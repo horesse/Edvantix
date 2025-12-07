@@ -1,0 +1,165 @@
+name: BookWorm Pull Request Validation
+run-name: PR #${{ github.event.pull_request.number }} - ${{ github.actor }}
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/pr-validation.yml"
+      - ".github/actions/**"
+      - "Directory.Packages.props"
+      - "Directory.Build.props"
+      - "global.json"
+      - "Versions.props"
+      - ".config/dotnet-tools.json"
+      - "!**.md"
+      - "!src/Aspire/BookWorm.AppHost/Container/**"
+      - "BookWorm.slnx"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+env:
+  GLOBAL_JSON_PATH: ${{ github.workspace }}/global.json
+  BUN_VERSION_FILE: ${{ github.workspace }}/.bun-version
+
+permissions:
+  checks: write
+  pull-requests: write
+  contents: read
+  security-events: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+        with:
+          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+      - name: Cache .NET SDK
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.dotnet
+            ~/.nuget/packages
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/global.json', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-dotnet-
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: setup
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Security Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Format
+        uses: ./.github/actions/format
+        with:
+          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+  style:
+    name: Style
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Style
+        uses: ./.github/actions/style
+        with:
+          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+  analyzers:
+    name: Analyzers
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Analyzers
+        uses: ./.github/actions/analyzers
+        with:
+          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [setup, security-scan, format, style, analyzers]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: [setup, security-scan, format, style, analyzers]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Test
+        uses: ./.github/actions/test
+        with:
+          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}

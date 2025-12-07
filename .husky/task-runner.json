@@ -1,0 +1,36 @@
+{
+  "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+  "tasks": [
+    {
+      "name": "scan",
+      "command": "gitleaks",
+      "args": ["detect", "--source", ".", "--exit-code", "1"]
+    },
+    {
+      "name": "format",
+      "command": "dnx",
+      "args": ["csharpier", "format", "."]
+    },
+    {
+      "name": "style",
+      "command": "dnx",
+      "args": ["csharpier", "check", "."]
+    },
+    {
+      "name": "analyzers",
+      "command": "dotnet",
+      "args": ["format", "analyzers", ".", "--verify-no-changes"]
+    },
+    {
+      "name": "build",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "BookWorm.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release"
+      ]
+    }
+  ]
+}

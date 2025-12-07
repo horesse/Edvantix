@@ -2,16 +2,11 @@
 
 public abstract class Entity : HasDomainEvents
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
 }
 
 public abstract class Entity<TId> : Entity
-    where TId : IEquatable<TId>
+    where TId : struct
 {
     public new TId Id { get; set; } = default!;
-}
-
-public abstract class LongIdentity : Entity<long>
-{
-    public new long Id { get; set; }
 }

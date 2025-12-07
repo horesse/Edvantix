@@ -28,10 +28,10 @@ public static class MediatorCrudExtensions
         services.AddSingleton<IQueryHandler<GetByIdQuery<TModel, TIdentity>, TModel>,
             GetByIdQueryHandler<TModel, TIdentity, TEntity>>();
 
-        services.AddSingleton<IQueryHandler<GetCountQuery<TModel, TIdentity>, long>,
+        services.AddSingleton<IQueryHandler<GetCountQuery, long>,
             GetCountQueryHandler<TModel, TIdentity, TEntity>>();
 
-        services.AddSingleton<IQueryHandler<IsExistQuery<TModel, TIdentity>, bool>,
+        services.AddSingleton<IQueryHandler<IsExistQuery<TIdentity>, bool>,
             IsExistQueryHandler<TModel, TIdentity, TEntity>>();
 
         // Command Handlers

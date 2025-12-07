@@ -6,8 +6,7 @@ namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
 /// <summary>
 /// Получение всех записей
 /// </summary>
-public sealed record GetAllQuery<TModel, TIdentity>()
-    : IQuery<IEnumerable<TModel>>
+public sealed record GetAllQuery<TModel, TIdentity> : IQuery<IEnumerable<TModel>>
     where TModel : Model<TIdentity>
     where TIdentity : struct;
 
@@ -30,15 +29,10 @@ public sealed record GetByIdQuery<TModel, TIdentity>(TIdentity Id)
 /// <summary>
 /// Получение количества записей
 /// </summary>
-public sealed record GetCountQuery<TModel, TIdentity>()
-    : IQuery<long>
-    where TModel : Model<TIdentity>
-    where TIdentity : struct;
+public sealed record GetCountQuery : IQuery<long>;
 
 /// <summary>
 /// Проверка существования записи
 /// </summary>
-public sealed record IsExistQuery<TModel, TIdentity>(TIdentity Id)
-    : BaseIdentityQuery<TIdentity, bool>(Id)
-    where TModel : Model<TIdentity>
-    where TIdentity : struct;
+public sealed record IsExistQuery<TIdentity>(TIdentity Id)
+    : BaseIdentityQuery<TIdentity, bool>(Id) where TIdentity : struct;

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Edvantix.Chassis.Repository.Crud;
 
 public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
-    where TEntity : IAggregateRoot
+    where TEntity : Entity, IAggregateRoot
 {
     /// <summary>
     /// Асинхронно извлекает объект типа TEntity, который соответствует заданному условию.
@@ -30,6 +30,14 @@ public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
     Task<List<TEntity>> GetAllAsync(CancellationToken token);
 
     /// <summary>
+    /// Асинхронно возвращает все объекты типа TEntity в виде коллекции.
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <param name="token">Токен для отмены операции.</param>
+    /// <returns>Задача, содержащая коллекцию объектов типа TEntity.</returns>
+    Task<List<TEntity>> GetAllByIdsAsync<TIdentity>(List<TIdentity> ids, CancellationToken token);
+
+    /// <summary>
     /// Асинхронно извлекает объект типа TEntity по указанному идентификатору.
     /// </summary>
     /// <typeparam name="TIdentity">Тип идентификатора. Должен быть значимым типом (struct).</typeparam>
@@ -45,6 +53,15 @@ public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
     /// <param name="token">Токен для отмены операции.</param>
     /// <returns>Задача, содержащая количество объектов.</returns>
     Task<int> GetCountAsync(CancellationToken token);
+
+    /// <summary>
+    /// Асинхронно проверяет наличие записи по идентификатору 
+    /// </summary>
+    /// <param name="id">Идентификатор сущности.</param>
+    /// <param name="token">Токен для отмены операции.</param>
+    /// <typeparam name="TIdentity">Тип идентификатора. Должен быть значимым типом (struct).</typeparam>
+    /// <returns></returns>
+    Task<bool> IsExistAsync<TIdentity>(TIdentity id, CancellationToken token);
     
     /// <summary>
     /// Вставляет новый объект типа TEntity в хранилище данных.

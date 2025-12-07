@@ -1,0 +1,21 @@
+﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.SharedKernel.SeedWork;
+using Mediator;
+
+namespace Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
+
+public sealed class GetCountQueryHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
+    : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
+        IQueryHandler<GetCountQuery<TModel, TIdentity>, long>
+    where TModel : Model<TIdentity>
+    where TIdentity : struct
+    where TEntity : Entity<TIdentity>, IAggregateRoot
+{
+    public async ValueTask<long> Handle(
+        GetCountQuery<TModel, TIdentity> query,
+        CancellationToken token)
+    {
+        return await ExecuteAsync(async () => await Repository.GetCountAsync(token),
+            nameof(GetCountQuery<TModel, TIdentity>), token);
+    }
+}

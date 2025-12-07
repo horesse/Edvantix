@@ -1,0 +1,39 @@
+name: "Style"
+description: "Style the repository using Husky"
+
+inputs:
+  global-json-file:
+    description: "The path to the global.json file"
+    required: false
+    default: "./global.json"
+  bun-version-file:
+    description: "The path to the .bun-version file"
+    required: false
+    default: ".bun-version"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v5
+      with:
+        global-json-file: ${{ inputs.global-json-file }}
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version-file: ${{ inputs.bun-version-file }}
+
+    - name: Install Tools
+      shell: bash
+      run: dotnet tool restore
+
+    - name: Configure Husky
+      shell: bash
+      if: success()
+      run: dnx husky install
+
+    - name: Run Style Task
+      shell: bash
+      if: success()
+      run: dnx husky run --name style

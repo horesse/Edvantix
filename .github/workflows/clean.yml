@@ -1,0 +1,21 @@
+name: BookWorm Clean Up
+run-name: Delete untagged package versions
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  delete-package-versions:
+    name: Delete untagged package versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: snok/container-retention-policy@v3.0.1
+        with:
+          account: user
+          token: ${{ secrets.GH_TOKEN }}
+          image-names: "edvantix/*"
+          tag-selection: untagged
+          cut-off: 1h

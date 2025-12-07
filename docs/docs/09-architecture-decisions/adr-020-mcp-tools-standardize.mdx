@@ -15,13 +15,13 @@ last_update:
 
 ## Context
 
-BookWorm's AI-driven features require secure and standardized access to various data sources, tools, and services to provide intelligent recommendations, automated support, and enhanced user experiences. The AI integration challenges include:
+Edvantix's AI-driven features require secure and standardized access to various data sources, tools, and services to provide intelligent recommendations, automated support, and enhanced user experiences. The AI integration challenges include:
 
 - **Secure Data Access**: AI models need secure access to customer data, order history, and catalog information
 - **Tool Integration**: AI agents require access to various tools for automation and decision-making
 - **Context Management**: Maintaining conversation context across multiple AI interactions
 - **Permission Control**: Fine-grained access control for AI models to different data sources
-- **Standardized Interfaces**: Consistent interfaces for AI models to interact with BookWorm services
+- **Standardized Interfaces**: Consistent interfaces for AI models to interact with Edvantix services
 - **Multi-Modal Support**: Integration of different AI models (LLM, embedding, vision) with unified access patterns
 - **Audit and Compliance**: Comprehensive logging of AI data access for security and compliance
 - **Resource Management**: Efficient resource utilization and connection pooling for AI operations
@@ -34,27 +34,27 @@ The solution must provide a secure, standardized, and extensible framework for A
 
 ## Decision
 
-Adopt **Model Context Protocol (MCP)** as the standardized framework for AI model integration, enabling secure access to BookWorm's data sources, tools, and services while maintaining fine-grained permission control and comprehensive audit capabilities.
+Adopt **Model Context Protocol (MCP)** as the standardized framework for AI model integration, enabling secure access to Edvantix's data sources, tools, and services while maintaining fine-grained permission control and comprehensive audit capabilities.
 
 ### MCP Integration Strategy
 
 #### Secure AI Data Access
 
-- **Resource Servers**: MCP servers providing secure access to BookWorm's databases, APIs, and services
+- **Resource Servers**: MCP servers providing secure access to Edvantix's databases, APIs, and services
 - **Permission Framework**: Fine-grained permissions controlling AI model access to different data sources
 - **Context Management**: Persistent context across AI interactions with conversation state management
 - **Audit Logging**: Comprehensive logging of all AI data access and tool usage
 
 #### AI Tool Integration
 
-- **Tool Servers**: MCP servers exposing BookWorm tools and automation capabilities to AI models
+- **Tool Servers**: MCP servers exposing Edvantix tools and automation capabilities to AI models
 - **Function Calling**: Standardized function calling interface for AI models to invoke business operations
 - **Error Handling**: Robust error handling and fallback mechanisms for tool integration failures
 - **Rate Limiting**: Resource usage controls to prevent AI model abuse of system resources
 
 ## Decision
 
-Adopt **Model Context Protocol (MCP) Tools** as the foundational framework for standardizing development tools, workflows, and integrations across the BookWorm development ecosystem.
+Adopt **Model Context Protocol (MCP) Tools** as the foundational framework for standardizing development tools, workflows, and integrations across the Edvantix development ecosystem.
 
 ## Rationale
 
@@ -114,7 +114,7 @@ Adopt **Model Context Protocol (MCP) Tools** as the foundational framework for s
 
 ### MCP Server Architecture
 
-- **Resource Servers**: MCP servers providing structured access to BookWorm data sources
+- **Resource Servers**: MCP servers providing structured access to Edvantix data sources
 - **Tool Servers**: Servers exposing system tools and automation capabilities
 - **Authentication Service**: Centralized authentication and authorization for AI model access
 - **Context Management**: Persistent conversation state and context tracking
@@ -131,7 +131,7 @@ Adopt **Model Context Protocol (MCP) Tools** as the foundational framework for s
 
 ### Positive
 
-- **AI Integration**: Seamless integration of AI models with BookWorm system data and tools
+- **AI Integration**: Seamless integration of AI models with Edvantix system data and tools
 - **Enhanced Development**: AI-assisted development with full project context and capabilities
 - **Intelligent Automation**: AI-driven system monitoring, analysis, and optimization
 - **Secure Access**: Controlled and audited AI access to sensitive system resources

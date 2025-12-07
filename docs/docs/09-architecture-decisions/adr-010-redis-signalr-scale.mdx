@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's microservices architecture requires high-performance caching and real-time communication scaling capabilities. The system faces several performance and scalability challenges:
+Edvantix's microservices architecture requires high-performance caching and real-time communication scaling capabilities. The system faces several performance and scalability challenges:
 
 - **Caching Requirements**: Fast data access for frequently requested catalog information, user sessions, and computed results
 - **SignalR Scaling**: Multi-instance SignalR deployment requires connection state synchronization
@@ -52,7 +52,7 @@ Adopt **Redis** as the primary distributed caching and session storage solution,
 
 ### Service Redis Usage Map
 
-BookWorm uses Redis primarily for distributed state management and real-time communication scaling, with services utilizing Redis based on their specific needs:
+Edvantix uses Redis primarily for distributed state management and real-time communication scaling, with services utilizing Redis based on their specific needs:
 
 - **Chat Service**: Custom backplane implementation for conversation state and message buffering
 - **Caching Services**: Distributed caching for frequently accessed data
@@ -88,7 +88,7 @@ BookWorm uses Redis primarily for distributed state management and real-time com
 
 ### Redis Architecture Overview
 
-BookWorm implements a custom Redis backplane for the Chat service, providing:
+Edvantix implements a custom Redis backplane for the Chat service, providing:
 
 - **Conversation State Management**: Redis-based message buffering and state persistence
 - **Real-time Communication**: Pub/Sub channels for cross-instance message delivery
@@ -193,7 +193,7 @@ public class RedisConfiguration
         services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = connectionString;
-            options.InstanceName = "BookWorm";
+            options.InstanceName = "Edvantix";
         });
 
         // Add session state
@@ -322,7 +322,7 @@ public class SignalRConfiguration
         })
         .AddStackExchangeRedis(redisConnectionString, options =>
         {
-            options.Configuration.ChannelPrefix = "BookWorm.SignalR";
+            options.Configuration.ChannelPrefix = "Edvantix.SignalR";
         });
 
         return services;

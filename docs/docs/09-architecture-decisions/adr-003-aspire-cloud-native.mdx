@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's microservices architecture requires sophisticated orchestration, service discovery, observability, and deployment capabilities. The development and operational challenges include:
+Edvantix's microservices architecture requires sophisticated orchestration, service discovery, observability, and deployment capabilities. The development and operational challenges include:
 
 - **Local Development Complexity**: Running and debugging multiple services simultaneously
 - **Service Orchestration**: Managing dependencies and startup order across services
@@ -29,11 +29,11 @@ Traditional approaches would require significant custom infrastructure code, mul
 
 ## Decision
 
-Adopt **Aspire** as the cloud-native development framework to provide integrated service orchestration, observability, and deployment capabilities for the BookWorm microservices ecosystem.
+Adopt **Aspire** as the cloud-native development framework to provide integrated service orchestration, observability, and deployment capabilities for the Edvantix microservices ecosystem.
 
 ### Core Aspire Components
 
-#### App Host (`BookWorm.AppHost`)
+#### App Host (`Edvantix.AppHost`)
 
 Central orchestration point that defines:
 
@@ -42,7 +42,7 @@ Central orchestration point that defines:
 - Environment-specific settings
 - Service discovery configuration
 
-#### Service Defaults (`BookWorm.ServiceDefaults`)
+#### Service Defaults (`Edvantix.ServiceDefaults`)
 
 Shared configuration package providing:
 
@@ -110,7 +110,7 @@ graph TB
 
 ### App Host Configuration
 
-The `BookWorm.AppHost` project orchestrates the entire system topology:
+The `Edvantix.AppHost` project orchestrates the entire system topology:
 
 #### Service Registration Pattern
 
@@ -125,23 +125,23 @@ var qdrant = builder.AddQdrant("qdrant");
 var keycloak = builder.AddKeycloak("keycloak", 8080);
 
 // Microservices with Dependencies
-var catalog = builder.AddProject<Projects.BookWorm_Catalog>("catalog")
+var catalog = builder.AddProject<Projects.Edvantix_Catalog>("catalog")
     .WithReference(postgres)
     .WithReference(redis)
     .WithReference(qdrant);
 
-var basket = builder.AddProject<Projects.BookWorm_Basket>("basket")
+var basket = builder.AddProject<Projects.Edvantix_Basket>("basket")
     .WithReference(redis)
     .WithReference(catalog);
 
-var ordering = builder.AddProject<Projects.BookWorm_Ordering>("ordering")
+var ordering = builder.AddProject<Projects.Edvantix_Ordering>("ordering")
     .WithReference(postgres)
     .WithReference(rabbitmq);
 ```
 
 ### Service Defaults Implementation
 
-The `BookWorm.ServiceDefaults` package provides:
+The `Edvantix.ServiceDefaults` package provides:
 
 #### Observability Configuration
 
@@ -221,7 +221,7 @@ sequenceDiagram
 
 ### Local Development Process
 
-1. **Startup**: `dotnet run --project BookWorm.AppHost` starts entire ecosystem
+1. **Startup**: `dotnet run --project Edvantix.AppHost` starts entire ecosystem
 2. **Dashboard Access**: Aspire dashboard provides unified view of all services
 3. **Service Debugging**: Attach debuggers to individual services
 4. **Resource Monitoring**: Real-time monitoring of databases and message brokers

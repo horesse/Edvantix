@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's Notification Service requires a robust email delivery solution to handle transactional communications across the microservices architecture. The email requirements include:
+Edvantix's Notification Service requires a robust email delivery solution to handle transactional communications across the microservices architecture. The email requirements include:
 
 - **Transactional Notifications**: Order confirmations, payment receipts, shipping updates, and account verifications
 - **System Communications**: Password resets, account activations, and security notifications
@@ -28,11 +28,11 @@ BookWorm's Notification Service requires a robust email delivery solution to han
 - **Observability**: Comprehensive logging, health checks, and error handling
 - **Configuration Management**: Secure API key management and environment-specific settings
 
-The email solution must integrate with BookWorm's event-driven architecture while providing reliable delivery guarantees.
+The email solution must integrate with Edvantix's event-driven architecture while providing reliable delivery guarantees.
 
 ## Decision
 
-Adopt **SendGrid** as the production email service provider with **MailKit/MailPit** for development, implementing a dual-provider strategy with outbox pattern for reliable email delivery in the BookWorm Notification Service.
+Adopt **SendGrid** as the production email service provider with **MailKit/MailPit** for development, implementing a dual-provider strategy with outbox pattern for reliable email delivery in the Edvantix Notification Service.
 
 ### Email Service Strategy
 
@@ -50,7 +50,7 @@ Adopt **SendGrid** as the production email service provider with **MailKit/MailP
 - **Error Handling**: Comprehensive error logging with `GlobalLogBuffer` for immediate feedback
 - **Health Monitoring**: SendGrid health checks with degraded status handling
 
-### BookWorm Email Integration Architecture
+### Edvantix Email Integration Architecture
 
 | Component                    | Purpose                    | Implementation                           | Environment        |
 | ---------------------------- | -------------------------- | ---------------------------------------- | ------------------ |
@@ -79,11 +79,11 @@ Adopt **SendGrid** as the production email service provider with **MailKit/MailP
 4. **Segmentation**: Advanced recipient segmentation for targeted communications
 5. **Real-Time Analytics**: Comprehensive email performance metrics and engagement tracking
 
-#### Integration with BookWorm Architecture
+#### Integration with Edvantix Architecture
 
 1. **Event-Driven Communication**: Integrates with RabbitMQ and MassTransit for event-driven email notifications
 2. **Aspire Orchestration**: Native support for Aspire with automatic provider configuration
-3. **Microservice Integration**: Centralized email service accessible to all BookWorm microservices
+3. **Microservice Integration**: Centralized email service accessible to all Edvantix microservices
 4. **Configuration Management**: Azure Key Vault integration for secure API key management
 5. **Database Integration**: PostgreSQL-based outbox pattern for transactional email guarantees
 

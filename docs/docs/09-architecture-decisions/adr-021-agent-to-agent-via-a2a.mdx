@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's intelligent chat system relies on specialized AI agents to provide comprehensive book assistance and customer support. The system requires seamless coordination between multiple agents, each with specific capabilities, to deliver optimal user experiences. The agent communication challenges include:
+Edvantix's intelligent chat system relies on specialized AI agents to provide comprehensive book assistance and customer support. The system requires seamless coordination between multiple agents, each with specific capabilities, to deliver optimal user experiences. The agent communication challenges include:
 
 - **Multi-Agent Coordination**: Multiple specialized agents (Book, Rating, Summarize, Sentiment, Language) need to collaborate on user requests
 - **Seamless Agent Handoffs**: Smooth transitions between agents without losing conversation context
@@ -34,7 +34,7 @@ The solution must provide a robust, standardized foundation for agent-to-agent c
 
 ## Decision
 
-Adopt **Agent2Agent (A2A) Protocol** as the standardized communication protocol for AI agent coordination in the BookWorm intelligent chat system, enabling seamless collaboration between specialized agents.
+Adopt **Agent2Agent (A2A) Protocol** as the standardized communication protocol for AI agent coordination in the Edvantix intelligent chat system, enabling seamless collaboration between specialized agents.
 
 ### A2A Protocol Implementation
 
@@ -52,7 +52,7 @@ Adopt **Agent2Agent (A2A) Protocol** as the standardized communication protocol 
 - **Conditional Routing**: Dynamic agent routing based on user intent and content analysis
 - **Fallback Mechanisms**: Graceful degradation when specific agents are unavailable
 
-### BookWorm Agent Ecosystem
+### Edvantix Agent Ecosystem
 
 | Agent               | Primary Responsibility                            | A2A Integration                                             | Downstream Agents             |
 | ------------------- | ------------------------------------------------- | ----------------------------------------------------------- | ----------------------------- |
@@ -82,7 +82,7 @@ Adopt **Agent2Agent (A2A) Protocol** as the standardized communication protocol 
 4. **Modular Architecture**: Each agent focuses on specific expertise while collaborating seamlessly
 5. **Scalable Design**: Protocol scales with increasing number and complexity of agents
 
-#### Integration with BookWorm Architecture
+#### Integration with Edvantix Architecture
 
 1. **Agent Framework Integration**: A2A Protocol integrates natively with Microsoft Agent Framework agent framework
 2. **Microservice Compatibility**: Agents can be deployed as independent microservices with A2A communication
@@ -140,7 +140,7 @@ Each agent implements standardized A2A AgentCard with:
 
 - **Capabilities**: Streaming support, notification preferences
 - **Skills**: Specific tasks and capabilities with examples
-- **Provider Information**: BookWorm organization identifier
+- **Provider Information**: Edvantix organization identifier
 - **Input/Output Modes**: Text-based communication modes
 - **Version Management**: Agent versioning for compatibility
 

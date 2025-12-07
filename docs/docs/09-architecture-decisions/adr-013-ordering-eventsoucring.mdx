@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's ordering service requires sophisticated state management to handle complex business workflows, maintain comprehensive audit trails, and support advanced analytics. The ordering domain involves intricate business processes with multiple state transitions, compensation scenarios, and regulatory requirements:
+Edvantix's ordering service requires sophisticated state management to handle complex business workflows, maintain comprehensive audit trails, and support advanced analytics. The ordering domain involves intricate business processes with multiple state transitions, compensation scenarios, and regulatory requirements:
 
 - **Complex Order Lifecycle**: Orders transition through multiple states (placed, paid, shipped, delivered, cancelled, returned)
 - **Business Rule Evolution**: Pricing rules, discount calculations, and tax regulations change frequently
@@ -51,7 +51,7 @@ Implement **Event Sourcing** pattern for the Ordering Service using **Marten** a
 - **Projections**: OrderSummary projections for efficient querying
 - **Telemetry Integration**: Full observability with OpenTelemetry tracing and metrics
 
-### BookWorm Order Events
+### Edvantix Order Events
 
 | Event                   | Purpose            | Trigger               | Integration                    |
 | ----------------------- | ------------------ | --------------------- | ------------------------------ |
@@ -64,12 +64,12 @@ Implement **Event Sourcing** pattern for the Ordering Service using **Marten** a
 ### Why Marten for Event Sourcing?
 
 1. **PostgreSQL-Native**: Uses PostgreSQL JSONB for efficient event storage and advanced indexing
-2. **BookWorm Integration**: Seamless integration with existing PostgreSQL infrastructure
+2. **Edvantix Integration**: Seamless integration with existing PostgreSQL infrastructure
 3. **Async Daemon**: Background processing for projections and event subscriptions
 4. **OpenTelemetry**: Built-in observability and distributed tracing support
 5. **Developer Experience**: Code-first approach with LINQ querying and strong typing
 
-### Event Sourcing Benefits for BookWorm
+### Event Sourcing Benefits for Edvantix
 
 1. **Audit Trail**: Complete history of order state changes for compliance
 2. **Performance**: Optimized event appending with PostgreSQL JSONB storage
@@ -292,7 +292,7 @@ public sealed class MartenEventPublisher : SubscriptionBase
 ### Benefits
 
 - **Complete audit trail** for order state changes
-- **Real-time integration** with other BookWorm services via event publishing
+- **Real-time integration** with other Edvantix services via event publishing
 - **Performance optimization** with async daemon processing
 - **Observability** through OpenTelemetry integration
 - **Future flexibility** for temporal queries and event replay
@@ -310,7 +310,7 @@ public sealed class MartenEventPublisher : SubscriptionBase
 
 - **Pros**: Simple implementation, immediate consistency
 - **Cons**: No audit trail, limited integration capabilities
-- **Decision**: Insufficient for BookWorm's audit and integration requirements
+- **Decision**: Insufficient for Edvantix's audit and integration requirements
 
 ### Event Store Database (EventStoreDB)
 

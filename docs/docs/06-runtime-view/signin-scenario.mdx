@@ -47,7 +47,7 @@ sequenceDiagram
     User->>Client: Initiate Login
     Client->>Client: Generate PKCE parameters<br/>code_verifier (random string)<br/>code_challenge = SHA256(code_verifier)
 
-    Client->>Keycloak: Authorization Request<br/>response_type=code<br/>client_id=bookworm-client<br/>redirect_uri=callback<br/>code_challenge=<hash><br/>code_challenge_method=S256<br/>scope=openid profile
+    Client->>Keycloak: Authorization Request<br/>response_type=code<br/>client_id=edvantix-client<br/>redirect_uri=callback<br/>code_challenge=<hash><br/>code_challenge_method=S256<br/>scope=openid profile
 
     Keycloak->>User: Present Login Form<br/>(Custom BookWorm Theme)
     User->>Keycloak: Enter Credentials
@@ -55,7 +55,7 @@ sequenceDiagram
     Keycloak->>Keycloak: Validate Credentials
     Keycloak->>Client: Authorization Code<br/>(via redirect_uri)
 
-    Client->>Keycloak: Token Request<br/>grant_type=authorization_code<br/>code=<auth_code><br/>client_id=bookworm-client<br/>code_verifier=<original_verifier><br/>redirect_uri=callback
+    Client->>Keycloak: Token Request<br/>grant_type=authorization_code<br/>code=<auth_code><br/>client_id=edvantix-client<br/>code_verifier=<original_verifier><br/>redirect_uri=callback
 
     Keycloak->>Keycloak: Verify PKCE<br/>SHA256(code_verifier) == code_challenge
     Keycloak->>Client: Access Token + Refresh Token<br/>ID Token (JWT)

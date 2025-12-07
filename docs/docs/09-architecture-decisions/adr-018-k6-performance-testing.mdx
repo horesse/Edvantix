@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's microservices architecture requires comprehensive performance testing to ensure scalability, reliability, and optimal user experience under various load conditions. The performance testing requirements include:
+Edvantix's microservices architecture requires comprehensive performance testing to ensure scalability, reliability, and optimal user experience under various load conditions. The performance testing requirements include:
 
 - **Load Testing**: Validate system behavior under expected production load levels
 - **Stress Testing**: Determine system breaking points and failure modes under extreme load
@@ -52,7 +52,7 @@ Adopt **K6** as the primary performance testing framework with JavaScript-based 
 - **Stress Load**: Beyond peak load to identify system breaking points
 - **Spike Load**: Sudden traffic increases to test auto-scaling capabilities
 
-### BookWorm Performance Testing Coverage
+### Edvantix Performance Testing Coverage
 
 | Service          | Test Scenarios                                  | Load Patterns                | Performance SLAs            |
 | ---------------- | ----------------------------------------------- | ---------------------------- | --------------------------- |
@@ -164,17 +164,17 @@ export let options = {
 // Environment-specific configuration
 const environments = {
   development: {
-    baseUrl: 'https://dev-api.bookworm.local',
+    baseUrl: 'https://dev-api.Edvantix.local',
     users: 50,
     duration: '2m'
   },
   staging: {
-    baseUrl: 'https://staging-api.bookworm.com',
+    baseUrl: 'https://staging-api.Edvantix.com',
     users: 200,
     duration: '10m'
   },
   production: {
-    baseUrl: 'https://api.bookworm.com',
+    baseUrl: 'https://api.Edvantix.com',
     users: 500,
     duration: '30m'
   }

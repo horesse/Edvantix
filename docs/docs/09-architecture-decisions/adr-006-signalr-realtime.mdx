@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm requires real-time communication capabilities to enhance user experience and provide immediate feedback for various business scenarios. The system needs:
+Edvantix requires real-time communication capabilities to enhance user experience and provide immediate feedback for various business scenarios. The system needs:
 
 - **Real-time Chat**: Interactive chat support with AI-powered responses
 - **Order Updates**: Live order status updates and notifications
@@ -32,13 +32,13 @@ Traditional HTTP polling would be inefficient for real-time scenarios, while Web
 
 ## Decision
 
-Adopt **SignalR** as the real-time communication framework for streaming AI chat responses in the BookWorm Chat service, providing bidirectional communication for interactive AI-powered conversations.
+Adopt **SignalR** as the real-time communication framework for streaming AI chat responses in the Edvantix Chat service, providing bidirectional communication for interactive AI-powered conversations.
 
 ### Implementation Strategy
 
 #### Chat Streaming Hub
 
-BookWorm implements a focused SignalR solution specifically for AI chat streaming:
+Edvantix implements a focused SignalR solution specifically for AI chat streaming:
 
 - **ChatStreamHub**: Single hub dedicated to streaming AI responses
 - **Message Fragments**: Real-time streaming of message fragments as AI generates responses
@@ -73,7 +73,7 @@ BookWorm implements a focused SignalR solution specifically for AI chat streamin
 
 ### Implementation Overview
 
-BookWorm's SignalR implementation focuses specifically on AI chat streaming rather than general real-time communication.
+Edvantix's SignalR implementation focuses specifically on AI chat streaming rather than general real-time communication.
 
 ## Implementation Architecture
 
@@ -105,7 +105,7 @@ chatConnection.onreconnected(() => {
 ```csharp
 // Xamarin/MAUI client
 var orderConnection = new HubConnectionBuilder()
-    .WithUrl("https://api.bookworm.com/orderhub", options =>
+    .WithUrl("https://api.Edvantix.com/orderhub", options =>
     {
         options.AccessTokenProvider = () => Task.FromResult(GetAccessToken());
     })
@@ -132,7 +132,7 @@ orderConnection.On<string, OrderStatus>("OrderStatusChanged",
 services.AddSignalR()
     .AddStackExchangeRedis(connectionString, options =>
     {
-        options.Configuration.ChannelPrefix = "bookworm";
+        options.Configuration.ChannelPrefix = "Edvantix";
     });
 ```
 
@@ -253,7 +253,7 @@ public class NotificationService
 
 #### Custom Redis Integration
 
-- **Custom Backplane**: Integration with BookWorm's custom Redis backplane
+- **Custom Backplane**: Integration with Edvantix's custom Redis backplane
 - **Message Buffering**: Redis-based message buffering for connection recovery
 - **Cross-instance Communication**: Seamless message delivery across service instances
 

@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's event-driven microservices architecture produces numerous domain events, integration events, and system events that require comprehensive documentation and discoverability. The event documentation challenges include:
+Edvantix's event-driven microservices architecture produces numerous domain events, integration events, and system events that require comprehensive documentation and discoverability. The event documentation challenges include:
 
 - **Event Discovery**: Developers need to discover available events across the distributed system
 - **Schema Documentation**: Clear documentation of event schemas, payloads, and versioning
@@ -33,7 +33,7 @@ The solution must provide a centralized, searchable, and maintainable event docu
 
 ## Decision
 
-Adopt **EventCatalog** as the primary platform for documenting, discovering, and managing events across BookWorm's event-driven architecture, integrated with code generation and CI/CD pipelines.
+Adopt **EventCatalog** as the primary platform for documenting, discovering, and managing events across Edvantix's event-driven architecture, integrated with code generation and CI/CD pipelines.
 
 ### Event Documentation Strategy
 
@@ -51,7 +51,7 @@ Adopt **EventCatalog** as the primary platform for documenting, discovering, and
 - **Code Examples**: Generated code examples for event producers and consumers
 - **Test Data**: Automated generation of sample event data for testing
 
-### BookWorm Event Categories
+### Edvantix Event Categories
 
 | Event Category         | Business Domain               | Example Events                           | Documentation Priority |
 | ---------------------- | ----------------------------- | ---------------------------------------- | ---------------------- |
@@ -140,12 +140,12 @@ Adopt **EventCatalog** as the primary platform for documenting, discovering, and
 ```javascript
 // eventcatalog.config.js
 module.exports = {
-  title: 'BookWorm Event Catalog',
-  tagline: 'Discover and understand events in the BookWorm ecosystem',
-  organizationName: 'BookWorm',
-  projectName: 'BookWorm-Events',
+  title: 'Edvantix Event Catalog',
+  tagline: 'Discover and understand events in the Edvantix ecosystem',
+  organizationName: 'Edvantix',
+  projectName: 'Edvantix-Events',
 
-  editUrl: 'https://github.com/bookworm/eventcatalog/edit/main',
+  editUrl: 'https://github.com/Edvantix/eventcatalog/edit/main',
 
   users: [
     {
@@ -159,11 +159,11 @@ module.exports = {
   footerLinks: [
     {
       label: 'GitHub',
-      href: 'https://github.com/bookworm/eventcatalog',
+      href: 'https://github.com/Edvantix/eventcatalog',
     },
     {
       label: 'API Documentation',
-      href: 'https://api.bookworm.com/docs',
+      href: 'https://api.Edvantix.com/docs',
     },
   ],
 

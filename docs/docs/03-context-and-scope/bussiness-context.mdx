@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: Business Context
-description: BookWorm's business partners, external entities, and domain-specific interactions with stakeholders
+description: Edvantix's business partners, external entities, and domain-specific interactions with stakeholders
 keywords: [business context, external partners, communication patterns, book data providers, email service, AI provider, identity provider]
 last_update:
   author: Nhan Nguyen
@@ -9,17 +9,17 @@ last_update:
 
 ## Business Context Diagram
 
-The business context shows BookWorm's interactions with its business environment, focusing on the domain-specific inputs and outputs exchanged with external entities.
+The business context shows Edvantix's interactions with its business environment, focusing on the domain-specific inputs and outputs exchanged with external entities.
 
 ```mermaid
 C4Context
-    title System Context Diagram for BookWorm
+    title System Context Diagram for Edvantix
 
     Person(customer, "Customer", "Browses and purchases books, seeks support")
     Person(admin, "Administrator", "Manages system and monitors operations")
 
-    Boundary(b1, "BookWorm Organization", "Internal Systems") {
-        System(bookworm, "BookWorm System", "Digital bookstore platform providing book discovery, purchasing, and customer support")
+    Boundary(b1, "Edvantix Organization", "Internal Systems") {
+        System(Edvantix, "Edvantix System", "Digital bookstore platform providing book discovery, purchasing, and customer support")
     }
 
     Boundary(b2, "External Partners", "Third-party Services") {
@@ -29,13 +29,13 @@ C4Context
         System_Ext(identityProvider, "Identity Provider", "Handles user authentication and authorization")
     }
 
-    Rel(customer, bookworm, "Browses catalog, places orders, uses chat support", "HTTPS")
-    Rel(admin, bookworm, "Manages system, monitors operations", "HTTPS")
+    Rel(customer, Edvantix, "Browses catalog, places orders, uses chat support", "HTTPS")
+    Rel(admin, Edvantix, "Manages system, monitors operations", "HTTPS")
 
-    Rel(bookworm, bookDataProvider, "Retrieves book information", "REST API")
-    Rel(bookworm, emailService, "Sends notifications", "SMTP/API")
-    Rel(bookworm, aiProvider, "Gets AI responses", "REST API")
-    Rel(bookworm, identityProvider, "Authenticates users", "OIDC")
+    Rel(Edvantix, bookDataProvider, "Retrieves book information", "REST API")
+    Rel(Edvantix, emailService, "Sends notifications", "SMTP/API")
+    Rel(Edvantix, aiProvider, "Gets AI responses", "REST API")
+    Rel(Edvantix, identityProvider, "Authenticates users", "OIDC")
 
     UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
 ```

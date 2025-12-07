@@ -1,21 +1,21 @@
 ---
 sidebar_position: 1
 title: Overview
-description: Cross-cutting concepts and architectural patterns implemented across all BookWorm microservices
-keywords: [cross-cutting concepts, BookWorm Chassis, service defaults, CQRS, event-driven architecture, repository pattern]
+description: Cross-cutting concepts and architectural patterns implemented across all Edvantix microservices
+keywords: [cross-cutting concepts, Edvantix Chassis, service defaults, CQRS, event-driven architecture, repository pattern]
 last_update:
   author: Nhan Nguyen
 ---
 
 # Cross-Cutting Concepts Overview
 
-This section describes the cross-cutting concepts that are implemented across all services in the BookWorm application. These concepts ensure consistency, maintainability, and operational excellence throughout the system.
+This section describes the cross-cutting concepts that are implemented across all services in the Edvantix application. These concepts ensure consistency, maintainability, and operational excellence throughout the system.
 
 ## Architecture Components
 
-The BookWorm application implements cross-cutting concerns through two main components:
+The Edvantix application implements cross-cutting concerns through two main components:
 
-### BookWorm.Chassis
+### Edvantix.Chassis
 A comprehensive building block library that provides core functionality for all microservices, including:
 - **CQRS Pattern Implementation** - Command and Query separation with MediatR
 - **Event-Driven Architecture** - Integration events with MassTransit and RabbitMQ
@@ -28,7 +28,7 @@ A comprehensive building block library that provides core functionality for all 
 - **Guards & Defensive Programming** - Input validation and security guards
 - **Repository & Specifications** - Data access abstraction with query composition
 
-### BookWorm.ServiceDefaults
+### Edvantix.ServiceDefaults
 Aspire-based service defaults that standardize common configurations:
 - **Authentication & Authorization** - Keycloak integration with JWT tokens
 - **Service Discovery** - Aspire service discovery for microservice communication

@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's AI-enhanced features require a robust, scalable, and cost-effective Large Language Model (LLM) runtime to power intelligent functionalities across the platform. The requirements include:
+Edvantix's AI-enhanced features require a robust, scalable, and cost-effective Large Language Model (LLM) runtime to power intelligent functionalities across the platform. The requirements include:
 
 - **Book Recommendations**: Personalized book suggestions based on reading history and preferences
 - **Content Analysis**: Automatic book categorization, summary generation, and metadata extraction
@@ -33,7 +33,7 @@ The choice of LLM runtime significantly impacts system performance, operational 
 
 ## Decision
 
-Adopt **Ollama** as the primary Large Language Model runtime, integrated with **Microsoft Agent Framework** for AI orchestration, to provide powerful, cost-effective, and privacy-conscious AI capabilities across BookWorm's platform.
+Adopt **Ollama** as the primary Large Language Model runtime, integrated with **Microsoft Agent Framework** for AI orchestration, to provide powerful, cost-effective, and privacy-conscious AI capabilities across Edvantix's platform.
 
 ### AI Architecture Strategy
 
@@ -49,7 +49,7 @@ Adopt **Ollama** as the primary Large Language Model runtime, integrated with **
 - **RAG Integration**: Hybrid search capabilities with vector embeddings
 - **Real-time Streaming**: Live response streaming with Redis backplane
 
-### BookWorm AI Agents
+### Edvantix AI Agents
 
 | Agent | Purpose | Integration | Capabilities |
 |-------|---------|-------------|--------------|
@@ -111,10 +111,10 @@ Adopt **Ollama** as the primary Large Language Model runtime, integrated with **
 ```mermaid
 graph TB
     subgraph "Client Applications"
-        WebApp[BookWorm Web App<br/>User Interface]
-        MobileApp[BookWorm Mobile<br/>iOS/Android]
+        WebApp[Edvantix Web App<br/>User Interface]
+        MobileApp[Edvantix Mobile<br/>iOS/Android]
         AdminPanel[Admin Panel<br/>Management Interface]
-        API[BookWorm API<br/>External Integrations]
+        API[Edvantix API<br/>External Integrations]
     end
 
     subgraph "Agent Framework Layer"

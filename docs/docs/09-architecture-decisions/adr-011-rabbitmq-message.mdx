@@ -15,7 +15,7 @@ last_update:
 
 ## Context
 
-BookWorm's event-driven microservices architecture requires reliable asynchronous communication between services to maintain loose coupling and ensure system resilience. The messaging requirements include:
+Edvantix's event-driven microservices architecture requires reliable asynchronous communication between services to maintain loose coupling and ensure system resilience. The messaging requirements include:
 
 - **Event-Driven Integration**: Domain and integration events between microservices
 - **Reliable Message Delivery**: Guarantee message delivery with durability and persistence
@@ -32,7 +32,7 @@ The choice of message broker significantly impacts system reliability, performan
 
 ## Decision
 
-Adopt **RabbitMQ** as the primary message broker, integrated with **MassTransit** for .NET-based message handling, to provide reliable, scalable, and feature-rich asynchronous communication between BookWorm's microservices.
+Adopt **RabbitMQ** as the primary message broker, integrated with **MassTransit** for .NET-based message handling, to provide reliable, scalable, and feature-rich asynchronous communication between Edvantix's microservices.
 
 ### Messaging Architecture Strategy
 
@@ -102,7 +102,7 @@ Services communicate through domain events that are mapped to integration events
 
 ### Messaging Architecture Overview
 
-BookWorm uses a simplified event-driven architecture with RabbitMQ and MassTransit:
+Edvantix uses a simplified event-driven architecture with RabbitMQ and MassTransit:
 
 - **Domain Events** are raised within services and mapped to **Integration Events**
 - **Integration Events** are published to RabbitMQ exchanges
@@ -184,9 +184,9 @@ public class RabbitMQTopologyConfiguration
         // Configure main topic exchange for domain events
         configurator.UsingRabbitMq((context, cfg) =>
         {
-            cfg.Host("rabbitmq-cluster", "/bookworm", h =>
+            cfg.Host("rabbitmq-cluster", "/Edvantix", h =>
             {
-                h.Username("bookworm");
+                h.Username("Edvantix");
                 h.Password("secure-password");
                 h.Heartbeat(TimeSpan.FromSeconds(30));
                 h.RequestedConnectionTimeout(TimeSpan.FromSeconds(30));
@@ -198,9 +198,9 @@ public class RabbitMQTopologyConfiguration
             cfg.Publish<PaymentProcessedIntegrationEvent>(p => p.ExchangeType = ExchangeType.Topic);
 
             // Configure dead letter handling
-            cfg.ReceiveEndpoint("bookworm.failed", e =>
+            cfg.ReceiveEndpoint("Edvantix.failed", e =>
             {
-                e.ConfigureDeadLetterExchange("bookworm.events.failed");
+                e.ConfigureDeadLetterExchange("Edvantix.events.failed");
                 e.Consumer<DeadLetterConsumer>();
             });
 

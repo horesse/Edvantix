@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/Edvantix.Chassis/Edvantix.Chassis.csproj" />
+    <Project Path="src/BuildingBlocks/Edvantix.Constants/Edvantix.Constants.csproj" />
+    <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />

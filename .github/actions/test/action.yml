@@ -1,0 +1,59 @@
+name: "Test"
+description: "Run tests"
+
+inputs:
+  global-json-file:
+    description: "The path to the global.json file"
+    required: false
+    default: "./global.json"
+  bun-version-file:
+    description: "The path to the .bun-version file"
+    required: false
+    default: ".bun-version"
+  testHangTimeout:
+    description: "The timeout for the test"
+    required: false
+    default: "7m"
+  testSessionTimeout:
+    description: "The timeout for the test session"
+    required: false
+    default: "15m"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v5
+      with:
+        global-json-file: ${{ inputs.global-json-file }}
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version-file: ${{ inputs.bun-version-file }}
+
+    - name: Install Tools
+      shell: bash
+      run: dotnet tool restore
+
+    - name: Test
+      shell: bash
+      if: success()
+      run: >
+        dotnet test
+        --configuration Release
+        --report-trx
+        --coverage
+        --coverage-settings Coverage.runsettings
+        --results-directory ./test-results
+        --github-reporter-style full
+        --hangdump --hangdump-timeout ${{ inputs.testHangTimeout }}
+        --crashdump
+        --timeout ${{ inputs.testSessionTimeout }}
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: test-results
+        path: ./test-results

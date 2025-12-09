@@ -13,10 +13,14 @@
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="2.76.0-pre1" />
     <PackageVersion Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.71.0" />
+    <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="9.0.0-develop.27" />
     <PackageVersion Include="MassTransit.RabbitMQ" Version="8.5.7" />
     <PackageVersion Include="Mediator.Abstractions" Version="3.0.1" />
+    <PackageVersion Include="Mediator.SourceGenerator" Version="3.1.0-preview.14" />
     <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.Middleware" Version="10.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Compliance.Redaction" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.0.0" />

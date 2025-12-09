@@ -2,7 +2,7 @@
 
 namespace Edvantix.SharedKernel.SeedWork;
 
-public abstract class AuditableEntity : Entity
+public abstract class AuditableEntity : LongIdentity
 {
     public DateTime CreatedAt { get; init; } = DateTimeHelper.UtcNow();
     public DateTime? LastModifiedAt { get; set; }

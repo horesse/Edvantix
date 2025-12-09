@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Edvantix.Chassis.Repository.Crud;
 
 public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvider provider)
-    : ICrudRepository<TEntity>
+    : ICrudRepository<TEntity, TIdentity>
     where TContext : DbContext, IUnitOfWork
     where TEntity : Entity<TIdentity>, IAggregateRoot
     where TIdentity : struct
@@ -28,9 +28,9 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
     public Task<List<TEntity>> GetAllAsync(CancellationToken token)
         => DbSet.ToListAsync(token);
 
-    public Task<List<TEntity>> GetAllByIdsAsync<TIdentityInternal>(List<TIdentityInternal> ids, CancellationToken token)
+    public Task<List<TEntity>> GetAllByIdsAsync(List<TIdentity> ids, CancellationToken token)
     {
-        if (ids is List<TIdentity> identities)
+        if (ids is { } identities)
         {
             return DbSet.Where(x => identities.Contains(x.Id)).ToListAsync<TEntity>(token);
         }
@@ -38,7 +38,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.FromResult(new List<TEntity>());
     }
 
-    public Task<TEntity?> GetByIdAsync<TIdentityInternal>(TIdentityInternal identity, CancellationToken token) where TIdentityInternal : struct
+    public Task<TEntity?> GetByIdAsync(TIdentity identity, CancellationToken token)
     {
         if (identity is TIdentity id)
         {
@@ -51,14 +51,9 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
     public Task<int> GetCountAsync(CancellationToken token)
         => DbSet.CountAsync(token);
 
-    public Task<bool> IsExistAsync<TIdentity1>(TIdentity1 id, CancellationToken token)
+    public Task<bool> IsExistAsync(TIdentity id, CancellationToken token)
     {
-        if (id is TIdentity identity)
-        {
-            return DbSet.AnyAsync(x => x.Id.Equals(identity), token);
-        }
-
-        return Task.FromResult(false);
+        return DbSet.AnyAsync(x => x.Id.Equals(id), token);
     }
 
     public void Insert(TEntity entity)
@@ -212,30 +207,26 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
     
-    public Task DeleteAsync<TIdentityInternal>(TIdentityInternal identity, CancellationToken token)
-        where TIdentityInternal : struct
+    public Task DeleteAsync(TIdentity id, CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
         {
             throw exception;
         }
 
-        if (identity is not TIdentity identityId)
-            return Task.CompletedTask;
-
-        var entity = Context.Find<TEntity>(identityId);
+        var entity = Context.Find<TEntity>(id);
 
         if (entity != null)
             Context.Entry(entity).State = EntityState.Deleted;
         else
             throw new Exception(
-                $"Сущность c идентификатором [{identityId}] отсутствует в контексте."
+                $"Сущность c идентификатором [{id}] отсутствует в контексте."
             );
 
         return Task.CompletedTask;
     }
 
-    public Task DeleteAsync<TIdentityInternal>(IEnumerable<TIdentityInternal> identities, CancellationToken token) where TIdentityInternal : struct
+    public Task DeleteAsync(IEnumerable<TIdentity> identities, CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
         {

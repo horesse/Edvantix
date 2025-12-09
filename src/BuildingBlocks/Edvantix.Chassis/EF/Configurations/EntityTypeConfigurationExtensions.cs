@@ -7,30 +7,22 @@ namespace Edvantix.Chassis.EF.Configurations;
 public static class EntityTypeConfigurationExtensions
 {
     public static void Configure<TEntity, TIdentity>(
-        this EntityTypeBuilder<TEntity> builder,
-        string scheme,
-        string table
+        this EntityTypeBuilder<TEntity> builder
     )
         where TIdentity : struct
         where TEntity : Entity<TIdentity>
     {
-        builder.ToTable(table, scheme);
-
         builder.HasKey(bd => bd.Id);
 
         builder.Property(bd => bd.Id).HasComment("Идентификатор");
     }
 
     public static void ConfigureSoftDeletable<TEntity, TIdentity>(
-        this EntityTypeBuilder<TEntity> builder,
-        string scheme,
-        string table
+        this EntityTypeBuilder<TEntity> builder
     )
         where TIdentity : struct
         where TEntity : Entity<TIdentity>, ISoftDelete
     {
-        builder.ToTable(table, scheme);
-
         builder.HasKey(bd => bd.Id);
 
         builder.Property(bd => bd.Id).HasComment("Идентификатор");

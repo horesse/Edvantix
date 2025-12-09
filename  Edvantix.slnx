@@ -8,7 +8,9 @@
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/Services/" />
-  <Folder Name="/Services/DataVault/" />
+  <Folder Name="/Services/DataVault/">
+    <Project Path="src/Services/Edvantix.DataVault/Edvantix.DataVault.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />

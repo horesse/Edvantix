@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Edvantix.Chassis.Repository.Crud;
 
-public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
-    where TEntity : Entity, IAggregateRoot
+public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDisposable
+    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TIdentity : struct
 {
     /// <summary>
     /// Асинхронно извлекает объект типа TEntity, который соответствует заданному условию.
@@ -35,7 +36,7 @@ public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
     /// <param name="ids"></param>
     /// <param name="token">Токен для отмены операции.</param>
     /// <returns>Задача, содержащая коллекцию объектов типа TEntity.</returns>
-    Task<List<TEntity>> GetAllByIdsAsync<TIdentity>(List<TIdentity> ids, CancellationToken token);
+    Task<List<TEntity>> GetAllByIdsAsync(List<TIdentity> ids, CancellationToken token);
 
     /// <summary>
     /// Асинхронно извлекает объект типа TEntity по указанному идентификатору.
@@ -44,8 +45,7 @@ public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
     /// <param name="identity">Идентификатор объекта для извлечения.</param>
     /// <param name="token">Токен для отмены операции.</param>
     /// <returns>Задача, содержащая объект типа TEntity или null, если объект не найден.</returns>
-    Task<TEntity?> GetByIdAsync<TIdentity>(TIdentity identity, CancellationToken token)
-        where TIdentity : struct;
+    Task<TEntity?> GetByIdAsync(TIdentity identity, CancellationToken token);
     
     /// <summary>
     /// Асинхронно возвращает количество объектов типа TEntity.
@@ -61,7 +61,7 @@ public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
     /// <param name="token">Токен для отмены операции.</param>
     /// <typeparam name="TIdentity">Тип идентификатора. Должен быть значимым типом (struct).</typeparam>
     /// <returns></returns>
-    Task<bool> IsExistAsync<TIdentity>(TIdentity id, CancellationToken token);
+    Task<bool> IsExistAsync(TIdentity id, CancellationToken token);
     
     /// <summary>
     /// Вставляет новый объект типа TEntity в хранилище данных.
@@ -158,8 +158,7 @@ public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
     /// <param name="identity">Идентификатор объекта для удаления.</param>
     /// <param name="token">Токен для отмены операции.</param>
     /// <returns>Задача, представляющая завершение операции удаления.</returns>
-    Task DeleteAsync<TIdentity>(TIdentity identity, CancellationToken token)
-        where TIdentity : struct;
+    Task DeleteAsync(TIdentity identity, CancellationToken token);
 
     /// <summary>
     /// Асинхронно удаляет объекты типа TEntity, идентифицируемые коллекцией идентификаторов.
@@ -168,8 +167,7 @@ public interface ICrudRepository<TEntity> : IRepository<TEntity>, IDisposable
     /// <param name="identities">Коллекция идентификаторов объектов для удаления.</param>
     /// <param name="token">Токен для отмены операции.</param>
     /// <returns>Задача, представляющая завершение операции удаления.</returns>
-    Task DeleteAsync<TIdentity>(IEnumerable<TIdentity> identities, CancellationToken token)
-        where TIdentity : struct;
+    Task DeleteAsync(IEnumerable<TIdentity> identities, CancellationToken token);
     
     /// <summary>
     /// Асинхронно выполняет необработанный SQL-запрос и возвращает количество затронутых строк.

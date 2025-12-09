@@ -14,7 +14,7 @@ public abstract class BaseCrudHandler<TModel, TIdentity, TEntity>(IServiceProvid
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
 {
-    protected readonly ICrudRepository<TEntity> Repository = provider.GetRequiredService<ICrudRepository<TEntity>>();
+    protected readonly ICrudRepository<TEntity, TIdentity> Repository = provider.GetRequiredService<ICrudRepository<TEntity, TIdentity>>();
     protected readonly IMapper<TEntity, TModel> EntityToModelMapper = provider.GetRequiredService<IMapper<TEntity, TModel>>();
     protected readonly IMapper<TModel, TEntity> ModelToEntityMapper = provider.GetRequiredService<IMapper<TModel, TEntity>>();
 

@@ -12,6 +12,7 @@ using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Constants.Aspire;
 using Edvantix.Constants.Core;
+using Edvantix.DataVault.Features;
 using Edvantix.DataVault.Infrastructure;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.Kestrel;
@@ -76,6 +77,8 @@ public static class Extensions
 
         builder.Configuration.Bind(appSettings);
 
+        services.AddApiFeature();
+        
         services.AddSingleton(appSettings);
 
         services.AddRateLimiting();

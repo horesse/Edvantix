@@ -1,4 +1,5 @@
-﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.SharedKernel.SeedWork;
 using Mediator;
 

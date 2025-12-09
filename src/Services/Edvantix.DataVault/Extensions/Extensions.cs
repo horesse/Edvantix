@@ -82,8 +82,6 @@ public static class Extensions
         services.AddSingleton(appSettings);
 
         services.AddRateLimiting();
-        
-        services.AddGrpcHealthChecks();
 
         services.AddSingleton(_ =>
         {

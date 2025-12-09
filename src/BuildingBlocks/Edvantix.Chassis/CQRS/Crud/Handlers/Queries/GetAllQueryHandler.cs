@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
 
-public sealed class GetAllQueryHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
+public class GetAllQueryHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
         IQueryHandler<GetAllQuery<TModel, TIdentity>, IEnumerable<TModel>>
     where TModel : Model<TIdentity>

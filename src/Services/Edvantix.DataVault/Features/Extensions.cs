@@ -1,4 +1,4 @@
-﻿using Edvantix.DataVault.Features.PlaygroundEntity;
+﻿using Edvantix.DataVault.Features.PlaygroundEntityFeature;
 
 namespace Edvantix.DataVault.Features;
 

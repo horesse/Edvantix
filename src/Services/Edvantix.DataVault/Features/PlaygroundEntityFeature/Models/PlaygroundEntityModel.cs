@@ -1,6 +1,6 @@
 ﻿using Edvantix.SharedKernel.SeedWork;
 
-namespace Edvantix.DataVault.Features.PlaygroundEntity.Models;
+namespace Edvantix.DataVault.Features.PlaygroundEntityFeature.Models;
 
 public sealed class PlaygroundEntityModel : Model<long>
 {

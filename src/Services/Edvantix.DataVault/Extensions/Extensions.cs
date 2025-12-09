@@ -61,12 +61,14 @@ public static class Extensions
         services.AddExceptionHandler<NotFoundExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-
+        
+        services.AddApiFeature();
+        
         services
             .AddMediator((MediatorOptions options) =>
                 {
                     options.ServiceLifetime = ServiceLifetime.Scoped;
-                    options.Assemblies = [Assembly.GetExecutingAssembly()];
+                    options.Assemblies = [typeof(IDataVaultApiMarker)];
                 }
             )
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
@@ -76,8 +78,6 @@ public static class Extensions
         var appSettings = new AppSettings();
 
         builder.Configuration.Bind(appSettings);
-
-        services.AddApiFeature();
         
         services.AddSingleton(appSettings);
 

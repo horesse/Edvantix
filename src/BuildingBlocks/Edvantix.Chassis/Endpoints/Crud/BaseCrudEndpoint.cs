@@ -12,9 +12,14 @@ public abstract class BaseCrudEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
+    // TODO: удалять из TModel Model
+    // TODO: аттрибут модели с русским неймингом
+    // TODO: перевод на русский
+    // TODO: разобраться с RequireAuth, может быть как-то прокидывать хз, в основном должно быть true
     protected abstract string ResourceName { get; }
     protected abstract string Tag { get; }
     
+    // TODO: SnakeCase?
     protected virtual string GetRoutePath(string action) => $"/{ResourceName}/{action}";
     protected virtual ApiVersion ApiVersion => new(1, 0);
     protected virtual bool RequireAuth => false;

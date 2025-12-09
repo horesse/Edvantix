@@ -1,4 +1,5 @@
-﻿using Mediator;
+﻿using Edvantix.Chassis.CQRS.Command;
+using Edvantix.Chassis.CQRS.Query;
 
 namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
 

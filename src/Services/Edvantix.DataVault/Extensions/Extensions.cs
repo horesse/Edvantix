@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
@@ -17,7 +16,7 @@ using Edvantix.DataVault.Infrastructure;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.Kestrel;
 using FluentValidation;
-using Mediator;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.DataVault.Extensions;
@@ -64,16 +63,14 @@ public static class Extensions
         
         services.AddApiFeature();
         
-        services
-            .AddMediator((MediatorOptions options) =>
-                {
-                    options.ServiceLifetime = ServiceLifetime.Scoped;
-                    options.Assemblies = [typeof(IDataVaultApiMarker)];
-                }
-            )
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddMediatR(cfg => 
+        {
+            cfg.RegisterServicesFromAssembly(typeof(IDataVaultApiMarker).Assembly);
+            
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>));
+        });
         
         var appSettings = new AppSettings();
 

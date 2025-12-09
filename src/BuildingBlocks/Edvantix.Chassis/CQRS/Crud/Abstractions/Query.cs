@@ -1,5 +1,5 @@
-﻿using Edvantix.SharedKernel.SeedWork;
-using Mediator;
+﻿using Edvantix.Chassis.CQRS.Query;
+using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
 

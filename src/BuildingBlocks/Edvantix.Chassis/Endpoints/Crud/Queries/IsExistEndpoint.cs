@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.SharedKernel.SeedWork;
-using Mediator;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
     <ItemGroup>
       <PackageReference Include="MassTransit.EntityFrameworkCore" />
-      <PackageReference Include="Mediator.SourceGenerator" PrivateAssets="All" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
       <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
     </ItemGroup>

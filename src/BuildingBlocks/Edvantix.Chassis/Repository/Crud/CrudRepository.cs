@@ -261,7 +261,12 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token)
         => Context.Database.BeginTransactionAsync(token);
-    
+
+    public Task<bool> SaveEntitiesAsync(CancellationToken token)
+    {
+        return Context.SaveEntitiesAsync(token);
+    }
+
     public void Dispose()
     {
         GC.SuppressFinalize(this);

@@ -1,18 +1,18 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.Exceptions;
 using Edvantix.SharedKernel.SeedWork;
-using Mediator;
+using MediatR;
 
 namespace Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
 
 public sealed class GetByIdQueryHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
-        IQueryHandler<GetByIdQuery<TModel, TIdentity>, TModel>
+        IRequestHandler<GetByIdQuery<TModel, TIdentity>, TModel>
     where TModel : Model<TIdentity>
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
 {
-    public async ValueTask<TModel> Handle(
+    public async Task<TModel> Handle(
         GetByIdQuery<TModel, TIdentity> query,
         CancellationToken token)
     {

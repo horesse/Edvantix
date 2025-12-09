@@ -1,5 +1,5 @@
 ﻿using Edvantix.SharedKernel.Helpers;
-using Mediator;
+using MediatR;
 
 namespace Edvantix.SharedKernel.SeedWork;
 

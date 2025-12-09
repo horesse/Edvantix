@@ -190,4 +190,6 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
     /// <param name="token">Токен отмены, позволяющий прервать операцию.</param>
     /// <returns>Задача, представляющая транзакцию <see cref="IDbContextTransaction"/>.</returns>
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token);
+    
+    Task<bool> SaveEntitiesAsync(CancellationToken token);
 }

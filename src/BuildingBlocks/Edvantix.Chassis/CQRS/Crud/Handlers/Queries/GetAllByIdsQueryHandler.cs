@@ -13,12 +13,17 @@ public sealed class GetAllByIdsQueryHandler<TModel, TIdentity, TEntity>(IService
 {
     public async Task<IEnumerable<TModel>> Handle(
         GetAllByIdsQuery<TModel, TIdentity> query,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
-        return await ExecuteAsync(async () =>
-        {
-            var entities = await Repository.GetAllByIdsAsync(query.Ids, token);
-            return entities.Select(EntityToModelMapper.Map);
-        }, nameof(GetAllByIdsQuery<TModel, TIdentity>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                var entities = await Repository.GetAllByIdsAsync(query.Ids, token);
+                return entities.Select(EntityToModelMapper.Map);
+            },
+            nameof(GetAllByIdsQuery<TModel, TIdentity>),
+            token
+        );
     }
 }

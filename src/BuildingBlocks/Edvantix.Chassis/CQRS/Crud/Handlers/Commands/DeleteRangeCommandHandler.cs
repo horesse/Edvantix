@@ -13,14 +13,18 @@ public sealed class DeleteRangeCommandHandler<TModel, TIdentity, TEntity>(IServi
 {
     public async Task<IEnumerable<TIdentity>> Handle(
         DeleteRangeCommand<TModel, TIdentity> command,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
-        return await ExecuteAsync(async () =>
-        {
-            await Repository.DeleteAsync(command.Ids, token);
-            await Repository.SaveEntitiesAsync(token);
-            return command.Ids;
-        }, nameof(DeleteRangeCommand<TModel, TIdentity>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                await Repository.DeleteAsync(command.Ids, token);
+                await Repository.SaveEntitiesAsync(token);
+                return command.Ids;
+            },
+            nameof(DeleteRangeCommand<TModel, TIdentity>),
+            token
+        );
     }
 }
-

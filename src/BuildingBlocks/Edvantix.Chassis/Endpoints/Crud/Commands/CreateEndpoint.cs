@@ -27,21 +27,23 @@ public class CreateEndpoint<TModel, TIdentity>
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Create{ResourceName}",
-            $"Создать запись",
-            $"Создать новую запись"
-        ).ProducesPost<TIdentity>();
+                builder,
+                $"Create{ResourceName}",
+                $"Создать запись",
+                $"Создать новую запись"
+            )
+            .ProducesPost<TIdentity>();
     }
 
     public virtual async Task<Created<TIdentity>> HandleAsync(
         TModel model,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var command = new CreateCommand<TModel, TIdentity>(model);
         var id = await sender.Send(command, cancellationToken);
-        
+
         return TypedResults.Created($"{GetRoutePath(CrudAction.GetById)}/{id}", id);
     }
 }

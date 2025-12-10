@@ -24,25 +24,27 @@ public class DeleteRangeEndpoint<TModel, TIdentity>
         var builder = app.MapDelete(
             GetRoutePath(CrudAction.DeleteRange),
             async ([FromBody] IEnumerable<TIdentity> ids, ISender sender, CancellationToken ct) =>
-            await HandleAsync(ids, sender, ct)
+                await HandleAsync(ids, sender, ct)
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Delete{ResourceName}Batch",
-            $"Удалить несколько записей",
-            $"Удаляет несколько записей по их идентификаторам"
-        ).ProducesDelete();
+                builder,
+                $"Delete{ResourceName}Batch",
+                $"Удалить несколько записей",
+                $"Удаляет несколько записей по их идентификаторам"
+            )
+            .ProducesDelete();
     }
 
     public virtual async Task<NoContent> HandleAsync(
         IEnumerable<TIdentity> ids,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var command = new DeleteRangeCommand<TModel, TIdentity>(ids);
         await sender.Send(command, cancellationToken);
-        
+
         return TypedResults.NoContent();
     }
 }

@@ -27,21 +27,23 @@ public class IsExistEndpoint<TModel, TIdentity>
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Check{ResourceName}Exists",
-            $"Проверить существование записи",
-            $"Проверяет, существует ли запись с указанным идентификатором"
-        ).ProducesGet<bool>();
+                builder,
+                $"Check{ResourceName}Exists",
+                $"Проверить существование записи",
+                $"Проверяет, существует ли запись с указанным идентификатором"
+            )
+            .ProducesGet<bool>();
     }
 
     public virtual async Task<Ok<bool>> HandleAsync(
         TIdentity id,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var query = new IsExistQuery<TIdentity>(id);
         var result = await sender.Send(query, cancellationToken);
-        
+
         return TypedResults.Ok(result);
     }
 }

@@ -5,7 +5,7 @@ namespace Edvantix.Chassis.Utilities.Formatters;
 public static class StringFormatter
 {
     private static readonly Regex SnakeRegex = new(@"([a-z0-9])([A-Z])", RegexOptions.Compiled);
-    
+
     public static string ToSnakeCase(this string value)
     {
         if (string.IsNullOrWhiteSpace(value))

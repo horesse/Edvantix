@@ -14,12 +14,17 @@ public class GetAllQueryHandler<TModel, TIdentity, TEntity>(IServiceProvider pro
 {
     public async Task<IEnumerable<TModel>> Handle(
         GetAllQuery<TModel, TIdentity> query,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
-        return await ExecuteAsync(async () =>
-        {
-            var entities = await Repository.GetAllAsync(token);
-            return entities.Select(EntityToModelMapper.Map);
-        }, nameof(GetAllQuery<,>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                var entities = await Repository.GetAllAsync(token);
+                return entities.Select(EntityToModelMapper.Map);
+            },
+            nameof(GetAllQuery<,>),
+            token
+        );
     }
 }

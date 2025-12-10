@@ -11,7 +11,8 @@ public static class CrudEndpointExtensions
     /// Регистрирует все стандартные CRUD endpoints для модели
     /// </summary>
     public static IServiceCollection AddCrudEndpoints<TModel, TIdentity>(
-        this IServiceCollection services)
+        this IServiceCollection services
+    )
         where TModel : Model<TIdentity>
         where TIdentity : struct
     {
@@ -32,15 +33,14 @@ public static class CrudEndpointExtensions
     /// <summary>
     /// Регистрирует кастомный endpoint, переопределяя стандартный
     /// </summary>
-    public static IServiceCollection AddCrudEndpoint<TEndpoint>(
-        this IServiceCollection services)
+    public static IServiceCollection AddCrudEndpoint<TEndpoint>(this IServiceCollection services)
         where TEndpoint : class, IEndpoint
     {
         // Удаляем существующую регистрацию если есть
-        var descriptor = services.FirstOrDefault(d => 
-            d.ServiceType == typeof(IEndpoint) && 
-            d.ImplementationType == typeof(TEndpoint));
-        
+        var descriptor = services.FirstOrDefault(d =>
+            d.ServiceType == typeof(IEndpoint) && d.ImplementationType == typeof(TEndpoint)
+        );
+
         if (descriptor != null)
         {
             services.Remove(descriptor);

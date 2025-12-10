@@ -27,22 +27,23 @@ public class CreateRangeEndpoint<TModel, TIdentity>
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Create{ResourceName}Batch",
-            $"Создать несколько записей",
-            $"Создаёт несколько записей за одну операцию"
-        ).ProducesPost<IEnumerable<TIdentity>>();
+                builder,
+                $"Create{ResourceName}Batch",
+                $"Создать несколько записей",
+                $"Создаёт несколько записей за одну операцию"
+            )
+            .ProducesPost<IEnumerable<TIdentity>>();
     }
 
     public virtual async Task<Created<IEnumerable<TIdentity>>> HandleAsync(
         IEnumerable<TModel> models,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var command = new CreateRangeCommand<TModel, TIdentity>(models);
         var ids = await sender.Send(command, cancellationToken);
-        
+
         return TypedResults.Created($"{GetRoutePath(CrudAction.GetById)}", ids);
     }
 }
-

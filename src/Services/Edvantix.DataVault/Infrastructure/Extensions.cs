@@ -9,7 +9,7 @@ public static class Extensions
     public static void AddPersistenceServices(this IHostApplicationBuilder builder)
     {
         var services = builder.Services;
-        
+
         builder.AddAzurePostgresDbContext<DataVaultContext>(
             Components.Database.DataVault,
             app =>

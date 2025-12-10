@@ -13,14 +13,19 @@ public sealed class CreateRangeCommandHandler<TModel, TIdentity, TEntity>(IServi
 {
     public async Task<IEnumerable<TIdentity>> Handle(
         CreateRangeCommand<TModel, TIdentity> command,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
-        return await ExecuteAsync(async () =>
-        {
-            var entities = command.Models.Select(ModelToEntityMapper.Map).ToList();
-            var added = await Repository.InsertRangeAsync(entities, token);
-            await Repository.SaveEntitiesAsync(token);
-            return added.Select(c => c.Id);
-        }, nameof(CreateRangeCommand<TModel, TIdentity>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                var entities = command.Models.Select(ModelToEntityMapper.Map).ToList();
+                var added = await Repository.InsertRangeAsync(entities, token);
+                await Repository.SaveEntitiesAsync(token);
+                return added.Select(c => c.Id);
+            },
+            nameof(CreateRangeCommand<TModel, TIdentity>),
+            token
+        );
     }
 }

@@ -8,7 +8,12 @@ public sealed class ToModel : IMapper<PlaygroundEntity, PlaygroundEntityModel>
 {
     public PlaygroundEntityModel Map(PlaygroundEntity source)
     {
-        return new PlaygroundEntityModel { Name = source.Name, Id = source.Id, Value = source.Value, };
+        return new PlaygroundEntityModel
+        {
+            Name = source.Name,
+            Id = source.Id,
+            Value = source.Value,
+        };
     }
 
     public IReadOnlyList<PlaygroundEntityModel> Map(IReadOnlyList<PlaygroundEntity> sources)

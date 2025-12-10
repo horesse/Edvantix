@@ -3,4 +3,5 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Edvantix.DataVault.Infrastructure;
 
-public sealed class DataVaultContext(DbContextOptions<DataVaultContext> options) : PostgresContext(options);
+public sealed class DataVaultContext(DbContextOptions<DataVaultContext> options)
+    : PostgresContext(options);

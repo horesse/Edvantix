@@ -22,25 +22,26 @@ public class GetAllEndpoint<TModel, TIdentity>
     {
         var builder = app.MapGet(
             GetRoutePath(CrudAction.GetAll),
-            async (ISender sender, CancellationToken ct) =>
-                await HandleAsync(sender, ct)
+            async (ISender sender, CancellationToken ct) => await HandleAsync(sender, ct)
         );
 
         ConfigureEndpoint(
-            builder,
-            $"GetAll{ResourceName}s",
-            $"Получить все записи",
-            $"Возвращает все записи"
-        ).ProducesGet<IEnumerable<TModel>>();
+                builder,
+                $"GetAll{ResourceName}s",
+                $"Получить все записи",
+                $"Возвращает все записи"
+            )
+            .ProducesGet<IEnumerable<TModel>>();
     }
 
     public virtual async Task<Ok<IEnumerable<TModel>>> HandleAsync(
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var query = new GetAllQuery<TModel, TIdentity>();
         var result = await sender.Send(query, cancellationToken);
-        
+
         return TypedResults.Ok(result);
     }
 }

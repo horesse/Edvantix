@@ -6,9 +6,7 @@ namespace Edvantix.Chassis.EF.Configurations;
 
 public static class EntityTypeConfigurationExtensions
 {
-    public static void Configure<TEntity, TIdentity>(
-        this EntityTypeBuilder<TEntity> builder
-    )
+    public static void Configure<TEntity, TIdentity>(this EntityTypeBuilder<TEntity> builder)
         where TIdentity : struct
         where TEntity : Entity<TIdentity>
     {

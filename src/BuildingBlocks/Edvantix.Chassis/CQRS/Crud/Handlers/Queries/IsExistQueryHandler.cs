@@ -11,13 +11,15 @@ public sealed class IsExistQueryHandler<TModel, TIdentity, TEntity>(IServiceProv
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
 {
-    public async Task<bool> Handle(
-        IsExistQuery<TIdentity> query,
-        CancellationToken token)
+    public async Task<bool> Handle(IsExistQuery<TIdentity> query, CancellationToken token)
     {
-        return await ExecuteAsync(async () =>
-        {
-            return await Repository.IsExistAsync(query.Id, token);
-        }, nameof(IsExistQuery<TIdentity>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                return await Repository.IsExistAsync(query.Id, token);
+            },
+            nameof(IsExistQuery<TIdentity>),
+            token
+        );
     }
 }

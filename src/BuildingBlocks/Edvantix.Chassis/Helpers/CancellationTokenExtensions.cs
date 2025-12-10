@@ -15,8 +15,7 @@ public static class CancellationTokenExtensions
     /// </returns>
     public static bool GetErrorIfCancellationRequested(
         this CancellationToken token,
-        [MaybeNullWhen(false)]
-        out Exception exception
+        [MaybeNullWhen(false)] out Exception exception
     )
     {
         exception = null;
@@ -27,7 +26,7 @@ public static class CancellationTokenExtensions
 
             return true;
         }
-        
+
         return false;
     }
 }

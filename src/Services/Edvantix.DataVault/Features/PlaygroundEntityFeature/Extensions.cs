@@ -11,7 +11,7 @@ public static class Extensions
     {
         services.AddCrudHandlers<PlaygroundEntityModel, long, PlaygroundEntity>();
         services.AddCrudEndpoints<PlaygroundEntityModel, long>();
-        
+
         return services;
     }
 }

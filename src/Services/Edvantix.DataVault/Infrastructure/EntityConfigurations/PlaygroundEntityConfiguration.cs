@@ -11,12 +11,8 @@ public sealed class PlaygroundEntityConfiguration : IEntityTypeConfiguration<Pla
     {
         builder.Configure<PlaygroundEntity, long>();
 
-        builder.Property(p => p.Name)
-            .IsRequired()
-            .HasComment("Наименование");
-        
-        builder.Property(p => p.Value)
-            .IsRequired()
-            .HasComment("Значение");
+        builder.Property(p => p.Name).IsRequired().HasComment("Наименование");
+
+        builder.Property(p => p.Value).IsRequired().HasComment("Значение");
     }
 }

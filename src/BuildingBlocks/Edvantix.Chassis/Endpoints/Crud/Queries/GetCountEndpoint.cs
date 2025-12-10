@@ -22,25 +22,26 @@ public class GetCountEndpoint<TModel, TIdentity>
     {
         var builder = app.MapGet(
             GetRoutePath(CrudAction.GetCount),
-            async (ISender sender, CancellationToken ct) =>
-                await HandleAsync(sender, ct)
+            async (ISender sender, CancellationToken ct) => await HandleAsync(sender, ct)
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Get{ResourceName}Count",
-            $"Получить количество записей",
-            $"Возвращает общее количество записей"
-        ).ProducesGet<long>();
+                builder,
+                $"Get{ResourceName}Count",
+                $"Получить количество записей",
+                $"Возвращает общее количество записей"
+            )
+            .ProducesGet<long>();
     }
 
     public virtual async Task<Ok<long>> HandleAsync(
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var query = new GetCountQuery();
         var result = await sender.Send(query, cancellationToken);
-        
+
         return TypedResults.Ok(result);
     }
 }

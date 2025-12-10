@@ -7,4 +7,3 @@ public abstract class Entity<TId> : HasDomainEvents
 }
 
 public abstract class LongIdentity : Entity<long>;
-

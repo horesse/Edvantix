@@ -28,7 +28,8 @@ public abstract class BaseCrudEndpoint<TModel, TIdentity>
         RouteHandlerBuilder builder,
         string name,
         string summary,
-        string? description = null)
+        string? description = null
+    )
     {
         builder = builder
             .WithTags(Tag)
@@ -43,14 +44,15 @@ public abstract class BaseCrudEndpoint<TModel, TIdentity>
 
         if (RequireAuth)
         {
-            builder = AuthPolicy != null
-                ? builder.RequireAuthorization(AuthPolicy)
-                : builder.RequireAuthorization();
+            builder =
+                AuthPolicy != null
+                    ? builder.RequireAuthorization(AuthPolicy)
+                    : builder.RequireAuthorization();
         }
 
         return builder;
     }
-    
+
     protected virtual string GetRoutePath(CrudAction action, bool identity = false)
     {
         var route = $"/{ResourceName.ToSnakeCase()}/{action.ToString().ToSnakeCase()}";

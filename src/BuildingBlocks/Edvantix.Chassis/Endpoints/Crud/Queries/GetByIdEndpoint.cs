@@ -12,7 +12,7 @@ namespace Edvantix.Chassis.Endpoints.Crud.Queries;
 /// <summary>
 /// Generic endpoint для получения записи по ID
 /// </summary>
-public class GetByIdEndpoint<TModel, TIdentity> 
+public class GetByIdEndpoint<TModel, TIdentity>
     : BaseCrudEndpoint<TModel, TIdentity>,
         IEndpoint<Results<Ok<TModel>, NotFound>, TIdentity, ISender>
     where TModel : Model<TIdentity>
@@ -27,21 +27,23 @@ public class GetByIdEndpoint<TModel, TIdentity>
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Get{ResourceName}ById",
-            $"Получить запись по идентификатору",
-            $"Возвращает запись по уникальному идентификатору"
-        ).ProducesGet<TModel>(hasNotFound: true);
+                builder,
+                $"Get{ResourceName}ById",
+                $"Получить запись по идентификатору",
+                $"Возвращает запись по уникальному идентификатору"
+            )
+            .ProducesGet<TModel>(hasNotFound: true);
     }
 
     public virtual async Task<Results<Ok<TModel>, NotFound>> HandleAsync(
         TIdentity id,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var query = new GetByIdQuery<TModel, TIdentity>(id);
         var result = await sender.Send(query, cancellationToken);
-        
+
         return TypedResults.Ok(result);
     }
 }

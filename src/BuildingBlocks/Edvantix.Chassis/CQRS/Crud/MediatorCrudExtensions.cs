@@ -10,57 +10,82 @@ namespace Edvantix.Chassis.CQRS.Crud;
 public static class MediatorCrudExtensions
 {
     public static IServiceCollection AddCrudHandlers<TModel, TIdentity, TEntity>(
-        this IServiceCollection services)
+        this IServiceCollection services
+    )
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : Entity<TIdentity>, IAggregateRoot
     {
         // Query Handlers
-        services.AddScoped<IRequestHandler<GetAllQuery<TModel, TIdentity>, IEnumerable<TModel>>,
-            GetAllQueryHandler<TModel, TIdentity, TEntity>>();
-        
-        services.AddScoped<IRequestHandler<GetAllByIdsQuery<TModel, TIdentity>, IEnumerable<TModel>>,
-            GetAllByIdsQueryHandler<TModel, TIdentity, TEntity>>();
-        
-        services.AddScoped<IRequestHandler<GetByIdQuery<TModel, TIdentity>, TModel>,
-            GetByIdQueryHandler<TModel, TIdentity, TEntity>>();
+        services.AddScoped<
+            IRequestHandler<GetAllQuery<TModel, TIdentity>, IEnumerable<TModel>>,
+            GetAllQueryHandler<TModel, TIdentity, TEntity>
+        >();
 
-        services.AddScoped<IRequestHandler<GetCountQuery, long>,
-            GetCountQueryHandler<TModel, TIdentity, TEntity>>();
+        services.AddScoped<
+            IRequestHandler<GetAllByIdsQuery<TModel, TIdentity>, IEnumerable<TModel>>,
+            GetAllByIdsQueryHandler<TModel, TIdentity, TEntity>
+        >();
 
-        services.AddScoped<IRequestHandler<IsExistQuery<TIdentity>, bool>,
-            IsExistQueryHandler<TModel, TIdentity, TEntity>>();
+        services.AddScoped<
+            IRequestHandler<GetByIdQuery<TModel, TIdentity>, TModel>,
+            GetByIdQueryHandler<TModel, TIdentity, TEntity>
+        >();
+
+        services.AddScoped<
+            IRequestHandler<GetCountQuery, long>,
+            GetCountQueryHandler<TModel, TIdentity, TEntity>
+        >();
+
+        services.AddScoped<
+            IRequestHandler<IsExistQuery<TIdentity>, bool>,
+            IsExistQueryHandler<TModel, TIdentity, TEntity>
+        >();
 
         // Command Handlers
-        services.AddScoped<IRequestHandler<CreateCommand<TModel, TIdentity>, TIdentity>,
-            CreateCommandHandler<TModel, TIdentity, TEntity>>();
+        services.AddScoped<
+            IRequestHandler<CreateCommand<TModel, TIdentity>, TIdentity>,
+            CreateCommandHandler<TModel, TIdentity, TEntity>
+        >();
 
-        services.AddScoped<IRequestHandler<CreateRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
-            CreateRangeCommandHandler<TModel, TIdentity, TEntity>>();
-        
-        services.AddScoped<IRequestHandler<UpdateCommand<TModel, TIdentity>, TIdentity>,
-            UpdateCommandHandler<TModel, TIdentity, TEntity>>();
+        services.AddScoped<
+            IRequestHandler<CreateRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
+            CreateRangeCommandHandler<TModel, TIdentity, TEntity>
+        >();
 
-        services.AddScoped<IRequestHandler<UpdateRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
-            UpdateRangeCommandHandler<TModel, TIdentity, TEntity>>();
-        
-        services.AddScoped<IRequestHandler<DeleteCommand<TModel, TIdentity>, TIdentity>,
-            DeleteCommandHandler<TModel, TIdentity, TEntity>>();
+        services.AddScoped<
+            IRequestHandler<UpdateCommand<TModel, TIdentity>, TIdentity>,
+            UpdateCommandHandler<TModel, TIdentity, TEntity>
+        >();
 
-        services.AddScoped<IRequestHandler<DeleteRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
-            DeleteRangeCommandHandler<TModel, TIdentity, TEntity>>();
+        services.AddScoped<
+            IRequestHandler<UpdateRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
+            UpdateRangeCommandHandler<TModel, TIdentity, TEntity>
+        >();
+
+        services.AddScoped<
+            IRequestHandler<DeleteCommand<TModel, TIdentity>, TIdentity>,
+            DeleteCommandHandler<TModel, TIdentity, TEntity>
+        >();
+
+        services.AddScoped<
+            IRequestHandler<DeleteRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
+            DeleteRangeCommandHandler<TModel, TIdentity, TEntity>
+        >();
 
         return services;
     }
 
     public static IServiceCollection AddCrudHandler<THandler, TRequest, TResponse>(
-        this IServiceCollection services)
+        this IServiceCollection services
+    )
         where THandler : class, IRequestHandler<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        var descriptor = services.FirstOrDefault(d => 
-            d.ServiceType == typeof(IRequestHandler<TRequest, TResponse>));
-        
+        var descriptor = services.FirstOrDefault(d =>
+            d.ServiceType == typeof(IRequestHandler<TRequest, TResponse>)
+        );
+
         if (descriptor != null)
         {
             services.Remove(descriptor);

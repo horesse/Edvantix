@@ -16,17 +16,17 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 {
     private TContext Context => provider.GetRequiredService<TContext>();
     private DbSet<TEntity> DbSet => Context.Set<TEntity>();
-    
+
     public IUnitOfWork UnitOfWork => Context;
-    
-    public Task<TEntity?> GetOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken token)
-        => DbSet.FirstOrDefaultAsync(predicate, token);
 
-    public IQueryable<TEntity> GetAsQueryable()
-        => DbSet.AsQueryable();
+    public Task<TEntity?> GetOrDefaultAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        CancellationToken token
+    ) => DbSet.FirstOrDefaultAsync(predicate, token);
 
-    public Task<List<TEntity>> GetAllAsync(CancellationToken token)
-        => DbSet.ToListAsync(token);
+    public IQueryable<TEntity> GetAsQueryable() => DbSet.AsQueryable();
+
+    public Task<List<TEntity>> GetAllAsync(CancellationToken token) => DbSet.ToListAsync(token);
 
     public Task<List<TEntity>> GetAllByIdsAsync(List<TIdentity> ids, CancellationToken token)
     {
@@ -48,8 +48,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.FromResult(default(TEntity?));
     }
 
-    public Task<int> GetCountAsync(CancellationToken token)
-        => DbSet.CountAsync(token);
+    public Task<int> GetCountAsync(CancellationToken token) => DbSet.CountAsync(token);
 
     public Task<bool> IsExistAsync(TIdentity id, CancellationToken token)
     {
@@ -75,7 +74,10 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return entry.Entity;
     }
 
-    public async Task<List<TEntity>> InsertRangeAsync(List<TEntity> entities, CancellationToken token)
+    public async Task<List<TEntity>> InsertRangeAsync(
+        List<TEntity> entities,
+        CancellationToken token
+    )
     {
         var modifiedCollection = new List<TEntity>(entities.Count());
 
@@ -116,7 +118,10 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return entry.Entity;
     }
 
-    public async Task<List<TEntity>> InsertOrUpdateAsync(List<TEntity> entities, CancellationToken token)
+    public async Task<List<TEntity>> InsertOrUpdateAsync(
+        List<TEntity> entities,
+        CancellationToken token
+    )
     {
         var modifiedCollection = new List<TEntity>(entities.Count);
 
@@ -179,7 +184,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         }
 
         DbSet.RemoveRange(DbSet);
-        
+
         return Task.CompletedTask;
     }
 
@@ -206,7 +211,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 
         return Task.CompletedTask;
     }
-    
+
     public Task DeleteAsync(TIdentity id, CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
@@ -219,9 +224,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         if (entity != null)
             Context.Entry(entity).State = EntityState.Deleted;
         else
-            throw new Exception(
-                $"Сущность c идентификатором [{id}] отсутствует в контексте."
-            );
+            throw new Exception($"Сущность c идентификатором [{id}] отсутствует в контексте.");
 
         return Task.CompletedTask;
     }
@@ -241,8 +244,8 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task<int> ExecuteRawSqlAsync(string query, CancellationToken token)
-        => Context.Database.ExecuteSqlRawAsync(query, token);
+    public Task<int> ExecuteRawSqlAsync(string query, CancellationToken token) =>
+        Context.Database.ExecuteSqlRawAsync(query, token);
 
     public Task ClearCacheAsync(CancellationToken token)
     {
@@ -259,8 +262,8 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token)
-        => Context.Database.BeginTransactionAsync(token);
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token) =>
+        Context.Database.BeginTransactionAsync(token);
 
     public Task<bool> SaveEntitiesAsync(CancellationToken token)
     {

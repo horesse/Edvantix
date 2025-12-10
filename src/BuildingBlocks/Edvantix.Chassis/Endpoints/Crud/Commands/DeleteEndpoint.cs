@@ -27,21 +27,23 @@ public class DeleteEndpoint<TModel, TIdentity>
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Delete{ResourceName}",
-            $"Удалить запись",
-            $"Удаляет запись по идентификатору"
-        ).ProducesDelete();
+                builder,
+                $"Delete{ResourceName}",
+                $"Удалить запись",
+                $"Удаляет запись по идентификатору"
+            )
+            .ProducesDelete();
     }
 
     public virtual async Task<Results<NoContent, NotFound>> HandleAsync(
         TIdentity id,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var command = new DeleteCommand<TModel, TIdentity>(id);
         await sender.Send(command, cancellationToken);
-        
+
         return TypedResults.NoContent();
     }
 }

@@ -8,7 +8,7 @@ public class PublicModel(string? description = null, bool requiredAuth = false) 
 {
     public string Description => description ?? "Неизвестная сущность";
     public bool AuthRequired => requiredAuth;
-    
+
     // TODO: Разобраться
     public string? AuthPolicy => null;
 }
@@ -30,14 +30,14 @@ public static class PublicModelAttributeHelper
 
             return attribute?.Description ?? "Неизвестная сущность";
         }
-        
+
         public bool IsAuthRequired()
         {
             var attribute = type.GetCustomAttribute<PublicModel>();
 
             return attribute?.AuthRequired ?? true;
         }
-        
+
         public string? GetPolicy()
         {
             var attribute = type.GetCustomAttribute<PublicModel>();

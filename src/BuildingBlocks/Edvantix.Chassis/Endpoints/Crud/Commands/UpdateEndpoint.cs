@@ -27,25 +27,27 @@ public class UpdateEndpoint<TModel, TIdentity>
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Update{ResourceName}",
-            $"Обновить запись",
-            $"Обновляет существующую запись"
-        ).ProducesPut();
+                builder,
+                $"Update{ResourceName}",
+                $"Обновить запись",
+                $"Обновляет существующую запись"
+            )
+            .ProducesPut();
     }
 
     public virtual async Task<Results<NoContent, NotFound>> HandleAsync(
         TIdentity id,
         TModel model,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         // Убедимся что ID совпадает
         model.Id = id;
-        
+
         var command = new UpdateCommand<TModel, TIdentity>(model);
         await sender.Send(command, cancellationToken);
-        
+
         return TypedResults.NoContent();
     }
 }

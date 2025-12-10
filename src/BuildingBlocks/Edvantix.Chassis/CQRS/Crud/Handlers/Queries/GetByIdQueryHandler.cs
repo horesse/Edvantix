@@ -12,17 +12,19 @@ public sealed class GetByIdQueryHandler<TModel, TIdentity, TEntity>(IServiceProv
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
 {
-    public async Task<TModel> Handle(
-        GetByIdQuery<TModel, TIdentity> query,
-        CancellationToken token)
+    public async Task<TModel> Handle(GetByIdQuery<TModel, TIdentity> query, CancellationToken token)
     {
-        return await ExecuteAsync(async () =>
-        {
-            var entity = await Repository.GetByIdAsync(query.Id, token);
-            if (entity == null)
-                throw new NotFoundException("Entity not found");
-            
-            return EntityToModelMapper.Map(entity);
-        }, nameof(GetByIdQuery<,>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                var entity = await Repository.GetByIdAsync(query.Id, token);
+                if (entity == null)
+                    throw new NotFoundException("Entity not found");
+
+                return EntityToModelMapper.Map(entity);
+            },
+            nameof(GetByIdQuery<,>),
+            token
+        );
     }
 }

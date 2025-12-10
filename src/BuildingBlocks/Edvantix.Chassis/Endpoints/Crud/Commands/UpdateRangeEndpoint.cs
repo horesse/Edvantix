@@ -27,21 +27,23 @@ public class UpdateRangeEndpoint<TModel, TIdentity>
         );
 
         ConfigureEndpoint(
-            builder,
-            $"Update{ResourceName}Batch",
-            $"Обновить несколько записей",
-            $"Обновляет несколько записей за одну операцию"
-        ).ProducesPut();
+                builder,
+                $"Update{ResourceName}Batch",
+                $"Обновить несколько записей",
+                $"Обновляет несколько записей за одну операцию"
+            )
+            .ProducesPut();
     }
 
     public virtual async Task<NoContent> HandleAsync(
         IEnumerable<TModel> models,
         ISender sender,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var command = new UpdateRangeCommand<TModel, TIdentity>(models);
         await sender.Send(command, cancellationToken);
-        
+
         return TypedResults.NoContent();
     }
 }

@@ -13,14 +13,19 @@ public sealed class UpdateCommandHandler<TModel, TIdentity, TEntity>(IServicePro
 {
     public async Task<TIdentity> Handle(
         UpdateCommand<TModel, TIdentity> command,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
-        return await ExecuteAsync(async () =>
-        {
-            var entity = ModelToEntityMapper.Map(command.Model);
-            var modified = await Repository.UpdateAsync(entity, token);
-            await Repository.SaveEntitiesAsync(token);
-            return modified.Id;
-        }, nameof(UpdateCommand<,>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                var entity = ModelToEntityMapper.Map(command.Model);
+                var modified = await Repository.UpdateAsync(entity, token);
+                await Repository.SaveEntitiesAsync(token);
+                return modified.Id;
+            },
+            nameof(UpdateCommand<,>),
+            token
+        );
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Edvantix.DataVault.Infrastructure;
 
-public class DataVaultContextFactory: IDesignTimeDbContextFactory<DataVaultContext>
+public class DataVaultContextFactory : IDesignTimeDbContextFactory<DataVaultContext>
 {
     public DataVaultContext CreateDbContext(string[] args)
     {

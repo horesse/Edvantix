@@ -11,11 +11,12 @@ public sealed class GetCountQueryHandler<TModel, TIdentity, TEntity>(IServicePro
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
 {
-    public async Task<long> Handle(
-        GetCountQuery query,
-        CancellationToken token)
+    public async Task<long> Handle(GetCountQuery query, CancellationToken token)
     {
-        return await ExecuteAsync(async () => await Repository.GetCountAsync(token),
-            nameof(GetCountQuery), token);
+        return await ExecuteAsync(
+            async () => await Repository.GetCountAsync(token),
+            nameof(GetCountQuery),
+            token
+        );
     }
 }

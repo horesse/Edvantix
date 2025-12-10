@@ -21,7 +21,6 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
-
 var dataVaultApi = builder
     .AddProject<Edvantix_DataVault>(Services.DataVault)
     .WithReference(dataVaultDb)
@@ -29,16 +28,11 @@ var dataVaultApi = builder
     .WithKeycloak(keycloak)
     .WithFriendlyUrls();
 
-var gateway = builder
-    .AddApiGatewayProxy()
-    .WithService(dataVaultApi)
-    .WithService(keycloak);
+var gateway = builder.AddApiGatewayProxy().WithService(dataVaultApi).WithService(keycloak);
 
 if (builder.ExecutionContext.IsRunMode)
 {
-    builder
-        .AddScalar(keycloak)
-        .WithOpenAPI(dataVaultApi);
+    builder.AddScalar(keycloak).WithOpenAPI(dataVaultApi);
 }
 
 builder.Pipeline.AddGhcrPushStep();

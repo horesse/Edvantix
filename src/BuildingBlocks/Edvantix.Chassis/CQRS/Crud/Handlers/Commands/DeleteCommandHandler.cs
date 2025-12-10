@@ -13,13 +13,18 @@ public sealed class DeleteCommandHandler<TModel, TIdentity, TEntity>(IServicePro
 {
     public async Task<TIdentity> Handle(
         DeleteCommand<TModel, TIdentity> command,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
-        return await ExecuteAsync(async () =>
-        {
-            await Repository.DeleteAsync(command.Id, token);
-            await Repository.SaveEntitiesAsync(token);
-            return command.Id;
-        }, nameof(DeleteCommand<TModel, TIdentity>), token);
+        return await ExecuteAsync(
+            async () =>
+            {
+                await Repository.DeleteAsync(command.Id, token);
+                await Repository.SaveEntitiesAsync(token);
+                return command.Id;
+            },
+            nameof(DeleteCommand<TModel, TIdentity>),
+            token
+        );
     }
 }

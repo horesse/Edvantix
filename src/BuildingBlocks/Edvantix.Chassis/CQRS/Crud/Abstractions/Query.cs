@@ -34,5 +34,5 @@ public sealed record GetCountQuery : IQuery<long>;
 /// <summary>
 /// Проверка существования записи
 /// </summary>
-public sealed record IsExistQuery<TIdentity>(TIdentity Id)
-    : BaseIdentityQuery<TIdentity, bool>(Id) where TIdentity : struct;
+public sealed record IsExistQuery<TIdentity>(TIdentity Id) : BaseIdentityQuery<TIdentity, bool>(Id)
+    where TIdentity : struct;

@@ -28,7 +28,7 @@ public static class Extensions
         var services = builder.Services;
 
         builder.AddDefaultCors();
-        
+
         builder.AddDefaultAuthentication().WithKeycloakClaimsTransformation();
 
         services
@@ -54,28 +54,28 @@ public static class Extensions
             );
 
         builder.AddDefaultOpenApi();
-        
+
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-        
+
         services.AddApiFeature();
-        
-        services.AddMediatR(cfg => 
+
+        services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(IDataVaultApiMarker).Assembly);
-            
+
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>));
         });
-        
+
         var appSettings = new AppSettings();
 
         builder.Configuration.Bind(appSettings);
-        
+
         services.AddSingleton(appSettings);
 
         services.AddRateLimiting();
@@ -87,20 +87,22 @@ public static class Extensions
             options.Converters.Add(DecimalJsonConverter.Instance);
             return options;
         });
-        
+
         builder.AddPersistenceServices();
-        
-        services.AddValidatorsFromAssemblyContaining<IDataVaultApiMarker>(includeInternalTypes: true);
-        
+
+        services.AddValidatorsFromAssemblyContaining<IDataVaultApiMarker>(
+            includeInternalTypes: true
+        );
+
         services.AddSingleton<IActivityScope, ActivityScope>();
         services.AddSingleton<CommandHandlerMetrics>();
         services.AddSingleton<QueryHandlerMetrics>();
-        
+
         services.AddVersioning();
         services.AddEndpoints(typeof(IDataVaultApiMarker));
-        
+
         services.AddMapper(typeof(IDataVaultApiMarker));
-        
+
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
     }
 }

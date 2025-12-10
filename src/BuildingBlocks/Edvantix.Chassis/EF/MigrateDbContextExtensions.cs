@@ -136,4 +136,3 @@ public interface IDbSeeder<in TContext>
 {
     Task SeedAsync(TContext context);
 }
-

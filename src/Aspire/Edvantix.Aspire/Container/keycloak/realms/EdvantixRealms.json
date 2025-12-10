@@ -434,16 +434,6 @@
           "containerId": "da68320e-e061-4d62-84eb-956380572064",
           "attributes": {}
         }
-      ],
-      "${CLIENT_CHATTING_ID}": [
-        {
-          "id": "eb395161-f22f-41e7-a1d3-3e7f889886ac",
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "dc87a6cc-0137-4248-9215-632c3b7fe073",
-          "attributes": {}
-        }
       ]
     }
   },
@@ -1061,30 +1051,6 @@
       ]
     },
     {
-      "id": "15520ea5-5c09-4ab4-abec-2ee89fb32267",
-      "name": "${CLIENT_CHATTING_ID}_read",
-      "description": "Read for ${CLIENT_CHATTING_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
-      "id": "ff508de9-2952-4025-921a-fffabe5f936b",
-      "name": "${CLIENT_CHATTING_ID}_write",
-      "description": "Write for ${CLIENT_CHATTING_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
       "id": "b0fa9066-d7e0-4161-96d7-361a6542ac78",
       "name": "offline_access",
       "description": "OpenID Connect built-in scope: offline_access",
@@ -1138,30 +1104,6 @@
           }
         }
       ]
-    },
-    {
-      "id": "fbd2ef92-6dc3-46af-b0cd-d8b81f18cb06",
-      "name": "${CLIENT_RATING_ID}_read",
-      "description": "Read for ${CLIENT_RATING_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
-      "id": "21db6734-7284-4684-9581-3affab293866",
-      "name": "${CLIENT_RATING_ID}_write",
-      "description": "Write for ${CLIENT_RATING_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
     },
     {
       "id": "7d6a1313-822f-49b7-af83-7beb42f039f9",

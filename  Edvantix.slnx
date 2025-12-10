@@ -10,7 +10,7 @@
   </Folder>
   <Folder Name="/Services/" />
   <Folder Name="/Services/DataVault/">
-    <Project Path="src/Services/Edvantix.DataVault/Edvantix.DataVault.csproj" />
+    <Project Path="src/Services/DataVault/Edvantix.DataVault/Edvantix.DataVault.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />

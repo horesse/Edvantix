@@ -38,7 +38,7 @@ internal sealed class SecuritySchemeDefinitionsTransformer(IdentityOptions ident
         var securityScheme = new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OAuth2,
-            Description = "OAuth2 security scheme for the BookWorm API",
+            Description = "OAuth2 security scheme for the Edvantix API",
             Flows = new()
             {
                 AuthorizationCode = new()

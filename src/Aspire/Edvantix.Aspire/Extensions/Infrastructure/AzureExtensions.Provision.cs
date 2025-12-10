@@ -59,7 +59,7 @@ public static partial class AzureExtensions
     }
 
     /// <summary>
-    ///     Provisions an Azure PostgreSQL Flexible Server resource with BookWorm-specific configuration.
+    ///     Provisions an Azure PostgreSQL Flexible Server resource with Edvantix-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure PostgreSQL Flexible Server.</param>
     /// <returns>The configured resource builder for method chaining.</returns>

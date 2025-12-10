@@ -59,7 +59,7 @@ public static class EmailExtensions
                         Name = "SenderNameParameter",
                         Label = "Sender Name",
                         InputType = InputType.Text,
-                        Value = "BookWorm Support",
+                        Value = "Edvantix Support",
                         Description = "Enter the sender name",
                     }
                 );

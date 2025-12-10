@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,22 +18,19 @@ public class GetAllEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapGet(
-            $"/{ResourceName}",
+            GetRoutePath(CrudAction.GetAll),
             async (ISender sender, CancellationToken ct) =>
                 await HandleAsync(sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"GetAll{typeof(TModel).Name}s",
-            $"Get all {typeof(TModel).Name}s",
-            $"Retrieves all {typeof(TModel).Name} records"
+            $"GetAll{ResourceName}s",
+            $"Получить все записи",
+            $"Возвращает все записи"
         ).ProducesGet<IEnumerable<TModel>>();
     }
 

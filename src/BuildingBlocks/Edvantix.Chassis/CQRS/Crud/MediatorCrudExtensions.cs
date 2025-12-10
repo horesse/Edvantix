@@ -15,7 +15,7 @@ public static class MediatorCrudExtensions
         where TIdentity : struct
         where TEntity : Entity<TIdentity>, IAggregateRoot
     {
-        // Query Handlers - ИЗМЕНЕНО: IQueryHandler -> IRequestHandler
+        // Query Handlers
         services.AddScoped<IRequestHandler<GetAllQuery<TModel, TIdentity>, IEnumerable<TModel>>,
             GetAllQueryHandler<TModel, TIdentity, TEntity>>();
         
@@ -31,7 +31,7 @@ public static class MediatorCrudExtensions
         services.AddScoped<IRequestHandler<IsExistQuery<TIdentity>, bool>,
             IsExistQueryHandler<TModel, TIdentity, TEntity>>();
 
-        // Command Handlers - ИЗМЕНЕНО: ICommandHandler -> IRequestHandler
+        // Command Handlers
         services.AddScoped<IRequestHandler<CreateCommand<TModel, TIdentity>, TIdentity>,
             CreateCommandHandler<TModel, TIdentity, TEntity>>();
 

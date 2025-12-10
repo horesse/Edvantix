@@ -1,4 +1,7 @@
 ﻿using Asp.Versioning;
+using Edvantix.Chassis.Utilities.Attributes;
+using Edvantix.Chassis.Utilities.Formatters;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -12,18 +15,15 @@ public abstract class BaseCrudEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    // TODO: удалять из TModel Model
-    // TODO: аттрибут модели с русским неймингом
-    // TODO: перевод на русский
     // TODO: разобраться с RequireAuth, может быть как-то прокидывать хз, в основном должно быть true
-    protected abstract string ResourceName { get; }
-    protected abstract string Tag { get; }
-    
-    // TODO: SnakeCase?
-    protected virtual string GetRoutePath(string action) => $"/{ResourceName}/{action}";
+    protected virtual string ResourceName => typeof(TModel).Name.Replace("Model", string.Empty);
+
     protected virtual ApiVersion ApiVersion => new(1, 0);
     protected virtual bool RequireAuth => false;
     protected virtual string? AuthPolicy => null;
+    protected virtual string Description => typeof(TModel).GetDescription();
+    protected virtual string ResourceDisplayName => $"{Description} ({ResourceName})";
+    protected virtual string Tag => ResourceDisplayName;
 
     protected RouteHandlerBuilder ConfigureEndpoint(
         RouteHandlerBuilder builder,
@@ -50,5 +50,15 @@ public abstract class BaseCrudEndpoint<TModel, TIdentity>
         }
 
         return builder;
+    }
+    
+    protected virtual string GetRoutePath(CrudAction action, bool identity = false)
+    {
+        var route = $"/{ResourceName.ToSnakeCase()}/{action.ToString().ToSnakeCase()}";
+
+        if (identity)
+            route += "/{id}";
+
+        return route;
     }
 }

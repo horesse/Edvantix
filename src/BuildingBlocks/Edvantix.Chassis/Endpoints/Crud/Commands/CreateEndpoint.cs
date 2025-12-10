@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,22 +18,19 @@ public class CreateEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapPost(
-            $"/{ResourceName}",
+            GetRoutePath(CrudAction.Create),
             async (TModel model, ISender sender, CancellationToken ct) =>
                 await HandleAsync(model, sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"Create{typeof(TModel).Name}",
-            $"Create {typeof(TModel).Name}",
-            $"Creates a new {typeof(TModel).Name} record"
+            $"Create{ResourceName}",
+            $"Создать запись",
+            $"Создать новую запись"
         ).ProducesPost<TIdentity>();
     }
 
@@ -44,6 +42,6 @@ public class CreateEndpoint<TModel, TIdentity>
         var command = new CreateCommand<TModel, TIdentity>(model);
         var id = await sender.Send(command, cancellationToken);
         
-        return TypedResults.Created($"/{ResourceName}/{id}", id);
+        return TypedResults.Created($"{GetRoutePath(CrudAction.GetById)}/{id}", id);
     }
 }

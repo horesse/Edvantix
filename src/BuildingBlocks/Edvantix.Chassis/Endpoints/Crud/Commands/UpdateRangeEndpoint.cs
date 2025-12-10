@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,22 +18,19 @@ public class UpdateRangeEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapPut(
-            $"/{ResourceName}/batch",
+            GetRoutePath(CrudAction.UpdateRange),
             async (IEnumerable<TModel> models, ISender sender, CancellationToken ct) =>
                 await HandleAsync(models, sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"Update{typeof(TModel).Name}Batch",
-            $"Update multiple {typeof(TModel).Name}s",
-            $"Updates multiple {typeof(TModel).Name} records in a single operation"
+            $"Update{ResourceName}Batch",
+            $"Обновить несколько записей",
+            $"Обновляет несколько записей за одну операцию"
         ).ProducesPut();
     }
 

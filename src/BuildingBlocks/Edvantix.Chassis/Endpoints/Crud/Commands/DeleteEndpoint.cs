@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,22 +18,19 @@ public class DeleteEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapDelete(
-            $"/{ResourceName}/{{id}}",
+            GetRoutePath(CrudAction.Delete, true),
             async (TIdentity id, ISender sender, CancellationToken ct) =>
                 await HandleAsync(id, sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"Delete{typeof(TModel).Name}",
-            $"Delete {typeof(TModel).Name}",
-            $"Deletes a {typeof(TModel).Name} record by ID"
+            $"Delete{ResourceName}",
+            $"Удалить запись",
+            $"Удаляет запись по идентификатору"
         ).ProducesDelete();
     }
 

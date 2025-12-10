@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,22 +18,19 @@ public class IsExistEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapGet(
-            $"/{ResourceName}/{{id}}/exists",
+            GetRoutePath(CrudAction.IsExist, true),
             async (TIdentity id, ISender sender, CancellationToken ct) =>
                 await HandleAsync(id, sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"Check{typeof(TModel).Name}Exists",
-            $"Check if {typeof(TModel).Name} exists",
-            $"Checks whether a {typeof(TModel).Name} with the specified ID exists"
+            $"Check{ResourceName}Exists",
+            $"Проверить существование записи",
+            $"Проверяет, существует ли запись с указанным идентификатором"
         ).ProducesGet<bool>();
     }
 

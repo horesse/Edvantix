@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -18,22 +19,19 @@ public class DeleteRangeEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapDelete(
-            $"/{ResourceName}/batch",
+            GetRoutePath(CrudAction.DeleteRange),
             async ([FromBody] IEnumerable<TIdentity> ids, ISender sender, CancellationToken ct) =>
             await HandleAsync(ids, sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"Delete{typeof(TModel).Name}Batch",
-            $"Delete multiple {typeof(TModel).Name}s",
-            $"Deletes multiple {typeof(TModel).Name} records by their IDs"
+            $"Delete{ResourceName}Batch",
+            $"Удалить несколько записей",
+            $"Удаляет несколько записей по их идентификаторам"
         ).ProducesDelete();
     }
 

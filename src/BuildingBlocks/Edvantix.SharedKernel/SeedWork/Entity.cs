@@ -6,8 +6,5 @@ public abstract class Entity<TId> : HasDomainEvents
     public TId Id { get; set; } = default!;
 }
 
-public abstract class LongIdentity : Entity<long>
-{
-    public new long Id { get; set; }
-}
+public abstract class LongIdentity : Entity<long>;
 

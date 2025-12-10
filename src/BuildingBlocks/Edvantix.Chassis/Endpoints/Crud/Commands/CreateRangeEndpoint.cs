@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,22 +18,19 @@ public class CreateRangeEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapPost(
-            $"/{ResourceName}/batch",
+            GetRoutePath(CrudAction.CreateRange),
             async (IEnumerable<TModel> models, ISender sender, CancellationToken ct) =>
                 await HandleAsync(models, sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"Create{typeof(TModel).Name}Batch",
-            $"Create multiple {typeof(TModel).Name}s",
-            $"Creates multiple {typeof(TModel).Name} records in a single operation"
+            $"Create{ResourceName}Batch",
+            $"Создать несколько записей",
+            $"Создаёт несколько записей за одну операцию"
         ).ProducesPost<IEnumerable<TIdentity>>();
     }
 
@@ -44,7 +42,7 @@ public class CreateRangeEndpoint<TModel, TIdentity>
         var command = new CreateRangeCommand<TModel, TIdentity>(models);
         var ids = await sender.Send(command, cancellationToken);
         
-        return TypedResults.Created($"/{ResourceName}/batch", ids);
+        return TypedResults.Created($"{GetRoutePath(CrudAction.GetById)}", ids);
     }
 }
 

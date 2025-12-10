@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,22 +18,19 @@ public class GetCountEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    protected override string ResourceName => typeof(TModel).Name.ToLowerInvariant() + "s";
-    protected override string Tag => typeof(TModel).Name;
-
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapGet(
-            $"/{ResourceName}/count",
+            GetRoutePath(CrudAction.GetCount),
             async (ISender sender, CancellationToken ct) =>
                 await HandleAsync(sender, ct)
         );
 
         ConfigureEndpoint(
             builder,
-            $"Get{typeof(TModel).Name}Count",
-            $"Get {typeof(TModel).Name} count",
-            $"Returns the total count of {typeof(TModel).Name} records"
+            $"Get{ResourceName}Count",
+            $"Получить количество записей",
+            $"Возвращает общее количество записей"
         ).ProducesGet<long>();
     }
 

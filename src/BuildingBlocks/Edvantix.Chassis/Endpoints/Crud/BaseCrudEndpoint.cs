@@ -15,12 +15,11 @@ public abstract class BaseCrudEndpoint<TModel, TIdentity>
     where TModel : Model<TIdentity>
     where TIdentity : struct
 {
-    // TODO: разобраться с RequireAuth, может быть как-то прокидывать хз, в основном должно быть true
     protected virtual string ResourceName => typeof(TModel).Name.Replace("Model", string.Empty);
 
     protected virtual ApiVersion ApiVersion => new(1, 0);
-    protected virtual bool RequireAuth => false;
-    protected virtual string? AuthPolicy => null;
+    protected virtual bool RequireAuth => typeof(TModel).IsAuthRequired();
+    protected virtual string? AuthPolicy => RequireAuth ? typeof(TModel).GetPolicy() : null;
     protected virtual string Description => typeof(TModel).GetDescription();
     protected virtual string ResourceDisplayName => $"{Description} ({ResourceName})";
     protected virtual string Tag => ResourceDisplayName;

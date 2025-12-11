@@ -14,21 +14,12 @@ public class PagedSpecification<TEntity> : Specification<TEntity>
     {
         if (PageSize > 0 && CurrentPage > 0)
         {
-            ApplyPaging(Query, CurrentPage, PageSize);
+            Query.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
         }
         
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !ShowDeleted)
         {
             Query.Where(e => ((ISoftDelete)e).IsDeleted == false);
         }
-    }
-
-    private static void ApplyPaging(
-        ISpecificationBuilder<TEntity> builder,
-        int pageIndex,
-        int pageSize
-    )
-    {
-        builder.Skip((pageIndex - 1) * pageSize).Take(pageSize);
     }
 }

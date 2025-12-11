@@ -8,7 +8,6 @@
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\Assemblies\" />
     <Folder Include="Grpc\" />
   </ItemGroup>
 </Project>

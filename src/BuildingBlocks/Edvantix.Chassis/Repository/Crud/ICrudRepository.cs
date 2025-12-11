@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Edvantix.Chassis.Specification;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -33,6 +34,14 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
     /// <returns>Задача, содержащая коллекцию объектов типа TEntity.</returns>
     Task<List<TEntity>> GetAllAsync(CancellationToken token);
 
+    /// <summary>
+    /// Асинхронно возвращает все объекты типа TEntity в виде коллекции по заданному фильтру.
+    /// </summary>
+    /// <param name="specification"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task<List<TEntity>> GetByExpressionAsync(ISpecification<TEntity> specification, CancellationToken token);
+    
     /// <summary>
     /// Асинхронно возвращает все объекты типа TEntity в виде коллекции.
     /// </summary>

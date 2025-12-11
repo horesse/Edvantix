@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Edvantix.Chassis.Helpers;
+using Edvantix.Chassis.Specification;
+using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -16,6 +18,8 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 {
     private TContext Context => provider.GetRequiredService<TContext>();
     private DbSet<TEntity> DbSet => Context.Set<TEntity>();
+    
+    private static SpecificationEvaluator Specification => SpecificationEvaluator.Instance;
 
     public IUnitOfWork UnitOfWork => Context;
 
@@ -28,6 +32,12 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 
     public Task<List<TEntity>> GetAllAsync(CancellationToken token) => DbSet.ToListAsync(token);
 
+    public Task<List<TEntity>> GetByExpressionAsync(ISpecification<TEntity> specification, CancellationToken token)
+    {
+        return Specification.GetQuery(DbSet.AsQueryable(), specification)
+            .ToListAsync(token);
+    }
+    
     public Task<List<TEntity>> GetAllByIdsAsync(List<TIdentity> ids, CancellationToken token)
     {
         if (ids is { } identities)

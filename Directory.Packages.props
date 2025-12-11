@@ -21,7 +21,7 @@
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.MailPit" Version="13.0.1-beta.468" />
     <PackageVersion Include="EFCore.NamingConventions" Version="10.0.0-rc.2" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="2.76.0-pre1" />
+    <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="2.71.0" />
     <PackageVersion Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.71.0" />
     <PackageVersion Include="Grpc.Core.Api" Version="2.71.0" />
     <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="9.0.0-develop.27" />
@@ -32,7 +32,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Compliance.Redaction" Version="10.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.0.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />

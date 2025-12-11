@@ -1,0 +1,34 @@
+﻿using Edvantix.Chassis.Specification.Builders;
+using Edvantix.SharedKernel.SeedWork;
+
+namespace Edvantix.Chassis.Specification.Generic;
+
+public class PagedSpecification<TEntity> : Specification<TEntity>
+    where TEntity : class, IAggregateRoot
+{
+    public int PageSize { get; set; }
+    public int CurrentPage { get; set; }
+    public bool ShowDeleted { get; set; } = false;
+
+    public PagedSpecification()
+    {
+        if (PageSize > 0 && CurrentPage > 0)
+        {
+            ApplyPaging(Query, CurrentPage, PageSize);
+        }
+        
+        if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !ShowDeleted)
+        {
+            Query.Where(e => ((ISoftDelete)e).IsDeleted == false);
+        }
+    }
+
+    private static void ApplyPaging(
+        ISpecificationBuilder<TEntity> builder,
+        int pageIndex,
+        int pageSize
+    )
+    {
+        builder.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+    }
+}

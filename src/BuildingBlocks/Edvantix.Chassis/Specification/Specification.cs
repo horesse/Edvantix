@@ -21,34 +21,34 @@ public class Specification<T> : ISpecification<T>
 
     [JsonIgnore]
     protected ISpecificationBuilder<T> Query => new SpecificationBuilder<T>(this);
-    
+
     [JsonIgnore]
     public IEnumerable<WhereExpression<T>> WhereExpressions => _whereExpressions ?? [];
-    
+
     [JsonIgnore]
     public IEnumerable<SearchExpression<T>> SearchExpressions => _searchExpressions ?? [];
-    
+
     [JsonIgnore]
     public IEnumerable<OrderExpression<T>> OrderExpressions => _orderExpressions ?? [];
-    
+
     [JsonIgnore]
     public IEnumerable<IncludeExpression> IncludeExpressions => _includeExpressions ?? [];
-    
+
     [JsonIgnore]
     public IEnumerable<string> IncludeStrings => _includeStrings ?? [];
 
     [JsonIgnore]
     public int Take { get; set; }
-    
+
     [JsonIgnore]
     public int Skip { get; set; }
-    
+
     [JsonIgnore]
     public bool AsNoTracking { get; internal set; }
-    
+
     [JsonIgnore]
     public bool AsSplitQuery { get; internal set; }
-    
+
     [JsonIgnore]
     public bool IgnoreQueryFilters { get; internal set; }
 

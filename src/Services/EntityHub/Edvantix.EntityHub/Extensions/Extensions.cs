@@ -59,7 +59,7 @@ public static class Extensions
         services.AddExceptionHandler<NotFoundExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-        
+
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(IEntityHubApiMarker).Assembly);
@@ -103,4 +103,3 @@ public static class Extensions
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
     }
 }
-

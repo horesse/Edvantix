@@ -10,8 +10,18 @@ public static class Extensions
 {
     public static IServiceCollection AddPlaygroundEntityFeature(this IServiceCollection services)
     {
-        services.AddCrudHandlers<PlaygroundEntityModel, long, PlaygroundEntity, CommonSpecification<PlaygroundEntity>>();
-        services.AddCrudEndpoints<PlaygroundEntity, PlaygroundEntityModel, long, CommonSpecification<PlaygroundEntity>>();
+        services.AddCrudHandlers<
+            PlaygroundEntityModel,
+            long,
+            PlaygroundEntity,
+            CommonSpecification<PlaygroundEntity>
+        >();
+        services.AddCrudEndpoints<
+            PlaygroundEntity,
+            PlaygroundEntityModel,
+            long,
+            CommonSpecification<PlaygroundEntity>
+        >();
 
         return services;
     }

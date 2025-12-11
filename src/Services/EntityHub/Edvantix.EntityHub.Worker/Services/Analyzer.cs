@@ -11,7 +11,7 @@ file record struct EntityTypeDto(string Name, string Description);
 public sealed class Analyzer(IServiceProvider provider)
 {
     private readonly IServiceProvider _localProvider = provider.CreateScope().ServiceProvider;
-    
+
     public async Task AnalyzeAssemblies(CancellationToken token)
     {
         var assemblies = ProjectAssembly.Assemblies;
@@ -24,17 +24,24 @@ public sealed class Analyzer(IServiceProvider provider)
 
         await Parallel.ForEachAsync(
             assemblies,
-            new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount, CancellationToken = token },
+            new ParallelOptions
+            {
+                MaxDegreeOfParallelism = Environment.ProcessorCount,
+                CancellationToken = token,
+            },
             async (kvp, ct) =>
             {
                 var (serviceName, assembly) = kvp;
                 var microserviceId = microserviceMap[serviceName];
                 await SyncEntityTypesAsync(microserviceId, assembly, ct);
-            });
+            }
+        );
     }
 
-    private async IAsyncEnumerable<(string serviceName, long id)> SyncMicroservicesAsync(Dictionary<string, Assembly> assemblies,
-        [EnumeratorCancellation] CancellationToken token)
+    private async IAsyncEnumerable<(string serviceName, long id)> SyncMicroservicesAsync(
+        Dictionary<string, Assembly> assemblies,
+        [EnumeratorCancellation] CancellationToken token
+    )
     {
         using var repo = _localProvider.GetRequiredService<IMicroserviceRepository>();
 
@@ -43,15 +50,13 @@ public sealed class Analyzer(IServiceProvider provider)
 
         var serviceNamesSet = assemblies.Select(x => x.Key).ToHashSet();
 
-        var toDelete = existing
-            .Where(m => !serviceNamesSet.Contains(m.Name))
-            .ToList();
-        
+        var toDelete = existing.Where(m => !serviceNamesSet.Contains(m.Name)).ToList();
+
         if (toDelete.Count > 0)
         {
             await repo.DeleteAsync(toDelete, token);
         }
-        
+
         foreach (var serviceName in serviceNamesSet)
         {
             if (existingDict.TryGetValue(serviceName, out var id))
@@ -61,22 +66,28 @@ public sealed class Analyzer(IServiceProvider provider)
             else
             {
                 var newMicroservice = await repo.InsertAsync(
-                    new Microservice { Name = serviceName }, 
-                    token);
+                    new Microservice { Name = serviceName },
+                    token
+                );
                 yield return (serviceName, newMicroservice.Id);
             }
         }
-        
+
         await repo.SaveEntitiesAsync(token);
     }
 
-    private async Task SyncEntityTypesAsync(long microserviceId, Assembly assembly, CancellationToken token)
+    private async Task SyncEntityTypesAsync(
+        long microserviceId,
+        Assembly assembly,
+        CancellationToken token
+    )
     {
         using var scope = _localProvider.CreateScope();
-        
+
         var repo = scope.ServiceProvider.GetRequiredService<IEntityTypeRepository>();
-        
-        var publicModels = assembly.GetTypes()
+
+        var publicModels = assembly
+            .GetTypes()
             .Select(t => (Type: t, Attribute: t.GetCustomAttribute<PublicModelAttribute>()))
             .Where(x => x.Attribute is not null)
             .Select(x => new EntityTypeDto(
@@ -87,27 +98,28 @@ public sealed class Analyzer(IServiceProvider provider)
 
         var expression = new EntityTypeFilterExpression(microserviceId);
         var existing = await repo.GetByExpressionAsync(expression, token);
-        
+
         var existingDict = existing.ToDictionary(e => e.Name, e => e);
         var publicModelTypes = publicModels.Select(p => p.Name).ToHashSet();
-        
-        var toDelete = existing
-            .Where(e => !publicModelTypes.Contains(e.Name))
-            .ToList();
-        
+
+        var toDelete = existing.Where(e => !publicModelTypes.Contains(e.Name)).ToList();
+
         if (toDelete.Count > 0)
         {
             await repo.DeleteAsync(toDelete, token);
         }
-        
+
         var toInsert = new List<EntityType>();
         var toUpdate = new List<EntityType>();
-        
+
         foreach (var model in publicModels)
         {
             if (existingDict.TryGetValue(model.Name, out var existingEntity))
             {
-                if (existingEntity.Name == model.Name && existingEntity.Description == model.Description)
+                if (
+                    existingEntity.Name == model.Name
+                    && existingEntity.Description == model.Description
+                )
                     continue;
 
                 existingEntity.Update(model.Name, model.Description);
@@ -118,17 +130,17 @@ public sealed class Analyzer(IServiceProvider provider)
                 toInsert.Add(new EntityType(model.Name, model.Description, microserviceId));
             }
         }
-        
+
         if (toInsert.Count > 0)
         {
             await repo.InsertRangeAsync(toInsert, token);
         }
-        
+
         if (toUpdate.Count > 0)
         {
             await repo.UpdateAsync(toUpdate, token);
         }
-        
+
         await repo.SaveEntitiesAsync(token);
     }
 }

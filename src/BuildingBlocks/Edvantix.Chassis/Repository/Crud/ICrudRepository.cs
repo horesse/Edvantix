@@ -40,8 +40,11 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
     /// <param name="specification"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    Task<List<TEntity>> GetByExpressionAsync(ISpecification<TEntity> specification, CancellationToken token);
-    
+    Task<List<TEntity>> GetByExpressionAsync(
+        ISpecification<TEntity> specification,
+        CancellationToken token
+    );
+
     /// <summary>
     /// Асинхронно возвращает все объекты типа TEntity в виде коллекции.
     /// </summary>

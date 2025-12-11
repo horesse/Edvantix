@@ -10,8 +10,9 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Edvantix.Chassis.Endpoints.Crud.Queries;
 
-public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification> : BaseCrudEndpoint<TModel, TIdentity>,
-    IEndpoint<Ok<IEnumerable<TModel>>, TSpecification, ISender>
+public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
+    : BaseCrudEndpoint<TModel, TIdentity>,
+        IEndpoint<Ok<IEnumerable<TModel>>, TSpecification, ISender>
     where TModel : Model<TIdentity>
     where TIdentity : struct
     where TEntity : class, IAggregateRoot
@@ -34,8 +35,11 @@ public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
             .ProducesGet<TModel>(hasNotFound: true);
     }
 
-    public async Task<Ok<IEnumerable<TModel>>> HandleAsync(TSpecification request, ISender sender,
-        CancellationToken cancellationToken = default)
+    public async Task<Ok<IEnumerable<TModel>>> HandleAsync(
+        TSpecification request,
+        ISender sender,
+        CancellationToken cancellationToken = default
+    )
     {
         var query = new GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity>(request);
         var result = await sender.Send(query, cancellationToken);

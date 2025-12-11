@@ -2,7 +2,8 @@ using Edvantix.EntityHub.Worker.Services;
 
 namespace Edvantix.EntityHub.Worker;
 
-public class Worker(IServiceProvider provider, IHostApplicationLifetime hostApplicationLifetime) : BackgroundService
+public class Worker(IServiceProvider provider, IHostApplicationLifetime hostApplicationLifetime)
+    : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

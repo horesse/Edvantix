@@ -23,7 +23,10 @@ public static class CrudEndpointExtensions
         services.AddTransient<IEndpoint, GetAllEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, GetCountEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, IsExistEndpoint<TModel, TIdentity>>();
-        services.AddTransient<IEndpoint, GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>>();
+        services.AddTransient<
+            IEndpoint,
+            GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
+        >();
         services.AddTransient<IEndpoint, CreateEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, CreateRangeEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, UpdateEndpoint<TModel, TIdentity>>();

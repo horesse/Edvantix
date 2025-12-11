@@ -15,24 +15,52 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
                 name: "microservice",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, comment: "Идентификатор")
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false, comment: "Наименование сервиса")
+                    id = table
+                        .Column<long>(type: "bigint", nullable: false, comment: "Идентификатор")
+                        .Annotation(
+                            "Npgsql:ValueGenerationStrategy",
+                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
+                        ),
+                    name = table.Column<string>(
+                        type: "character varying(255)",
+                        maxLength: 255,
+                        nullable: false,
+                        comment: "Наименование сервиса"
+                    ),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_microservice", x => x.id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "entity_type",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false, comment: "Идентификатор")
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false, comment: "Наименование сущности"),
-                    description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true, comment: "Описание сущности"),
-                    microservice_id = table.Column<long>(type: "bigint", nullable: false, comment: "Идентификатор микросервиса")
+                    id = table
+                        .Column<long>(type: "bigint", nullable: false, comment: "Идентификатор")
+                        .Annotation(
+                            "Npgsql:ValueGenerationStrategy",
+                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
+                        ),
+                    name = table.Column<string>(
+                        type: "character varying(100)",
+                        maxLength: 100,
+                        nullable: false,
+                        comment: "Наименование сущности"
+                    ),
+                    description = table.Column<string>(
+                        type: "character varying(1000)",
+                        maxLength: 1000,
+                        nullable: true,
+                        comment: "Описание сущности"
+                    ),
+                    microservice_id = table.Column<long>(
+                        type: "bigint",
+                        nullable: false,
+                        comment: "Идентификатор микросервиса"
+                    ),
                 },
                 constraints: table =>
                 {
@@ -42,29 +70,31 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
                         column: x => x.microservice_id,
                         principalTable: "microservice",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+                        onDelete: ReferentialAction.Restrict
+                    );
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_entity_type_microservice_id",
                 table: "entity_type",
-                column: "microservice_id");
+                column: "microservice_id"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_microservice_name",
                 table: "microservice",
                 column: "name",
-                unique: true);
+                unique: true
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "entity_type");
+            migrationBuilder.DropTable(name: "entity_type");
 
-            migrationBuilder.DropTable(
-                name: "microservice");
+            migrationBuilder.DropTable(name: "microservice");
         }
     }
 }

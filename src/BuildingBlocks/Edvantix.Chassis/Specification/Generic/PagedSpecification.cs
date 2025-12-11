@@ -16,7 +16,7 @@ public class PagedSpecification<TEntity> : Specification<TEntity>
         {
             Query.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
         }
-        
+
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && !ShowDeleted)
         {
             Query.Where(e => ((ISoftDelete)e).IsDeleted == false);

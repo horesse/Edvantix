@@ -6,7 +6,10 @@ namespace Edvantix.EntityHub.Infrastructure;
 
 public static class Extensions
 {
-    public static void AddPersistenceServices(this IHostApplicationBuilder builder, bool isFullFeatures = true)
+    public static void AddPersistenceServices(
+        this IHostApplicationBuilder builder,
+        bool isFullFeatures = true
+    )
     {
         var services = builder.Services;
 
@@ -18,7 +21,7 @@ public static class Extensions
                 {
                     services.AddMigration<EntityHubContext>();
                 }
-                
+
                 services.AddRepositories(typeof(IEntityHubApiMarker));
             },
             excludeDefaultInterceptors: !isFullFeatures

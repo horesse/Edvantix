@@ -12,12 +12,12 @@ public sealed class MicroserviceConfiguration : IEntityTypeConfiguration<Microse
     {
         builder.Configure<Microservice, long>();
 
-        builder.Property(m => m.Name)
+        builder
+            .Property(m => m.Name)
             .IsRequired()
             .HasMaxLength(DataSchemaLength.ExtraLarge)
             .HasComment("Наименование сервиса");
 
-        builder.HasIndex(m => m.Name)
-            .IsUnique();
+        builder.HasIndex(m => m.Name).IsUnique();
     }
 }

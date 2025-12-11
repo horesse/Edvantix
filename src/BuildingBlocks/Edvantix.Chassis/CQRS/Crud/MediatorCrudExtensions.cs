@@ -45,7 +45,10 @@ public static class MediatorCrudExtensions
         >();
 
         services.AddScoped<
-            IRequestHandler<GetByExpressionQuery<TEntity, TModel, TCommonExpression, TIdentity>, IEnumerable<TModel>>,
+            IRequestHandler<
+                GetByExpressionQuery<TEntity, TModel, TCommonExpression, TIdentity>,
+                IEnumerable<TModel>
+            >,
             GetByExpressionQueryHandler<TEntity, TModel, TCommonExpression, TIdentity>
         >();
 
@@ -79,7 +82,6 @@ public static class MediatorCrudExtensions
             IRequestHandler<DeleteRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
             DeleteRangeCommandHandler<TModel, TIdentity, TEntity>
         >();
-        
 
         return services;
     }

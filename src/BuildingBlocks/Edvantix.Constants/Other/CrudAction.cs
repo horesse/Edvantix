@@ -12,6 +12,7 @@ public enum CrudAction
 
     // Queries
     GetAll,
+    GetByExpression,
     GetById,
     GetCount,
     IsExist,

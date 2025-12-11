@@ -3,7 +3,7 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.DataVault.Features.PlaygroundEntityFeature.Models;
 
-[PublicModel("Игровая сущность", true)]
+[PublicModel("Игровая сущность", false)]
 public sealed class PlaygroundEntityModel : Model<long>
 {
     public string Name { get; set; } = null!;

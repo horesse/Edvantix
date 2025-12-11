@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Query;
+using Edvantix.Chassis.Specification;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
@@ -36,3 +37,9 @@ public sealed record GetCountQuery : IQuery<long>;
 /// </summary>
 public sealed record IsExistQuery<TIdentity>(TIdentity Id) : BaseIdentityQuery<TIdentity, bool>(Id)
     where TIdentity : struct;
+
+public sealed record GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity>(TSpecification Specification) : IQuery<IEnumerable<TModel>>
+    where TModel : Model<TIdentity>
+    where TIdentity : struct
+    where TSpecification : ISpecification<TEntity>
+    where TEntity : class,  IAggregateRoot;

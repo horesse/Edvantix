@@ -1,6 +1,7 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
+using Edvantix.Chassis.Specification;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,12 +10,13 @@ namespace Edvantix.Chassis.CQRS.Crud;
 
 public static class MediatorCrudExtensions
 {
-    public static IServiceCollection AddCrudHandlers<TModel, TIdentity, TEntity>(
+    public static IServiceCollection AddCrudHandlers<TModel, TIdentity, TEntity, TCommonExpression>(
         this IServiceCollection services
     )
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : Entity<TIdentity>, IAggregateRoot
+        where TCommonExpression : ISpecification<TEntity>
     {
         // Query Handlers
         services.AddScoped<
@@ -40,6 +42,11 @@ public static class MediatorCrudExtensions
         services.AddScoped<
             IRequestHandler<IsExistQuery<TIdentity>, bool>,
             IsExistQueryHandler<TModel, TIdentity, TEntity>
+        >();
+
+        services.AddScoped<
+            IRequestHandler<GetByExpressionQuery<TEntity, TModel, TCommonExpression, TIdentity>, IEnumerable<TModel>>,
+            GetByExpressionQueryHandler<TEntity, TModel, TCommonExpression, TIdentity>
         >();
 
         // Command Handlers
@@ -72,6 +79,7 @@ public static class MediatorCrudExtensions
             IRequestHandler<DeleteRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
             DeleteRangeCommandHandler<TModel, TIdentity, TEntity>
         >();
+        
 
         return services;
     }

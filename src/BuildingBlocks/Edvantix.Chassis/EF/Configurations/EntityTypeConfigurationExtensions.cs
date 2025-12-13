@@ -26,5 +26,7 @@ public static class EntityTypeConfigurationExtensions
         builder.Property(bd => bd.Id).HasComment("Идентификатор");
 
         builder.Property(bd => bd.IsDeleted).HasComment("Признак удаленной записи");
+        
+        builder.HasQueryFilter(x => !x.IsDeleted);
     }
 }

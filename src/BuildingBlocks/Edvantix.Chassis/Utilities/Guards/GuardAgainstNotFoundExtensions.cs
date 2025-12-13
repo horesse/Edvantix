@@ -28,6 +28,17 @@ public static class GuardAgainstNotFoundExtensions
             throw NotFoundException.For<T>(id);
         }
 
+        public void NotFound<T, TIdentity>([NotNull] T? value, TIdentity identity)
+            where TIdentity : struct
+        {
+            if (value is not null)
+            {
+                return;
+            }
+
+            throw NotFoundException.For<T>(identity.ToString());
+        }
+
         /// <summary>
         ///     Validates that the provided value is not null. If null, throws a <see cref="NotFoundException" />
         ///     for the specified <paramref name="id" />.

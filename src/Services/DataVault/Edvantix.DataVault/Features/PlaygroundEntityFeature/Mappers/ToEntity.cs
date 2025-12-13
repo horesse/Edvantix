@@ -8,12 +8,12 @@ public sealed class ToEntity : IMapper<PlaygroundEntityModel, PlaygroundEntity>
 {
     public PlaygroundEntity Map(PlaygroundEntityModel source)
     {
-        return new PlaygroundEntity
-        {
-            Name = source.Name,
-            Id = source.Id,
-            Value = source.Value,
-        };
+        return new PlaygroundEntity(source.Value, source.Name);
+    }
+
+    public void SetProperties(PlaygroundEntityModel source, PlaygroundEntity target)
+    {
+        target.Update(source.Value, source.Name);
     }
 
     public IReadOnlyList<PlaygroundEntity> Map(IReadOnlyList<PlaygroundEntityModel> sources)

@@ -12,7 +12,7 @@ public sealed class NotFoundException(string message) : Exception(message)
         return For<T>(id.ToString());
     }
 
-    public static NotFoundException For<T>(string id)
+    public static NotFoundException For<T>(string? id)
     {
         return new($"{typeof(T).Name} with id {id} not found.");
     }

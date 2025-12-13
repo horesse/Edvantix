@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Edvantix.Chassis.Repository.Crud;
 
 public abstract class SoftDeleteRepository<TContext, TEntity, TIdentity>(IServiceProvider provider)
-    : CrudRepository<TContext, TEntity, TIdentity>(provider) where TContext : DbContext, IUnitOfWork
+    : CrudRepository<TContext, TEntity, TIdentity>(provider)
+    where TContext : DbContext, IUnitOfWork
     where TEntity : Entity<TIdentity>, IAggregateRoot, ISoftDelete
     where TIdentity : struct
 {
@@ -31,14 +32,17 @@ public abstract class SoftDeleteRepository<TContext, TEntity, TIdentity>(IServic
     public override async Task DeleteAsync(TIdentity id, CancellationToken token)
     {
         var entity = await GetByIdAsync(id, token);
-        
+
         if (entity == null)
             return;
-        
+
         await DeleteAsync(entity, token);
     }
 
-    public override async Task DeleteAsync(IEnumerable<TIdentity> identities, CancellationToken token)
+    public override async Task DeleteAsync(
+        IEnumerable<TIdentity> identities,
+        CancellationToken token
+    )
     {
         foreach (var identity in identities)
         {

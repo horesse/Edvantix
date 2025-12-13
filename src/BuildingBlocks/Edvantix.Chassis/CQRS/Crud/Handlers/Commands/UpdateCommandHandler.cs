@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 
@@ -19,10 +20,13 @@ public sealed class UpdateCommandHandler<TModel, TIdentity, TEntity>(IServicePro
         return await ExecuteAsync(
             async () =>
             {
-                var entity = ModelToEntityMapper.Map(command.Model);
-                var modified = await Repository.UpdateAsync(entity, token);
+                var entity = await Repository.GetByIdAsync(command.Model.Id, token);
+                Guard.Against.NotFound(entity, command.Model.Id);
+
+                ModelToEntityMapper.SetProperties(command.Model, entity);
+                
                 await Repository.SaveEntitiesAsync(token);
-                return modified.Id;
+                return entity.Id;
             },
             nameof(UpdateCommand<,>),
             token

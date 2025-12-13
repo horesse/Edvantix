@@ -2,7 +2,7 @@
 
 namespace Edvantix.DataVault.Domain.AggregatesModel.PlaygroundEntityAggregate;
 
-public sealed class PlaygroundEntity() : LongIdentity, IAggregateRoot
+public sealed class PlaygroundEntity() : LongIdentity, IAggregateRoot, ISoftDelete
 {
     public PlaygroundEntity(decimal value, string name)
         : this()
@@ -11,6 +11,18 @@ public sealed class PlaygroundEntity() : LongIdentity, IAggregateRoot
         Name = name;
     }
 
-    public decimal Value { get; set; }
-    public string Name { get; set; } = null!;
+    public decimal Value { get; private set; }
+    public string Name { get; private set; } = null!;
+    public bool IsDeleted { get; set; }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+    }
+
+    public void Update(decimal value, string name)
+    {
+        Value = value;
+        Name = name;
+    }
 }

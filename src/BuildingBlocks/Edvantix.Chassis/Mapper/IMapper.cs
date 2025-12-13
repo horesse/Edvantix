@@ -10,7 +10,7 @@
 ///     This interface supports one-way mapping from domain/entity models to objects.
 ///     Implementations should be stateless and thread-safe.
 /// </remarks>
-public interface IMapper<in TSource, out TDestination>
+public interface IMapper<in TSource, TDestination>
     where TSource : class
     where TDestination : notnull
 {
@@ -27,4 +27,11 @@ public interface IMapper<in TSource, out TDestination>
     /// <param name="sources">The collection of source models to map from.</param>
     /// <returns>A read-only collection of mapped destination objects.</returns>
     IReadOnlyList<TDestination> Map(IReadOnlyList<TSource> sources);
+
+    /// <summary>
+    ///     Обновляет свойства сущности на базе источника
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="target"></param>
+    void SetProperties(TSource source, TDestination target);
 }

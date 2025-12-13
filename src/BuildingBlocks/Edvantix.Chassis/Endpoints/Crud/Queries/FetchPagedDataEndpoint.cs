@@ -30,8 +30,8 @@ public class FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
         ConfigureEndpoint(
                 builder,
                 $"FetchPaged{ResourceName}",
-                "Получить записи по фильтру",
-                "Возвращает записи по указанному фильтру"
+                "Получить пагинированные записи с учетом фильтра",
+                "Возвращает пагинированные записи с учетом фильтра"
             )
             .ProducesGet<TModel>(hasNotFound: true);
     }

@@ -42,7 +42,7 @@ public class DeleteRangeEndpoint<TModel, TIdentity>
         CancellationToken cancellationToken = default
     )
     {
-        var command = new DeleteRangeCommand<TModel, TIdentity>(ids);
+        var command = new DeleteRangeCommand<TIdentity>(ids);
         await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();

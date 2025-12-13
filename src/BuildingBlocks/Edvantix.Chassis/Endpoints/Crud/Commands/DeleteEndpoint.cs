@@ -41,7 +41,7 @@ public class DeleteEndpoint<TModel, TIdentity>
         CancellationToken cancellationToken = default
     )
     {
-        var command = new DeleteCommand<TModel, TIdentity>(id);
+        var command = new DeleteCommand<TIdentity>(id);
         await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();

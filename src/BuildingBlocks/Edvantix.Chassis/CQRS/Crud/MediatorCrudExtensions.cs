@@ -27,11 +27,6 @@ public static class MediatorCrudExtensions
     {
         // Query Handlers
         services.AddScoped<
-            IRequestHandler<GetAllQuery<TModel, TIdentity>, IEnumerable<TModel>>,
-            GetAllQueryHandler<TModel, TIdentity, TEntity>
-        >();
-
-        services.AddScoped<
             IRequestHandler<GetAllByIdsQuery<TModel, TIdentity>, IEnumerable<TModel>>,
             GetAllByIdsQueryHandler<TModel, TIdentity, TEntity>
         >();
@@ -74,27 +69,17 @@ public static class MediatorCrudExtensions
         >();
 
         services.AddScoped<
-            IRequestHandler<CreateRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
-            CreateRangeCommandHandler<TModel, TIdentity, TEntity>
-        >();
-
-        services.AddScoped<
             IRequestHandler<UpdateCommand<TModel, TIdentity>, TIdentity>,
             UpdateCommandHandler<TModel, TIdentity, TEntity>
         >();
 
         services.AddScoped<
-            IRequestHandler<UpdateRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
-            UpdateRangeCommandHandler<TModel, TIdentity, TEntity>
-        >();
-
-        services.AddScoped<
-            IRequestHandler<DeleteCommand<TModel, TIdentity>, TIdentity>,
+            IRequestHandler<DeleteCommand<TIdentity>, TIdentity>,
             DeleteCommandHandler<TModel, TIdentity, TEntity>
         >();
 
         services.AddScoped<
-            IRequestHandler<DeleteRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>,
+            IRequestHandler<DeleteRangeCommand<TIdentity>, IEnumerable<TIdentity>>,
             DeleteRangeCommandHandler<TModel, TIdentity, TEntity>
         >();
 

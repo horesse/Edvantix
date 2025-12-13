@@ -26,7 +26,6 @@ public static class CrudEndpointExtensions
         where TPagedSpecification : PagedSpecification<TEntity>
     {
         services.AddTransient<IEndpoint, GetByIdEndpoint<TModel, TIdentity>>();
-        services.AddTransient<IEndpoint, GetAllEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, GetCountEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, IsExistEndpoint<TModel, TIdentity>>();
         services.AddTransient<
@@ -38,9 +37,7 @@ public static class CrudEndpointExtensions
             FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TPagedSpecification>
         >();
         services.AddTransient<IEndpoint, CreateEndpoint<TModel, TIdentity>>();
-        services.AddTransient<IEndpoint, CreateRangeEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, UpdateEndpoint<TModel, TIdentity>>();
-        services.AddTransient<IEndpoint, UpdateRangeEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, DeleteEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, DeleteRangeEndpoint<TModel, TIdentity>>();
 

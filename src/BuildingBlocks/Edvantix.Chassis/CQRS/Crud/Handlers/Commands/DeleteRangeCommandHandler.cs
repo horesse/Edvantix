@@ -6,13 +6,13 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 
 public sealed class DeleteRangeCommandHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
-        IRequestHandler<DeleteRangeCommand<TModel, TIdentity>, IEnumerable<TIdentity>>
+        IRequestHandler<DeleteRangeCommand<TIdentity>, IEnumerable<TIdentity>>
     where TModel : Model<TIdentity>
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
 {
     public async Task<IEnumerable<TIdentity>> Handle(
-        DeleteRangeCommand<TModel, TIdentity> command,
+        DeleteRangeCommand<TIdentity> command,
         CancellationToken token
     )
     {
@@ -23,7 +23,7 @@ public sealed class DeleteRangeCommandHandler<TModel, TIdentity, TEntity>(IServi
                 await Repository.SaveEntitiesAsync(token);
                 return command.Ids;
             },
-            nameof(DeleteRangeCommand<TModel, TIdentity>),
+            nameof(DeleteRangeCommand<TIdentity>),
             token
         );
     }

@@ -10,7 +10,7 @@ public sealed class PlaygroundEntityConfiguration : IEntityTypeConfiguration<Pla
 {
     public void Configure(EntityTypeBuilder<PlaygroundEntity> builder)
     {
-        builder.Configure<PlaygroundEntity, long>();
+        builder.ConfigureSoftDeletable<PlaygroundEntity, long>();
 
         builder
             .Property(p => p.Name)

@@ -2,6 +2,7 @@
 using Edvantix.EntityHub.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.EntityHub.Infrastructure.Migrations
 {
     [DbContext(typeof(EntityHubContext))]
-    partial class EntityHubContextModelSnapshot : ModelSnapshot
+    [Migration("20251213224731_Fix EntityGroupId")]
+    partial class FixEntityGroupId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

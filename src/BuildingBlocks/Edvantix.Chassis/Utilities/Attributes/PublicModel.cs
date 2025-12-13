@@ -1,13 +1,20 @@
 ﻿using System.Reflection;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.Utilities.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class PublicModelAttribute(string? description = null, bool requiredAuth = false) : Attribute
+public class PublicModelAttribute(
+    string? desc = null,
+    EntityGroupEnum entityType = EntityGroupEnum.Hidden,
+    bool requiredAuth = false
+) : Attribute
 {
-    public string Description => description ?? "Неизвестная сущность";
+    public string Description => desc ?? "Неизвестная сущность";
     public bool AuthRequired => requiredAuth;
+
+    public EntityGroupEnum EntityType => entityType;
 
     // TODO: Разобраться
     public string? AuthPolicy => null;
@@ -22,6 +29,13 @@ public static class PublicModelAttributeHelper
             var attribute = type.GetCustomAttribute<PublicModelAttribute>();
 
             return attribute != null;
+        }
+
+        public EntityGroupEnum GetEntityType()
+        {
+            var attribute = type.GetCustomAttribute<PublicModelAttribute>();
+
+            return attribute?.EntityType ?? EntityGroupEnum.Hidden;
         }
 
         public string GetDescription()

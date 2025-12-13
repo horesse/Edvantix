@@ -2,6 +2,7 @@
 using Edvantix.EntityHub.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.EntityHub.Infrastructure.Migrations
 {
     [DbContext(typeof(EntityHubContext))]
-    partial class EntityHubContextModelSnapshot : ModelSnapshot
+    [Migration("20251213223900_Add EntityGroup")]
+    partial class AddEntityGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,6 +92,10 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
                         .HasColumnName("entity_group_id")
                         .HasComment("Идентификатор группы сущности");
 
+                    b.Property<long?>("EntityGroupId1")
+                        .HasColumnType("bigint")
+                        .HasColumnName("entity_group_id1");
+
                     b.Property<long>("MicroserviceId")
                         .HasColumnType("bigint")
                         .HasColumnName("microservice_id")
@@ -106,6 +113,9 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
 
                     b.HasIndex("EntityGroupId")
                         .HasDatabaseName("ix_entity_type_entity_group_id");
+
+                    b.HasIndex("EntityGroupId1")
+                        .HasDatabaseName("ix_entity_type_entity_group_id1");
 
                     b.HasIndex("MicroserviceId")
                         .HasDatabaseName("ix_entity_type_microservice_id");
@@ -143,11 +153,16 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
             modelBuilder.Entity("Edvantix.EntityHub.Domain.AggregatesModel.EntityTypeAggregate.EntityType", b =>
                 {
                     b.HasOne("Edvantix.EntityHub.Domain.AggregatesModel.EntityGroupAggregate.EntityGroup", "EntityGroup")
-                        .WithMany("Entities")
+                        .WithMany()
                         .HasForeignKey("EntityGroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_entity_type_entity_group_entity_group_id");
+
+                    b.HasOne("Edvantix.EntityHub.Domain.AggregatesModel.EntityGroupAggregate.EntityGroup", null)
+                        .WithMany("Entities")
+                        .HasForeignKey("EntityGroupId1")
+                        .HasConstraintName("fk_entity_type_entity_group_entity_group_id1");
 
                     b.HasOne("Edvantix.EntityHub.Domain.AggregatesModel.MicroserviceAggregate.Microservice", "Microservice")
                         .WithMany()

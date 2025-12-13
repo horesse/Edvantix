@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Constants.Core;
+using Edvantix.Constants.Other;
 using Edvantix.EntityHub.Domain.AggregatesModel.EntityTypeAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -28,6 +29,18 @@ public sealed class EntityTypeConfiguration : IEntityTypeConfiguration<EntityTyp
             .IsRequired()
             .HasComment("Идентификатор микросервиса");
 
+        builder
+            .Property(e => e.EntityGroupId)
+            .IsRequired()
+            .HasDefaultValue((long)EntityGroupEnum.Hidden)
+            .HasComment("Идентификатор группы сущности");
+
+        builder
+            .HasOne(e => e.EntityGroup)
+            .WithMany(e => e.Entities)
+            .HasForeignKey(e => e.EntityGroupId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         builder
             .HasOne(e => e.Microservice)
             .WithMany()

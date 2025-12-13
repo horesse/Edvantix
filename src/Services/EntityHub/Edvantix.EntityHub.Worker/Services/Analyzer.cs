@@ -1,12 +1,13 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using Edvantix.Chassis.Utilities.Attributes;
+using Edvantix.Constants.Other;
 using Edvantix.EntityHub.Domain.AggregatesModel.EntityTypeAggregate;
 using Edvantix.EntityHub.Domain.AggregatesModel.MicroserviceAggregate;
 
 namespace Edvantix.EntityHub.Worker.Services;
 
-file record struct EntityTypeDto(string Name, string Description);
+file record struct EntityTypeDto(string Name, string Description, EntityGroupEnum Type);
 
 public sealed class Analyzer(IServiceProvider provider)
 {
@@ -92,7 +93,8 @@ public sealed class Analyzer(IServiceProvider provider)
             .Where(x => x.Attribute is not null)
             .Select(x => new EntityTypeDto(
                 Name: x.Type.Name.Replace("Model", "", StringComparison.Ordinal),
-                Description: x.Attribute!.Description
+                Description: x.Attribute!.Description,
+                Type: x.Attribute!.EntityType
             ))
             .ToArray();
 
@@ -122,12 +124,12 @@ public sealed class Analyzer(IServiceProvider provider)
                 )
                     continue;
 
-                existingEntity.Update(model.Name, model.Description);
+                existingEntity.Update(model.Name, model.Description, (long)model.Type);
                 toUpdate.Add(existingEntity);
             }
             else
             {
-                toInsert.Add(new EntityType(model.Name, model.Description, microserviceId));
+                toInsert.Add(new EntityType(model.Name, model.Description, microserviceId, (long)model.Type));
             }
         }
 

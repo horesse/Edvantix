@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.CQRS.Query;
+using Edvantix.Chassis.Endpoints.Requests;
 using Edvantix.Chassis.Specification;
-using Edvantix.Chassis.Specification.Generic;
 using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
 
@@ -49,9 +49,9 @@ public sealed record GetByExpressionQuery<TEntity, TModel, TSpecification, TIden
     where TEntity : class, IAggregateRoot;
 
 public sealed record FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity>(
-    TSpecification Specification
+    PaginationRequest<TSpecification, TEntity> Request
 ) : IQuery<PagedResult<TModel>>
     where TModel : Model<TIdentity>
     where TIdentity : struct
-    where TSpecification : PagedSpecification<TEntity>
+    where TSpecification : class, ISpecification<TEntity>
     where TEntity : class, IAggregateRoot;

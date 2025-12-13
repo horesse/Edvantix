@@ -16,14 +16,11 @@ public static class MediatorCrudExtensions
         TModel,
         TIdentity,
         TEntity,
-        TCommonSpecification,
-        TPagedSpecification
-    >(this IServiceCollection services)
+        TSpecification>(this IServiceCollection services)
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : Entity<TIdentity>, IAggregateRoot
-        where TCommonSpecification : ISpecification<TEntity>
-        where TPagedSpecification : PagedSpecification<TEntity>
+        where TSpecification : class, ISpecification<TEntity>, new()
     {
         // Query Handlers
         services.AddScoped<
@@ -48,18 +45,18 @@ public static class MediatorCrudExtensions
 
         services.AddScoped<
             IRequestHandler<
-                GetByExpressionQuery<TEntity, TModel, TCommonSpecification, TIdentity>,
+                GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity>,
                 IEnumerable<TModel>
             >,
-            GetByExpressionQueryHandler<TEntity, TModel, TCommonSpecification, TIdentity>
+            GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdentity>
         >();
 
         services.AddScoped<
             IRequestHandler<
-                FetchPagedDataQuery<TEntity, TModel, TPagedSpecification, TIdentity>,
+                FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity>,
                 PagedResult<TModel>
             >,
-            FetchPagedDataQueryHandler<TEntity, TModel, TPagedSpecification, TIdentity>
+            FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdentity>
         >();
 
         // Command Handlers

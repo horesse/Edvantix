@@ -16,25 +16,23 @@ public static class CrudEndpointExtensions
         TEntity,
         TModel,
         TIdentity,
-        TCommonSpecification,
-        TPagedSpecification
+        TSpecification
     >(this IServiceCollection services)
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : class, IAggregateRoot
-        where TCommonSpecification : ISpecification<TEntity>
-        where TPagedSpecification : PagedSpecification<TEntity>
+        where TSpecification : class, ISpecification<TEntity>, new()
     {
         services.AddTransient<IEndpoint, GetByIdEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, GetCountEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, IsExistEndpoint<TModel, TIdentity>>();
         services.AddTransient<
             IEndpoint,
-            GetByExpressionEndpoint<TModel, TIdentity, TEntity, TCommonSpecification>
+            GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
         >();
         services.AddTransient<
             IEndpoint,
-            FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TPagedSpecification>
+            FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
         >();
         services.AddTransient<IEndpoint, CreateEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, UpdateEndpoint<TModel, TIdentity>>();

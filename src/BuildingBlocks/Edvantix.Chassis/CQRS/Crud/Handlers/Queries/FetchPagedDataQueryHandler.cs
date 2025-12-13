@@ -1,5 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
-using Edvantix.Chassis.Specification.Generic;
+using Edvantix.Chassis.Specification;
 using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
@@ -17,7 +17,7 @@ public class FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdenti
     where TModel : Model<TIdentity>
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
-    where TSpecification : PagedSpecification<TEntity>
+    where TSpecification : class, ISpecification<TEntity>, new()
 {
     public async Task<PagedResult<TModel>> Handle(
         FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity> request,
@@ -27,21 +27,23 @@ public class FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdenti
         return await ExecuteAsync(
             async () =>
             {
-                var entities = await Repository.GetByExpressionAsync(request.Specification, token);
+                var spec = request.Request.Specification ?? new TSpecification();
+
+                spec.Take = request.Request.PageSize;
+                spec.Skip = (request.Request.Page - 1) * request.Request.PageSize;
+                
+                var entities = await Repository.GetByExpressionAsync(spec, token);
                 var models = entities.Select(EntityToModelMapper.Map).ToList();
 
-                request.Specification.Take = 0;
-                request.Specification.Skip = 0;
-
                 var totalCount = await Repository.GetCountByExpressionAsync(
-                    request.Specification,
+                    spec,
                     token
                 );
 
                 return new PagedResult<TModel>(
                     models,
-                    request.Specification.CurrentPage,
-                    request.Specification.PageSize,
+                    request.Request.Page,
+                    request.Request.PageSize,
                     totalCount
                 );
             },

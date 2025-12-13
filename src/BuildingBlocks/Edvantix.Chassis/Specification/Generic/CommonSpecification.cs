@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Edvantix.Chassis.EF.Attributes;
 using Edvantix.Chassis.Specification.Builders;
-using Edvantix.Chassis.Specification.Expressions;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.Specification.Generic;

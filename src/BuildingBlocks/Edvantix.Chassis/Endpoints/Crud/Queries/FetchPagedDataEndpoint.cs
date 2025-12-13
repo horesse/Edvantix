@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
-using Edvantix.Chassis.Specification.Generic;
+using Edvantix.Chassis.Endpoints.Requests;
+using Edvantix.Chassis.Specification;
 using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
@@ -13,17 +14,17 @@ namespace Edvantix.Chassis.Endpoints.Crud.Queries;
 
 public class FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
     : BaseCrudEndpoint<TModel, TIdentity>,
-        IEndpoint<Ok<PagedResult<TModel>>, TSpecification, ISender>
+        IEndpoint<Ok<PagedResult<TModel>>, PaginationRequest<TSpecification, TEntity>, ISender>
     where TModel : Model<TIdentity>
     where TIdentity : struct
     where TEntity : class, IAggregateRoot
-    where TSpecification : PagedSpecification<TEntity>
+    where TSpecification : class, ISpecification<TEntity>, new()
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapPost(
             GetRoutePath(CrudAction.FetchPagedData),
-            async (TSpecification request, ISender sender, CancellationToken ct) =>
+            async (PaginationRequest<TSpecification, TEntity> request, ISender sender, CancellationToken ct) =>
                 await HandleAsync(request, sender, ct)
         );
 
@@ -37,7 +38,7 @@ public class FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
     }
 
     public async Task<Ok<PagedResult<TModel>>> HandleAsync(
-        TSpecification request,
+        PaginationRequest<TSpecification, TEntity> request,
         ISender sender,
         CancellationToken cancellationToken = default
     )

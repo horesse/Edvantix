@@ -11,7 +11,7 @@ public sealed class OrderEvaluator : IEvaluator
     public IQueryable<T> GetQuery<T>(IQueryable<T> query, ISpecification<T> specification)
         where T : class
     {
-        if (specification.OrderExpressions is null)
+        if (specification.OrderExpressions is null || !specification.OrderExpressions.Any())
         {
             return query;
         }
@@ -27,34 +27,31 @@ public sealed class OrderEvaluator : IEvaluator
             );
         }
 
-        var orderedQuery = specification.OrderExpressions.Aggregate<
-            OrderExpression<T>?,
-            IOrderedQueryable<T>?
-        >(
-            null,
-            (queryable, orderExpression) =>
-                orderExpression!.OrderType switch
-                {
-                    OrderType.OrderBy => queryable?.OrderBy(orderExpression.KeySelector),
-                    OrderType.OrderByDescending => queryable?.OrderByDescending(
-                        orderExpression.KeySelector
-                    ),
-                    OrderType.ThenBy => queryable?.ThenBy(orderExpression.KeySelector),
-                    OrderType.ThenByDescending => queryable?.ThenByDescending(
-                        orderExpression.KeySelector
-                    ),
-                    _ => throw new ArgumentOutOfRangeException(
-                        nameof(OrderType),
-                        "Invalid order type."
-                    ),
-                }
-        );
+        IOrderedQueryable<T>? orderedQuery = null;
 
-        if (orderedQuery is not null)
+        foreach (var orderExpression in specification.OrderExpressions)
         {
-            query = orderedQuery;
+            orderedQuery = orderExpression.OrderType switch
+            {
+                OrderType.OrderBy => query.OrderBy(orderExpression.KeySelector),
+                OrderType.OrderByDescending => query.OrderByDescending(orderExpression.KeySelector),
+                OrderType.ThenBy => orderedQuery?.ThenBy(orderExpression.KeySelector) 
+                                    ?? throw new InvalidOperationException("ThenBy requires a preceding OrderBy."),
+                OrderType.ThenByDescending => orderedQuery?.ThenByDescending(orderExpression.KeySelector)
+                                              ?? throw new InvalidOperationException("ThenByDescending requires a preceding OrderBy."),
+                _ => throw new ArgumentOutOfRangeException(
+                    nameof(orderExpression.OrderType),
+                    "Invalid order type."
+                ),
+            };
+
+            // После первого OrderBy/OrderByDescending, query больше не используется
+            if (orderExpression.OrderType is OrderType.OrderBy or OrderType.OrderByDescending)
+            {
+                query = orderedQuery;
+            }
         }
 
-        return query;
+        return orderedQuery ?? query;
     }
 }

@@ -1,4 +1,6 @@
-﻿using Edvantix.SharedKernel.SeedWork;
+﻿using Edvantix.Chassis.EF.Attributes;
+using Edvantix.Chassis.Specification;
+using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.DataVault.Domain.AggregatesModel.PlaygroundEntityAggregate;
 
@@ -11,7 +13,10 @@ public sealed class PlaygroundEntity() : LongIdentity, IAggregateRoot, ISoftDele
         Name = name;
     }
 
+    [OrderBy(OrderType.ThenByDescending)]
     public decimal Value { get; private set; }
+    
+    [OrderBy]
     public string Name { get; private set; } = null!;
     public bool IsDeleted { get; set; }
 

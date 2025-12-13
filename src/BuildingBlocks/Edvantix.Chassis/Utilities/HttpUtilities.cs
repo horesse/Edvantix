@@ -121,7 +121,7 @@ public sealed class UrlBuilder
         if (_pathSegments.Count > 0)
         {
             builder.Append('/');
-            builder.Append(string.Join('/', _pathSegments.Select(Uri.EscapeDataString)));
+            builder.Append(string.Join('/', _pathSegments));
         }
 
         if (_query.Count > 0)

@@ -139,7 +139,6 @@ public static class KeycloakExtensions
                 .AddKeycloak(name)
                 .WithDataVolume()
                 .WithIconName("LockClosedRibbon")
-                .WithCustomTheme(DefaultLocalKeycloakName)
                 .WithImagePullPolicy(ImagePullPolicy.Always)
                 .WithLifetime(ContainerLifetime.Persistent)
                 .WithSampleRealmImport(DefaultLocalKeycloakName, nameof(Edvantix));

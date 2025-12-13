@@ -71,7 +71,7 @@ builder
     .WithReference(entityHubDb)
     .WaitFor(entityHubDb);
 
-var gateway = builder
+builder
     .AddApiGatewayProxy()
     .WithService(dataVaultApi)
     .WithService(entityHubApi)

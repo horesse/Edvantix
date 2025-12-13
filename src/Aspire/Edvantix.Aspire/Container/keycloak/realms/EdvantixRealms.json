@@ -327,19 +327,29 @@
           "attributes": {}
         }
       ],
-      "security-admin-console": [],
-      "admin-cli": [],
-      "account-console": [],
       "${CLIENT_DATAVAULT_ID}": [
         {
-          "id": "fcdc711b-7a4b-4353-90a2-70a7f12f5de0",
+          "id": "f04ab1a1-33b2-4651-93f7-c1c87e8d1a16",
           "name": "uma_protection",
           "composite": false,
           "clientRole": true,
-          "containerId": "f1f6b9ba-8625-449d-97e1-53505e93e8aa",
+          "containerId": "8cf34f0b-4f2e-47ef-970a-110397a1c924",
           "attributes": {}
         }
       ],
+      "${CLIENT_ENTITYHUB_ID}": [
+        {
+          "id": "80ca6b7d-6531-4459-8a70-a9053567f5c5",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "b3abf8f9-4d75-4a3c-ada2-3b27abbe509f",
+          "attributes": {}
+        }
+      ],
+      "security-admin-console": [],
+      "admin-cli": [],
+      "account-console": [],
       "broker": [
         {
           "id": "fbd36721-8831-4c0d-b84b-b315d05ab0a1",
@@ -484,10 +494,10 @@
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "users": [
     {
-      "id": "74b3f025-6c8e-451a-a32c-286ed08e0eac",
+      "id": "25d3e3a8-3d02-4e4b-bc58-9af00f93938c",
       "username": "service-account-${CLIENT_DATAVAULT_ID}",
       "emailVerified": false,
-      "createdTimestamp": 1748888907625,
+      "createdTimestamp": 1748888580944,
       "enabled": true,
       "totp": false,
       "serviceAccountClientId": "${CLIENT_DATAVAULT_ID}",
@@ -496,6 +506,23 @@
       "realmRoles": ["default-roles-${REALM_NAME}"],
       "clientRoles": {
         "${CLIENT_DATAVAULT_ID}": ["uma_protection"]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "3d6de182-f41c-452a-b8ad-0ca193cb622f",
+      "username": "service-account-${CLIENT_ENTITYHUB_ID}",
+      "emailVerified": false,
+      "createdTimestamp": 1748889128804,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "${CLIENT_ENTITYHUB_ID}",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": ["default-roles-${REALM_NAME}"],
+      "clientRoles": {
+        "${CLIENT_ENTITYHUB_ID}": ["uma_protection"]
       },
       "notBefore": 0,
       "groups": []
@@ -671,80 +698,6 @@
       ]
     },
     {
-      "id": "f1f6b9ba-8625-449d-97e1-53505e93e8aa",
-      "clientId": "${CLIENT_DATAVAULT_ID}",
-      "name": "${CLIENT_DATAVAULT_NAME}",
-      "description": "Manages the lifecycle of customer shopping DATAVAULTs in the BookWorm e-commerce system",
-      "rootUrl": "${CLIENT_DATAVAULT_URL}",
-      "adminUrl": "${CLIENT_DATAVAULT_URL_CONTAINERHOST}",
-      "baseUrl": "/",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": true,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "${CLIENT_DATAVAULT_SECRET}",
-      "redirectUris": ["*"],
-      "webOrigins": ["*"],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "request.object.signature.alg": "any",
-        "post.logout.redirect.uris": "*",
-        "frontchannel.logout.session.required": "true",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "backchannel.logout.revoke.offline.tokens": "false",
-        "use.refresh.tokens": "true",
-        "realm_client": "false",
-        "oidc.ciba.grant.enabled": "false",
-        "backchannel.logout.session.required": "true",
-        "client_credentials.use_refresh_token": "false",
-        "require.pushed.authorization.requests": "false",
-        "request.object.encryption.enc": "any",
-        "pkce.code.challenge.method": "S256",
-        "client.secret.creation.time": "1748888907",
-        "request.object.encryption.alg": "any",
-        "client.introspection.response.allow.jwt.claim.enabled": "false",
-        "standard.token.exchange.enabled": "true",
-        "login_theme": "${THEME_NAME}",
-        "client.use.lightweight.access.token.enabled": "false",
-        "request.object.required": "not required",
-        "access.token.header.type.rfc9068": "false",
-        "tls.client.certificate.bound.access.tokens": "false",
-        "acr.loa.map": "{}",
-        "display.on.consent.screen": "false",
-        "token.response.type.bearer.lower-case": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "defaultClientScopes": [
-        "service_account",
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "${CLIENT_DATAVAULT_ID}_read",
-        "${CLIENT_DATAVAULT_ID}_write",
-        "address",
-        "phone",
-        "organization",
-        "offline_access",
-        "microprofile-jwt"
-      ]
-    },
-    {
       "id": "322ab436-febf-477a-9d59-56d0f6d91f4e",
       "clientId": "broker",
       "name": "${client_broker}",
@@ -780,6 +733,154 @@
         "email"
       ],
       "optionalClientScopes": [
+        "address",
+        "phone",
+        "organization",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "8cf34f0b-4f2e-47ef-970a-110397a1c924",
+      "clientId": "${CLIENT_DATAVAULT_ID}",
+      "name": "${CLIENT_DATAVAULT_NAME}",
+      "description": "",
+      "rootUrl": "${CLIENT_DATAVAULT_URL}",
+      "adminUrl": "${CLIENT_DATAVAULT_URL_CONTAINERHOST}",
+      "baseUrl": "/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${CLIENT_DATAVAULT_SECRET}",
+      "redirectUris": ["*"],
+      "webOrigins": ["*"],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "request.object.signature.alg": "any",
+        "frontchannel.logout.session.required": "true",
+        "post.logout.redirect.uris": "*",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "require.pushed.authorization.requests": "false",
+        "request.object.encryption.enc": "any",
+        "pkce.code.challenge.method": "S256",
+        "client.secret.creation.time": "1748885122",
+        "request.object.encryption.alg": "any",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
+        "standard.token.exchange.enabled": "false",
+        "login_theme": "${THEME_NAME}",
+        "client.use.lightweight.access.token.enabled": "false",
+        "request.object.required": "not required",
+        "access.token.header.type.rfc9068": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "acr.loa.map": "{}",
+        "display.on.consent.screen": "false",
+        "token.response.type.bearer.lower-case": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "service_account",
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "${CLIENT_DATAVAULT_ID}_read",
+        "${CLIENT_DATAVAULT_ID}_write",
+        "address",
+        "phone",
+        "organization",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "b3abf8f9-4d75-4a3c-ada2-3b27abbe509f",
+      "clientId": "${CLIENT_ENTITYHUB_ID}",
+      "name": "${CLIENT_ENTITYHUB_NAME}",
+      "description": "",
+      "rootUrl": "${CLIENT_ENTITYHUB_URL}",
+      "adminUrl": "${CLIENT_ENTITYHUB_URL_CONTAINERHOST}",
+      "baseUrl": "/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${CLIENT_ENTITYHUB_SECRET}",
+      "redirectUris": ["*"],
+      "webOrigins": ["*"],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "request.object.signature.alg": "any",
+        "post.logout.redirect.uris": "*",
+        "frontchannel.logout.session.required": "true",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "require.pushed.authorization.requests": "false",
+        "request.object.encryption.enc": "any",
+        "pkce.code.challenge.method": "S256",
+        "client.secret.creation.time": "1748889128",
+        "request.object.encryption.alg": "any",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
+        "standard.token.exchange.enabled": "false",
+        "login_theme": "${THEME_NAME}",
+        "client.use.lightweight.access.token.enabled": "false",
+        "request.object.required": "not required",
+        "access.token.header.type.rfc9068": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "acr.loa.map": "{}",
+        "display.on.consent.screen": "false",
+        "token.response.type.bearer.lower-case": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "service_account",
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "${CLIENT_ENTITYHUB_ID}_read",
+        "${CLIENT_ENTITYHUB_ID}_write",
         "address",
         "phone",
         "organization",
@@ -1106,6 +1207,30 @@
       ]
     },
     {
+      "id": "fbd2ef92-6dc3-46af-b0cd-d8b81f18cb06",
+      "name": "${CLIENT_ENTITYHUB_ID}_read",
+      "description": "Read for ${CLIENT_ENTITYHUB_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "21db6734-7284-4684-9581-3affab293866",
+      "name": "${CLIENT_ENTITYHUB_ID}_write",
+      "description": "Write for ${CLIENT_ENTITYHUB_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
       "id": "7d6a1313-822f-49b7-af83-7beb42f039f9",
       "name": "address",
       "description": "OpenID Connect built-in scope: address",
@@ -1180,30 +1305,6 @@
           }
         }
       ]
-    },
-    {
-      "id": "fa0295b4-d575-49ea-bad8-34fd0e492100",
-      "name": "${CLIENT_DATAVAULT_ID}_read",
-      "description": "Read for ${CLIENT_DATAVAULT_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
-      "id": "a1a7d53b-900e-462c-a584-14f5af678933",
-      "name": "${CLIENT_DATAVAULT_ID}_write",
-      "description": "Write for ${CLIENT_DATAVAULT_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
     },
     {
       "id": "4bfd4208-d813-4243-b532-7cad4fb25f61",
@@ -1317,6 +1418,30 @@
           }
         }
       ]
+    },
+    {
+      "id": "dc9d8059-8e37-4ffd-904b-1a4d080afb17",
+      "name": "${CLIENT_DATAVAULT_ID}_read",
+      "description": "Read for ${CLIENT_DATAVAULT_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "39e7d424-6a58-4507-90a2-3887bd2952b5",
+      "name": "${CLIENT_DATAVAULT_ID}_write",
+      "description": "Write for ${CLIENT_DATAVAULT_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
     },
     {
       "id": "5563bcbb-019c-4c66-93bb-7c19b4044354",

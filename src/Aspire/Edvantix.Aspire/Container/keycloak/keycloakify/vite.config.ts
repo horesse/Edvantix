@@ -7,10 +7,10 @@ export default defineConfig({
   plugins: [
     react(),
     keycloakify({
-      themeName: "bookworm",
+      themeName: "edvantix",
       themeVersion: "1.0.0",
-      groupId: "com.foxminchan.bookworm.keycloak",
-      artifactId: "keycloak-theme-bookworm",
+      groupId: "com.edvantix.edvantix.keycloak",
+      artifactId: "keycloak-theme-edvantix",
       accountThemeImplementation: "none",
       keycloakifyBuildDirPath: "../themes",
     }),

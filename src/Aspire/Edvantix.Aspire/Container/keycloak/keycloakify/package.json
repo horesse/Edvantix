@@ -1,8 +1,8 @@
 {
-  "name": "@bookworm/keycloakify",
+  "name": "@edvantix/keycloakify",
   "version": "1.0.0",
-  "description": "Keycloakify-based authentication UI theme for BookWorm's identity and access management",
-  "author": "Nhan Nguyen <nguyenxuannhan407@gmail.com> (https://github.com/foxminchan)",
+  "description": "Keycloakify-based authentication UI theme for Edvantix's identity and access management",
+  "author": "Nhan Nguyen <nguyenxuannhan407@gmail.com> (https://github.com/Edvantix)",
   "licenses": [
     {
       "type": "MIT",
@@ -11,13 +11,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/foxminchan/BookWorm.git",
-    "directory": "src/Aspire/BookWorm.AppHost/Container/keycloak/keycloakify"
+    "url": "git+https://github.com/Edvantix/Edvantix.git",
+    "directory": "src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify"
   },
   "bugs": {
-    "url": "https://github.com/foxminchan/BookWorm/issues"
+    "url": "https://github.com/foxminchan/Edvantix/issues"
   },
-  "homepage": "https://github.com/foxminchan/BookWorm#readme",
+  "homepage": "https://github.com/Edvantix/Edvantix#readme",
   "type": "module",
   "scripts": {
     "postinstall": "keycloakify sync-extensions",

@@ -17,7 +17,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
     where TIdentity : struct
 {
     private TContext Context => provider.GetRequiredService<TContext>();
-    private DbSet<TEntity> DbSet => Context.Set<TEntity>();
+    protected DbSet<TEntity> DbSet => Context.Set<TEntity>();
 
     private static SpecificationEvaluator Specification => SpecificationEvaluator.Instance;
 
@@ -178,7 +178,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return modifiedCollection;
     }
 
-    public Task DeleteAllAsync(CancellationToken token)
+    public virtual Task DeleteAllAsync(CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
         {
@@ -190,7 +190,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task DeleteAsync(TEntity entity, CancellationToken token)
+    public virtual Task DeleteAsync(TEntity entity, CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
         {
@@ -202,7 +202,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task DeleteAsync(IEnumerable<TEntity> entities, CancellationToken token)
+    public virtual Task DeleteAsync(IEnumerable<TEntity> entities, CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
         {
@@ -214,7 +214,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task DeleteAsync(TIdentity id, CancellationToken token)
+    public virtual Task DeleteAsync(TIdentity id, CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
         {
@@ -231,7 +231,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task DeleteAsync(IEnumerable<TIdentity> identities, CancellationToken token)
+    public virtual Task DeleteAsync(IEnumerable<TIdentity> identities, CancellationToken token)
     {
         if (token.GetErrorIfCancellationRequested(out var exception))
         {

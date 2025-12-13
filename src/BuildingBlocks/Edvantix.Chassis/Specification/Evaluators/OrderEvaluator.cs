@@ -35,10 +35,14 @@ public sealed class OrderEvaluator : IEvaluator
             {
                 OrderType.OrderBy => query.OrderBy(orderExpression.KeySelector),
                 OrderType.OrderByDescending => query.OrderByDescending(orderExpression.KeySelector),
-                OrderType.ThenBy => orderedQuery?.ThenBy(orderExpression.KeySelector) 
-                                    ?? throw new InvalidOperationException("ThenBy requires a preceding OrderBy."),
-                OrderType.ThenByDescending => orderedQuery?.ThenByDescending(orderExpression.KeySelector)
-                                              ?? throw new InvalidOperationException("ThenByDescending requires a preceding OrderBy."),
+                OrderType.ThenBy => orderedQuery?.ThenBy(orderExpression.KeySelector)
+                    ?? throw new InvalidOperationException("ThenBy requires a preceding OrderBy."),
+                OrderType.ThenByDescending => orderedQuery?.ThenByDescending(
+                    orderExpression.KeySelector
+                )
+                    ?? throw new InvalidOperationException(
+                        "ThenByDescending requires a preceding OrderBy."
+                    ),
                 _ => throw new ArgumentOutOfRangeException(
                     nameof(orderExpression.OrderType),
                     "Invalid order type."

@@ -8,7 +8,10 @@ public static partial class SpecificationBuilderExtensions
     extension<T>(ISpecificationBuilder<T> builder)
         where T : class
     {
-        public ISpecificationBuilder<T> Order(Expression<Func<T, object?>> keySelector, OrderType orderType)
+        public ISpecificationBuilder<T> Order(
+            Expression<Func<T, object?>> keySelector,
+            OrderType orderType
+        )
         {
             return orderType switch
             {
@@ -16,10 +19,10 @@ public static partial class SpecificationBuilderExtensions
                 OrderType.OrderByDescending => builder.OrderByDescending(keySelector),
                 OrderType.ThenBy => builder.ThenBy(keySelector),
                 OrderType.ThenByDescending => builder.ThenByDescending(keySelector),
-                _ => throw new ArgumentOutOfRangeException(nameof(orderType), orderType, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(orderType), orderType, null),
             };
         }
-        
+
         public ISpecificationBuilder<T> OrderBy(Expression<Func<T, object?>> keySelector)
         {
             var expr = new OrderExpression<T>(keySelector, OrderType.OrderBy);

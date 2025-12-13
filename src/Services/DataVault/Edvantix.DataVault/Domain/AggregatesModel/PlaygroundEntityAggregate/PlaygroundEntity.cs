@@ -15,7 +15,7 @@ public sealed class PlaygroundEntity() : LongIdentity, IAggregateRoot, ISoftDele
 
     [OrderBy(OrderType.ThenByDescending)]
     public decimal Value { get; private set; }
-    
+
     [OrderBy]
     public string Name { get; private set; } = null!;
     public bool IsDeleted { get; set; }

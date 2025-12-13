@@ -11,10 +11,7 @@ public sealed class DeleteCommandHandler<TModel, TIdentity, TEntity>(IServicePro
     where TIdentity : struct
     where TEntity : Entity<TIdentity>, IAggregateRoot
 {
-    public async Task<TIdentity> Handle(
-        DeleteCommand<TIdentity> command,
-        CancellationToken token
-    )
+    public async Task<TIdentity> Handle(DeleteCommand<TIdentity> command, CancellationToken token)
     {
         return await ExecuteAsync(
             async () =>

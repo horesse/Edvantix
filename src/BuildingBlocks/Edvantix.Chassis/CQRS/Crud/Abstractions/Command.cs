@@ -21,10 +21,12 @@ public sealed record UpdateCommand<TModel, TIdentity>(TModel Model) : ICommand<T
 /// Удаление записи
 /// </summary>
 public sealed record DeleteCommand<TIdentity>(TIdentity Id)
-    : BaseIdentityCommand<TIdentity, TIdentity>(Id) where TIdentity : struct;
+    : BaseIdentityCommand<TIdentity, TIdentity>(Id)
+    where TIdentity : struct;
 
 /// <summary>
 /// Удаление нескольких записей
 /// </summary>
 public sealed record DeleteRangeCommand<TIdentity>(IEnumerable<TIdentity> Ids)
-    : ICommand<IEnumerable<TIdentity>> where TIdentity : struct;
+    : ICommand<IEnumerable<TIdentity>>
+    where TIdentity : struct;

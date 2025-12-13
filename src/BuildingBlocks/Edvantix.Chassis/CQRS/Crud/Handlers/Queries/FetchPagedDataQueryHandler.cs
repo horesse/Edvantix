@@ -45,7 +45,7 @@ public class FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdenti
                     totalCount
                 );
             },
-            nameof(GetAllQuery<,>),
+            nameof(FetchPagedDataQuery<,,,>),
             token
         );
     }

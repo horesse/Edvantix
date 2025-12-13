@@ -29,7 +29,7 @@ public class GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdent
                 var entities = await Repository.GetByExpressionAsync(request.Specification, token);
                 return entities.Select(EntityToModelMapper.Map);
             },
-            nameof(GetAllQuery<,>),
+            nameof(GetByExpressionQuery<,,,>),
             token
         );
     }

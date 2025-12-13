@@ -42,22 +42,12 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 
     public Task<List<TEntity>> GetAllByIdsAsync(List<TIdentity> ids, CancellationToken token)
     {
-        if (ids is { } identities)
-        {
-            return DbSet.Where(x => identities.Contains(x.Id)).ToListAsync<TEntity>(token);
-        }
-
-        return Task.FromResult(new List<TEntity>());
+        return DbSet.Where(x => ids.Contains(x.Id)).ToListAsync(token);
     }
 
-    public Task<TEntity?> GetByIdAsync(TIdentity identity, CancellationToken token)
+    public Task<TEntity?> GetByIdAsync(TIdentity id, CancellationToken token)
     {
-        if (identity is TIdentity id)
-        {
-            return DbSet.FirstOrDefaultAsync(x => x.Id.Equals(id), token);
-        }
-
-        return Task.FromResult(default(TEntity?));
+        return DbSet.FirstOrDefaultAsync(x => x.Id.Equals(id), token);
     }
 
     public Task<int> GetCountAsync(CancellationToken token) => DbSet.CountAsync(token);
@@ -91,7 +81,7 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         CancellationToken token
     )
     {
-        var modifiedCollection = new List<TEntity>(entities.Count());
+        var modifiedCollection = new List<TEntity>(entities.Count);
 
         foreach (var entity in entities)
         {

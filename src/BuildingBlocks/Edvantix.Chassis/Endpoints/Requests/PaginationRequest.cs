@@ -7,8 +7,8 @@ public class PaginationRequest<TSpecification, TEntity>
     where TEntity : class
 {
     public int Page { get; set; }
-    
+
     public int PageSize { get; set; }
-    
+
     public TSpecification? Specification { get; set; }
 }

@@ -12,12 +12,9 @@ public static class CrudEndpointExtensions
     /// <summary>
     /// Регистрирует все стандартные CRUD endpoints для модели
     /// </summary>
-    public static IServiceCollection AddCrudEndpoints<
-        TEntity,
-        TModel,
-        TIdentity,
-        TSpecification
-    >(this IServiceCollection services)
+    public static IServiceCollection AddCrudEndpoints<TEntity, TModel, TIdentity, TSpecification>(
+        this IServiceCollection services
+    )
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : class, IAggregateRoot

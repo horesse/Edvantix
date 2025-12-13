@@ -24,8 +24,11 @@ public class FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
     {
         var builder = app.MapPost(
             GetRoutePath(CrudAction.FetchPagedData),
-            async (PaginationRequest<TSpecification, TEntity> request, ISender sender, CancellationToken ct) =>
-                await HandleAsync(request, sender, ct)
+            async (
+                PaginationRequest<TSpecification, TEntity> request,
+                ISender sender,
+                CancellationToken ct
+            ) => await HandleAsync(request, sender, ct)
         );
 
         ConfigureEndpoint(

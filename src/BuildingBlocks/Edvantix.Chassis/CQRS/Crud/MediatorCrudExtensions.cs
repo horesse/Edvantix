@@ -12,11 +12,9 @@ namespace Edvantix.Chassis.CQRS.Crud;
 
 public static class MediatorCrudExtensions
 {
-    public static IServiceCollection AddCrudHandlers<
-        TModel,
-        TIdentity,
-        TEntity,
-        TSpecification>(this IServiceCollection services)
+    public static IServiceCollection AddCrudHandlers<TModel, TIdentity, TEntity, TSpecification>(
+        this IServiceCollection services
+    )
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : Entity<TIdentity>, IAggregateRoot

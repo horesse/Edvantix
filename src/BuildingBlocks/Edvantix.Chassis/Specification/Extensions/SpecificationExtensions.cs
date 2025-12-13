@@ -2,7 +2,7 @@
 
 namespace Edvantix.Chassis.Specification.Extensions;
 
-public static class SpecificationExtensions<TEntity> 
+public static class SpecificationExtensions<TEntity>
     where TEntity : class
 {
     public static void ApplyPaging(

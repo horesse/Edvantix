@@ -2,6 +2,7 @@
 using Edvantix.DataVault.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.DataVault.Infrastructure.Migrations
 {
     [DbContext(typeof(DataVaultContext))]
-    partial class DataVaultContextModelSnapshot : ModelSnapshot
+    [Migration("20251213075654_Add soft delete for PlaygroundEntity")]
+    partial class AddsoftdeleteforPlaygroundEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

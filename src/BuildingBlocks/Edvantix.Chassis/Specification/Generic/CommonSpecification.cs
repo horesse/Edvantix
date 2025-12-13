@@ -1,15 +1,27 @@
-﻿using Edvantix.SharedKernel.SeedWork;
+﻿using System.ComponentModel;
+using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.Specification.Generic;
 
 public class CommonSpecification<TEntity> : Specification<TEntity>
     where TEntity : class, IAggregateRoot
 {
-    public bool ShowDeleted { get; set; } = false;
-
-    public CommonSpecification()
+    private readonly bool _showDeleted;
+    
+    [DefaultValue(false)]
+    public bool ShowDeleted
     {
-        if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && ShowDeleted)
+        get => _showDeleted;
+        init
+        {
+            _showDeleted = value;
+            ApplyFilters();
+        }
+    }
+    
+    protected virtual void ApplyFilters()
+    {
+        if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && _showDeleted)
         {
             IgnoreQueryFilters = true;
         }

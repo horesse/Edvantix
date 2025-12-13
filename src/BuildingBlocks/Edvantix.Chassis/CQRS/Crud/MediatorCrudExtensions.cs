@@ -2,6 +2,8 @@
 using Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
 using Edvantix.Chassis.Specification;
+using Edvantix.Chassis.Specification.Generic;
+using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +12,18 @@ namespace Edvantix.Chassis.CQRS.Crud;
 
 public static class MediatorCrudExtensions
 {
-    public static IServiceCollection AddCrudHandlers<TModel, TIdentity, TEntity, TCommonExpression>(
-        this IServiceCollection services
-    )
+    public static IServiceCollection AddCrudHandlers<
+        TModel,
+        TIdentity,
+        TEntity,
+        TCommonSpecification,
+        TPagedSpecification
+    >(this IServiceCollection services)
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : Entity<TIdentity>, IAggregateRoot
-        where TCommonExpression : ISpecification<TEntity>
+        where TCommonSpecification : ISpecification<TEntity>
+        where TPagedSpecification : PagedSpecification<TEntity>
     {
         // Query Handlers
         services.AddScoped<
@@ -46,10 +53,18 @@ public static class MediatorCrudExtensions
 
         services.AddScoped<
             IRequestHandler<
-                GetByExpressionQuery<TEntity, TModel, TCommonExpression, TIdentity>,
+                GetByExpressionQuery<TEntity, TModel, TCommonSpecification, TIdentity>,
                 IEnumerable<TModel>
             >,
-            GetByExpressionQueryHandler<TEntity, TModel, TCommonExpression, TIdentity>
+            GetByExpressionQueryHandler<TEntity, TModel, TCommonSpecification, TIdentity>
+        >();
+
+        services.AddScoped<
+            IRequestHandler<
+                FetchPagedDataQuery<TEntity, TModel, TPagedSpecification, TIdentity>,
+                PagedResult<TModel>
+            >,
+            FetchPagedDataQueryHandler<TEntity, TModel, TPagedSpecification, TIdentity>
         >();
 
         // Command Handlers

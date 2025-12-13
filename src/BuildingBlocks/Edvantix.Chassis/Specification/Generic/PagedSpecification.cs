@@ -6,14 +6,36 @@ namespace Edvantix.Chassis.Specification.Generic;
 public class PagedSpecification<TEntity> : CommonSpecification<TEntity>
     where TEntity : class, IAggregateRoot
 {
-    public int PageSize { get; set; }
-    public int CurrentPage { get; set; }
+    private readonly int _pageSize;
+    private readonly int _currentPage;
 
-    public PagedSpecification()
+    public int PageSize
     {
-        if (PageSize > 0 && CurrentPage > 0)
+        get => _pageSize;
+        init
         {
-            Query.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
+            _pageSize = value;
+            ApplyFilters();
         }
+    }
+
+    public int CurrentPage
+    {
+        get => _currentPage;
+        init
+        {
+            _currentPage = value;
+            ApplyFilters();
+        }
+    }
+
+    protected override void ApplyFilters()
+    {
+        if (_pageSize > 0 || _currentPage > 0)
+        {
+            Query.Skip((_currentPage - 1) * _pageSize).Take(_pageSize);
+        }
+
+        base.ApplyFilters();
     }
 }

@@ -14,13 +14,15 @@ public static class Extensions
             PlaygroundEntityModel,
             long,
             PlaygroundEntity,
-            CommonSpecification<PlaygroundEntity>
+            CommonSpecification<PlaygroundEntity>,
+            PagedSpecification<PlaygroundEntity>
         >();
         services.AddCrudEndpoints<
             PlaygroundEntity,
             PlaygroundEntityModel,
             long,
-            CommonSpecification<PlaygroundEntity>
+            CommonSpecification<PlaygroundEntity>,
+            PagedSpecification<PlaygroundEntity>
         >();
 
         return services;

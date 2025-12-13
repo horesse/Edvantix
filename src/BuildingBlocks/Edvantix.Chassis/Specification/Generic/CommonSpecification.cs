@@ -7,7 +7,7 @@ public class CommonSpecification<TEntity> : Specification<TEntity>
     where TEntity : class, IAggregateRoot
 {
     private readonly bool _showDeleted;
-    
+
     [DefaultValue(false)]
     public bool ShowDeleted
     {
@@ -18,7 +18,7 @@ public class CommonSpecification<TEntity> : Specification<TEntity>
             ApplyFilters();
         }
     }
-    
+
     protected virtual void ApplyFilters()
     {
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && _showDeleted)

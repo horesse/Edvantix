@@ -1,6 +1,7 @@
 ﻿using Edvantix.Chassis.Endpoints.Crud.Commands;
 using Edvantix.Chassis.Endpoints.Crud.Queries;
 using Edvantix.Chassis.Specification;
+using Edvantix.Chassis.Specification.Generic;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,13 +12,18 @@ public static class CrudEndpointExtensions
     /// <summary>
     /// Регистрирует все стандартные CRUD endpoints для модели
     /// </summary>
-    public static IServiceCollection AddCrudEndpoints<TEntity, TModel, TIdentity, TSpecification>(
-        this IServiceCollection services
-    )
+    public static IServiceCollection AddCrudEndpoints<
+        TEntity,
+        TModel,
+        TIdentity,
+        TCommonSpecification,
+        TPagedSpecification
+    >(this IServiceCollection services)
         where TModel : Model<TIdentity>
         where TIdentity : struct
         where TEntity : class, IAggregateRoot
-        where TSpecification : ISpecification<TEntity>
+        where TCommonSpecification : ISpecification<TEntity>
+        where TPagedSpecification : PagedSpecification<TEntity>
     {
         services.AddTransient<IEndpoint, GetByIdEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, GetAllEndpoint<TModel, TIdentity>>();
@@ -25,7 +31,11 @@ public static class CrudEndpointExtensions
         services.AddTransient<IEndpoint, IsExistEndpoint<TModel, TIdentity>>();
         services.AddTransient<
             IEndpoint,
-            GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
+            GetByExpressionEndpoint<TModel, TIdentity, TEntity, TCommonSpecification>
+        >();
+        services.AddTransient<
+            IEndpoint,
+            FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TPagedSpecification>
         >();
         services.AddTransient<IEndpoint, CreateEndpoint<TModel, TIdentity>>();
         services.AddTransient<IEndpoint, CreateRangeEndpoint<TModel, TIdentity>>();

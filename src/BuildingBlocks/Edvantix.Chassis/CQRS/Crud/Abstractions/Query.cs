@@ -1,5 +1,7 @@
 ﻿using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.Specification;
+using Edvantix.Chassis.Specification.Generic;
+using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
@@ -44,4 +46,12 @@ public sealed record GetByExpressionQuery<TEntity, TModel, TSpecification, TIden
     where TModel : Model<TIdentity>
     where TIdentity : struct
     where TSpecification : ISpecification<TEntity>
+    where TEntity : class, IAggregateRoot;
+
+public sealed record FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity>(
+    TSpecification Specification
+) : IQuery<PagedResult<TModel>>
+    where TModel : Model<TIdentity>
+    where TIdentity : struct
+    where TSpecification : PagedSpecification<TEntity>
     where TEntity : class, IAggregateRoot;

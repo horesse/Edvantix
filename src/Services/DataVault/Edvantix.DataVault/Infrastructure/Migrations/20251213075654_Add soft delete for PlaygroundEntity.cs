@@ -19,22 +19,22 @@ namespace Edvantix.DataVault.Infrastructure.Migrations
                 comment: "Наименование",
                 oldClrType: typeof(string),
                 oldType: "text",
-                oldComment: "Наименование");
+                oldComment: "Наименование"
+            );
 
             migrationBuilder.AddColumn<bool>(
                 name: "is_deleted",
                 table: "playground_entity",
                 type: "boolean",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: false
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "is_deleted",
-                table: "playground_entity");
+            migrationBuilder.DropColumn(name: "is_deleted", table: "playground_entity");
 
             migrationBuilder.AlterColumn<string>(
                 name: "name",
@@ -45,7 +45,8 @@ namespace Edvantix.DataVault.Infrastructure.Migrations
                 oldClrType: typeof(string),
                 oldType: "character varying(100)",
                 oldMaxLength: 100,
-                oldComment: "Наименование");
+                oldComment: "Наименование"
+            );
         }
     }
 }

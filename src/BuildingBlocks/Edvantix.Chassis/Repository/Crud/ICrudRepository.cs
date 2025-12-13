@@ -69,6 +69,11 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
     /// <returns>Задача, содержащая количество объектов.</returns>
     Task<int> GetCountAsync(CancellationToken token);
 
+    Task<int> GetCountByExpressionAsync(
+        ISpecification<TEntity> specification,
+        CancellationToken token
+    );
+
     /// <summary>
     /// Асинхронно проверяет наличие записи по идентификатору
     /// </summary>

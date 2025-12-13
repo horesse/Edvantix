@@ -16,4 +16,5 @@ public enum CrudAction
     GetById,
     GetCount,
     IsExist,
+    FetchPagedData,
 }

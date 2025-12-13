@@ -52,6 +52,14 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 
     public Task<int> GetCountAsync(CancellationToken token) => DbSet.CountAsync(token);
 
+    public Task<int> GetCountByExpressionAsync(
+        ISpecification<TEntity> specification,
+        CancellationToken token
+    )
+    {
+        return Specification.GetQuery(DbSet.AsQueryable(), specification).CountAsync(token);
+    }
+
     public Task<bool> IsExistAsync(TIdentity id, CancellationToken token)
     {
         return DbSet.AnyAsync(x => x.Id.Equals(id), token);

@@ -17,7 +17,8 @@ namespace Edvantix.DataVault.Infrastructure.Migrations
                 nullable: false,
                 comment: "Признак удаленной записи",
                 oldClrType: typeof(bool),
-                oldType: "boolean");
+                oldType: "boolean"
+            );
         }
 
         /// <inheritdoc />
@@ -30,7 +31,8 @@ namespace Edvantix.DataVault.Infrastructure.Migrations
                 nullable: false,
                 oldClrType: typeof(bool),
                 oldType: "boolean",
-                oldComment: "Признак удаленной записи");
+                oldComment: "Признак удаленной записи"
+            );
         }
     }
 }

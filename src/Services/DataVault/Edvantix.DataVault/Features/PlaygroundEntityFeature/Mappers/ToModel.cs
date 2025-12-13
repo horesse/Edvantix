@@ -21,6 +21,6 @@ public sealed class ToModel : IMapper<PlaygroundEntity, PlaygroundEntityModel>
         return [.. sources.Select(Map)];
     }
 
-    public void SetProperties(PlaygroundEntity source, PlaygroundEntityModel target)
-        => throw new NotImplementedException();
+    public void SetProperties(PlaygroundEntity source, PlaygroundEntityModel target) =>
+        throw new NotImplementedException();
 }

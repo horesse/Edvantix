@@ -24,7 +24,7 @@ public sealed class UpdateCommandHandler<TModel, TIdentity, TEntity>(IServicePro
                 Guard.Against.NotFound(entity, command.Model.Id);
 
                 ModelToEntityMapper.SetProperties(command.Model, entity);
-                
+
                 await Repository.SaveEntitiesAsync(token);
                 return entity.Id;
             },

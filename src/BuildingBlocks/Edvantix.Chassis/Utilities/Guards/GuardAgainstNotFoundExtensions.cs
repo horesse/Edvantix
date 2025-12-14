@@ -1,0 +1,63 @@
+﻿using System.Diagnostics.CodeAnalysis;
+using Edvantix.Chassis.Exceptions;
+
+namespace Edvantix.Chassis.Utilities.Guards;
+
+public static class GuardAgainstNotFoundExtensions
+{
+    extension(Guard guard)
+    {
+        /// <summary>
+        ///     Validates that the provided value is not null. If null, throws a <see cref="NotFoundException" />
+        ///     for the specified <paramref name="id" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the value being checked.</typeparam>
+        /// <param name="value">The value to check for null.</param>
+        /// <param name="id">The identifier associated with the entity being checked.</param>
+        /// <exception cref="NotFoundException">
+        ///     Thrown when the value is null,
+        ///     indicating that the entity with the specified <paramref name="id" /> was not found.
+        /// </exception>
+        public void NotFound<T>([NotNull] T? value, string id)
+        {
+            if (value is not null)
+            {
+                return;
+            }
+
+            throw NotFoundException.For<T>(id);
+        }
+
+        public void NotFound<T, TIdentity>([NotNull] T? value, TIdentity identity)
+            where TIdentity : struct
+        {
+            if (value is not null)
+            {
+                return;
+            }
+
+            throw NotFoundException.For<T>(identity.ToString());
+        }
+
+        /// <summary>
+        ///     Validates that the provided value is not null. If null, throws a <see cref="NotFoundException" />
+        ///     for the specified <paramref name="id" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the value being checked.</typeparam>
+        /// <param name="value">The value to check for null.</param>
+        /// <param name="id">The identifier associated with the entity being checked.</param>
+        /// <exception cref="NotFoundException">
+        ///     Thrown when the value is null,
+        ///     indicating that the entity with the specified <paramref name="id" /> was not found.
+        /// </exception>
+        public void NotFound<T>([NotNull] T? value, Guid id)
+        {
+            if (value is not null)
+            {
+                return;
+            }
+
+            throw NotFoundException.For<T>(id);
+        }
+    }
+}

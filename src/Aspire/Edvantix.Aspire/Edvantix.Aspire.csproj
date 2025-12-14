@@ -1,0 +1,32 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.2">
+  <Import Project="KeycloakifyIntegration.targets" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <UserSecretsId>78a33324-5add-4731-b2fc-e0fc06ef0564</UserSecretsId>
+    <NoWarn>ASPIREINTERACTION001;ASPIREPIPELINES001</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Azure.AppContainers" />
+    <PackageReference Include="Aspire.Hosting.Azure.PostgreSQL" />
+    <PackageReference Include="Aspire.Hosting.Azure.Redis" />
+    <PackageReference Include="Aspire.Hosting.Azure.Storage" />
+    <PackageReference Include="Aspire.Hosting.Keycloak" />
+    <PackageReference Include="Aspire.Hosting.Qdrant" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+    <PackageReference Include="Aspire.Hosting.Yarp" />
+    <PackageReference Include="CliWrap" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
+    <PackageReference Include="Scalar.Aspire" />
+  </ItemGroup>
+  <ItemGroup Label="Services">
+    <ProjectReference Include="..\..\Services\DataVault\Edvantix.DataVault\Edvantix.DataVault.csproj" />
+    <ProjectReference Include="..\..\Services\EntityHub\Edvantix.EntityHub\Edvantix.EntityHub.csproj" />
+    <ProjectReference Include="..\..\Services\EntityHub\Edvantix.EntityHub.Worker\Edvantix.EntityHub.Worker.csproj" />
+  </ItemGroup>
+  <ItemGroup Label="Integrations">
+    <ProjectReference
+      Include="..\..\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj"
+      IsAspireProjectResource="false"
+    />
+  </ItemGroup>
+</Project>

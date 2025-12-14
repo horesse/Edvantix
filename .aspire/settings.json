@@ -1,5 +1,5 @@
 {
-  "appHostPath": "../src/Aspire/Edvantix.AppHost/Edvantix.AppHost.csproj",
+  "appHostPath": "../src/Aspire/Edvantix.Aspire/Edvantix.Aspire.csproj",
   "features": {
     "deployCommandEnabled": "true",
     "dotnetSdkInstallationEnabled": "true",

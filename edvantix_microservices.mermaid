@@ -1,0 +1,152 @@
+graph TB
+    subgraph "User Layer"
+        Bot[Bot Service<br/>Telegram/WhatsApp интеграция]
+        WebApp[Web Application<br/>React/Next.js]
+        MobileApp[Mobile App<br/>iOS/Android]
+    end
+
+    subgraph "API Gateway"
+        Gateway[API Gateway<br/>Аутентификация, маршрутизация]
+    end
+
+    subgraph "Identity & Access"
+        Keycloak[Keycloak<br/>SSO, OAuth2, OIDC,<br/>управление ролями<br/>и пользователями]
+    end
+
+    subgraph "Core Services"
+        Organization[Organization Service<br/>Данные школы, настройки,<br/>брендирование, мультитенантность]
+        User[User Profile Service<br/>Расширенные профили,<br/>академическая информация,<br/>портфолио студентов]
+    end
+
+    subgraph "Educational Services"
+        Course[Course Service<br/>Курсы, модули,<br/>структура программы]
+        Lesson[Lesson Service<br/>Уроки, теория,<br/>последовательность]
+        Content[Content Service<br/>Видео, PDF, тесты,<br/>интерактивные задания]
+        Homework[Homework Service<br/>Домашние задания,<br/>дедлайны, проверка]
+        Progress[Progress Service<br/>Отслеживание прогресса,<br/>аналитика студентов]
+    end
+
+    subgraph "Management Services"
+        Schedule[Schedule Service<br/>Расписание, группы,<br/>занятия, календарь]
+        Attendance[Attendance Service<br/>Посещаемость,<br/>журнал занятий]
+        Rating[Rating Service<br/>Оценки, рейтинги,<br/>успеваемость]
+        Certificate[Certificate Service<br/>Генерация сертификатов,<br/>дипломов]
+    end
+
+    subgraph "Financial Services"
+        Payment[Payment Service<br/>Платежи, подписки,<br/>интеграция с платежными<br/>системами]
+        Invoice[Invoice Service<br/>Счета, чеки,<br/>бухгалтерия]
+        Subscription[Subscription Service<br/>Тарифы, лимиты,<br/>управление подписками]
+    end
+
+    subgraph "Communication Services"
+        Notification[Notification Service<br/>Email, SMS, Push,<br/>шаблоны уведомлений]
+        Chat[Chat Service<br/>Чат студент-преподаватель,<br/>групповые чаты]
+        VideoConference[Video Conference Service<br/>Онлайн уроки, вебинары,<br/>запись занятий]
+        Whiteboard[Whiteboard Service<br/>Интерактивная доска,<br/>real-time синхронизация,<br/>совместное рисование]
+        ScreenShare[Screen Share Service<br/>Демонстрация экрана,<br/>презентации]
+    end
+
+    subgraph "Support Services"
+        Analytics[Analytics Service<br/>Метрики, отчеты,<br/>dashboard]
+        Storage[Storage Service<br/>S3/Minio для файлов,<br/>медиа контента]
+        Search[Search Service<br/>Elasticsearch,<br/>поиск по контенту]
+        Audit[Audit Service<br/>Логирование действий,<br/>история изменений]
+    end
+
+    subgraph "Data Layer"
+        PostgreSQL[(PostgreSQL<br/>Основные данные)]
+        MongoDB[(MongoDB<br/>Неструктурированные)]
+        Redis[(Redis<br/>Кэш, сессии)]
+        RabbitMQ[Message Queue<br/>RabbitMQ/Kafka]
+    end
+
+    %% User Layer connections
+    Bot --> Gateway
+    WebApp --> Gateway
+    MobileApp --> Gateway
+
+    %% Gateway to Keycloak
+    Gateway --> Keycloak
+    
+    %% Keycloak to Core
+    Keycloak -.-> Organization
+    Keycloak -.-> User
+    Organization --> User
+    Organization --> Subscription
+
+    %% Educational Services connections
+    User --> Course
+    Course --> Lesson
+    Lesson --> Content
+    Lesson --> Homework
+    Lesson --> Whiteboard
+    Course --> Progress
+    Organization --> Course
+
+    %% Management Services connections
+    Schedule --> User
+    Schedule --> Course
+    Organization --> Schedule
+    Attendance --> Schedule
+    Rating --> Course
+    Rating --> User
+    Progress --> Rating
+    Certificate --> Progress
+    Certificate --> User
+
+    %% Financial Services connections
+    Payment --> User
+    Payment --> Organization
+    Payment --> Invoice
+    Invoice --> Organization
+    Subscription --> Organization
+    Subscription --> Payment
+
+    %% Communication Services connections
+    Notification --> User
+    Notification --> Payment
+    Notification --> Schedule
+    Notification --> Homework
+    Chat --> User
+    VideoConference --> Schedule
+    VideoConference --> User
+    VideoConference --> Lesson
+    Whiteboard --> VideoConference
+    Whiteboard --> User
+    ScreenShare --> VideoConference
+
+    %% Support Services connections
+    Analytics --> Organization
+    Analytics --> Course
+    Analytics --> Payment
+    Storage --> Content
+    Search --> Course
+    Search --> Content
+    Audit -.-> Organization
+    Audit -.-> User
+    Audit -.-> Payment
+
+    %% Data Layer connections
+    Keycloak --- PostgreSQL
+    Organization --- PostgreSQL
+    User --- PostgreSQL
+    Course --- PostgreSQL
+    Schedule --- PostgreSQL
+    Payment --- PostgreSQL
+    
+    Content --- MongoDB
+    Chat --- MongoDB
+    Keycloak --- Redis
+    Gateway --- Redis
+    
+    Notification --- RabbitMQ
+    VideoConference --- RabbitMQ
+    Audit --- RabbitMQ
+
+    style Gateway fill:#ff9800
+    style Keycloak fill:#e91e63
+    style Organization fill:#2196f3
+    style User fill:#2196f3
+    style Payment fill:#4caf50
+    style Notification fill:#9c27b0

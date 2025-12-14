@@ -9,18 +9,38 @@
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/Services/" />
-  <Folder Name="/Services/DataVault/">
+  <Folder Name="/Services/Common/" />
+  <Folder Name="/Services/Common/DataVault/">
     <Project Path="src/Services/DataVault/Edvantix.DataVault/Edvantix.DataVault.csproj" />
   </Folder>
-  <Folder Name="/Services/EntityHub/">
+  <Folder Name="/Services/Common/EntityHub/">
     <Project Path="src/Services/EntityHub/Edvantix.EntityHub.Worker/Edvantix.EntityHub.Worker.csproj" />
     <Project Path="src/Services/EntityHub/Edvantix.EntityHub/Edvantix.EntityHub.csproj" />
   </Folder>
+  <Folder Name="/Services/Common/History/" />
+  <Folder Name="/Services/Core/" />
+  <Folder Name="/Services/Core/Organization/" />
+  <Folder Name="/Services/Core/Person/" />
+  <Folder Name="/Services/Educational/" />
+  <Folder Name="/Services/Educational/Content/" />
+  <Folder Name="/Services/Educational/Course/" />
+  <Folder Name="/Services/Educational/Homework/" />
+  <Folder Name="/Services/Educational/Progress/" />
+  <Folder Name="/Services/Financial/" />
+  <Folder Name="/Services/Financial/Invoice/" />
+  <Folder Name="/Services/Financial/Payment/" />
+  <Folder Name="/Services/Financial/Subscription/" />
+  <Folder Name="/Services/Management/" />
+  <Folder Name="/Services/Management/Attendance/" />
+  <Folder Name="/Services/Management/Certificate/" />
+  <Folder Name="/Services/Management/Rating/" />
+  <Folder Name="/Services/Management/Schedule/" />
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path="edvantix.png" />
     <File Path="global.json" />
     <File Path="NuGet.config" />
     <File Path="Versions.props" />

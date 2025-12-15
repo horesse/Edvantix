@@ -2,7 +2,7 @@
 
 public enum LimitType
 {
-    Disk,
-    Users,
+    DiskSpace,
+    Staff,
     Commission,
 }

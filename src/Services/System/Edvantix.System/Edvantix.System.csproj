@@ -1,10 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Domain\AggregatesModel\" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="Domain\AggregatesModel\" />
+  </ItemGroup>
 </Project>

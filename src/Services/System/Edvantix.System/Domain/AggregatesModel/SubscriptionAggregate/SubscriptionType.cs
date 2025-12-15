@@ -1,9 +1,9 @@
 ﻿namespace Edvantix.System.Domain.AggregatesModel.SubscriptionAggregate;
 
-public enum SubscriptionType
+public enum SubscriptionType : long
 {
-    Free,
-    Trial,
-    Professional,
-    Ultimate
+    Free = 1,
+    Trial = 2,
+    Professional = 3,
+    Ultimate = 4,
 }

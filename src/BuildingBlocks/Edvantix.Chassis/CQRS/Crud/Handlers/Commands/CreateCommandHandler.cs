@@ -19,7 +19,7 @@ public sealed class CreateCommandHandler<TModel, TIdentity, TEntity>(IServicePro
         return await ExecuteAsync(
             async () =>
             {
-                var entity = ModelToEntityMapper.Map(command.Model);
+                var entity = Converter.Map(command.Model);
                 var added = await Repository.InsertAsync(entity, token);
                 await Repository.SaveEntitiesAsync(token);
                 return added.Id;

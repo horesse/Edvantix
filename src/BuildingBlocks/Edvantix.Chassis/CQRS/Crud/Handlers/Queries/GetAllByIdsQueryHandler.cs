@@ -20,7 +20,7 @@ public sealed class GetAllByIdsQueryHandler<TModel, TIdentity, TEntity>(IService
             async () =>
             {
                 var entities = await Repository.GetAllByIdsAsync(query.Ids, token);
-                return entities.Select(EntityToModelMapper.Map);
+                return entities.Select(Converter.Map);
             },
             nameof(GetAllByIdsQuery<TModel, TIdentity>),
             token

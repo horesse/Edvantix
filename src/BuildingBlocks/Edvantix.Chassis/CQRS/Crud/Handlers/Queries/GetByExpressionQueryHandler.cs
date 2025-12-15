@@ -27,7 +27,7 @@ public class GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdent
             async () =>
             {
                 var entities = await Repository.GetByExpressionAsync(request.Specification, token);
-                return entities.Select(EntityToModelMapper.Map);
+                return entities.Select(Converter.Map);
             },
             nameof(GetByExpressionQuery<,,,>),
             token

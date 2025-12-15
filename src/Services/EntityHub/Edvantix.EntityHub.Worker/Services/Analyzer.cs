@@ -129,7 +129,9 @@ public sealed class Analyzer(IServiceProvider provider)
             }
             else
             {
-                toInsert.Add(new EntityType(model.Name, model.Description, microserviceId, (long)model.Type));
+                toInsert.Add(
+                    new EntityType(model.Name, model.Description, microserviceId, (long)model.Type)
+                );
             }
         }
 

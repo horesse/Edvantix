@@ -12,15 +12,15 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "fk_entity_type_entity_group_entity_group_id1",
-                table: "entity_type");
+                table: "entity_type"
+            );
 
             migrationBuilder.DropIndex(
                 name: "ix_entity_type_entity_group_id1",
-                table: "entity_type");
+                table: "entity_type"
+            );
 
-            migrationBuilder.DropColumn(
-                name: "entity_group_id1",
-                table: "entity_type");
+            migrationBuilder.DropColumn(name: "entity_group_id1", table: "entity_type");
         }
 
         /// <inheritdoc />
@@ -30,19 +30,22 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
                 name: "entity_group_id1",
                 table: "entity_type",
                 type: "bigint",
-                nullable: true);
+                nullable: true
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_entity_type_entity_group_id1",
                 table: "entity_type",
-                column: "entity_group_id1");
+                column: "entity_group_id1"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "fk_entity_type_entity_group_entity_group_id1",
                 table: "entity_type",
                 column: "entity_group_id1",
                 principalTable: "entity_group",
-                principalColumn: "id");
+                principalColumn: "id"
+            );
         }
     }
 }

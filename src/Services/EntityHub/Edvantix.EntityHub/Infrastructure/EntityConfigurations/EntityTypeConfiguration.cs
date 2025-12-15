@@ -40,7 +40,7 @@ public sealed class EntityTypeConfiguration : IEntityTypeConfiguration<EntityTyp
             .WithMany(e => e.Entities)
             .HasForeignKey(e => e.EntityGroupId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.Microservice)
             .WithMany()

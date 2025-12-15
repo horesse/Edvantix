@@ -19,7 +19,7 @@ public sealed class EntityType() : LongIdentity, IAggregateRoot
     public string? Description { get; private set; }
     public long MicroserviceId { get; private set; }
     public Microservice Microservice { get; private set; } = null!;
-    
+
     public long EntityGroupId { get; private set; }
     public EntityGroup EntityGroup { get; private set; } = null!;
 

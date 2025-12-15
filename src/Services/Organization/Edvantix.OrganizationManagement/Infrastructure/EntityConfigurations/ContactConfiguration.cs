@@ -12,23 +12,20 @@ public sealed class ContactConfiguration : IEntityTypeConfiguration<Contact>
     {
         builder.Configure<Contact, long>();
 
-        builder.Property(c => c.OrganizationId)
-            .IsRequired();
+        builder.Property(c => c.OrganizationId).IsRequired();
 
-        builder.Property(c => c.Type)
+        builder
+            .Property(c => c.Type)
             .IsRequired()
             .HasConversion<string>()
             .HasMaxLength(DataSchemaLength.Medium);
 
-        builder.Property(c => c.Value)
-            .IsRequired()
-            .HasMaxLength(DataSchemaLength.SuperLarge);
+        builder.Property(c => c.Value).IsRequired().HasMaxLength(DataSchemaLength.SuperLarge);
 
-        builder.Property(c => c.Description)
-            .IsRequired(false)
-            .HasMaxLength(DataSchemaLength.Max);
+        builder.Property(c => c.Description).IsRequired(false).HasMaxLength(DataSchemaLength.Max);
 
-        builder.HasOne(c => c.Organization)
+        builder
+            .HasOne(c => c.Organization)
             .WithMany(o => o.Contacts)
             .HasForeignKey(c => c.OrganizationId)
             .OnDelete(DeleteBehavior.Cascade);

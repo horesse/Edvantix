@@ -12,29 +12,26 @@ public sealed class SubscriptionConfiguration : IEntityTypeConfiguration<Subscri
     {
         builder.Configure<Subscription, long>();
 
-        builder.Property(s => s.Name)
-            .IsRequired()
-            .HasMaxLength(DataSchemaLength.ExtraLarge);
+        builder.Property(s => s.Name).IsRequired().HasMaxLength(DataSchemaLength.ExtraLarge);
 
-        builder.Property(s => s.Type)
+        builder
+            .Property(s => s.Type)
             .IsRequired()
             .HasConversion<string>()
             .HasMaxLength(DataSchemaLength.Medium);
 
-        builder.Property(s => s.Price)
-            .IsRequired()
-            .HasPrecision(18, 2);
+        builder.Property(s => s.Price).IsRequired().HasPrecision(18, 2);
 
-        builder.Property(s => s.CurrencyId)
-            .IsRequired();
+        builder.Property(s => s.CurrencyId).IsRequired();
 
-        builder.HasMany(s => s.Limits)
+        builder
+            .HasMany(s => s.Limits)
             .WithOne(l => l.Subscription)
             .HasForeignKey(l => l.SubscriptionId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Metadata
-            .FindNavigation(nameof(Subscription.Limits))!
+        builder
+            .Metadata.FindNavigation(nameof(Subscription.Limits))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder.HasIndex(s => s.Name);

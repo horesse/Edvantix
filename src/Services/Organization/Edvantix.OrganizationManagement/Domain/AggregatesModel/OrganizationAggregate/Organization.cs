@@ -17,21 +17,19 @@ public sealed class Organization() : LongIdentity, IAggregateRoot
         string shortName,
         DateTime registrationDate,
         string? printName = null,
-        string? description = null)
+        string? description = null
+    )
         : this()
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException(
-                "Название организации не может быть пустым.",
-                nameof(name)
-            );
-        
+            throw new ArgumentException("Название организации не может быть пустым.", nameof(name));
+
         if (string.IsNullOrWhiteSpace(nameLatin))
             throw new ArgumentException(
                 "Латинское название не может быть пустым.",
                 nameof(nameLatin)
             );
-        
+
         if (string.IsNullOrWhiteSpace(shortName))
             throw new ArgumentException(
                 "Краткое название не может быть пустым.",
@@ -57,20 +55,22 @@ public sealed class Organization() : LongIdentity, IAggregateRoot
     public IReadOnlyCollection<Member> Members => _members.AsReadOnly();
     public IReadOnlyCollection<Subscription> Subscriptions => _subscriptions.AsReadOnly();
 
-    public void UpdateNames(string name, string nameLatin, string shortName, string? printName = null)
+    public void UpdateNames(
+        string name,
+        string nameLatin,
+        string shortName,
+        string? printName = null
+    )
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException(
-                "Название организации не может быть пустым.",
-                nameof(name)
-            );
-        
+            throw new ArgumentException("Название организации не может быть пустым.", nameof(name));
+
         if (string.IsNullOrWhiteSpace(nameLatin))
             throw new ArgumentException(
                 "Латинское название не может быть пустым.",
                 nameof(nameLatin)
             );
-        
+
         if (string.IsNullOrWhiteSpace(shortName))
             throw new ArgumentException(
                 "Краткое название не может быть пустым.",
@@ -137,4 +137,3 @@ public sealed class Organization() : LongIdentity, IAggregateRoot
         return _subscriptions.FirstOrDefault(s => s.IsActive());
     }
 }
-

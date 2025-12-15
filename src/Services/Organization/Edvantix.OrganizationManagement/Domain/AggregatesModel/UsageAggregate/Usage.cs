@@ -13,13 +13,10 @@ public sealed class Usage() : Entity<long>, IAggregateRoot
                 "Некорректный идентификатор организации.",
                 nameof(organizationId)
             );
-        
+
         if (limitId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор лимита.",
-                nameof(limitId)
-            );
-        
+            throw new ArgumentException("Некорректный идентификатор лимита.", nameof(limitId));
+
         if (value < 0)
             throw new ArgumentException(
                 "Значение использования не может быть отрицательным.",
@@ -50,10 +47,7 @@ public sealed class Usage() : Entity<long>, IAggregateRoot
     public void IncrementValue(decimal increment)
     {
         if (increment <= 0)
-            throw new ArgumentException(
-                "Инкремент должен быть положительным.",
-                nameof(increment)
-            );
+            throw new ArgumentException("Инкремент должен быть положительным.", nameof(increment));
 
         Value += increment;
     }
@@ -61,11 +55,8 @@ public sealed class Usage() : Entity<long>, IAggregateRoot
     public void DecrementValue(decimal decrement)
     {
         if (decrement <= 0)
-            throw new ArgumentException(
-                "Декремент должен быть положительным.",
-                nameof(decrement)
-            );
-        
+            throw new ArgumentException("Декремент должен быть положительным.", nameof(decrement));
+
         if (Value - decrement < 0)
             throw new InvalidOperationException("Невозможно уменьшить значение ниже нуля.");
 

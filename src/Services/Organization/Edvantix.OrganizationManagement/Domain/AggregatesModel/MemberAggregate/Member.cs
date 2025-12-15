@@ -13,7 +13,7 @@ public sealed class Member() : Entity<Guid>, IAggregateRoot, ISoftDelete
                 "Некорректный идентификатор организации.",
                 nameof(organizationId)
             );
-        
+
         if (personId == Guid.Empty)
             throw new ArgumentException(
                 "Идентификатор пользователя не может быть пустым.",

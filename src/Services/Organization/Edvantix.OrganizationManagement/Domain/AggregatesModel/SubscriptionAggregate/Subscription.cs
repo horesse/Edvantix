@@ -12,7 +12,8 @@ public sealed class Subscription() : Entity<long>, IAggregateRoot
         long subscriptionId,
         long organizationId,
         DateTime dateStart,
-        DateTime? dateEnd = null)
+        DateTime? dateEnd = null
+    )
         : this()
     {
         if (subscriptionId <= 0)
@@ -20,13 +21,13 @@ public sealed class Subscription() : Entity<long>, IAggregateRoot
                 "Некорректный идентификатор подписки.",
                 nameof(subscriptionId)
             );
-        
+
         if (organizationId <= 0)
             throw new ArgumentException(
                 "Некорректный идентификатор организации.",
                 nameof(organizationId)
             );
-        
+
         if (dateEnd.HasValue && dateEnd.Value < dateStart)
             throw new ArgumentException(
                 "Дата окончания не может быть раньше даты начала.",
@@ -54,7 +55,7 @@ public sealed class Subscription() : Entity<long>, IAggregateRoot
                 "Дата окончания не может быть раньше даты начала.",
                 nameof(newEndDate)
             );
-        
+
         if (DateEnd.HasValue && newEndDate < DateEnd.Value)
             throw new ArgumentException(
                 "Невозможно сократить подписку. Используйте CancelSubscription.",

@@ -5,11 +5,7 @@ namespace Edvantix.OrganizationManagement.Domain.AggregatesModel.ContactAggregat
 
 public sealed class Contact() : LongIdentity, IAggregateRoot
 {
-    public Contact(
-        long organizationId,
-        ContactType type,
-        string value,
-        string? description = null)
+    public Contact(long organizationId, ContactType type, string value, string? description = null)
         : this()
     {
         if (organizationId <= 0)
@@ -17,12 +13,9 @@ public sealed class Contact() : LongIdentity, IAggregateRoot
                 "Некорректный идентификатор организации.",
                 nameof(organizationId)
             );
-        
+
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException(
-                "Значение контакта не может быть пустым.",
-                nameof(value)
-            );
+            throw new ArgumentException("Значение контакта не может быть пустым.", nameof(value));
 
         OrganizationId = organizationId;
         Type = type;

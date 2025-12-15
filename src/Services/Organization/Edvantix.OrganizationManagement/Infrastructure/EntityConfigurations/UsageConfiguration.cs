@@ -11,21 +11,18 @@ public sealed class UsageConfiguration : IEntityTypeConfiguration<Usage>
     {
         builder.Configure<Usage, long>();
 
-        builder.Property(u => u.OrganizationId)
-            .IsRequired();
+        builder.Property(u => u.OrganizationId).IsRequired();
 
-        builder.Property(u => u.LimitId)
-            .IsRequired();
+        builder.Property(u => u.LimitId).IsRequired();
 
-        builder.Property(u => u.Value)
-            .IsRequired()
-            .HasPrecision(18, 2);
+        builder.Property(u => u.Value).IsRequired().HasPrecision(18, 2);
 
-        builder.HasOne(u => u.Organization)
+        builder
+            .HasOne(u => u.Organization)
             .WithMany()
             .HasForeignKey(u => u.OrganizationId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.HasIndex(u => u.OrganizationId);
         builder.HasIndex(u => u.LimitId);
         builder.HasIndex(u => new { u.OrganizationId, u.LimitId });

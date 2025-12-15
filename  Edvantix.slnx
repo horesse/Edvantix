@@ -19,8 +19,13 @@
   </Folder>
   <Folder Name="/Services/Common/History/" />
   <Folder Name="/Services/Core/" />
-  <Folder Name="/Services/Core/Organization/" />
+  <Folder Name="/Services/Core/Organization/">
+    <Project Path="src/Services/Organization/Edvantix.OrganizationManagement/Edvantix.OrganizationManagement.csproj" />
+  </Folder>
   <Folder Name="/Services/Core/Person/" />
+  <Folder Name="/Services/Core/System/">
+    <Project Path="src/Services/System/Edvantix.System/Edvantix.System.csproj" />
+  </Folder>
   <Folder Name="/Services/Educational/" />
   <Folder Name="/Services/Educational/Content/" />
   <Folder Name="/Services/Educational/Course/" />

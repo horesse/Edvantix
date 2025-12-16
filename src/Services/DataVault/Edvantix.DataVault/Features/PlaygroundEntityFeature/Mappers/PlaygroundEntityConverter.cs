@@ -4,7 +4,8 @@ using Edvantix.DataVault.Features.PlaygroundEntityFeature.Models;
 
 namespace Edvantix.DataVault.Features.PlaygroundEntityFeature.Mappers;
 
-public sealed class PlaygroundEntityConverter : ClassConverter<PlaygroundEntityModel, PlaygroundEntity>
+public sealed class PlaygroundEntityConverter
+    : ClassConverter<PlaygroundEntityModel, PlaygroundEntity>
 {
     public override PlaygroundEntity Map(PlaygroundEntityModel source)
     {

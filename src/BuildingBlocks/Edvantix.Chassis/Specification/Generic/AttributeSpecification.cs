@@ -10,7 +10,7 @@ namespace Edvantix.Chassis.Specification.Generic;
 public class AttributeSpecification<TEntity> : Specification<TEntity>
     where TEntity : class
 {
-    protected AttributeSpecification()
+    public AttributeSpecification()
     {
         ApplyIncludeAttributes();
         ApplyOrderByAttribute();

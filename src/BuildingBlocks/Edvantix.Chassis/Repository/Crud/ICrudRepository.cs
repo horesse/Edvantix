@@ -25,7 +25,7 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
     /// предоставляя возможность построения отложенных запросов.
     /// </summary>
     /// <returns>IQueryable, представляющий объекты типа TEntity.</returns>
-    IQueryable<TEntity> GetAsQueryable();
+    IQueryable<TEntity> GetAsQueryable(bool withDefault = true);
 
     /// <summary>
     /// Асинхронно возвращает все объекты типа TEntity в виде коллекции.
@@ -44,14 +44,6 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
         ISpecification<TEntity> specification,
         CancellationToken token
     );
-
-    /// <summary>
-    /// Асинхронно возвращает все объекты типа TEntity в виде коллекции.
-    /// </summary>
-    /// <param name="ids"></param>
-    /// <param name="token">Токен для отмены операции.</param>
-    /// <returns>Задача, содержащая коллекцию объектов типа TEntity.</returns>
-    Task<List<TEntity>> GetAllByIdsAsync(List<TIdentity> ids, CancellationToken token);
 
     /// <summary>
     /// Асинхронно извлекает объект типа TEntity по указанному идентификатору.

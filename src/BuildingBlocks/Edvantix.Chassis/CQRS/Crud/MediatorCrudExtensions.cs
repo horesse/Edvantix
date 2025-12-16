@@ -22,11 +22,6 @@ public static class MediatorCrudExtensions
     {
         // Query Handlers
         services.AddScoped<
-            IRequestHandler<GetAllByIdsQuery<TModel, TIdentity>, IEnumerable<TModel>>,
-            GetAllByIdsQueryHandler<TModel, TIdentity, TEntity>
-        >();
-
-        services.AddScoped<
             IRequestHandler<GetByIdQuery<TModel, TIdentity>, TModel>,
             GetByIdQueryHandler<TModel, TIdentity, TEntity>
         >();

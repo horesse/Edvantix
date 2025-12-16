@@ -2,6 +2,7 @@
 using Edvantix.Chassis.Helpers;
 using Edvantix.Chassis.Specification;
 using Edvantix.Chassis.Specification.Evaluators;
+using Edvantix.Chassis.Specification.Generic;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -21,6 +22,9 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
 
     private static SpecificationEvaluator Specification => SpecificationEvaluator.Instance;
 
+    private static ISpecification<TEntity> BaseSpecification =>
+        new AttributeSpecification<TEntity>();
+
     public IUnitOfWork UnitOfWork => Context;
 
     public Task<TEntity?> GetOrDefaultAsync(
@@ -28,9 +32,15 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         CancellationToken token
     ) => DbSet.FirstOrDefaultAsync(predicate, token);
 
-    public IQueryable<TEntity> GetAsQueryable() => DbSet.AsQueryable();
+    public IQueryable<TEntity> GetAsQueryable(bool withDefault = true)
+    {
+        return withDefault
+            ? Specification.GetQuery(DbSet.AsQueryable(), BaseSpecification)
+            : DbSet.AsQueryable();
+    }
 
-    public Task<List<TEntity>> GetAllAsync(CancellationToken token) => DbSet.ToListAsync(token);
+    public Task<List<TEntity>> GetAllAsync(CancellationToken token) =>
+        Specification.GetQuery(DbSet.AsQueryable(), BaseSpecification).ToListAsync(token);
 
     public Task<List<TEntity>> GetByExpressionAsync(
         ISpecification<TEntity> specification,
@@ -40,14 +50,9 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Specification.GetQuery(DbSet.AsQueryable(), specification).ToListAsync(token);
     }
 
-    public Task<List<TEntity>> GetAllByIdsAsync(List<TIdentity> ids, CancellationToken token)
-    {
-        return DbSet.Where(x => ids.Contains(x.Id)).ToListAsync(token);
-    }
-
     public Task<TEntity?> GetByIdAsync(TIdentity id, CancellationToken token)
     {
-        return DbSet.FirstOrDefaultAsync(x => x.Id.Equals(id), token);
+        return GetAsQueryable().FirstOrDefaultAsync(x => x.Id.Equals(id), token);
     }
 
     public Task<int> GetCountAsync(CancellationToken token) => DbSet.CountAsync(token);

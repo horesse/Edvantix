@@ -14,14 +14,6 @@ public sealed record GetAllQuery<TModel, TIdentity> : IQuery<IEnumerable<TModel>
     where TIdentity : struct;
 
 /// <summary>
-/// Получение записей по списку идентификаторов
-/// </summary>
-public sealed record GetAllByIdsQuery<TModel, TIdentity>(List<TIdentity> Ids)
-    : IQuery<IEnumerable<TModel>>
-    where TModel : Model<TIdentity>
-    where TIdentity : struct;
-
-/// <summary>
 /// Получение записи по идентификатору
 /// </summary>
 public sealed record GetByIdQuery<TModel, TIdentity>(TIdentity Id)

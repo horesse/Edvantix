@@ -76,7 +76,7 @@ public static class Extensions
         services.AddSingleton(appSettings);
 
         services.AddRateLimiting();
-        
+
         services.AddGrpc(options =>
         {
             options.EnableDetailedErrors = builder.Environment.IsDevelopment();

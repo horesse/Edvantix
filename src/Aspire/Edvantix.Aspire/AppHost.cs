@@ -46,6 +46,7 @@ var postgres = builder
 
 var dataVaultDb = postgres.AddDatabase(Components.Database.DataVault);
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
+var systemDb = postgres.AddDatabase(Components.Database.System);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -71,15 +72,27 @@ builder
     .WithReference(entityHubDb)
     .WaitFor(entityHubDb);
 
+var systemApi = builder
+    .AddProject<Edvantix_System>(Services.System)
+    .WithReference(systemDb)
+    .WaitFor(systemDb)
+    .WithKeycloak(keycloak)
+    .WithFriendlyUrls();
+
 builder
     .AddApiGatewayProxy()
     .WithService(dataVaultApi)
     .WithService(entityHubApi)
+    .WithService(systemApi, true)
     .WithService(keycloak);
 
 if (builder.ExecutionContext.IsRunMode)
 {
-    builder.AddScalar(keycloak).WithOpenAPI(dataVaultApi).WithOpenAPI(entityHubApi);
+    builder
+        .AddScalar(keycloak)
+        .WithOpenAPI(dataVaultApi)
+        .WithOpenAPI(entityHubApi)
+        .WithOpenAPI(systemApi);
 }
 
 builder.Pipeline.AddGhcrPushStep();

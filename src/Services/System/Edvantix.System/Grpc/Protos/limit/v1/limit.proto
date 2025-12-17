@@ -1,0 +1,20 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.System.Grpc.Services";
+
+package limit.v1;
+
+service LimitGrpcService {
+  rpc GetLimitValue(GetLimitRequest) returns (DecimalValue);
+}
+
+message GetLimitRequest {
+  int64 subscription_id = 1;
+  int64 limit_type = 2;
+}
+
+message DecimalValue {
+  int64 units = 1;
+  sfixed32 nanos = 2;
+}
+

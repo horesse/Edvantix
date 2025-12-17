@@ -50,6 +50,16 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Specification.GetQuery(DbSet.AsQueryable(), specification).ToListAsync(token);
     }
 
+    public Task<TEntity?> GetFirstByExpressionAsync(
+        ISpecification<TEntity> specification,
+        CancellationToken token
+    )
+    {
+        return Specification
+            .GetQuery(DbSet.AsQueryable(), specification)
+            .FirstOrDefaultAsync(token);
+    }
+
     public Task<TEntity?> GetByIdAsync(TIdentity id, CancellationToken token)
     {
         return GetAsQueryable().FirstOrDefaultAsync(x => x.Id.Equals(id), token);

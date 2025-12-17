@@ -46,6 +46,17 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
     );
 
     /// <summary>
+    /// Асинхронно возвращает первый объект типа TEntity по заданному фильтру.
+    /// </summary>
+    /// <param name="specification"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task<TEntity?> GetFirstByExpressionAsync(
+        ISpecification<TEntity> specification,
+        CancellationToken token
+    );
+
+    /// <summary>
     /// Асинхронно извлекает объект типа TEntity по указанному идентификатору.
     /// </summary>
     /// <typeparam name="TIdentity">Тип идентификатора. Должен быть значимым типом (struct).</typeparam>

@@ -20,7 +20,7 @@
   <Folder Name="/Services/Common/History/" />
   <Folder Name="/Services/Core/" />
   <Folder Name="/Services/Core/Organization/">
-    <Project Path="src/Services/Organization/Edvantix.OrganizationManagement/Edvantix.OrganizationManagement.csproj" />
+    <Project Path="src/Services/Organization/Edvantix.Organization/Edvantix.Organization.csproj" />
   </Folder>
   <Folder Name="/Services/Core/Person/" />
   <Folder Name="/Services/Core/System/">

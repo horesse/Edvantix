@@ -74,7 +74,7 @@ builder
     .WaitFor(entityHubDb);
 
 var organizationApi = builder
-    .AddProject<Edvantix_OrganizationManagement>(Services.Organization)
+    .AddProject<Edvantix_Organization>(Services.Organization)
     .WithReference(organizationDb)
     .WaitFor(organizationDb)
     .WithKeycloak(keycloak)

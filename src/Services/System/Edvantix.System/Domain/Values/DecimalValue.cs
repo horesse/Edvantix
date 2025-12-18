@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Edvantix.System.Grpc.Services;
+namespace Edvantix.System.Domain.Values;
 
 [ExcludeFromCodeCoverage]
 public sealed partial class DecimalValue

@@ -12,7 +12,7 @@ public sealed class LimitService(IServiceProvider serviceProvider)
         ILogger<LimitService>
     >();
 
-    public override async Task<DecimalValue> GetLimitValue(
+    public override async Task<Domain.Values.DecimalValue> GetLimitValue(
         GetLimitRequest request,
         ServerCallContext context
     )

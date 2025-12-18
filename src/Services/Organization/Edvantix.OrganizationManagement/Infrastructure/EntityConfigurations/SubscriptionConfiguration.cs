@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.OrganizationManagement.Infrastructure.EntityConfigurations;
 
-public sealed class OrganizationSubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
+public sealed class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {

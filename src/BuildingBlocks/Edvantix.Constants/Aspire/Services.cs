@@ -6,6 +6,7 @@ public static class Services
     public static readonly string DataVault = nameof(DataVault).ToLowerInvariant();
     public static readonly string EntityHub = nameof(EntityHub).ToLowerInvariant();
     public static readonly string EntityHubWorker = nameof(EntityHubWorker).ToLowerInvariant();
+    public static readonly string Organization = nameof(Organization).ToLowerInvariant();
     public static readonly string System = nameof(System).ToLowerInvariant();
 
     public static string ToClientName(string application, string? suffix = null)

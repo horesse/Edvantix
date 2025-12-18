@@ -46,6 +46,7 @@ var postgres = builder
 
 var dataVaultDb = postgres.AddDatabase(Components.Database.DataVault);
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
+var organizationDb = postgres.AddDatabase(Components.Database.Organization);
 var systemDb = postgres.AddDatabase(Components.Database.System);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
@@ -72,6 +73,13 @@ builder
     .WithReference(entityHubDb)
     .WaitFor(entityHubDb);
 
+var organizationApi = builder
+    .AddProject<Edvantix_OrganizationManagement>(Services.Organization)
+    .WithReference(organizationDb)
+    .WaitFor(organizationDb)
+    .WithKeycloak(keycloak)
+    .WithFriendlyUrls();
+
 var systemApi = builder
     .AddProject<Edvantix_System>(Services.System)
     .WithReference(systemDb)
@@ -83,6 +91,7 @@ builder
     .AddApiGatewayProxy()
     .WithService(dataVaultApi)
     .WithService(entityHubApi)
+    .WithService(organizationApi)
     .WithService(systemApi, true)
     .WithService(keycloak);
 
@@ -92,6 +101,7 @@ if (builder.ExecutionContext.IsRunMode)
         .AddScalar(keycloak)
         .WithOpenAPI(dataVaultApi)
         .WithOpenAPI(entityHubApi)
+        .WithOpenAPI(organizationApi)
         .WithOpenAPI(systemApi);
 }
 

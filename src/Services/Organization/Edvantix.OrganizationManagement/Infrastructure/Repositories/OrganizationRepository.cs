@@ -6,4 +6,3 @@ namespace Edvantix.OrganizationManagement.Infrastructure.Repositories;
 public sealed class OrganizationRepository(IServiceProvider provider)
     : CrudRepository<OrganizationContext, Organization, long>(provider),
         IOrganizationRepository;
-

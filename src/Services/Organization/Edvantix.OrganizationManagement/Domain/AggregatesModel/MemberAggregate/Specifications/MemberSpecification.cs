@@ -37,4 +37,3 @@ public sealed class MemberSpecification : CommonSpecification<Member>
             Query.Where(x => x.PersonId == _personId.Value);
     }
 }
-

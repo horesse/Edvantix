@@ -32,7 +32,8 @@ public sealed class UsageConverter
     )
     {
         // Read-only via API, updates only via gRPC
-        throw new NotSupportedException("Usage updates via API are not supported. Use gRPC service.");
+        throw new NotSupportedException(
+            "Usage updates via API are not supported. Use gRPC service."
+        );
     }
 }
-

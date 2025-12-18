@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS.Crud;
 using Edvantix.Chassis.Endpoints.Crud;
+using Edvantix.Constants.Other;
 using Edvantix.OrganizationManagement.Domain.AggregatesModel.MemberAggregate.Specifications;
 using Edvantix.OrganizationManagement.Features.Member.Models;
 
@@ -26,4 +27,3 @@ public static class Extensions
         return services;
     }
 }
-

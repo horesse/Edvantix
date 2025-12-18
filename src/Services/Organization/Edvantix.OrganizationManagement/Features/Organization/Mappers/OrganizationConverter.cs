@@ -45,4 +45,3 @@ public sealed class OrganizationConverter
         throw new NotSupportedException("Organization updates are not supported via API");
     }
 }
-

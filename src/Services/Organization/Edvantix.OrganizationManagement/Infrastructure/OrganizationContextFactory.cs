@@ -23,4 +23,3 @@ public class OrganizationContextFactory : IDesignTimeDbContextFactory<Organizati
         return new OrganizationContext(optionsBuilder.Options);
     }
 }
-

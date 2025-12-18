@@ -37,4 +37,3 @@ public sealed class OrganizationSpecification : CommonSpecification<Organization
             Query.Where(x => x.NameLatin.Contains(_nameLatin));
     }
 }
-

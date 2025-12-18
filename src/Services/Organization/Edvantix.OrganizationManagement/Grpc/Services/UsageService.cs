@@ -61,4 +61,3 @@ public sealed class UsageService(IServiceProvider serviceProvider)
         };
     }
 }
-

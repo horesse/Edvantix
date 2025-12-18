@@ -37,4 +37,3 @@ public sealed class ContactSpecification : CommonSpecification<Contact>
             Query.Where(x => x.Type == _type.Value);
     }
 }
-

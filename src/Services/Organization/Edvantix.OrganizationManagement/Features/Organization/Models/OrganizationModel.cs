@@ -14,4 +14,3 @@ public sealed class OrganizationModel : Model<long>
     public string? Description { get; set; }
     public DateTime RegistrationDate { get; set; }
 }
-

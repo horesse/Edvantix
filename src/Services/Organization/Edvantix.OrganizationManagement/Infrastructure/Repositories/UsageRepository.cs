@@ -6,4 +6,3 @@ namespace Edvantix.OrganizationManagement.Infrastructure.Repositories;
 public sealed class UsageRepository(IServiceProvider provider)
     : CrudRepository<OrganizationContext, Usage, long>(provider),
         IUsageRepository;
-

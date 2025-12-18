@@ -37,4 +37,3 @@ public sealed class UsageSpecification : CommonSpecification<Usage>
             Query.Where(x => x.LimitId == _limitId.Value);
     }
 }
-

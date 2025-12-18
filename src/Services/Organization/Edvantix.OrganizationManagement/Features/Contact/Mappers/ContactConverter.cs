@@ -4,7 +4,8 @@ using Edvantix.OrganizationManagement.Features.Contact.Models;
 
 namespace Edvantix.OrganizationManagement.Features.Contact.Mappers;
 
-public sealed class ContactConverter : ClassConverter<ContactModel, Domain.AggregatesModel.ContactAggregate.Contact>
+public sealed class ContactConverter
+    : ClassConverter<ContactModel, Domain.AggregatesModel.ContactAggregate.Contact>
 {
     public override Domain.AggregatesModel.ContactAggregate.Contact Map(ContactModel source)
     {
@@ -38,4 +39,3 @@ public sealed class ContactConverter : ClassConverter<ContactModel, Domain.Aggre
         target.UpdateDescription(source.Description);
     }
 }
-

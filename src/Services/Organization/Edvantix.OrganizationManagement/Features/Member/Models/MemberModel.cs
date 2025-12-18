@@ -11,4 +11,3 @@ public sealed class MemberModel : Model<Guid>
     public Guid PersonId { get; set; }
     public string? Position { get; set; }
 }
-

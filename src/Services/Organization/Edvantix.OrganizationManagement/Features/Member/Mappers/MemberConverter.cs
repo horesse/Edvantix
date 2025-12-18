@@ -34,4 +34,3 @@ public sealed class MemberConverter
         target.UpdatePosition(source.Position);
     }
 }
-

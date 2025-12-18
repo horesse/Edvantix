@@ -114,4 +114,3 @@ public static class Extensions
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
     }
 }
-

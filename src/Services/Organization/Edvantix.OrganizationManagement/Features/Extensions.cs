@@ -15,4 +15,3 @@ public static class Extensions
         services.AddUsageFeature();
     }
 }
-

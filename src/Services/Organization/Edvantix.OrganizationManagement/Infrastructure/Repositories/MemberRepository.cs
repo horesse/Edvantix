@@ -6,4 +6,3 @@ namespace Edvantix.OrganizationManagement.Infrastructure.Repositories;
 public sealed class MemberRepository(IServiceProvider provider)
     : SoftDeleteRepository<OrganizationContext, Member, Guid>(provider),
         IMemberRepository;
-

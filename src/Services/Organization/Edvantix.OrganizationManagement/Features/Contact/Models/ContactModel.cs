@@ -5,7 +5,11 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.OrganizationManagement.Features.Contact.Models;
 
-[PublicModel(desc: "Контакт организации", entityType: EntityGroupEnum.Reference, requiredAuth: true)]
+[PublicModel(
+    desc: "Контакт организации",
+    entityType: EntityGroupEnum.Reference,
+    requiredAuth: true
+)]
 public sealed class ContactModel : Model<long>
 {
     public long OrganizationId { get; set; }
@@ -13,4 +17,3 @@ public sealed class ContactModel : Model<long>
     public string Value { get; set; } = null!;
     public string? Description { get; set; }
 }
-

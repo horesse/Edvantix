@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Edvantix.System.Domain.Values;
-
+// ReSharper disable once CheckNamespace
+namespace Edvantix.System.Grpc.Services;
+ 
 [ExcludeFromCodeCoverage]
 public sealed partial class DecimalValue
 {

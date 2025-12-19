@@ -1,7 +1,6 @@
 using Edvantix.Chassis.Repository.Crud;
 using Edvantix.Company.Domain.AggregatesModel.UsageAggregate;
 using Edvantix.Company.Domain.AggregatesModel.UsageAggregate.Specifications;
-using Edvantix.OrganizationManagement.Grpc.Services;
 using Grpc.Core;
 
 namespace Edvantix.Company.Grpc.Services;

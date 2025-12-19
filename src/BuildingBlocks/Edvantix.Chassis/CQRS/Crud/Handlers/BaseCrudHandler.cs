@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.Mapper;
+﻿using Edvantix.Chassis.Converter;
 using Edvantix.Chassis.Repository.Crud;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,11 +17,8 @@ public abstract class BaseCrudHandler<TModel, TIdentity, TEntity>(IServiceProvid
     protected readonly ICrudRepository<TEntity, TIdentity> Repository = provider.GetRequiredService<
         ICrudRepository<TEntity, TIdentity>
     >();
-    protected readonly IMapper<TEntity, TModel> EntityToModelMapper = provider.GetRequiredService<
-        IMapper<TEntity, TModel>
-    >();
-    protected readonly IMapper<TModel, TEntity> ModelToEntityMapper = provider.GetRequiredService<
-        IMapper<TModel, TEntity>
+    protected readonly IConverter<TModel, TEntity> Converter = provider.GetRequiredService<
+        IConverter<TModel, TEntity>
     >();
 
     private readonly ILogger _logger = provider.GetRequiredService<

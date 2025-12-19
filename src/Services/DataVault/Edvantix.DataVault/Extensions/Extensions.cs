@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
+using Edvantix.Chassis.Converter;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.Endpoints;
 using Edvantix.Chassis.Exceptions;
-using Edvantix.Chassis.Mapper;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
@@ -101,7 +101,7 @@ public static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(IDataVaultApiMarker));
 
-        services.AddMapper(typeof(IDataVaultApiMarker));
+        services.AddConverter(typeof(IDataVaultApiMarker));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
     }

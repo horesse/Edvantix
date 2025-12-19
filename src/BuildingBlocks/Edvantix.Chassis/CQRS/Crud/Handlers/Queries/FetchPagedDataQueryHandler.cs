@@ -33,7 +33,7 @@ public class FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdenti
                 spec.Skip = (request.Request.Page - 1) * request.Request.PageSize;
 
                 var entities = await Repository.GetByExpressionAsync(spec, token);
-                var models = entities.Select(EntityToModelMapper.Map).ToList();
+                var models = entities.Select(Converter.Map).ToList();
 
                 var totalCount = await Repository.GetCountByExpressionAsync(spec, token);
 

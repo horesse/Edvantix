@@ -23,7 +23,7 @@ public sealed class UpdateCommandHandler<TModel, TIdentity, TEntity>(IServicePro
                 var entity = await Repository.GetByIdAsync(command.Model.Id, token);
                 Guard.Against.NotFound(entity, command.Model.Id);
 
-                ModelToEntityMapper.SetProperties(command.Model, entity);
+                Converter.SetProperties(command.Model, entity);
 
                 await Repository.SaveEntitiesAsync(token);
                 return entity.Id;

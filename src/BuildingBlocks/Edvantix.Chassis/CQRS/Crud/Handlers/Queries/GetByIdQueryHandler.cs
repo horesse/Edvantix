@@ -21,7 +21,7 @@ public sealed class GetByIdQueryHandler<TModel, TIdentity, TEntity>(IServiceProv
                 if (entity == null)
                     throw new NotFoundException("Entity not found");
 
-                return EntityToModelMapper.Map(entity);
+                return Converter.Map(entity);
             },
             nameof(GetByIdQuery<,>),
             token

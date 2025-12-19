@@ -1,0 +1,29 @@
+﻿using Edvantix.Chassis.EF.Configurations;
+using Edvantix.Constants.Core;
+using Edvantix.Person.Domain.AggregatesModel.FullNameAggregate;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Edvantix.Person.Infrastructure.EntityConfigurations;
+
+public sealed class FullNameConfiguration : IEntityTypeConfiguration<FullName>
+{
+    public void Configure(EntityTypeBuilder<FullName> builder)
+    {
+        builder.ConfigureSoftDeletable<FullName, long>();
+
+        builder.Property(f => f.PersonInfoId).IsRequired();
+
+        builder.Property(f => f.FirstName).IsRequired().HasMaxLength(DataSchemaLength.Large);
+
+        builder.Property(f => f.LastName).IsRequired().HasMaxLength(DataSchemaLength.Large);
+
+        builder.Property(f => f.MiddleName).HasMaxLength(DataSchemaLength.Large);
+
+        builder.HasIndex(f => f.PersonInfoId).IsUnique();
+
+        builder.Ignore(f => f.GetFullName());
+
+        builder.HasQueryFilter(e => !e.IsDeleted);
+    }
+}

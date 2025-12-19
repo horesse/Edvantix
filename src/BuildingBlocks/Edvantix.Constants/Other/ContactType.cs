@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Company.Domain.AggregatesModel.ContactAggregate;
+﻿namespace Edvantix.Constants.Other;
 
 public enum ContactType : long
 {

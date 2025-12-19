@@ -5,9 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Company.Infrastructure.EntityConfigurations;
 
-public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Domain.AggregatesModel.OrganizationAggregate.Organization>
+public sealed class OrganizationConfiguration
+    : IEntityTypeConfiguration<Domain.AggregatesModel.OrganizationAggregate.Organization>
 {
-    public void Configure(EntityTypeBuilder<Domain.AggregatesModel.OrganizationAggregate.Organization> builder)
+    public void Configure(
+        EntityTypeBuilder<Domain.AggregatesModel.OrganizationAggregate.Organization> builder
+    )
     {
         builder.Configure<Domain.AggregatesModel.OrganizationAggregate.Organization, long>();
 
@@ -48,15 +51,21 @@ public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Domain.
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .Metadata.FindNavigation(nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Contacts))!
+            .Metadata.FindNavigation(
+                nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Contacts)
+            )!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Members))!
+            .Metadata.FindNavigation(
+                nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Members)
+            )!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Subscriptions))!
+            .Metadata.FindNavigation(
+                nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Subscriptions)
+            )!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder.HasIndex(o => o.Name);

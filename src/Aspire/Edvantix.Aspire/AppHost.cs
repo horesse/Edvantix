@@ -74,7 +74,7 @@ builder
     .WaitFor(entityHubDb);
 
 var organizationApi = builder
-    .AddProject<Edvantix_Organization>(Services.Organization)
+    .AddProject<Edvantix_Company>(Services.Company)
     .WithReference(organizationDb)
     .WaitFor(organizationDb)
     .WithKeycloak(keycloak)
@@ -91,7 +91,7 @@ builder
     .AddApiGatewayProxy()
     .WithService(dataVaultApi)
     .WithService(entityHubApi)
-    .WithService(organizationApi)
+    .WithService(organizationApi, true)
     .WithService(systemApi, true)
     .WithService(keycloak);
 

@@ -347,7 +347,7 @@
           "attributes": {}
         }
       ],
-      "${CLIENT_ORGANIZATION_ID}": [
+      "${CLIENT_COMPANY_ID}": [
         {
           "id": "c1a2b3c4-5678-4d90-a1b2-c3d4e5f6a7b8",
           "name": "uma_protection",
@@ -549,17 +549,17 @@
     },
     {
       "id": "4e7f8a9b-0c1d-4e2f-3a4b-5c6d7e8f9a0b",
-      "username": "service-account-${CLIENT_ORGANIZATION_ID}",
+      "username": "service-account-${CLIENT_COMPANY_ID}",
       "emailVerified": false,
       "createdTimestamp": 1748890000000,
       "enabled": true,
       "totp": false,
-      "serviceAccountClientId": "${CLIENT_ORGANIZATION_ID}",
+      "serviceAccountClientId": "${CLIENT_COMPANY_ID}",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": ["default-roles-${REALM_NAME}"],
       "clientRoles": {
-        "${CLIENT_ORGANIZATION_ID}": ["uma_protection"]
+        "${CLIENT_COMPANY_ID}": ["uma_protection"]
       },
       "notBefore": 0,
       "groups": []
@@ -944,17 +944,17 @@
     },
     {
       "id": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
-      "clientId": "${CLIENT_ORGANIZATION_ID}",
-      "name": "${CLIENT_ORGANIZATION_NAME}",
+      "clientId": "${CLIENT_COMPANY_ID}",
+      "name": "${CLIENT_COMPANY_NAME}",
       "description": "",
-      "rootUrl": "${CLIENT_ORGANIZATION_URL}",
-      "adminUrl": "${CLIENT_ORGANIZATION_URL_CONTAINERHOST}",
+      "rootUrl": "${CLIENT_COMPANY_URL}",
+      "adminUrl": "${CLIENT_COMPANY_URL_CONTAINERHOST}",
       "baseUrl": "/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
-      "secret": "${CLIENT_ORGANIZATION_SECRET}",
+      "secret": "${CLIENT_COMPANY_SECRET}",
       "redirectUris": ["*"],
       "webOrigins": ["*"],
       "notBefore": 0,
@@ -1007,8 +1007,8 @@
         "email"
       ],
       "optionalClientScopes": [
-        "${CLIENT_ORGANIZATION_ID}_read",
-        "${CLIENT_ORGANIZATION_ID}_write",
+        "${CLIENT_COMPANY_ID}_read",
+        "${CLIENT_COMPANY_ID}_write",
         "address",
         "phone",
         "organization",
@@ -1434,8 +1434,8 @@
     },
     {
       "id": "a2b3c4d5-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
-      "name": "${CLIENT_ORGANIZATION_ID}_read",
-      "description": "Read for ${CLIENT_ORGANIZATION_NAME}",
+      "name": "${CLIENT_COMPANY_ID}_read",
+      "description": "Read for ${CLIENT_COMPANY_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
@@ -1446,8 +1446,8 @@
     },
     {
       "id": "b3c4d5e6-7f8a-4b9c-0d1e-2f3a4b5c6d7e",
-      "name": "${CLIENT_ORGANIZATION_ID}_write",
-      "description": "Write for ${CLIENT_ORGANIZATION_NAME}",
+      "name": "${CLIENT_COMPANY_ID}_write",
+      "description": "Write for ${CLIENT_COMPANY_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",

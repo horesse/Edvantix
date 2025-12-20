@@ -32,4 +32,7 @@
       IsAspireProjectResource="false"
     />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Container\keycloak\themes\" />
+  </ItemGroup>
 </Project>

@@ -15,6 +15,7 @@
     <PackageReference Include="Aspire.Hosting.RabbitMQ" />
     <PackageReference Include="Aspire.Hosting.Yarp" />
     <PackageReference Include="CliWrap" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Bun" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
     <PackageReference Include="Scalar.Aspire" />
   </ItemGroup>
@@ -30,5 +31,8 @@
       Include="..\..\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj"
       IsAspireProjectResource="false"
     />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Container\keycloak\themes\" />
   </ItemGroup>
 </Project>

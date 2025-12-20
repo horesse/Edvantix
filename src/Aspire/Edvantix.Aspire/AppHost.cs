@@ -95,6 +95,12 @@ builder
     .WithService(systemApi, true)
     .WithService(keycloak);
 
+var frontend = builder.AddBunApp(
+        name: "frontend",
+        workingDirectory: "../../frontend",
+        entryPoint: "dev")
+    .WithHttpEndpoint(port: 3000, env: "PORT");
+
 if (builder.ExecutionContext.IsRunMode)
 {
     builder

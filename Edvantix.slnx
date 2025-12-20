@@ -8,7 +8,6 @@
     <Project Path="src/BuildingBlocks/Edvantix.Constants/Edvantix.Constants.csproj" />
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
-  <Folder Name="/Frontend/" />
   <Folder Name="/Services/" />
   <Folder Name="/Services/Common/" />
   <Folder Name="/Services/Common/DataVault/">

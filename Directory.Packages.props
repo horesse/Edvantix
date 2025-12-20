@@ -44,7 +44,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
     <PackageVersion Include="Refit.HttpClientFactory" Version="9.0.2" />
-    <PackageVersion Include="Scalar.Aspire" Version="0.8.5" />
+    <PackageVersion Include="Scalar.Aspire" Version="0.8.7" />
     <PackageVersion Include="Scrutor" Version="7.0.0" />
   </ItemGroup>
 </Project>

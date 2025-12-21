@@ -62,16 +62,9 @@
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
-          "realm": [
-            "offline_access",
-            "uma_authorization"
-          ],
+          "realm": ["offline_access", "uma_authorization"],
           "client": {
-            "account": [
-              "delete-account",
-              "manage-account",
-              "view-profile"
-            ]
+            "account": ["delete-account", "manage-account", "view-profile"]
           }
         },
         "clientRole": false,
@@ -143,10 +136,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "realm-management": [
-                "query-users",
-                "query-groups"
-              ]
+              "realm-management": ["query-users", "query-groups"]
             }
           },
           "clientRole": true,
@@ -283,9 +273,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "realm-management": [
-                "query-clients"
-              ]
+              "realm-management": ["query-clients"]
             }
           },
           "clientRole": true,
@@ -342,9 +330,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "account": [
-                "manage-account-links"
-              ]
+              "account": ["manage-account-links"]
             }
           },
           "clientRole": true,
@@ -394,9 +380,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "account": [
-                "view-consent"
-              ]
+              "account": ["view-consent"]
             }
           },
           "clientRole": true,
@@ -415,9 +399,7 @@
     "clientRole": false,
     "containerId": "5d0dd960-0478-4ca6-b64a-810a3f6f4071"
   },
-  "requiredCredentials": [
-    "password"
-  ],
+  "requiredCredentials": ["password"],
   "otpPolicyType": "totp",
   "otpPolicyAlgorithm": "HmacSHA1",
   "otpPolicyInitialCounter": 0,
@@ -526,9 +508,7 @@
     }
   },
   "webAuthnPolicyRpEntityName": "keycloak",
-  "webAuthnPolicySignatureAlgorithms": [
-    "ES256"
-  ],
+  "webAuthnPolicySignatureAlgorithms": ["ES256"],
   "webAuthnPolicyRpId": "",
   "webAuthnPolicyAttestationConveyancePreference": "not specified",
   "webAuthnPolicyAuthenticatorAttachment": "not specified",
@@ -539,9 +519,7 @@
   "webAuthnPolicyAcceptableAaguids": [],
   "webAuthnPolicyExtraOrigins": [],
   "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
-  "webAuthnPolicyPasswordlessSignatureAlgorithms": [
-    "ES256"
-  ],
+  "webAuthnPolicyPasswordlessSignatureAlgorithms": ["ES256"],
   "webAuthnPolicyPasswordlessRpId": "",
   "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
   "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
@@ -564,28 +542,13 @@
           "test.user@protonmail.com",
           "testuser@hotmail.com"
         ],
-        "gender": [
-          "prefer_not_to_say"
-        ],
-        "favorite_pet": [
-          "cats"
-        ],
-        "favourite_pet": [
-          "cat"
-        ],
-        "bio": [
-          "Hello I'm Test User and I do not exist."
-        ],
-        "phone_number": [
-          "1111111111"
-        ],
-        "locale": [
-          "en"
-        ],
-        "favorite_media": [
-          "movies",
-          "series"
-        ]
+        "gender": ["prefer_not_to_say"],
+        "favorite_pet": ["cats"],
+        "favourite_pet": ["cat"],
+        "bio": ["Hello I'm Test User and I do not exist."],
+        "phone_number": ["1111111111"],
+        "locale": ["en"],
+        "favorite_media": ["movies", "series"]
       },
       "createdTimestamp": 1716183898408,
       "enabled": true,
@@ -602,9 +565,7 @@
       ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
-      "realmRoles": [
-        "default-roles-myrealm"
-      ],
+      "realmRoles": ["default-roles-myrealm"],
       "clientRoles": {
         "realm-management": [
           "manage-users",
@@ -627,9 +588,7 @@
           "view-identity-providers",
           "view-clients"
         ],
-        "broker": [
-          "read-token"
-        ],
+        "broker": ["read-token"],
         "account": [
           "delete-account",
           "view-applications",
@@ -648,19 +607,14 @@
   "scopeMappings": [
     {
       "clientScope": "offline_access",
-      "roles": [
-        "offline_access"
-      ]
+      "roles": ["offline_access"]
     }
   ],
   "clientScopeMappings": {
     "account": [
       {
         "client": "account-console",
-        "roles": [
-          "manage-account",
-          "view-groups"
-        ]
+        "roles": ["manage-account", "view-groups"]
       }
     ]
   },
@@ -675,9 +629,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/realms/myrealm/account/*"
-      ],
+      "redirectUris": ["/realms/myrealm/account/*"],
       "webOrigins": [],
       "notBefore": 0,
       "bearerOnly": false,
@@ -728,9 +680,7 @@
         "http://127.0.0.1*",
         "/realms/myrealm/account/*"
       ],
-      "webOrigins": [
-        "*"
-      ],
+      "webOrigins": ["*"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -881,9 +831,7 @@
         "http://localhost*",
         "http://127.0.0.1*"
       ],
-      "webOrigins": [
-        "*"
-      ],
+      "webOrigins": ["*"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -999,9 +947,7 @@
         "http://127.0.0.1*",
         "/admin/myrealm/console/*"
       ],
-      "webOrigins": [
-        "*"
-      ],
+      "webOrigins": ["*"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -1688,10 +1634,7 @@
   "adminTheme": "",
   "emailTheme": "edvantix",
   "eventsEnabled": false,
-  "eventsListeners": [
-    "keycloakify-logging",
-    "jboss-logging"
-  ],
+  "eventsListeners": ["keycloakify-logging", "jboss-logging"],
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
@@ -1706,9 +1649,7 @@
         "subType": "authenticated",
         "subComponents": {},
         "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
+          "allow-default-scopes": ["true"]
         }
       },
       {
@@ -1745,9 +1686,7 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "max-clients": [
-            "200"
-          ]
+          "max-clients": ["200"]
         }
       },
       {
@@ -1776,9 +1715,7 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
+          "allow-default-scopes": ["true"]
         }
       },
       {
@@ -1788,12 +1725,8 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "host-sending-registration-request-must-match": [
-            "true"
-          ],
-          "client-uris-must-match": [
-            "true"
-          ]
+          "host-sending-registration-request-must-match": ["true"],
+          "client-uris-must-match": ["true"]
         }
       },
       {
@@ -1830,9 +1763,7 @@
           "certificate": [
             "MIICnTCCAYUCBgGTulJBzTANBgkqhkiG9w0BAQsFADASMRAwDgYDVQQDDAdteXJlYWxtMB4XDTI0MTIxMjEwMDExM1oXDTM0MTIxMjEwMDI1M1owEjEQMA4GA1UEAwwHbXlyZWFsbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMUxTL0YjYkI2Pc2o7y7GoelcuKZ/FO7JrJwXB0vUpCydY/TvPvdAfdLSGZOCKhBOIHSQP5m23lJ6Ltb1rnNJOvXYkDBXpc3SGg6iWhRXjkvidQ6AKY04YxiM+xSIJhouqqDfMZ6z1Q/+qDGALsU70GiR+5hDYiBtNffHb2rn1dZhT4PpK07Ie1qJqNgiXmZjbgF7+0Q0GMcD2AwhWS26aXs+PA+/tg/tVekrZOl8M/CA0Gb5Y8Qxeltj/a4T1ldQubXCaQv/UT8hg6PpHvFDd3zOl+2DoKWzM7Va4PCdGk6j12e3bekBVKlTrn6PucGC9owmn6WDVfHJmhpWPkN3eUCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEATZXyOluloTj6Q/Mv0JjstfdvPQbzGFzWtULB1ttOJqQVL+IJoF8V79HIvfP9U5OYaOdYk9dDurQcd2hXvEtX+zQlLYGniRfJlFI7d+m6MDXa7/g1r+OmcvaiXX7O3ol7eJdymPKS79+PSWFsHk0JjfgRJ11jajOscYPoQ+IvxXgwuy6v7VHigsLnGnmmo+KWiKO6Cna6eilm6/awYXaoym4ky9S4T5+WaJwd/tH/n5VY77zyXaXfANd1hU/+4Ux/eaGVnoMAM4ud2emd4qCN2tQQ3HusIVl+5V+S8Uq1y54mBpXv6CAODDGDJeFa+cGPJUSLdv/ZT2F8yfDlDc4J6g=="
           ],
-          "priority": [
-            "100"
-          ]
+          "priority": ["100"]
         }
       },
       {
@@ -1847,12 +1778,8 @@
           "certificate": [
             "MIICnTCCAYUCBgGTulJDCDANBgkqhkiG9w0BAQsFADASMRAwDgYDVQQDDAdteXJlYWxtMB4XDTI0MTIxMjEwMDExM1oXDTM0MTIxMjEwMDI1M1owEjEQMA4GA1UEAwwHbXlyZWFsbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALp4C+KLC8j/GxOjEio/GTCUxvFgYdytv8QeQSWAmHOz9QiDkWSPaP7ykMdUJz/gl5CCp50dpMyMwtK506pSDpGmX4Zkp+dIxubzQUvaj0/llO1Ht6isbliRcHGhVOUhCWsCR6pwzyvqZLZJMZLnXjB8+omij7PsCnG360Sevt2txakEHRxEIOCI1VPKQWZmoNXOyR2sojOejk+cuo5hOSb2OtPefYj62T10kzFN4TaIlcHciukMHSvv9MKzuvNVYSD/rtqXvdp0PobIDEkkCXoC8dVLBBMlPO7Mm5Rvqd8wCkkvpLdp74lf2tnGIojBNC3ZUN5ZyrEOLdWOsmQYktkCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAPhPdLFcXdQT4k06oXB06ZSJ8AkZNXLvQFWCHXI34OmrS2yTse+dLqrqehnC3kPwxElVmawoUVc1sbsk7fUnspfM+Xw20PaABZu4MO2m5TB98f1hEkezP9fSqgPeuWJgTL8ZW5kkZyiD3IaZoqyxzYXaFxKHhU455g+k2+DO+N6FreVKcYz12Q5EMaxZ6U1neZAo3vicNxM3/TA5V8sPK8+oKvon7v5OyjpOH0goJo9v/klKeUk36h4u2h1S67IhVSU7tfzVFYrpns1JhrwGZ2xavVqEoqX8zFp3GKz3yVXkwHRHlrzYkZoGn21rm5boXIP3wEB7yXZbXWTiUko/IFw=="
           ],
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "RSA-OAEP"
-          ]
+          "priority": ["100"],
+          "algorithm": ["RSA-OAEP"]
         }
       },
       {
@@ -1861,15 +1788,9 @@
         "providerId": "aes-generated",
         "subComponents": {},
         "config": {
-          "kid": [
-            "c36222c6-6a43-4d32-9d44-d5d355e5cabd"
-          ],
-          "secret": [
-            "rzL4qUQ7wTEkZDbgt595VA"
-          ],
-          "priority": [
-            "100"
-          ]
+          "kid": ["c36222c6-6a43-4d32-9d44-d5d355e5cabd"],
+          "secret": ["rzL4qUQ7wTEkZDbgt595VA"],
+          "priority": ["100"]
         }
       },
       {
@@ -1878,28 +1799,18 @@
         "providerId": "hmac-generated",
         "subComponents": {},
         "config": {
-          "kid": [
-            "06532a54-c310-41c1-829c-58776ce2ab4a"
-          ],
+          "kid": ["06532a54-c310-41c1-829c-58776ce2ab4a"],
           "secret": [
             "9v1ZjFhEFH6UpY6ncFkaCbqJYHMyI4tA0cvx4GuQ5KtMXYbimitSSVDqxIKwa-gBC_8bY2O4FQfpmp1Qn1-L4fFmPFfIF3ZKsO16263BwpADo_FNSBTte8Le4gJLylqFULdsn3ye17FHyq5Jjms_OTt3opzcDLNduCuK22GBBsU"
           ],
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "HS512"
-          ]
+          "priority": ["100"],
+          "algorithm": ["HS512"]
         }
       }
     ]
   },
   "internationalizationEnabled": true,
-  "supportedLocales": [
-    "en",
-    "fr",
-    "es"
-  ],
+  "supportedLocales": ["en", "fr", "es"],
   "defaultLocale": "en",
   "authenticationFlows": [
     {

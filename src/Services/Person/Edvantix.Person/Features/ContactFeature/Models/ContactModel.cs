@@ -7,7 +7,6 @@ namespace Edvantix.Person.Features.ContactFeature.Models;
 [PublicModel("Контакты пользователя", EntityGroupEnum.Personal, requiredAuth: true)]
 public sealed class ContactModel : Model<long>
 {
-    public long PersonInfoId { get; set; }
     public ContactType Type { get; set; }
     public string Value { get; set; } = null!;
     public string? Description { get; set; }

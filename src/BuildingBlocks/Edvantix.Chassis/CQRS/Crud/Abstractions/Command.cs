@@ -30,3 +30,13 @@ public sealed record DeleteCommand<TIdentity>(TIdentity Id)
 public sealed record DeleteRangeCommand<TIdentity>(IEnumerable<TIdentity> Ids)
     : ICommand<IEnumerable<TIdentity>>
     where TIdentity : struct;
+
+/// <summary>
+/// Создание новой записи с использованием CreateViewModel
+/// </summary>
+public sealed record CreateWithViewModelCommand<TModel, TCreateViewModel, TIdentity>(
+    TCreateViewModel ViewModel
+) : ICommand<TIdentity>
+    where TModel : Model<TIdentity>
+    where TCreateViewModel : class
+    where TIdentity : struct;

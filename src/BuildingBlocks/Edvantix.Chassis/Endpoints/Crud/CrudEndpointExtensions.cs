@@ -94,6 +94,99 @@ public static class CrudEndpointExtensions
         }
 
         /// <summary>
+        /// Регистрирует CRUD endpoints с поддержкой ViewModels
+        /// </summary>
+        public IServiceCollection AddCrudViewModelEndpoints<
+            TEntity,
+            TModel,
+            TCreateViewModel,
+            TViewViewModel,
+            TIdentity,
+            TSpecification
+        >(
+            Func<TCreateViewModel, TModel> createViewModelMapper,
+            Func<TModel, TViewViewModel> viewViewModelMapper
+        )
+            where TModel : Model<TIdentity>
+            where TCreateViewModel : class
+            where TViewViewModel : class
+            where TIdentity : struct
+            where TEntity : class, IAggregateRoot
+            where TSpecification : class, ISpecification<TEntity>, new()
+        {
+            return services.AddCrudViewModelEndpoints<
+                TEntity,
+                TModel,
+                TCreateViewModel,
+                TViewViewModel,
+                TIdentity,
+                TSpecification
+            >(
+                CrudActions.Create | CrudActions.GetById | CrudActions.FetchPagedData,
+                createViewModelMapper,
+                viewViewModelMapper
+            );
+        }
+
+        /// <summary>
+        /// Регистрирует выборочные CRUD endpoints с поддержкой ViewModels
+        /// </summary>
+        public IServiceCollection AddCrudViewModelEndpoints<
+            TEntity,
+            TModel,
+            TCreateViewModel,
+            TViewViewModel,
+            TIdentity,
+            TSpecification
+        >(
+            CrudActions actions,
+            Func<TCreateViewModel, TModel> createViewModelMapper,
+            Func<TModel, TViewViewModel> viewViewModelMapper
+        )
+            where TModel : Model<TIdentity>
+            where TCreateViewModel : class
+            where TViewViewModel : class
+            where TIdentity : struct
+            where TEntity : class, IAggregateRoot
+            where TSpecification : class, ISpecification<TEntity>, new()
+        {
+            // Регистрируем мапперы
+            services.AddSingleton(createViewModelMapper);
+            services.AddSingleton(viewViewModelMapper);
+
+            // Command Endpoints
+            if (actions.HasFlag(CrudActions.Create))
+            {
+                services.AddTransient<
+                    IEndpoint,
+                    CreateWithViewModelEndpoint<TModel, TCreateViewModel, TIdentity>
+                >();
+            }
+
+            // Query Endpoints
+            if (actions.HasFlag(CrudActions.GetById))
+            {
+                services.AddTransient<IEndpoint, GetByIdWithViewModelEndpoint<TModel, TIdentity>>();
+            }
+
+            if (actions.HasFlag(CrudActions.FetchPagedData))
+            {
+                services.AddTransient<
+                    IEndpoint,
+                    FetchPagedDataWithViewModelEndpoint<
+                        TModel,
+                        TViewViewModel,
+                        TIdentity,
+                        TEntity,
+                        TSpecification
+                    >
+                >();
+            }
+
+            return services;
+        }
+
+        /// <summary>
         /// Регистрирует кастомный endpoint, переопределяя стандартный
         /// </summary>
         public IServiceCollection AddCrudEndpoint<TEndpoint>()

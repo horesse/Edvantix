@@ -7,9 +7,7 @@ namespace Edvantix.Person.Features.ContactFeature.Mappers;
 public sealed class ContactConverter : ClassConverter<ContactModel, Contact>
 {
     public override Contact Map(ContactModel source)
-    {
-        return new Contact(source.PersonInfoId, source.Type, source.Value, source.Description);
-    }
+        => throw new NotImplementedException();
 
     public override ContactModel Map(Contact source)
     {
@@ -17,7 +15,7 @@ public sealed class ContactConverter : ClassConverter<ContactModel, Contact>
         {
             Type = source.Type,
             Value = source.Value,
-            Description = source.Description
+            Description = source.Description,
         };
     }
 

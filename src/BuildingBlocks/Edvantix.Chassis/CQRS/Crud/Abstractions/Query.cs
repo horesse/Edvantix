@@ -47,3 +47,19 @@ public sealed record FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdent
     where TIdentity : struct
     where TSpecification : class, ISpecification<TEntity>
     where TEntity : class, IAggregateRoot;
+
+/// <summary>
+/// Получение пагинированных записей с маппингом в ViewViewModel
+/// </summary>
+public sealed record FetchPagedDataWithViewModelQuery<
+    TEntity,
+    TModel,
+    TViewViewModel,
+    TSpecification,
+    TIdentity
+>(PaginationRequest<TSpecification, TEntity> Request) : IQuery<PagedResult<TViewViewModel>>
+    where TModel : Model<TIdentity>
+    where TViewViewModel : class
+    where TIdentity : struct
+    where TSpecification : class, ISpecification<TEntity>
+    where TEntity : class, IAggregateRoot;

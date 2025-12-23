@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Constants.Core;
-using Edvantix.Person.Domain.AggregatesModel.CareerHistoryAggregate;
+using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

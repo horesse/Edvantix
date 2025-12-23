@@ -194,13 +194,7 @@ public static class MediatorCrudExtensions
             {
                 services.AddScoped<
                     IRequestHandler<
-                        FetchPagedDataWithViewModelQuery<
-                            TEntity,
-                            TModel,
-                            TViewViewModel,
-                            TSpecification,
-                            TIdentity
-                        >,
+                        FetchPagedDataWithViewModelQuery<TEntity, TViewViewModel, TSpecification>,
                         PagedResult<TViewViewModel>
                     >,
                     FetchPagedDataWithViewModelQueryHandler<

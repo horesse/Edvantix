@@ -19,13 +19,7 @@ public class FetchPagedDataWithViewModelQueryHandler<
 >(IServiceProvider provider)
     : BaseCrudViewModelHandler<TModel, TIdentity, TEntity>(provider),
         IRequestHandler<
-            FetchPagedDataWithViewModelQuery<
-                TEntity,
-                TModel,
-                TViewViewModel,
-                TSpecification,
-                TIdentity
-            >,
+            FetchPagedDataWithViewModelQuery<TEntity, TViewViewModel, TSpecification>,
             PagedResult<TViewViewModel>
         >
     where TModel : Model<TIdentity>
@@ -38,13 +32,7 @@ public class FetchPagedDataWithViewModelQueryHandler<
         provider.GetRequiredService<Func<TModel, TViewViewModel>>();
 
     public async Task<PagedResult<TViewViewModel>> Handle(
-        FetchPagedDataWithViewModelQuery<
-            TEntity,
-            TModel,
-            TViewViewModel,
-            TSpecification,
-            TIdentity
-        > request,
+        FetchPagedDataWithViewModelQuery<TEntity, TViewViewModel, TSpecification> request,
         CancellationToken token
     )
     {
@@ -73,7 +61,7 @@ public class FetchPagedDataWithViewModelQueryHandler<
                     totalCount
                 );
             },
-            nameof(FetchPagedDataWithViewModelQuery<,,,,>),
+            nameof(FetchPagedDataWithViewModelQuery<,,>),
             token
         );
     }

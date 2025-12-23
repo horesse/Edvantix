@@ -6,8 +6,7 @@ namespace Edvantix.Person.Features.ContactFeature.Mappers;
 
 public sealed class ContactConverter : ClassConverter<ContactModel, Contact>
 {
-    public override Contact Map(ContactModel source)
-        => throw new NotImplementedException();
+    public override Contact Map(ContactModel source) => throw new NotImplementedException();
 
     public override ContactModel Map(Contact source)
     {

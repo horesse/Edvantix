@@ -60,13 +60,9 @@ public class FetchPagedDataWithViewModelEndpoint<
         CancellationToken cancellationToken = default
     )
     {
-        var query = new FetchPagedDataWithViewModelQuery<
-            TEntity,
-            TModel,
-            TViewViewModel,
-            TSpecification,
-            TIdentity
-        >(request);
+        var query = new FetchPagedDataWithViewModelQuery<TEntity, TViewViewModel, TSpecification>(
+            request
+        );
         var result = await sender.Send(query, cancellationToken);
 
         return TypedResults.Ok(result);

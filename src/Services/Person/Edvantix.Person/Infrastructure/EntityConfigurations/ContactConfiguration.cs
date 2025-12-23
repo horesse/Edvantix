@@ -10,7 +10,7 @@ public sealed class ContactConfiguration : IEntityTypeConfiguration<Contact>
 {
     public void Configure(EntityTypeBuilder<Contact> builder)
     {
-        builder.Configure<Contact, long>();
+        builder.ConfigureSoftDeletable<Contact, long>();
 
         builder.Property(c => c.PersonInfoId).IsRequired();
 

@@ -1,7 +1,7 @@
 ﻿using Edvantix.Chassis.EF.Attributes;
 using Edvantix.Constants.Other;
-using Edvantix.Person.Domain.AggregatesModel.CareerHistoryAggregate;
 using Edvantix.Person.Domain.AggregatesModel.ContactAggregate;
+using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 using Edvantix.Person.Domain.AggregatesModel.FullNameAggregate;
 using Edvantix.SharedKernel.SeedWork;
 

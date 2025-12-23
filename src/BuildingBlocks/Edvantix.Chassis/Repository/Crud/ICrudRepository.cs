@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Edvantix.Chassis.Repository.Crud;
 
 public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDisposable
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
     where TIdentity : struct
 {
     /// <summary>

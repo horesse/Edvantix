@@ -1,11 +1,10 @@
 ﻿using Edvantix.Chassis.EF.Attributes;
-using Edvantix.Chassis.Specification;
 using Edvantix.Person.Domain.AggregatesModel.PersonInfoAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
-namespace Edvantix.Person.Domain.AggregatesModel.CareerHistoryAggregate;
+namespace Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 
-public sealed class EmploymentHistory() : Entity<long>, ISoftDelete
+public sealed class EmploymentHistory() : Entity<long>, ISoftDelete, IAggregateRoot
 {
     internal EmploymentHistory(
         string companyName,

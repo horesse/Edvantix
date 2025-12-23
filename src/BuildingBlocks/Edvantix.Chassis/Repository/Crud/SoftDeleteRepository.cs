@@ -6,7 +6,7 @@ namespace Edvantix.Chassis.Repository.Crud;
 public abstract class SoftDeleteRepository<TContext, TEntity, TIdentity>(IServiceProvider provider)
     : CrudRepository<TContext, TEntity, TIdentity>(provider)
     where TContext : DbContext, IUnitOfWork
-    where TEntity : Entity<TIdentity>, IAggregateRoot, ISoftDelete
+    where TEntity : Entity<TIdentity>, ISoftDelete
     where TIdentity : struct
 {
     public override Task DeleteAllAsync(CancellationToken token)

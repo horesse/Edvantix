@@ -14,7 +14,7 @@ namespace Edvantix.Chassis.Repository.Crud;
 public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvider provider)
     : ICrudRepository<TEntity, TIdentity>
     where TContext : DbContext, IUnitOfWork
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
     where TIdentity : struct
 {
     private TContext Context => provider.GetRequiredService<TContext>();

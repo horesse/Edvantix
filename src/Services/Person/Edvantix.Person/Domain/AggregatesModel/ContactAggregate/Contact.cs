@@ -4,7 +4,7 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.ContactAggregate;
 
-public sealed class Contact : Entity<long>, ISoftDelete
+public sealed class Contact : Entity<long>, ISoftDelete, IAggregateRoot
 {
     private Contact() { }
 

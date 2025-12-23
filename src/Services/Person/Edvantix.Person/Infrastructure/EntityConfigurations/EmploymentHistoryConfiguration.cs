@@ -10,7 +10,7 @@ public sealed class EmploymentHistoryConfiguration : IEntityTypeConfiguration<Em
 {
     public void Configure(EntityTypeBuilder<EmploymentHistory> builder)
     {
-        builder.Configure<EmploymentHistory, long>();
+        builder.ConfigureSoftDeletable<EmploymentHistory, long>();
 
         builder.Property(e => e.PersonInfoId).IsRequired();
 

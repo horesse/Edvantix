@@ -40,7 +40,7 @@ public sealed class EmploymentHistory() : Entity<long>, ISoftDelete
 
     public string CompanyName { get; private set; } = null!;
     public string Position { get; private set; } = null!;
-    
+
     [OrderBy]
     public DateTime StartDate { get; private set; }
     public DateTime? EndDate { get; private set; }

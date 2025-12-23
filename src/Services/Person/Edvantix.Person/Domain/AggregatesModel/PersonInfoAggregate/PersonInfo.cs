@@ -53,14 +53,6 @@ public sealed class PersonInfo() : Entity<long>, IAggregateRoot, ISoftDelete
         FullName.Update(firstName, lastName, middleName);
     }
 
-    // Методы для управления Contacts
-    public Contact AddContact(ContactType type, string value, string? description = null)
-    {
-        var contact = new Contact(type, value, description);
-        _contacts.Add(contact);
-        return contact;
-    }
-
     public void RemoveContact(long contactId)
     {
         var contact = _contacts.FirstOrDefault(c => c.Id == contactId);

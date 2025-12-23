@@ -2,4 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\EmploymentHistory\" />
+    <Folder Include="Features\FullName\" />
+    <Folder Include="Features\PersonInfo\" />
+  </ItemGroup>
 </Project>

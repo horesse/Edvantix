@@ -6,4 +6,5 @@ public enum EntityGroupEnum : long
     Hidden = 2,
     Other = 3,
     Reference = 4,
+    Personal = 5
 }

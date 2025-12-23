@@ -1,6 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Constants.Other;
-using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +14,7 @@ namespace Edvantix.Chassis.Endpoints.Crud.Queries;
 public class GetCountEndpoint<TModel, TIdentity>
     : BaseCrudEndpoint<TModel, TIdentity>,
         IEndpoint<Ok<long>, ISender>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
 {
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
@@ -28,8 +27,8 @@ public class GetCountEndpoint<TModel, TIdentity>
         ConfigureEndpoint(
                 builder,
                 $"Get{ResourceName}Count",
-                $"Получить количество записей",
-                $"Возвращает общее количество записей"
+                "Получить количество записей",
+                "Возвращает общее количество записей"
             )
             .ProducesGet<long>();
     }

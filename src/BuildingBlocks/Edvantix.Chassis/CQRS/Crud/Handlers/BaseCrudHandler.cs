@@ -10,9 +10,9 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers;
 /// Базовый обработчик с общей логикой для всех CRUD операций
 /// </summary>
 public abstract class BaseCrudHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
 {
     protected readonly ICrudRepository<TEntity, TIdentity> Repository = provider.GetRequiredService<
         ICrudRepository<TEntity, TIdentity>

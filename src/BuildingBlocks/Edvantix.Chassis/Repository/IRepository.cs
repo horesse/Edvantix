@@ -1,6 +1,4 @@
-﻿using Edvantix.SharedKernel.SeedWork;
-
-namespace Edvantix.Chassis.Repository;
+﻿namespace Edvantix.Chassis.Repository;
 
 public interface IRepository<T>
     where T : class

@@ -1,6 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Constants.Other;
-using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +14,7 @@ namespace Edvantix.Chassis.Endpoints.Crud.Commands;
 public class DeleteEndpoint<TModel, TIdentity>
     : BaseCrudEndpoint<TModel, TIdentity>,
         IEndpoint<Results<NoContent, NotFound>, TIdentity, ISender>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
 {
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
@@ -29,8 +28,8 @@ public class DeleteEndpoint<TModel, TIdentity>
         ConfigureEndpoint(
                 builder,
                 $"Delete{ResourceName}",
-                $"Удалить запись",
-                $"Удаляет запись по идентификатору"
+                "Удалить запись",
+                "Удаляет запись по идентификатору"
             )
             .ProducesDelete();
     }

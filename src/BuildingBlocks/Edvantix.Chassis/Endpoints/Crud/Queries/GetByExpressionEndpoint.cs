@@ -13,7 +13,7 @@ namespace Edvantix.Chassis.Endpoints.Crud.Queries;
 public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
     : BaseCrudEndpoint<TModel, TIdentity>,
         IEndpoint<Ok<IEnumerable<TModel>>, TSpecification, ISender>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
     where TEntity : class, IAggregateRoot
     where TSpecification : ISpecification<TEntity>
@@ -29,8 +29,8 @@ public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
         ConfigureEndpoint(
                 builder,
                 $"Get{ResourceName}ByExpression",
-                $"Получить записи по фильтру",
-                $"Возвращает записи по указанному фильтру"
+                "Получить записи по фильтру",
+                "Возвращает записи по указанному фильтру"
             )
             .ProducesGet<TModel>(hasNotFound: true);
     }
@@ -41,7 +41,7 @@ public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
         CancellationToken cancellationToken = default
     )
     {
-        var query = new GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity>(request);
+        var query = new GetByExpressionQuery<TEntity, TModel, TSpecification>(request);
         var result = await sender.Send(query, cancellationToken);
 
         return TypedResults.Ok(result);

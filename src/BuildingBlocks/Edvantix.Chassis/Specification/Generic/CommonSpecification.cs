@@ -1,8 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Reflection;
-using Edvantix.Chassis.EF.Attributes;
-using Edvantix.Chassis.Specification.Builders;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.Specification.Generic;

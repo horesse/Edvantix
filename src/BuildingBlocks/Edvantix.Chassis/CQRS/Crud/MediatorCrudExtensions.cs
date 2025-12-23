@@ -2,7 +2,6 @@
 using Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
 using Edvantix.Chassis.Specification;
-using Edvantix.Chassis.Specification.Generic;
 using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
@@ -19,7 +18,7 @@ public static class MediatorCrudExtensions
         /// Регистрирует все CRUD handlers для модели
         /// </summary>
         public IServiceCollection AddCrudHandlers<TModel, TIdentity, TEntity, TSpecification>()
-            where TModel : Model<TIdentity>
+            where TModel : class
             where TIdentity : struct
             where TEntity : Entity<TIdentity>, IAggregateRoot
             where TSpecification : class, ISpecification<TEntity>, new()
@@ -35,7 +34,7 @@ public static class MediatorCrudExtensions
         public IServiceCollection AddCrudHandlers<TModel, TIdentity, TEntity, TSpecification>(
             CrudActions actions
         )
-            where TModel : Model<TIdentity>
+            where TModel : class
             where TIdentity : struct
             where TEntity : Entity<TIdentity>, IAggregateRoot
             where TSpecification : class, ISpecification<TEntity>, new()
@@ -69,7 +68,7 @@ public static class MediatorCrudExtensions
             {
                 services.AddScoped<
                     IRequestHandler<
-                        GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity>,
+                        GetByExpressionQuery<TEntity, TModel, TSpecification>,
                         IEnumerable<TModel>
                     >,
                     GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdentity>
@@ -80,7 +79,7 @@ public static class MediatorCrudExtensions
             {
                 services.AddScoped<
                     IRequestHandler<
-                        FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity>,
+                        FetchPagedDataQuery<TEntity, TModel, TSpecification>,
                         PagedResult<TModel>
                     >,
                     FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdentity>
@@ -157,30 +156,18 @@ public static class MediatorCrudExtensions
         public IServiceCollection AddCrudViewModelHandlers<
             TModel,
             TCreateViewModel,
-            TViewViewModel,
+            TViewModel,
             TIdentity,
             TEntity,
             TSpecification
         >(CrudActions actions)
-            where TModel : Model<TIdentity>
+            where TModel : class
             where TCreateViewModel : class
-            where TViewViewModel : class
+            where TViewModel : class
             where TIdentity : struct
             where TEntity : Entity<TIdentity>, IAggregateRoot
             where TSpecification : class, ISpecification<TEntity>, new()
         {
-            // Command Handlers
-            if (actions.HasFlag(CrudActions.Create))
-            {
-                services.AddScoped<
-                    IRequestHandler<
-                        CreateWithViewModelCommand<TModel, TCreateViewModel, TIdentity>,
-                        TIdentity
-                    >,
-                    CreateWithViewModelCommandHandler<TModel, TCreateViewModel, TIdentity, TEntity>
-                >();
-            }
-
             // Query Handlers
             if (actions.HasFlag(CrudActions.GetById))
             {
@@ -190,20 +177,74 @@ public static class MediatorCrudExtensions
                 >();
             }
 
+            if (actions.HasFlag(CrudActions.GetCount))
+            {
+                services.AddScoped<
+                    IRequestHandler<GetCountQuery, long>,
+                    GetCountQueryHandler<TModel, TIdentity, TEntity>
+                >();
+            }
+
+            if (actions.HasFlag(CrudActions.IsExist))
+            {
+                services.AddScoped<
+                    IRequestHandler<IsExistQuery<TIdentity>, bool>,
+                    IsExistQueryHandler<TModel, TIdentity, TEntity>
+                >();
+            }
+
+            if (actions.HasFlag(CrudActions.GetByExpression))
+            {
+                services.AddScoped<
+                    IRequestHandler<
+                        GetByExpressionQuery<TEntity, TViewModel, TSpecification>,
+                        IEnumerable<TViewModel>
+                    >,
+                    GetByExpressionQueryHandler<TEntity, TViewModel, TSpecification, TIdentity>
+                >();
+            }
+
             if (actions.HasFlag(CrudActions.FetchPagedData))
             {
                 services.AddScoped<
                     IRequestHandler<
-                        FetchPagedDataWithViewModelQuery<TEntity, TViewViewModel, TSpecification>,
-                        PagedResult<TViewViewModel>
+                        FetchPagedDataQuery<TEntity, TViewModel, TSpecification>,
+                        PagedResult<TViewModel>
                     >,
-                    FetchPagedDataWithViewModelQueryHandler<
-                        TEntity,
-                        TModel,
-                        TViewViewModel,
-                        TSpecification,
-                        TIdentity
-                    >
+                    FetchPagedDataQueryHandler<TEntity, TViewModel, TSpecification, TIdentity>
+                >();
+            }
+
+            // Command Handlers
+            if (actions.HasFlag(CrudActions.Create))
+            {
+                services.AddScoped<
+                    IRequestHandler<CreateCommand<TCreateViewModel, TIdentity>, TIdentity>,
+                    CreateCommandHandler<TCreateViewModel, TIdentity, TEntity>
+                >();
+            }
+
+            if (actions.HasFlag(CrudActions.Update))
+            {
+                services.AddScoped<
+                    IRequestHandler<UpdateCommand<TModel, TIdentity>, TIdentity>,
+                    UpdateCommandHandler<TModel, TIdentity, TEntity>
+                >();
+            }
+
+            if (actions.HasFlag(CrudActions.Delete))
+            {
+                services.AddScoped<
+                    IRequestHandler<DeleteCommand<TIdentity>, TIdentity>,
+                    DeleteCommandHandler<TModel, TIdentity, TEntity>
+                >();
+            }
+
+            if (actions.HasFlag(CrudActions.DeleteRange))
+            {
+                services.AddScoped<
+                    IRequestHandler<DeleteRangeCommand<TIdentity>, IEnumerable<TIdentity>>,
+                    DeleteRangeCommandHandler<TModel, TIdentity, TEntity>
                 >();
             }
 

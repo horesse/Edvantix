@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Edvantix.Constants.Other;
-using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.Utilities.Attributes;
 

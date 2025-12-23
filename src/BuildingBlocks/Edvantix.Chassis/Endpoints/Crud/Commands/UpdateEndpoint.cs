@@ -1,6 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Constants.Other;
-using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +14,7 @@ namespace Edvantix.Chassis.Endpoints.Crud.Commands;
 public class UpdateEndpoint<TModel, TIdentity>
     : BaseCrudEndpoint<TModel, TIdentity>,
         IEndpoint<Results<NoContent, NotFound>, TIdentity, TModel, ISender>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
 {
     public virtual void MapEndpoint(IEndpointRouteBuilder app)
@@ -29,8 +28,8 @@ public class UpdateEndpoint<TModel, TIdentity>
         ConfigureEndpoint(
                 builder,
                 $"Update{ResourceName}",
-                $"Обновить запись",
-                $"Обновляет существующую запись"
+                "Обновить запись",
+                "Обновляет существующую запись"
             )
             .ProducesPut();
     }
@@ -42,10 +41,7 @@ public class UpdateEndpoint<TModel, TIdentity>
         CancellationToken cancellationToken = default
     )
     {
-        // Убедимся что ID совпадает
-        model.Id = id;
-
-        var command = new UpdateCommand<TModel, TIdentity>(model);
+        var command = new UpdateCommand<TModel, TIdentity>(id, model);
         await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();

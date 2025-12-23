@@ -7,9 +7,9 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 public sealed class DeleteRangeCommandHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
         IRequestHandler<DeleteRangeCommand<TIdentity>, IEnumerable<TIdentity>>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
 {
     public async Task<IEnumerable<TIdentity>> Handle(
         DeleteRangeCommand<TIdentity> command,

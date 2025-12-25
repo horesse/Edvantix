@@ -1,11 +1,12 @@
 ﻿using Edvantix.Chassis.EF.Attributes;
 using Edvantix.Chassis.Specification;
+using Edvantix.Person.Domain.Abstractions;
 using Edvantix.Person.Domain.AggregatesModel.PersonInfoAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.FullNameAggregate;
 
-public sealed class FullName() : Entity<long>, ISoftDelete, IAggregateRoot
+public sealed class FullName() : PersonalData, ISoftDelete, IAggregateRoot
 {
     internal FullName(string firstName, string lastName, string? middleName = null)
         : this()
@@ -21,16 +22,10 @@ public sealed class FullName() : Entity<long>, ISoftDelete, IAggregateRoot
         MiddleName = middleName;
     }
 
-    public long PersonInfoId { get; private set; }
-    public PersonInfo PersonInfo { get; private set; } = null!;
-
-    [OrderBy(OrderType.ThenBy, 1)]
     public string FirstName { get; private set; } = null!;
 
-    [OrderBy]
     public string LastName { get; private set; } = null!;
 
-    [OrderBy(OrderType.ThenBy, 2)]
     public string? MiddleName { get; private set; }
 
     public string GetFullName() => $"{LastName} {FirstName} {MiddleName}".TrimEnd();

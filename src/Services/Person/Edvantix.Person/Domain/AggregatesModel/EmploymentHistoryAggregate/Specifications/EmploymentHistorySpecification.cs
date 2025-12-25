@@ -1,9 +1,9 @@
 ﻿using Edvantix.Chassis.Specification;
 using Edvantix.Chassis.Specification.Builders;
 
-namespace Edvantix.Person.Domain.AggregatesModel.ContactAggregate.Specifications;
+namespace Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate.Specifications;
 
-public sealed class ContactSpecification : Specification<Contact>
+public sealed class EmploymentHistorySpecification : Specification<EmploymentHistory>
 {
     private readonly long? _personId;
 

@@ -1,10 +1,11 @@
 ﻿using Edvantix.Chassis.EF.Attributes;
+using Edvantix.Person.Domain.Abstractions;
 using Edvantix.Person.Domain.AggregatesModel.PersonInfoAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 
-public sealed class EmploymentHistory() : Entity<long>, ISoftDelete, IAggregateRoot
+public sealed class EmploymentHistory() : PersonalData, ISoftDelete, IAggregateRoot
 {
     internal EmploymentHistory(
         string companyName,
@@ -33,9 +34,6 @@ public sealed class EmploymentHistory() : Entity<long>, ISoftDelete, IAggregateR
         EndDate = endDate;
         Description = description;
     }
-
-    public long PersonInfoId { get; private set; }
-    public PersonInfo PersonInfo { get; private set; } = null!;
 
     public string CompanyName { get; private set; } = null!;
     public string Position { get; private set; } = null!;

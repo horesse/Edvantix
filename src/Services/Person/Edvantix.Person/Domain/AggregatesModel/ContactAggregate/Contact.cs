@@ -1,10 +1,11 @@
 ﻿using Edvantix.Constants.Other;
+using Edvantix.Person.Domain.Abstractions;
 using Edvantix.Person.Domain.AggregatesModel.PersonInfoAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.ContactAggregate;
 
-public sealed class Contact : Entity<long>, ISoftDelete, IAggregateRoot
+public sealed class Contact : PersonalData, ISoftDelete, IAggregateRoot
 {
     private Contact() { }
 
@@ -18,9 +19,6 @@ public sealed class Contact : Entity<long>, ISoftDelete, IAggregateRoot
         Value = value;
         Description = description;
     }
-
-    public long PersonInfoId { get; private set; }
-    public PersonInfo PersonInfo { get; private set; } = null!;
 
     public ContactType Type { get; private set; }
     public string Value { get; private set; } = null!;

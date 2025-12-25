@@ -31,8 +31,6 @@ public sealed class EmploymentHistoryModelValidator : AbstractValidator<Employme
 
         RuleFor(x => x.Description)
             .MaximumLength(DataSchemaLength.SuperLarge)
-            .WithMessage(
-                $"Описание не должно превышать {DataSchemaLength.SuperLarge} символов"
-            );
+            .WithMessage($"Описание не должно превышать {DataSchemaLength.SuperLarge} символов");
     }
 }

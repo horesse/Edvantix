@@ -16,7 +16,7 @@ public static class Extensions
             FullName,
             FullNameSpecification
         >();
-        
+
         services.AddCrudEndpoints<FullName, FullNameModel, long, FullNameSpecification>();
 
         return services;

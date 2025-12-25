@@ -8,12 +8,12 @@ public abstract class ClassConverter<TFirst, TSecond> : IConverter<TFirst, TSeco
 
     public abstract TFirst Map(TSecond source);
 
-    public virtual IReadOnlyList<TSecond> Map(IReadOnlyList<TFirst> sources)
+    public virtual List<TSecond> Map(IReadOnlyList<TFirst> sources)
     {
         return [.. sources.Select(Map)];
     }
 
-    public virtual IReadOnlyList<TFirst> Map(IReadOnlyList<TSecond> sources)
+    public virtual List<TFirst> Map(IReadOnlyList<TSecond> sources)
     {
         return [.. sources.Select(Map)];
     }

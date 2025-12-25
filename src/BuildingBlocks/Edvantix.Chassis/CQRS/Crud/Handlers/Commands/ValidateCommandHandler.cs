@@ -6,8 +6,7 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 /// <summary>
 /// Handler для валидации модели
 /// </summary>
-public class ValidateCommandHandler<TModel>
-    : IRequestHandler<ValidateCommand<TModel>, bool>
+public class ValidateCommandHandler<TModel> : IRequestHandler<ValidateCommand<TModel>, bool>
     where TModel : class
 {
     public virtual Task<bool> Handle(

@@ -126,7 +126,7 @@ public static class MediatorCrudExtensions
                 IRequestHandler<ValidateCommand<TModel>, bool>,
                 ValidateCommandHandler<TModel>
             >();
-            
+
             services.AddValidators<TModel, TIdentity>();
 
             return services;
@@ -262,14 +262,14 @@ public static class MediatorCrudExtensions
                 IRequestHandler<ValidateCommand<TCreateViewModel>, bool>,
                 ValidateCommandHandler<TCreateViewModel>
             >();
-            
+
             services.AddScoped<
                 IRequestHandler<ValidateCommand<TModel>, bool>,
                 ValidateCommandHandler<TModel>
             >();
 
             services.AddValidators<TModel, TIdentity>();
-            
+
             return services;
         }
 
@@ -294,10 +294,16 @@ public static class MediatorCrudExtensions
             where TModel : class
             where TIdentity : struct
         {
-            services.AddScoped<IValidator<CreateCommand<TModel, TIdentity>>, CreateCommandValidator<TModel, TIdentity>>();
-            services.AddScoped<IValidator<UpdateCommand<TModel, TIdentity>>, UpdateCommandValidator<TModel, TIdentity>>();
+            services.AddScoped<
+                IValidator<CreateCommand<TModel, TIdentity>>,
+                CreateCommandValidator<TModel, TIdentity>
+            >();
+            services.AddScoped<
+                IValidator<UpdateCommand<TModel, TIdentity>>,
+                UpdateCommandValidator<TModel, TIdentity>
+            >();
             services.AddScoped<IValidator<ValidateCommand<TModel>>, CommandValidator<TModel>>();
-            
+
             return services;
         }
     }

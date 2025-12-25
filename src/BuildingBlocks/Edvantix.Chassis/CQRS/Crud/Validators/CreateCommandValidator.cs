@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Edvantix.Chassis.CQRS.Crud.Validators;
 
-public sealed class CreateCommandValidator<TModel, TIdentity> : AbstractValidator<CreateCommand<TModel, TIdentity>>
+public sealed class CreateCommandValidator<TModel, TIdentity>
+    : AbstractValidator<CreateCommand<TModel, TIdentity>>
     where TModel : class
     where TIdentity : struct
 {

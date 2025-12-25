@@ -196,7 +196,7 @@ public static class CrudEndpointExtensions
             services.AddTransient<IEndpoint, ValidateEndpoint<TCreateViewModel, TIdentity>>();
 
             services.AddTransient<IEndpoint, ValidateEndpoint<TModel, TIdentity>>();
-            
+
             return services;
         }
 

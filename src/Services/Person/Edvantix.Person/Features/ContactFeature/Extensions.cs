@@ -14,7 +14,7 @@ public static class Extensions
         services.AddPersonalDataCrudHandlers<ContactModel, long, Contact, ContactSpecification>();
 
         services.AddCrudEndpoints<Contact, ContactModel, long, ContactSpecification>();
-        
+
         return services;
     }
 }

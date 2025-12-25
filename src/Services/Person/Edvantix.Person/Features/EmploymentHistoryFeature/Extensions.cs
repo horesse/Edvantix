@@ -17,7 +17,12 @@ public static class Extensions
             EmploymentHistorySpecification
         >();
 
-        services.AddCrudEndpoints<EmploymentHistory, EmploymentHistoryModel, long, EmploymentHistorySpecification>();
+        services.AddCrudEndpoints<
+            EmploymentHistory,
+            EmploymentHistoryModel,
+            long,
+            EmploymentHistorySpecification
+        >();
 
         return services;
     }

@@ -30,3 +30,9 @@ public sealed record DeleteCommand<TIdentity>(TIdentity Id)
 public sealed record DeleteRangeCommand<TIdentity>(IEnumerable<TIdentity> Ids)
     : ICommand<IEnumerable<TIdentity>>
     where TIdentity : struct;
+
+/// <summary>
+/// Валидация модели
+/// </summary>
+public record ValidateCommand<TModel>(TModel Model) : ICommand<bool>
+    where TModel : class;

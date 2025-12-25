@@ -119,6 +119,11 @@ public static class MediatorCrudExtensions
                 >();
             }
 
+            services.AddScoped<
+                IRequestHandler<ValidateCommand<TModel>, bool>,
+                ValidateCommandHandler<TModel>
+            >();
+
             return services;
         }
 
@@ -247,6 +252,16 @@ public static class MediatorCrudExtensions
                     DeleteRangeCommandHandler<TModel, TIdentity, TEntity>
                 >();
             }
+
+            services.AddScoped<
+                IRequestHandler<ValidateCommand<TCreateViewModel>, bool>,
+                ValidateCommandHandler<TCreateViewModel>
+            >();
+            
+            services.AddScoped<
+                IRequestHandler<ValidateCommand<TModel>, bool>,
+                ValidateCommandHandler<TModel>
+            >();
 
             return services;
         }

@@ -16,6 +16,7 @@ public sealed class PersonInfoConverter : ClassConverter<PersonInfoModel, Person
             LastName = source.FullName.LastName,
             MiddleName = source.FullName.MiddleName,
             Gender = source.Gender,
+            Id = source.Id,
         };
 
     public override void SetProperties(PersonInfoModel source, PersonInfo target)

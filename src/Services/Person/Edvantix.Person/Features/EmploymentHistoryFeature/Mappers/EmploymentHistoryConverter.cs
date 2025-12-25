@@ -23,6 +23,7 @@ public class EmploymentHistoryConverter : ClassConverter<EmploymentHistoryModel,
             StartDate = source.StartDate,
             EndDate = source.EndDate,
             Description = source.Description,
+            Id = source.Id
         };
 
     public override void SetProperties(EmploymentHistoryModel source, EmploymentHistory target)

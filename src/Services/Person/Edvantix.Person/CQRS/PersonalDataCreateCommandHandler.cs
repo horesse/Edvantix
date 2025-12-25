@@ -1,4 +1,4 @@
-using Edvantix.Chassis.CQRS.Crud.Handlers;
+using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Person.Domain.Abstractions;
 using MediatR;
 
@@ -10,14 +10,14 @@ namespace Edvantix.Person.CQRS;
 public sealed class PersonalDataCreateCommandHandler<TModel, TIdentity, TEntity>(
     IServiceProvider provider
 )
-    : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
-        IRequestHandler<PersonalDataCreateCommand<TModel, TIdentity>, TIdentity>
+    : PersonalDataBaseHandler<TModel, TIdentity, TEntity>(provider),
+        IRequestHandler<CreateCommand<TModel, TIdentity>, TIdentity>
     where TModel : class
     where TIdentity : struct
     where TEntity : PersonalData<TIdentity>
 {
     public async Task<TIdentity> Handle(
-        PersonalDataCreateCommand<TModel, TIdentity> command,
+        CreateCommand<TModel, TIdentity> command,
         CancellationToken token
     )
     {
@@ -26,17 +26,13 @@ public sealed class PersonalDataCreateCommandHandler<TModel, TIdentity, TEntity>
             {
                 var entity = Converter.Map(command.Model);
 
-                // Устанавливаем PersonInfoId (заполняется через PersonalDataBehavior)
-                var personInfoIdProperty = typeof(TEntity).GetProperty(
-                    nameof(PersonalData<>.PersonInfoId)
-                );
-                personInfoIdProperty?.SetValue(entity, command.PersonInfoId);
+                await SetPersonInfoId(entity, token);
 
                 var added = await Repository.InsertAsync(entity, token);
                 await Repository.SaveEntitiesAsync(token);
                 return added.Id;
             },
-            nameof(PersonalDataCreateCommand<,>),
+            nameof(CreateCommand<,>),
             token
         );
     }

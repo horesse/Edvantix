@@ -1,4 +1,4 @@
-using Edvantix.Chassis.CQRS.Crud.Handlers;
+using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Person.Domain.Abstractions;
 using MediatR;
@@ -11,14 +11,14 @@ namespace Edvantix.Person.CQRS;
 public sealed class PersonalDataUpdateCommandHandler<TModel, TIdentity, TEntity>(
     IServiceProvider provider
 )
-    : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
-        IRequestHandler<PersonalDataUpdateCommand<TModel, TIdentity>, TIdentity>
+    : PersonalDataBaseHandler<TModel, TIdentity, TEntity>(provider),
+        IRequestHandler<UpdateCommand<TModel, TIdentity>, TIdentity>
     where TModel : class
     where TIdentity : struct
     where TEntity : PersonalData<TIdentity>
 {
     public async Task<TIdentity> Handle(
-        PersonalDataUpdateCommand<TModel, TIdentity> command,
+        UpdateCommand<TModel, TIdentity> command,
         CancellationToken token
     )
     {
@@ -28,20 +28,14 @@ public sealed class PersonalDataUpdateCommandHandler<TModel, TIdentity, TEntity>
                 var entity = await Repository.GetByIdAsync(command.Id, token);
                 Guard.Against.NotFound(entity, command.Id);
 
-                // Проверка принадлежности к пользователю (aggregate root boundary)
-                if (entity.PersonInfoId != command.PersonInfoId)
-                {
-                    throw new Exception(
-                        $"User does not have access to PersonalData with Id={command.Id}"
-                    );
-                }
+                await SetPersonInfoId(entity, token);
 
                 Converter.SetProperties(command.Model, entity);
 
                 await Repository.SaveEntitiesAsync(token);
                 return entity.Id;
             },
-            nameof(PersonalDataUpdateCommand<,>),
+            nameof(UpdateCommand<,>),
             token
         );
     }

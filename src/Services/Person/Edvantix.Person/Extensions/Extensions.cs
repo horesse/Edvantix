@@ -11,7 +11,6 @@ using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Constants.Aspire;
 using Edvantix.Constants.Core;
-using Edvantix.Person.CQRS.Pipelines;
 using Edvantix.Person.Features;
 using Edvantix.Person.Infrastructure;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
@@ -71,7 +70,6 @@ public static class Extensions
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>));
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PersonalDataBehavior<,>));
         });
 
         var appSettings = new AppSettings();
@@ -103,7 +101,7 @@ public static class Extensions
         services.AddValidatorsFromAssemblyContaining<IPersonApiMarker>(includeInternalTypes: true);
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
-        
+
         services.AddSingleton<IActivityScope, ActivityScope>();
         services.AddSingleton<CommandHandlerMetrics>();
         services.AddSingleton<QueryHandlerMetrics>();

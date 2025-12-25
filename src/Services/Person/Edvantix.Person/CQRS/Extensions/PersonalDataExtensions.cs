@@ -21,10 +21,7 @@ public static class PersonalDataExtensions
         TIdentity,
         TEntity,
         TSpecification
-    >(
-        this IServiceCollection services,
-        CrudActions actions = CrudActions.All
-    )
+    >(this IServiceCollection services, CrudActions actions = CrudActions.All)
         where TModel : class
         where TIdentity : struct
         where TEntity : PersonalData<TIdentity>, IAggregateRoot
@@ -49,25 +46,28 @@ public static class PersonalDataExtensions
         // Command Handlers для PersonalData с проверками владельца
         if (actions.HasFlag(CrudActions.Create))
         {
-            services.AddScoped<
-                IRequestHandler<PersonalDataCreateCommand<TModel, TIdentity>, TIdentity>,
-                PersonalDataCreateCommandHandler<TModel, TIdentity, TEntity>
+            services.AddCrudHandler<
+                PersonalDataCreateCommandHandler<TModel, TIdentity, TEntity>,
+                CreateCommand<TModel, TIdentity>,
+                TIdentity
             >();
         }
 
         if (actions.HasFlag(CrudActions.Update))
         {
-            services.AddScoped<
-                IRequestHandler<PersonalDataUpdateCommand<TModel, TIdentity>, TIdentity>,
-                PersonalDataUpdateCommandHandler<TModel, TIdentity, TEntity>
+            services.AddCrudHandler<
+                PersonalDataUpdateCommandHandler<TModel, TIdentity, TEntity>,
+                UpdateCommand<TModel, TIdentity>,
+                TIdentity
             >();
         }
 
         if (actions.HasFlag(CrudActions.Delete))
         {
-            services.AddScoped<
-                IRequestHandler<PersonalDataDeleteCommand<TIdentity>, TIdentity>,
-                PersonalDataDeleteCommandHandler<TModel, TIdentity, TEntity>
+            services.AddCrudHandler<
+                PersonalDataDeleteCommandHandler<TModel, TIdentity, TEntity>,
+                DeleteCommand<TIdentity>,
+                TIdentity
             >();
         }
 

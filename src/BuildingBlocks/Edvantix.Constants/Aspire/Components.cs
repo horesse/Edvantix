@@ -20,7 +20,7 @@ public static class Components
         public static readonly string Organization =
             $"{nameof(Organization).ToLowerInvariant()}{Suffix}";
         public static readonly string System = $"{nameof(System).ToLowerInvariant()}{Suffix}";
-        
+
         public static readonly string Person = $"{nameof(Person).ToLowerInvariant()}{Suffix}";
     }
 

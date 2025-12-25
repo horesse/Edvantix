@@ -100,9 +100,7 @@ public static class Extensions
 
         builder.AddPersistenceServices();
 
-        services.AddValidatorsFromAssemblyContaining<IPersonApiMarker>(
-            includeInternalTypes: true
-        );
+        services.AddValidatorsFromAssemblyContaining<IPersonApiMarker>(includeInternalTypes: true);
 
         services.AddSingleton<IActivityScope, ActivityScope>();
         services.AddSingleton<CommandHandlerMetrics>();

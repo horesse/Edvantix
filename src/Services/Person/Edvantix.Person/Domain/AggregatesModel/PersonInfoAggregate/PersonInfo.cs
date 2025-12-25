@@ -47,12 +47,6 @@ public sealed class PersonInfo() : Entity<long>, IAggregateRoot, ISoftDelete
         Gender = newGender;
     }
 
-    // Методы для управления FullName
-    public void UpdateFullName(string firstName, string lastName, string? middleName = null)
-    {
-        FullName.Update(firstName, lastName, middleName);
-    }
-
     // Soft Delete
     public void Delete()
     {

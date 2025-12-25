@@ -1,8 +1,8 @@
 using Edvantix.Constants.Core;
-using Edvantix.Person.Features.EmploymentHistory.Models;
+using Edvantix.Person.Features.EmploymentHistoryFeature.Models;
 using FluentValidation;
 
-namespace Edvantix.Person.Features.EmploymentHistory;
+namespace Edvantix.Person.Features.EmploymentHistoryFeature;
 
 public sealed class EmploymentHistoryModelValidator : AbstractValidator<EmploymentHistoryModel>
 {
@@ -11,16 +11,16 @@ public sealed class EmploymentHistoryModelValidator : AbstractValidator<Employme
         RuleFor(x => x.CompanyName)
             .NotEmpty()
             .WithMessage("Название компании является обязательным полем")
-            .MaximumLength(DataSchemaLength.Medium)
+            .MaximumLength(DataSchemaLength.ExtraLarge)
             .WithMessage(
-                $"Название компании не должно превышать {DataSchemaLength.Medium} символов"
+                $"Название компании не должно превышать {DataSchemaLength.ExtraLarge} символов"
             );
 
         RuleFor(x => x.Position)
             .NotEmpty()
             .WithMessage("Должность является обязательным полем")
-            .MaximumLength(DataSchemaLength.Medium)
-            .WithMessage($"Должность не должна превышать {DataSchemaLength.Medium} символов");
+            .MaximumLength(DataSchemaLength.ExtraLarge)
+            .WithMessage($"Должность не должна превышать {DataSchemaLength.ExtraLarge} символов");
 
         RuleFor(x => x.StartDate).NotEmpty().WithMessage("Дата начала является обязательным полем");
 
@@ -30,7 +30,7 @@ public sealed class EmploymentHistoryModelValidator : AbstractValidator<Employme
             .WithMessage("Дата окончания не может быть раньше даты начала");
 
         RuleFor(x => x.Description)
-            .MaximumLength(DataSchemaLength.SuperLarge)
-            .WithMessage($"Описание не должно превышать {DataSchemaLength.SuperLarge} символов");
+            .MaximumLength(DataSchemaLength.Max)
+            .WithMessage($"Описание не должно превышать {DataSchemaLength.Max} символов");
     }
 }

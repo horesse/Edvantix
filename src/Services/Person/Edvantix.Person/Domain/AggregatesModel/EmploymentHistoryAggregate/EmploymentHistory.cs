@@ -5,7 +5,7 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 
-public sealed class EmploymentHistory() : PersonalData, ISoftDelete, IAggregateRoot
+public sealed class EmploymentHistory() : PersonalData<long>, ISoftDelete, IAggregateRoot
 {
     internal EmploymentHistory(
         string companyName,

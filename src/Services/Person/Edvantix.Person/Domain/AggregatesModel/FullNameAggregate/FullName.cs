@@ -6,7 +6,7 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.FullNameAggregate;
 
-public sealed class FullName() : PersonalData, ISoftDelete, IAggregateRoot
+public sealed class FullName() : PersonalData<long>, ISoftDelete, IAggregateRoot
 {
     internal FullName(string firstName, string lastName, string? middleName = null)
         : this()

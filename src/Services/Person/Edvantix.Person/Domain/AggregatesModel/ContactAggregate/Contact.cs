@@ -5,16 +5,15 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.ContactAggregate;
 
-public sealed class Contact : PersonalData, ISoftDelete, IAggregateRoot
+public sealed class Contact : PersonalData<long>, ISoftDelete, IAggregateRoot
 {
     private Contact() { }
 
-    internal Contact(long personInfoId, ContactType type, string value, string? description = null)
+    internal Contact(ContactType type, string value, string? description = null)
     {
         if (string.IsNullOrWhiteSpace(value))
             throw new ArgumentException("Значение контакта не может быть пустым.", nameof(value));
 
-        PersonInfoId = personInfoId;
         Type = type;
         Value = value;
         Description = description;

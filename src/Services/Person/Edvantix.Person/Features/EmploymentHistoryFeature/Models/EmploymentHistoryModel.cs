@@ -2,7 +2,7 @@ using Edvantix.Chassis.Utilities.Attributes;
 using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 
-namespace Edvantix.Person.Features.EmploymentHistory.Models;
+namespace Edvantix.Person.Features.EmploymentHistoryFeature.Models;
 
 [PublicModel("История трудоустройства", EntityGroupEnum.Personal, requiredAuth: true)]
 public sealed class EmploymentHistoryModel : Model<long>

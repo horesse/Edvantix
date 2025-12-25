@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud;
+using Edvantix.Chassis.Endpoints.Crud;
 using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate.Specifications;
 using Edvantix.Person.Extensions;
@@ -17,12 +18,7 @@ public static class Extensions
             EmploymentHistorySpecification
         >();
 
-        services.AddCrudHandlers<
-            EmploymentHistoryModel,
-            long,
-            EmploymentHistory,
-            EmploymentHistorySpecification
-        >();
+        services.AddCrudEndpoints<EmploymentHistory, EmploymentHistoryModel, long, EmploymentHistorySpecification>();
 
         return services;
     }

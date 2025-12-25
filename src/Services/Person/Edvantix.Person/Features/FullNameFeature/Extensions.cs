@@ -1,10 +1,7 @@
-﻿using Edvantix.Chassis.CQRS.Crud;
-using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
-using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate.Specifications;
+﻿using Edvantix.Chassis.Endpoints.Crud;
 using Edvantix.Person.Domain.AggregatesModel.FullNameAggregate;
 using Edvantix.Person.Domain.AggregatesModel.FullNameAggregate.Specifications;
 using Edvantix.Person.Extensions;
-using Edvantix.Person.Features.EmploymentHistoryFeature.Models;
 using Edvantix.Person.Features.FullNameFeature.Models;
 
 namespace Edvantix.Person.Features.FullNameFeature;
@@ -19,13 +16,8 @@ public static class Extensions
             FullName,
             FullNameSpecification
         >();
-
-        services.AddCrudHandlers<
-            EmploymentHistoryModel,
-            long,
-            EmploymentHistory,
-            EmploymentHistorySpecification
-        >();
+        
+        services.AddCrudEndpoints<FullName, FullNameModel, long, FullNameSpecification>();
 
         return services;
     }

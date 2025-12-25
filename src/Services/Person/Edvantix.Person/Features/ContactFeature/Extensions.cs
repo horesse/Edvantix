@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS.Crud;
+using Edvantix.Chassis.Endpoints.Crud;
 using Edvantix.Person.Domain.AggregatesModel.ContactAggregate;
 using Edvantix.Person.Domain.AggregatesModel.ContactAggregate.Specifications;
 using Edvantix.Person.Extensions;
@@ -12,8 +13,8 @@ public static class Extensions
     {
         services.AddPersonalDataCrudHandlers<ContactModel, long, Contact, ContactSpecification>();
 
-        services.AddCrudHandlers<ContactModel, long, Contact, ContactSpecification>();
-
+        services.AddCrudEndpoints<Contact, ContactModel, long, ContactSpecification>();
+        
         return services;
     }
 }

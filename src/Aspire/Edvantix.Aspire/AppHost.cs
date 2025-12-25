@@ -90,8 +90,8 @@ var systemApi = builder
 
 var personApi = builder
     .AddProject<Edvantix_Person>(Services.Person)
-    .WithReference(systemDb)
-    .WaitFor(systemDb)
+    .WithReference(personDb)
+    .WaitFor(personDb)
     .WithKeycloak(keycloak)
     .WithFriendlyUrls();
 

@@ -1,5 +1,4 @@
-﻿using Edvantix.Chassis.CQRS.Crud;
-using Edvantix.Chassis.Endpoints.Crud;
+﻿using Edvantix.Chassis.Endpoints.Crud;
 using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate.Specifications;
 using Edvantix.Person.Extensions;

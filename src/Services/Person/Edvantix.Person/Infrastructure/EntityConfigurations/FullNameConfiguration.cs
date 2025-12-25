@@ -21,9 +21,7 @@ public sealed class FullNameConfiguration : IEntityTypeConfiguration<FullName>
         builder.Property(f => f.MiddleName).HasMaxLength(DataSchemaLength.Large);
 
         builder.HasIndex(f => f.PersonInfoId).IsUnique();
-
-        builder.Ignore(f => f.GetFullName());
-
+        
         builder.HasQueryFilter(e => !e.IsDeleted);
     }
 }

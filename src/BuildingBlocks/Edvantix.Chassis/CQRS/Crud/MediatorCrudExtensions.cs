@@ -1,10 +1,13 @@
-﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
+﻿using System.Reflection;
+using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
+using Edvantix.Chassis.CQRS.Crud.Validators;
 using Edvantix.Chassis.Specification;
 using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -123,6 +126,8 @@ public static class MediatorCrudExtensions
                 IRequestHandler<ValidateCommand<TModel>, bool>,
                 ValidateCommandHandler<TModel>
             >();
+            
+            services.AddValidators<TModel, TIdentity>();
 
             return services;
         }
@@ -263,6 +268,8 @@ public static class MediatorCrudExtensions
                 ValidateCommandHandler<TModel>
             >();
 
+            services.AddValidators<TModel, TIdentity>();
+            
             return services;
         }
 
@@ -280,6 +287,17 @@ public static class MediatorCrudExtensions
             }
 
             services.AddScoped<IRequestHandler<TRequest, TResponse>, THandler>();
+            return services;
+        }
+
+        private IServiceCollection AddValidators<TModel, TIdentity>()
+            where TModel : class
+            where TIdentity : struct
+        {
+            services.AddScoped<IValidator<CreateCommand<TModel, TIdentity>>, CreateCommandValidator<TModel, TIdentity>>();
+            services.AddScoped<IValidator<UpdateCommand<TModel, TIdentity>>, UpdateCommandValidator<TModel, TIdentity>>();
+            services.AddScoped<IValidator<ValidateCommand<TModel>>, CommandValidator<TModel>>();
+            
             return services;
         }
     }

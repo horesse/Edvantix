@@ -1,7 +1,7 @@
 ﻿using Edvantix.Chassis.Endpoints.Crud;
+using Edvantix.Person.CQRS;
 using Edvantix.Person.Domain.AggregatesModel.FullNameAggregate;
 using Edvantix.Person.Domain.AggregatesModel.FullNameAggregate.Specifications;
-using Edvantix.Person.Extensions;
 using Edvantix.Person.Features.FullNameFeature.Models;
 
 namespace Edvantix.Person.Features.FullNameFeature;

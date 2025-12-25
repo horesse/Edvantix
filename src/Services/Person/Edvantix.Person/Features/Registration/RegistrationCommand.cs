@@ -26,11 +26,12 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
 {
     public async Task<long> Handle(RegistrationCommand request, CancellationToken cancellationToken)
     {
-        var claimsPrincipal = provider.GetService<ClaimsPrincipal>() ?? throw new Exception("Вы не авторизованы.");
-        
+        var claimsPrincipal =
+            provider.GetService<ClaimsPrincipal>() ?? throw new Exception("Вы не авторизованы.");
+
         var sub = claimsPrincipal.GetClaimValue(ClaimTypes.NameIdentifier);
         var userId = Guard.Against.NotAuthenticated(sub);
-        
+
         using var personRepo = provider.GetRequiredService<IPersonInfoRepository>();
 
         await using var transaction = await personRepo.BeginTransactionAsync(cancellationToken);
@@ -51,26 +52,27 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
             {
                 var converter = provider.GetRequiredService<ContactConverter>();
                 var contacts = converter.Map([.. request.Contacts]);
-                
+
                 using var contactRepo = provider.GetRequiredService<IContactRepository>();
                 await contactRepo.InsertRangeAsync(contacts, cancellationToken);
             }
-            
+
             if (request.EmploymentHistories.Count != 0)
             {
                 var converter = provider.GetRequiredService<EmploymentHistoryConverter>();
                 var histories = converter.Map([.. request.EmploymentHistories]);
-                
-                using var employmentRepo = provider.GetRequiredService<IEmploymentHistoryRepository>();
+
+                using var employmentRepo =
+                    provider.GetRequiredService<IEmploymentHistoryRepository>();
                 await employmentRepo.InsertRangeAsync(histories, cancellationToken);
             }
-            
+
             await personRepo.SaveEntitiesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
-            
+
             return person.Id;
         }
-        catch 
+        catch
         {
             await transaction.RollbackAsync(cancellationToken);
             throw;

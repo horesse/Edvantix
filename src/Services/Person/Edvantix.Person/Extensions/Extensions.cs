@@ -102,6 +102,8 @@ public static class Extensions
 
         services.AddValidatorsFromAssemblyContaining<IPersonApiMarker>(includeInternalTypes: true);
 
+        services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
+        
         services.AddSingleton<IActivityScope, ActivityScope>();
         services.AddSingleton<CommandHandlerMetrics>();
         services.AddSingleton<QueryHandlerMetrics>();

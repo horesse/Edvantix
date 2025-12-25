@@ -1,4 +1,5 @@
 using Edvantix.Chassis.CQRS.Crud;
+using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.Specification;
 using Edvantix.Constants.Other;
 using Edvantix.Person.CQRS;
@@ -7,7 +8,7 @@ using Edvantix.Person.Features;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 
-namespace Edvantix.Person.Extensions;
+namespace Edvantix.Person.CQRS;
 
 public static class PersonalDataExtensions
 {
@@ -22,7 +23,7 @@ public static class PersonalDataExtensions
         TSpecification
     >(
         this IServiceCollection services,
-        CrudActions actions = CrudActions.Create | CrudActions.Update | CrudActions.Delete
+        CrudActions actions = CrudActions.All
     )
         where TModel : class
         where TIdentity : struct

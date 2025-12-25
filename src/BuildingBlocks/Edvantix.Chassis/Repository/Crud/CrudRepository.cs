@@ -287,8 +287,11 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token) =>
-        Context.Database.BeginTransactionAsync(token);
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token)
+    {
+        return Context.Database.BeginTransactionAsync(token);
+    }
+        
 
     public Task<bool> SaveEntitiesAsync(CancellationToken token)
     {

@@ -33,7 +33,7 @@ public class PersonalDataBaseHandler<TModel, TIdentity, TEntity>(IServiceProvide
 
         if (personInfoId == 0)
             throw new Exception("Профиль не найден.");
-        
+
         if (personalData.PersonInfoId > 0 && personalData.PersonInfoId != personInfoId)
             throw new Exception("У Вас нет прав на изменение данной сущности.");
 

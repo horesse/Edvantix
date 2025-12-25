@@ -1,5 +1,5 @@
-﻿using Edvantix.Chassis.Specification;
+﻿using Edvantix.Chassis.Specification.Generic;
 
 namespace Edvantix.Person.Domain.AggregatesModel.PersonInfoAggregate.Specifications;
 
-public sealed class PersonInfoSpecification : Specification<PersonInfo>;
+public sealed class PersonInfoSpecification : AttributeSpecification<PersonInfo>;

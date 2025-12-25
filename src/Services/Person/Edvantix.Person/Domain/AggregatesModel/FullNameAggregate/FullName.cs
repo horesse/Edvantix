@@ -1,7 +1,4 @@
-﻿using Edvantix.Chassis.EF.Attributes;
-using Edvantix.Chassis.Specification;
-using Edvantix.Person.Domain.Abstractions;
-using Edvantix.Person.Domain.AggregatesModel.PersonInfoAggregate;
+﻿using Edvantix.Person.Domain.Abstractions;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Person.Domain.AggregatesModel.FullNameAggregate;

@@ -17,10 +17,7 @@ public sealed class PersonalDataDeleteCommandHandler<TModel, TIdentity, TEntity>
     where TIdentity : struct
     where TEntity : PersonalData<TIdentity>
 {
-    public async Task<TIdentity> Handle(
-        DeleteCommand<TIdentity> command,
-        CancellationToken token
-    )
+    public async Task<TIdentity> Handle(DeleteCommand<TIdentity> command, CancellationToken token)
     {
         return await ExecuteAsync(
             async () =>

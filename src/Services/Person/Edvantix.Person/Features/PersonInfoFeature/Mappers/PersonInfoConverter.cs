@@ -9,7 +9,7 @@ public sealed class PersonInfoConverter : ClassConverter<PersonInfoModel, Person
     public override PersonInfo Map(PersonInfoModel source) => throw new NotImplementedException();
 
     public override PersonInfoModel Map(PersonInfo source) =>
-        new PersonInfoModel()
+        new()
         {
             AccountId = source.AccountId,
             FirstName = source.FullName.FirstName,

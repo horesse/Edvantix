@@ -1,13 +1,12 @@
 ﻿using System.Security.Claims;
+using Edvantix.Chassis.Converter;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Constants.Other;
 using Edvantix.Person.Domain.AggregatesModel.ContactAggregate;
 using Edvantix.Person.Domain.AggregatesModel.EmploymentHistoryAggregate;
 using Edvantix.Person.Domain.AggregatesModel.PersonInfoAggregate;
-using Edvantix.Person.Features.ContactFeature.Mappers;
 using Edvantix.Person.Features.ContactFeature.Models;
-using Edvantix.Person.Features.EmploymentHistoryFeature.Mappers;
 using Edvantix.Person.Features.EmploymentHistoryFeature.Models;
 using Edvantix.Person.Features.PersonInfoFeature.Models;
 using MediatR;
@@ -50,21 +49,18 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
 
             if (request.Contacts.Count != 0)
             {
-                var converter = provider.GetRequiredService<ContactConverter>();
+                var converter = provider.GetRequiredService<IConverter<ContactModel, Contact>>();
                 var contacts = converter.Map([.. request.Contacts]);
-
-                using var contactRepo = provider.GetRequiredService<IContactRepository>();
-                await contactRepo.InsertRangeAsync(contacts, cancellationToken);
+                
+                person.AddContacts(contacts);
             }
 
             if (request.EmploymentHistories.Count != 0)
             {
-                var converter = provider.GetRequiredService<EmploymentHistoryConverter>();
+                var converter = provider.GetRequiredService<IConverter<EmploymentHistoryModel, EmploymentHistory>>();
                 var histories = converter.Map([.. request.EmploymentHistories]);
 
-                using var employmentRepo =
-                    provider.GetRequiredService<IEmploymentHistoryRepository>();
-                await employmentRepo.InsertRangeAsync(histories, cancellationToken);
+                person.AddEmploymentHistories(histories);
             }
 
             await personRepo.SaveEntitiesAsync(cancellationToken);

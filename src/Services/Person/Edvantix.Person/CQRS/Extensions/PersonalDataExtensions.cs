@@ -2,11 +2,8 @@ using Edvantix.Chassis.CQRS.Crud;
 using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.Specification;
 using Edvantix.Constants.Other;
-using Edvantix.Person.CQRS;
 using Edvantix.Person.Domain.Abstractions;
-using Edvantix.Person.Features;
 using Edvantix.SharedKernel.SeedWork;
-using MediatR;
 
 namespace Edvantix.Person.CQRS.Extensions;
 

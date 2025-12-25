@@ -1,9 +1,9 @@
-﻿using Edvantix.Chassis.Specification;
-using Edvantix.Chassis.Specification.Builders;
+﻿using Edvantix.Chassis.Specification.Builders;
+using Edvantix.Chassis.Specification.Generic;
 
 namespace Edvantix.Person.Domain.AggregatesModel.ContactAggregate.Specifications;
 
-public sealed class ContactSpecification : Specification<Contact>
+public sealed class ContactSpecification : AttributeSpecification<Contact>
 {
     private readonly long? _personId;
 

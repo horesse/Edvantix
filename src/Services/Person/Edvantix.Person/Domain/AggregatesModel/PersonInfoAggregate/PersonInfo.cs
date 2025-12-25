@@ -47,6 +47,26 @@ public sealed class PersonInfo() : Entity<long>, IAggregateRoot, ISoftDelete
         Gender = newGender;
     }
 
+    public void AddContact(Contact contact)
+    {
+        _contacts.Add(contact);
+    }
+
+    public void AddContacts(IEnumerable<Contact> contacts)
+    {
+        _contacts.AddRange(contacts);
+    }
+
+    public void AddEmploymentHistory(EmploymentHistory employmentHistory)
+    {
+        _employmentHistories.Add(employmentHistory);
+    }
+    
+    public void AddEmploymentHistories(IEnumerable<EmploymentHistory> employmentHistories)
+    {
+        _employmentHistories.AddRange(employmentHistories);
+    }
+    
     // Soft Delete
     public void Delete()
     {

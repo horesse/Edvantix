@@ -1,9 +1,9 @@
-﻿using Edvantix.Chassis.Specification;
-using Edvantix.Chassis.Specification.Builders;
+﻿using Edvantix.Chassis.Specification.Builders;
+using Edvantix.Chassis.Specification.Generic;
 
 namespace Edvantix.Person.Domain.AggregatesModel.FullNameAggregate.Specifications;
 
-public sealed class FullNameSpecification : Specification<FullName>
+public sealed class FullNameSpecification : AttributeSpecification<FullName>
 {
     private readonly long? _personId;
 

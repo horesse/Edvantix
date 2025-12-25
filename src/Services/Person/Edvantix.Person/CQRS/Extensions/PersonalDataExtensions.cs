@@ -8,7 +8,7 @@ using Edvantix.Person.Features;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 
-namespace Edvantix.Person.CQRS;
+namespace Edvantix.Person.CQRS.Extensions;
 
 public static class PersonalDataExtensions
 {

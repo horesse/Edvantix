@@ -1,5 +1,5 @@
 ﻿using Edvantix.Chassis.Endpoints.Crud;
-using Edvantix.Person.CQRS;
+using Edvantix.Person.CQRS.Extensions;
 using Edvantix.Person.Domain.AggregatesModel.ContactAggregate;
 using Edvantix.Person.Domain.AggregatesModel.ContactAggregate.Specifications;
 using Edvantix.Person.Features.ContactFeature.Models;

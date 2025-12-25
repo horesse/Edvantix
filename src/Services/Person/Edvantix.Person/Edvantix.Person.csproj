@@ -5,6 +5,7 @@
   <ItemGroup>
     <Folder Include="Features\EmploymentHistory\" />
     <Folder Include="Features\FullName\" />
+    <Folder Include="Features\Generic\" />
     <Folder Include="Features\PersonInfo\" />
   </ItemGroup>
 </Project>

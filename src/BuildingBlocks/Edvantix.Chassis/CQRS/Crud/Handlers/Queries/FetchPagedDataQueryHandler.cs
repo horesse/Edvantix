@@ -10,17 +10,14 @@ public class FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdenti
     IServiceProvider provider
 )
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
-        IRequestHandler<
-            FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity>,
-            PagedResult<TModel>
-        >
-    where TModel : Model<TIdentity>
+        IRequestHandler<FetchPagedDataQuery<TEntity, TModel, TSpecification>, PagedResult<TModel>>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
     where TSpecification : class, ISpecification<TEntity>, new()
 {
     public async Task<PagedResult<TModel>> Handle(
-        FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity> request,
+        FetchPagedDataQuery<TEntity, TModel, TSpecification> request,
         CancellationToken token
     )
     {
@@ -44,7 +41,7 @@ public class FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdenti
                     totalCount
                 );
             },
-            nameof(FetchPagedDataQuery<,,,>),
+            nameof(FetchPagedDataQuery<,,>),
             token
         );
     }

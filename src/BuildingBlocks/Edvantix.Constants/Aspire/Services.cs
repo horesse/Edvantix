@@ -8,6 +8,7 @@ public static class Services
     public static readonly string EntityHubWorker = nameof(EntityHubWorker).ToLowerInvariant();
     public static readonly string Company = nameof(Company).ToLowerInvariant();
     public static readonly string System = nameof(System).ToLowerInvariant();
+    public static readonly string Person = nameof(Person).ToLowerInvariant();
 
     public static string ToClientName(string application, string? suffix = null)
     {

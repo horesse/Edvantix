@@ -1,4 +1,5 @@
-﻿using Edvantix.SharedKernel.SeedWork;
+﻿using Edvantix.Constants.Other;
+using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Company.Domain.AggregatesModel.ContactAggregate;
 

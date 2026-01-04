@@ -14,7 +14,7 @@ namespace Edvantix.Chassis.Repository.Crud;
 public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvider provider)
     : ICrudRepository<TEntity, TIdentity>
     where TContext : DbContext, IUnitOfWork
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
     where TIdentity : struct
 {
     private TContext Context => provider.GetRequiredService<TContext>();
@@ -287,8 +287,15 @@ public abstract class CrudRepository<TContext, TEntity, TIdentity>(IServiceProvi
         return Task.CompletedTask;
     }
 
-    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token) =>
-        Context.Database.BeginTransactionAsync(token);
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token)
+    {
+        return Context.Database.BeginTransactionAsync(token);
+    }
+
+    public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken token)
+    {
+        return DbSet.AnyAsync(predicate, token);
+    }
 
     public Task<bool> SaveEntitiesAsync(CancellationToken token)
     {

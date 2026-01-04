@@ -7,9 +7,9 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
 public sealed class GetCountQueryHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
         IRequestHandler<GetCountQuery, long>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
 {
     public async Task<long> Handle(GetCountQuery query, CancellationToken token)
     {

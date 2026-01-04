@@ -7,9 +7,9 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 public sealed class CreateCommandHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
         IRequestHandler<CreateCommand<TModel, TIdentity>, TIdentity>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
 {
     public async Task<TIdentity> Handle(
         CreateCommand<TModel, TIdentity> command,

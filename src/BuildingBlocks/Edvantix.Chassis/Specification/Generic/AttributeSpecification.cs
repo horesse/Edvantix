@@ -97,6 +97,7 @@ public class AttributeSpecification<TEntity> : Specification<TEntity>
                 Attribute = p.GetCustomAttribute<OrderByAttribute>()!,
             })
             .OrderBy(x => x.Attribute.Order)
+            .ThenBy(x => x.Attribute.Priority)
             .ToList();
 
         foreach (var item in properties)

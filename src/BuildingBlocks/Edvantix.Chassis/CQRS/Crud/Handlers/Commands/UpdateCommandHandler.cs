@@ -8,9 +8,9 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 public sealed class UpdateCommandHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
         IRequestHandler<UpdateCommand<TModel, TIdentity>, TIdentity>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
 {
     public async Task<TIdentity> Handle(
         UpdateCommand<TModel, TIdentity> command,
@@ -20,8 +20,8 @@ public sealed class UpdateCommandHandler<TModel, TIdentity, TEntity>(IServicePro
         return await ExecuteAsync(
             async () =>
             {
-                var entity = await Repository.GetByIdAsync(command.Model.Id, token);
-                Guard.Against.NotFound(entity, command.Model.Id);
+                var entity = await Repository.GetByIdAsync(command.Id, token);
+                Guard.Against.NotFound(entity, command.Id);
 
                 Converter.SetProperties(command.Model, entity);
 

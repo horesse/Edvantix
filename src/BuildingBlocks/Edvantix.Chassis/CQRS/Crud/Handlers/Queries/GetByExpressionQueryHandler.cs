@@ -9,17 +9,14 @@ public class GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdent
     IServiceProvider provider
 )
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
-        IRequestHandler<
-            GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity>,
-            IEnumerable<TModel>
-        >
-    where TModel : Model<TIdentity>
+        IRequestHandler<GetByExpressionQuery<TEntity, TModel, TSpecification>, IEnumerable<TModel>>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
     where TSpecification : ISpecification<TEntity>
 {
     public async Task<IEnumerable<TModel>> Handle(
-        GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity> request,
+        GetByExpressionQuery<TEntity, TModel, TSpecification> request,
         CancellationToken token
     )
     {
@@ -29,7 +26,7 @@ public class GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdent
                 var entities = await Repository.GetByExpressionAsync(request.Specification, token);
                 return entities.Select(Converter.Map);
             },
-            nameof(GetByExpressionQuery<,,,>),
+            nameof(GetByExpressionQuery<,,>),
             token
         );
     }

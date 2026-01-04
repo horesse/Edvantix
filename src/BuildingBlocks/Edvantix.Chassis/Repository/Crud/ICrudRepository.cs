@@ -211,5 +211,13 @@ public interface ICrudRepository<TEntity, TIdentity> : IRepository<TEntity>, IDi
     /// <returns>Задача, представляющая транзакцию <see cref="IDbContextTransaction"/>.</returns>
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken token);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task<bool> AnyAsync(Expression<Func<TEntity,bool>> predicate, CancellationToken token);
+
     Task<bool> SaveEntitiesAsync(CancellationToken token);
 }

@@ -31,14 +31,21 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         var sub = claimsPrincipal.GetClaimValue(ClaimTypes.NameIdentifier);
         var userId = Guard.Against.NotAuthenticated(sub);
 
+        var userGuid = Guid.Parse(userId);
+        
         using var personRepo = provider.GetRequiredService<IPersonInfoRepository>();
+        
+        var isExists = await personRepo.AnyAsync(p => p.AccountId == userGuid, cancellationToken);
 
+        if (isExists)
+            throw new Exception("Пользователь с таким идентификатором уже существует");
+        
         await using var transaction = await personRepo.BeginTransactionAsync(cancellationToken);
 
         try
         {
             var person = new PersonInfo(
-                Guid.Parse(userId),
+                userGuid,
                 request.Gender,
                 request.PersonInfo.FirstName,
                 request.PersonInfo.LastName,

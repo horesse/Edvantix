@@ -1,6 +1,4 @@
-﻿using Edvantix.Chassis.Specification.Expressions;
-
-namespace Edvantix.Chassis.Specification.Evaluators;
+﻿namespace Edvantix.Chassis.Specification.Evaluators;
 
 public sealed class OrderEvaluator : IEvaluator
 {

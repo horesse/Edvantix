@@ -15,7 +15,7 @@ namespace Edvantix.Chassis.Endpoints.Crud.Queries;
 public class FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
     : BaseCrudEndpoint<TModel, TIdentity>,
         IEndpoint<Ok<PagedResult<TModel>>, PaginationRequest<TSpecification, TEntity>, ISender>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
     where TEntity : class, IAggregateRoot
     where TSpecification : class, ISpecification<TEntity>, new()
@@ -46,7 +46,7 @@ public class FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
         CancellationToken cancellationToken = default
     )
     {
-        var query = new FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity>(request);
+        var query = new FetchPagedDataQuery<TEntity, TModel, TSpecification>(request);
         var result = await sender.Send(query, cancellationToken);
 
         return TypedResults.Ok(result);

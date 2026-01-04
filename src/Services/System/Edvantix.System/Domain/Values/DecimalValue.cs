@@ -2,7 +2,7 @@
 
 // ReSharper disable once CheckNamespace
 namespace Edvantix.System.Grpc.Services;
- 
+
 [ExcludeFromCodeCoverage]
 public sealed partial class DecimalValue
 {

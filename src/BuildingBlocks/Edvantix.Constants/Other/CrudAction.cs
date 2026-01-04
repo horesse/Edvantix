@@ -9,6 +9,7 @@ public enum CrudAction
     DeleteRange,
     Update,
     UpdateRange,
+    Validate,
 
     // Queries
     GetAll,

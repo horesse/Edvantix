@@ -1,4 +1,5 @@
-﻿using Edvantix.Chassis.Converter;
+﻿using System.Security.Claims;
+using Edvantix.Chassis.Converter;
 using Edvantix.Chassis.Repository.Crud;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,9 +11,9 @@ namespace Edvantix.Chassis.CQRS.Crud.Handlers;
 /// Базовый обработчик с общей логикой для всех CRUD операций
 /// </summary>
 public abstract class BaseCrudHandler<TModel, TIdentity, TEntity>(IServiceProvider provider)
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
-    where TEntity : Entity<TIdentity>, IAggregateRoot
+    where TEntity : Entity<TIdentity>
 {
     protected readonly ICrudRepository<TEntity, TIdentity> Repository = provider.GetRequiredService<
         ICrudRepository<TEntity, TIdentity>
@@ -20,6 +21,11 @@ public abstract class BaseCrudHandler<TModel, TIdentity, TEntity>(IServiceProvid
     protected readonly IConverter<TModel, TEntity> Converter = provider.GetRequiredService<
         IConverter<TModel, TEntity>
     >();
+
+    /// <summary>
+    /// ClaimsPrincipal текущего пользователя (опционально доступен в наследниках)
+    /// </summary>
+    protected readonly ClaimsPrincipal? ClaimsPrincipal = provider.GetService<ClaimsPrincipal>();
 
     private readonly ILogger _logger = provider.GetRequiredService<
         ILogger<BaseCrudHandler<TModel, TIdentity, TEntity>>

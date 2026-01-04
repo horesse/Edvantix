@@ -2,7 +2,6 @@
 using Edvantix.Chassis.Endpoints.Requests;
 using Edvantix.Chassis.Specification;
 using Edvantix.SharedKernel.Results;
-using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
 
@@ -10,7 +9,7 @@ namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
 /// Получение всех записей
 /// </summary>
 public sealed record GetAllQuery<TModel, TIdentity> : IQuery<IEnumerable<TModel>>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct;
 
 /// <summary>
@@ -18,7 +17,7 @@ public sealed record GetAllQuery<TModel, TIdentity> : IQuery<IEnumerable<TModel>
 /// </summary>
 public sealed record GetByIdQuery<TModel, TIdentity>(TIdentity Id)
     : BaseIdentityQuery<TIdentity, TModel>(Id)
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct;
 
 /// <summary>
@@ -32,18 +31,16 @@ public sealed record GetCountQuery : IQuery<long>;
 public sealed record IsExistQuery<TIdentity>(TIdentity Id) : BaseIdentityQuery<TIdentity, bool>(Id)
     where TIdentity : struct;
 
-public sealed record GetByExpressionQuery<TEntity, TModel, TSpecification, TIdentity>(
+public sealed record GetByExpressionQuery<TEntity, TModel, TSpecification>(
     TSpecification Specification
 ) : IQuery<IEnumerable<TModel>>
-    where TModel : Model<TIdentity>
-    where TIdentity : struct
-    where TSpecification : ISpecification<TEntity>
-    where TEntity : class, IAggregateRoot;
+    where TEntity : class
+    where TModel : class
+    where TSpecification : ISpecification<TEntity>;
 
-public sealed record FetchPagedDataQuery<TEntity, TModel, TSpecification, TIdentity>(
+public sealed record FetchPagedDataQuery<TEntity, TModel, TSpecification>(
     PaginationRequest<TSpecification, TEntity> Request
 ) : IQuery<PagedResult<TModel>>
-    where TModel : Model<TIdentity>
-    where TIdentity : struct
-    where TSpecification : class, ISpecification<TEntity>
-    where TEntity : class, IAggregateRoot;
+    where TEntity : class
+    where TModel : class
+    where TSpecification : class, ISpecification<TEntity>;

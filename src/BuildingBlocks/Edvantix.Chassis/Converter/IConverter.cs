@@ -8,9 +8,9 @@ public interface IConverter<TFirst, TSecond>
 
     TFirst Map(TSecond source);
 
-    IReadOnlyList<TSecond> Map(IReadOnlyList<TFirst> sources);
+    List<TSecond> Map(IReadOnlyList<TFirst> sources);
 
-    IReadOnlyList<TFirst> Map(IReadOnlyList<TSecond> sources);
+    List<TFirst> Map(IReadOnlyList<TSecond> sources);
 
     void SetProperties(TFirst source, TSecond target);
 }

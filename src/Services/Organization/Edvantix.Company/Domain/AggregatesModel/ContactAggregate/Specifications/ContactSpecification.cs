@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Specification.Builders;
 using Edvantix.Chassis.Specification.Generic;
+using Edvantix.Constants.Other;
 
 namespace Edvantix.Company.Domain.AggregatesModel.ContactAggregate.Specifications;
 

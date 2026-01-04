@@ -2,7 +2,6 @@
 using Edvantix.Chassis.Utilities.Attributes;
 using Edvantix.Chassis.Utilities.Formatters;
 using Edvantix.Constants.Other;
-using Edvantix.SharedKernel.SeedWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
@@ -12,7 +11,7 @@ namespace Edvantix.Chassis.Endpoints.Crud;
 /// Базовый класс для CRUD endpoints с общей конфигурацией
 /// </summary>
 public abstract class BaseCrudEndpoint<TModel, TIdentity>
-    where TModel : Model<TIdentity>
+    where TModel : class
     where TIdentity : struct
 {
     protected virtual string ResourceName => typeof(TModel).Name.Replace("Model", string.Empty);

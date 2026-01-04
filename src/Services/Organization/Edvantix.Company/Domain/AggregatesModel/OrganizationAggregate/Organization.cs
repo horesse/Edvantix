@@ -1,6 +1,7 @@
 ﻿using Edvantix.Company.Domain.AggregatesModel.ContactAggregate;
 using Edvantix.Company.Domain.AggregatesModel.MemberAggregate;
 using Edvantix.Company.Domain.AggregatesModel.SubscriptionAggregate;
+using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate;

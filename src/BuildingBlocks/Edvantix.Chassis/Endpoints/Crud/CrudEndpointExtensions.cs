@@ -1,7 +1,6 @@
 ﻿using Edvantix.Chassis.Endpoints.Crud.Commands;
 using Edvantix.Chassis.Endpoints.Crud.Queries;
 using Edvantix.Chassis.Specification;
-using Edvantix.Chassis.Specification.Generic;
 using Edvantix.Constants.Other;
 using Edvantix.SharedKernel.SeedWork;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,6 +88,114 @@ public static class CrudEndpointExtensions
             {
                 services.AddTransient<IEndpoint, DeleteRangeEndpoint<TModel, TIdentity>>();
             }
+
+            services.AddTransient<IEndpoint, ValidateEndpoint<TModel, TIdentity>>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Регистрирует CRUD endpoints с поддержкой ViewModels
+        /// </summary>
+        public IServiceCollection AddCrudViewModelEndpoints<
+            TEntity,
+            TModel,
+            TCreateViewModel,
+            TViewViewModel,
+            TIdentity,
+            TSpecification
+        >()
+            where TModel : Model<TIdentity>
+            where TCreateViewModel : class
+            where TViewViewModel : class
+            where TIdentity : struct
+            where TEntity : class, IAggregateRoot
+            where TSpecification : class, ISpecification<TEntity>, new()
+        {
+            return services.AddCrudViewModelEndpoints<
+                TEntity,
+                TModel,
+                TCreateViewModel,
+                TViewViewModel,
+                TIdentity,
+                TSpecification
+            >(CrudActions.Create | CrudActions.GetById | CrudActions.FetchPagedData);
+        }
+
+        /// <summary>
+        /// Регистрирует выборочные CRUD endpoints с поддержкой ViewModels
+        /// </summary>
+        public IServiceCollection AddCrudViewModelEndpoints<
+            TEntity,
+            TModel,
+            TCreateViewModel,
+            TViewModel,
+            TIdentity,
+            TSpecification
+        >(CrudActions actions)
+            where TModel : Model<TIdentity>
+            where TCreateViewModel : class
+            where TViewModel : class
+            where TIdentity : struct
+            where TEntity : class, IAggregateRoot
+            where TSpecification : class, ISpecification<TEntity>, new()
+        {
+            // Query Endpoints
+            if (actions.HasFlag(CrudActions.GetById))
+            {
+                services.AddTransient<IEndpoint, GetByIdEndpoint<TModel, TIdentity>>();
+            }
+
+            if (actions.HasFlag(CrudActions.GetCount))
+            {
+                services.AddTransient<IEndpoint, GetCountEndpoint<TModel, TIdentity>>();
+            }
+
+            if (actions.HasFlag(CrudActions.IsExist))
+            {
+                services.AddTransient<IEndpoint, IsExistEndpoint<TModel, TIdentity>>();
+            }
+
+            if (actions.HasFlag(CrudActions.GetByExpression))
+            {
+                services.AddTransient<
+                    IEndpoint,
+                    GetByExpressionEndpoint<TViewModel, TIdentity, TEntity, TSpecification>
+                >();
+            }
+
+            if (actions.HasFlag(CrudActions.FetchPagedData))
+            {
+                services.AddTransient<
+                    IEndpoint,
+                    FetchPagedDataEndpoint<TViewModel, TIdentity, TEntity, TSpecification>
+                >();
+            }
+
+            // Command Endpoints
+            if (actions.HasFlag(CrudActions.Create))
+            {
+                services.AddTransient<IEndpoint, CreateEndpoint<TCreateViewModel, TIdentity>>();
+            }
+
+            if (actions.HasFlag(CrudActions.Update))
+            {
+                services.AddTransient<IEndpoint, UpdateEndpoint<TModel, TIdentity>>();
+            }
+
+            if (actions.HasFlag(CrudActions.Delete))
+            {
+                services.AddTransient<IEndpoint, DeleteEndpoint<TModel, TIdentity>>();
+            }
+
+            if (actions.HasFlag(CrudActions.DeleteRange))
+            {
+                services.AddTransient<IEndpoint, DeleteRangeEndpoint<TModel, TIdentity>>();
+            }
+
+            services.AddTransient<IEndpoint, ValidateEndpoint<TCreateViewModel, TIdentity>>();
+
+            services.AddTransient<IEndpoint, ValidateEndpoint<TModel, TIdentity>>();
 
             return services;
         }

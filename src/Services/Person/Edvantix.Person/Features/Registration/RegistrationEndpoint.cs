@@ -16,9 +16,7 @@ public class RegistrationEndpoint : IEndpoint<Created<long>, RegistrationCommand
             .WithName("Registration")
             .WithTags("Person")
             .WithSummary("Регистрация пользователя")
-            .WithDescription(
-                "Создать новую запись пользователя"
-            )
+            .WithDescription("Создать новую запись пользователя")
             .Produces<long>(StatusCodes.Status201Created);
     }
 

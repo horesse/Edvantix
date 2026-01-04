@@ -61,12 +61,12 @@ public sealed class PersonInfo() : Entity<long>, IAggregateRoot, ISoftDelete
     {
         _employmentHistories.Add(employmentHistory);
     }
-    
+
     public void AddEmploymentHistories(IEnumerable<EmploymentHistory> employmentHistories)
     {
         _employmentHistories.AddRange(employmentHistories);
     }
-    
+
     // Soft Delete
     public void Delete()
     {

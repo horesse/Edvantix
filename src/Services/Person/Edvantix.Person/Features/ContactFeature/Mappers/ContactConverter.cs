@@ -15,7 +15,7 @@ public sealed class ContactConverter : ClassConverter<ContactModel, Contact>
             Type = source.Type,
             Value = source.Value,
             Description = source.Description,
-            Id = source.Id
+            Id = source.Id,
         };
 
     public override void SetProperties(ContactModel source, Contact target)

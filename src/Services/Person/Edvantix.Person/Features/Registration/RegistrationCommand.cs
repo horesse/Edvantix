@@ -32,14 +32,14 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         var userId = Guard.Against.NotAuthenticated(sub);
 
         var userGuid = Guid.Parse(userId);
-        
+
         using var personRepo = provider.GetRequiredService<IPersonInfoRepository>();
-        
+
         var isExists = await personRepo.AnyAsync(p => p.AccountId == userGuid, cancellationToken);
 
         if (isExists)
             throw new Exception("Пользователь с таким идентификатором уже существует");
-        
+
         await using var transaction = await personRepo.BeginTransactionAsync(cancellationToken);
 
         try
@@ -58,13 +58,15 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
             {
                 var converter = provider.GetRequiredService<IConverter<ContactModel, Contact>>();
                 var contacts = converter.Map([.. request.Contacts]);
-                
+
                 person.AddContacts(contacts);
             }
 
             if (request.EmploymentHistories.Count != 0)
             {
-                var converter = provider.GetRequiredService<IConverter<EmploymentHistoryModel, EmploymentHistory>>();
+                var converter = provider.GetRequiredService<
+                    IConverter<EmploymentHistoryModel, EmploymentHistory>
+                >();
                 var histories = converter.Map([.. request.EmploymentHistories]);
 
                 person.AddEmploymentHistories(histories);

@@ -15,7 +15,7 @@ public sealed class FullNameConverter : ClassConverter<FullNameModel, FullName>
             FirstName = source.FirstName,
             LastName = source.LastName,
             MiddleName = source.MiddleName,
-            Id = source.Id
+            Id = source.Id,
         };
 
     public override void SetProperties(FullNameModel source, FullName target)

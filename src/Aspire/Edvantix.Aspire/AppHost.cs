@@ -2,6 +2,7 @@ using Edvantix.Aspire.Extensions.Infrastructure;
 using Edvantix.Aspire.Extensions.Network;
 using Edvantix.Aspire.Extensions.Security;
 using Edvantix.Constants.Aspire;
+using Edvantix.Constants.Core;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -95,7 +96,7 @@ var personApi = builder
     .WithKeycloak(keycloak)
     .WithFriendlyUrls();
 
-builder
+var gateway = builder
     .AddApiGatewayProxy()
     .WithService(dataVaultApi)
     .WithService(entityHubApi)
@@ -103,6 +104,28 @@ builder
     .WithService(systemApi, true)
     .WithService(personApi, true)
     .WithService(keycloak);
+
+var turbo = builder
+    .AddTurborepoApp(
+        Components.TurboRepo,
+        Path.GetFullPath("../../Clients", builder.AppHostDirectory)
+    )
+    .WithPnpm(true)
+    .WithPackageManagerLaunch();
+
+var front = turbo
+    .AddApp(Clients.Front, Clients.FrontTurboApp)
+    .WithOtlpExporter()
+    .WithHttpEndpoint(env: "PORT")
+    .WithMappedEndpointPort()
+    .WithHttpHealthCheck()
+    .WithExternalHttpEndpoints()
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
+    .WithEnvironment("NEXT_PUBLIC_COPILOT_ENABLED", "true")
+    .WithKeycloak(keycloak);
+
+front.WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Http.Schemes.Http));
 
 if (builder.ExecutionContext.IsRunMode)
 {

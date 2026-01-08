@@ -16,6 +16,7 @@
     <PackageReference Include="Aspire.Hosting.Yarp" />
     <PackageReference Include="CliWrap" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.Bun" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
     <PackageReference Include="Scalar.Aspire" />
   </ItemGroup>

@@ -1,20 +1,39 @@
 {
-  "name": "Clients",
+  "name": "@edvantix/clients",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "e2e": "turbo test:e2e",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.1",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
     "prettier": "^3.7.4",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "turbo": "^2.7.2",
-    "typescript": "5.9.2"
+    "typescript": "5.9.3"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.27.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=25.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "@scarf/scarf",
+      "core-js-pure",
+      "esbuild",
+      "msw",
+      "protobufjs",
+      "sharp"
+    ]
   }
 }

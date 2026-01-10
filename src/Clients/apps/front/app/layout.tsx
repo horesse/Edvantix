@@ -24,25 +24,25 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "BookWorm - Curated Books & Design Inspiration | Online Bookstore",
-    template: "%s | BookWorm",
+    default: "Edvantix - Онлайн менеджер школ",
+    template: "%s | Edvantix",
   },
   description:
-    "Discover a carefully curated collection of literature, design books, and inspiration for the modern reader. Shop fiction, non-fiction, design, science, and more.",
+    "Современная система управления образовательными учреждениями. Управление учениками, преподавателями, расписанием и учебным процессом.",
   generator: "Next.js",
-  applicationName: "BookWorm",
+  applicationName: "Edvantix",
   keywords: [
-    "books",
-    "online bookstore",
-    "literature",
-    "design books",
-    "fiction",
-    "non-fiction",
-    "book shop",
+    "управление школой",
+    "образовательная система",
+    "школьный менеджер",
+    "учебный процесс",
+    "расписание",
+    "ученики",
+    "преподаватели",
   ],
-  authors: [{ name: "BookWorm Team" }],
-  creator: "BookWorm",
-  publisher: "BookWorm",
+  authors: [{ name: "Edvantix Team" }],
+  creator: "Edvantix",
+  publisher: "Edvantix",
   formatDetection: {
     email: false,
     address: false,
@@ -52,17 +52,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    title: "BookWorm - Curated Books & Design Inspiration",
+    title: "Edvantix - Онлайн менеджер школ",
     description:
-      "Discover a carefully curated collection of literature and design books for the modern reader.",
-    siteName: "BookWorm",
-    locale: "en_US",
+      "Современная система управления образовательными учреждениями.",
+    siteName: "Edvantix",
+    locale: "ru_RU",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BookWorm - Curated Books & Design Inspiration",
+    title: "Edvantix - Онлайн менеджер школ",
     description:
-      "Discover a carefully curated collection of literature and design books.",
+      "Современная система управления образовательными учреждениями.",
   },
   icons: {
     icon: [
@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "BookWorm",
+    title: "Edvantix",
   },
 };
 

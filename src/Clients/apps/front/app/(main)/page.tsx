@@ -6,37 +6,33 @@ import { env } from "@/env.mjs";
 import { getQueryClient } from "@/lib/query-client";
 
 export const metadata: Metadata = {
-  title: "BookWorm - Curated Books & Design Inspiration | Online Bookstore",
+  title: "Edvantix - Главная",
   description:
-    "Discover a carefully curated collection of literature, design books, and inspiration for the modern reader. Shop fiction, non-fiction, design, science, and more.",
+    "Современная система управления образовательными учреждениями. Управление учениками, преподавателями, расписанием и учебным процессом.",
   keywords: [
-    "books",
-    "online bookstore",
-    "literature",
-    "design books",
-    "fiction",
-    "non-fiction",
-    "book shop",
-    "curated books",
-    "best books",
+    "управление школой",
+    "образовательная система",
+    "школьный менеджер",
+    "учебный процесс",
+    "расписание",
   ],
   openGraph: {
     type: "website",
-    title: "BookWorm - Curated Books & Design Inspiration",
+    title: "Edvantix - Онлайн менеджер школ",
     description:
-      "Discover a carefully curated collection of literature and design books for the modern reader.",
-    url: env.NEXT_PUBLIC_APP_URL || "https://bookworm.com",
-    siteName: "BookWorm",
-    locale: "en_US",
+      "Современная система управления образовательными учреждениями.",
+    url: env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    siteName: "Edvantix",
+    locale: "ru_RU",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BookWorm - Curated Books & Design Inspiration",
+    title: "Edvantix - Онлайн менеджер школ",
     description:
-      "Discover a carefully curated collection of literature and design books.",
+      "Современная система управления образовательными учреждениями.",
   },
   alternates: {
-    canonical: env.NEXT_PUBLIC_APP_URL || "https://bookworm.com",
+    canonical: env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   },
   robots: {
     index: true,
@@ -51,12 +47,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function BookshopPage() {
+export default async function HomePage() {
   const queryClient = getQueryClient();
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      HomePage
+      <div className="space-y-4">
+        <h1 className="text-3xl font-bold">Добро пожаловать в Edvantix</h1>
+        <p className="text-muted-foreground">
+          Система управления образовательными учреждениями
+        </p>
+      </div>
     </HydrationBoundary>
   );
 }

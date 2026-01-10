@@ -1,4 +1,7 @@
 import type React from "react";
+import { SidebarProvider, SidebarInset } from "@workspace/ui/components/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { Header } from "@/components/header";
 
 export default function MainLayout({
                                        children,
@@ -6,10 +9,14 @@ export default function MainLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="bg-background flex min-h-screen flex-col">
-            <main className="flex-1" id="main-content">
-                {children}
-            </main>
-        </div>
+        <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+                <Header />
+                <main className="flex flex-1 flex-col gap-4 p-4" id="main-content">
+                    {children}
+                </main>
+            </SidebarInset>
+        </SidebarProvider>
     );
 }

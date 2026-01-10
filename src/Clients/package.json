@@ -35,5 +35,10 @@
       "protobufjs",
       "sharp"
     ]
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "input-otp": "^1.4.2",
+    "vaul": "^1.1.2"
   }
 }

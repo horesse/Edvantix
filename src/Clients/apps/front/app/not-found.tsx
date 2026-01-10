@@ -5,45 +5,28 @@ import { BookOpen, Home } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 
 export default function NotFound() {
-  return (
-    <div className="bg-background flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-2xl space-y-8 text-center">
-        <div className="space-y-4">
-          <h1 className="text-muted-foreground/20 font-serif text-9xl font-bold">
-            404
-          </h1>
-          <h2 className="text-foreground font-serif text-4xl font-medium md:text-5xl">
-            Page Not Found
-          </h2>
-          <p className="text-muted-foreground mx-auto max-w-md text-lg leading-relaxed">
-            It seems the page you're looking for has wandered off into the
-            stacks. Let's help you find your way back.
-          </p>
+    return (
+        <div className='grid min-h-screen grid-cols-1 lg:grid-cols-2'>
+            <div className='flex flex-col items-center justify-center px-4 py-8 text-center'>
+                <h2 className='mb-6 text-5xl font-semibold'>Whoops!</h2>
+                <h3 className='mb-1.5 text-3xl font-semibold'>Something went wrong</h3>
+                <p className='text-muted-foreground mb-6 max-w-sm'>
+                    The page you&apos;re looking for isn&apos;t found, we suggest you back to home.
+                </p>
+                <Button asChild size='lg' className='rounded-lg text-base'>
+                    <a href='#'>Back to home page</a>
+                </Button>
+            </div>
+
+            {/* Right Section: Illustration */}
+            <div className='relative max-h-screen w-full p-2 max-lg:hidden'>
+                <div className='h-full w-full rounded-2xl bg-black'></div>
+                <img
+                    src='https://cdn.shadcnstudio.com/ss-assets/blocks/marketing/error/image-1.png'
+                    alt='404 illustration'
+                    className='absolute top-1/2 left-1/2 h-[clamp(260px,25vw,406px)] -translate-x-1/2 -translate-y-1/2'
+                />
+            </div>
         </div>
-        <div className="flex flex-col items-center justify-center gap-4 pt-6 sm:flex-row">
-          <Button
-            asChild
-            size="lg"
-            className="shadow-primary/20 gap-2 rounded-full px-8 shadow-lg"
-          >
-            <Link href="/">
-              <Home className="size-5" />
-              Return Home
-            </Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="gap-2 rounded-full bg-transparent px-8"
-          >
-            <Link href="/shop">
-              <BookOpen className="size-5" />
-              Browse Books
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }

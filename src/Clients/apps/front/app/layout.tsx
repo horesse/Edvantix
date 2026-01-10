@@ -6,9 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Button } from "@workspace/ui/components/button";
 import "@workspace/ui/globals.css";
 
-import { JsonLd } from "@/components/json-ld";
 import { env } from "@/env.mjs";
-import { generateOrganizationJsonLd, generateWebsiteJsonLd } from "@/lib/seo";
 
 import { Providers } from "./providers";
 
@@ -99,10 +97,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const organizationJsonLd = generateOrganizationJsonLd();
-  const websiteJsonLd = generateWebsiteJsonLd();
-  const isCopilotEnabled = env.NEXT_PUBLIC_COPILOT_ENABLED;
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
@@ -114,10 +108,8 @@ export default async function RootLayout({
           <a href="#main-content">Skip to main content</a>
         </Button>
         <div id="main-content">
-          <Providers isCopilotEnabled={false}>{children}</Providers>
+          <Providers>{children}</Providers>
         </div>
-        <JsonLd data={organizationJsonLd} />
-        <JsonLd data={websiteJsonLd} />
       </body>
     </html>
   );

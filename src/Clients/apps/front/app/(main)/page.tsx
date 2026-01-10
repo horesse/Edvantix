@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
 import { env } from "@/env.mjs";
-import BookshopPageContent from "@/features/home/bookshop-page-content";
 import { getQueryClient } from "@/lib/query-client";
 
 export const metadata: Metadata = {
@@ -57,7 +56,7 @@ export default async function BookshopPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <BookshopPageContent />
+      HomePage
     </HydrationBoundary>
   );
 }

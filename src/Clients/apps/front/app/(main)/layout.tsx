@@ -10,7 +10,7 @@ export default function MainLayout({
 }) {
     return (
         <SidebarProvider>
-            <AppSidebar />
+            <AppSidebar variant="inset" />
             <SidebarInset>
                 <Header />
                 <main className="flex flex-1 flex-col gap-4 p-4" id="main-content">

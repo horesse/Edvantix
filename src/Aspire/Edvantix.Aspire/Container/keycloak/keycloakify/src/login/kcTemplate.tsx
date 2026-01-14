@@ -18,15 +18,12 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         displayInfo = false,
         displayMessage = true,
         displayRequiredFields = false,
-        headerNode,
         socialProvidersNode = null,
         infoNode = null,
         documentTitle,
         bodyClassName,
         kcContext,
         i18n,
-        // doUseDefaultCss,
-        // classes,
         children,
     } = props;
 
@@ -38,52 +35,67 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
     }, [documentTitle, i18n, kcContext.realm.displayName, msgStr]);
 
     return (
-        <div className={clsx("min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted/20", bodyClassName)}>
+        <div className={clsx("relative flex h-auto min-h-screen items-center justify-center overflow-x-hidden px-4 py-10 sm:px-6 lg:px-8", bodyClassName)}>
             {/* Background decoration */}
-            <div className="fixed inset-0 -z-10 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-pulse delay-1000" />
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+                <svg
+                    className="absolute inset-0 h-full w-full"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <defs>
+                        <pattern
+                            id="grid-pattern"
+                            width="32"
+                            height="32"
+                            patternUnits="userSpaceOnUse"
+                        >
+                            <path
+                                d="M0 32V.5H32"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeOpacity="0.05"
+                            />
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid-pattern)" className="text-muted-foreground" />
+                </svg>
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
 
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-lg z-10 space-y-4">
                 {/* Locale Selector */}
                 {realm.internationalizationEnabled && enabledLanguages.length > 1 && (
-                    <div className="flex justify-end mb-4 animate-in fade-in slide-in-from-top-2 duration-500">
+                    <div className="flex justify-end">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    className="gap-2 border-2 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 group"
+                                    className="gap-2"
                                 >
-                                    <Globe className="h-4 w-4 transition-transform group-hover:rotate-12" />
+                                    <Globe className="h-4 w-4" />
                                     <span className="font-medium">
-                    {enabledLanguages.find(lang => lang.languageTag === currentLanguage.languageTag)?.label}
-                  </span>
+                                        {enabledLanguages.find(lang => lang.languageTag === currentLanguage.languageTag)?.label}
+                                    </span>
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                align="end"
-                                className="w-48 border-2 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200"
-                            >
+                            <DropdownMenuContent align="end" className="w-48">
                                 {enabledLanguages.map((lang) => (
-                                    <DropdownMenuItem
-                                        key={lang.languageTag}
-                                        asChild
-                                    >
+                                    <DropdownMenuItem key={lang.languageTag} asChild>
                                         <a
                                             href={lang.href}
                                             className={clsx(
-                                                "cursor-pointer transition-colors duration-200",
+                                                "cursor-pointer",
                                                 lang.languageTag === currentLanguage.languageTag && "bg-primary/10 font-semibold"
                                             )}
                                         >
-                      <span className="flex items-center justify-between w-full">
-                        {lang.label}
-                          {lang.languageTag === currentLanguage.languageTag && (
-                              <CheckCircle2 className="h-4 w-4 text-primary" />
-                          )}
-                      </span>
+                                            <span className="flex items-center justify-between w-full">
+                                                {lang.label}
+                                                {lang.languageTag === currentLanguage.languageTag && (
+                                                    <CheckCircle2 className="h-4 w-4 text-primary" />
+                                                )}
+                                            </span>
                                         </a>
                                     </DropdownMenuItem>
                                 ))}
@@ -92,80 +104,61 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                     </div>
                 )}
 
-                {/* Main Card */}
-                <div className="relative flex h-auto min-h-screen items-center justify-center overflow-x-hidden px-4 py-10 sm:px-6 lg:px-8">
-                    <div className='absolute'>
-                        {/*<AuthBackgroundShape />*/}
-                    </div>
-
-                    {/* Header */}
-                    <div className="space-y-4">
-                        {headerNode}
-
-                        {/* Messages */}
-                        {displayMessage && message !== undefined && (
-                            <div
-                                className={clsx(
-                                    "rounded-lg p-4 border-2 flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-500",
-                                    message.type === "success" && "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200",
-                                    message.type === "warning" && "bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200",
-                                    message.type === "error" && "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200",
-                                    message.type === "info" && "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200"
-                                )}
-                            >
-                                {message.type === "success" && <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" />}
-                                {message.type === "warning" && <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />}
-                                {message.type === "error" && <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />}
-                                {message.type === "info" && <Info className="h-5 w-5 mt-0.5 flex-shrink-0" />}
-                                <span
-                                    className="text-sm font-medium flex-1"
-                                    dangerouslySetInnerHTML={{
-                                        __html: kcSanitize(message.summary),
-                                    }}
-                                />
-                            </div>
+                {/* Messages */}
+                {displayMessage && message !== undefined && (
+                    <div
+                        className={clsx(
+                            "rounded-lg p-4 flex items-start gap-3",
+                            message.type === "success" && "bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200",
+                            message.type === "warning" && "bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200",
+                            message.type === "error" && "bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200",
+                            message.type === "info" && "bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200"
                         )}
+                    >
+                        {message.type === "success" && <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                        {message.type === "warning" && <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                        {message.type === "error" && <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                        {message.type === "info" && <Info className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                        <span
+                            className="text-sm font-medium flex-1"
+                            dangerouslySetInnerHTML={{
+                                __html: kcSanitize(message.summary),
+                            }}
+                        />
                     </div>
+                )}
 
-                    {/* Required fields notice */}
-                    {displayRequiredFields && (
-                        <div className="text-sm text-muted-foreground">
-                            <span className="text-destructive">*</span> {msg("requiredFields")}
-                        </div>
-                    )}
-
-                    {/* Main content */}
-                    <div className="space-y-6">
-                        {children}
-
-                        {/* Social providers */}
-                        {socialProvidersNode}
-
-                        {/* Info section */}
-                        {displayInfo && infoNode}
+                {/* Required fields notice */}
+                {displayRequiredFields && (
+                    <div className="text-sm text-muted-foreground">
+                        <span className="text-destructive">*</span> {msg("requiredFields")}
                     </div>
+                )}
 
-                    {/* App initiated action */}
-                    {isAppInitiatedAction && (
-                        <div className="pt-4 border-t animate-in fade-in slide-in-from-bottom-2 duration-500 delay-300">
-                            <form action={kcContext.url.loginAction} method="post">
-                                <input type="hidden" name="cancel-aia" value="true" />
-                                <Button
-                                    type="submit"
-                                    variant="outline"
-                                    className="w-full border-2 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
-                                >
-                                    {msg("doCancel")}
-                                </Button>
-                            </form>
-                        </div>
-                    )}
-                </div>
+                {/* Main content */}
+                {children}
 
-                {/* Footer branding (optional) */}
-                <div className="mt-8 text-center text-sm text-muted-foreground animate-in fade-in duration-1000 delay-500">
-                    <p>Powered by <span className="font-semibold text-foreground">Edvzntix</span></p>
-                </div>
+                {/* Social providers */}
+                {socialProvidersNode}
+
+                {/* Info section */}
+                {displayInfo && infoNode}
+
+                {/* App initiated action */}
+                {isAppInitiatedAction && (
+                    <div className="mt-6">
+                        <form action={kcContext.url.loginAction} method="post">
+                            <input type="hidden" name="cancel-aia" value="true" />
+                            <Button
+                                type="submit"
+                                variant="outline"
+                                className="w-full"
+                            >
+                                {msg("doCancel")}
+                            </Button>
+                        </form>
+                    </div>
+                )}
             </div>
         </div>
     );

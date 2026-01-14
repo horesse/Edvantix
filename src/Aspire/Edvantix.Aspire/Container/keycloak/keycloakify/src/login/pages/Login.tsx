@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff } from "lucide-react";
-import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Login(
     props: Readonly<PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>>
@@ -39,111 +39,91 @@ export default function Login(
             doUseDefaultCss={false}
             classes={classes}
             displayMessage={!messagesPerField.existsError("username", "password")}
-            headerNode={
-                <Card className='z-1 w-full border-none shadow-md sm:max-w-lg'>
-                    <CardHeader className='gap-6'>
-                        <div>
-                            <CardTitle className='mb-1.5 text-2xl'>{msg("loginAccountTitle")}</CardTitle>
-                            <CardDescription className='text-base'>Менеджмент онлайн-школы</CardDescription>
-                        </div>
-                    </CardHeader>
-                </Card>
-            }
             displayInfo={
                 realm.password && realm.registrationAllowed && !registrationDisabled
             }
             infoNode={
-                <div className="text-center mt-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-                    <p className="text-sm text-muted-foreground">
-                        {msg("noAccount")}{" "}
-                        <a
-                            href={url.registrationUrl}
-                            className="font-semibold text-primary underline-offset-4 hover:underline transition-all hover:text-primary/80 inline-flex items-center gap-1 group"
-                        >
-                            {msg("doRegister")}
-                            <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
-                        </a>
-                    </p>
-                </div>
+                <p className='text-muted-foreground text-center'>
+                    {msg("noAccount")}{" "}
+                    <a href={url.registrationUrl} className='text-card-foreground hover:underline'>
+                        {msg("doRegister")}
+                    </a>
+                </p>
             }
             socialProvidersNode={
                 <>
                     {realm.password &&
                         social?.providers !== undefined &&
                         social.providers.length !== 0 && (
-                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-                                <div className="relative">
-                                    <div className="absolute inset-0 flex items-center">
-                                        <Separator className="w-full" />
-                                    </div>
-                                    <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-3 py-1 text-muted-foreground font-medium tracking-wider">
-                      {msg("identity-provider-login-label")}
-                    </span>
-                                    </div>
+                            <>
+                                <div className='flex items-center gap-4'>
+                                    <Separator className='flex-1' />
+                                    <p>{msg("identity-provider-login-label")}</p>
+                                    <Separator className='flex-1' />
                                 </div>
 
-                                <div className={`grid gap-3 ${social.providers.length > 3 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-                                    {social.providers.map((p) => (
-                                        <Button
-                                            key={p.alias}
-                                            variant="outline"
-                                            className="w-full h-12 border-2 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-0.5 group"
-                                            asChild
+                                {social.providers.map((p) => (
+                                    <Button
+                                        key={p.alias}
+                                        variant="ghost"
+                                        className="w-full"
+                                        asChild
+                                    >
+                                        <a
+                                            id={`social-${p.alias}`}
+                                            href={p.loginUrl}
                                         >
-                                            <a
-                                                id={`social-${p.alias}`}
-                                                href={p.loginUrl}
-                                            >
-                                                {p.iconClasses && (
-                                                    <i
-                                                        className={`${p.iconClasses} mr-2 text-lg transition-transform group-hover:scale-110`}
-                                                        aria-hidden="true"
-                                                    />
-                                                )}
-                                                <span
-                                                    className="font-medium"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: kcSanitize(p.displayName),
-                                                    }}
+                                            {p.iconClasses && (
+                                                <i
+                                                    className={`${p.iconClasses} mr-2`}
+                                                    aria-hidden="true"
                                                 />
-                                            </a>
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
+                                            )}
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: kcSanitize(p.displayName),
+                                                }}
+                                            />
+                                        </a>
+                                    </Button>
+                                ))}
+                            </>
                         )}
                 </>
             }
         >
-            {realm.password && (
-                <form
-                    id="kc-form-login"
-                    onSubmit={() => {
-                        setIsLoginButtonDisabled(true);
-                        return true;
-                    }}
-                    action={url.loginAction}
-                    method="post"
-                    className="space-y-4"
-                >
-                    {!usernameHidden && (
-                        <div className="space-y-2 group">
-                            <Label
-                                htmlFor="username"
-                                className="leading-5"
-                            >
-                                {(() => {
-                                    if (!realm.loginWithEmailAllowed) {
-                                        return msg("username");
-                                    }
-                                    if (!realm.registrationEmailAsUsername) {
-                                        return msg("usernameOrEmail");
-                                    }
-                                    return msg("email");
-                                })()}
-                            </Label>
-                            <div className="relative">
+            <Card className='w-full border-none shadow-md'>
+                <CardHeader className='gap-6'>
+                    <div>
+                        <CardTitle className='mb-1.5 text-2xl'>{msg("loginAccountTitle")}</CardTitle>
+                        <CardDescription className='text-base'>Менеджмент онлайн-школы</CardDescription>
+                    </div>
+                </CardHeader>
+
+                {realm.password && (
+                    <form
+                        id="kc-form-login"
+                        onSubmit={() => {
+                            setIsLoginButtonDisabled(true);
+                            return true;
+                        }}
+                        action={url.loginAction}
+                        method="post"
+                        className="px-6 pb-6 space-y-4"
+                    >
+                        {!usernameHidden && (
+                            <div className="space-y-2">
+                                <Label htmlFor="username">
+                                    {(() => {
+                                        if (!realm.loginWithEmailAllowed) {
+                                            return msg("username");
+                                        }
+                                        if (!realm.registrationEmailAsUsername) {
+                                            return msg("usernameOrEmail");
+                                        }
+                                        return msg("email");
+                                    })()}
+                                </Label>
                                 <Input
                                     id="username"
                                     name="username"
@@ -151,119 +131,103 @@ export default function Login(
                                     type="text"
                                     autoFocus
                                     autoComplete="username"
-                                    onFocus={() => setIsFocused("username")}
-                                    onBlur={() => setIsFocused(null)}
                                     aria-invalid={messagesPerField.existsError(
                                         "username",
                                         "password"
                                     )}
                                 />
+                                {messagesPerField.existsError("username", "password") && (
+                                    <p className="text-sm text-destructive">
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: kcSanitize(
+                                                    messagesPerField.getFirstError("username", "password")
+                                                ),
+                                            }}
+                                        />
+                                    </p>
+                                )}
                             </div>
-                            {messagesPerField.existsError("username", "password") && (
-                                <p
-                                    className="text-sm font-medium text-destructive animate-in fade-in slide-in-from-top-1 duration-300 flex items-center gap-1.5"
-                                    aria-live="polite"
-                                >
-                                    <span className="inline-block w-1 h-1 rounded-full bg-destructive animate-pulse" />
-                                    <span
-                                        dangerouslySetInnerHTML={{
-                                            __html: kcSanitize(
-                                                messagesPerField.getFirstError("username", "password")
-                                            ),
-                                        }}
-                                    />
-                                </p>
-                            )}
+                        )}
+
+                        <div className='space-y-2'>
+                            <Label htmlFor="password">
+                                {msg("password")}
+                            </Label>
+                            <PasswordInput
+                                i18n={i18n}
+                                passwordInputId="password"
+                                hasError={messagesPerField.existsError("username", "password")}
+                                isFocused={isFocused === "password"}
+                                onFocus={() => setIsFocused("password")}
+                                onBlur={() => setIsFocused(null)}
+                            />
+                            {usernameHidden &&
+                                messagesPerField.existsError("username", "password") && (
+                                    <p className="text-sm text-destructive">
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: kcSanitize(
+                                                    messagesPerField.getFirstError("username", "password")
+                                                ),
+                                            }}
+                                        />
+                                    </p>
+                                )}
                         </div>
-                    )}
 
-                    <div className='w-full space-y-1'>
-                        <Label
-                            htmlFor="password"
-                        >
-                            {msg("password")}
-                        </Label>
-                        <PasswordInput
-                            i18n={i18n}
-                            passwordInputId="password"
-                            hasError={messagesPerField.existsError("username", "password")}
-                            isFocused={isFocused === "password"}
-                            onFocus={() => setIsFocused("password")}
-                            onBlur={() => setIsFocused(null)}
-                        />
-                        {usernameHidden &&
-                            messagesPerField.existsError("username", "password") && (
-                                <p
-                                    className="text-destructive animate-in fade-in slide-in-from-top-1 duration-300 flex items-center gap-1.5"
-                                    aria-live="polite"
-                                >
-                                    <span className="inline-block w-1 h-1 rounded-full bg-destructive animate-pulse" />
-                                    <span
-                                        dangerouslySetInnerHTML={{
-                                            __html: kcSanitize(
-                                                messagesPerField.getFirstError("username", "password")
-                                            ),
-                                        }}
-                                    />
-                                </p>
-                            )}
-                    </div>
-
-                    <div className="flex items-center justify-between pt-2">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center justify-between">
                             {realm.rememberMe && !usernameHidden && (
-                                <>
+                                <div className="flex items-center space-x-2">
                                     <Checkbox
                                         id="rememberMe"
                                         name="rememberMe"
                                         defaultChecked={!!login.rememberMe}
-                                        className="transition-all duration-300 data-[state=checked]:bg-primary data-[state=checked]:scale-110"
                                     />
                                     <label
                                         htmlFor="rememberMe"
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer select-none transition-colors hover:text-foreground/80"
+                                        className="text-sm font-medium leading-none cursor-pointer select-none"
                                     >
                                         {msg("rememberMe")}
                                     </label>
-                                </>
+                                </div>
+                            )}
+                            {realm.resetPasswordAllowed && (
+                                <a
+                                    href={url.loginResetCredentialsUrl}
+                                    className="text-sm text-card-foreground hover:underline ml-auto"
+                                >
+                                    {msg("doForgotPassword")}
+                                </a>
                             )}
                         </div>
-                        {realm.resetPasswordAllowed && (
-                            <a
-                                href={url.loginResetCredentialsUrl}
-                                className="text-sm font-semibold text-primary underline-offset-4 hover:underline transition-all hover:text-primary/80 inline-flex items-center gap-1 group"
-                            >
-                                {msg("doForgotPassword")}
-                                <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
-                            </a>
-                        )}
-                    </div>
 
-                    <input
-                        type="hidden"
-                        id="id-hidden-input"
-                        name="credentialId"
-                        value={auth.selectedCredential}
-                    />
+                        <input
+                            type="hidden"
+                            id="id-hidden-input"
+                            name="credentialId"
+                            value={auth.selectedCredential}
+                        />
 
-                    <Button
-                        disabled={isLoginButtonDisabled}
-                        className="w-full text-base shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                        name="login"
-                        id="kc-login"
-                        type="submit"
-                    >
-                        {isLoginButtonDisabled ? (
-                            <span className="flex items-center gap-2">
-                  <span className="inline-block w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                                {msgStr("doLogIn")}
-                </span>
-                        ) : (
-                            msgStr("doLogIn")
-                        )}
-                    </Button>
-                </form>
-            )}
+                        <Button
+                            disabled={isLoginButtonDisabled}
+                            className="w-full"
+                            name="login"
+                            id="kc-login"
+                            type="submit"
+                        >
+                            {isLoginButtonDisabled ? (
+                                <span className="flex items-center gap-2">
+                                    <span className="inline-block w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                                    {msgStr("doLogIn")}
+                                </span>
+                            ) : (
+                                msgStr("doLogIn")
+                            )}
+                        </Button>
+                    </form>
+                )}
+            </Card>
         </Template>
     );
 }
@@ -276,7 +240,7 @@ function PasswordInput(props: Readonly<{
     onFocus: () => void;
     onBlur: () => void;
 }>) {
-    const { i18n, passwordInputId, hasError, isFocused, onFocus, onBlur } = props;
+    const { i18n, passwordInputId, hasError, onFocus, onBlur } = props;
     const { msgStr } = i18n;
 
     const [isPasswordRevealed, toggleIsPasswordRevealed] = useReducer(
@@ -301,24 +265,21 @@ function PasswordInput(props: Readonly<{
                 aria-invalid={hasError}
                 onFocus={onFocus}
                 onBlur={onBlur}
-                className={`pr-12 transition-all duration-300`}
+                className="pr-10"
             />
-            {isFocused && !hasError && (
-                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent animate-in fade-in duration-300" />
-            )}
             <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-1 top-1 h-7 w-10 px-0 hover:bg-primary/10 transition-all duration-300 group rounded-md"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 px-0"
                 aria-label={msgStr(isPasswordRevealed ? "hidePassword" : "showPassword")}
                 aria-controls={passwordInputId}
                 onClick={toggleIsPasswordRevealed}
             >
                 {isPasswordRevealed ? (
-                    <EyeOff className="h-4 w-4 text-muted-foreground transition-all duration-300 group-hover:text-primary group-hover:scale-110" />
+                    <EyeOff className="h-4 w-4" />
                 ) : (
-                    <Eye className="h-4 w-4 text-muted-foreground transition-all duration-300 group-hover:text-primary group-hover:scale-110" />
+                    <Eye className="h-4 w-4" />
                 )}
             </Button>
         </div>

@@ -40,6 +40,7 @@ export default function Login(
   return (
     <Template
       kcContext={kcContext}
+      headerNode={""}
       i18n={i18n}
       doUseDefaultCss={false}
       classes={classes}

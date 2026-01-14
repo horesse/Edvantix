@@ -40,7 +40,7 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
-  apps/front:
+  apps/organization:
     dependencies:
       '@hookform/resolvers':
         specifier: ^5.2.2
@@ -7588,7 +7588,7 @@ snapshots:
 
   '@types/minimatch@6.0.0':
     dependencies:
-      minimatch: 9.0.5
+      minimatch: 10.1.1
 
   '@types/node@20.19.27':
     dependencies:

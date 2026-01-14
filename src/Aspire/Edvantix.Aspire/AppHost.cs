@@ -114,7 +114,7 @@ var turbo = builder
     .WithPackageManagerLaunch();
 
 var front = turbo
-    .AddApp(Clients.Front, Clients.FrontTurboApp)
+    .AddApp(Clients.OrganizationFront, Clients.OrganizationTurboApp)
     .WithOtlpExporter()
     .WithHttpEndpoint(env: "PORT")
     .WithMappedEndpointPort()

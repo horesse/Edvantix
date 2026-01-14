@@ -12,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Globe, AlertCircle, CheckCircle2, Info } from "lucide-react";
+import AuthBackgroundShape from "@/login/assets/img/AuthBackgroundShape.tsx";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -37,30 +38,8 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
     return (
         <div className={clsx("relative flex h-auto min-h-screen items-center justify-center overflow-x-hidden px-4 py-10 sm:px-6 lg:px-8", bodyClassName)}>
             {/* Background decoration */}
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-                <svg
-                    className="absolute inset-0 h-full w-full"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <defs>
-                        <pattern
-                            id="grid-pattern"
-                            width="32"
-                            height="32"
-                            patternUnits="userSpaceOnUse"
-                        >
-                            <path
-                                d="M0 32V.5H32"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeOpacity="0.05"
-                            />
-                        </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid-pattern)" className="text-muted-foreground" />
-                </svg>
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute">
+                <AuthBackgroundShape />
             </div>
 
             <div className="w-full max-w-lg z-10 space-y-4">

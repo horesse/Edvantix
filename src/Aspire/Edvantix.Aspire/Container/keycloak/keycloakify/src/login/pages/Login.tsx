@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, GraduationCap } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Login(
@@ -94,6 +94,13 @@ export default function Login(
         >
             <Card className='w-full border-none shadow-md'>
                 <CardHeader className='gap-6'>
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10">
+                            <GraduationCap className="w-6 h-6 text-primary" />
+                        </div>
+                        <span className="text-2xl font-bold">Edvantix</span>
+                    </div>
+
                     <div>
                         <CardTitle className='mb-1.5 text-2xl'>{msg("loginAccountTitle")}</CardTitle>
                         <CardDescription className='text-base'>Менеджмент онлайн-школы</CardDescription>

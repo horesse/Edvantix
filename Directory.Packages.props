@@ -6,15 +6,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-    <PackageVersion Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.0.2" />
-    <PackageVersion Include="Aspire.Hosting.Azure.AppContainers" Version="13.0.2" />
-    <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="13.0.2" />
-    <PackageVersion Include="Aspire.Hosting.Azure.Redis" Version="13.0.2" />
-    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="13.0.2" />
+    <PackageVersion Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.AppContainers" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Redis" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="13.1.0" />
     <PackageVersion Include="Aspire.Hosting.Keycloak" Version="13.0.2-preview.1.25603.5" />
-    <PackageVersion Include="Aspire.Hosting.Qdrant" Version="13.0.2" />
-    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="13.0.2" />
-    <PackageVersion Include="Aspire.Hosting.Yarp" Version="13.0.2" />
+    <PackageVersion Include="Aspire.Hosting.Qdrant" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Yarp" Version="13.1.0" />
     <PackageVersion Include="Aspire.Keycloak.Authentication" Version="13.0.2-preview.1.25603.5" />
     <PackageVersion Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
     <PackageVersion Include="CliWrap" Version="3.10.0" />

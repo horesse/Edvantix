@@ -53,41 +53,41 @@ export default function Register(
       socialProvidersNode={
         <>
           {social?.providers !== undefined && social.providers.length !== 0 && (
-              <>
-                <div className="flex items-center gap-4">
-                  <Separator className="flex-1" />
-                  <p className="text-sm text-muted-foreground">
-                    {msg("identity-provider-login-label")}
-                  </p>
-                  <Separator className="flex-1" />
-                </div>
+            <>
+              <div className="flex items-center gap-4">
+                <Separator className="flex-1" />
+                <p className="text-sm text-muted-foreground">
+                  {msg("identity-provider-login-label")}
+                </p>
+                <Separator className="flex-1" />
+              </div>
 
-                <div className="space-y-2">
-                  {social.providers.map((p: any) => (
-                    <Button
-                      key={p.alias}
-                      variant="outline"
-                      className="w-full"
-                      asChild
-                    >
-                      <a id={`social-${p.alias}`} href={p.loginUrl}>
-                        {p.iconClasses && (
-                          <i
-                            className={`${p.iconClasses} mr-2`}
-                            aria-hidden="true"
-                          />
-                        )}
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: kcSanitize(p.displayName),
-                          }}
+              <div className="space-y-2">
+                {social.providers.map((p: any) => (
+                  <Button
+                    key={p.alias}
+                    variant="outline"
+                    className="w-full"
+                    asChild
+                  >
+                    <a id={`social-${p.alias}`} href={p.loginUrl}>
+                      {p.iconClasses && (
+                        <i
+                          className={`${p.iconClasses} mr-2`}
+                          aria-hidden="true"
                         />
-                      </a>
-                    </Button>
-                  ))}
-                </div>
-              </>
-            )}
+                      )}
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: kcSanitize(p.displayName),
+                        }}
+                      />
+                    </a>
+                  </Button>
+                ))}
+              </div>
+            </>
+          )}
         </>
       }
     >
@@ -323,7 +323,7 @@ export default function Register(
                   id="termsAccepted"
                   name="termsAccepted"
                   checked={termsAccepted}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setTermsAccepted(checked === true)
                   }
                   aria-invalid={messagesPerField.existsError("termsAccepted")}
@@ -337,8 +337,7 @@ export default function Register(
                   htmlFor="termsAccepted"
                   className="text-sm leading-relaxed cursor-pointer select-none"
                 >
-                  {msg("termsText")}{" "}
-                  <span className="text-destructive">*</span>
+                  {msg("termsText")} <span className="text-destructive">*</span>
                 </label>
               </div>
               {messagesPerField.existsError("termsAccepted") && (
@@ -359,7 +358,12 @@ export default function Register(
 
           {/* reCAPTCHA */}
           {recaptchaRequired && (
-            <div className="g-recaptcha" data-size="compact" data-sitekey={recaptchaSiteKey} data-action={recaptchaAction} />
+            <div
+              className="g-recaptcha"
+              data-size="compact"
+              data-sitekey={recaptchaSiteKey}
+              data-action={recaptchaAction}
+            />
           )}
 
           {/* Submit Button */}

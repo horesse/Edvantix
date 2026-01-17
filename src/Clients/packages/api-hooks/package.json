@@ -1,0 +1,29 @@
+{
+  "name": "@workspace/api-hooks",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=25.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.16"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@workspace/api-client": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "@workspace/types": "workspace:*",
+    "react": "^19.2.3",
+    "eslint": "^9.39.2"
+  },
+  "peerDependencies": {
+    "@workspace/api-client": "workspace:*",
+    "react": "^19.2.3"
+  },
+  "exports": {}
+}

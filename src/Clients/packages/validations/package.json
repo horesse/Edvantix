@@ -1,0 +1,21 @@
+{
+  "name": "@workspace/validations",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=25.0.0"
+  },
+  "exports": {},
+  "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.3.4"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*"
+  }
+}

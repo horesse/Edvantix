@@ -12,7 +12,7 @@ namespace Edvantix.Aspire.Extensions.Infrastructure;
 public static partial class AzureExtensions
 {
     /// <summary>
-    ///     Provisions an Azure Storage resource with BookWorm-specific configuration.
+    ///     Provisions an Azure Storage resource with Edvantix-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure Storage.</param>
     /// <returns>The configured resource builder for method chaining.</returns>
@@ -39,20 +39,21 @@ public static partial class AzureExtensions
     {
         builder.ConfigureInfrastructure(infra =>
         {
-            var resource = infra.GetProvisionableResources().OfType<StorageAccount>().Single();
+            var resource = infra
+                .GetProvisionableResources()
+                .OfType<StorageAccount>()
+                .FirstOrDefault();
+
+            if (resource is null)
+            {
+                return;
+            }
 
             resource.Sku = new() { Name = StorageSkuName.StandardLrs };
 
             resource.Location = AzureLocation.SoutheastAsia;
 
             resource.AccessTier = StorageAccountAccessTier.Cool;
-
-            resource.Tags.Add(
-                nameof(Environment),
-                builder.ApplicationBuilder.Environment.EnvironmentName
-            );
-
-            resource.Tags.Add(nameof(Projects), nameof(Edvantix));
         });
 
         return builder;
@@ -95,7 +96,12 @@ public static partial class AzureExtensions
             var resource = infra
                 .GetProvisionableResources()
                 .OfType<PostgreSqlFlexibleServer>()
-                .Single();
+                .FirstOrDefault();
+
+            if (resource is null)
+            {
+                return;
+            }
 
             resource.Sku = new() { Tier = PostgreSqlFlexibleServerSkuTier.Burstable };
 
@@ -114,20 +120,13 @@ public static partial class AzureExtensions
             };
 
             resource.Storage = new() { StorageSizeInGB = 32, AutoGrow = StorageAutoGrow.Disabled };
-
-            resource.Tags.Add(
-                nameof(Environment),
-                builder.ApplicationBuilder.Environment.EnvironmentName
-            );
-
-            resource.Tags.Add(nameof(Projects), nameof(Edvantix));
         });
 
         return builder;
     }
 
     /// <summary>
-    ///     Provisions an Azure Redis Cache resource with BookWorm-specific configuration.
+    ///     Provisions an Azure Redis Cache resource with Edvantix-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure Redis Cache.</param>
     /// <returns>The configured resource builder for method chaining.</returns>
@@ -145,13 +144,21 @@ public static partial class AzureExtensions
     ///         </item>
     ///     </list>
     /// </remarks>
-    public static IResourceBuilder<AzureRedisCacheResource> ProvisionAsService(
-        this IResourceBuilder<AzureRedisCacheResource> builder
+    public static IResourceBuilder<AzureManagedRedisResource> ProvisionAsService(
+        this IResourceBuilder<AzureManagedRedisResource> builder
     )
     {
         builder.ConfigureInfrastructure(infra =>
         {
-            var resource = infra.GetProvisionableResources().OfType<RedisResource>().Single();
+            var resource = infra
+                .GetProvisionableResources()
+                .OfType<RedisResource>()
+                .FirstOrDefault();
+
+            if (resource is null)
+            {
+                return;
+            }
 
             resource.Sku = new()
             {
@@ -161,20 +168,13 @@ public static partial class AzureExtensions
             };
 
             resource.Location = AzureLocation.SoutheastAsia;
-
-            resource.Tags.Add(
-                nameof(Environment),
-                builder.ApplicationBuilder.Environment.EnvironmentName
-            );
-
-            resource.Tags.Add(nameof(Projects), nameof(Edvantix));
         });
 
         return builder;
     }
 
     /// <summary>
-    ///     Provisions an Azure Container App Environment resource with BookWorm-specific configuration.
+    ///     Provisions an Azure Container App Environment resource with Edvantix-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure Container App Environment.</param>
     /// <remarks>
@@ -209,7 +209,12 @@ public static partial class AzureExtensions
                 var resource = infra
                     .GetProvisionableResources()
                     .OfType<ContainerAppManagedEnvironment>()
-                    .Single();
+                    .FirstOrDefault();
+
+                if (resource is null)
+                {
+                    return;
+                }
 
                 resource.WorkloadProfiles.Add(
                     new ContainerAppWorkloadProfile
@@ -220,13 +225,6 @@ public static partial class AzureExtensions
                 );
 
                 resource.Location = AzureLocation.SoutheastAsia;
-
-                resource.Tags.Add(
-                    nameof(Environment),
-                    builder.ApplicationBuilder.Environment.EnvironmentName
-                );
-
-                resource.Tags.Add(nameof(Projects), nameof(Edvantix));
             });
     }
 }

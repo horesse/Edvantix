@@ -4,11 +4,9 @@ using Edvantix.ProfileService.Features.ProfileFeature.Models;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.Mappers;
 
-public sealed class ProfileConverter
-    : ClassConverter<ProfileModel, Profile>
+public sealed class ProfileConverter : ClassConverter<ProfileModel, Profile>
 {
-    public override Profile Map(ProfileModel source) =>
-        throw new NotImplementedException();
+    public override Profile Map(ProfileModel source) => throw new NotImplementedException();
 
     public override ProfileModel Map(Profile source) =>
         new()
@@ -21,10 +19,7 @@ public sealed class ProfileConverter
             Id = source.Id,
         };
 
-    public override void SetProperties(
-        ProfileModel source,
-        Profile target
-    )
+    public override void SetProperties(ProfileModel source, Profile target)
     {
         target.UpdateGender(source.Gender);
     }

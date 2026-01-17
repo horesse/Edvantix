@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff, GraduationCap } from "lucide-react";
+import { Eye, EyeOff, GraduationCap, AlertCircle } from "lucide-react";
 import {
   Card,
   CardDescription,
@@ -152,17 +152,24 @@ export default function Login(
                     "username",
                     "password"
                   )}
+                  className={
+                    messagesPerField.existsError("username", "password")
+                      ? "border-destructive focus-visible:ring-destructive"
+                      : ""
+                  }
                 />
                 {messagesPerField.existsError("username", "password") && (
-                  <p className="text-sm text-destructive">
+                  <div className="flex items-start gap-2 text-destructive">
+                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                     <span
+                      className="text-sm"
                       dangerouslySetInnerHTML={{
                         __html: kcSanitize(
                           messagesPerField.getFirstError("username", "password")
                         ),
                       }}
                     />
-                  </p>
+                  </div>
                 )}
               </div>
             )}
@@ -179,15 +186,17 @@ export default function Login(
               />
               {usernameHidden &&
                 messagesPerField.existsError("username", "password") && (
-                  <p className="text-sm text-destructive">
+                  <div className="flex items-start gap-2 text-destructive">
+                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                     <span
+                      className="text-sm"
                       dangerouslySetInnerHTML={{
                         __html: kcSanitize(
                           messagesPerField.getFirstError("username", "password")
                         ),
                       }}
                     />
-                  </p>
+                  </div>
                 )}
             </div>
 
@@ -282,7 +291,7 @@ function PasswordInput(
         aria-invalid={hasError}
         onFocus={onFocus}
         onBlur={onBlur}
-        className="pr-10"
+        className={`pr-10 ${hasError ? "border-destructive focus-visible:ring-destructive" : ""}`}
       />
       <Button
         type="button"

@@ -22,19 +22,24 @@ public sealed class EducationLevelEntityTypeConfiguration : IEntityTypeConfigura
         builder.HasIndex(el => el.IsDeleted);
 
         builder.HasData(
-            new EducationLevel("Дошкольное образование", "preschool"),
-            new EducationLevel("Общее среднее образование", "general_secondary"),
-            new EducationLevel("Профессионально-техническое образование", "vocational_technical"),
-            new EducationLevel("Среднее специальное образование", "secondary_specialized"),
-            new EducationLevel("Высшее образование (I ступень)", "higher_bachelor"),
-            new EducationLevel("Высшее образование (II ступень)", "higher_master"),
-            new EducationLevel("Послевузовское образование", "postgraduate"),
+            new EducationLevel(1, "Дошкольное образование", "preschool"),
+            new EducationLevel(2, "Общее среднее образование", "general_secondary"),
             new EducationLevel(
+                3,
+                "Профессионально-техническое образование",
+                "vocational_technical"
+            ),
+            new EducationLevel(4, "Среднее специальное образование", "secondary_specialized"),
+            new EducationLevel(5, "Высшее образование (I ступень)", "higher_bachelor"),
+            new EducationLevel(6, "Высшее образование (II ступень)", "higher_master"),
+            new EducationLevel(7, "Послевузовское образование", "postgraduate"),
+            new EducationLevel(
+                8,
                 "Дополнительное образование детей и молодежи",
                 "additional_children"
             ),
-            new EducationLevel("Дополнительное образование взрослых", "additional_adults"),
-            new EducationLevel("Специальное образование", "special")
+            new EducationLevel(9, "Дополнительное образование взрослых", "additional_adults"),
+            new EducationLevel(10, "Специальное образование", "special")
         );
     }
 }

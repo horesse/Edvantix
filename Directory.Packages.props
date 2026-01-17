@@ -35,15 +35,9 @@
     />
 
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.AppContainers" Version="13.1.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
     <PackageVersion Include="CliWrap" Version="3.10.0" />
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.Bun" Version="13.0.1-beta.468" />
-    <PackageVersion
-      Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions"
-      Version="13.0.1-beta.468"
-    />
-    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.MailPit" Version="13.0.1-beta.468" />
     <PackageVersion Include="EFCore.NamingConventions" Version="10.0.0-rc.2" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="2.71.0" />

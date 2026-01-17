@@ -26,7 +26,7 @@
     <ProjectReference Include="..\..\Services\EntityHub\Edvantix.EntityHub.Worker\Edvantix.EntityHub.Worker.csproj" />
     <ProjectReference Include="..\..\Services\Organization\Edvantix.Company\Edvantix.Company.csproj" />
     <ProjectReference Include="..\..\Services\System\Edvantix.System\Edvantix.System.csproj" />
-    <ProjectReference Include="..\..\Services\Person\Edvantix.Person\Edvantix.Person.csproj" />
+    <ProjectReference Include="..\..\Services\Person\Edvantix.ProfileService\Edvantix.ProfileService.csproj" />
   </ItemGroup>
   <ItemGroup Label="Integrations">
     <ProjectReference

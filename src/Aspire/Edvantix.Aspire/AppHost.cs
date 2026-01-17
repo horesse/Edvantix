@@ -89,8 +89,8 @@ var systemApi = builder
     .WithKeycloak(keycloak)
     .WithFriendlyUrls();
 
-var personApi = builder
-    .AddProject<Edvantix_Person>(Services.Person)
+var profileApi = builder
+    .AddProject<Edvantix_ProfileService>(Services.Profile)
     .WithReference(personDb)
     .WaitFor(personDb)
     .WithKeycloak(keycloak)
@@ -102,7 +102,7 @@ var gateway = builder
     .WithService(entityHubApi)
     .WithService(organizationApi, true)
     .WithService(systemApi, true)
-    .WithService(personApi, true)
+    .WithService(profileApi, true)
     .Build();
 
 var turbo = builder
@@ -135,7 +135,7 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(entityHubApi)
         .WithOpenAPI(organizationApi)
         .WithOpenAPI(systemApi)
-        .WithOpenAPI(personApi);
+        .WithOpenAPI(profileApi);
 }
 
 builder.Pipeline.AddGhcrPushStep();

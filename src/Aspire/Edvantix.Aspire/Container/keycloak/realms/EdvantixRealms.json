@@ -2461,8 +2461,9 @@
       }
     ]
   },
-  "internationalizationEnabled": false,
-  "supportedLocales": [],
+  "internationalizationEnabled": true,
+  "supportedLocales": ["ru", "en"],
+  "defaultLocale": "ru",
   "authenticationFlows": [
     {
       "id": "caa2d1b8-e3c9-40f4-ba95-27364afaabbd",

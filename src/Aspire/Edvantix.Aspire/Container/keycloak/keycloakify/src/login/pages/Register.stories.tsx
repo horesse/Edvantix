@@ -4,37 +4,6 @@ import { createKcPageStory } from "../KcPageStory";
 const { KcPageStory } = createKcPageStory({ pageId: "register.ftl" });
 
 // Common social providers to avoid duplication
-const SOCIAL_PROVIDERS = [
-  {
-    loginUrl: "google",
-    alias: "google",
-    providerId: "google",
-    displayName: "Google",
-    iconClasses: "fa fa-google",
-  },
-  {
-    loginUrl: "microsoft",
-    alias: "microsoft",
-    providerId: "microsoft",
-    displayName: "Microsoft",
-    iconClasses: "fa fa-windows",
-  },
-  {
-    loginUrl: "facebook",
-    alias: "facebook",
-    providerId: "facebook",
-    displayName: "Facebook",
-    iconClasses: "fa fa-facebook",
-  },
-  {
-    loginUrl: "github",
-    alias: "github",
-    providerId: "github",
-    displayName: "Github",
-    iconClasses: "fa fa-github",
-  },
-];
-
 const meta = {
   title: "login/register.ftl",
   component: KcPageStory,
@@ -98,24 +67,6 @@ export const WithPasswordMismatch: Story = {
     />
   ),
 };
-
-export const WithPrefilledData: Story = {
-  render: () => (
-    <KcPageStory
-      kcContext={{
-        register: {
-          formData: {
-            firstName: "Иван",
-            lastName: "Иванов",
-            email: "ivan.ivanov@example.com",
-            username: "ivan.ivanov",
-          },
-        },
-      }}
-    />
-  ),
-};
-
 export const WithEmailAsUsername: Story = {
   render: () => (
     <KcPageStory
@@ -169,32 +120,6 @@ export const WithTermsError: Story = {
   ),
 };
 
-export const WithSocialProviders: Story = {
-  render: () => (
-    <KcPageStory
-      kcContext={{
-        social: {
-          displayInfo: true,
-          providers: SOCIAL_PROVIDERS,
-        },
-      }}
-    />
-  ),
-};
-
-export const WithOneSocialProvider: Story = {
-  render: () => (
-    <KcPageStory
-      kcContext={{
-        social: {
-          displayInfo: true,
-          providers: [SOCIAL_PROVIDERS[0]], // Just Google
-        },
-      }}
-    />
-  ),
-};
-
 export const WithRecaptcha: Story = {
   render: () => (
     <KcPageStory
@@ -224,28 +149,6 @@ export const WithGlobalError: Story = {
               return "Registration failed. Please try again later.";
             }
             return "";
-          },
-        },
-      }}
-    />
-  ),
-};
-
-export const CompleteScenario: Story = {
-  render: () => (
-    <KcPageStory
-      kcContext={{
-        termsAcceptanceRequired: true,
-        social: {
-          displayInfo: true,
-          providers: SOCIAL_PROVIDERS.slice(0, 2),
-        },
-        register: {
-          formData: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            username: "",
           },
         },
       }}

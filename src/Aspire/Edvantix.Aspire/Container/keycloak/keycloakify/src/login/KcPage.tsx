@@ -10,6 +10,7 @@ const UserProfileFormFields = lazy(
   () => import("keycloakify/login/UserProfileFormFields")
 );
 const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 
 const doMakeUserConfirmPassword = true;
 
@@ -24,6 +25,16 @@ export default function KcPage(props: Readonly<{ kcContext: KcContext }>) {
         if (kcContext.pageId === "login.ftl") {
           return (
             <Login
+              {...{ kcContext, i18n, classes }}
+              Template={Template}
+              doUseDefaultCss={true}
+            />
+          );
+        }
+
+        if (kcContext.pageId === "register.ftl") {
+          return (
+            <Register
               {...{ kcContext, i18n, classes }}
               Template={Template}
               doUseDefaultCss={true}

@@ -2,7 +2,7 @@ ARG NODE_VERSION=25.0.0
 FROM node:${NODE_VERSION}-slim AS base
 
 # Check https://github.com/nodejs/docker-node/tree/main#nodealpine to understand why libc6-compat might be needed
-RUN corepack enable pnpm && corepack install -g pnpm@10.27.0
+RUN corepack enable pnpm && corepack install -g pnpm@10.28.0
 WORKDIR /app
 
 # ---
@@ -10,8 +10,8 @@ FROM base AS prepare
 RUN pnpm install -g turbo@^2
 COPY . .
 # Generate a partial monorepo with a pruned lockfile for a target workspace
-# Assuming "@bookworm/storefront" is the name in the project's package.json
-RUN turbo prune @bookworm/storefront --docker
+# Assuming "@edvantix/organization" is the name in the project's package.json
+RUN turbo prune @edvantix/organization --docker
 
 # ---
 FROM base AS builder
@@ -29,7 +29,7 @@ COPY --from=prepare /app/out/full/ .
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN pnpm turbo build --filter=@bookworm/storefront
+RUN pnpm turbo build --filter=@edvantix/organization
 
 # ---
 FROM node:${NODE_VERSION}-alpine AS runner
@@ -48,13 +48,13 @@ USER nextjs
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/apps/storefront/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/storefront/.next/static ./apps/storefront/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/apps/storefront/public ./apps/storefront/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/organization/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/organization/.next/static ./apps/organization/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/organization/public ./apps/organization/public
 
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" || exit 1
 
-CMD ["node", "apps/storefront/server.js"]
+CMD ["node", "apps/organization/server.js"]

@@ -241,7 +241,6 @@ public static class KeycloakExtensions
             var keycloak = builder
                 .AddKeycloak(name)
                 .WithOtlpExporter()
-                .WithDataVolume()
                 .WithIconName("LockClosedRibbon")
                 .WithCustomTheme(_defaultLocalKeycloakName)
                 .WithImagePullPolicy(ImagePullPolicy.Always)
@@ -268,7 +267,7 @@ public static class KeycloakExtensions
                         Name = "KeycloakUrlParameter",
                         Label = "Keycloak URL",
                         InputType = InputType.Text,
-                        Value = "https://identity.bookworm.com",
+                        Value = "https://identity.edvantix.ru",
                         Description = "Enter your Keycloak server URL here",
                     }
                 );

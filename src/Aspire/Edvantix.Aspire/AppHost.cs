@@ -103,7 +103,7 @@ var gateway = builder
     .WithService(organizationApi, true)
     .WithService(systemApi, true)
     .WithService(personApi, true)
-    .WithService(keycloak);
+    .Build();
 
 var turbo = builder
     .AddTurborepoApp(

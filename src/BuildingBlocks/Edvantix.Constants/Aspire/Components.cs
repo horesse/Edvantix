@@ -2,13 +2,16 @@
 
 public static class Components
 {
-    public static readonly string Queue = nameof(Queue).ToLowerInvariant();
-    public static readonly string Redis = nameof(Redis).ToLowerInvariant();
-    public static readonly string MailPit = nameof(MailPit).ToLowerInvariant();
-    public static readonly string Postgres = nameof(Postgres).ToLowerInvariant();
-    public static readonly string KeyCloak = nameof(KeyCloak).ToLowerInvariant();
-    public static readonly string Inspector = nameof(Inspector).ToLowerInvariant();
-    public static readonly string VectorDb = nameof(VectorDb).ToLowerInvariant();
+    public const string K6 = "k6";
+    public const string Queue = "queue";
+    public const string Redis = "redis";
+    public const string MailPit = "mailpit";
+    public const string Postgres = "postgres";
+    public const string KeyCloak = "keycloak";
+    public const string Inspector = "inspector";
+    public const string VectorDb = "vectordb";
+    public const string TurboRepo = "turborepo";
+    public const string ContainerRegistry = "container-registry";
 
     public static class Database
     {

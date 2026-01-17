@@ -6,7 +6,7 @@ public sealed class EducationLevel() : Entity<long>, ISoftDelete
 {
     // EF Core требует конструктор без параметров
 
-    internal EducationLevel(string name, string code)
+    internal EducationLevel(long id, string name, string code)
         : this()
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -23,6 +23,7 @@ public sealed class EducationLevel() : Entity<long>, ISoftDelete
 
         Name = name;
         Code = code;
+        Id = id;
     }
 
     public string Name { get; private set; } = null!;

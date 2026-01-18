@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Edvantix.ProfileService.Features.EmploymentHistoryFeature;
 
-public sealed class EmploymentHistoryModelValidator : AbstractValidator<EmploymentHistoryModel>
+public sealed class Validator : AbstractValidator<EmploymentHistoryModel>
 {
-    public EmploymentHistoryModelValidator()
+    public Validator()
     {
         RuleFor(x => x.CompanyName)
             .NotEmpty()

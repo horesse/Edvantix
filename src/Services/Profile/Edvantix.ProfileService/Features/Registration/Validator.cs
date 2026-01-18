@@ -5,9 +5,9 @@ using FluentValidation;
 
 namespace Edvantix.ProfileService.Features.Registration;
 
-public sealed class RegistrationValidator : AbstractValidator<RegistrationCommand>
+public sealed class Validator : AbstractValidator<RegistrationCommand>
 {
-    public RegistrationValidator(
+    public Validator(
         IValidator<UserContactModel> validator,
         IValidator<EmploymentHistoryModel> ehValidator,
         IValidator<ProfileModel> piValidator

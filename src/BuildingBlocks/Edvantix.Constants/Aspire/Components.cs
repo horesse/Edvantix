@@ -24,7 +24,7 @@ public static class Components
             $"{nameof(Organization).ToLowerInvariant()}{Suffix}";
         public static readonly string System = $"{nameof(System).ToLowerInvariant()}{Suffix}";
 
-        public static readonly string Person = $"{nameof(Person).ToLowerInvariant()}{Suffix}";
+        public static readonly string Profile = $"{nameof(Profile).ToLowerInvariant()}{Suffix}";
     }
 
     public static class Azure

@@ -1,11 +1,11 @@
 ﻿using Edvantix.DataVault.Features.PlaygroundEntityFeature.Models;
 using FluentValidation;
 
-namespace Edvantix.DataVault.Features.PlaygroundEntityFeature.Validators;
+namespace Edvantix.DataVault.Features.PlaygroundEntityFeature;
 
-public sealed class PlaygroundEntityValidator : AbstractValidator<PlaygroundEntityModel>
+public sealed class Validator : AbstractValidator<PlaygroundEntityModel>
 {
-    public PlaygroundEntityValidator()
+    public Validator()
     {
         RuleFor(x => x.Name)
             .Must(x => !string.IsNullOrEmpty(x))

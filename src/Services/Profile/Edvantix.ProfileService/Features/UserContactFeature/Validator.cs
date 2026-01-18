@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Edvantix.ProfileService.Features.UserContactFeature;
 
-public sealed class UserContactModelValidator : AbstractValidator<UserContactModel>
+public sealed class Validator : AbstractValidator<UserContactModel>
 {
-    public UserContactModelValidator()
+    public Validator()
     {
         RuleFor(x => x.Type).NotEmpty().WithMessage("Тип контакта является обязательным полем");
 

@@ -1,15 +1,13 @@
 using Edvantix.Constants.Core;
-using Edvantix.ProfileService.Features.ProfileFeature.Models;
+using Edvantix.ProfileService.Features.FullNameFeature.Models;
 using FluentValidation;
 
-namespace Edvantix.ProfileService.Features.ProfileFeature;
+namespace Edvantix.ProfileService.Features.FullNameFeature;
 
-public sealed class ProfileModelValidator : AbstractValidator<ProfileModel>
+public sealed class Validator : AbstractValidator<FullNameModel>
 {
-    public ProfileModelValidator()
+    public Validator()
     {
-        RuleFor(x => x.Gender).IsInEnum().WithMessage("Указан некорректный пол");
-
         RuleFor(x => x.FirstName)
             .NotEmpty()
             .WithMessage("Имя является обязательным полем")

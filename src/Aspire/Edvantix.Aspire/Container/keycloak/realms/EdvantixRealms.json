@@ -482,7 +482,7 @@
           "attributes": {}
         }
       ],
-      "${CLIENT_PERSON_ID}": [
+      "${CLIENT_PROFILE_ID}": [
         {
           "id": "0c696741-e978-41bc-be6f-136f7edaeac1",
           "name": "uma_protection",
@@ -634,19 +634,19 @@
     },
     {
       "id": "fe9fbf9a-6045-44a3-a730-cc6986cd3e1e",
-      "username": "service-account-${CLIENT_PERSON_ID}",
+      "username": "service-account-${CLIENT_PROFILE_ID}",
       "emailVerified": false,
       "createdTimestamp": 1766698049617,
       "enabled": true,
       "totp": false,
-      "serviceAccountClientId": "${CLIENT_PERSON_ID}",
+      "serviceAccountClientId": "${CLIENT_PROFILE_ID}",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
         "default-roles-${REALM_NAME}"
       ],
       "clientRoles": {
-        "${CLIENT_PERSON_ID}": [
+        "${CLIENT_PROFILE_ID}": [
           "uma_protection"
         ]
       },
@@ -1375,17 +1375,17 @@
     },
     {
       "id": "df6e2df7-15be-49f9-973d-64689e2da07d",
-      "clientId": "${CLIENT_PERSON_ID}",
-      "name": "${CLIENT_PERSON_NAME}",
+      "clientId": "${CLIENT_PROFILE_ID}",
+      "name": "${CLIENT_PROFILE_NAME}",
       "description": "",
-      "rootUrl": "${CLIENT_PERSON_URL}",
-      "adminUrl": "${CLIENT_PERSON_URL_CONTAINERHOST}",
+      "rootUrl": "${CLIENT_PROFILE_URL}",
+      "adminUrl": "${CLIENT_PROFILE_URL_CONTAINERHOST}",
       "baseUrl": "/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
-      "secret": "${CLIENT_PERSON_SECRET}",
+      "secret": "${CLIENT_PROFILE_SECRET}",
       "redirectUris": [
         "*"
       ],
@@ -1442,8 +1442,8 @@
         "email"
       ],
       "optionalClientScopes": [
-        "${CLIENT_PERSON_ID}_read",
-        "${CLIENT_PERSON_ID}_write",
+        "${CLIENT_PROFILE_ID}_read",
+        "${CLIENT_PROFILE_ID}_write",
         "address",
         "phone",
         "organization",
@@ -2236,8 +2236,8 @@
     },
     {
       "id": "efc5465b-7bda-412a-ba0e-1594bad0f960",
-      "name": "${CLIENT_PERSON_ID}_read",
-      "description": "Read for ${CLIENT_PERSON_NAME}",
+      "name": "${CLIENT_PROFILE_ID}_read",
+      "description": "Read for ${CLIENT_PROFILE_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
@@ -2248,8 +2248,8 @@
     },
     {
       "id": "03f5b25c-2f97-45a5-b634-9d4cb12f7b8d",
-      "name": "${CLIENT_PERSON_ID}_write",
-      "description": "Write for ${CLIENT_PERSON_NAME}",
+      "name": "${CLIENT_PROFILE_ID}_write",
+      "description": "Write for ${CLIENT_PROFILE_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",

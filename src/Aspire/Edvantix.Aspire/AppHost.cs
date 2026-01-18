@@ -49,7 +49,7 @@ var dataVaultDb = postgres.AddDatabase(Components.Database.DataVault);
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
 var organizationDb = postgres.AddDatabase(Components.Database.Organization);
 var systemDb = postgres.AddDatabase(Components.Database.System);
-var personDb = postgres.AddDatabase(Components.Database.Person);
+var profileDb = postgres.AddDatabase(Components.Database.Profile);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -91,8 +91,8 @@ var systemApi = builder
 
 var profileApi = builder
     .AddProject<Edvantix_ProfileService>(Services.Profile)
-    .WithReference(personDb)
-    .WaitFor(personDb)
+    .WithReference(profileDb)
+    .WaitFor(profileDb)
     .WithKeycloak(keycloak)
     .WithFriendlyUrls();
 

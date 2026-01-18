@@ -24,9 +24,9 @@
     <ProjectReference Include="..\..\Services\DataVault\Edvantix.DataVault\Edvantix.DataVault.csproj" />
     <ProjectReference Include="..\..\Services\EntityHub\Edvantix.EntityHub\Edvantix.EntityHub.csproj" />
     <ProjectReference Include="..\..\Services\EntityHub\Edvantix.EntityHub.Worker\Edvantix.EntityHub.Worker.csproj" />
-    <ProjectReference Include="..\..\Services\Organization\Edvantix.Company\Edvantix.Company.csproj" />
+    <ProjectReference Include="..\..\Services\Company\Edvantix.Company\Edvantix.Company.csproj" />
     <ProjectReference Include="..\..\Services\System\Edvantix.System\Edvantix.System.csproj" />
-    <ProjectReference Include="..\..\Services\Person\Edvantix.ProfileService\Edvantix.ProfileService.csproj" />
+    <ProjectReference Include="..\..\Services\Profile\Edvantix.ProfileService\Edvantix.ProfileService.csproj" />
   </ItemGroup>
   <ItemGroup Label="Integrations">
     <ProjectReference

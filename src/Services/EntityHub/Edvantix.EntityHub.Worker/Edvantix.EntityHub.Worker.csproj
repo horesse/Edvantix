@@ -5,5 +5,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\DataVault\Edvantix.DataVault\Edvantix.DataVault.csproj" />
     <ProjectReference Include="..\..\EntityHub\Edvantix.EntityHub\Edvantix.EntityHub.csproj" />
+    <ProjectReference Include="..\..\Profile\Edvantix.ProfileService\Edvantix.ProfileService.csproj" />
+    <ProjectReference Include="..\..\Company\Edvantix.Company\Edvantix.Company.csproj" />
   </ItemGroup>
 </Project>

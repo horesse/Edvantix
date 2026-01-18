@@ -11,7 +11,7 @@ public static class Extensions
         var services = builder.Services;
 
         builder.AddAzurePostgresDbContext<ProfileContext>(
-            Components.Database.Person,
+            Components.Database.Profile,
             app =>
             {
                 if (app.Environment.IsDevelopment())

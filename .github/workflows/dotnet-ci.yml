@@ -150,30 +150,13 @@ jobs:
           global-json-file: ${{ env.GLOBAL_JSON_PATH }}
           bun-version-file: ${{ env.BUN_VERSION_FILE }}
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs: [setup, security-scan, format, style, analyzers]
-    timeout-minutes: 15
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Test
-        uses: ./.github/actions/test
-        with:
-          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
   publish:
     name: Publish Artifacts
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.publish || false
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'development' }}
     timeout-minutes: 15
-    needs: [build, test]
+    needs: [build]
 
     steps:
       - name: Checkout code

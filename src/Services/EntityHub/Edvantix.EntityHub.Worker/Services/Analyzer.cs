@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Edvantix.Chassis.Utilities.Attributes;
 using Edvantix.Constants.Other;
+using Edvantix.EntityHub.Domain.AggregatesModel.EntityGroupAggregate;
 using Edvantix.EntityHub.Domain.AggregatesModel.EntityTypeAggregate;
 using Edvantix.EntityHub.Domain.AggregatesModel.MicroserviceAggregate;
 
@@ -20,6 +21,8 @@ public sealed class Analyzer(IServiceProvider provider)
         {
             microserviceMap[name] = id;
         }
+
+        await SyncEntityGroupAsync();
 
         await Parallel.ForEachAsync(
             assemblies,
@@ -76,6 +79,23 @@ public sealed class Analyzer(IServiceProvider provider)
         await repo.SaveEntitiesAsync(token);
     }
 
+    private async Task SyncEntityGroupAsync()
+    {
+        using var repo = provider.GetRequiredService<IEntityGroupRepository>();
+        
+        var types = Enum.GetValues<EntityGroupEnum>();
+
+        foreach (var type in types)
+        {
+            if (await repo.AnyAsync(x => x.Name ==  type.ToString(), CancellationToken.None))
+                continue;
+
+            await repo.InsertAsync(new EntityGroup(type.ToString()), CancellationToken.None);
+        }
+
+        await repo.SaveEntitiesAsync(CancellationToken.None);
+    }
+    
     private async Task SyncEntityTypesAsync(
         long microserviceId,
         Assembly assembly,

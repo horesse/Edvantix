@@ -5,6 +5,7 @@ using Edvantix.Constants.Other;
 using Edvantix.EntityHub.Domain.AggregatesModel.EntityGroupAggregate;
 using Edvantix.EntityHub.Domain.AggregatesModel.EntityTypeAggregate;
 using Edvantix.EntityHub.Domain.AggregatesModel.MicroserviceAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Edvantix.EntityHub.Worker.Services;
 
@@ -81,13 +82,14 @@ public sealed class Analyzer(IServiceProvider provider)
 
     private async Task SyncEntityGroupAsync()
     {
-        using var repo = provider.GetRequiredService<IEntityGroupRepository>();
-        
+        var localProvider = provider.CreateScope().ServiceProvider;
+        using var repo = localProvider.GetRequiredService<IEntityGroupRepository>();
+
         var types = Enum.GetValues<EntityGroupEnum>();
 
         foreach (var type in types)
         {
-            if (await repo.AnyAsync(x => x.Name ==  type.ToString(), CancellationToken.None))
+            if (await repo.AnyAsync(x => x.Name == type.ToString(), CancellationToken.None))
                 continue;
 
             await repo.InsertAsync(new EntityGroup(type.ToString()), CancellationToken.None);
@@ -95,7 +97,7 @@ public sealed class Analyzer(IServiceProvider provider)
 
         await repo.SaveEntitiesAsync(CancellationToken.None);
     }
-    
+
     private async Task SyncEntityTypesAsync(
         long microserviceId,
         Assembly assembly,
@@ -104,6 +106,12 @@ public sealed class Analyzer(IServiceProvider provider)
     {
         var localProvider = provider.CreateScope().ServiceProvider;
         using var repo = localProvider.GetRequiredService<IEntityTypeRepository>();
+
+        using var groupRepo = localProvider.GetRequiredService<IEntityGroupRepository>();
+
+        var groups = await groupRepo
+            .GetAsQueryable()
+            .ToDictionaryAsync(c => c.Name, c => c.Id, token);
 
         var publicModels = assembly
             .GetTypes()
@@ -142,13 +150,18 @@ public sealed class Analyzer(IServiceProvider provider)
                 )
                     continue;
 
-                existingEntity.Update(model.Name, model.Description, (long)model.Type);
+                existingEntity.Update(model.Name, model.Description, groups[model.Type.ToString()]);
                 toUpdate.Add(existingEntity);
             }
             else
             {
                 toInsert.Add(
-                    new EntityType(model.Name, model.Description, microserviceId, (long)model.Type)
+                    new EntityType(
+                        model.Name,
+                        model.Description,
+                        microserviceId,
+                        groups[model.Type.ToString()]
+                    )
                 );
             }
         }

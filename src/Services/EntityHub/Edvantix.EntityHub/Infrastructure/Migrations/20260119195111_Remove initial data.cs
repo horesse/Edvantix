@@ -12,25 +12,13 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "entity_group",
-                keyColumn: "id",
-                keyValue: 1L);
+            migrationBuilder.DeleteData(table: "entity_group", keyColumn: "id", keyValue: 1L);
 
-            migrationBuilder.DeleteData(
-                table: "entity_group",
-                keyColumn: "id",
-                keyValue: 2L);
+            migrationBuilder.DeleteData(table: "entity_group", keyColumn: "id", keyValue: 2L);
 
-            migrationBuilder.DeleteData(
-                table: "entity_group",
-                keyColumn: "id",
-                keyValue: 3L);
+            migrationBuilder.DeleteData(table: "entity_group", keyColumn: "id", keyValue: 3L);
 
-            migrationBuilder.DeleteData(
-                table: "entity_group",
-                keyColumn: "id",
-                keyValue: 4L);
+            migrationBuilder.DeleteData(table: "entity_group", keyColumn: "id", keyValue: 4L);
         }
 
         /// <inheritdoc />
@@ -44,8 +32,9 @@ namespace Edvantix.EntityHub.Infrastructure.Migrations
                     { 1L, "System" },
                     { 2L, "Hidden" },
                     { 3L, "Other" },
-                    { 4L, "Reference" }
-                });
+                    { 4L, "Reference" },
+                }
+            );
         }
     }
 }

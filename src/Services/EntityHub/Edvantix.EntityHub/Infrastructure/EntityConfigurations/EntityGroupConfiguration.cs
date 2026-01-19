@@ -18,10 +18,5 @@ public sealed class EntityGroupConfiguration : IEntityTypeConfiguration<EntityGr
             .IsRequired()
             .HasMaxLength(DataSchemaLength.Large)
             .HasComment("Наименование группы сущностей");
-
-        builder.HasData([
-            .. Enum.GetValues<EntityGroupEnum>()
-                .Select(x => new EntityGroup { Id = (long)x, Name = x.ToString() }),
-        ]);
     }
 }

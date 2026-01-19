@@ -11,38 +11,26 @@
     <PackageVersion Include="Aspire.Hosting.Azure.Redis" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Keycloak" Version="$(AspireUnstableVersion)" />
-    <PackageVersion Include="Aspire.Hosting.OpenAI" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Qdrant" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Yarp" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="$(AspireVersion)" />
     <!-- Client -->
     <PackageVersion Include="Aspire.Azure.Npgsql" Version="$(AspireVersion)" />
-    <PackageVersion
-      Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL"
-      Version="$(AspireVersion)"
-    />
+    <PackageVersion Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Keycloak.Authentication" Version="$(AspireUnstableVersion)" />
     <!-- Community Toolkit -->
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.MailPit" Version="$(ToolKitVersion)" />
-    <PackageVersion
-      Include="CommunityToolkit.Aspire.Hosting.McpInspector"
-      Version="$(ToolKitVersion)"
-    />
-    <PackageVersion
-      Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions"
-      Version="$(ToolKitVersion)"
-    />
-
+    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.McpInspector" Version="$(ToolKitVersion)" />
+    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions" Version="$(ToolKitVersion)" />
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
     <PackageVersion Include="CliWrap" Version="3.10.0" />
-    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.Bun" Version="13.0.1-beta.468" />
-    <PackageVersion Include="EFCore.NamingConventions" Version="10.0.0-rc.2" />
+    <PackageVersion Include="EFCore.NamingConventions" Version="10.0.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="2.71.0" />
     <PackageVersion Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.71.0" />
-    <PackageVersion Include="Grpc.Core.Api" Version="2.71.0" />
+    <PackageVersion Include="Grpc.Core.Api" Version="2.76.0" />
     <PackageVersion Include="Grpc.Tools" Version="2.76.0" />
     <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="9.0.0-develop.27" />
     <PackageVersion Include="MassTransit.RabbitMQ" Version="8.5.7" />
@@ -62,7 +50,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
     <PackageVersion Include="Refit.HttpClientFactory" Version="9.0.2" />
-    <PackageVersion Include="Scalar.Aspire" Version="0.8.13" />
+    <PackageVersion Include="Scalar.Aspire" Version="0.8.20" />
     <PackageVersion Include="Scrutor" Version="7.0.0" />
   </ItemGroup>
 </Project>

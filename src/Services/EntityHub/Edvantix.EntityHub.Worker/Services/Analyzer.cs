@@ -2,8 +2,10 @@
 using System.Runtime.CompilerServices;
 using Edvantix.Chassis.Utilities.Attributes;
 using Edvantix.Constants.Other;
+using Edvantix.EntityHub.Domain.AggregatesModel.EntityGroupAggregate;
 using Edvantix.EntityHub.Domain.AggregatesModel.EntityTypeAggregate;
 using Edvantix.EntityHub.Domain.AggregatesModel.MicroserviceAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Edvantix.EntityHub.Worker.Services;
 
@@ -11,8 +13,6 @@ file record struct EntityTypeDto(string Name, string Description, EntityGroupEnu
 
 public sealed class Analyzer(IServiceProvider provider)
 {
-    private readonly IServiceProvider _localProvider = provider.CreateScope().ServiceProvider;
-
     public async Task AnalyzeAssemblies(CancellationToken token)
     {
         var assemblies = ProjectAssembly.Assemblies;
@@ -22,6 +22,8 @@ public sealed class Analyzer(IServiceProvider provider)
         {
             microserviceMap[name] = id;
         }
+
+        await SyncEntityGroupAsync();
 
         await Parallel.ForEachAsync(
             assemblies,
@@ -44,7 +46,8 @@ public sealed class Analyzer(IServiceProvider provider)
         [EnumeratorCancellation] CancellationToken token
     )
     {
-        using var repo = _localProvider.GetRequiredService<IMicroserviceRepository>();
+        var localProvider = provider.CreateScope().ServiceProvider;
+        using var repo = localProvider.GetRequiredService<IMicroserviceRepository>();
 
         var existing = await repo.GetAllAsync(token);
         var existingDict = existing.ToDictionary(x => x.Name, x => x.Id);
@@ -77,15 +80,38 @@ public sealed class Analyzer(IServiceProvider provider)
         await repo.SaveEntitiesAsync(token);
     }
 
+    private async Task SyncEntityGroupAsync()
+    {
+        var localProvider = provider.CreateScope().ServiceProvider;
+        using var repo = localProvider.GetRequiredService<IEntityGroupRepository>();
+
+        var types = Enum.GetValues<EntityGroupEnum>();
+
+        foreach (var type in types)
+        {
+            if (await repo.AnyAsync(x => x.Name == type.ToString(), CancellationToken.None))
+                continue;
+
+            await repo.InsertAsync(new EntityGroup(type.ToString()), CancellationToken.None);
+        }
+
+        await repo.SaveEntitiesAsync(CancellationToken.None);
+    }
+
     private async Task SyncEntityTypesAsync(
         long microserviceId,
         Assembly assembly,
         CancellationToken token
     )
     {
-        using var scope = _localProvider.CreateScope();
+        var localProvider = provider.CreateScope().ServiceProvider;
+        using var repo = localProvider.GetRequiredService<IEntityTypeRepository>();
 
-        var repo = scope.ServiceProvider.GetRequiredService<IEntityTypeRepository>();
+        using var groupRepo = localProvider.GetRequiredService<IEntityGroupRepository>();
+
+        var groups = await groupRepo
+            .GetAsQueryable()
+            .ToDictionaryAsync(c => c.Name, c => c.Id, token);
 
         var publicModels = assembly
             .GetTypes()
@@ -124,13 +150,18 @@ public sealed class Analyzer(IServiceProvider provider)
                 )
                     continue;
 
-                existingEntity.Update(model.Name, model.Description, (long)model.Type);
+                existingEntity.Update(model.Name, model.Description, groups[model.Type.ToString()]);
                 toUpdate.Add(existingEntity);
             }
             else
             {
                 toInsert.Add(
-                    new EntityType(model.Name, model.Description, microserviceId, (long)model.Type)
+                    new EntityType(
+                        model.Name,
+                        model.Description,
+                        microserviceId,
+                        groups[model.Type.ToString()]
+                    )
                 );
             }
         }

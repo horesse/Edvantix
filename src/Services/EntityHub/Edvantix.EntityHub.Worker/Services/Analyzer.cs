@@ -11,8 +11,6 @@ file record struct EntityTypeDto(string Name, string Description, EntityGroupEnu
 
 public sealed class Analyzer(IServiceProvider provider)
 {
-    private readonly IServiceProvider _localProvider = provider.CreateScope().ServiceProvider;
-
     public async Task AnalyzeAssemblies(CancellationToken token)
     {
         var assemblies = ProjectAssembly.Assemblies;
@@ -44,7 +42,8 @@ public sealed class Analyzer(IServiceProvider provider)
         [EnumeratorCancellation] CancellationToken token
     )
     {
-        using var repo = _localProvider.GetRequiredService<IMicroserviceRepository>();
+        var localProvider = provider.CreateScope().ServiceProvider;
+        using var repo = localProvider.GetRequiredService<IMicroserviceRepository>();
 
         var existing = await repo.GetAllAsync(token);
         var existingDict = existing.ToDictionary(x => x.Name, x => x.Id);
@@ -83,9 +82,8 @@ public sealed class Analyzer(IServiceProvider provider)
         CancellationToken token
     )
     {
-        using var scope = _localProvider.CreateScope();
-
-        var repo = scope.ServiceProvider.GetRequiredService<IEntityTypeRepository>();
+        var localProvider = provider.CreateScope().ServiceProvider;
+        using var repo = localProvider.GetRequiredService<IEntityTypeRepository>();
 
         var publicModels = assembly
             .GetTypes()

@@ -1,7 +1,7 @@
 ﻿using Edvantix.ProfileService.Features.ProfileFeature.Models;
 using FluentValidation;
 
-namespace Edvantix.ProfileService.Features.Registration;
+namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
 public sealed class Validator : AbstractValidator<RegistrationCommand>
 {

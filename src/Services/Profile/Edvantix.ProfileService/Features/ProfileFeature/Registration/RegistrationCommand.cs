@@ -1,17 +1,12 @@
 ﻿using System.Security.Claims;
-using Edvantix.Chassis.Converter;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Constants.Other;
-using Edvantix.ProfileService.Domain.AggregatesModel.ContactAggregate;
-using Edvantix.ProfileService.Domain.AggregatesModel.EmploymentHistoryAggregate;
 using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate;
-using Edvantix.ProfileService.Features.EmploymentHistoryFeature.Models;
 using Edvantix.ProfileService.Features.ProfileFeature.Models;
-using Edvantix.ProfileService.Features.UserContactFeature.Models;
 using MediatR;
 
-namespace Edvantix.ProfileService.Features.Registration;
+namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
 public sealed record RegistrationCommand(Gender Gender, ProfileModel Profile) : IRequest<long>;
 

@@ -1,15 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+
+import { usePathname } from "next/navigation";
+
 import {
   BookOpen,
+  Calendar,
+  FileText,
   GraduationCap,
   Home,
   Settings,
   Users,
-  Calendar,
-  FileText,
-} from "lucide-react"
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -18,12 +21,11 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
-} from "@workspace/ui/components/sidebar"
-import { usePathname } from "next/navigation"
+} from "@workspace/ui/components/sidebar";
 
 // Меню навигации
 const navItems = [
@@ -57,7 +59,7 @@ const navItems = [
     url: "/reports",
     icon: FileText,
   },
-]
+];
 
 const settingsItems = [
   {
@@ -65,10 +67,10 @@ const settingsItems = [
     url: "/settings",
     icon: Settings,
   },
-]
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -77,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <GraduationCap className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -123,5 +125,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

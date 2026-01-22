@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useSearchParams } from "next/navigation";
 
 import { Loader2 } from "lucide-react";
@@ -25,7 +26,9 @@ export default function LoginPage() {
   return (
     <div className="space-y-4 text-center">
       <Loader2 className="text-primary mx-auto size-12 animate-spin" />
-      <h1 className="text-2xl font-semibold">Перенаправление на страницу входа...</h1>
+      <h1 className="text-2xl font-semibold">
+        Перенаправление на страницу входа...
+      </h1>
       <p className="text-muted-foreground">
         Пожалуйста, подождите, пока мы перенаправим вас на страницу авторизации.
       </p>

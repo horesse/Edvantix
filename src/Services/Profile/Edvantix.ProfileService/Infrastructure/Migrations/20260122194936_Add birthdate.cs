@@ -16,15 +16,14 @@ namespace Edvantix.ProfileService.Infrastructure.Migrations
                 table: "profile",
                 type: "date",
                 nullable: false,
-                defaultValue: new DateOnly(1, 1, 1));
+                defaultValue: new DateOnly(1, 1, 1)
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "birth_date",
-                table: "profile");
+            migrationBuilder.DropColumn(name: "birth_date", table: "profile");
         }
     }
 }

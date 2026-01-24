@@ -60,7 +60,7 @@ public static class Extensions
         services.AddExceptionHandler<NotFoundExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-        
+
         services.AddSingleton(
             new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
         );

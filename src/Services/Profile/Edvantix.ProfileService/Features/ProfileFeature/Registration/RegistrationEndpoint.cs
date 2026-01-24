@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Edvantix.ProfileService.Features.Registration;
+namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
 public class RegistrationEndpoint : IEndpoint<Created<long>, RegistrationCommand, ISender>
 {

@@ -61,6 +61,10 @@ public static class Extensions
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
+        services.AddSingleton(
+            new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
+        );
+
         services.AddApiFeature();
 
         services.AddMediatR(cfg =>

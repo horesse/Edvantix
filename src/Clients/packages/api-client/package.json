@@ -21,5 +21,9 @@
   "peerDependencies": {
     "@workspace/types": "workspace:*"
   },
-  "exports": {}
+  "exports": {
+    "./client": "./src/client.ts",
+    "./config": "./src/config.ts",
+    "./profile/*": "./src/profile/*.ts"
+  }
 }

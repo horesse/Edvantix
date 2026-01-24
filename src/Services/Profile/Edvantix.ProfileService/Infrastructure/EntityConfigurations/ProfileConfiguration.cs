@@ -16,6 +16,8 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 
         builder.Property(p => p.Gender).IsRequired().HasConversion<int>();
 
+        builder.Property(p => p.BirthDate).IsRequired();
+
         builder.HasIndex(p => p.AccountId).IsUnique();
 
         builder.HasQueryFilter(p => !p.IsDeleted);

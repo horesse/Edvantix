@@ -1,16 +1,17 @@
-﻿import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+﻿import type { UseQueryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import profileApiClient from "@workspace/api-client/profile/profiles";
-import { OwnProfile } from "@workspace/types/profile";
+import type { OwnProfile } from "@workspace/types/profile";
 
 import { profileKeys } from "../keys";
 
-export default function UseOwnProfile(
+export default function useOwnProfile(
   options?: Omit<UseQueryOptions<OwnProfile>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: profileKeys.profile(),
-    queryFn: () => profileApiClient.profile(),
+    queryFn: () => profileApiClient.getProfile(),
     ...options,
   });
 }

@@ -10,16 +10,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.90.16"
+    "@tanstack/react-query": "^5.90.20"
   },
   "devDependencies": {
-    "@types/react": "^19.2.7",
+    "@types/react": "^19.2.9",
     "@workspace/api-client": "workspace:*",
     "@workspace/eslint-config": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
     "@workspace/types": "workspace:*",
-    "react": "^19.2.3",
-    "eslint": "^9.39.2"
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9.39.2",
+    "react": "^19.2.3"
   },
   "peerDependencies": {
     "@workspace/api-client": "workspace:*",

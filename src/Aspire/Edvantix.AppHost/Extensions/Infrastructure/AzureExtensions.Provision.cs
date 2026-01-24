@@ -7,7 +7,7 @@ using Azure.Provisioning.Redis;
 using Azure.Provisioning.Storage;
 using RedisResource = Azure.Provisioning.Redis.RedisResource;
 
-namespace Edvantix.Aspire.Extensions.Infrastructure;
+namespace Edvantix.AppHost.Extensions.Infrastructure;
 
 public static partial class AzureExtensions
 {

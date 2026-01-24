@@ -1,7 +1,7 @@
 ﻿using Edvantix.Constants.Aspire;
 using Edvantix.Constants.Core;
 
-namespace Edvantix.Aspire.Extensions.Network;
+namespace Edvantix.AppHost.Extensions.Network;
 
 public static class UrlExtensions
 {

@@ -47,7 +47,36 @@
 ## Constitution Check
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+### Code Quality Gate
+- [ ] Code compiles without warnings
+- [ ] Static analysis passes (CSharpier/ESLint)
+- [ ] Public APIs documented
+- [ ] DDD patterns followed
+- [ ] No TypeScript `any` types
+- [ ] Nullable reference types handled
+
+### Testing Gate
+- [ ] Tests written before implementation
+- [ ] Test naming convention followed
+- [ ] Coverage targets met (85% domain/application)
+- [ ] Contract tests for APIs
+- [ ] Integration tests for aggregates
+
+### UX Consistency Gate
+- [ ] Design system followed
+- [ ] Keyboard accessibility verified
+- [ ] WCAG 2.1 AA compliance checked
+- [ ] Error messages user-friendly
+- [ ] Loading states implemented
+- [ ] Responsive design validated
+
+### Performance Gate
+- [ ] API latency under 200ms (p95)
+- [ ] Database queries under 100ms
+- [ ] LCP under 2.5s
+- [ ] TTI under 3.5s
+- [ ] No blocking async calls
+- [ ] Graceful degradation implemented
 
 ## Project Structure
 
@@ -209,4 +238,4 @@ ios/ or android/
 - [ ] Complexity deviations documented
 
 ---
-*Based on Constitution v2.1.1 - See `/memory/constitution.md`*
+*Based on Constitution v1.0.0 - See `.specify/memory/constitution.md`*

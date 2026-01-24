@@ -17,6 +17,7 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
     public Profile(
         Guid accountId,
         Gender gender,
+        DateOnly birthDate,
         string firstName,
         string lastName,
         string? middleName = null
@@ -28,11 +29,13 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
 
         AccountId = accountId;
         Gender = gender;
+        BirthDate = birthDate;
         FullName = new FullName(firstName, lastName, middleName);
     }
 
     public Guid AccountId { get; private set; }
     public Gender Gender { get; private set; }
+    public DateOnly BirthDate { get; private set; }
 
     [Include]
     public FullName FullName { get; private set; } = null!;

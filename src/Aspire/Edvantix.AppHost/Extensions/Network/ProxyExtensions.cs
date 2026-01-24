@@ -17,6 +17,10 @@ public static class ProxyExtensions
             IReadOnlyList<Service> services
         )
         {
+            // In dev mode, use HTTP endpoints to avoid SSL certificate validation issues
+            // See: https://github.com/dotnet/aspire/issues/10333
+            var useHttp = builder.ExecutionContext.IsRunMode;
+
             var yarp = builder
                 .AddYarp(Services.Gateway)
                 .WithHttpsDeveloperCertificate()
@@ -25,10 +29,15 @@ public static class ProxyExtensions
                 {
                     foreach (var service in services)
                     {
-                        var routeBuilder = yarpBuilder.AddRoute(
-                            $"/{service.Name}/{{**remainder}}",
-                            service.Resource
-                        );
+                        var routeBuilder = useHttp
+                            ? yarpBuilder.AddRoute(
+                                $"/{service.Name}/{{**remainder}}",
+                                service.Resource.GetEndpoint("http")
+                            )
+                            : yarpBuilder.AddRoute(
+                                $"/{service.Name}/{{**remainder}}",
+                                service.Resource
+                            );
 
                         if (service.UseProtobuf)
                         {

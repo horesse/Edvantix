@@ -8,6 +8,7 @@ import {
 import { AppSidebar } from "@/components/app-sidebar";
 import { AuthGuard } from "@/components/auth-guard";
 import { Header } from "@/components/header";
+import { ProfileGuard } from "@/components/profile-guard";
 
 export default function MainLayout({
   children,
@@ -16,15 +17,17 @@ export default function MainLayout({
 }) {
   return (
     <AuthGuard>
-      <SidebarProvider>
-        <AppSidebar variant="inset" />
-        <SidebarInset>
-          <Header />
-          <main className="flex flex-1 flex-col gap-4 p-4" id="main-content">
-            {children}
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
+      <ProfileGuard>
+        <SidebarProvider>
+          <AppSidebar variant="inset" />
+          <SidebarInset>
+            <Header />
+            <main className="flex flex-1 flex-col gap-4 p-4" id="main-content">
+              {children}
+            </main>
+          </SidebarInset>
+        </SidebarProvider>
+      </ProfileGuard>
     </AuthGuard>
   );
 }

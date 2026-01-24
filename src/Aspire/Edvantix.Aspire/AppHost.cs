@@ -9,6 +9,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 builder.AddAzureContainerAppEnvironment(Components.Azure.ContainerApp).ProvisionAsService();
 
+var registry = builder.AddContainerRegistry();
+
 var postgres = builder
     .AddAzurePostgresFlexibleServer(Components.Postgres)
     .WithPasswordAuthentication()
@@ -60,6 +62,7 @@ var dataVaultApi = builder
     .WithReference(dataVaultDb)
     .WaitFor(dataVaultDb)
     .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
 var entityHubApi = builder
@@ -67,12 +70,14 @@ var entityHubApi = builder
     .WithReference(entityHubDb)
     .WaitFor(entityHubDb)
     .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
 builder
     .AddProject<Edvantix_EntityHub_Worker>(Services.EntityHubWorker)
     .WaitFor(entityHubApi)
     .WithReference(entityHubDb)
+    .WithContainerRegistry(registry)
     .WaitFor(entityHubDb);
 
 var organizationApi = builder
@@ -80,6 +85,7 @@ var organizationApi = builder
     .WithReference(organizationDb)
     .WaitFor(organizationDb)
     .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
 var systemApi = builder
@@ -87,6 +93,7 @@ var systemApi = builder
     .WithReference(systemDb)
     .WaitFor(systemDb)
     .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
 var profileApi = builder
@@ -94,6 +101,7 @@ var profileApi = builder
     .WithReference(profileDb)
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
 var gateway = builder
@@ -137,7 +145,5 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(systemApi)
         .WithOpenAPI(profileApi);
 }
-
-builder.Pipeline.AddGhcrPushStep();
 
 await builder.Build().RunAsync();

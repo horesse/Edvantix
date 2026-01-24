@@ -1,6 +1,6 @@
-using Edvantix.Aspire.Extensions.Infrastructure;
-using Edvantix.Aspire.Extensions.Network;
-using Edvantix.Aspire.Extensions.Security;
+using Edvantix.AppHost.Extensions.Infrastructure;
+using Edvantix.AppHost.Extensions.Network;
+using Edvantix.AppHost.Extensions.Security;
 using Edvantix.Constants.Aspire;
 using Edvantix.Constants.Core;
 using Projects;

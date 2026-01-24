@@ -2,7 +2,7 @@
 using Aspire.Hosting.Yarp.Transforms;
 using Edvantix.Constants.Aspire;
 
-namespace Edvantix.Aspire.Extensions.Network;
+namespace Edvantix.AppHost.Extensions.Network;
 
 public static class ProxyExtensions
 {

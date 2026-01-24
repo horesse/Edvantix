@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Scalar.Aspire;
 
-namespace Edvantix.Aspire.Extensions.Infrastructure;
+namespace Edvantix.AppHost.Extensions.Infrastructure;
 
 public static class ScalarExtensions
 {

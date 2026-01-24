@@ -1,7 +1,7 @@
 ﻿using Edvantix.Constants.Aspire;
 using Edvantix.Constants.Core;
 
-namespace Edvantix.Aspire.Extensions.Security;
+namespace Edvantix.AppHost.Extensions.Security;
 
 public static class KeycloakExtensions
 {

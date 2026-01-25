@@ -3,8 +3,20 @@ import axios, { type AxiosInstance, type AxiosResponse } from "axios";
 import axiosConfig from "./config";
 import { AxiosRequestConfig } from "./global";
 
+type TokenProvider = () => Promise<string | null>;
+
 export default class ApiClient {
   private readonly client: AxiosInstance;
+
+  private static tokenProvider: TokenProvider | null = null;
+
+  /**
+   * Устанавливает глобальный провайдер токена авторизации.
+   * Вызывается один раз при инициализации приложения.
+   */
+  public static setTokenProvider(provider: TokenProvider): void {
+    ApiClient.tokenProvider = provider;
+  }
 
   constructor(config = axiosConfig) {
     const axiosConfigs = "baseURL" in config ? config : axiosConfig;
@@ -21,7 +33,15 @@ export default class ApiClient {
 
   private setupInterceptors(instance: AxiosInstance): AxiosInstance {
     instance.interceptors.request.use(
-      async (config) => config,
+      async (config) => {
+        if (ApiClient.tokenProvider) {
+          const token = await ApiClient.tokenProvider();
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
+        }
+        return config;
+      },
       (error) => {
         console.error(`[request error] [${JSON.stringify(error)}]`);
         return Promise.reject(new Error(error));

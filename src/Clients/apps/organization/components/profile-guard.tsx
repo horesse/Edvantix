@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 
-import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 import useOwnProfile from "@workspace/api-hooks/profiles/useOwnProfile";
@@ -45,7 +44,9 @@ export function ProfileGuard({ children }: { children: React.ReactNode }) {
                 Пожалуйста, подождите...
               </p>
             </div>
-            <span className="sr-only">Загрузка профиля, пожалуйста, подождите</span>
+            <span className="sr-only">
+              Загрузка профиля, пожалуйста, подождите
+            </span>
           </CardContent>
         </Card>
       </div>
@@ -75,7 +76,9 @@ export function ProfileGuard({ children }: { children: React.ReactNode }) {
                   Перенаправление на страницу регистрации профиля...
                 </p>
               </div>
-              <span className="sr-only">Перенаправление на страницу регистрации</span>
+              <span className="sr-only">
+                Перенаправление на страницу регистрации
+              </span>
             </CardContent>
           </Card>
         </div>

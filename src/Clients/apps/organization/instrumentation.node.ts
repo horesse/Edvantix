@@ -18,24 +18,32 @@ function parseOtlpHeaders(headerString: string): Record<string, string> {
     );
 }
 
-const otlpEndpoint = `${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces`;
+const otlpBaseEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 
-const additionalHeaders = process.env.OTEL_EXPORTER_OTLP_HEADERS
-  ? parseOtlpHeaders(process.env.OTEL_EXPORTER_OTLP_HEADERS)
-  : {};
+if (!otlpBaseEndpoint) {
+  console.warn(
+    "OTEL_EXPORTER_OTLP_ENDPOINT is not set. Skipping OpenTelemetry instrumentation.",
+  );
+} else {
+  const otlpEndpoint = `${otlpBaseEndpoint}/v1/traces`;
 
-const exporterHeaders = {
-  "Content-Type": "application/x-protobuf",
-  ...additionalHeaders,
-};
+  const additionalHeaders = process.env.OTEL_EXPORTER_OTLP_HEADERS
+    ? parseOtlpHeaders(process.env.OTEL_EXPORTER_OTLP_HEADERS)
+    : {};
 
-const exporter = new OTLPTraceExporter({
-  url: otlpEndpoint,
-  headers: exporterHeaders,
-});
+  const exporterHeaders = {
+    "Content-Type": "application/x-protobuf",
+    ...additionalHeaders,
+  };
 
-const sdk = new NodeSDK({
-  spanProcessors: [new SimpleSpanProcessor(exporter)],
-});
+  const exporter = new OTLPTraceExporter({
+    url: otlpEndpoint,
+    headers: exporterHeaders,
+  });
 
-sdk.start();
+  const sdk = new NodeSDK({
+    spanProcessors: [new SimpleSpanProcessor(exporter)],
+  });
+
+  sdk.start();
+}

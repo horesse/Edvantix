@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@workspace/ui/components/input";
 import { RadioGroup, RadioGroupItem } from "@workspace/ui/components/radio-group";
 import { Gender } from "@workspace/types/profile";
-import { type RegisterProfileInput, registerProfileSchema } from "@workspace/validations/profile/registration";
+// import { type RegisterProfileInput, registerProfileSchema } from "@workspace/validations/profile/registration";
 
 const STEPS = [
   { id: 1, title: "Основная информация", description: "Имя и фамилия" },

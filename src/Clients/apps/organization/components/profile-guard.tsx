@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 import useOwnProfile from "@workspace/api-hooks/profiles/useOwnProfile";

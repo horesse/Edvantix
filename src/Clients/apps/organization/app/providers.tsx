@@ -14,13 +14,14 @@ import { getQueryClient } from "@/lib/query-client";
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
-  useEffect(() => {
     const gatewayUrl =
-      env.NEXT_PUBLIC_GATEWAY_HTTPS || env.NEXT_PUBLIC_GATEWAY_HTTP;
+        env.NEXT_PUBLIC_GATEWAY_HTTPS || env.NEXT_PUBLIC_GATEWAY_HTTP;
+  
+  useEffect(() => {
     if (!gatewayUrl && process.env.NODE_ENV === "development") {
       initMocks();
     }
-  }, []);
+  }, [gatewayUrl]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -32,7 +33,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         enableColorScheme
       >
         <div className="pb-16 md:pb-0">{children}</div>
-        <Analytics />
+        {/*<Analytics />*/}
       </NextThemesProvider>
     </QueryClientProvider>
   );

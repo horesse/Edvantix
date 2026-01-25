@@ -1,29 +1,23 @@
-import { useState } from "react";
+"use client";
+
+import { useCallback } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { authClient } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
 
-type UseLogoutReturn = {
-  logout: () => Promise<void>;
-  isLoggingOut: boolean;
-};
-
-export function useLogout(): UseLogoutReturn {
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+export function useLogout() {
   const router = useRouter();
 
-  const logout = async () => {
-    setIsLoggingOut(true);
+  const logout = useCallback(async () => {
+    try {
+      await signOut();
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  }, [router]);
 
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/");
-        },
-      },
-    });
-  };
-
-  return { logout, isLoggingOut };
+  return { logout };
 }

@@ -1,32 +1,27 @@
 import Link from "next/link";
 
-import { BookOpen, Home } from "lucide-react";
-
 import { Button } from "@workspace/ui/components/button";
 
 export default function NotFound() {
   return (
-    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
-      <div className="flex flex-col items-center justify-center px-4 py-8 text-center">
-        <h2 className="mb-6 text-5xl font-semibold">Whoops!</h2>
-        <h3 className="mb-1.5 text-3xl font-semibold">Something went wrong</h3>
-        <p className="text-muted-foreground mb-6 max-w-sm">
-          The page you&apos;re looking for isn&apos;t found, we suggest you back
-          to home.
-        </p>
-        <Button asChild size="lg" className="rounded-lg text-base">
-          <a href="#">Back to home page</a>
-        </Button>
-      </div>
+    <div className="bg-background flex min-h-screen items-center justify-center px-4">
+      <div className="space-y-6 text-center">
+        <div className="space-y-2">
+          <h1 className="text-foreground text-6xl font-bold">404</h1>
+          <h2 className="text-foreground/80 text-2xl font-semibold">
+            Page Not Found
+          </h2>
+          <p className="text-foreground/60 max-w-md">
+            The page you&apos;re looking for doesn&apos;t exist or has been
+            moved. Let&apos;s get you back on track.
+          </p>
+        </div>
 
-      {/* Right Section: Illustration */}
-      <div className="relative max-h-screen w-full p-2 max-lg:hidden">
-        <div className="h-full w-full rounded-2xl bg-black"></div>
-        <img
-          src="https://cdn.shadcnstudio.com/ss-assets/blocks/marketing/error/image-1.png"
-          alt="404 illustration"
-          className="absolute top-1/2 left-1/2 h-[clamp(260px,25vw,406px)] -translate-x-1/2 -translate-y-1/2"
-        />
+        <div className="flex justify-center gap-3">
+          <Button asChild>
+            <Link href="/">Go to Dashboard</Link>
+          </Button>
+        </div>
       </div>
     </div>
   );

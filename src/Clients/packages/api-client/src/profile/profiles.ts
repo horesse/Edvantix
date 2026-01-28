@@ -1,4 +1,7 @@
-﻿import type { OwnProfile, RegisterProfileRequest } from "@workspace/types/profile";
+﻿import type {
+  OwnProfile,
+  RegisterProfileRequest,
+} from "@workspace/types/profile";
 
 import ApiClient from "../client";
 
@@ -10,12 +13,19 @@ class ProfileApiClient {
   }
 
   public async getProfile(): Promise<OwnProfile> {
-    const response = await this.client.get<OwnProfile>(`/profile/api/v1/profile`);
+    const response = await this.client.get<OwnProfile>(
+      `/profile/api/v1/profile`,
+    );
     return response.data;
   }
 
-  public async registerProfile(request: RegisterProfileRequest): Promise<number> {
-    const response = await this.client.post<number>(`/profile/api/person/registration`, request);
+  public async registerProfile(
+    request: RegisterProfileRequest,
+  ): Promise<number> {
+    const response = await this.client.post<number>(
+      `/profile/api/person/registration`,
+      request,
+    );
     return response.data;
   }
 }

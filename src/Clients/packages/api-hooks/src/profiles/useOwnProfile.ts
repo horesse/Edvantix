@@ -9,7 +9,6 @@ import { profileKeys } from "../keys";
 export default function useOwnProfile(
   options?: Omit<UseQueryOptions<OwnProfile>, "queryKey" | "queryFn">,
 ) {
-  console.log(options);
   return useQuery({
     queryKey: profileKeys.profile(),
     queryFn: () => profileApiClient.getProfile(),

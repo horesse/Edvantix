@@ -36,7 +36,9 @@
   <Folder Name="/Services/Financial/" />
   <Folder Name="/Services/Financial/Invoice/" />
   <Folder Name="/Services/Financial/Payment/" />
-  <Folder Name="/Services/Financial/Subscription/" />
+  <Folder Name="/Services/Financial/Subscription/">
+    <Project Path="src/Services/Subscriptions/Edvantix.Subscriptions/Edvantix.Subscriptions.csproj" />
+  </Folder>
   <Folder Name="/Services/Management/" />
   <Folder Name="/Services/Management/Attendance/" />
   <Folder Name="/Services/Management/Certificate/" />

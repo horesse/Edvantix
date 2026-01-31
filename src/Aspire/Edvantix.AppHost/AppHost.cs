@@ -52,6 +52,7 @@ var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
 var organizationDb = postgres.AddDatabase(Components.Database.Organization);
 var systemDb = postgres.AddDatabase(Components.Database.System);
 var profileDb = postgres.AddDatabase(Components.Database.Profile);
+var subscriptionDb = postgres.AddDatabase(Components.Database.Subscription);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -104,6 +105,14 @@ var profileApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+var subscriptionsApi = builder
+    .AddProject<Edvantix_Subscriptions>(Services.Subscriptions)
+    .WithReference(subscriptionDb)
+    .WaitFor(subscriptionDb)
+    .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls();
+
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(dataVaultApi)
@@ -111,6 +120,7 @@ var gateway = builder
     .WithService(organizationApi, true)
     .WithService(systemApi, true)
     .WithService(profileApi, true)
+    .WithService(subscriptionsApi, true)
     .Build();
 
 var turbo = builder
@@ -142,7 +152,8 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(entityHubApi)
         .WithOpenAPI(organizationApi)
         .WithOpenAPI(systemApi)
-        .WithOpenAPI(profileApi);
+        .WithOpenAPI(profileApi)
+        .WithOpenAPI(subscriptionsApi);
 }
 
 await builder.Build().RunAsync();

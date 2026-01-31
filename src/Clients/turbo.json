@@ -1,7 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "envMode": "loose",
   "globalEnv": [
     "NODE_ENV",
     "NEXT_PUBLIC_GATEWAY_HTTPS",
@@ -9,11 +8,17 @@
     "KEYCLOAK_URL",
     "KEYCLOAK_REALM",
     "KEYCLOAK_CLIENT_ID",
+    "BETTER_AUTH_SECRET",
     "SKIP_ENV_VALIDATION",
     "FAKER_SEED",
     "SLOW_MO",
     "VIDEO",
-    "NEXT_RUNTIME"
+    "NEXT_RUNTIME",
+    "OTEL_EXPORTER_OTLP_ENDPOINT",
+    "OTEL_EXPORTER_OTLP_HEADERS",
+    "TEST_ADMIN_EMAIL",
+    "TEST_ADMIN_PASSWORD",
+    "MSW_COOKIE_STORE_PATH"
   ],
   "tasks": {
     "build": {

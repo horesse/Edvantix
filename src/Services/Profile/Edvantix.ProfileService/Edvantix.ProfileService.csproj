@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <SuppressCheckGrpcNetClientFactoryVersion>true</SuppressCheckGrpcNetClientFactoryVersion>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
@@ -10,5 +13,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="Grpc\Protos\profile\v1\profile.proto" GrpcService="Server" />
   </ItemGroup>
 </Project>

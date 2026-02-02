@@ -3,6 +3,7 @@
     <SuppressCheckGrpcNetClientFactoryVersion>true</SuppressCheckGrpcNetClientFactoryVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Aspire.Azure.Storage.Blobs" />
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />

@@ -40,6 +40,8 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
     [Include]
     public FullName FullName { get; private set; } = null!;
 
+    public string? Avatar { get; private set; }
+
     public IReadOnlyCollection<UserContact> Contacts => _contacts.AsReadOnly();
     public IReadOnlyCollection<EmploymentHistory> EmploymentHistories =>
         _employmentHistories.AsReadOnly();
@@ -70,7 +72,11 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
         FullName = new FullName(firstName, lastName, middleName);
     }
 
-    // Методы для управления контактами
+    public void UploadAvatar(string? avatarUrl)
+    {
+        Avatar = avatarUrl;
+    }
+
     public UserContact CreateContact(ContactType type, string value, string? description = null)
     {
         return new UserContact(type, value, description);

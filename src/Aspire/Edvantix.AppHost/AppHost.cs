@@ -41,11 +41,15 @@ var postgres = builder
 //     .WithLifetime(ContainerLifetime.Persistent)
 //     .WithEndpoint(Network.Tcp, e => e.Port = 5672);
 //
-// var storage = builder
-//     .AddAzureStorage(Components.Azure.Storage.Resource)
-//     .WithIconName("DatabasePlugConnected")
-//     .RunAsLocalContainer()
-//     .ProvisionAsService();
+var storage = builder
+    .AddAzureStorage(Components.Azure.Storage.Resource)
+    .WithIconName("DatabasePlugConnected")
+    .RunAsLocalContainer()
+    .ProvisionAsService();
+
+var profileContainer = storage.AddBlobContainer(
+    Components.Azure.Storage.BlobContainer(Services.Profile)
+);
 
 var dataVaultDb = postgres.AddDatabase(Components.Database.DataVault);
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
@@ -103,6 +107,8 @@ var profileApi = builder
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)
     .WithContainerRegistry(registry)
+    .WithReference(profileContainer)
+    .WaitFor(profileContainer)
     .WithFriendlyUrls();
 
 var subscriptionsApi = builder

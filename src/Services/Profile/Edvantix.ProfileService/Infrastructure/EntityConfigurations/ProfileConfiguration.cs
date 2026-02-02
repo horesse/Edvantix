@@ -20,6 +20,8 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 
         builder.HasIndex(p => p.AccountId).IsUnique();
 
+        builder.Property(p => p.Avatar).IsRequired(false);
+
         builder.HasQueryFilter(p => !p.IsDeleted);
 
         builder

@@ -26,18 +26,12 @@ export const commonValidationRules = {
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || value.trim().length === 0,
     message,
   }),
-  minLength: (
-    min: number,
-    message?: string
-  ): ValidationRule => ({
+  minLength: (min: number, message?: string): ValidationRule => ({
     validate: (value: string) =>
       value.trim().length >= min || value.trim().length === 0,
     message: message ?? `Минимум ${min} символов`,
   }),
-  maxLength: (
-    max: number,
-    message?: string
-  ): ValidationRule => ({
+  maxLength: (max: number, message?: string): ValidationRule => ({
     validate: (value: string) => value.trim().length <= max,
     message: message ?? `Максимум ${max} символов`,
   }),

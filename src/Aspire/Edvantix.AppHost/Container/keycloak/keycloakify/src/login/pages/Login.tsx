@@ -192,9 +192,7 @@ export default function Login(
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           {msg("loginAccountTitle")}
         </h1>
-        <p className="text-muted-foreground">
-          Войдите для доступа к платформе
-        </p>
+        <p className="text-muted-foreground">Войдите для доступа к платформе</p>
       </div>
 
       {realm.password && (

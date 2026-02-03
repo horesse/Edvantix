@@ -46,12 +46,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
   }, [documentTitle, i18n, kcContext.realm.displayName, msgStr]);
 
   return (
-    <div
-      className={clsx(
-        "relative flex min-h-screen w-full",
-        bodyClassName
-      )}
-    >
+    <div className={clsx("relative flex min-h-screen w-full", bodyClassName)}>
       {/* Left Panel - Branding (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 xl:w-[55%] relative overflow-hidden bg-gradient-to-br from-primary/90 via-primary to-primary/80">
         {/* Decorative elements */}
@@ -92,7 +87,8 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 <span className="text-white/80">эффективно</span>
               </h1>
               <p className="text-lg xl:text-xl text-white/70 max-w-md leading-relaxed">
-                Современная платформа для создания и управления образовательными курсами
+                Современная платформа для создания и управления образовательными
+                курсами
               </p>
             </div>
 
@@ -160,7 +156,9 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
             {/* Required fields notice */}
             {displayRequiredFields && (
               <div className="text-sm text-muted-foreground">
-                <span className="text-destructive" aria-hidden="true">*</span>{" "}
+                <span className="text-destructive" aria-hidden="true">
+                  *
+                </span>{" "}
                 {msg("requiredFields")}
               </div>
             )}
@@ -220,7 +218,7 @@ function Feature({ icon, text }: { icon: React.ReactNode; text: string }) {
 
 function LanguageSelector({
   currentLanguage,
-  enabledLanguages
+  enabledLanguages,
 }: {
   currentLanguage: { languageTag: string };
   enabledLanguages: Array<{ languageTag: string; label: string; href: string }>;
@@ -235,9 +233,11 @@ function LanguageSelector({
         >
           <Globe className="h-4 w-4" />
           <span className="text-sm">
-            {enabledLanguages.find(
-              lang => lang.languageTag === currentLanguage.languageTag
-            )?.label}
+            {
+              enabledLanguages.find(
+                lang => lang.languageTag === currentLanguage.languageTag
+              )?.label
+            }
           </span>
         </Button>
       </DropdownMenuTrigger>
@@ -248,7 +248,8 @@ function LanguageSelector({
               href={lang.href}
               className={clsx(
                 "cursor-pointer flex items-center justify-between",
-                lang.languageTag === currentLanguage.languageTag && "font-medium"
+                lang.languageTag === currentLanguage.languageTag &&
+                  "font-medium"
               )}
             >
               <span>{lang.label}</span>
@@ -263,7 +264,11 @@ function LanguageSelector({
   );
 }
 
-function MessageAlert({ message }: { message: { type: string; summary: string } }) {
+function MessageAlert({
+  message,
+}: {
+  message: { type: string; summary: string };
+}) {
   return (
     <div
       className={clsx(
@@ -282,13 +287,22 @@ function MessageAlert({ message }: { message: { type: string; summary: string } 
       role="alert"
     >
       {message.type === "success" && (
-        <CheckCircle2 className="h-5 w-5 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        <CheckCircle2
+          className="h-5 w-5 mt-0.5 flex-shrink-0"
+          aria-hidden="true"
+        />
       )}
       {message.type === "warning" && (
-        <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        <AlertCircle
+          className="h-5 w-5 mt-0.5 flex-shrink-0"
+          aria-hidden="true"
+        />
       )}
       {message.type === "error" && (
-        <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        <AlertCircle
+          className="h-5 w-5 mt-0.5 flex-shrink-0"
+          aria-hidden="true"
+        />
       )}
       {message.type === "info" && (
         <Info className="h-5 w-5 mt-0.5 flex-shrink-0" aria-hidden="true" />

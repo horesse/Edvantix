@@ -423,9 +423,7 @@ export default function Register(
                 id="termsAccepted"
                 name="termsAccepted"
                 checked={termsAccepted}
-                onCheckedChange={checked =>
-                  setTermsAccepted(checked === true)
-                }
+                onCheckedChange={checked => setTermsAccepted(checked === true)}
                 aria-invalid={messagesPerField.existsError("termsAccepted")}
                 className={
                   messagesPerField.existsError("termsAccepted")

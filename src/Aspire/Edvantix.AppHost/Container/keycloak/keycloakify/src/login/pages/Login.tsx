@@ -1,20 +1,13 @@
 import { kcSanitize } from "keycloakify/lib/kcSanitize";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
-import { useEffect, useReducer, useState } from "react";
+import { useState, useCallback } from "react";
 import type { I18n } from "../i18n";
 import type { KcContext } from "../KcContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff, GraduationCap, AlertCircle } from "lucide-react";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { FormInput, PasswordInput } from "@/components/ui/form-input";
+import { AlertCircle } from "lucide-react";
 
 export default function Login(
   props: Readonly<PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>>
@@ -35,7 +28,104 @@ export default function Login(
   const { msg, msgStr } = i18n;
 
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
-  const [isFocused, setIsFocused] = useState<string | null>(null);
+  const [formState, setFormState] = useState({
+    username: {
+      value: login.username ?? "",
+      touched: false,
+      error: null as string | null,
+    },
+    password: {
+      value: "",
+      touched: false,
+      error: null as string | null,
+    },
+  });
+
+  const validateUsername = useCallback(
+    (value: string): string | null => {
+      if (!value.trim()) {
+        return "Обязательное поле";
+      }
+      if (realm.loginWithEmailAllowed && realm.registrationEmailAsUsername) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          return "Некорректный формат email";
+        }
+      }
+      return null;
+    },
+    [realm.loginWithEmailAllowed, realm.registrationEmailAsUsername]
+  );
+
+  const validatePassword = useCallback((value: string): string | null => {
+    if (!value) {
+      return "Обязательное поле";
+    }
+    return null;
+  }, []);
+
+  const handleUsernameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setFormState(prev => ({
+        ...prev,
+        username: {
+          value,
+          touched: prev.username.touched,
+          error: prev.username.touched ? validateUsername(value) : null,
+        },
+      }));
+    },
+    [validateUsername]
+  );
+
+  const handleUsernameBlur = useCallback(() => {
+    setFormState(prev => ({
+      ...prev,
+      username: {
+        ...prev.username,
+        touched: true,
+        error: validateUsername(prev.username.value),
+      },
+    }));
+  }, [validateUsername]);
+
+  const handlePasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setFormState(prev => ({
+        ...prev,
+        password: {
+          value,
+          touched: prev.password.touched,
+          error: prev.password.touched ? validatePassword(value) : null,
+        },
+      }));
+    },
+    [validatePassword]
+  );
+
+  const handlePasswordBlur = useCallback(() => {
+    setFormState(prev => ({
+      ...prev,
+      password: {
+        ...prev.password,
+        touched: true,
+        error: validatePassword(prev.password.value),
+      },
+    }));
+  }, [validatePassword]);
+
+  const getUsernameLabel = () => {
+    if (!realm.loginWithEmailAllowed) {
+      return msgStr("username");
+    }
+    if (!realm.registrationEmailAsUsername) {
+      return msgStr("usernameOrEmail");
+    }
+    return msgStr("email");
+  };
+
+  const hasServerError = messagesPerField.existsError("username", "password");
 
   return (
     <Template
@@ -44,272 +134,185 @@ export default function Login(
       i18n={i18n}
       doUseDefaultCss={false}
       classes={classes}
-      displayMessage={!messagesPerField.existsError("username", "password")}
+      displayMessage={!hasServerError}
       displayInfo={
         realm.password && realm.registrationAllowed && !registrationDisabled
       }
       infoNode={
-        <p className="text-muted-foreground text-center">
+        <p className="text-muted-foreground text-center text-sm">
           {msg("noAccount")}{" "}
           <a
             href={url.registrationUrl}
-            className="text-card-foreground hover:underline"
+            className="text-primary font-medium hover:underline focus:outline-none focus-visible:underline"
           >
             {msg("doRegister")}
           </a>
         </p>
       }
       socialProvidersNode={
-        <>
-          {realm.password &&
-            social?.providers !== undefined &&
-            social.providers.length !== 0 && (
-              <>
-                <div className="flex items-center gap-4">
-                  <Separator className="flex-1" />
-                  <p>{msg("identity-provider-login-label")}</p>
-                  <Separator className="flex-1" />
-                </div>
+        realm.password &&
+        social?.providers !== undefined &&
+        social.providers.length !== 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <Separator className="flex-1" />
+              <p className="text-sm text-muted-foreground whitespace-nowrap">
+                {msg("identity-provider-login-label")}
+              </p>
+              <Separator className="flex-1" />
+            </div>
 
-                {social.providers.map(p => (
-                  <Button
-                    key={p.alias}
-                    variant="ghost"
-                    className="w-full"
-                    asChild
-                  >
-                    <a id={`social-${p.alias}`} href={p.loginUrl}>
-                      {p.iconClasses && (
-                        <i
-                          className={`${p.iconClasses} mr-2`}
-                          aria-hidden="true"
-                        />
-                      )}
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: kcSanitize(p.displayName),
-                        }}
-                      />
-                    </a>
-                  </Button>
-                ))}
-              </>
-            )}
-        </>
+            <div className="grid gap-2">
+              {social.providers.map(p => (
+                <Button
+                  key={p.alias}
+                  variant="outline"
+                  className="w-full h-10 gap-2"
+                  asChild
+                >
+                  <a id={`social-${p.alias}`} href={p.loginUrl}>
+                    {p.iconClasses && (
+                      <i className={p.iconClasses} aria-hidden="true" />
+                    )}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: kcSanitize(p.displayName),
+                      }}
+                    />
+                  </a>
+                </Button>
+              ))}
+            </div>
+          </div>
+        )
       }
     >
-      <Card className="w-full border-none shadow-md">
-        <CardHeader className="gap-6">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10">
-              <GraduationCap className="w-6 h-6 text-primary" />
+      {/* Header */}
+      <div className="space-y-2 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          {msg("loginAccountTitle")}
+        </h1>
+        <p className="text-muted-foreground">
+          Войдите для доступа к платформе
+        </p>
+      </div>
+
+      {realm.password && (
+        <form
+          id="kc-form-login"
+          onSubmit={() => {
+            setIsLoginButtonDisabled(true);
+            return true;
+          }}
+          action={url.loginAction}
+          method="post"
+          className="space-y-5"
+          noValidate
+        >
+          {hasServerError && (
+            <div
+              role="alert"
+              className="flex items-start gap-3 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive animate-in fade-in-0 slide-in-from-top-2 duration-300"
+            >
+              <AlertCircle
+                className="h-5 w-5 mt-0.5 flex-shrink-0"
+                aria-hidden="true"
+              />
+              <span
+                className="text-sm"
+                dangerouslySetInnerHTML={{
+                  __html: kcSanitize(
+                    messagesPerField.getFirstError("username", "password")
+                  ),
+                }}
+              />
             </div>
-            <span className="text-2xl font-bold">Edvantix</span>
-          </div>
+          )}
 
-          <div>
-            <CardTitle className="mb-1.5 text-2xl">
-              {msg("loginAccountTitle")}
-            </CardTitle>
-            <CardDescription className="text-base">
-              Менеджмент онлайн-школы
-            </CardDescription>
-          </div>
-        </CardHeader>
+          {!usernameHidden && (
+            <FormInput
+              label={getUsernameLabel()}
+              name="username"
+              type={realm.registrationEmailAsUsername ? "email" : "text"}
+              required
+              autoComplete="username"
+              autoFocus
+              value={formState.username.value}
+              onChange={handleUsernameChange}
+              onBlur={handleUsernameBlur}
+              touched={formState.username.touched}
+              error={hasServerError ? null : formState.username.error}
+            />
+          )}
 
-        {realm.password && (
-          <form
-            id="kc-form-login"
-            onSubmit={() => {
-              setIsLoginButtonDisabled(true);
-              return true;
+          <PasswordInput
+            label={msgStr("password")}
+            name="password"
+            required
+            autoComplete="current-password"
+            value={formState.password.value}
+            onChange={handlePasswordChange}
+            onBlur={handlePasswordBlur}
+            touched={formState.password.touched}
+            error={hasServerError ? null : formState.password.error}
+            i18n={{
+              showPassword: msgStr("showPassword"),
+              hidePassword: msgStr("hidePassword"),
             }}
-            action={url.loginAction}
-            method="post"
-            className="px-6 pb-6 space-y-4"
-          >
-            {!usernameHidden && (
-              <div className="space-y-2">
-                <Label htmlFor="username">
-                  {(() => {
-                    if (!realm.loginWithEmailAllowed) {
-                      return msg("username");
-                    }
-                    if (!realm.registrationEmailAsUsername) {
-                      return msg("usernameOrEmail");
-                    }
-                    return msg("email");
-                  })()}
-                </Label>
-                <Input
-                  id="username"
-                  name="username"
-                  defaultValue={login.username ?? ""}
-                  type="text"
-                  autoFocus
-                  autoComplete="username"
-                  aria-invalid={messagesPerField.existsError(
-                    "username",
-                    "password"
-                  )}
-                  className={
-                    messagesPerField.existsError("username", "password")
-                      ? "border-destructive focus-visible:ring-destructive"
-                      : ""
-                  }
+          />
+
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            {realm.rememberMe && !usernameHidden && (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="rememberMe"
+                  name="rememberMe"
+                  defaultChecked={!!login.rememberMe}
+                  className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                 />
-                {messagesPerField.existsError("username", "password") && (
-                  <div className="flex items-start gap-2 text-destructive">
-                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <span
-                      className="text-sm"
-                      dangerouslySetInnerHTML={{
-                        __html: kcSanitize(
-                          messagesPerField.getFirstError("username", "password")
-                        ),
-                      }}
-                    />
-                  </div>
-                )}
+                <label
+                  htmlFor="rememberMe"
+                  className="text-sm font-medium leading-none cursor-pointer select-none text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {msg("rememberMe")}
+                </label>
               </div>
             )}
+            {realm.resetPasswordAllowed && (
+              <a
+                href={url.loginResetCredentialsUrl}
+                className="text-sm text-primary hover:underline focus:outline-none focus-visible:underline sm:ml-auto"
+              >
+                {msg("doForgotPassword")}
+              </a>
+            )}
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">{msg("password")}</Label>
-              <PasswordInput
-                i18n={i18n}
-                passwordInputId="password"
-                hasError={messagesPerField.existsError("username", "password")}
-                isFocused={isFocused === "password"}
-                onFocus={() => setIsFocused("password")}
-                onBlur={() => setIsFocused(null)}
-              />
-              {usernameHidden &&
-                messagesPerField.existsError("username", "password") && (
-                  <div className="flex items-start gap-2 text-destructive">
-                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <span
-                      className="text-sm"
-                      dangerouslySetInnerHTML={{
-                        __html: kcSanitize(
-                          messagesPerField.getFirstError("username", "password")
-                        ),
-                      }}
-                    />
-                  </div>
-                )}
-            </div>
+          <input
+            type="hidden"
+            id="id-hidden-input"
+            name="credentialId"
+            value={auth.selectedCredential}
+          />
 
-            <div className="flex items-center justify-between">
-              {realm.rememberMe && !usernameHidden && (
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="rememberMe"
-                    name="rememberMe"
-                    defaultChecked={!!login.rememberMe}
-                  />
-                  <label
-                    htmlFor="rememberMe"
-                    className="text-sm font-medium leading-none cursor-pointer select-none"
-                  >
-                    {msg("rememberMe")}
-                  </label>
-                </div>
-              )}
-              {realm.resetPasswordAllowed && (
-                <a
-                  href={url.loginResetCredentialsUrl}
-                  className="text-sm text-card-foreground hover:underline ml-auto"
-                >
-                  {msg("doForgotPassword")}
-                </a>
-              )}
-            </div>
-
-            <input
-              type="hidden"
-              id="id-hidden-input"
-              name="credentialId"
-              value={auth.selectedCredential}
-            />
-
-            <Button
-              disabled={isLoginButtonDisabled}
-              className="w-full"
-              name="login"
-              id="kc-login"
-              type="submit"
-            >
-              {isLoginButtonDisabled ? (
-                <span className="flex items-center gap-2">
-                  <span className="inline-block w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                  {msgStr("doLogIn")}
-                </span>
-              ) : (
-                msgStr("doLogIn")
-              )}
-            </Button>
-          </form>
-        )}
-      </Card>
+          <Button
+            disabled={isLoginButtonDisabled}
+            className="w-full h-11 text-base font-medium"
+            name="login"
+            id="kc-login"
+            type="submit"
+          >
+            {isLoginButtonDisabled ? (
+              <span className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                {msgStr("doLogIn")}
+              </span>
+            ) : (
+              msgStr("doLogIn")
+            )}
+          </Button>
+        </form>
+      )}
     </Template>
-  );
-}
-
-function PasswordInput(
-  props: Readonly<{
-    i18n: I18n;
-    passwordInputId: string;
-    hasError: boolean;
-    isFocused: boolean;
-    onFocus: () => void;
-    onBlur: () => void;
-  }>
-) {
-  const { i18n, passwordInputId, hasError, onFocus, onBlur } = props;
-  const { msgStr } = i18n;
-
-  const [isPasswordRevealed, toggleIsPasswordRevealed] = useReducer(
-    (isPasswordRevealed: boolean) => !isPasswordRevealed,
-    false
-  );
-
-  useEffect(() => {
-    const passwordInputElement = document.getElementById(passwordInputId);
-    if (passwordInputElement instanceof HTMLInputElement) {
-      passwordInputElement.type = isPasswordRevealed ? "text" : "password";
-    }
-  }, [isPasswordRevealed, passwordInputId]);
-
-  return (
-    <div className="relative">
-      <Input
-        id={passwordInputId}
-        name="password"
-        type="password"
-        autoComplete="current-password"
-        aria-invalid={hasError}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        className={`pr-10 ${hasError ? "border-destructive focus-visible:ring-destructive" : ""}`}
-      />
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 px-0"
-        aria-label={msgStr(
-          isPasswordRevealed ? "hidePassword" : "showPassword"
-        )}
-        aria-controls={passwordInputId}
-        onClick={toggleIsPasswordRevealed}
-      >
-        {isPasswordRevealed ? (
-          <EyeOff className="h-4 w-4" />
-        ) : (
-          <Eye className="h-4 w-4" />
-        )}
-      </Button>
-    </div>
   );
 }

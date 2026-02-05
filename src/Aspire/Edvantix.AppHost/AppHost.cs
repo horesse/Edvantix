@@ -148,7 +148,9 @@ var front = turbo
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
     .WithKeycloak(keycloak);
 
-front.WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Http.Schemes.Http));
+front
+    .WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Http.Schemes.Http))
+    .WithEnvironment("NEXTAUTH_URL", front.GetEndpoint(Http.Schemes.Http));
 
 if (builder.ExecutionContext.IsRunMode)
 {

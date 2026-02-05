@@ -14,21 +14,17 @@ import {
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 
-import { signOut, useSession } from "@/lib/auth-client";
+import { useLogout } from "@/hooks/useLogout";
+import { useSession } from "@/lib/auth-client";
 
 import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
   const { data: session } = useSession();
+  const { logout } = useLogout();
 
   const handleSignOut = async () => {
-    await signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          window.location.href = "/login";
-        },
-      },
-    });
+    await logout();
   };
 
   return (

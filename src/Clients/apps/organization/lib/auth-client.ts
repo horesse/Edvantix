@@ -1,14 +1,20 @@
 "use client";
 
-import { genericOAuthClient } from "better-auth/client/plugins";
-import { createAuthClient } from "better-auth/react";
+import {
+  signIn as nextAuthSignIn,
+  signOut as nextAuthSignOut,
+} from "next-auth/react";
 
-export const authClient = createAuthClient({
-  baseURL:
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "http://localhost:3000",
-  plugins: [genericOAuthClient()],
-});
+export const signIn = async () => {
+  await nextAuthSignIn("keycloak", {
+    callbackUrl: window.location.origin,
+  });
+};
 
-export const { signIn, signOut, useSession } = authClient;
+export const signOut = async () => {
+  await nextAuthSignOut({
+    callbackUrl: window.location.origin,
+  });
+};
+
+export { useSession } from "next-auth/react";

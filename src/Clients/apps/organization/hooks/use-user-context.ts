@@ -3,12 +3,12 @@
 import { useSession } from "@/lib/auth-client";
 
 export function useUserContext() {
-  const { data: session, status } = useSession();
+  const { data: session, isPending, error } = useSession();
 
   return {
     user: session?.user ?? null,
-    isLoading: status === "loading",
-    isAuthenticated: status === "authenticated",
-    error: null,
+    isLoading: isPending,
+    isAuthenticated: !!session?.user,
+    error,
   };
 }

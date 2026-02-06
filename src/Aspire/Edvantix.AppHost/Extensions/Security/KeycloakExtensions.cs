@@ -27,8 +27,8 @@ public static class KeycloakExtensions
     {
         var clientId = builder.Resource.Name;
 
-        var authSecret = builder
-            .ApplicationBuilder.AddParameter($"{clientId}-auth-secret", true)
+        var betterAuthSecret = builder
+            .ApplicationBuilder.AddParameter($"{clientId}-better-auth-secret", true)
             .WithGeneratedDefault(new() { MinLength = 32, Special = false });
 
         switch (keycloak)
@@ -46,21 +46,19 @@ public static class KeycloakExtensions
                 builder
                     .WithReference(keycloakContainer)
                     .WaitForStart(keycloakContainer)
-                    .WithEnvironment("AUTH_SECRET", authSecret)
+                    .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
                     .WithEnvironment(
                         "KEYCLOAK_URL",
                         keycloakContainer.GetEndpoint(Http.Schemes.Http)
                     )
                     .WithEnvironment("KEYCLOAK_REALM", _defaultLocalKeycloakName)
-                    .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId)
-                    .WithEnvironment("KEYCLOAK_CLIENT_SECRET", "")
-                    .WithEnvironment("AUTH_TRUST_HOST", "true");
+                    .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
                 break;
             case IResourceBuilder<ExternalServiceResource> keycloakHosted:
                 ConfigureClientForHostedKeycloak(
                     builder,
                     keycloakHosted,
-                    authSecret,
+                    betterAuthSecret,
                     clientId
                 );
                 break;
@@ -210,7 +208,7 @@ public static class KeycloakExtensions
     private static void ConfigureClientForHostedKeycloak<TResource>(
         IResourceBuilder<TResource> clientBuilder,
         IResourceBuilder<ExternalServiceResource> keycloakHosted,
-        IResourceBuilder<ParameterResource> authSecret,
+        IResourceBuilder<ParameterResource> betterAuthSecret,
         string clientId
     )
         where TResource : IResourceWithEnvironment, IResourceWithWaitSupport
@@ -222,12 +220,10 @@ public static class KeycloakExtensions
         clientBuilder
             .WithReference(keycloakHosted)
             .WaitFor(keycloakHosted)
-            .WithEnvironment("AUTH_SECRET", authSecret)
+            .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
             .WithEnvironment("KEYCLOAK_URL", keycloakHosted)
             .WithEnvironment("KEYCLOAK_REALM", realmParameter)
-            .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId)
-            .WithEnvironment("KEYCLOAK_CLIENT_SECRET", "")
-            .WithEnvironment("AUTH_TRUST_HOST", "true");
+            .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
     }
 
     extension(IDistributedApplicationBuilder builder)

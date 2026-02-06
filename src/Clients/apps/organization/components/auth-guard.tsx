@@ -9,6 +9,7 @@ import { Spinner } from "@workspace/ui/components/spinner";
 
 import { useUserContext } from "@/hooks/use-user-context";
 import { signIn } from "@/lib/auth-client";
+import { AUTH } from "@/lib/constants";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useUserContext();
@@ -16,7 +17,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      signIn();
+      signIn.social({
+        provider: AUTH.PROVIDER,
+        callbackURL: AUTH.CALLBACK_URL,
+      });
     }
   }, [isAuthenticated, isLoading, router]);
 

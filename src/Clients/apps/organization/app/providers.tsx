@@ -14,9 +14,9 @@ import { getQueryClient } from "@/lib/query-client";
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
-    const gatewayUrl =
-        env.NEXT_PUBLIC_GATEWAY_HTTPS || env.NEXT_PUBLIC_GATEWAY_HTTP;
-  
+  const gatewayUrl =
+    env.NEXT_PUBLIC_GATEWAY_HTTPS || env.NEXT_PUBLIC_GATEWAY_HTTP;
+
   useEffect(() => {
     if (!gatewayUrl && process.env.NODE_ENV === "development") {
       initMocks();

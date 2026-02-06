@@ -2,17 +2,35 @@
 
 import { useState } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import useRegisterProfile from "@workspace/api-hooks/profiles/useRegisterProfile";
-import { Button } from "@workspace/ui/components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@workspace/ui/components/form";
-import { Input } from "@workspace/ui/components/input";
-import { RadioGroup, RadioGroupItem } from "@workspace/ui/components/radio-group";
 import { Gender } from "@workspace/types/profile";
+import { Button } from "@workspace/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui/components/form";
+import { Input } from "@workspace/ui/components/input";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@workspace/ui/components/radio-group";
+
 // import { type RegisterProfileInput, registerProfileSchema } from "@workspace/validations/profile/registration";
 
 const STEPS = [
@@ -56,7 +74,10 @@ export default function ProfileRegisterPage() {
   };
 
   const handleNext = async () => {
-    const fieldsToValidate = currentStep === 1 ? (["firstName", "lastName", "middleName"] as const) : (["birthDate", "gender"] as const);
+    const fieldsToValidate =
+      currentStep === 1
+        ? (["firstName", "lastName", "middleName"] as const)
+        : (["birthDate", "gender"] as const);
 
     const isValid = await form.trigger(fieldsToValidate);
 
@@ -78,15 +99,15 @@ export default function ProfileRegisterPage() {
   const isLoading = registerMutation.isPending;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background to-muted/20">
-      <Card className="w-full max-w-lg shadow-2xl border-muted/50">
+    <div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-gradient-to-br p-4">
+      <Card className="border-muted/50 w-full max-w-lg shadow-2xl">
         <CardHeader className="space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             {STEPS.map((step, index) => (
-              <div key={step.id} className="flex items-center flex-1">
-                <div className="flex flex-col items-center flex-1">
+              <div key={step.id} className="flex flex-1 items-center">
+                <div className="flex flex-1 flex-col items-center">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-full font-semibold transition-colors ${
                       currentStep >= step.id
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted text-muted-foreground"
@@ -94,15 +115,21 @@ export default function ProfileRegisterPage() {
                   >
                     {step.id}
                   </div>
-                  <div className="mt-2 text-xs text-center hidden sm:block">
-                    <div className={currentStep >= step.id ? "font-semibold" : "text-muted-foreground"}>
+                  <div className="mt-2 hidden text-center text-xs sm:block">
+                    <div
+                      className={
+                        currentStep >= step.id
+                          ? "font-semibold"
+                          : "text-muted-foreground"
+                      }
+                    >
                       {step.title}
                     </div>
                   </div>
                 </div>
                 {index < STEPS.length - 1 && (
                   <div
-                    className={`h-1 flex-1 mx-2 rounded transition-colors ${
+                    className={`mx-2 h-1 flex-1 rounded transition-colors ${
                       currentStep > step.id ? "bg-primary" : "bg-muted"
                     }`}
                   />
@@ -112,7 +139,9 @@ export default function ProfileRegisterPage() {
           </div>
           <div className="text-center">
             <CardTitle className="text-2xl">Регистрация профиля</CardTitle>
-            <CardDescription>{STEPS[currentStep - 1].description}</CardDescription>
+            <CardDescription>
+              {STEPS[currentStep - 1].description}
+            </CardDescription>
           </div>
         </CardHeader>
 
@@ -120,7 +149,7 @@ export default function ProfileRegisterPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {currentStep === 1 && (
-                <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                <div className="animate-in fade-in slide-in-from-right-4 space-y-4 duration-300">
                   <FormField
                     control={form.control}
                     name="lastName"
@@ -156,7 +185,11 @@ export default function ProfileRegisterPage() {
                       <FormItem>
                         <FormLabel>Отчество (необязательно)</FormLabel>
                         <FormControl>
-                          <Input placeholder="Иванович" {...field} value={field.value ?? ""} />
+                          <Input
+                            placeholder="Иванович"
+                            {...field}
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -166,7 +199,7 @@ export default function ProfileRegisterPage() {
               )}
 
               {currentStep === 2 && (
-                <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                <div className="animate-in fade-in slide-in-from-right-4 space-y-4 duration-300">
                   <FormField
                     control={form.control}
                     name="birthDate"
@@ -189,27 +222,41 @@ export default function ProfileRegisterPage() {
                         <FormLabel>Пол</FormLabel>
                         <FormControl>
                           <RadioGroup
-                            onValueChange={(value) => field.onChange(Number(value))}
+                            onValueChange={(value) =>
+                              field.onChange(Number(value))
+                            }
                             value={field.value?.toString()}
                             className="flex flex-col space-y-2"
                           >
-                            <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormItem className="flex items-center space-y-0 space-x-3">
                               <FormControl>
-                                <RadioGroupItem value={Gender.Male.toString()} />
+                                <RadioGroupItem
+                                  value={Gender.Male.toString()}
+                                />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">Мужской</FormLabel>
+                              <FormLabel className="cursor-pointer font-normal">
+                                Мужской
+                              </FormLabel>
                             </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormItem className="flex items-center space-y-0 space-x-3">
                               <FormControl>
-                                <RadioGroupItem value={Gender.Female.toString()} />
+                                <RadioGroupItem
+                                  value={Gender.Female.toString()}
+                                />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">Женский</FormLabel>
+                              <FormLabel className="cursor-pointer font-normal">
+                                Женский
+                              </FormLabel>
                             </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormItem className="flex items-center space-y-0 space-x-3">
                               <FormControl>
-                                <RadioGroupItem value={Gender.Other.toString()} />
+                                <RadioGroupItem
+                                  value={Gender.Other.toString()}
+                                />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">Другое</FormLabel>
+                              <FormLabel className="cursor-pointer font-normal">
+                                Другое
+                              </FormLabel>
                             </FormItem>
                           </RadioGroup>
                         </FormControl>
@@ -222,7 +269,12 @@ export default function ProfileRegisterPage() {
 
               <div className="flex gap-3 pt-4">
                 {currentStep > 1 && (
-                  <Button type="button" variant="outline" onClick={handleBack} className="flex-1">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleBack}
+                    className="flex-1"
+                  >
                     Назад
                   </Button>
                 )}
@@ -232,7 +284,11 @@ export default function ProfileRegisterPage() {
                   disabled={isLoading}
                   className="flex-1"
                 >
-                  {isLoading ? "Сохранение..." : currentStep === STEPS.length ? "Завершить" : "Далее"}
+                  {isLoading
+                    ? "Сохранение..."
+                    : currentStep === STEPS.length
+                      ? "Завершить"
+                      : "Далее"}
                 </Button>
               </div>
             </form>

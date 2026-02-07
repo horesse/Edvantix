@@ -1,6 +1,7 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.Specification;
 using Edvantix.Constants.Other;
+using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -12,17 +13,17 @@ namespace Edvantix.Chassis.Endpoints.Crud.Queries;
 
 public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
     : BaseCrudEndpoint<TModel, TIdentity>,
-        IEndpoint<Ok<IEnumerable<TModel>>, TSpecification, ISender>
+        IEndpoint<Ok<PagedResult<TModel>>, TSpecification, ISender>
     where TModel : class
     where TIdentity : struct
     where TEntity : class, IAggregateRoot
-    where TSpecification : ISpecification<TEntity>
+    where TSpecification : class, ISpecification<TEntity>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         var builder = app.MapPost(
             GetRoutePath(CrudAction.GetByExpression),
-            async (TSpecification request, ISender sender, CancellationToken ct) =>
+            async ([AsParameters] TSpecification request, ISender sender, CancellationToken ct) =>
                 await HandleAsync(request, sender, ct)
         );
 
@@ -32,10 +33,11 @@ public class GetByExpressionEndpoint<TModel, TIdentity, TEntity, TSpecification>
                 "Получить записи по фильтру",
                 "Возвращает записи по указанному фильтру"
             )
+            .WithPaginationHeaders()
             .ProducesGet<TModel>(hasNotFound: true);
     }
 
-    public async Task<Ok<IEnumerable<TModel>>> HandleAsync(
+    public async Task<Ok<PagedResult<TModel>>> HandleAsync(
         TSpecification request,
         ISender sender,
         CancellationToken cancellationToken = default

@@ -4,20 +4,16 @@ public enum CrudAction
 {
     // Commands
     Create,
-    CreateRange,
     Delete,
     DeleteRange,
     Update,
-    UpdateRange,
     Validate,
 
     // Queries
-    GetAll,
     GetByExpression,
     GetById,
     GetCount,
     IsExist,
-    FetchPagedData,
 }
 
 /// <summary>
@@ -39,15 +35,14 @@ public enum CrudActions
     GetByExpression = 1 << 5, // 32
     GetCount = 1 << 6, // 64
     IsExist = 1 << 7, // 128
-    FetchPagedData = 1 << 8, // 256
 
     // Группы операций
     AllCommands = Create | Update | Delete | DeleteRange,
-    AllQueries = GetById | GetByExpression | GetCount | IsExist | FetchPagedData,
+    AllQueries = GetById | GetByExpression | GetCount | IsExist,
     All = AllCommands | AllQueries,
 
     // Часто используемые комбинации
     ReadOnly = AllQueries,
     WriteOnly = AllCommands,
-    Basic = Create | Update | Delete | GetById | FetchPagedData,
+    Basic = Create | Update | Delete | GetById,
 }

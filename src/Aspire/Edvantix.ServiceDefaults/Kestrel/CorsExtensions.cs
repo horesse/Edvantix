@@ -23,6 +23,8 @@ public static class CorsExtensions
                     {
                         policyBuilder
                             .SetIsOriginAllowed(origin => new Uri(origin).Host == Network.Localhost)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
                             .AllowCredentials();
                     }
                 );
@@ -68,11 +70,6 @@ public static class CorsExtensions
         var policyName = app.Environment.IsDevelopment()
             ? AllowAllCorsPolicy
             : AllowSpecificCorsPolicy;
-        app.Logger.LogInformation(
-            "Using CORS policy: {PolicyName}, IsDevelopment: {IsDev}",
-            policyName,
-            app.Environment.IsDevelopment()
-        );
         app.UseCors(policyName);
     }
 }

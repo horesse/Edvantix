@@ -35,8 +35,9 @@ public static class Components
 
         public static class Storage
         {
-            public static readonly string Resource = nameof(Storage).ToLowerInvariant();
-            public static readonly string Blob = nameof(Blob).ToLowerInvariant();
+            public const string Resource = "storage";
+
+            public static string BlobContainer(string containerName) => $"{containerName}-blob";
         }
     }
 }

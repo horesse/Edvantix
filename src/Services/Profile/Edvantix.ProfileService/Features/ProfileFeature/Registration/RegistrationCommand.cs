@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
-public sealed record RegistrationCommand(Gender Gender, ProfileModel Profile) : IRequest<long>;
+public sealed record RegistrationCommand(ProfileModel Profile) : IRequest<long>;
 
 public sealed class RegistrationCommandHandler(IServiceProvider provider)
     : IRequestHandler<RegistrationCommand, long>
@@ -36,7 +36,7 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         {
             var person = new Profile(
                 userGuid,
-                request.Gender,
+                request.Profile.Gender,
                 request.Profile.BirthDate,
                 request.Profile.FirstName,
                 request.Profile.LastName,

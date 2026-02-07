@@ -1,4 +1,6 @@
 ﻿using Edvantix.Chassis.Utilities.Configuration;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace Edvantix.ServiceDefaults.Kestrel;
 
@@ -19,9 +21,11 @@ public static class CorsExtensions
                     AllowAllCorsPolicy,
                     policyBuilder =>
                     {
-                        policyBuilder.SetIsOriginAllowed(origin =>
-                            new Uri(origin).Host == Network.Localhost
-                        );
+                        policyBuilder
+                            .SetIsOriginAllowed(origin => new Uri(origin).Host == Network.Localhost)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
                     }
                 );
             });
@@ -63,6 +67,9 @@ public static class CorsExtensions
 
     public static void UseDefaultCors(this WebApplication app)
     {
-        app.UseCors(app.Environment.IsDevelopment() ? AllowAllCorsPolicy : AllowSpecificCorsPolicy);
+        var policyName = app.Environment.IsDevelopment()
+            ? AllowAllCorsPolicy
+            : AllowSpecificCorsPolicy;
+        app.UseCors(policyName);
     }
 }

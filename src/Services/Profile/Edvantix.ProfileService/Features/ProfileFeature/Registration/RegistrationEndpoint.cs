@@ -14,7 +14,7 @@ public class RegistrationEndpoint : IEndpoint<Created<long>, RegistrationCommand
                     await HandleAsync(command, sender, ct)
             )
             .WithName("Registration")
-            .WithTags("Person")
+            .WithTags("Profile")
             .WithSummary("Регистрация пользователя")
             .WithDescription("Создать новую запись пользователя")
             .Produces<long>(StatusCodes.Status201Created);

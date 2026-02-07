@@ -22,10 +22,10 @@ public class GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdent
     )
     {
         var count = await Repository.GetCountByExpressionAsync(request.Specification, token);
-        
+
         request.Specification.Skip = (request.PageIndex - 1) * request.PageSize;
         request.Specification.Take = request.PageSize;
-        
+
         var data = await ExecuteAsync(
             async () =>
             {

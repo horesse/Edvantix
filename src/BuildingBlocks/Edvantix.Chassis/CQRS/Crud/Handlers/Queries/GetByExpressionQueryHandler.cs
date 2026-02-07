@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.Specification;
+using Edvantix.SharedKernel.Results;
 using Edvantix.SharedKernel.SeedWork;
 using MediatR;
 
@@ -9,18 +10,23 @@ public class GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdent
     IServiceProvider provider
 )
     : BaseCrudHandler<TModel, TIdentity, TEntity>(provider),
-        IRequestHandler<GetByExpressionQuery<TEntity, TModel, TSpecification>, IEnumerable<TModel>>
+        IRequestHandler<GetByExpressionQuery<TEntity, TModel, TSpecification>, PagedResult<TModel>>
     where TModel : class
     where TIdentity : struct
     where TEntity : Entity<TIdentity>
-    where TSpecification : ISpecification<TEntity>
+    where TSpecification : class, ISpecification<TEntity>
 {
-    public async Task<IEnumerable<TModel>> Handle(
+    public async Task<PagedResult<TModel>> Handle(
         GetByExpressionQuery<TEntity, TModel, TSpecification> request,
         CancellationToken token
     )
     {
-        return await ExecuteAsync(
+        var count = await Repository.GetCountByExpressionAsync(request.Specification, token);
+        
+        request.Specification.Skip = (request.PageIndex - 1) * request.PageSize;
+        request.Specification.Take = request.PageSize;
+        
+        var data = await ExecuteAsync(
             async () =>
             {
                 var entities = await Repository.GetByExpressionAsync(request.Specification, token);
@@ -29,5 +35,7 @@ public class GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdent
             nameof(GetByExpressionQuery<,,>),
             token
         );
+
+        return new PagedResult<TModel>([.. data], request.PageIndex, request.PageSize, count);
     }
 }

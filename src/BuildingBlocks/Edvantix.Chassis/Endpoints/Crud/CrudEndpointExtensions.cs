@@ -60,14 +60,6 @@ public static class CrudEndpointExtensions
                 >();
             }
 
-            if (actions.HasFlag(CrudActions.FetchPagedData))
-            {
-                services.AddTransient<
-                    IEndpoint,
-                    FetchPagedDataEndpoint<TModel, TIdentity, TEntity, TSpecification>
-                >();
-            }
-
             // Command Endpoints
             if (actions.HasFlag(CrudActions.Create))
             {
@@ -119,7 +111,7 @@ public static class CrudEndpointExtensions
                 TViewViewModel,
                 TIdentity,
                 TSpecification
-            >(CrudActions.Create | CrudActions.GetById | CrudActions.FetchPagedData);
+            >(CrudActions.Create | CrudActions.GetById);
         }
 
         /// <summary>
@@ -161,14 +153,6 @@ public static class CrudEndpointExtensions
                 services.AddTransient<
                     IEndpoint,
                     GetByExpressionEndpoint<TViewModel, TIdentity, TEntity, TSpecification>
-                >();
-            }
-
-            if (actions.HasFlag(CrudActions.FetchPagedData))
-            {
-                services.AddTransient<
-                    IEndpoint,
-                    FetchPagedDataEndpoint<TViewModel, TIdentity, TEntity, TSpecification>
                 >();
             }
 

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Edvantix.Chassis.CQRS.Crud.Abstractions;
+﻿using Edvantix.Chassis.CQRS.Crud.Abstractions;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Commands;
 using Edvantix.Chassis.CQRS.Crud.Handlers.Queries;
 using Edvantix.Chassis.CQRS.Crud.Validators;
@@ -72,20 +71,9 @@ public static class MediatorCrudExtensions
                 services.AddScoped<
                     IRequestHandler<
                         GetByExpressionQuery<TEntity, TModel, TSpecification>,
-                        IEnumerable<TModel>
-                    >,
-                    GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdentity>
-                >();
-            }
-
-            if (actions.HasFlag(CrudActions.FetchPagedData))
-            {
-                services.AddScoped<
-                    IRequestHandler<
-                        FetchPagedDataQuery<TEntity, TModel, TSpecification>,
                         PagedResult<TModel>
                     >,
-                    FetchPagedDataQueryHandler<TEntity, TModel, TSpecification, TIdentity>
+                    GetByExpressionQueryHandler<TEntity, TModel, TSpecification, TIdentity>
                 >();
             }
 
@@ -157,7 +145,7 @@ public static class MediatorCrudExtensions
                 TIdentity,
                 TEntity,
                 TSpecification
-            >(CrudActions.Create | CrudActions.GetById | CrudActions.FetchPagedData);
+            >(CrudActions.Create | CrudActions.GetById);
         }
 
         /// <summary>
@@ -208,20 +196,9 @@ public static class MediatorCrudExtensions
                 services.AddScoped<
                     IRequestHandler<
                         GetByExpressionQuery<TEntity, TViewModel, TSpecification>,
-                        IEnumerable<TViewModel>
-                    >,
-                    GetByExpressionQueryHandler<TEntity, TViewModel, TSpecification, TIdentity>
-                >();
-            }
-
-            if (actions.HasFlag(CrudActions.FetchPagedData))
-            {
-                services.AddScoped<
-                    IRequestHandler<
-                        FetchPagedDataQuery<TEntity, TViewModel, TSpecification>,
                         PagedResult<TViewModel>
                     >,
-                    FetchPagedDataQueryHandler<TEntity, TViewModel, TSpecification, TIdentity>
+                    GetByExpressionQueryHandler<TEntity, TViewModel, TSpecification, TIdentity>
                 >();
             }
 

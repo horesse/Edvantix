@@ -1,6 +1,8 @@
-﻿using Edvantix.Chassis.CQRS.Query;
+﻿using System.ComponentModel;
+using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.Endpoints.Requests;
 using Edvantix.Chassis.Specification;
+using Edvantix.Constants.Core;
 using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Chassis.CQRS.Crud.Abstractions;
@@ -32,14 +34,19 @@ public sealed record IsExistQuery<TIdentity>(TIdentity Id) : BaseIdentityQuery<T
     where TIdentity : struct;
 
 public sealed record GetByExpressionQuery<TEntity, TModel, TSpecification>(
-    TSpecification Specification
-) : IQuery<IEnumerable<TModel>>
-    where TEntity : class
-    where TModel : class
-    where TSpecification : ISpecification<TEntity>;
-
-public sealed record FetchPagedDataQuery<TEntity, TModel, TSpecification>(
-    PaginationRequest<TSpecification, TEntity> Request
+    [property: Description("Спецификация")] TSpecification Specification,
+    [property: Description("Индекс страницы")]
+    [property: DefaultValue(Pagination.DefaultPageIndex)]
+        int PageIndex = Pagination.DefaultPageIndex,
+    [property: Description(
+        "Количество элементов, которые должны быть отображены на одной странице результатов."
+    )]
+    [property: DefaultValue(Pagination.DefaultPageSize)]
+        int PageSize = Pagination.DefaultPageSize,
+    [property: Description("Свойство для упорядочивания результатов")] string? OrderBy = null,
+    [property: Description("При выборе порядка сортировки результат будет в порядке убывания.")]
+    [property: DefaultValue(false)]
+        bool IsDescending = false
 ) : IQuery<PagedResult<TModel>>
     where TEntity : class
     where TModel : class

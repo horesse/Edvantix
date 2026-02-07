@@ -25,7 +25,7 @@
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.McpInspector" Version="$(ToolKitVersion)" />
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions" Version="$(ToolKitVersion)" />
     <!-- Extra -->
-    <PackageVersion Include="Scalar.Aspire" Version="0.8.27" />
+    <PackageVersion Include="Scalar.Aspire" Version="0.8.45" />
   </ItemGroup>
   <ItemGroup Label="Core Packages">
     <!-- Microsoft Extensions -->
@@ -50,7 +50,7 @@
     <!-- Miscellaneous -->
     <PackageVersion Include="AspNetCore.HealthChecks.Uris" Version="$(HealthChecksVersion)" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageVersion Include="Refit.HttpClientFactory" Version="9.0.2" />
+    <PackageVersion Include="Refit.HttpClientFactory" Version="10.0.1" />
     <PackageVersion Include="Scrutor" Version="7.0.0" />
     <PackageVersion Include="DistributedLock.Redis" Version="1.1.1" />
     <PackageVersion Include="MediatR" Version="14.0.0" />
@@ -59,10 +59,10 @@
     <!-- gRPC -->
     <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="$(GrpcVersion)" />
     <PackageVersion Include="Grpc.AspNetCore.Server.ClientFactory" Version="$(GrpcVersion)" />
-    <PackageVersion Include="Grpc.Tools" Version="2.76.0" PrivateAssets="All" />
+    <PackageVersion Include="Grpc.Tools" Version="2.78.0" PrivateAssets="All" />
     <PackageVersion Include="Grpc.Core.Api" Version="2.76.0" />
     <!-- MassTransit -->
-    <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="$(MassTransitVersion)" />
+    <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="9.1.0-develop.54" />
     <PackageVersion Include="MassTransit.RabbitMQ" Version="$(MassTransitVersion)" />
   </ItemGroup>
 </Project>

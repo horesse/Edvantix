@@ -3,7 +3,6 @@ import type React from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { Button } from "@workspace/ui/components/button";
 import "@workspace/ui/globals.css";
 
 import { env } from "@/env.mjs";
@@ -100,13 +99,6 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        <Button
-          asChild
-          variant="outline"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50"
-        >
-          <a href="#main-content">Skip to main content</a>
-        </Button>
         <div id="main-content">
           <Providers>{children}</Providers>
         </div>

@@ -166,6 +166,51 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .text-destructive {
+    color: oklch(0.59 0.19 29.23);
+  }
+
+  .dark .text-destructive {
+    color: oklch(0.64 0.21 25.39);
+  }
+}
+
+/* Smooth focus transitions */
+input:focus-visible,
+button:focus-visible,
+a:focus-visible,
+[role="checkbox"]:focus-visible {
+  transition:
+    box-shadow 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+/* Better touch targets on mobile */
+@media (pointer: coarse) {
+  input,
+  button,
+  [role="checkbox"] {
+    min-height: 44px;
+  }
+
+  .text-sm {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -10,7 +10,7 @@ public class GetOwnProfileEndpoint : IEndpoint<Ok<OwnProfileResponse>, GetOwnPro
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "/api/v1/profile",
+                "/profile",
                 async (ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetOwnProfileQuery(), sender, ct)
             )

@@ -21,7 +21,15 @@ export default class ApiClient {
 
   private setupInterceptors(instance: AxiosInstance): AxiosInstance {
     instance.interceptors.request.use(
-      async (config) => config,
+      async (config) => {
+        const accessToken = localStorage.getItem("access_token");
+
+        if (accessToken) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+
+        return config;
+      },
       (error) => {
         console.error(`[request error] [${JSON.stringify(error)}]`);
         return Promise.reject(new Error(error));

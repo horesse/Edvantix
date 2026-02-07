@@ -19,6 +19,7 @@
     <PackageVersion Include="Aspire.Azure.Npgsql" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Keycloak.Authentication" Version="$(AspireUnstableVersion)" />
+    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="$(AspireVersion)" />
     <!-- Community Toolkit -->
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.MailPit" Version="$(ToolKitVersion)" />
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.McpInspector" Version="$(ToolKitVersion)" />

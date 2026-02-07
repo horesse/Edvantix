@@ -3,7 +3,6 @@ import { createKcPageStory } from "../KcPageStory";
 
 const { KcPageStory } = createKcPageStory({ pageId: "register.ftl" });
 
-// Common social providers to avoid duplication
 const meta = {
   title: "login/register.ftl",
   component: KcPageStory,
@@ -24,16 +23,9 @@ export const WithFieldErrors: Story = {
         messagesPerField: {
           existsError: (fieldName: string, ...otherFieldNames: string[]) => {
             const fieldNames = new Set([fieldName, ...otherFieldNames]);
-            return (
-              fieldNames.has("firstName") ||
-              fieldNames.has("email") ||
-              fieldNames.has("password")
-            );
+            return fieldNames.has("email") || fieldNames.has("password");
           },
           get: (fieldName: string) => {
-            if (fieldName === "firstName") {
-              return "First name is required.";
-            }
             if (fieldName === "email") {
               return "Invalid email format.";
             }
@@ -41,6 +33,18 @@ export const WithFieldErrors: Story = {
               return "Password must be at least 8 characters.";
             }
             return "";
+          },
+          getFirstError: (fieldName: string) => {
+            if (fieldName === "email") {
+              return "Invalid email format.";
+            }
+            if (fieldName === "password") {
+              return "Password must be at least 8 characters.";
+            }
+            return "";
+          },
+          exists: (fieldName: string) => {
+            return fieldName === "email" || fieldName === "password";
           },
         },
       }}
@@ -62,11 +66,19 @@ export const WithPasswordMismatch: Story = {
             }
             return "";
           },
+          getFirstError: (fieldName: string) => {
+            if (fieldName === "password-confirm") {
+              return "Passwords do not match.";
+            }
+            return "";
+          },
+          exists: () => false,
         },
       }}
     />
   ),
 };
+
 export const WithEmailAsUsername: Story = {
   render: () => (
     <KcPageStory
@@ -114,6 +126,13 @@ export const WithTermsError: Story = {
             }
             return "";
           },
+          getFirstError: (fieldName: string) => {
+            if (fieldName === "termsAccepted") {
+              return "You must accept the terms and conditions.";
+            }
+            return "";
+          },
+          exists: () => false,
         },
       }}
     />
@@ -150,8 +169,13 @@ export const WithGlobalError: Story = {
             }
             return "";
           },
+          getFirstError: () => "",
+          exists: (fieldName: string) => fieldName === "global",
         },
       }}
     />
   ),
 };
+
+// Note: Social providers are conditionally rendered based on realm configuration
+// and would need to be configured at the Keycloak level for the register page

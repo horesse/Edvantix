@@ -1,6 +1,7 @@
 ﻿using Edvantix.Chassis.EF;
 using Edvantix.Chassis.Repository;
 using Edvantix.Constants.Aspire;
+using Edvantix.ProfileService.Infrastructure.Blob;
 
 namespace Edvantix.ProfileService.Infrastructure;
 
@@ -26,5 +27,7 @@ public static class Extensions
                 services.AddRepositories(typeof(IProfileApiMarker));
             }
         );
+
+        builder.AddAzureBlobStorage();
     }
 }

@@ -40,6 +40,8 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
     [Include]
     public FullName FullName { get; private set; } = null!;
 
+    public string? Avatar { get; private set; }
+
     public IReadOnlyCollection<UserContact> Contacts => _contacts.AsReadOnly();
     public IReadOnlyCollection<EmploymentHistory> EmploymentHistories =>
         _employmentHistories.AsReadOnly();
@@ -48,10 +50,36 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
 
     public bool IsDeleted { get; set; }
 
-    // Методы для управления Gender
+    // Методы для управления основными полями профиля
     public void UpdateGender(Gender newGender)
     {
         Gender = newGender;
+    }
+
+    public void UpdateBirthDate(DateOnly newBirthDate)
+    {
+        if (newBirthDate > DateOnly.FromDateTime(DateTime.UtcNow))
+            throw new ArgumentException(
+                "Дата рождения не может быть в будущем.",
+                nameof(newBirthDate)
+            );
+
+        BirthDate = newBirthDate;
+    }
+
+    public void UpdateFullName(string firstName, string lastName, string? middleName = null)
+    {
+        FullName = new FullName(firstName, lastName, middleName);
+    }
+
+    public void UploadAvatar(string? avatarUrl)
+    {
+        Avatar = avatarUrl;
+    }
+
+    public UserContact CreateContact(ContactType type, string value, string? description = null)
+    {
+        return new UserContact(type, value, description);
     }
 
     public void AddContact(UserContact userContact)
@@ -64,6 +92,29 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
         _contacts.AddRange(contacts);
     }
 
+    public void ClearContacts()
+    {
+        _contacts.Clear();
+    }
+
+    public void ReplaceContacts(IEnumerable<UserContact> contacts)
+    {
+        _contacts.Clear();
+        _contacts.AddRange(contacts);
+    }
+
+    // Методы для управления историей трудоустройства
+    public EmploymentHistory CreateEmploymentHistory(
+        string workplace,
+        string position,
+        DateTime startDate,
+        DateTime? endDate = null,
+        string? description = null
+    )
+    {
+        return new EmploymentHistory(workplace, position, startDate, endDate, description);
+    }
+
     public void AddEmploymentHistory(EmploymentHistory employmentHistory)
     {
         _employmentHistories.Add(employmentHistory);
@@ -74,6 +125,29 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
         _employmentHistories.AddRange(employmentHistories);
     }
 
+    public void ClearEmploymentHistories()
+    {
+        _employmentHistories.Clear();
+    }
+
+    public void ReplaceEmploymentHistories(IEnumerable<EmploymentHistory> employmentHistories)
+    {
+        _employmentHistories.Clear();
+        _employmentHistories.AddRange(employmentHistories);
+    }
+
+    // Методы для управления образованием
+    public Education CreateEducation(
+        DateTime dateStart,
+        string institution,
+        long educationLevelId,
+        string? specialty = null,
+        DateTime? dateEnd = null
+    )
+    {
+        return new Education(dateStart, institution, educationLevelId, specialty, dateEnd);
+    }
+
     public void AddEducation(Education education)
     {
         _educations.Add(education);
@@ -81,6 +155,17 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
 
     public void AddEducations(IEnumerable<Education> educations)
     {
+        _educations.AddRange(educations);
+    }
+
+    public void ClearEducations()
+    {
+        _educations.Clear();
+    }
+
+    public void ReplaceEducations(IEnumerable<Education> educations)
+    {
+        _educations.Clear();
         _educations.AddRange(educations);
     }
 

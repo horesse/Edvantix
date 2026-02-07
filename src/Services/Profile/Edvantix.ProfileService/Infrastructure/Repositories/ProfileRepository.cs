@@ -4,5 +4,7 @@ using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate;
 namespace Edvantix.ProfileService.Infrastructure.Repositories;
 
 public sealed class ProfileRepository(IServiceProvider provider)
-    : CrudRepository<ProfileContext, Profile, long>(provider),
+    : CrudRepository<ProfileContext, Domain.AggregatesModel.ProfileAggregate.Profile, long>(
+        provider
+    ),
         IProfileRepository;

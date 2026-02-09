@@ -95,7 +95,7 @@ public static class Extensions
     {
         // TODO: Нужно ли это в целом, возможно вынести в отдельный/более подходящий метод
         app.UseAuthorization();
-        
+
         if (!app.Environment.IsDevelopment())
         {
             return;

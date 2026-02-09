@@ -28,7 +28,7 @@ public static class AuthenticationExtensions
 
         // TODO: Фронт локально запускается в http, из-за этого отличается issuer и токен не проходит валидацию
         var keycloakUrl = builder.Configuration["KEYCLOAK_URL"] ?? keycloakUrlBuilt;
-        
+
         services.AddHttpClient(
             Components.KeyCloak,
             client => client.BaseAddress = new(keycloakUrl)

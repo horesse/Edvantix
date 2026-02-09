@@ -1,12 +1,28 @@
-﻿using Edvantix.ProfileService.Features.ProfileFeature.Models;
+﻿using Edvantix.Constants.Core;
 using FluentValidation;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
 public sealed class Validator : AbstractValidator<RegistrationCommand>
 {
-    public Validator(IValidator<ProfileModel> piValidator)
+    public Validator()
     {
-        RuleFor(x => x.Profile).SetValidator(piValidator);
+        RuleFor(x => x.Gender).IsInEnum().WithMessage("Указан некорректный пол");
+
+        RuleFor(x => x.FirstName)
+            .NotEmpty()
+            .WithMessage("Имя является обязательным полем")
+            .MaximumLength(DataSchemaLength.Large)
+            .WithMessage($"Имя не должно превышать {DataSchemaLength.Large} символов");
+
+        RuleFor(x => x.LastName)
+            .NotEmpty()
+            .WithMessage("Фамилия является обязательным полем")
+            .MaximumLength(DataSchemaLength.Large)
+            .WithMessage($"Фамилия не должна превышать {DataSchemaLength.Large} символов");
+
+        RuleFor(x => x.MiddleName)
+            .MaximumLength(DataSchemaLength.Large)
+            .WithMessage($"Отчество не должно превышать {DataSchemaLength.Large} символов");
     }
 }

@@ -8,7 +8,13 @@ using MediatR;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
-public sealed record RegistrationCommand(ProfileModel Profile) : IRequest<long>;
+public sealed record RegistrationCommand(
+    string FirstName,
+    string LastName,
+    string? MiddleName,
+    DateOnly BirthDate,
+    Gender Gender
+) : IRequest<long>;
 
 public sealed class RegistrationCommandHandler(IServiceProvider provider)
     : IRequestHandler<RegistrationCommand, long>
@@ -36,11 +42,11 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         {
             var person = new Profile(
                 userGuid,
-                request.Profile.Gender,
-                request.Profile.BirthDate,
-                request.Profile.FirstName,
-                request.Profile.LastName,
-                request.Profile.MiddleName
+                request.Gender,
+                request.BirthDate,
+                request.FirstName,
+                request.LastName,
+                request.MiddleName
             );
 
             await personRepo.InsertAsync(person, cancellationToken);

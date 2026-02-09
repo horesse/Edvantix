@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -26,271 +26,194 @@ import {
   FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
+import { Label } from "@workspace/ui/components/label";
 import {
   RadioGroup,
   RadioGroupItem,
 } from "@workspace/ui/components/radio-group";
+import {
+  type RegistrationFormData,
+  registrationSchema,
+} from "@workspace/validations/profile/registration";
 
-// import { type RegisterProfileInput, registerProfileSchema } from "@workspace/validations/profile/registration";
-
-const STEPS = [
-  { id: 1, title: "Основная информация", description: "Имя и фамилия" },
-  { id: 2, title: "Дополнительно", description: "Дата рождения и пол" },
+const genderOptions = [
+  { value: Gender.Male, label: "Мужской" },
+  { value: Gender.Female, label: "Женский" },
+  { value: Gender.None, label: "Не указан" },
 ] as const;
 
 export default function ProfileRegisterPage() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(1);
-  const registerMutation = useRegisterProfile();
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const form = useForm<RegisterProfileInput>({
-    resolver: zodResolver(registerProfileSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      middleName: "",
-      birthDate: "",
-      gender: Gender.Male,
+  const registerMutation = useRegisterProfile({
+    onSuccess: () => {
+      router.push("/");
+    },
+    onError: (error) => {
+      const axiosError = error as {
+        response?: { status?: number; data?: string };
+      };
+
+      if (axiosError.response?.status === 409) {
+        setServerError("Профиль уже существует. Перенаправление...");
+        router.push("/");
+        return;
+      }
+
+      if (axiosError.response?.status === 400) {
+        setServerError(
+          axiosError.response.data ?? "Проверьте правильность заполнения полей",
+        );
+        return;
+      }
+
+      setServerError("Произошла ошибка при регистрации. Попробуйте ещё раз.");
     },
   });
 
-  const onSubmit = async (data: RegisterProfileInput) => {
-    registerMutation.mutate(
-      {
-        gender: data.gender,
-        profile: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          middleName: data.middleName,
-          birthDate: data.birthDate,
-        },
-      },
-      {
-        onSuccess: () => {
-          router.push("/");
-        },
-      },
-    );
-  };
+  const form = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      lastName: "",
+      firstName: "",
+      middleName: "",
+      birthDate: "",
+      gender: undefined,
+    },
+  });
 
-  const handleNext = async () => {
-    const fieldsToValidate =
-      currentStep === 1
-        ? (["firstName", "lastName", "middleName"] as const)
-        : (["birthDate", "gender"] as const);
-
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if (isValid) {
-      if (currentStep < STEPS.length) {
-        setCurrentStep(currentStep + 1);
-      } else {
-        form.handleSubmit(onSubmit)();
-      }
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const isLoading = registerMutation.isPending;
+  function onSubmit(data: RegistrationFormData) {
+    setServerError(null);
+    registerMutation.mutate({
+      lastName: data.lastName,
+      firstName: data.firstName,
+      middleName: data.middleName || null,
+      birthDate: data.birthDate,
+      gender: data.gender,
+    });
+  }
 
   return (
-    <div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-gradient-to-br p-4">
-      <Card className="border-muted/50 w-full max-w-lg shadow-2xl">
-        <CardHeader className="space-y-4">
-          <div className="flex items-center justify-between">
-            {STEPS.map((step, index) => (
-              <div key={step.id} className="flex flex-1 items-center">
-                <div className="flex flex-1 flex-col items-center">
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full font-semibold transition-colors ${
-                      currentStep >= step.id
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {step.id}
-                  </div>
-                  <div className="mt-2 hidden text-center text-xs sm:block">
-                    <div
-                      className={
-                        currentStep >= step.id
-                          ? "font-semibold"
-                          : "text-muted-foreground"
-                      }
-                    >
-                      {step.title}
-                    </div>
-                  </div>
-                </div>
-                {index < STEPS.length - 1 && (
-                  <div
-                    className={`mx-2 h-1 flex-1 rounded transition-colors ${
-                      currentStep > step.id ? "bg-primary" : "bg-muted"
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="text-center">
-            <CardTitle className="text-2xl">Регистрация профиля</CardTitle>
-            <CardDescription>
-              {STEPS[currentStep - 1].description}
-            </CardDescription>
-          </div>
+    <div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-linear-to-br p-4">
+      <Card className="border-muted/50 w-full max-w-lg shadow-lg">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Регистрация профиля</CardTitle>
+          <CardDescription>
+            Заполните информацию для создания вашего профиля
+          </CardDescription>
         </CardHeader>
-
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {currentStep === 1 && (
-                <div className="animate-in fade-in slide-in-from-right-4 space-y-4 duration-300">
-                  <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Фамилия</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Иванов" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Имя</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Иван" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="middleName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Отчество (необязательно)</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Иванович"
-                            {...field}
-                            value={field.value ?? ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              )}
-
-              {currentStep === 2 && (
-                <div className="animate-in fade-in slide-in-from-right-4 space-y-4 duration-300">
-                  <FormField
-                    control={form.control}
-                    name="birthDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Дата рождения</FormLabel>
-                        <FormControl>
-                          <Input type="date" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Пол</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={(value) =>
-                              field.onChange(Number(value))
-                            }
-                            value={field.value?.toString()}
-                            className="flex flex-col space-y-2"
-                          >
-                            <FormItem className="flex items-center space-y-0 space-x-3">
-                              <FormControl>
-                                <RadioGroupItem
-                                  value={Gender.Male.toString()}
-                                />
-                              </FormControl>
-                              <FormLabel className="cursor-pointer font-normal">
-                                Мужской
-                              </FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-y-0 space-x-3">
-                              <FormControl>
-                                <RadioGroupItem
-                                  value={Gender.Female.toString()}
-                                />
-                              </FormControl>
-                              <FormLabel className="cursor-pointer font-normal">
-                                Женский
-                              </FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-y-0 space-x-3">
-                              <FormControl>
-                                <RadioGroupItem
-                                  value={Gender.Other.toString()}
-                                />
-                              </FormControl>
-                              <FormLabel className="cursor-pointer font-normal">
-                                Другое
-                              </FormLabel>
-                            </FormItem>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              )}
-
-              <div className="flex gap-3 pt-4">
-                {currentStep > 1 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleBack}
-                    className="flex-1"
-                  >
-                    Назад
-                  </Button>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Фамилия</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Иванов" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={isLoading}
-                  className="flex-1"
-                >
-                  {isLoading
-                    ? "Сохранение..."
-                    : currentStep === STEPS.length
-                      ? "Завершить"
-                      : "Далее"}
-                </Button>
-              </div>
+              />
+
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Имя</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Иван" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="middleName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Отчество{" "}
+                      <span className="text-muted-foreground font-normal">
+                        (необязательно)
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Иванович" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="birthDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Дата рождения</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Пол</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value?.toString()}
+                        className="flex gap-6"
+                      >
+                        {genderOptions.map((option) => (
+                          <div
+                            key={option.value}
+                            className="flex items-center gap-2"
+                          >
+                            <RadioGroupItem
+                              value={option.value.toString()}
+                              id={`gender-${option.value}`}
+                            />
+                            <Label htmlFor={`gender-${option.value}`}>
+                              {option.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {serverError && (
+                <p className="text-destructive text-sm">{serverError}</p>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full"
+                size="lg"
+                disabled={registerMutation.isPending}
+              >
+                {registerMutation.isPending
+                  ? "Регистрация..."
+                  : "Зарегистрировать профиль"}
+              </Button>
             </form>
           </Form>
         </CardContent>

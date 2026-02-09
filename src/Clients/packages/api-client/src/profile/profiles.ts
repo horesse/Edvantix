@@ -23,7 +23,7 @@ class ProfileApiClient {
     request: RegisterProfileRequest,
   ): Promise<number> {
     const response = await this.client.post<number>(
-      `/profile/api/person/registration`,
+      `/profile/api/v1/profile/registration`,
       request,
     );
     return response.data;

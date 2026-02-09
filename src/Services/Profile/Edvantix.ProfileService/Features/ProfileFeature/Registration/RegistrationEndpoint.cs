@@ -9,7 +9,7 @@ public class RegistrationEndpoint : IEndpoint<Created<long>, RegistrationCommand
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "/api/person/registration",
+                "/profile/registration",
                 async (RegistrationCommand command, ISender sender, CancellationToken ct) =>
                     await HandleAsync(command, sender, ct)
             )
@@ -27,6 +27,6 @@ public class RegistrationEndpoint : IEndpoint<Created<long>, RegistrationCommand
     )
     {
         var id = await sender.Send(command, cancellationToken);
-        return TypedResults.Created($"/api/person/{id}", id);
+        return TypedResults.Created($"/api/profile/{id}", id);
     }
 }

@@ -20,12 +20,15 @@ public static class AuthenticationExtensions
         services.Configure<IdentityOptions>(IdentityOptions.ConfigurationSection);
 
         var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
-        var keycloakUrl = HttpUtilities
+        var keycloakUrlBuilt = HttpUtilities
             .AsUrlBuilder()
             .WithScheme(Http.Schemes.HttpOrHttps)
             .WithHost(Components.KeyCloak)
             .Build();
 
+        // TODO: Фронт локально запускается в http, из-за этого отличается issuer и токен не проходит валидацию
+        var keycloakUrl = builder.Configuration["KEYCLOAK_URL"] ?? keycloakUrlBuilt;
+        
         services.AddHttpClient(
             Components.KeyCloak,
             client => client.BaseAddress = new(keycloakUrl)
@@ -44,6 +47,9 @@ public static class AuthenticationExtensions
                 {
                     options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
                     options.Audience = "account";
+
+                    // TODO: In dev we start http keycloak for front
+                    options.TokenValidationParameters.ValidateIssuer = false;
                 }
             );
 

@@ -1290,6 +1290,7 @@
       "id": "a9f3c7d2-8b4e-4f1a-9c6d-5e2b1a8d4f3c",
       "clientId": "${CLIENT_ORGANIZATIONFRONT_ID}",
       "name": "${CLIENT_ORGANIZATIONFRONT_NAME}",
+      "description": "",
       "rootUrl": "${CLIENT_ORGANIZATIONFRONT_URL}",
       "adminUrl": "${CLIENT_ORGANIZATIONFRONT_URL}",
       "baseUrl": "/",
@@ -1297,8 +1298,12 @@
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": ["${CLIENT_ORGANIZATIONFRONT_URL}/*"],
-      "webOrigins": ["${CLIENT_ORGANIZATIONFRONT_URL}"],
+      "redirectUris": [
+        "${CLIENT_ORGANIZATIONFRONT_URL}/*"
+      ],
+      "webOrigins": [
+        "${CLIENT_ORGANIZATIONFRONT_URL}"
+      ],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -1310,77 +1315,51 @@
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
-        "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1748888507",
-        "backchannel.logout.session.required": "true",
+        "request.object.signature.alg": "any",
+        "post.logout.redirect.uris": "${CLIENT_ORGANIZATIONFRONT_URL}/*",
+        "frontchannel.logout.session.required": "true",
         "oauth2.device.authorization.grant.enabled": "false",
-        "display.on.consent.screen": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
-        "saml.artifact.binding": "false",
-        "saml.server.signature": "false",
-        "saml.server.signature.keyinfo.ext": "false",
         "use.refresh.tokens": "true",
-        "exclude.session.state.from.auth.response": "false",
-        "saml.signature.algorithm": "RSA_SHA256",
-        "saml_force_name_id_format": "false",
-        "saml.client.signature": "false",
-        "tls.client.certificate.bound.access.tokens": "false",
-        "require.pushed.authorization.requests": "false",
-        "saml.authnstatement": "false",
-        "saml.onetimeuse.condition": "false",
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
         "client_credentials.use_refresh_token": "false",
+        "require.pushed.authorization.requests": "false",
+        "request.object.encryption.enc": "any",
+        "pkce.code.challenge.method": "S256",
+        "client.secret.creation.time": "1748888507",
+        "request.object.encryption.alg": "any",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
+        "standard.token.exchange.enabled": "false",
+        "login_theme": "${THEME_NAME}",
+        "client.use.lightweight.access.token.enabled": "false",
+        "request.object.required": "not required",
+        "access.token.header.type.rfc9068": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
         "acr.loa.map": "{}",
+        "display.on.consent.screen": "false",
         "token.response.type.bearer.lower-case": "false"
       },
       "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": false,
+      "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "org-front-audience-mapper",
-          "name": "account audience",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-audience-mapper",
-          "consentRequired": false,
-          "config": {
-            "included.client.audience": "account",
-            "id.token.claim": "false",
-            "access.token.claim": "true",
-            "introspection.token.claim": "true"
-          }
-        },
-        {
-          "id": "8161aa60-2f55-4df5-9531-0a4e75f742fa",
-          "name": "auth_time",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "AUTH_TIME",
-            "introspection.token.claim": "true",
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "auth_time",
-            "jsonType.label": "long"
-          }
-        }
-      ],
       "defaultClientScopes": [
         "web-origins",
         "acr",
-        "profile",
         "roles",
+        "profile",
+        "basic",
         "email"
       ],
       "optionalClientScopes": [
+        "${CLIENT_PROFILE_ID}_read",
+        "${CLIENT_PROFILE_ID}_write",
         "address",
         "phone",
-        "offline_access",
-        "microprofile-jwt",
         "organization",
-        "${CLIENT_PROFILE_ID}_read",
-        "${CLIENT_PROFILE_ID}_write"
+        "offline_access",
+        "microprofile-jwt"
       ]
     },
     {

@@ -101,6 +101,11 @@ public static class KeycloakExtensions
                 builder
                     .WithReference(keycloakContainer)
                     .WaitForStart(keycloakContainer)
+                    // TODO: Фронт локально запускается в http, из-за этого отличается issuer и токен не проходит валидацию
+                    .WithEnvironment(
+                        "KEYCLOAK_URL",
+                        keycloakContainer.GetEndpoint(Http.Schemes.Http)
+                    )
                     .WithEnvironment("Identity__Realm", _defaultLocalKeycloakName)
                     .WithEnvironment("Identity__ClientId", clientId)
                     .WithEnvironment("Identity__ClientSecret", clientSecret)

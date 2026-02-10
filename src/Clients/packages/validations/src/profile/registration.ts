@@ -1,36 +1,72 @@
-﻿import { z } from "zod";
+import { z } from "zod";
 
 import { Gender } from "@workspace/types/profile";
 
-export const registerProfileSchema = z.object({
-  gender: z.nativeEnum(Gender, {
-    required_error: "Пол обязателен для заполнения",
-  }),
-  firstName: z
-    .string()
-    .min(1, "Имя обязательно для заполнения")
-    .max(50, "Имя должно содержать не более 50 символов"),
+const MAX_NAME_LENGTH = 100;
+const MIN_AGE = 14;
+const MAX_AGE = 120;
+const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
+
+export const registrationSchema = z.object({
   lastName: z
     .string()
-    .min(1, "Фамилия обязательна для заполнения")
-    .max(50, "Фамилия должна содержать не более 50 символов"),
+    .min(1, "Фамилия является обязательным полем")
+    .max(
+      MAX_NAME_LENGTH,
+      `Фамилия не должна превышать ${MAX_NAME_LENGTH} символов`,
+    ),
+  firstName: z
+    .string()
+    .min(1, "Имя является обязательным полем")
+    .max(
+      MAX_NAME_LENGTH,
+      `Имя не должно превышать ${MAX_NAME_LENGTH} символов`,
+    ),
   middleName: z
     .string()
-    .max(50, "Отчество должно содержать не более 50 символов")
+    .max(
+      MAX_NAME_LENGTH,
+      `Отчество не должно превышать ${MAX_NAME_LENGTH} символов`,
+    )
     .optional()
-    .nullable(),
+    .or(z.literal("")),
   birthDate: z
     .string()
-    .min(1, "Дата рождения обязательна для заполнения")
+    .min(1, "Дата рождения является обязательным полем")
+    .refine((value) => {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return false;
+
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const dayDiff = today.getDate() - date.getDate();
+      const exactAge =
+        monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+
+      return exactAge >= MIN_AGE && exactAge <= MAX_AGE;
+    }, `Возраст должен быть от ${MIN_AGE} до ${MAX_AGE} лет`),
+  gender: z.nativeEnum(Gender, {
+    error: "Указан некорректный пол",
+  }),
+  avatar: z
+    .instanceof(File)
     .refine(
-      (date) => {
-        const birthDate = new Date(date);
-        const today = new Date();
-        const age = today.getFullYear() - birthDate.getFullYear();
-        return age >= 14 && age <= 120;
-      },
-      { message: "Возраст должен быть от 14 до 120 лет" },
-    ),
+      (file) => file.size <= MAX_AVATAR_SIZE,
+      "Размер файла не должен превышать 5 МБ",
+    )
+    .refine(
+      (file) => ALLOWED_IMAGE_TYPES.includes(file.type),
+      "Допустимые форматы: JPEG, PNG, GIF, WebP",
+    )
+    .nullish(),
 });
 
-export type RegisterProfileInput = z.infer<typeof registerProfileSchema>;
+export type RegistrationFormData = z.infer<typeof registrationSchema>;

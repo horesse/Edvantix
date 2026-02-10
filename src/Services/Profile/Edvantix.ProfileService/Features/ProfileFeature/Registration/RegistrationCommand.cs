@@ -1,54 +1,65 @@
-﻿using System.Security.Claims;
-using Edvantix.Chassis.Security.Extensions;
-using Edvantix.Chassis.Utilities.Guards;
+﻿using Edvantix.Chassis.Utilities;
 using Edvantix.Constants.Other;
 using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate;
-using Edvantix.ProfileService.Features.ProfileFeature.Models;
+using Edvantix.ProfileService.Infrastructure.Blob;
 using MediatR;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
-public sealed record RegistrationCommand(ProfileModel Profile) : IRequest<long>;
+public sealed class RegistrationCommand : IRequest<long>
+{
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string? MiddleName { get; set; }
+    public DateOnly BirthDate { get; set; }
+    public Gender Gender { get; set; }
+    public IFormFile? Avatar { get; set; }
+}
 
 public sealed class RegistrationCommandHandler(IServiceProvider provider)
     : IRequestHandler<RegistrationCommand, long>
 {
     public async Task<long> Handle(RegistrationCommand request, CancellationToken cancellationToken)
     {
-        var claimsPrincipal =
-            provider.GetService<ClaimsPrincipal>() ?? throw new Exception("Вы не авторизованы.");
+        var userGuid = provider.GetUserId();
 
-        var sub = claimsPrincipal.GetClaimValue(ClaimTypes.NameIdentifier);
-        var userId = Guard.Against.NotAuthenticated(sub);
+        using var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        var userGuid = Guid.Parse(userId);
-
-        using var personRepo = provider.GetRequiredService<IProfileRepository>();
-
-        var isExists = await personRepo.AnyAsync(p => p.AccountId == userGuid, cancellationToken);
+        var isExists = await profileRepo.AnyAsync(p => p.AccountId == userGuid, cancellationToken);
 
         if (isExists)
             throw new Exception("Пользователь с таким идентификатором уже существует");
 
-        await using var transaction = await personRepo.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await profileRepo.BeginTransactionAsync(cancellationToken);
 
         try
         {
-            var person = new Profile(
+            var profile = new Profile(
                 userGuid,
-                request.Profile.Gender,
-                request.Profile.BirthDate,
-                request.Profile.FirstName,
-                request.Profile.LastName,
-                request.Profile.MiddleName
+                request.Gender,
+                request.BirthDate,
+                request.FirstName,
+                request.LastName,
+                request.MiddleName
             );
 
-            await personRepo.InsertAsync(person, cancellationToken);
+            if (request.Avatar is not null)
+            {
+                var blobService = provider.GetRequiredService<IBlobService>();
 
-            await personRepo.SaveEntitiesAsync(cancellationToken);
+                string? url = request.Avatar is null
+                    ? null
+                    : await blobService.UploadFileAsync(request.Avatar, cancellationToken);
+
+                profile.UploadAvatar(url);
+            }
+
+            await profileRepo.InsertAsync(profile, cancellationToken);
+
+            await profileRepo.SaveEntitiesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
 
-            return person.Id;
+            return profile.Id;
         }
         catch
         {

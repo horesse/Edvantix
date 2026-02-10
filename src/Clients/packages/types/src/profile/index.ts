@@ -1,23 +1,20 @@
-﻿export type OwnProfile = {
+export type OwnProfile = {
   id: string;
   name: string;
   userName: string;
 };
 
 export enum Gender {
-  Male = 0,
-  Female = 1,
-  Other = 2,
+  Male = 1,
+  Female = 2,
+  None = 3,
 }
 
-export type ProfileModel = {
+export type RegisterProfileRequest = {
   birthDate: string;
   firstName: string;
   lastName: string;
   middleName?: string | null;
-};
-
-export type RegisterProfileRequest = {
   gender: Gender;
-  profile: ProfileModel;
+  avatar?: File | null;
 };

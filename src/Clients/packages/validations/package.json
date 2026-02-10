@@ -5,12 +5,15 @@
   "engines": {
     "node": ">=25.0.0"
   },
-  "exports": {},
+  "exports": {
+    "./profile/registration": "./src/profile/registration.ts"
+  },
   "scripts": {
     "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@workspace/types": "workspace:*",
     "zod": "^4.3.6"
   },
   "devDependencies": {

@@ -32,13 +32,13 @@ export default class ApiClient {
       },
       (error) => {
         console.error(`[request error] [${JSON.stringify(error)}]`);
-        return Promise.reject(new Error(error));
+        return Promise.reject(error);
       },
     );
     instance.interceptors.response.use(
       async (response) => response,
       (error) => {
-        return Promise.reject(new Error(error));
+        return Promise.reject(error);
       },
     );
 

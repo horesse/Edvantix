@@ -22,9 +22,24 @@ class ProfileApiClient {
   public async registerProfile(
     request: RegisterProfileRequest,
   ): Promise<number> {
+    const formData = new FormData();
+    formData.append("firstName", request.firstName);
+    formData.append("lastName", request.lastName);
+    formData.append("birthDate", request.birthDate);
+    formData.append("gender", String(request.gender));
+
+    if (request.middleName) {
+      formData.append("middleName", request.middleName);
+    }
+
+    if (request.avatar) {
+      formData.append("avatar", request.avatar);
+    }
+
     const response = await this.client.post<number>(
       `/profile/api/v1/profile/registration`,
-      request,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } },
     );
     return response.data;
   }

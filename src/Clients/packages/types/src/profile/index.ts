@@ -16,4 +16,5 @@ export type RegisterProfileRequest = {
   lastName: string;
   middleName?: string | null;
   gender: Gender;
+  avatar?: File | null;
 };

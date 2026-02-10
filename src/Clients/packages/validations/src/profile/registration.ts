@@ -5,6 +5,14 @@ import { Gender } from "@workspace/types/profile";
 const MAX_NAME_LENGTH = 100;
 const MIN_AGE = 14;
 const MAX_AGE = 120;
+const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 
 export const registrationSchema = z.object({
   lastName: z
@@ -42,6 +50,17 @@ export const registrationSchema = z.object({
   gender: z.nativeEnum(Gender, {
     error: "Указан некорректный пол",
   }),
+  avatar: z
+    .instanceof(File)
+    .refine(
+      (file) => file.size <= MAX_AVATAR_SIZE,
+      "Размер файла не должен превышать 5 МБ",
+    )
+    .refine(
+      (file) => ALLOWED_IMAGE_TYPES.includes(file.type),
+      "Допустимые форматы: JPEG, PNG, GIF, WebP",
+    )
+    .nullish(),
 });
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>;

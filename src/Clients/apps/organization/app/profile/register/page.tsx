@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { UserCircle, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import useRegisterProfile from "@workspace/api-hooks/profiles/useRegisterProfile";
@@ -45,6 +46,8 @@ const genderOptions = [
 export default function ProfileRegisterPage() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const registerMutation = useRegisterProfile({
     onSuccess: () => {
@@ -80,6 +83,7 @@ export default function ProfileRegisterPage() {
       middleName: "",
       birthDate: "",
       gender: undefined,
+      avatar: null,
     },
   });
 
@@ -91,7 +95,29 @@ export default function ProfileRegisterPage() {
       middleName: data.middleName || null,
       birthDate: data.birthDate,
       gender: data.gender,
+      avatar: data.avatar ?? null,
     });
+  }
+
+  function handleAvatarChange(file: File | null) {
+    if (avatarPreview) {
+      URL.revokeObjectURL(avatarPreview);
+    }
+
+    if (file) {
+      form.setValue("avatar", file, { shouldValidate: true });
+      setAvatarPreview(URL.createObjectURL(file));
+    } else {
+      form.setValue("avatar", null, { shouldValidate: true });
+      setAvatarPreview(null);
+    }
+  }
+
+  function removeAvatar() {
+    handleAvatarChange(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   }
 
   return (
@@ -106,6 +132,65 @@ export default function ProfileRegisterPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <FormField
+                control={form.control}
+                name="avatar"
+                render={() => (
+                  <FormItem className="flex flex-col items-center">
+                    <FormLabel>
+                      Аватар{" "}
+                      <span className="text-muted-foreground font-normal">
+                        (необязательно)
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="bg-muted hover:bg-muted/80 focus-visible:ring-ring flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-dashed transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                          >
+                            {avatarPreview ? (
+                              <img
+                                src={avatarPreview}
+                                alt="Аватар"
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <UserCircle className="text-muted-foreground h-12 w-12" />
+                            )}
+                          </button>
+                          {avatarPreview && (
+                            <button
+                              type="button"
+                              onClick={removeAvatar}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full"
+                            >
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                        </div>
+                        <Input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/jpeg,image/png,image/gif,image/webp"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] ?? null;
+                            handleAvatarChange(file);
+                          }}
+                        />
+                        <p className="text-muted-foreground text-xs">
+                          JPEG, PNG, GIF или WebP. Макс. 5 МБ
+                        </p>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="lastName"

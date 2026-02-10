@@ -1,23 +1,20 @@
-﻿using System.Security.Claims;
-using Edvantix.Chassis.Security.Extensions;
-using Edvantix.Chassis.Utilities;
-using Edvantix.Chassis.Utilities.Guards;
+﻿using Edvantix.Chassis.Utilities;
 using Edvantix.Constants.Other;
 using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate;
-using Edvantix.ProfileService.Features.ProfileFeature.Models;
 using Edvantix.ProfileService.Infrastructure.Blob;
 using MediatR;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.Registration;
 
-public sealed record RegistrationCommand(
-    string FirstName,
-    string LastName,
-    string? MiddleName,
-    DateOnly BirthDate,
-    Gender Gender,
-    IFormFile? Avatar
-) : IRequest<long>;
+public sealed class RegistrationCommand : IRequest<long>
+{
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string? MiddleName { get; set; }
+    public DateOnly BirthDate { get; set; }
+    public Gender Gender { get; set; }
+    public IFormFile? Avatar { get; set; }
+}
 
 public sealed class RegistrationCommandHandler(IServiceProvider provider)
     : IRequestHandler<RegistrationCommand, long>

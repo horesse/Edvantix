@@ -5,6 +5,7 @@ using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate;
 using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate.Specifications;
 using Edvantix.ProfileService.Features.ProfileFeature.Models;
+using Edvantix.ProfileService.Infrastructure.Blob;
 using FluentValidation;
 using MediatR;
 
@@ -40,10 +41,15 @@ public sealed class GetOwnProfileQueryHandler(IServiceProvider provider)
         var userName =
             claimsPrincipal.GetClaimValue(ClaimTypes.Name) ?? profile.AccountId.ToString();
 
+        var blobService = provider.GetRequiredService<IBlobService>();
+
+        var avatarUrl = profile.Avatar != null ? blobService.GetFileSasUrl(profile.Avatar) : null;
+
         return new OwnProfileResponse(
             profile.Id.ToString(),
             profile.FullName.GetFullName(),
-            userName
+            userName,
+            avatarUrl
         );
     }
 }

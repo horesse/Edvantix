@@ -2,6 +2,7 @@ export type OwnProfile = {
   id: string;
   name: string;
   userName: string;
+  avatarUrl?: string;
 };
 
 export enum Gender {

@@ -43,7 +43,8 @@ public sealed class GetOwnProfileQueryHandler(IServiceProvider provider)
         return new OwnProfileResponse(
             profile.Id.ToString(),
             profile.FullName.GetFullName(),
-            userName
+            userName,
+            profile.Avatar
         );
     }
 }

@@ -32,5 +32,5 @@ public enum EducationLevel : byte
     AdditionalAdults = 9,
 
     [Description("Специальное образование")]
-    Special = 10
+    Special = 10,
 }

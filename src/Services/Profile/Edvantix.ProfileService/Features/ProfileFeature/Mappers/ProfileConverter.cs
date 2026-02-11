@@ -50,14 +50,18 @@ public sealed class ProfileConverter(IServiceProvider provider)
 
         if (source.Contacts is not null)
         {
-            var converter = provider.GetRequiredService<IConverter<UserContactModel, UserContact>>();
+            var converter = provider.GetRequiredService<
+                IConverter<UserContactModel, UserContact>
+            >();
             var contacts = converter.Map(source.Contacts.ToList());
             target.ReplaceContacts(contacts);
         }
 
         if (source.EmploymentHistories is not null)
         {
-            var converter = provider.GetRequiredService<IConverter<EmploymentHistoryModel, EmploymentHistory>>();
+            var converter = provider.GetRequiredService<
+                IConverter<EmploymentHistoryModel, EmploymentHistory>
+            >();
             var employmentHistories = converter.Map(source.EmploymentHistories.ToList());
             target.ReplaceEmploymentHistories(employmentHistories);
         }

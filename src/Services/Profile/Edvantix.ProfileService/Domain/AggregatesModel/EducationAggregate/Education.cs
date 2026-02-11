@@ -53,7 +53,7 @@ public sealed class Education() : PersonalData<long>, ISoftDelete, IAggregateRoo
         EducationLevel educationLevel
     )
     {
-            DateStart = dateStart;
+        DateStart = dateStart;
 
         if (dateEnd.HasValue)
         {

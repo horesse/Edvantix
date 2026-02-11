@@ -26,5 +26,14 @@ public static class Extensions
 
             return converter.Map(model);
         }
+
+        public TFirst Map<TFirst, TSecond>(TSecond model)
+            where TFirst : class
+            where TSecond : notnull
+        {
+            var converter = provider.GetRequiredService<IConverter<TFirst, TSecond>>();
+
+            return converter.Map(model);
+        }
     }
 }

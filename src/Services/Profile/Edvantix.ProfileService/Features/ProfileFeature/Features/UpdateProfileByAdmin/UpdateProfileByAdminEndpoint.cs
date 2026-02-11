@@ -4,7 +4,7 @@ using Edvantix.ProfileService.Features.ProfileFeature.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Edvantix.ProfileService.Features.ProfileFeature.UpdateProfileByAdmin;
+namespace Edvantix.ProfileService.Features.ProfileFeature.Features.UpdateProfileByAdmin;
 
 /// <summary>
 /// Эндпоинт для обновления профиля администратором
@@ -16,7 +16,7 @@ public class UpdateProfileByAdminEndpoint
     {
         app.MapPut(
                 "/profile/{id:long}",
-                async (long id, UpdateProfileModel model, ISender sender, CancellationToken ct) =>
+                async (long id, ProfileModel model, ISender sender, CancellationToken ct) =>
                 {
                     var command = new UpdateProfileByAdminCommand(id, model);
                     return await HandleAsync(command, sender, ct);

@@ -3,7 +3,7 @@ using Edvantix.ProfileService.Features.ProfileFeature.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Edvantix.ProfileService.Features.ProfileFeature.UpdateOwnProfile;
+namespace Edvantix.ProfileService.Features.ProfileFeature.Features.UpdateOwnProfile;
 
 /// <summary>
 /// Эндпоинт для обновления собственного профиля
@@ -14,7 +14,7 @@ public class UpdateOwnProfileEndpoint : IEndpoint<NoContent, UpdateOwnProfileCom
     {
         app.MapPut(
                 "/profile",
-                async (UpdateProfileModel model, ISender sender, CancellationToken ct) =>
+                async (ProfileModel model, ISender sender, CancellationToken ct) =>
                 {
                     var command = new UpdateOwnProfileCommand(model);
                     return await HandleAsync(command, sender, ct);

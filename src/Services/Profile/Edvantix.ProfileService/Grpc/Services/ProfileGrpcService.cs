@@ -1,6 +1,6 @@
 using Edvantix.Chassis.Exceptions;
-using Edvantix.ProfileService.Features.ProfileFeature.GetProfileByAccountId;
-using Edvantix.ProfileService.Features.ProfileFeature.GetProfileById;
+using Edvantix.ProfileService.Features.ProfileFeature.Features.GetProfileByAccountId;
+using Edvantix.ProfileService.Features.ProfileFeature.Features.GetProfileById;
 using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

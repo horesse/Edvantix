@@ -11,12 +11,12 @@ using MediatR;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.OwnProfile;
 
-public sealed record GetOwnProfileQuery : IRequest<OwnProfileResponse>;
+public sealed record GetOwnProfileQuery : IRequest<ProfileViewModel>;
 
 public sealed class GetOwnProfileQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetOwnProfileQuery, OwnProfileResponse>
+    : IRequestHandler<GetOwnProfileQuery, ProfileViewModel>
 {
-    public async Task<OwnProfileResponse> Handle(
+    public async Task<ProfileViewModel> Handle(
         GetOwnProfileQuery request,
         CancellationToken cancellationToken
     )
@@ -45,7 +45,7 @@ public sealed class GetOwnProfileQueryHandler(IServiceProvider provider)
 
         var avatarUrl = profile.Avatar != null ? blobService.GetFileSasUrl(profile.Avatar) : null;
 
-        return new OwnProfileResponse(
+        return new ProfileViewModel(
             profile.Id.ToString(),
             profile.FullName.GetFullName(),
             userName,

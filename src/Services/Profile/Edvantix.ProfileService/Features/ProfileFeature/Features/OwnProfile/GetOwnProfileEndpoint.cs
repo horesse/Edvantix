@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.OwnProfile;
 
-public class GetOwnProfileEndpoint : IEndpoint<Ok<OwnProfileResponse>, GetOwnProfileQuery, ISender>
+public class GetOwnProfileEndpoint : IEndpoint<Ok<ProfileViewModel>, GetOwnProfileQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -18,11 +18,11 @@ public class GetOwnProfileEndpoint : IEndpoint<Ok<OwnProfileResponse>, GetOwnPro
             .WithTags("Profile")
             .WithSummary("Получить собственный профиль")
             .WithDescription("Возвращает информацию о профиле текущего пользователя")
-            .Produces<OwnProfileResponse>()
+            .Produces<ProfileViewModel>()
             .RequireAuthorization();
     }
 
-    public async Task<Ok<OwnProfileResponse>> HandleAsync(
+    public async Task<Ok<ProfileViewModel>> HandleAsync(
         GetOwnProfileQuery query,
         ISender sender,
         CancellationToken cancellationToken = default

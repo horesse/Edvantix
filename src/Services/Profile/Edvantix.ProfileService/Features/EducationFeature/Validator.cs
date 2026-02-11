@@ -20,8 +20,8 @@ public sealed class Validator : AbstractValidator<EducationModel>
             .MaximumLength(DataSchemaLength.Large)
             .WithMessage($"Специальность не должна превышать {DataSchemaLength.Large} символов");
 
-        RuleFor(x => x.EducationLevelId)
-            .GreaterThan(0)
+        RuleFor(x => x.EducationLevel)
+            .IsInEnum()
             .WithMessage("Уровень образования является обязательным полем");
 
         RuleFor(x => x.DateStart)

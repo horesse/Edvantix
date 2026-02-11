@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.Utilities.Attributes;
 using Edvantix.Constants.Other;
+using Edvantix.ProfileService.Domain.AggregatesModel.EducationAggregate;
 
 namespace Edvantix.ProfileService.Features.EducationFeature.Models;
 
@@ -11,6 +12,5 @@ public sealed class EducationModel
 
     public string Institution { get; set; } = null!;
     public string? Specialty { get; set; }
-    public long EducationLevelId { get; set; }
-    public string EducationLevel { get; set; } = null!;
+    public EducationLevel EducationLevel { get; set; }
 }

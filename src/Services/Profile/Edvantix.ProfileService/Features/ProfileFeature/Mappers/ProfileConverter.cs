@@ -50,45 +50,23 @@ public sealed class ProfileConverter(IServiceProvider provider)
 
         if (source.Contacts is not null)
         {
-            var newContacts = source
-                .Contacts.Select(c => target.CreateContact(c.Type, c.Value, c.Description))
-                .ToList();
-
-            target.ReplaceContacts(newContacts);
+            var converter = provider.GetRequiredService<IConverter<UserContactModel, UserContact>>();
+            var contacts = converter.Map(source.Contacts.ToList());
+            target.ReplaceContacts(contacts);
         }
 
         if (source.EmploymentHistories is not null)
         {
-            var newEmploymentHistories = source
-                .EmploymentHistories.Select(e =>
-                    target.CreateEmploymentHistory(
-                        e.CompanyName,
-                        e.Position,
-                        e.StartDate,
-                        e.EndDate,
-                        e.Description
-                    )
-                )
-                .ToList();
-
-            target.ReplaceEmploymentHistories(newEmploymentHistories);
+            var converter = provider.GetRequiredService<IConverter<EmploymentHistoryModel, EmploymentHistory>>();
+            var employmentHistories = converter.Map(source.EmploymentHistories.ToList());
+            target.ReplaceEmploymentHistories(employmentHistories);
         }
 
         if (source.Educations is not null)
         {
-            var newEducations = source
-                .Educations.Select(e =>
-                    target.CreateEducation(
-                        e.DateStart,
-                        e.Institution,
-                        e.EducationLevelId,
-                        e.Specialty,
-                        e.DateEnd
-                    )
-                )
-                .ToList();
-
-            target.ReplaceEducations(newEducations);
+            var converter = provider.GetRequiredService<IConverter<EducationModel, Education>>();
+            var educations = converter.Map(source.Educations.ToList());
+            target.ReplaceEducations(educations);
         }
     }
 }

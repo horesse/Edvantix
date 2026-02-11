@@ -140,12 +140,12 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
     public Education CreateEducation(
         DateTime dateStart,
         string institution,
-        long educationLevelId,
+        EducationLevel educationLevel,
         string? specialty = null,
         DateTime? dateEnd = null
     )
     {
-        return new Education(dateStart, institution, educationLevelId, specialty, dateEnd);
+        return new Education(dateStart, institution, educationLevel, specialty, dateEnd);
     }
 
     public void AddEducation(Education education)

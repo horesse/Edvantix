@@ -11,17 +11,16 @@ public sealed class EducationMapper : ClassConverter<EducationModel, Education>
         {
             DateStart = source.DateStart,
             DateEnd = source.DateEnd,
-            EducationLevelId = source.EducationLevelId,
             Specialty = source.Specialty,
             Institution = source.Institution,
-            EducationLevel = source.EducationLevel.Name,
+            EducationLevel = source.EducationLevel,
         };
 
     public override Education Map(EducationModel source) =>
         new(
             source.DateStart,
             source.Institution,
-            source.EducationLevelId,
+            source.EducationLevel,
             source.Specialty,
             source.DateEnd
         );
@@ -33,7 +32,7 @@ public sealed class EducationMapper : ClassConverter<EducationModel, Education>
             source.DateEnd,
             source.Institution,
             source.Specialty,
-            source.EducationLevelId
+            source.EducationLevel
         );
     }
 }

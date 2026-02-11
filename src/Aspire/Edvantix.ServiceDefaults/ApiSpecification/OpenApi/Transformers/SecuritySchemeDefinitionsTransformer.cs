@@ -15,7 +15,11 @@ internal sealed class SecuritySchemeDefinitionsTransformer(IdentityOptions ident
         CancellationToken cancellationToken
     )
     {
-        var keycloakUrl = ServiceDiscoveryUtilities.GetServiceEndpoint(Components.KeyCloak, 0, true);
+        var keycloakUrl = ServiceDiscoveryUtilities.GetServiceEndpoint(
+            Components.KeyCloak,
+            0,
+            true
+        );
 
         if (string.IsNullOrWhiteSpace(keycloakUrl))
         {

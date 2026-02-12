@@ -2,6 +2,7 @@ using Edvantix.Chassis.Endpoints;
 using Edvantix.ProfileService.Features.EmploymentHistoryFeature.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.ProfileService.Features.EmploymentHistoryFeature.Features.UpdateOwnEmploymentHistories;
 
@@ -16,7 +17,7 @@ public class UpdateOwnEmploymentHistoriesEndpoint
         app.MapPut(
                 "/profile/employment-histories",
                 async (
-                    IEnumerable<EmploymentHistoryModel> employmentHistories,
+                    [FromBody] IEnumerable<EmploymentHistoryModel> employmentHistories,
                     ISender sender,
                     CancellationToken ct
                 ) =>

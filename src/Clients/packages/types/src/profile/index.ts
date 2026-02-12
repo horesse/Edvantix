@@ -38,7 +38,7 @@ export type Contact = {
 };
 
 export type EmploymentHistory = {
-  workplace: string;
+  companyName: string;
   position: string;
   startDate: string;
   endDate?: string | null;
@@ -50,8 +50,7 @@ export type Education = {
   dateEnd?: string | null;
   institution: string;
   specialty?: string | null;
-  educationLevelId: number;
-  educationLevelName?: string | null;
+  educationLevel: EducationLevel;
 };
 
 export type OwnProfileDetails = {
@@ -81,7 +80,7 @@ export type UpdateContactRequest = {
 };
 
 export type UpdateEmploymentHistoryRequest = {
-  workplace: string;
+  companyName: string;
   position: string;
   startDate: string;
   endDate?: string | null;
@@ -93,7 +92,7 @@ export type UpdateEducationRequest = {
   dateEnd?: string | null;
   institution: string;
   specialty?: string | null;
-  educationLevelId: number;
+  educationLevel: EducationLevel;
 };
 
 export type RegisterProfileRequest = {

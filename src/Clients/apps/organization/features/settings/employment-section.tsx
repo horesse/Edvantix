@@ -74,7 +74,7 @@ export function EmploymentSection({ profile }: EmploymentSectionProps) {
     const updated = [
       ...items,
       {
-        workplace: data.workplace,
+        companyName: data.companyName,
         position: data.position,
         startDate: data.startDate,
         endDate: data.endDate || null,
@@ -123,7 +123,7 @@ export function EmploymentSection({ profile }: EmploymentSectionProps) {
         <div className="space-y-3">
           {items.map((item, index) => (
             <EmploymentCard
-              key={`${item.workplace}-${item.startDate}`}
+              key={`${item.companyName}-${item.startDate}`}
               item={item}
               onRemove={() => handleRemove(index)}
               isLoading={updateMutation.isPending}
@@ -162,7 +162,7 @@ function EmploymentCard({
             <div className="min-w-0">
               <p className="truncate font-medium">{item.position}</p>
               <p className="text-muted-foreground truncate text-sm">
-                {item.workplace}
+                {item.companyName}
               </p>
             </div>
             <Button
@@ -203,7 +203,7 @@ function AddEmploymentDialog({
   const form = useForm<EmploymentInput>({
     resolver: zodResolver(employmentSchema),
     defaultValues: {
-      workplace: "",
+      companyName: "",
       position: "",
       startDate: "",
       endDate: "",
@@ -232,7 +232,7 @@ function AddEmploymentDialog({
           >
             <FormField
               control={form.control}
-              name="workplace"
+              name="companyName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Организация</FormLabel>

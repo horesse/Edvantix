@@ -2,6 +2,7 @@ using Edvantix.Chassis.Endpoints;
 using Edvantix.ProfileService.Features.UserContactFeature.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.ProfileService.Features.UserContactFeature.Features.UpdateOwnContacts;
 
@@ -15,7 +16,7 @@ public class UpdateOwnContactsEndpoint : IEndpoint<NoContent, UpdateOwnContactsC
         app.MapPut(
                 "/profile/contacts",
                 async (
-                    IEnumerable<UserContactModel> contacts,
+                    [FromBody] IEnumerable<UserContactModel> contacts,
                     ISender sender,
                     CancellationToken ct
                 ) =>

@@ -86,7 +86,7 @@ export const contactSchema = z.object({
 export type ContactInput = z.infer<typeof contactSchema>;
 
 export const employmentSchema = z.object({
-  workplace: z
+  companyName: z
     .string()
     .min(1, "Место работы обязательно")
     .max(
@@ -132,7 +132,7 @@ export const educationSchema = z.object({
     .or(z.literal("")),
   dateStart: z.string().min(1, "Дата начала обязательна"),
   dateEnd: z.string().optional().or(z.literal("")),
-  educationLevelId: z.number({ message: "Уровень образования обязателен" }),
+  educationLevel: z.number({ message: "Уровень образования обязателен" }),
 });
 
 export type EducationInput = z.infer<typeof educationSchema>;

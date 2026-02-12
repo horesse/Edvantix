@@ -2,6 +2,7 @@ using Edvantix.Chassis.Endpoints;
 using Edvantix.ProfileService.Features.EducationFeature.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.ProfileService.Features.EducationFeature.Features.UpdateOwnEducations;
 
@@ -15,7 +16,7 @@ public class UpdateOwnEducationsEndpoint : IEndpoint<NoContent, UpdateOwnEducati
         app.MapPut(
                 "/profile/educations",
                 async (
-                    IEnumerable<EducationModel> educations,
+                    [FromBody] IEnumerable<EducationModel> educations,
                     ISender sender,
                     CancellationToken ct
                 ) =>

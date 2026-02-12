@@ -96,7 +96,7 @@ export function EducationSection({ profile }: EducationSectionProps) {
         specialty: data.specialty || null,
         dateStart: data.dateStart,
         dateEnd: data.dateEnd || null,
-        educationLevelId: data.educationLevelId,
+        educationLevel: data.educationLevel,
       },
     ];
     updateMutation.mutate(updated, {
@@ -169,10 +169,7 @@ function EducationCard({
   onRemove: () => void;
   isLoading: boolean;
 }) {
-  const levelLabel =
-    educationLevelLabels[item.educationLevelId as EducationLevel] ??
-    item.educationLevelName ??
-    "Не указано";
+  const levelLabel = educationLevelLabels[item.educationLevel] ?? "Не указано";
 
   return (
     <div className="group hover:bg-muted/30 relative rounded-lg border p-4 transition-colors">
@@ -232,7 +229,7 @@ function AddEducationDialog({
       specialty: "",
       dateStart: "",
       dateEnd: "",
-      educationLevelId: undefined,
+      educationLevel: undefined,
     },
   });
 
@@ -291,7 +288,7 @@ function AddEducationDialog({
             />
             <FormField
               control={form.control}
-              name="educationLevelId"
+              name="educationLevel"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Уровень образования</FormLabel>

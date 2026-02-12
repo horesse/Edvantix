@@ -7,7 +7,7 @@ import { Briefcase, Loader2, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
+import useUpdateEmployment from "@workspace/api-hooks/profiles/useUpdateEmployment";
 import type {
   EmploymentHistory,
   OwnProfileDetails,
@@ -56,7 +56,7 @@ export function EmploymentSection({ profile }: EmploymentSectionProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const items = profile.employmentHistories ?? [];
 
-  const updateMutation = useUpdateProfile({
+  const updateMutation = useUpdateEmployment({
     onSuccess: () => {
       toast.success("Опыт работы обновлён");
     },
@@ -67,16 +67,7 @@ export function EmploymentSection({ profile }: EmploymentSectionProps) {
 
   function handleRemove(index: number) {
     const updated = items.filter((_, i) => i !== index);
-    updateMutation.mutate({
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      middleName: profile.middleName,
-      birthDate: profile.birthDate,
-      gender: profile.gender,
-      contacts: profile.contacts ?? null,
-      employmentHistories: updated,
-      educations: profile.educations ?? null,
-    });
+    updateMutation.mutate(updated);
   }
 
   function handleAdd(data: EmploymentInput) {
@@ -90,24 +81,12 @@ export function EmploymentSection({ profile }: EmploymentSectionProps) {
         description: data.description || null,
       },
     ];
-    updateMutation.mutate(
-      {
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        middleName: profile.middleName,
-        birthDate: profile.birthDate,
-        gender: profile.gender,
-        contacts: profile.contacts ?? null,
-        employmentHistories: updated,
-        educations: profile.educations ?? null,
+    updateMutation.mutate(updated, {
+      onSuccess: () => {
+        setDialogOpen(false);
+        toast.success("Место работы добавлено");
       },
-      {
-        onSuccess: () => {
-          setDialogOpen(false);
-          toast.success("Место работы добавлено");
-        },
-      },
-    );
+    });
   }
 
   return (

@@ -2,6 +2,9 @@
   OwnProfile,
   OwnProfileDetails,
   RegisterProfileRequest,
+  UpdateContactRequest,
+  UpdateEducationRequest,
+  UpdateEmploymentHistoryRequest,
   UpdateProfileRequest,
 } from "@workspace/types/profile";
 
@@ -30,6 +33,28 @@ class ProfileApiClient {
 
   public async updateProfile(request: UpdateProfileRequest): Promise<void> {
     await this.client.put<void>(`/profile/api/v1/profile`, request);
+  }
+
+  public async updateContacts(contacts: UpdateContactRequest[]): Promise<void> {
+    await this.client.put<void>(`/profile/api/v1/profile/contacts`, contacts);
+  }
+
+  public async updateEmploymentHistories(
+    employmentHistories: UpdateEmploymentHistoryRequest[],
+  ): Promise<void> {
+    await this.client.put<void>(
+      `/profile/api/v1/profile/employment-histories`,
+      employmentHistories,
+    );
+  }
+
+  public async updateEducations(
+    educations: UpdateEducationRequest[],
+  ): Promise<void> {
+    await this.client.put<void>(
+      `/profile/api/v1/profile/educations`,
+      educations,
+    );
   }
 
   public async uploadAvatar(file: File): Promise<void> {

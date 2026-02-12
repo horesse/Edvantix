@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
+import useUpdateContacts from "@workspace/api-hooks/profiles/useUpdateContacts";
 import type { Contact, OwnProfileDetails } from "@workspace/types/profile";
 import { ContactType } from "@workspace/types/profile";
 import { Badge } from "@workspace/ui/components/badge";
@@ -71,7 +71,7 @@ export function ContactsSection({ profile }: ContactsSectionProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const contacts = profile.contacts ?? [];
 
-  const updateMutation = useUpdateProfile({
+  const updateMutation = useUpdateContacts({
     onSuccess: () => {
       toast.success("Контакты обновлены");
     },
@@ -82,16 +82,7 @@ export function ContactsSection({ profile }: ContactsSectionProps) {
 
   function handleRemoveContact(index: number) {
     const updated = contacts.filter((_, i) => i !== index);
-    updateMutation.mutate({
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      middleName: profile.middleName,
-      birthDate: profile.birthDate,
-      gender: profile.gender,
-      contacts: updated,
-      employmentHistories: profile.employmentHistories ?? null,
-      educations: profile.educations ?? null,
-    });
+    updateMutation.mutate(updated);
   }
 
   function handleAddContact(data: ContactInput) {
@@ -103,24 +94,12 @@ export function ContactsSection({ profile }: ContactsSectionProps) {
         description: data.description || null,
       },
     ];
-    updateMutation.mutate(
-      {
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        middleName: profile.middleName,
-        birthDate: profile.birthDate,
-        gender: profile.gender,
-        contacts: updated,
-        employmentHistories: profile.employmentHistories ?? null,
-        educations: profile.educations ?? null,
+    updateMutation.mutate(updated, {
+      onSuccess: () => {
+        setDialogOpen(false);
+        toast.success("Контакт добавлен");
       },
-      {
-        onSuccess: () => {
-          setDialogOpen(false);
-          toast.success("Контакт добавлен");
-        },
-      },
-    );
+    });
   }
 
   return (

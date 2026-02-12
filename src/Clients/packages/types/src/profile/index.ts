@@ -72,9 +72,6 @@ export type UpdateProfileRequest = {
   firstName: string;
   lastName: string;
   middleName?: string | null;
-  contacts?: UpdateContactRequest[] | null;
-  employmentHistories?: UpdateEmploymentHistoryRequest[] | null;
-  educations?: UpdateEducationRequest[] | null;
 };
 
 export type UpdateContactRequest = {

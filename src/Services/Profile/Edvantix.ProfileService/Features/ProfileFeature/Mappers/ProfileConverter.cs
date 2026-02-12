@@ -45,30 +45,5 @@ public sealed class ProfileConverter(IServiceProvider provider)
 
         target.UpdateBirthDate(source.BirthDate);
         target.UpdateFullName(source.FirstName, source.LastName, source.MiddleName);
-
-        if (target.Avatar is not null)
-            target.UploadAvatar(source.AvatarUrl);
-
-        var contactConverter = provider.GetRequiredService<
-            IConverter<UserContactModel, UserContact>
-        >();
-
-        var contacts = contactConverter.Map(source.Contacts?.ToList() ?? []);
-        target.ReplaceContacts(contacts);
-
-        var employmentHistoryConverter = provider.GetRequiredService<
-            IConverter<EmploymentHistoryModel, EmploymentHistory>
-        >();
-        var employmentHistories = employmentHistoryConverter.Map(
-            source.EmploymentHistories?.ToList() ?? []
-        );
-        target.ReplaceEmploymentHistories(employmentHistories);
-
-        var educationConverter = provider.GetRequiredService<
-            IConverter<EducationModel, Education>
-        >();
-        var educations = educationConverter.Map(source.Educations?.ToList() ?? []);
-
-        target.ReplaceEducations(educations);
     }
 }

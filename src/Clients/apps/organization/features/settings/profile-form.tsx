@@ -78,9 +78,6 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       middleName: data.middleName || null,
       birthDate: data.birthDate,
       gender: data.gender,
-      contacts: profile.contacts ?? null,
-      employmentHistories: profile.employmentHistories ?? null,
-      educations: profile.educations ?? null,
     });
   }
 

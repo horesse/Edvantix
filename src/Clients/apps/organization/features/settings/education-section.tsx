@@ -7,7 +7,7 @@ import { GraduationCap, Loader2, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
+import useUpdateEducation from "@workspace/api-hooks/profiles/useUpdateEducation";
 import type { Education, OwnProfileDetails } from "@workspace/types/profile";
 import { EducationLevel } from "@workspace/types/profile";
 import { Badge } from "@workspace/ui/components/badge";
@@ -74,7 +74,7 @@ export function EducationSection({ profile }: EducationSectionProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const items = profile.educations ?? [];
 
-  const updateMutation = useUpdateProfile({
+  const updateMutation = useUpdateEducation({
     onSuccess: () => {
       toast.success("Образование обновлено");
     },
@@ -85,16 +85,7 @@ export function EducationSection({ profile }: EducationSectionProps) {
 
   function handleRemove(index: number) {
     const updated = items.filter((_, i) => i !== index);
-    updateMutation.mutate({
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      middleName: profile.middleName,
-      birthDate: profile.birthDate,
-      gender: profile.gender,
-      contacts: profile.contacts ?? null,
-      employmentHistories: profile.employmentHistories ?? null,
-      educations: updated,
-    });
+    updateMutation.mutate(updated);
   }
 
   function handleAdd(data: EducationInput) {
@@ -108,24 +99,12 @@ export function EducationSection({ profile }: EducationSectionProps) {
         educationLevelId: data.educationLevelId,
       },
     ];
-    updateMutation.mutate(
-      {
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        middleName: profile.middleName,
-        birthDate: profile.birthDate,
-        gender: profile.gender,
-        contacts: profile.contacts ?? null,
-        employmentHistories: profile.employmentHistories ?? null,
-        educations: updated,
+    updateMutation.mutate(updated, {
+      onSuccess: () => {
+        setDialogOpen(false);
+        toast.success("Образование добавлено");
       },
-      {
-        onSuccess: () => {
-          setDialogOpen(false);
-          toast.success("Образование добавлено");
-        },
-      },
-    );
+    });
   }
 
   return (

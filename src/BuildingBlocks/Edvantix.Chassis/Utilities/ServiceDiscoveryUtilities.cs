@@ -11,8 +11,15 @@ public static class ServiceDiscoveryUtilities
         );
     }
 
-    public static string? GetServiceEndpoint(string serviceName, int index = 0)
+    public static string? GetServiceEndpoint(
+        string serviceName,
+        int index = 0,
+        bool httpOnly = false
+    )
     {
+        if (httpOnly)
+            return GetServiceEndpoint(serviceName, Http.Schemes.Http, index);
+
         return GetServiceEndpoint(serviceName, Http.Schemes.Https, index)
             ?? GetServiceEndpoint(serviceName, Http.Schemes.Http, index);
     }

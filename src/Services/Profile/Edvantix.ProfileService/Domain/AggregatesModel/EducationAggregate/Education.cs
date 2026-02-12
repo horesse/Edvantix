@@ -8,11 +8,11 @@ namespace Edvantix.ProfileService.Domain.AggregatesModel.EducationAggregate;
 public sealed class Education() : PersonalData<long>, ISoftDelete, IAggregateRoot
 {
     internal Education(
-        DateTime dateStart,
+        DateOnly dateStart,
         string institution,
         EducationLevel educationLevel,
         string? specialty = null,
-        DateTime? dateEnd = null
+        DateOnly? dateEnd = null
     )
         : this()
     {
@@ -33,10 +33,10 @@ public sealed class Education() : PersonalData<long>, ISoftDelete, IAggregateRoo
     }
 
     [OrderBy]
-    public DateTime DateStart { get; private set; }
+    public DateOnly DateStart { get; private set; }
 
     [OrderBy(OrderType.ThenBy)]
-    public DateTime? DateEnd { get; private set; }
+    public DateOnly? DateEnd { get; private set; }
 
     public string Institution { get; private set; } = null!;
     public string? Specialty { get; private set; }
@@ -46,8 +46,8 @@ public sealed class Education() : PersonalData<long>, ISoftDelete, IAggregateRoo
     public EducationLevel EducationLevel { get; private set; }
 
     internal void Update(
-        DateTime dateStart,
-        DateTime? dateEnd,
+        DateOnly dateStart,
+        DateOnly? dateEnd,
         string institution,
         string? specialty,
         EducationLevel educationLevel

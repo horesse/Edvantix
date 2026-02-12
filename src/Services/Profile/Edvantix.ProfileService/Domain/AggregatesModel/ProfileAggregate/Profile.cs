@@ -138,11 +138,11 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
 
     // Методы для управления образованием
     public Education CreateEducation(
-        DateTime dateStart,
+        DateOnly dateStart,
         string institution,
         EducationLevel educationLevel,
         string? specialty = null,
-        DateTime? dateEnd = null
+        DateOnly? dateEnd = null
     )
     {
         return new Education(dateStart, institution, educationLevel, specialty, dateEnd);

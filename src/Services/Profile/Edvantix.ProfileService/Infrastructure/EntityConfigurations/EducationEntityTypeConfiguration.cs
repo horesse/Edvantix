@@ -20,20 +20,13 @@ public sealed class EducationEntityTypeConfiguration : IEntityTypeConfiguration<
 
         builder.Property(e => e.Specialty).HasMaxLength(DataSchemaLength.Large);
 
-        builder.Property(e => e.EducationLevelId).IsRequired();
+        builder.Property(e => e.EducationLevel).IsRequired();
 
         builder.Property(e => e.ProfileId).IsRequired();
 
         builder.Property(e => e.IsDeleted).IsRequired();
 
-        builder
-            .HasOne(e => e.EducationLevel)
-            .WithMany()
-            .HasForeignKey(e => e.EducationLevelId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasIndex(e => e.ProfileId);
-        builder.HasIndex(e => e.EducationLevelId);
         builder.HasIndex(e => e.IsDeleted);
     }
 }

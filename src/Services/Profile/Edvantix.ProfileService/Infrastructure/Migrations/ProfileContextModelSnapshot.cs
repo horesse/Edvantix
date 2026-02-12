@@ -80,17 +80,17 @@ namespace Edvantix.ProfileService.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime?>("DateEnd")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly?>("DateEnd")
+                        .HasColumnType("date")
                         .HasColumnName("date_end");
 
-                    b.Property<DateTime>("DateStart")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("DateStart")
+                        .HasColumnType("date")
                         .HasColumnName("date_start");
 
-                    b.Property<long>("EducationLevelId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("education_level_id");
+                    b.Property<byte>("EducationLevel")
+                        .HasColumnType("smallint")
+                        .HasColumnName("education_level");
 
                     b.Property<string>("Institution")
                         .IsRequired()
@@ -115,9 +115,6 @@ namespace Edvantix.ProfileService.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_education");
 
-                    b.HasIndex("EducationLevelId")
-                        .HasDatabaseName("ix_education_education_level_id");
-
                     b.HasIndex("IsDeleted")
                         .HasDatabaseName("ix_education_is_deleted");
 
@@ -125,117 +122,6 @@ namespace Edvantix.ProfileService.Infrastructure.Migrations
                         .HasDatabaseName("ix_education_profile_id");
 
                     b.ToTable("education", (string)null);
-                });
-
-            modelBuilder.Entity("Edvantix.ProfileService.Domain.AggregatesModel.EducationAggregate.EducationLevel", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasComment("Идентификатор");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("code");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
-                        .HasComment("Признак удаленной записи");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_education_level");
-
-                    b.HasIndex("Code")
-                        .HasDatabaseName("ix_education_level_code");
-
-                    b.HasIndex("IsDeleted")
-                        .HasDatabaseName("ix_education_level_is_deleted");
-
-                    b.ToTable("education_level", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Code = "preschool",
-                            IsDeleted = false,
-                            Name = "Дошкольное образование"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Code = "general_secondary",
-                            IsDeleted = false,
-                            Name = "Общее среднее образование"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Code = "vocational_technical",
-                            IsDeleted = false,
-                            Name = "Профессионально-техническое образование"
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Code = "secondary_specialized",
-                            IsDeleted = false,
-                            Name = "Среднее специальное образование"
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            Code = "higher_bachelor",
-                            IsDeleted = false,
-                            Name = "Высшее образование (I ступень)"
-                        },
-                        new
-                        {
-                            Id = 6L,
-                            Code = "higher_master",
-                            IsDeleted = false,
-                            Name = "Высшее образование (II ступень)"
-                        },
-                        new
-                        {
-                            Id = 7L,
-                            Code = "postgraduate",
-                            IsDeleted = false,
-                            Name = "Послевузовское образование"
-                        },
-                        new
-                        {
-                            Id = 8L,
-                            Code = "additional_children",
-                            IsDeleted = false,
-                            Name = "Дополнительное образование детей и молодежи"
-                        },
-                        new
-                        {
-                            Id = 9L,
-                            Code = "additional_adults",
-                            IsDeleted = false,
-                            Name = "Дополнительное образование взрослых"
-                        },
-                        new
-                        {
-                            Id = 10L,
-                            Code = "special",
-                            IsDeleted = false,
-                            Name = "Специальное образование"
-                        });
                 });
 
             modelBuilder.Entity("Edvantix.ProfileService.Domain.AggregatesModel.EmploymentHistoryAggregate.EmploymentHistory", b =>
@@ -397,21 +283,12 @@ namespace Edvantix.ProfileService.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.ProfileService.Domain.AggregatesModel.EducationAggregate.Education", b =>
                 {
-                    b.HasOne("Edvantix.ProfileService.Domain.AggregatesModel.EducationAggregate.EducationLevel", "EducationLevel")
-                        .WithMany()
-                        .HasForeignKey("EducationLevelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_education_education_level_education_level_id");
-
                     b.HasOne("Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate.Profile", "Profile")
                         .WithMany("Educations")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_education_profile_profile_id");
-
-                    b.Navigation("EducationLevel");
 
                     b.Navigation("Profile");
                 });

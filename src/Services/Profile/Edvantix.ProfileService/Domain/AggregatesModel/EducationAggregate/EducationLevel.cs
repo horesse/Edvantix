@@ -1,61 +1,36 @@
-﻿using Edvantix.SharedKernel.SeedWork;
+﻿using System.ComponentModel;
 
 namespace Edvantix.ProfileService.Domain.AggregatesModel.EducationAggregate;
 
-public sealed class EducationLevel() : Entity<long>, ISoftDelete
+public enum EducationLevel : byte
 {
-    // EF Core требует конструктор без параметров
+    [Description("Дошкольное образование")]
+    Preschool = 1,
 
-    internal EducationLevel(long id, string name, string code)
-        : this()
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException(
-                "Название уровня образования не может быть пустым.",
-                nameof(name)
-            );
+    [Description("Общее среднее образование")]
+    GeneralSecondary = 2,
 
-        if (string.IsNullOrWhiteSpace(code))
-            throw new ArgumentException(
-                "Код уровня образования не может быть пустым.",
-                nameof(code)
-            );
+    [Description("Профессионально-техническое образование")]
+    VocationalTechnical = 3,
 
-        Name = name;
-        Code = code;
-        Id = id;
-    }
+    [Description("Среднее специальное образование")]
+    SecondarySpecialized = 4,
 
-    public string Name { get; private set; } = null!;
-    public string Code { get; private set; } = null!;
+    [Description("Высшее образование (I ступень)")]
+    HigherBachelor = 5,
 
-    public bool IsDeleted { get; set; }
+    [Description("Высшее образование (II ступень)")]
+    HigherMaster = 6,
 
-    internal void Update(string? name = null, string? code = null)
-    {
-        if (name != null)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException(
-                    "Название уровня образования не может быть пустым.",
-                    nameof(name)
-                );
-            Name = name;
-        }
+    [Description("Послевузовское образование")]
+    Postgraduate = 7,
 
-        if (code != null)
-        {
-            if (string.IsNullOrWhiteSpace(code))
-                throw new ArgumentException(
-                    "Код уровня образования не может быть пустым.",
-                    nameof(code)
-                );
-            Code = code;
-        }
-    }
+    [Description("Дополнительное образование детей и молодежи")]
+    AdditionalChildren = 8,
 
-    public void Delete()
-    {
-        IsDeleted = true;
-    }
+    [Description("Дополнительное образование взрослых")]
+    AdditionalAdults = 9,
+
+    [Description("Специальное образование")]
+    Special = 10,
 }

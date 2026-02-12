@@ -1,6 +1,11 @@
 ﻿import type {
   OwnProfile,
+  OwnProfileDetails,
   RegisterProfileRequest,
+  UpdateContactRequest,
+  UpdateEducationRequest,
+  UpdateEmploymentHistoryRequest,
+  UpdateProfileRequest,
 } from "@workspace/types/profile";
 
 import ApiClient from "../client";
@@ -17,6 +22,47 @@ class ProfileApiClient {
       `/profile/api/v1/profile`,
     );
     return response.data;
+  }
+
+  public async getProfileDetails(): Promise<OwnProfileDetails> {
+    const response = await this.client.get<OwnProfileDetails>(
+      `/profile/api/v1/profile/details`,
+    );
+    return response.data;
+  }
+
+  public async updateProfile(request: UpdateProfileRequest): Promise<void> {
+    await this.client.put<void>(`/profile/api/v1/profile`, request);
+  }
+
+  public async updateContacts(contacts: UpdateContactRequest[]): Promise<void> {
+    await this.client.put<void>(`/profile/api/v1/profile/contacts`, contacts);
+  }
+
+  public async updateEmploymentHistories(
+    employmentHistories: UpdateEmploymentHistoryRequest[],
+  ): Promise<void> {
+    await this.client.put<void>(
+      `/profile/api/v1/profile/employment-histories`,
+      employmentHistories,
+    );
+  }
+
+  public async updateEducations(
+    educations: UpdateEducationRequest[],
+  ): Promise<void> {
+    await this.client.put<void>(
+      `/profile/api/v1/profile/educations`,
+      educations,
+    );
+  }
+
+  public async uploadAvatar(file: File): Promise<void> {
+    const formData = new FormData();
+    formData.append("image", file);
+    await this.client.post<void>(`/profile/api/v1/profile/avatar`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   }
 
   public async registerProfile(

@@ -15,4 +15,25 @@ public static class Extensions
                 .WithScopedLifetime()
         );
     }
+
+    extension(IServiceProvider provider)
+    {
+        public TSecond Map<TFirst, TSecond>(TFirst model)
+            where TFirst : class
+            where TSecond : notnull
+        {
+            var converter = provider.GetRequiredService<IConverter<TFirst, TSecond>>();
+
+            return converter.Map(model);
+        }
+
+        public TFirst Map<TFirst, TSecond>(TSecond model)
+            where TFirst : class
+            where TSecond : notnull
+        {
+            var converter = provider.GetRequiredService<IConverter<TFirst, TSecond>>();
+
+            return converter.Map(model);
+        }
+    }
 }

@@ -8,11 +8,11 @@ namespace Edvantix.ProfileService.Domain.AggregatesModel.EducationAggregate;
 public sealed class Education() : PersonalData<long>, ISoftDelete, IAggregateRoot
 {
     internal Education(
-        DateTime dateStart,
+        DateOnly dateStart,
         string institution,
-        long educationLevelId,
+        EducationLevel educationLevel,
         string? specialty = null,
-        DateTime? dateEnd = null
+        DateOnly? dateEnd = null
     )
         : this()
     {
@@ -29,34 +29,31 @@ public sealed class Education() : PersonalData<long>, ISoftDelete, IAggregateRoo
         DateEnd = dateEnd;
         Institution = institution;
         Specialty = specialty;
-        EducationLevelId = educationLevelId;
+        EducationLevel = educationLevel;
     }
 
     [OrderBy]
-    public DateTime DateStart { get; private set; }
+    public DateOnly DateStart { get; private set; }
 
     [OrderBy(OrderType.ThenBy)]
-    public DateTime? DateEnd { get; private set; }
+    public DateOnly? DateEnd { get; private set; }
 
     public string Institution { get; private set; } = null!;
     public string? Specialty { get; private set; }
-    public long EducationLevelId { get; private set; }
 
     public bool IsDeleted { get; set; }
 
-    [Include]
-    public EducationLevel EducationLevel { get; private set; } = null!;
+    public EducationLevel EducationLevel { get; private set; }
 
     internal void Update(
-        DateTime? dateStart = null,
-        DateTime? dateEnd = null,
-        string? institution = null,
-        string? specialty = null,
-        long? educationLevelId = null
+        DateOnly dateStart,
+        DateOnly? dateEnd,
+        string institution,
+        string? specialty,
+        EducationLevel educationLevel
     )
     {
-        if (dateStart.HasValue)
-            DateStart = dateStart.Value;
+        DateStart = dateStart;
 
         if (dateEnd.HasValue)
         {
@@ -65,21 +62,16 @@ public sealed class Education() : PersonalData<long>, ISoftDelete, IAggregateRoo
             DateEnd = dateEnd.Value;
         }
 
-        if (institution != null)
-        {
-            if (string.IsNullOrWhiteSpace(institution))
-                throw new ArgumentException(
-                    "Название учебного заведения не может быть пустым.",
-                    nameof(institution)
-                );
-            Institution = institution;
-        }
+        if (string.IsNullOrWhiteSpace(institution))
+            throw new ArgumentException(
+                "Название учебного заведения не может быть пустым.",
+                nameof(institution)
+            );
+        Institution = institution;
 
-        if (specialty != null)
-            Specialty = specialty;
+        Specialty = specialty;
 
-        if (educationLevelId.HasValue)
-            EducationLevelId = educationLevelId.Value;
+        EducationLevel = educationLevel;
     }
 
     public void Delete()

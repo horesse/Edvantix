@@ -5,18 +5,18 @@ import {
 } from "@tanstack/react-query";
 
 import profileApiClient from "@workspace/api-client/profile/profiles";
-import type { RegisterProfileRequest } from "@workspace/types/profile";
+import type { UpdateProfileRequest } from "@workspace/types/profile";
 
 import { profileKeys } from "../keys";
 
-export default function useRegisterProfile(
-  options?: UseMutationOptions<number, Error, RegisterProfileRequest>,
+export default function useUpdateProfile(
+  options?: UseMutationOptions<void, Error, UpdateProfileRequest>,
 ) {
   const queryClient = useQueryClient();
 
   return useMutation({
     ...options,
-    mutationFn: (request) => profileApiClient.registerProfile(request),
+    mutationFn: (request) => profileApiClient.updateProfile(request),
     onSuccess: (...args) => {
       queryClient.invalidateQueries({ queryKey: profileKeys.all });
       options?.onSuccess?.(...args);

@@ -114,7 +114,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           {settingsItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild isActive={pathname === item.url}>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname.startsWith(item.url)}
+              >
                 <a href={item.url}>
                   <item.icon />
                   <span>{item.title}</span>

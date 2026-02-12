@@ -5,18 +5,17 @@ import {
 } from "@tanstack/react-query";
 
 import profileApiClient from "@workspace/api-client/profile/profiles";
-import type { RegisterProfileRequest } from "@workspace/types/profile";
 
 import { profileKeys } from "../keys";
 
-export default function useRegisterProfile(
-  options?: UseMutationOptions<number, Error, RegisterProfileRequest>,
+export default function useUploadAvatar(
+  options?: UseMutationOptions<void, Error, File>,
 ) {
   const queryClient = useQueryClient();
 
   return useMutation({
     ...options,
-    mutationFn: (request) => profileApiClient.registerProfile(request),
+    mutationFn: (file) => profileApiClient.uploadAvatar(file),
     onSuccess: (...args) => {
       queryClient.invalidateQueries({ queryKey: profileKeys.all });
       options?.onSuccess?.(...args);

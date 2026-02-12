@@ -29,7 +29,7 @@ public sealed class GetOwnProfileDetailsQueryHandler(IServiceProvider provider)
 
         using var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        var spec = new ProfileByAccountSpecification(userGuid);
+        var spec = new ProfileByAccountSpecification(userGuid, true);
 
         var profile = await profileRepo.GetFirstByExpressionAsync(spec, cancellationToken);
 

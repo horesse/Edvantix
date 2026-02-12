@@ -27,7 +27,7 @@ public sealed class UpdateOwnProfileCommandHandler(IServiceProvider provider)
         var userGuid = provider.GetUserId();
         using var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        var spec = new ProfileByAccountSpecification(userGuid);
+        var spec = new ProfileByAccountSpecification(userGuid, true);
         var profile = await profileRepo.GetFirstByExpressionAsync(spec, cancellationToken);
 
         if (profile is null)

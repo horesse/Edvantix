@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Link from "next/link";
 
 import { LogOut, User } from "lucide-react";
 
@@ -85,9 +85,11 @@ export function Header() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <User />
-                    <span>Профиль</span>
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings/profile">
+                      <User />
+                      <span>Профиль</span>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem variant="destructive" onClick={logout}>

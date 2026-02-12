@@ -46,31 +46,29 @@ public sealed class ProfileConverter(IServiceProvider provider)
         target.UpdateBirthDate(source.BirthDate);
         target.UpdateFullName(source.FirstName, source.LastName, source.MiddleName);
 
-        target.UploadAvatar(source.AvatarUrl);
+        if (target.Avatar is not null)
+            target.UploadAvatar(source.AvatarUrl);
 
-        if (source.Contacts is not null)
-        {
-            var converter = provider.GetRequiredService<
-                IConverter<UserContactModel, UserContact>
-            >();
-            var contacts = converter.Map(source.Contacts.ToList());
-            target.ReplaceContacts(contacts);
-        }
+        var contactConverter = provider.GetRequiredService<
+            IConverter<UserContactModel, UserContact>
+        >();
 
-        if (source.EmploymentHistories is not null)
-        {
-            var converter = provider.GetRequiredService<
-                IConverter<EmploymentHistoryModel, EmploymentHistory>
-            >();
-            var employmentHistories = converter.Map(source.EmploymentHistories.ToList());
-            target.ReplaceEmploymentHistories(employmentHistories);
-        }
+        var contacts = contactConverter.Map(source.Contacts?.ToList() ?? []);
+        target.ReplaceContacts(contacts);
 
-        if (source.Educations is not null)
-        {
-            var converter = provider.GetRequiredService<IConverter<EducationModel, Education>>();
-            var educations = converter.Map(source.Educations.ToList());
-            target.ReplaceEducations(educations);
-        }
+        var employmentHistoryConverter = provider.GetRequiredService<
+            IConverter<EmploymentHistoryModel, EmploymentHistory>
+        >();
+        var employmentHistories = employmentHistoryConverter.Map(
+            source.EmploymentHistories?.ToList() ?? []
+        );
+        target.ReplaceEmploymentHistories(employmentHistories);
+
+        var educationConverter = provider.GetRequiredService<
+            IConverter<EducationModel, Education>
+        >();
+        var educations = educationConverter.Map(source.Educations?.ToList() ?? []);
+
+        target.ReplaceEducations(educations);
     }
 }

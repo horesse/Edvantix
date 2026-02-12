@@ -18,6 +18,19 @@ export enum ContactType {
   Other = 4,
 }
 
+export enum EducationLevel {
+  Preschool = 1,
+  GeneralSecondary = 2,
+  VocationalTechnical = 3,
+  SecondarySpecialized = 4,
+  HigherBachelor = 5,
+  HigherMaster = 6,
+  Postgraduate = 7,
+  AdditionalChildren = 8,
+  AdditionalAdults = 9,
+  Special = 10,
+}
+
 export type Contact = {
   type: ContactType;
   value: string;

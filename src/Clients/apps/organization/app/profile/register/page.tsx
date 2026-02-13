@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,9 +34,9 @@ import {
   RadioGroupItem,
 } from "@workspace/ui/components/radio-group";
 import {
-  type RegistrationFormData,
+  RegistrationFormData,
   registrationSchema,
-} from "@workspace/validations/profile/registration";
+} from "@workspace/validations/profile";
 
 const genderOptions = [
   { value: Gender.Male, label: "Мужской" },
@@ -152,10 +153,12 @@ export default function ProfileRegisterPage() {
                             className="bg-muted hover:bg-muted/80 focus-visible:ring-ring flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-dashed transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                           >
                             {avatarPreview ? (
-                              <img
+                              <Image
                                 src={avatarPreview}
                                 alt="Аватар"
-                                className="h-full w-full object-cover"
+                                fill
+                                className="object-cover"
+                                unoptimized
                               />
                             ) : (
                               <UserCircle className="text-muted-foreground h-12 w-12" />

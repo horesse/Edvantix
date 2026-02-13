@@ -18,6 +18,8 @@ export default class ApiClient {
       },
     });
 
+    this.setupInterceptors(this.client);
+
     axiosRetry(this.client, {
       retries: maxRetries,
       retryDelay: exponentialDelay,

@@ -26,5 +26,8 @@
     "@workspace/api-client": "workspace:*",
     "react": "^19.2.4"
   },
-  "exports": {}
+  "exports": {
+    "./keys": "./src/keys.ts",
+    "./profiles/*": "./src/profiles/*.ts"
+  }
 }

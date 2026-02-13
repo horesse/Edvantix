@@ -26,9 +26,9 @@ import {
   RadioGroupItem,
 } from "@workspace/ui/components/radio-group";
 import {
-  type ProfileSettingsInput,
+  ProfileSettingsInput,
   profileSettingsSchema,
-} from "@workspace/validations/profile/settings";
+} from "@workspace/validations/profile";
 
 const genderOptions = [
   { value: Gender.Male, label: "Мужской" },

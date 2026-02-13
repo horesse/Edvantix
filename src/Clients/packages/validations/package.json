@@ -7,7 +7,10 @@
     "node": ">=25.0.0"
   },
   "exports": {
-    "./profile/registration": "./src/profile/registration.ts"
+    "./profile": {
+      "import": "./src/profile/index.ts",
+      "types": "./src/profile/index.ts"
+    }
   },
   "scripts": {
     "lint": "eslint .",
@@ -15,6 +18,9 @@
   },
   "dependencies": {
     "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "@workspace/types": "workspace:*"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",

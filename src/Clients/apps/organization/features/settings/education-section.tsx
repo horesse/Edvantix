@@ -39,7 +39,7 @@ import {
 import {
   type EducationInput,
   educationSchema,
-} from "@workspace/validations/profile/settings";
+} from "@workspace/validations/profile";
 
 const educationLevelLabels: Record<EducationLevel, string> = {
   [EducationLevel.Preschool]: "Дошкольное",

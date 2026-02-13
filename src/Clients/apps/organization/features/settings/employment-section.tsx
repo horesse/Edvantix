@@ -34,7 +34,7 @@ import { Textarea } from "@workspace/ui/components/textarea";
 import {
   type EmploymentInput,
   employmentSchema,
-} from "@workspace/validations/profile/settings";
+} from "@workspace/validations/profile";
 
 function formatDateRange(start: string, end?: string | null): string {
   const options: Intl.DateTimeFormatOptions = {

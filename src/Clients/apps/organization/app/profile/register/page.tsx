@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +10,6 @@ import { UserCircle, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import useRegisterProfile from "@workspace/api-hooks/profiles/useRegisterProfile";
-import { Gender } from "@workspace/types/profile";
 import { Button } from "@workspace/ui/components/button";
 import {
   Card,
@@ -33,15 +33,11 @@ import {
   RadioGroupItem,
 } from "@workspace/ui/components/radio-group";
 import {
-  type RegistrationFormData,
+  RegistrationFormData,
   registrationSchema,
-} from "@workspace/validations/profile/registration";
+} from "@workspace/validations/profile";
 
-const genderOptions = [
-  { value: Gender.Male, label: "Мужской" },
-  { value: Gender.Female, label: "Женский" },
-  { value: Gender.None, label: "Не указан" },
-] as const;
+import { genderOptions } from "@/lib/profile-options";
 
 export default function ProfileRegisterPage() {
   const router = useRouter();
@@ -55,7 +51,7 @@ export default function ProfileRegisterPage() {
     },
     onError: (error) => {
       const axiosError = error as {
-        response?: { status?: number; data?: string };
+        response?: { status?: number; data?: { detail?: string } };
       };
 
       if (axiosError.response?.status === 409) {
@@ -66,7 +62,8 @@ export default function ProfileRegisterPage() {
 
       if (axiosError.response?.status === 400) {
         setServerError(
-          axiosError.response.data ?? "Проверьте правильность заполнения полей",
+          axiosError.response.data?.detail ??
+            "Проверьте правильность заполнения полей",
         );
         return;
       }
@@ -152,10 +149,12 @@ export default function ProfileRegisterPage() {
                             className="bg-muted hover:bg-muted/80 focus-visible:ring-ring flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-dashed transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                           >
                             {avatarPreview ? (
-                              <img
+                              <Image
                                 src={avatarPreview}
                                 alt="Аватар"
-                                className="h-full w-full object-cover"
+                                fill
+                                className="object-cover"
+                                unoptimized
                               />
                             ) : (
                               <UserCircle className="text-muted-foreground h-12 w-12" />

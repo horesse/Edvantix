@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import useUpdateEducation from "@workspace/api-hooks/profiles/useUpdateEducation";
 import type { Education, OwnProfileDetails } from "@workspace/types/profile";
 import { EducationLevel } from "@workspace/types/profile";
+import { formatDateRange } from "@workspace/utils/format";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -39,7 +40,7 @@ import {
 import {
   type EducationInput,
   educationSchema,
-} from "@workspace/validations/profile/settings";
+} from "@workspace/validations/profile";
 
 const educationLevelLabels: Record<EducationLevel, string> = {
   [EducationLevel.Preschool]: "Дошкольное",
@@ -53,18 +54,6 @@ const educationLevelLabels: Record<EducationLevel, string> = {
   [EducationLevel.AdditionalAdults]: "Доп. образование взрослых",
   [EducationLevel.Special]: "Специальное",
 };
-
-function formatDateRange(start: string, end?: string | null): string {
-  const options: Intl.DateTimeFormatOptions = {
-    month: "short",
-    year: "numeric",
-  };
-  const startStr = new Date(start).toLocaleDateString("ru-RU", options);
-  const endStr = end
-    ? new Date(end).toLocaleDateString("ru-RU", options)
-    : "настоящее время";
-  return `${startStr} — ${endStr}`;
-}
 
 type EducationSectionProps = {
   profile: OwnProfileDetails;

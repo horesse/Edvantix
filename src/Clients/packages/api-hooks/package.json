@@ -2,12 +2,13 @@
   "name": "@workspace/api-hooks",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": ">=25.0.0"
   },
   "scripts": {
     "lint": "eslint .",
-    "type-check": "tsc --noEmit"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21"
@@ -18,12 +19,15 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/types": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "react": "^19.2.4"
   },
   "peerDependencies": {
     "@workspace/api-client": "workspace:*",
-    "react": "^19.2.3"
+    "react": "^19.2.4"
   },
-  "exports": {}
+  "exports": {
+    "./keys": "./src/keys.ts",
+    "./profiles/*": "./src/profiles/*.ts"
+  }
 }

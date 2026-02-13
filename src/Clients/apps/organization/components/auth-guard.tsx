@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ import { useUserContext } from "@/hooks/use-user-context";
 import { getAccessToken, signIn } from "@/lib/auth-client";
 import { AUTH } from "@/lib/constants";
 
-function LoadingScreen({
+export function LoadingScreen({
   title,
   description,
 }: {
@@ -94,8 +94,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return (
       <LoadingScreen
-        title="Loading Dashboard"
-        description="Please wait while we verify your credentials..."
+        title="Загрузка"
+        description="Пожалуйста, подождите, идёт проверка учётных данных..."
       />
     );
   }
@@ -103,8 +103,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (!isAuthenticated) {
     return (
       <LoadingScreen
-        title="Authentication Required"
-        description="Redirecting to secure login..."
+        title="Требуется аутентификация"
+        description="Перенаправление на страницу входа..."
       />
     );
   }

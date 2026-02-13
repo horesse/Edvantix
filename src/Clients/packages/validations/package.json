@@ -2,23 +2,29 @@
   "name": "@workspace/validations",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": ">=25.0.0"
   },
   "exports": {
-    "./profile/registration": "./src/profile/registration.ts"
+    "./profile": {
+      "import": "./src/profile/index.ts",
+      "types": "./src/profile/index.ts"
+    }
   },
   "scripts": {
     "lint": "eslint .",
-    "type-check": "tsc --noEmit"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@workspace/types": "workspace:*",
     "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "@workspace/types": "workspace:*"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "eslint": "^9.39.2"
+    "eslint": "^10.0.0"
   }
 }

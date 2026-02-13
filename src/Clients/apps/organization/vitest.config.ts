@@ -15,7 +15,7 @@ export default defineConfig({
     ],
     setupFiles: ["./__tests__/setup.ts"],
     include: ["**/__tests__/**/*.test.{ts,tsx}", "**/*.test.{ts,tsx}"],
-    exclude: ["node_modules", ".next", "e2e"],
+    exclude: ["node_modules", ".next"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "json-summary", "html", "lcov"],
@@ -27,7 +27,6 @@ export default defineConfig({
         "**/*.config.*",
         "**/*.d.ts",
         "**/types.ts",
-        "e2e/",
         // Pages & App Directory (integration tested separately)
         "app/**/*.tsx",
         "app/**/*.ts",
@@ -41,36 +40,26 @@ export default defineConfig({
         "**/*.mjs",
         "**/env.mjs",
         "**/instrumentation.ts",
-        "**/proxy.ts",
         "**/middleware.ts",
-        // SEO & Metadata
-        "**/robots.ts",
-        "**/sitemap.ts",
-        "**/manifest.ts",
-        "**/opengraph-image.tsx",
-        "lib/seo.ts",
         // Auth & Providers (integration concerns)
         "lib/auth.ts",
         "lib/auth-client.ts",
-        "components/providers.tsx",
+        "app/providers.tsx",
         // MSW & Mocking
         "lib/msw.ts",
         "public/mockServiceWorker.js",
-        // Complex UI Components (e2e tested)
-        "components/header.tsx",
-        "components/footer.tsx",
-        "components/mobile-bottom-nav.tsx",
-        "components/chat-bot.tsx",
-        "components/policy-dialog.tsx",
+        // Complex UI Components (should be e2e tested)
+        "components/dashboard-header.tsx",
+        "components/dashboard-nav.tsx",
+        "components/auth-guard.tsx",
+        "components/mobile-blocker.tsx",
         // Loading Skeletons (visual only)
         "components/loading-skeleton.tsx",
         "**/loading-skeleton.tsx",
-        // Content Pages (static content)
-        "features/content/**",
-        "features/home/**",
       ],
     },
-    pool: "threads",
+    pool: "forks",
+    maxWorkers: 1,
     isolate: false,
   },
   resolve: {

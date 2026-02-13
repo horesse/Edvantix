@@ -8,13 +8,14 @@
   UpdateProfileRequest,
 } from "@workspace/types/profile";
 
-import ApiClient from "../client";
+import { apiClient } from "../client";
+import type ApiClient from "../client";
 
 class ProfileApiClient {
   private readonly client: ApiClient;
 
   constructor() {
-    this.client = new ApiClient();
+    this.client = apiClient;
   }
 
   public async getProfile(): Promise<OwnProfile> {

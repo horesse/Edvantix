@@ -9,7 +9,6 @@ import { toast } from "sonner";
 
 import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
 import type { OwnProfileDetails } from "@workspace/types/profile";
-import { Gender } from "@workspace/types/profile";
 import { Button } from "@workspace/ui/components/button";
 import {
   Form,
@@ -30,11 +29,7 @@ import {
   profileSettingsSchema,
 } from "@workspace/validations/profile";
 
-const genderOptions = [
-  { value: Gender.Male, label: "Мужской" },
-  { value: Gender.Female, label: "Женский" },
-  { value: Gender.None, label: "Не указан" },
-] as const;
+import { genderOptions } from "@/lib/profile-options";
 
 type ProfileFormProps = {
   profile: OwnProfileDetails;

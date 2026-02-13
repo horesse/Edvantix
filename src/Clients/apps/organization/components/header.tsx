@@ -23,19 +23,11 @@ import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
+import { getInitials } from "@workspace/utils/format";
+
 import { useLogout } from "@/hooks/useLogout";
 
 import { ThemeToggle } from "./theme-toggle";
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
 
 export function Header() {
   const { data: profile, isLoading } = useOwnProfile();

@@ -12,6 +12,7 @@ import type {
   EmploymentHistory,
   OwnProfileDetails,
 } from "@workspace/types/profile";
+import { formatDateRange } from "@workspace/utils/format";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
@@ -35,18 +36,6 @@ import {
   type EmploymentInput,
   employmentSchema,
 } from "@workspace/validations/profile";
-
-function formatDateRange(start: string, end?: string | null): string {
-  const options: Intl.DateTimeFormatOptions = {
-    month: "short",
-    year: "numeric",
-  };
-  const startStr = new Date(start).toLocaleDateString("ru-RU", options);
-  const endStr = end
-    ? new Date(end).toLocaleDateString("ru-RU", options)
-    : "настоящее время";
-  return `${startStr} — ${endStr}`;
-}
 
 type EmploymentSectionProps = {
   profile: OwnProfileDetails;

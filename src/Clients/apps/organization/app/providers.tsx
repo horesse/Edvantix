@@ -7,14 +7,10 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { Toaster } from "@workspace/ui/components/sonner";
 
-import { env } from "@/env.mjs";
 import { getQueryClient } from "@/lib/query-client";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
-
-  const gatewayUrl =
-    env.NEXT_PUBLIC_GATEWAY_HTTPS || env.NEXT_PUBLIC_GATEWAY_HTTP;
 
   return (
     <QueryClientProvider client={queryClient}>

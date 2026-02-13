@@ -10,7 +10,6 @@ import { UserCircle, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import useRegisterProfile from "@workspace/api-hooks/profiles/useRegisterProfile";
-import { Gender } from "@workspace/types/profile";
 import { Button } from "@workspace/ui/components/button";
 import {
   Card,
@@ -38,11 +37,7 @@ import {
   registrationSchema,
 } from "@workspace/validations/profile";
 
-const genderOptions = [
-  { value: Gender.Male, label: "Мужской" },
-  { value: Gender.Female, label: "Женский" },
-  { value: Gender.None, label: "Не указан" },
-] as const;
+import { genderOptions } from "@/lib/profile-options";
 
 export default function ProfileRegisterPage() {
   const router = useRouter();
@@ -56,7 +51,7 @@ export default function ProfileRegisterPage() {
     },
     onError: (error) => {
       const axiosError = error as {
-        response?: { status?: number; data?: string };
+        response?: { status?: number; data?: { detail?: string } };
       };
 
       if (axiosError.response?.status === 409) {
@@ -67,7 +62,8 @@ export default function ProfileRegisterPage() {
 
       if (axiosError.response?.status === 400) {
         setServerError(
-          axiosError.response.data ?? "Проверьте правильность заполнения полей",
+          axiosError.response.data?.detail ??
+            "Проверьте правильность заполнения полей",
         );
         return;
       }

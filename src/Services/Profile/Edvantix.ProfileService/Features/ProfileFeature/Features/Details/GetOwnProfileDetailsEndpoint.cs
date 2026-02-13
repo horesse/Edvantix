@@ -1,6 +1,5 @@
 using Edvantix.Chassis.Endpoints;
 using Edvantix.ProfileService.Features.ProfileFeature.Models;
-using Edvantix.ProfileService.Features.ProfileFeature.OwnProfile;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 

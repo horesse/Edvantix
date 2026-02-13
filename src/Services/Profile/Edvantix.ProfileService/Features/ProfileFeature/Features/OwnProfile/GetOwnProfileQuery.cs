@@ -6,7 +6,7 @@ using Edvantix.ProfileService.Features.ProfileFeature.Models;
 using Edvantix.ProfileService.Infrastructure.Blob;
 using MediatR;
 
-namespace Edvantix.ProfileService.Features.ProfileFeature.OwnProfile;
+namespace Edvantix.ProfileService.Features.ProfileFeature.Features.OwnProfile;
 
 public sealed record GetOwnProfileQuery : IRequest<ProfileViewModel>;
 
@@ -31,7 +31,9 @@ public sealed class GetOwnProfileQueryHandler(IServiceProvider provider)
 
         var blobService = provider.GetRequiredService<IBlobService>();
 
-        var avatarUrl = profile.Avatar is not null ? blobService.GetFileSasUrl(profile.Avatar) : null;
+        var avatarUrl = profile.Avatar is not null
+            ? blobService.GetFileSasUrl(profile.Avatar)
+            : null;
 
         return new ProfileViewModel(
             profile.Id.ToString(),

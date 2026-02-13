@@ -16,15 +16,14 @@ namespace Edvantix.ProfileService.Infrastructure.Migrations
                 type: "character varying(150)",
                 maxLength: 150,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: ""
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "login",
-                table: "profile");
+            migrationBuilder.DropColumn(name: "login", table: "profile");
         }
     }
 }

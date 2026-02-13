@@ -22,6 +22,7 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
     public async Task<long> Handle(RegistrationCommand request, CancellationToken cancellationToken)
     {
         var userGuid = provider.GetUserId();
+        var login = provider.GetUserLogin();
 
         using var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
@@ -36,6 +37,7 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         {
             var profile = new Profile(
                 userGuid,
+                login,
                 request.Gender,
                 request.BirthDate,
                 request.FirstName,

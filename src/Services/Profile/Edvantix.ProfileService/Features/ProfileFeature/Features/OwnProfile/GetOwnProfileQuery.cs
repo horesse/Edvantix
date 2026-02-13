@@ -1,12 +1,9 @@
-using System.Security.Claims;
 using Edvantix.Chassis.Exceptions;
-using Edvantix.Chassis.Security.Extensions;
-using Edvantix.Chassis.Utilities.Guards;
+using Edvantix.Chassis.Utilities;
 using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate;
 using Edvantix.ProfileService.Domain.AggregatesModel.ProfileAggregate.Specifications;
 using Edvantix.ProfileService.Features.ProfileFeature.Models;
 using Edvantix.ProfileService.Infrastructure.Blob;
-using FluentValidation;
 using MediatR;
 
 namespace Edvantix.ProfileService.Features.ProfileFeature.OwnProfile;
@@ -21,13 +18,7 @@ public sealed class GetOwnProfileQueryHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var claimsPrincipal =
-            provider.GetService<ClaimsPrincipal>() ?? throw new Exception("Вы не авторизованы.");
-
-        var sub = claimsPrincipal.GetClaimValue(ClaimTypes.NameIdentifier);
-        var userId = Guard.Against.NotAuthenticated(sub);
-
-        var userGuid = Guid.Parse(userId);
+        var userGuid = provider.GetUserId();
 
         var spec = new ProfileByAccountSpecification(userGuid);
 
@@ -35,20 +26,17 @@ public sealed class GetOwnProfileQueryHandler(IServiceProvider provider)
 
         var profile = await profileRepo.GetFirstByExpressionAsync(spec, cancellationToken);
 
-        if (profile == null)
+        if (profile is null)
             throw new NotFoundException("Профиль не найден.");
-
-        var userName =
-            claimsPrincipal.GetClaimValue(ClaimTypes.Name) ?? profile.AccountId.ToString();
 
         var blobService = provider.GetRequiredService<IBlobService>();
 
-        var avatarUrl = profile.Avatar != null ? blobService.GetFileSasUrl(profile.Avatar) : null;
+        var avatarUrl = profile.Avatar is not null ? blobService.GetFileSasUrl(profile.Avatar) : null;
 
         return new ProfileViewModel(
             profile.Id.ToString(),
             profile.FullName.GetFullName(),
-            userName,
+            profile.Login,
             avatarUrl
         );
     }

@@ -16,6 +16,7 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
 
     public Profile(
         Guid accountId,
+        string login,
         Gender gender,
         DateOnly birthDate,
         string firstName,
@@ -27,13 +28,17 @@ public sealed class Profile() : Entity<long>, IAggregateRoot, ISoftDelete
         if (accountId == Guid.Empty)
             throw new ArgumentException("AccountId не может быть пустым.", nameof(accountId));
 
+        ArgumentException.ThrowIfNullOrWhiteSpace(login, nameof(login));
+
         AccountId = accountId;
+        Login = login;
         Gender = gender;
         BirthDate = birthDate;
         FullName = new FullName(firstName, lastName, middleName);
     }
 
     public Guid AccountId { get; private set; }
+    public string Login { get; private set; } = null!;
     public Gender Gender { get; private set; }
     public DateOnly BirthDate { get; private set; }
 

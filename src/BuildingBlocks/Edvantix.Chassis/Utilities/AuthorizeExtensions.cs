@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Edvantix.Chassis.Security.Extensions;
+using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Guards;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,5 +19,18 @@ public static class AuthorizeExtensions
         var userGuid = Guid.Parse(userId);
 
         return userGuid;
+    }
+
+    /// <summary>
+    /// Извлекает логин (preferred_username) текущего пользователя из claims.
+    /// </summary>
+    public static string GetUserLogin(this IServiceProvider provider)
+    {
+        var claimsPrincipal =
+            provider.GetService<ClaimsPrincipal>() ?? throw new Exception("Вы не авторизованы.");
+
+        var login = claimsPrincipal.GetClaimValue(KeycloakClaimTypes.PreferredUsername);
+
+        return Guard.Against.NotAuthenticated(login);
     }
 }

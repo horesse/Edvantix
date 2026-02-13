@@ -14,6 +14,8 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 
         builder.Property(p => p.AccountId).IsRequired();
 
+        builder.Property(p => p.Login).IsRequired().HasMaxLength(150);
+
         builder.Property(p => p.Gender).IsRequired().HasConversion<int>();
 
         builder.Property(p => p.BirthDate).IsRequired();

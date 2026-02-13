@@ -12,6 +12,7 @@ namespace Edvantix.ProfileService.Features.ProfileFeature.Models;
 public sealed class ProfileModel : Model<long>
 {
     public Guid AccountId { get; set; }
+    public string Login { get; set; } = null!;
     public Gender Gender { get; set; }
 
     public DateOnly BirthDate { get; set; }

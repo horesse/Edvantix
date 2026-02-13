@@ -3,7 +3,7 @@ using Edvantix.ProfileService.Features.ProfileFeature.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Edvantix.ProfileService.Features.ProfileFeature.OwnProfile;
+namespace Edvantix.ProfileService.Features.ProfileFeature.Features.OwnProfile;
 
 public class GetOwnProfileEndpoint : IEndpoint<Ok<ProfileViewModel>, GetOwnProfileQuery, ISender>
 {

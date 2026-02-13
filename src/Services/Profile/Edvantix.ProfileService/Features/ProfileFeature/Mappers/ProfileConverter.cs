@@ -24,6 +24,7 @@ public sealed class ProfileConverter(IServiceProvider provider)
         return new ProfileModel
         {
             AccountId = source.AccountId,
+            Login = source.Login,
             AvatarUrl = avatarUrl,
             FirstName = source.FullName.FirstName,
             LastName = source.FullName.LastName,

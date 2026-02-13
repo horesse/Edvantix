@@ -47,7 +47,7 @@ import {
 import {
   type ContactInput,
   contactSchema,
-} from "@workspace/validations/profile/settings";
+} from "@workspace/validations/profile";
 
 const contactTypeLabels: Record<ContactType, string> = {
   [ContactType.Email]: "Email",

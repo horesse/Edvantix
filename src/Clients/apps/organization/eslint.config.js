@@ -11,53 +11,27 @@ export default [
     },
   },
   {
-    languageOptions: {
-      globals: {
-        process: "readonly",
-      },
-    },
-    rules: {
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
-          caughtErrorsIgnorePattern: "^_",
-        },
-      ],
-      "@typescript-eslint/no-explicit-any": "off",
-      "react/no-unescaped-entities": "off",
-      "react-hooks/set-state-in-effect": "off",
-      "jsx-a11y/alt-text": "off",
-    },
-  },
-  {
-    files: ["**/opengraph-image.tsx", "**/twitter-image.tsx"],
-    rules: {
-      "@next/next/no-img-element": "off",
-    },
-  },
-  {
-    files: [
-      "**/__tests__/**",
-      "**/e2e/**",
-      "**/*.test.{ts,tsx}",
-      "**/*.spec.{ts,tsx}",
-    ],
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-    },
-  },
-  {
     ignores: [
       ".next/**",
-      ".turbo/**",
-      "node_modules/**",
-      "coverage/**",
-      "playwright-report/**",
-      "test-results/**",
-      "e2e/reports/**",
       "public/mockServiceWorker.js",
+      "coverage/**",
+      "**/coverage/**",
+      "coverage/lcov-report/**",
     ],
+  },
+  {
+    rules: {
+      "react-hooks/incompatible-library": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/immutability": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "no-undef": "off",
+    },
+  },
+  {
+    files: ["**/__tests__/**/*.test.tsx", "**/__tests__/**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
   },
 ];

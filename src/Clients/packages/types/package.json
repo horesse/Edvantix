@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=25.0.0"
   },
+  "type": "module",
   "exports": {
     "./shared": {
       "import": "./src/shared/index.ts",
@@ -20,7 +21,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*"
   }

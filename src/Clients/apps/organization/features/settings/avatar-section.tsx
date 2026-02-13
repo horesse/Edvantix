@@ -13,31 +13,17 @@ import {
 } from "@workspace/ui/components/avatar";
 import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
-
-const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
-const ALLOWED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/gif",
-  "image/webp",
-];
+import { getInitials } from "@workspace/utils/format";
+import {
+  ALLOWED_IMAGE_TYPES,
+  MAX_AVATAR_SIZE,
+} from "@workspace/validations/profile";
 
 type AvatarSectionProps = {
   avatarUrl?: string | null;
   fullName: string;
   subtitle?: string;
 };
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
 
 export function AvatarSection({
   avatarUrl,

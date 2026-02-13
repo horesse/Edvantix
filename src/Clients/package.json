@@ -2,11 +2,13 @@
   "name": "@edvantix/clients",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "test": "turbo test",
-    "e2e": "turbo test:e2e",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "e2e": "turbo run test:e2e",
+    "boundaries": "turbo boundaries",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
@@ -18,7 +20,7 @@
     "turbo": "^2.8.7",
     "typescript": "5.9.3"
   },
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "pnpm@10.29.2",
   "engines": {
     "node": ">=25.0.0"
   },
@@ -33,12 +35,15 @@
       "esbuild",
       "msw",
       "protobufjs",
-      "sharp"
-    ]
-  },
-  "dependencies": {
-    "@radix-ui/react-slot": "^1.2.4",
-    "input-otp": "^1.4.2",
-    "vaul": "^1.1.2"
+      "sharp",
+      "unrs-resolver"
+    ],
+    "overrides": {
+      "semver@>=7.0.0 <7.5.2": ">=7.5.2",
+      "prismjs@<1.30.0": ">=1.30.0",
+      "js-yaml@>=4.0.0 <4.1.1": ">=4.1.1",
+      "lodash-es@>=4.0.0 <=4.17.22": ">=4.17.23",
+      "tmp@<=0.2.3": ">=0.2.4"
+    }
   }
 }

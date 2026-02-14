@@ -33,17 +33,12 @@ public sealed class CancelInvitationCommandHandler(IServiceProvider provider)
 
         using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
 
-        var invitation = await invitationRepo.GetByIdAsync(
-            request.InvitationId,
-            cancellationToken
-        ) ?? throw new NotFoundException(
-            $"Приглашение с ID {request.InvitationId} не найдено."
-        );
+        var invitation =
+            await invitationRepo.GetByIdAsync(request.InvitationId, cancellationToken)
+            ?? throw new NotFoundException($"Приглашение с ID {request.InvitationId} не найдено.");
 
         if (invitation.OrganizationId != request.OrganizationId)
-            throw new NotFoundException(
-                $"Приглашение с ID {request.InvitationId} не найдено."
-            );
+            throw new NotFoundException($"Приглашение с ID {request.InvitationId} не найдено.");
 
         invitation.Cancel();
 

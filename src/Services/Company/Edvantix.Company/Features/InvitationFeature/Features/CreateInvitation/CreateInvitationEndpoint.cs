@@ -45,9 +45,7 @@ public class CreateInvitationEndpoint : IEndpoint<Created<Guid>, CreateInvitatio
             .WithName("CreateInvitation")
             .WithTags("Invitations")
             .WithSummary("Создать приглашение")
-            .WithDescription(
-                "Создаёт приглашение в организацию. Доступно владельцу и менеджеру."
-            )
+            .WithDescription("Создаёт приглашение в организацию. Доступно владельцу и менеджеру.")
             .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization();

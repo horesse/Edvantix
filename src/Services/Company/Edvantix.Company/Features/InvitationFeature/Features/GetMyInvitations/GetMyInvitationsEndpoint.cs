@@ -21,9 +21,7 @@ public class GetMyInvitationsEndpoint
             .WithName("GetMyInvitations")
             .WithTags("Invitations")
             .WithSummary("Мои приглашения")
-            .WithDescription(
-                "Возвращает список ожидающих приглашений текущего пользователя."
-            )
+            .WithDescription("Возвращает список ожидающих приглашений текущего пользователя.")
             .Produces<IEnumerable<InvitationModel>>()
             .RequireAuthorization();
     }

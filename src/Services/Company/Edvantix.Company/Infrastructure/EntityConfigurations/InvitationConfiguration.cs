@@ -21,19 +21,11 @@ public sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitatio
 
         builder.Property(x => x.InviteeProfileId);
 
-        builder
-            .Property(x => x.InviteeEmail)
-            .HasMaxLength(256);
+        builder.Property(x => x.InviteeEmail).HasMaxLength(256);
 
-        builder
-            .Property(x => x.Role)
-            .IsRequired()
-            .HasConversion<int>();
+        builder.Property(x => x.Role).IsRequired().HasConversion<int>();
 
-        builder
-            .Property(x => x.Status)
-            .IsRequired()
-            .HasConversion<int>();
+        builder.Property(x => x.Status).IsRequired().HasConversion<int>();
 
         builder.Property(x => x.Token).IsRequired();
 
@@ -44,9 +36,7 @@ public sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitatio
         builder.Property(x => x.RespondedAt);
 
         // Уникальный индекс по токену для быстрого поиска accept/decline.
-        builder
-            .HasIndex(x => x.Token)
-            .IsUnique();
+        builder.HasIndex(x => x.Token).IsUnique();
 
         // Составной индекс для поиска ожидающих приглашений по организации.
         builder.HasIndex(x => new { x.OrganizationId, x.Status });
@@ -55,6 +45,11 @@ public sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitatio
         builder.HasIndex(x => new { x.InviteeProfileId, x.Status });
 
         // Индекс для поиска дубликатов по email.
-        builder.HasIndex(x => new { x.OrganizationId, x.InviteeEmail, x.Status });
+        builder.HasIndex(x => new
+        {
+            x.OrganizationId,
+            x.InviteeEmail,
+            x.Status,
+        });
     }
 }

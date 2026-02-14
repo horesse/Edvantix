@@ -55,8 +55,7 @@ public sealed class CreateInvitationCommandHandler(IServiceProvider provider)
         // Проверить, что пользователь ещё не является участником.
         if (request.InviteeProfileId.HasValue)
         {
-            using var memberRepo =
-                provider.GetRequiredService<IOrganizationMemberRepository>();
+            using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
 
             var memberSpec = new OrganizationMemberByProfileSpecification(
                 request.InviteeProfileId.Value,

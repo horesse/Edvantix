@@ -6,8 +6,7 @@ namespace Edvantix.Company.Domain.AggregatesModel.InvitationAggregate.Specificat
 /// <summary>
 /// Спецификация для поиска ожидающих приглашений по идентификатору организации.
 /// </summary>
-public sealed class PendingInvitationsByOrganizationSpecification
-    : CommonSpecification<Invitation>
+public sealed class PendingInvitationsByOrganizationSpecification : CommonSpecification<Invitation>
 {
     public PendingInvitationsByOrganizationSpecification(long organizationId)
     {

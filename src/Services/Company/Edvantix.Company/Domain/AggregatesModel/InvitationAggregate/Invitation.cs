@@ -93,7 +93,8 @@ public sealed class Invitation() : Entity<Guid>, IAggregateRoot
     /// <summary>
     /// Проверяет, истёк ли срок действия приглашения.
     /// </summary>
-    public bool IsExpired => Status == InvitationStatus.Pending && DateTimeHelper.UtcNow() > ExpiresAt;
+    public bool IsExpired =>
+        Status == InvitationStatus.Pending && DateTimeHelper.UtcNow() > ExpiresAt;
 
     /// <summary>
     /// Принимает приглашение. Вызывающий код должен создать OrganizationMember.
@@ -137,9 +138,7 @@ public sealed class Invitation() : Entity<Guid>, IAggregateRoot
     public void Cancel()
     {
         if (Status is not InvitationStatus.Pending)
-            throw new InvalidOperationException(
-                "Можно отменить только ожидающее приглашение."
-            );
+            throw new InvalidOperationException("Можно отменить только ожидающее приглашение.");
 
         Status = InvitationStatus.Cancelled;
         RespondedAt = DateTimeHelper.UtcNow();

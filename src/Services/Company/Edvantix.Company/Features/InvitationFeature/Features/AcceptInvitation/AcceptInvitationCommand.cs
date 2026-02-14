@@ -30,7 +30,8 @@ public sealed class AcceptInvitationCommandHandler(IServiceProvider provider)
         using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
 
         var spec = new InvitationByTokenSpecification(request.Token);
-        var invitation = await invitationRepo.GetFirstByExpressionAsync(spec, cancellationToken)
+        var invitation =
+            await invitationRepo.GetFirstByExpressionAsync(spec, cancellationToken)
             ?? throw new NotFoundException($"Приглашение с указанным токеном не найдено.");
 
         // Проверить, что пользователь ещё не является участником.
@@ -47,19 +48,13 @@ public sealed class AcceptInvitationCommandHandler(IServiceProvider provider)
         );
 
         if (existingMember is not null)
-            throw new InvalidOperationException(
-                "Вы уже являетесь участником данной организации."
-            );
+            throw new InvalidOperationException("Вы уже являетесь участником данной организации.");
 
         // Принять приглашение (domain logic: проверка статуса, TTL, profileId).
         invitation.Accept(profileId);
 
         // Создать участника организации (inline, по аналогии с AddMemberCommand).
-        var member = new OrganizationMember(
-            invitation.OrganizationId,
-            profileId,
-            invitation.Role
-        );
+        var member = new OrganizationMember(invitation.OrganizationId, profileId, invitation.Role);
 
         await memberRepo.InsertAsync(member, cancellationToken);
         await invitationRepo.UpdateAsync(invitation, cancellationToken);

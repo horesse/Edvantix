@@ -7,31 +7,19 @@ namespace Edvantix.Company.Features.InvitationFeature.Features.CancelInvitation;
 /// <summary>
 /// DELETE /organizations/{orgId}/invitations/{invitationId} — отменить приглашение.
 /// </summary>
-public class CancelInvitationEndpoint
-    : IEndpoint<NoContent, CancelInvitationCommand, ISender>
+public class CancelInvitationEndpoint : IEndpoint<NoContent, CancelInvitationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
                 "/organizations/{orgId:long}/invitations/{invitationId:guid}",
-                async (
-                    long orgId,
-                    Guid invitationId,
-                    ISender sender,
-                    CancellationToken ct
-                ) =>
-                    await HandleAsync(
-                        new CancelInvitationCommand(orgId, invitationId),
-                        sender,
-                        ct
-                    )
+                async (long orgId, Guid invitationId, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(new CancelInvitationCommand(orgId, invitationId), sender, ct)
             )
             .WithName("CancelInvitation")
             .WithTags("Invitations")
             .WithSummary("Отменить приглашение")
-            .WithDescription(
-                "Отменяет ожидающее приглашение. Доступно владельцу и менеджеру."
-            )
+            .WithDescription("Отменяет ожидающее приглашение. Доступно владельцу и менеджеру.")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)

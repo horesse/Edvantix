@@ -28,9 +28,7 @@ public sealed class CreateInvitationValidator : AbstractValidator<CreateInvitati
             .When(x => x.InviteeProfileId.HasValue)
             .WithMessage("Некорректный идентификатор профиля.");
 
-        RuleFor(x => x.Role)
-            .IsInEnum()
-            .WithMessage("Некорректная роль.");
+        RuleFor(x => x.Role).IsInEnum().WithMessage("Некорректная роль.");
 
         RuleFor(x => x.TtlDays)
             .InclusiveBetween(1, 30)

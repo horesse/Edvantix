@@ -27,7 +27,8 @@ public sealed class DeclineInvitationCommandHandler(IServiceProvider provider)
         using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
 
         var spec = new InvitationByTokenSpecification(request.Token);
-        var invitation = await invitationRepo.GetFirstByExpressionAsync(spec, cancellationToken)
+        var invitation =
+            await invitationRepo.GetFirstByExpressionAsync(spec, cancellationToken)
             ?? throw new NotFoundException($"Приглашение с указанным токеном не найдено.");
 
         invitation.Decline(profileId);

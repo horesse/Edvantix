@@ -22,7 +22,6 @@ import {
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-
 import { getInitials } from "@workspace/utils/format";
 
 import { useLogout } from "@/hooks/useLogout";

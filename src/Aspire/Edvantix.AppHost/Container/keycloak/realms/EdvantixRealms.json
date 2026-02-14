@@ -1355,6 +1355,8 @@
       "optionalClientScopes": [
         "${CLIENT_PROFILE_ID}_read",
         "${CLIENT_PROFILE_ID}_write",
+        "${CLIENT_COMPANY_ID}_read",
+        "${CLIENT_COMPANY_ID}_write",
         "address",
         "phone",
         "organization",
@@ -1502,8 +1504,6 @@
       "optionalClientScopes": [
         "${CLIENT_PROFILE_ID}_read",
         "${CLIENT_PROFILE_ID}_write",
-        "${CLIENT_COMPANY_ID}_read",
-        "${CLIENT_COMPANY_ID}_write",
         "address",
         "phone",
         "organization",

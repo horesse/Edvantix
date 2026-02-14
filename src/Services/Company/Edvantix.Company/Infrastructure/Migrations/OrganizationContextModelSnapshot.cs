@@ -17,12 +17,12 @@ namespace Edvantix.OrganizationManagement.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.ContactAggregate.Contact", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.ContactAggregate.Contact", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,49 @@ namespace Edvantix.OrganizationManagement.Migrations
                     b.ToTable("contact", (string)null);
                 });
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.MemberAggregate.Member", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.GroupAggregate.Group", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Идентификатор");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(10000)
+                        .HasColumnType("character varying(10000)")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted")
+                        .HasComment("Признак удаленной записи");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.Property<long>("OrganizationId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("organization_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_group");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("ix_group_name");
+
+                    b.HasIndex("OrganizationId")
+                        .HasDatabaseName("ix_group_organization_id");
+
+                    b.ToTable("group", (string)null);
+                });
+
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.GroupAggregate.GroupMember", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,43 +118,43 @@ namespace Edvantix.OrganizationManagement.Migrations
                         .HasColumnName("id")
                         .HasComment("Идентификатор");
 
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("group_id");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted")
                         .HasComment("Признак удаленной записи");
 
-                    b.Property<long>("OrganizationId")
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("joined_at");
+
+                    b.Property<long>("ProfileId")
                         .HasColumnType("bigint")
-                        .HasColumnName("organization_id");
+                        .HasColumnName("profile_id");
 
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("person_id");
-
-                    b.Property<string>("Position")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("position");
+                    b.Property<int>("Role")
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
 
                     b.HasKey("Id")
-                        .HasName("pk_member");
+                        .HasName("pk_group_member");
 
-                    b.HasIndex("IsDeleted")
-                        .HasDatabaseName("ix_member_is_deleted");
+                    b.HasIndex("GroupId")
+                        .HasDatabaseName("ix_group_member_group_id");
 
-                    b.HasIndex("OrganizationId")
-                        .HasDatabaseName("ix_member_organization_id");
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_group_member_profile_id");
 
-                    b.HasIndex("PersonId")
-                        .HasDatabaseName("ix_member_person_id");
+                    b.HasIndex("GroupId", "ProfileId", "IsDeleted")
+                        .HasDatabaseName("ix_group_member_group_id_profile_id_is_deleted");
 
-                    b.HasIndex("OrganizationId", "PersonId", "IsDeleted")
-                        .HasDatabaseName("ix_member_organization_id_person_id_is_deleted");
-
-                    b.ToTable("member", (string)null);
+                    b.ToTable("group_member", (string)null);
                 });
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.OrganizationAggregate.Organization", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate.Organization", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,91 +214,53 @@ namespace Edvantix.OrganizationManagement.Migrations
                     b.ToTable("organization", (string)null);
                 });
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.SubscriptionAggregate.Subscription", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMember", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
                         .HasComment("Идентификатор");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted")
+                        .HasComment("Признак удаленной записи");
 
-                    b.Property<DateTime?>("DateEnd")
+                    b.Property<DateTime>("JoinedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_end");
-
-                    b.Property<DateTime>("DateStart")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_start");
+                        .HasColumnName("joined_at");
 
                     b.Property<long>("OrganizationId")
                         .HasColumnType("bigint")
                         .HasColumnName("organization_id");
 
-                    b.Property<long>("SubscriptionId")
+                    b.Property<long>("ProfileId")
                         .HasColumnType("bigint")
-                        .HasColumnName("subscription_id");
+                        .HasColumnName("profile_id");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
 
                     b.HasKey("Id")
-                        .HasName("pk_subscription");
-
-                    b.HasIndex("DateEnd")
-                        .HasDatabaseName("ix_subscription_date_end");
+                        .HasName("pk_organization_member");
 
                     b.HasIndex("OrganizationId")
-                        .HasDatabaseName("ix_subscription_organization_id");
+                        .HasDatabaseName("ix_organization_member_organization_id");
 
-                    b.HasIndex("SubscriptionId")
-                        .HasDatabaseName("ix_subscription_subscription_id");
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_organization_member_profile_id");
 
-                    b.HasIndex("OrganizationId", "DateStart", "DateEnd")
-                        .HasDatabaseName("ix_subscription_organization_id_date_start_date_end");
+                    b.HasIndex("OrganizationId", "ProfileId", "IsDeleted")
+                        .HasDatabaseName("ix_organization_member_organization_id_profile_id_is_deleted");
 
-                    b.ToTable("subscription", (string)null);
+                    b.ToTable("organization_member", (string)null);
                 });
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.UsageAggregate.Usage", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.ContactAggregate.Contact", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasComment("Идентификатор");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("LimitId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("limit_id");
-
-                    b.Property<long>("OrganizationId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("organization_id");
-
-                    b.Property<decimal>("Value")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)")
-                        .HasColumnName("value");
-
-                    b.HasKey("Id")
-                        .HasName("pk_usage");
-
-                    b.HasIndex("LimitId")
-                        .HasDatabaseName("ix_usage_limit_id");
-
-                    b.HasIndex("OrganizationId")
-                        .HasDatabaseName("ix_usage_organization_id");
-
-                    b.HasIndex("OrganizationId", "LimitId")
-                        .HasDatabaseName("ix_usage_organization_id_limit_id");
-
-                    b.ToTable("usage", (string)null);
-                });
-
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.ContactAggregate.Contact", b =>
-                {
-                    b.HasOne("Edvantix.OrganizationManagement.Domain.AggregatesModel.OrganizationAggregate.Organization", "Organization")
+                    b.HasOne("Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate.Organization", "Organization")
                         .WithMany("Contacts")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -266,61 +270,54 @@ namespace Edvantix.OrganizationManagement.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.MemberAggregate.Member", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.GroupAggregate.Group", b =>
                 {
-                    b.HasOne("Edvantix.OrganizationManagement.Domain.AggregatesModel.OrganizationAggregate.Organization", "Organization")
+                    b.HasOne("Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate.Organization", "Organization")
+                        .WithMany("Groups")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_group_organization_organization_id");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.GroupAggregate.GroupMember", b =>
+                {
+                    b.HasOne("Edvantix.Company.Domain.AggregatesModel.GroupAggregate.Group", "Group")
+                        .WithMany("Members")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_group_member_group_group_id");
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMember", b =>
+                {
+                    b.HasOne("Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate.Organization", "Organization")
                         .WithMany("Members")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_member_organization_organization_id");
+                        .HasConstraintName("fk_organization_member_organization_organization_id");
 
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.SubscriptionAggregate.Subscription", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.GroupAggregate.Group", b =>
                 {
-                    b.HasOne("Edvantix.OrganizationManagement.Domain.AggregatesModel.OrganizationAggregate.Organization", "Organization")
-                        .WithMany("Subscriptions")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_subscription_organization_organization_id");
-
-                    b.Navigation("Organization");
+                    b.Navigation("Members");
                 });
 
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.UsageAggregate.Usage", b =>
-                {
-                    b.HasOne("Edvantix.OrganizationManagement.Domain.AggregatesModel.OrganizationAggregate.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_usage_organization_organization_id");
-
-                    b.HasOne("Edvantix.OrganizationManagement.Domain.AggregatesModel.SubscriptionAggregate.Subscription", null)
-                        .WithMany("Usages")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_usage_subscription_organization_id");
-
-                    b.Navigation("Organization");
-                });
-
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.OrganizationAggregate.Organization", b =>
+            modelBuilder.Entity("Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate.Organization", b =>
                 {
                     b.Navigation("Contacts");
 
+                    b.Navigation("Groups");
+
                     b.Navigation("Members");
-
-                    b.Navigation("Subscriptions");
-                });
-
-            modelBuilder.Entity("Edvantix.OrganizationManagement.Domain.AggregatesModel.SubscriptionAggregate.Subscription", b =>
-                {
-                    b.Navigation("Usages");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,8 +10,9 @@ using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Company.Features;
+using Edvantix.Company.Grpc;
 using Edvantix.Company.Infrastructure;
-using Edvantix.Constants.Aspire;
+using AspireServices = Edvantix.Constants.Aspire.Services;
 using Edvantix.Constants.Core;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.Kestrel;
@@ -41,15 +42,15 @@ public static class Extensions
                         .RequireAuthenticatedUser()
                         .RequireRole(Authorization.Roles.Admin)
                         .RequireScope(
-                            $"{Services.Company}_{Authorization.Actions.Read}",
-                            $"{Services.Company}_{Authorization.Actions.Write}"
+                            $"{AspireServices.Company}_{Authorization.Actions.Read}",
+                            $"{AspireServices.Company}_{Authorization.Actions.Write}"
                         );
                 }
             )
             .SetDefaultPolicy(
                 new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .RequireScope($"{Services.Company}_{Authorization.Actions.Read}")
+                    .RequireScope($"{AspireServices.Company}_{Authorization.Actions.Read}")
                     .Build()
             );
 
@@ -58,6 +59,7 @@ public static class Extensions
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
+        services.AddExceptionHandler<ForbiddenExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
@@ -80,14 +82,6 @@ public static class Extensions
 
         services.AddRateLimiting();
 
-        services.AddGrpc(options =>
-        {
-            options.EnableDetailedErrors = builder.Environment.IsDevelopment();
-            options.Interceptors.Add<GrpcExceptionInterceptor>();
-        });
-
-        services.AddGrpcHealthChecks();
-
         services.AddSingleton(_ =>
         {
             var options = new JsonSerializerOptions();
@@ -102,6 +96,8 @@ public static class Extensions
             includeInternalTypes: true
         );
 
+        services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
+
         services.AddSingleton<IActivityScope, ActivityScope>();
         services.AddSingleton<CommandHandlerMetrics>();
         services.AddSingleton<QueryHandlerMetrics>();
@@ -112,5 +108,7 @@ public static class Extensions
         services.AddConverter(typeof(IOrganizationApiMarker));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+        
+        builder.AddGrpcServices();
     }
 }

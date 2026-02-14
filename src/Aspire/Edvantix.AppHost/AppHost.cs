@@ -85,14 +85,6 @@ builder
     .WithContainerRegistry(registry)
     .WaitFor(entityHubDb);
 
-var organizationApi = builder
-    .AddProject<Edvantix_Company>(Services.Company)
-    .WithReference(organizationDb)
-    .WaitFor(organizationDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
-
 var systemApi = builder
     .AddProject<Edvantix_System>(Services.System)
     .WithReference(systemDb)
@@ -109,6 +101,16 @@ var profileApi = builder
     .WithContainerRegistry(registry)
     .WithReference(profileContainer)
     .WaitFor(profileContainer)
+    .WithFriendlyUrls();
+
+var organizationApi = builder
+    .AddProject<Edvantix_Company>(Services.Company)
+    .WithReference(organizationDb)
+    .WaitFor(organizationDb)
+    .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
+    .WithReference(profileApi)
+    .WaitFor(profileApi)
     .WithFriendlyUrls();
 
 var subscriptionsApi = builder

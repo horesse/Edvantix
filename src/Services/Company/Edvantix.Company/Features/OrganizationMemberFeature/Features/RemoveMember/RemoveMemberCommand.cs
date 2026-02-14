@@ -10,10 +10,7 @@ public sealed record RemoveMemberCommand(long OrganizationId, Guid MemberId) : I
 public sealed class RemoveMemberCommandHandler(IServiceProvider provider)
     : IRequestHandler<RemoveMemberCommand, Unit>
 {
-    public async Task<Unit> Handle(
-        RemoveMemberCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<Unit> Handle(RemoveMemberCommand request, CancellationToken cancellationToken)
     {
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireOrgRoleAsync(

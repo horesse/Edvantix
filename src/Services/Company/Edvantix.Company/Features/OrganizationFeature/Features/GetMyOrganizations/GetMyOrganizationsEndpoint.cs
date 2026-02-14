@@ -18,7 +18,9 @@ public class GetMyOrganizationsEndpoint
             .WithName("GetMyOrganizations")
             .WithTags("Organizations")
             .WithSummary("Мои организации")
-            .WithDescription("Возвращает список организаций, в которых состоит текущий пользователь.")
+            .WithDescription(
+                "Возвращает список организаций, в которых состоит текущий пользователь."
+            )
             .Produces<IEnumerable<OrganizationSummaryModel>>()
             .RequireAuthorization();
     }

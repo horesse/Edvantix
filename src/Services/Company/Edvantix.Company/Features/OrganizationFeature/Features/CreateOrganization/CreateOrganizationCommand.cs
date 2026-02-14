@@ -43,11 +43,7 @@ public sealed class CreateOrganizationCommandHandler(IServiceProvider provider)
 
             // Создатель становится Owner
             using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-            var member = new OrganizationMember(
-                organization.Id,
-                profileId,
-                OrganizationRole.Owner
-            );
+            var member = new OrganizationMember(organization.Id, profileId, OrganizationRole.Owner);
 
             await memberRepo.InsertAsync(member, cancellationToken);
             await memberRepo.SaveEntitiesAsync(cancellationToken);

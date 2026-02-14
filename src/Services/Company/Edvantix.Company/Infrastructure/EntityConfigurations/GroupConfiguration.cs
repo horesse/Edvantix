@@ -14,10 +14,7 @@ public sealed class GroupConfiguration : IEntityTypeConfiguration<Group>
 
         builder.Property(g => g.OrganizationId).IsRequired();
 
-        builder
-            .Property(g => g.Name)
-            .IsRequired()
-            .HasMaxLength(DataSchemaLength.SuperLarge);
+        builder.Property(g => g.Name).IsRequired().HasMaxLength(DataSchemaLength.SuperLarge);
 
         builder
             .Property(g => g.Description)

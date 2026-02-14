@@ -12,13 +12,13 @@ using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Company.Features;
 using Edvantix.Company.Grpc;
 using Edvantix.Company.Infrastructure;
-using AspireServices = Edvantix.Constants.Aspire.Services;
 using Edvantix.Constants.Core;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.Kestrel;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using AspireServices = Edvantix.Constants.Aspire.Services;
 
 namespace Edvantix.Company.Extensions;
 
@@ -108,7 +108,7 @@ public static class Extensions
         services.AddConverter(typeof(IOrganizationApiMarker));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
-        
+
         builder.AddGrpcServices();
     }
 }

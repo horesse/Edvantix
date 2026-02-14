@@ -17,10 +17,7 @@ public sealed class OrganizationMember() : Entity<Guid>, IAggregateRoot, ISoftDe
             );
 
         if (profileId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор профиля.",
-                nameof(profileId)
-            );
+            throw new ArgumentException("Некорректный идентификатор профиля.", nameof(profileId));
 
         OrganizationId = organizationId;
         ProfileId = profileId;

@@ -16,7 +16,9 @@ public class RemoveMemberEndpoint : IEndpoint<NoContent, RemoveMemberCommand, IS
             .WithName("RemoveOrganizationMember")
             .WithTags("Organization Members")
             .WithSummary("Удалить участника")
-            .WithDescription("Удаляет участника из организации (мягкое удаление). Доступно владельцу и менеджеру.")
+            .WithDescription(
+                "Удаляет участника из организации (мягкое удаление). Доступно владельцу и менеджеру."
+            )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)

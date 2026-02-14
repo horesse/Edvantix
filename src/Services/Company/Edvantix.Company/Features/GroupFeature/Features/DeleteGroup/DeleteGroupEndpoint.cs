@@ -16,7 +16,9 @@ public class DeleteGroupEndpoint : IEndpoint<NoContent, DeleteGroupCommand, ISen
             .WithName("DeleteGroup")
             .WithTags("Groups")
             .WithSummary("Удалить группу")
-            .WithDescription("Удаляет группу (мягкое удаление). Доступно владельцу и менеджеру организации.")
+            .WithDescription(
+                "Удаляет группу (мягкое удаление). Доступно владельцу и менеджеру организации."
+            )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)

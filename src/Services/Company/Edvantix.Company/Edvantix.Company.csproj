@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Protobuf
       Include="..\..\Profile\Edvantix.ProfileService\Grpc\Protos\profile\v1\profile.proto"

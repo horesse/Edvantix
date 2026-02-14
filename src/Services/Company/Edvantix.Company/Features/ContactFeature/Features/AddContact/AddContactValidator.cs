@@ -11,8 +11,6 @@ public sealed class AddContactValidator : AbstractValidator<AddContactCommand>
             .WithMessage("Значение контакта обязательно.")
             .MaximumLength(500);
 
-        RuleFor(x => x.Type)
-            .IsInEnum()
-            .WithMessage("Некорректный тип контакта.");
+        RuleFor(x => x.Type).IsInEnum().WithMessage("Некорректный тип контакта.");
     }
 }

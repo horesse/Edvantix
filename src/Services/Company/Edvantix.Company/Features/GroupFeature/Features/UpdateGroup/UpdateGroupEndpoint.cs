@@ -21,7 +21,9 @@ public class UpdateGroupEndpoint : IEndpoint<NoContent, UpdateGroupCommand, ISen
             .WithName("UpdateGroup")
             .WithTags("Groups")
             .WithSummary("Обновить группу")
-            .WithDescription("Обновляет информацию о группе. Доступно владельцу, менеджеру, учителю/менеджеру группы.")
+            .WithDescription(
+                "Обновляет информацию о группе. Доступно владельцу, менеджеру, учителю/менеджеру группы."
+            )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)

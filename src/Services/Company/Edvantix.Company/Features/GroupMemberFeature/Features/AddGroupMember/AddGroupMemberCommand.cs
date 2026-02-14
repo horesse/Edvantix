@@ -8,11 +8,8 @@ using MediatR;
 
 namespace Edvantix.Company.Features.GroupMemberFeature.Features.AddGroupMember;
 
-public sealed record AddGroupMemberCommand(
-    long GroupId,
-    int ProfileId,
-    GroupRole Role
-) : IRequest<Guid>;
+public sealed record AddGroupMemberCommand(long GroupId, int ProfileId, GroupRole Role)
+    : IRequest<Guid>;
 
 public sealed class AddGroupMemberCommandHandler(IServiceProvider provider)
     : IRequestHandler<AddGroupMemberCommand, Guid>
@@ -38,7 +35,10 @@ public sealed class AddGroupMemberCommandHandler(IServiceProvider provider)
             group.OrganizationId
         );
         using var orgMemberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-        var orgMember = await orgMemberRepo.GetFirstByExpressionAsync(orgMemberSpec, cancellationToken);
+        var orgMember = await orgMemberRepo.GetFirstByExpressionAsync(
+            orgMemberSpec,
+            cancellationToken
+        );
 
         if (orgMember is null)
             throw new InvalidOperationException(
@@ -46,9 +46,15 @@ public sealed class AddGroupMemberCommandHandler(IServiceProvider provider)
             );
 
         // Проверить, что пользователь ещё не в группе
-        var groupMemberSpec = new GroupMemberByProfileSpecification(request.ProfileId, request.GroupId);
+        var groupMemberSpec = new GroupMemberByProfileSpecification(
+            request.ProfileId,
+            request.GroupId
+        );
         using var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
-        var existing = await groupMemberRepo.GetFirstByExpressionAsync(groupMemberSpec, cancellationToken);
+        var existing = await groupMemberRepo.GetFirstByExpressionAsync(
+            groupMemberSpec,
+            cancellationToken
+        );
 
         if (existing is not null)
             throw new InvalidOperationException(

@@ -31,8 +31,5 @@ public interface IOrganizationAuthorizationService
     /// Проверяет, что текущий пользователь может управлять группой
     /// (Owner/Manager на уровне организации, или Teacher/Manager на уровне группы).
     /// </summary>
-    Task RequireGroupManagementAsync(
-        long groupId,
-        CancellationToken cancellationToken
-    );
+    Task RequireGroupManagementAsync(long groupId, CancellationToken cancellationToken);
 }

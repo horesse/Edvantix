@@ -7,8 +7,7 @@ using MediatR;
 
 namespace Edvantix.Company.Features.GroupMemberFeature.Features.GetGroupMembers;
 
-public sealed record GetGroupMembersQuery(long GroupId)
-    : IRequest<IEnumerable<GroupMemberModel>>;
+public sealed record GetGroupMembersQuery(long GroupId) : IRequest<IEnumerable<GroupMemberModel>>;
 
 public sealed class GetGroupMembersQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetGroupMembersQuery, IEnumerable<GroupMemberModel>>

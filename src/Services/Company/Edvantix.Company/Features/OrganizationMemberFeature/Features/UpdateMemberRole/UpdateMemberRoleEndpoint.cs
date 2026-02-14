@@ -7,14 +7,19 @@ namespace Edvantix.Company.Features.OrganizationMemberFeature.Features.UpdateMem
 
 public sealed record UpdateMemberRoleRequest(OrganizationRole NewRole);
 
-public class UpdateMemberRoleEndpoint
-    : IEndpoint<NoContent, UpdateMemberRoleCommand, ISender>
+public class UpdateMemberRoleEndpoint : IEndpoint<NoContent, UpdateMemberRoleCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
                 "/organizations/{orgId:long}/members/{memberId:guid}/role",
-                async (long orgId, Guid memberId, UpdateMemberRoleRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long orgId,
+                    Guid memberId,
+                    UpdateMemberRoleRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
                     var command = new UpdateMemberRoleCommand(orgId, memberId, request.NewRole);
                     return await HandleAsync(command, sender, ct);

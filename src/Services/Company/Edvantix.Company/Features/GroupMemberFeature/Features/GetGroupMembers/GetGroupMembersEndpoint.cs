@@ -18,7 +18,9 @@ public class GetGroupMembersEndpoint
             .WithName("GetGroupMembers")
             .WithTags("Group Members")
             .WithSummary("Список участников группы")
-            .WithDescription("Возвращает список участников группы. Доступно участникам организации.")
+            .WithDescription(
+                "Возвращает список участников группы. Доступно участникам организации."
+            )
             .Produces<IEnumerable<GroupMemberModel>>()
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)

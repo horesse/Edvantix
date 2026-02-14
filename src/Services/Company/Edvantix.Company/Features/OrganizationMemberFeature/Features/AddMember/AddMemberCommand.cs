@@ -5,19 +5,13 @@ using MediatR;
 
 namespace Edvantix.Company.Features.OrganizationMemberFeature.Features.AddMember;
 
-public sealed record AddMemberCommand(
-    long OrganizationId,
-    int ProfileId,
-    OrganizationRole Role
-) : IRequest<Guid>;
+public sealed record AddMemberCommand(long OrganizationId, int ProfileId, OrganizationRole Role)
+    : IRequest<Guid>;
 
 public sealed class AddMemberCommandHandler(IServiceProvider provider)
     : IRequestHandler<AddMemberCommand, Guid>
 {
-    public async Task<Guid> Handle(
-        AddMemberCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<Guid> Handle(AddMemberCommand request, CancellationToken cancellationToken)
     {
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireOrgRoleAsync(

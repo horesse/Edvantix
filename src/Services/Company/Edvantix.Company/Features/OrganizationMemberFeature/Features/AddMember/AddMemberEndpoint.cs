@@ -13,7 +13,12 @@ public class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISen
     {
         app.MapPost(
                 "/organizations/{orgId:long}/members",
-                async (long orgId, AddMemberRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long orgId,
+                    AddMemberRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
                     var command = new AddMemberCommand(orgId, request.ProfileId, request.Role);
                     return await HandleAsync(command, sender, ct);
@@ -22,7 +27,9 @@ public class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISen
             .WithName("AddOrganizationMember")
             .WithTags("Organization Members")
             .WithSummary("Добавить участника")
-            .WithDescription("Добавляет нового участника в организацию. Доступно владельцу и менеджеру.")
+            .WithDescription(
+                "Добавляет нового участника в организацию. Доступно владельцу и менеджеру."
+            )
             .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization();

@@ -13,16 +13,27 @@ public class AddGroupMemberEndpoint : IEndpoint<Created<Guid>, AddGroupMemberCom
     {
         app.MapPost(
                 "/groups/{groupId:long}/members",
-                async (long groupId, AddGroupMemberRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long groupId,
+                    AddGroupMemberRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
-                    var command = new AddGroupMemberCommand(groupId, request.ProfileId, request.Role);
+                    var command = new AddGroupMemberCommand(
+                        groupId,
+                        request.ProfileId,
+                        request.Role
+                    );
                     return await HandleAsync(command, sender, ct);
                 }
             )
             .WithName("AddGroupMember")
             .WithTags("Group Members")
             .WithSummary("Добавить участника в группу")
-            .WithDescription("Добавляет участника организации в группу. Доступно владельцу, менеджеру и учителю/менеджеру группы.")
+            .WithDescription(
+                "Добавляет участника организации в группу. Доступно владельцу, менеджеру и учителю/менеджеру группы."
+            )
             .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization();

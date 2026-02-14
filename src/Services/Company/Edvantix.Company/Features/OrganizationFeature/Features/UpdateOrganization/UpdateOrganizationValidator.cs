@@ -21,8 +21,6 @@ public sealed class UpdateOrganizationValidator : AbstractValidator<UpdateOrgani
             .WithMessage("Краткое название обязательно.")
             .MaximumLength(200);
 
-        RuleFor(x => x.PrintName)
-            .MaximumLength(500)
-            .When(x => x.PrintName is not null);
+        RuleFor(x => x.PrintName).MaximumLength(500).When(x => x.PrintName is not null);
     }
 }

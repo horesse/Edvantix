@@ -13,9 +13,21 @@ public class UpdateContactEndpoint : IEndpoint<NoContent, UpdateContactCommand, 
     {
         app.MapPut(
                 "/organizations/{orgId:long}/contacts/{contactId:long}",
-                async (long orgId, long contactId, UpdateContactRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long orgId,
+                    long contactId,
+                    UpdateContactRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
-                    var command = new UpdateContactCommand(orgId, contactId, request.Type, request.Value, request.Description);
+                    var command = new UpdateContactCommand(
+                        orgId,
+                        contactId,
+                        request.Type,
+                        request.Value,
+                        request.Description
+                    );
                     return await HandleAsync(command, sender, ct);
                 }
             )

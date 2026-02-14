@@ -17,7 +17,9 @@ public class GetGroupEndpoint : IEndpoint<Ok<GroupModel>, GetGroupQuery, ISender
             .WithName("GetGroup")
             .WithTags("Groups")
             .WithSummary("Получить группу")
-            .WithDescription("Возвращает детальную информацию о группе. Доступно участникам организации.")
+            .WithDescription(
+                "Возвращает детальную информацию о группе. Доступно участникам организации."
+            )
             .Produces<GroupModel>()
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status403Forbidden)

@@ -34,8 +34,10 @@ public sealed class UpdateMemberRoleCommandHandler(IServiceProvider provider)
             throw new NotFoundException($"Участник с ID {request.MemberId} не найден.");
 
         // Manager не может назначить Owner или понизить Owner
-        if (currentMember.Role == OrganizationRole.Manager &&
-            (request.NewRole == OrganizationRole.Owner || target.Role == OrganizationRole.Owner))
+        if (
+            currentMember.Role == OrganizationRole.Manager
+            && (request.NewRole == OrganizationRole.Owner || target.Role == OrganizationRole.Owner)
+        )
         {
             throw new ForbiddenException(
                 "Менеджер не может изменить роль владельца или назначить владельца."

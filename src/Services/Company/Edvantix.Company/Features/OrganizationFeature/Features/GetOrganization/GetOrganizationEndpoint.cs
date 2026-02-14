@@ -18,7 +18,9 @@ public class GetOrganizationEndpoint
             .WithName("GetOrganization")
             .WithTags("Organizations")
             .WithSummary("Получить организацию")
-            .WithDescription("Возвращает детальную информацию об организации. Доступно участникам организации.")
+            .WithDescription(
+                "Возвращает детальную информацию об организации. Доступно участникам организации."
+            )
             .Produces<OrganizationModel>()
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status403Forbidden)

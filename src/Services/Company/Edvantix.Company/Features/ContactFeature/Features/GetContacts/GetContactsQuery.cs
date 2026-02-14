@@ -6,8 +6,7 @@ using MediatR;
 
 namespace Edvantix.Company.Features.ContactFeature.Features.GetContacts;
 
-public sealed record GetContactsQuery(long OrganizationId)
-    : IRequest<IEnumerable<ContactModel>>;
+public sealed record GetContactsQuery(long OrganizationId) : IRequest<IEnumerable<ContactModel>>;
 
 public sealed class GetContactsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetContactsQuery, IEnumerable<ContactModel>>

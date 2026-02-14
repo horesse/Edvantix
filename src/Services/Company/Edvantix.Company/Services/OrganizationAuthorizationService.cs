@@ -25,10 +25,10 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
 
         using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
 
-        var member = await memberRepo.GetFirstByExpressionAsync(spec, cancellationToken) ?? throw new ForbiddenException(
-                "Вы не являетесь участником данной организации."
-            );
-        
+        var member =
+            await memberRepo.GetFirstByExpressionAsync(spec, cancellationToken)
+            ?? throw new ForbiddenException("Вы не являетесь участником данной организации.");
+
         return member;
     }
 
@@ -50,10 +50,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
     }
 
     /// <inheritdoc />
-    public async Task RequireGroupManagementAsync(
-        long groupId,
-        CancellationToken cancellationToken
-    )
+    public async Task RequireGroupManagementAsync(long groupId, CancellationToken cancellationToken)
     {
         var profileId = await provider.GetProfileId(cancellationToken);
 
@@ -88,9 +85,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
 
         if (groupMember?.Role is not (GroupRole.Teacher or GroupRole.Manager))
         {
-            throw new ForbiddenException(
-                "У вас недостаточно прав для управления данной группой."
-            );
+            throw new ForbiddenException("У вас недостаточно прав для управления данной группой.");
         }
     }
 }

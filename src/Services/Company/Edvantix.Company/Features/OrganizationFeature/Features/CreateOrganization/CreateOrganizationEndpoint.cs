@@ -17,7 +17,9 @@ public class CreateOrganizationEndpoint
             .WithName("CreateOrganization")
             .WithTags("Organizations")
             .WithSummary("Создать организацию")
-            .WithDescription("Создаёт новую организацию. Текущий пользователь становится владельцем.")
+            .WithDescription(
+                "Создаёт новую организацию. Текущий пользователь становится владельцем."
+            )
             .Produces<long>(StatusCodes.Status201Created)
             .RequireAuthorization();
     }

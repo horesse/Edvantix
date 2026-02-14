@@ -6,12 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Company.Infrastructure.EntityConfigurations;
 
-public sealed class OrganizationConfiguration
-    : IEntityTypeConfiguration<Organization>
+public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
 {
-    public void Configure(
-        EntityTypeBuilder<Organization> builder
-    )
+    public void Configure(EntityTypeBuilder<Organization> builder)
     {
         builder.Configure<Organization, long>();
 
@@ -52,21 +49,15 @@ public sealed class OrganizationConfiguration
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .Metadata.FindNavigation(
-                nameof(Organization.Contacts)
-            )!
+            .Metadata.FindNavigation(nameof(Organization.Contacts))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(
-                nameof(Organization.Members)
-            )!
+            .Metadata.FindNavigation(nameof(Organization.Members))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(
-                nameof(Organization.Groups)
-            )!
+            .Metadata.FindNavigation(nameof(Organization.Groups))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder.HasIndex(o => o.Name);

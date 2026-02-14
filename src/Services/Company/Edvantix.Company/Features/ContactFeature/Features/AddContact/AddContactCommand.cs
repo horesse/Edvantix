@@ -16,10 +16,7 @@ public sealed record AddContactCommand(
 public sealed class AddContactCommandHandler(IServiceProvider provider)
     : IRequestHandler<AddContactCommand, long>
 {
-    public async Task<long> Handle(
-        AddContactCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<long> Handle(AddContactCommand request, CancellationToken cancellationToken)
     {
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireOrgRoleAsync(

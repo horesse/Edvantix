@@ -15,10 +15,7 @@ public sealed class GroupMemberConfiguration : IEntityTypeConfiguration<GroupMem
 
         builder.Property(m => m.ProfileId).IsRequired();
 
-        builder
-            .Property(m => m.Role)
-            .IsRequired()
-            .HasConversion<int>();
+        builder.Property(m => m.Role).IsRequired().HasConversion<int>();
 
         builder.Property(m => m.JoinedAt).IsRequired();
 
@@ -30,6 +27,11 @@ public sealed class GroupMemberConfiguration : IEntityTypeConfiguration<GroupMem
 
         builder.HasIndex(m => m.GroupId);
         builder.HasIndex(m => m.ProfileId);
-        builder.HasIndex(m => new { m.GroupId, m.ProfileId, m.IsDeleted });
+        builder.HasIndex(m => new
+        {
+            m.GroupId,
+            m.ProfileId,
+            m.IsDeleted,
+        });
     }
 }

@@ -12,7 +12,12 @@ public class CreateGroupEndpoint : IEndpoint<Created<long>, CreateGroupCommand, 
     {
         app.MapPost(
                 "/organizations/{orgId:long}/groups",
-                async (long orgId, CreateGroupRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long orgId,
+                    CreateGroupRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
                     var command = new CreateGroupCommand(orgId, request.Name, request.Description);
                     return await HandleAsync(command, sender, ct);
@@ -21,7 +26,9 @@ public class CreateGroupEndpoint : IEndpoint<Created<long>, CreateGroupCommand, 
             .WithName("CreateGroup")
             .WithTags("Groups")
             .WithSummary("Создать группу")
-            .WithDescription("Создаёт новую группу в организации. Доступно владельцу, менеджеру и учителю.")
+            .WithDescription(
+                "Создаёт новую группу в организации. Доступно владельцу, менеджеру и учителю."
+            )
             .Produces<long>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization();

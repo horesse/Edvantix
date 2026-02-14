@@ -11,10 +11,7 @@ public sealed record GetGroupQuery(long Id) : IRequest<GroupModel>;
 public sealed class GetGroupQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetGroupQuery, GroupModel>
 {
-    public async Task<GroupModel> Handle(
-        GetGroupQuery request,
-        CancellationToken cancellationToken
-    )
+    public async Task<GroupModel> Handle(GetGroupQuery request, CancellationToken cancellationToken)
     {
         using var groupRepo = provider.GetRequiredService<IGroupRepository>();
         var group = await groupRepo.GetByIdAsync(request.Id, cancellationToken);

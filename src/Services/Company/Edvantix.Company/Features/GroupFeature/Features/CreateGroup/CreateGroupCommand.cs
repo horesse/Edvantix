@@ -5,19 +5,13 @@ using MediatR;
 
 namespace Edvantix.Company.Features.GroupFeature.Features.CreateGroup;
 
-public sealed record CreateGroupCommand(
-    long OrganizationId,
-    string Name,
-    string? Description
-) : IRequest<long>;
+public sealed record CreateGroupCommand(long OrganizationId, string Name, string? Description)
+    : IRequest<long>;
 
 public sealed class CreateGroupCommandHandler(IServiceProvider provider)
     : IRequestHandler<CreateGroupCommand, long>
 {
-    public async Task<long> Handle(
-        CreateGroupCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<long> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
     {
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireOrgRoleAsync(

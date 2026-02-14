@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Edvantix.Company.Features.GroupMemberFeature.Features.RemoveGroupMember;
 
-public class RemoveGroupMemberEndpoint
-    : IEndpoint<NoContent, RemoveGroupMemberCommand, ISender>
+public class RemoveGroupMemberEndpoint : IEndpoint<NoContent, RemoveGroupMemberCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -17,7 +16,9 @@ public class RemoveGroupMemberEndpoint
             .WithName("RemoveGroupMember")
             .WithTags("Group Members")
             .WithSummary("Удалить участника из группы")
-            .WithDescription("Удаляет участника из группы (мягкое удаление). Доступно владельцу, менеджеру и учителю/менеджеру группы.")
+            .WithDescription(
+                "Удаляет участника из группы (мягкое удаление). Доступно владельцу, менеджеру и учителю/менеджеру группы."
+            )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)

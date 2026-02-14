@@ -14,16 +14,28 @@ public class UpdateGroupMemberRoleEndpoint
     {
         app.MapPut(
                 "/groups/{groupId:long}/members/{memberId:guid}/role",
-                async (long groupId, Guid memberId, UpdateGroupMemberRoleRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long groupId,
+                    Guid memberId,
+                    UpdateGroupMemberRoleRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
-                    var command = new UpdateGroupMemberRoleCommand(groupId, memberId, request.NewRole);
+                    var command = new UpdateGroupMemberRoleCommand(
+                        groupId,
+                        memberId,
+                        request.NewRole
+                    );
                     return await HandleAsync(command, sender, ct);
                 }
             )
             .WithName("UpdateGroupMemberRole")
             .WithTags("Group Members")
             .WithSummary("Изменить роль участника группы")
-            .WithDescription("Изменяет роль участника группы. Доступно владельцу, менеджеру и учителю/менеджеру группы.")
+            .WithDescription(
+                "Изменяет роль участника группы. Доступно владельцу, менеджеру и учителю/менеджеру группы."
+            )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)

@@ -11,16 +11,10 @@ public sealed class GroupMember() : Entity<Guid>, IAggregateRoot, ISoftDelete
         : this()
     {
         if (groupId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор группы.",
-                nameof(groupId)
-            );
+            throw new ArgumentException("Некорректный идентификатор группы.", nameof(groupId));
 
         if (profileId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор профиля.",
-                nameof(profileId)
-            );
+            throw new ArgumentException("Некорректный идентификатор профиля.", nameof(profileId));
 
         GroupId = groupId;
         ProfileId = profileId;

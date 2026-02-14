@@ -6,7 +6,8 @@ namespace Edvantix.Company.Domain.AggregatesModel.OrganizationMemberAggregate.Sp
 /// <summary>
 /// Спецификация для поиска участника по идентификатору профиля (опционально в конкретной организации).
 /// </summary>
-public sealed class OrganizationMemberByProfileSpecification : CommonSpecification<OrganizationMember>
+public sealed class OrganizationMemberByProfileSpecification
+    : CommonSpecification<OrganizationMember>
 {
     public OrganizationMemberByProfileSpecification(long profileId, long? organizationId = null)
     {

@@ -13,9 +13,19 @@ public class AddContactEndpoint : IEndpoint<Created<long>, AddContactCommand, IS
     {
         app.MapPost(
                 "/organizations/{orgId:long}/contacts",
-                async (long orgId, AddContactRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long orgId,
+                    AddContactRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
-                    var command = new AddContactCommand(orgId, request.Type, request.Value, request.Description);
+                    var command = new AddContactCommand(
+                        orgId,
+                        request.Type,
+                        request.Value,
+                        request.Description
+                    );
                     return await HandleAsync(command, sender, ct);
                 }
             )

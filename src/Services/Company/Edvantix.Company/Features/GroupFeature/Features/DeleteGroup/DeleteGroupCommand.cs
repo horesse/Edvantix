@@ -11,10 +11,7 @@ public sealed record DeleteGroupCommand(long Id) : IRequest<Unit>;
 public sealed class DeleteGroupCommandHandler(IServiceProvider provider)
     : IRequestHandler<DeleteGroupCommand, Unit>
 {
-    public async Task<Unit> Handle(
-        DeleteGroupCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<Unit> Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
     {
         using var groupRepo = provider.GetRequiredService<IGroupRepository>();
         var group = await groupRepo.GetByIdAsync(request.Id, cancellationToken);

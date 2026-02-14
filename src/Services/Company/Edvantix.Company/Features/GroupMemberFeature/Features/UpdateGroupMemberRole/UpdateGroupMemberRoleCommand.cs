@@ -5,11 +5,8 @@ using MediatR;
 
 namespace Edvantix.Company.Features.GroupMemberFeature.Features.UpdateGroupMemberRole;
 
-public sealed record UpdateGroupMemberRoleCommand(
-    long GroupId,
-    Guid MemberId,
-    GroupRole NewRole
-) : IRequest<Unit>;
+public sealed record UpdateGroupMemberRoleCommand(long GroupId, Guid MemberId, GroupRole NewRole)
+    : IRequest<Unit>;
 
 public sealed class UpdateGroupMemberRoleCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateGroupMemberRoleCommand, Unit>

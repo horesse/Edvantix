@@ -5,19 +5,12 @@ using MediatR;
 
 namespace Edvantix.Company.Features.GroupFeature.Features.UpdateGroup;
 
-public sealed record UpdateGroupCommand(
-    long Id,
-    string Name,
-    string? Description
-) : IRequest<Unit>;
+public sealed record UpdateGroupCommand(long Id, string Name, string? Description) : IRequest<Unit>;
 
 public sealed class UpdateGroupCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateGroupCommand, Unit>
 {
-    public async Task<Unit> Handle(
-        UpdateGroupCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<Unit> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
     {
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireGroupManagementAsync(request.Id, cancellationToken);

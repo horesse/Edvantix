@@ -35,15 +35,18 @@ public sealed class GetMyOrganizationsQueryHandler(IServiceProvider provider)
         foreach (var member in members)
         {
             var org = await orgRepo.GetByIdAsync(member.OrganizationId, cancellationToken);
-            if (org is null) continue;
+            if (org is null)
+                continue;
 
-            result.Add(new OrganizationSummaryModel(
-                org.Id,
-                org.Name,
-                org.ShortName,
-                org.Description,
-                member.Role.ToString()
-            ));
+            result.Add(
+                new OrganizationSummaryModel(
+                    org.Id,
+                    org.Name,
+                    org.ShortName,
+                    org.Description,
+                    member.Role.ToString()
+                )
+            );
         }
 
         return result;

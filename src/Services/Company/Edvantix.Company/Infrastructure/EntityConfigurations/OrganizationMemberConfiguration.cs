@@ -5,8 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Company.Infrastructure.EntityConfigurations;
 
-public sealed class OrganizationMemberConfiguration
-    : IEntityTypeConfiguration<OrganizationMember>
+public sealed class OrganizationMemberConfiguration : IEntityTypeConfiguration<OrganizationMember>
 {
     public void Configure(EntityTypeBuilder<OrganizationMember> builder)
     {
@@ -16,10 +15,7 @@ public sealed class OrganizationMemberConfiguration
 
         builder.Property(m => m.ProfileId).IsRequired();
 
-        builder
-            .Property(m => m.Role)
-            .IsRequired()
-            .HasConversion<int>();
+        builder.Property(m => m.Role).IsRequired().HasConversion<int>();
 
         builder.Property(m => m.JoinedAt).IsRequired();
 
@@ -31,6 +27,11 @@ public sealed class OrganizationMemberConfiguration
 
         builder.HasIndex(m => m.OrganizationId);
         builder.HasIndex(m => m.ProfileId);
-        builder.HasIndex(m => new { m.OrganizationId, m.ProfileId, m.IsDeleted });
+        builder.HasIndex(m => new
+        {
+            m.OrganizationId,
+            m.ProfileId,
+            m.IsDeleted,
+        });
     }
 }

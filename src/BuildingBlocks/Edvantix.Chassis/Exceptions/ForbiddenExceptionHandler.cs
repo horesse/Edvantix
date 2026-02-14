@@ -39,7 +39,10 @@ public sealed class ForbiddenExceptionHandler(
         httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
 
         await TypedResults
-            .Json(new { Detail = forbiddenException.Message }, statusCode: StatusCodes.Status403Forbidden)
+            .Json(
+                new { Detail = forbiddenException.Message },
+                statusCode: StatusCodes.Status403Forbidden
+            )
             .ExecuteAsync(httpContext);
 
         return true;

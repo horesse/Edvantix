@@ -12,14 +12,18 @@ public sealed record UpdateOrganizationRequest(
     string? Description
 );
 
-public class UpdateOrganizationEndpoint
-    : IEndpoint<NoContent, UpdateOrganizationCommand, ISender>
+public class UpdateOrganizationEndpoint : IEndpoint<NoContent, UpdateOrganizationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
                 "/organizations/{id:long}",
-                async (long id, UpdateOrganizationRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    long id,
+                    UpdateOrganizationRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
                     var command = new UpdateOrganizationCommand(
                         id,

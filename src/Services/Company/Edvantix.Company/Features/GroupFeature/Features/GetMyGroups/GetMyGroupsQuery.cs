@@ -34,15 +34,18 @@ public sealed class GetMyGroupsQueryHandler(IServiceProvider provider)
         foreach (var membership in memberships)
         {
             var group = await groupRepo.GetByIdAsync(membership.GroupId, cancellationToken);
-            if (group is null) continue;
+            if (group is null)
+                continue;
 
-            result.Add(new GroupSummaryModel(
-                group.Id,
-                group.OrganizationId,
-                group.Name,
-                group.Description,
-                membership.Role.ToString()
-            ));
+            result.Add(
+                new GroupSummaryModel(
+                    group.Id,
+                    group.OrganizationId,
+                    group.Name,
+                    group.Description,
+                    membership.Role.ToString()
+                )
+            );
         }
 
         return result;

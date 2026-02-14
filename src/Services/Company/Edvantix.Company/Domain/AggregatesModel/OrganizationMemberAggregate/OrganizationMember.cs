@@ -1,3 +1,4 @@
+using Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Company.Domain.AggregatesModel.OrganizationMemberAggregate;
@@ -27,7 +28,7 @@ public sealed class OrganizationMember() : Entity<Guid>, IAggregateRoot, ISoftDe
     }
 
     public long OrganizationId { get; private set; }
-    public OrganizationAggregate.Organization Organization { get; private set; } = null!;
+    public Organization Organization { get; private set; } = null!;
     public long ProfileId { get; private set; }
     public OrganizationRole Role { get; private set; }
     public DateTime JoinedAt { get; private set; }

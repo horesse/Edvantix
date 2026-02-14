@@ -148,7 +148,8 @@ var front = turbo
     .WithExternalHttpEndpoints()
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
-    .WithKeycloak(keycloak);
+    .WithKeycloak(keycloak)
+    .WaitFor(gateway);
 
 front.WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Http.Schemes.Http));
 

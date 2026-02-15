@@ -28,6 +28,7 @@
   },
   "exports": {
     "./keys": "./src/keys.ts",
-    "./profiles/*": "./src/profiles/*.ts"
+    "./profiles/*": "./src/profiles/*.ts",
+    "./company/*": "./src/company/*.ts"
   }
 }

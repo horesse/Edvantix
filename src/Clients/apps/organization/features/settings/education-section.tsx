@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import useUpdateEducation from "@workspace/api-hooks/profiles/useUpdateEducation";
 import type { Education, OwnProfileDetails } from "@workspace/types/profile";
 import { EducationLevel } from "@workspace/types/profile";
-import { formatDateRange } from "@workspace/utils/format";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -37,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
+import { formatDateRange } from "@workspace/utils/format";
 import {
   type EducationInput,
   educationSchema,

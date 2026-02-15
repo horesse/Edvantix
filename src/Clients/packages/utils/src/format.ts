@@ -26,10 +26,7 @@ export function getInitials(name: string): string {
  * formatDateRange("2020-09-01");               // "сент. 2020 — настоящее время"
  * ```
  */
-export function formatDateRange(
-  start: string,
-  end?: string | null,
-): string {
+export function formatDateRange(start: string, end?: string | null): string {
   const options: Intl.DateTimeFormatOptions = {
     month: "short",
     year: "numeric",

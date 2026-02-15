@@ -1,7 +1,6 @@
 using Edvantix.Chassis.Endpoints;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Company.Extensions;
-using Edvantix.Company.Grpc.Services;
 using Edvantix.ServiceDefaults;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.Kestrel;
@@ -34,10 +33,6 @@ app.UseRateLimiter();
 var apiVersionSet = app.NewApiVersionSet().HasApiVersion(new(1, 0)).ReportApiVersions().Build();
 
 app.MapEndpoints(apiVersionSet);
-
-app.MapGrpcService<UsageService>();
-
-app.MapGrpcHealthChecksService();
 
 app.MapDefaultEndpoints();
 

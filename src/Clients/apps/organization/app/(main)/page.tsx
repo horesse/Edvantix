@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-
 import { env } from "@/env.mjs";
-import { getQueryClient } from "@/lib/query-client";
+import { Dashboard } from "@/features/dashboard/dashboard";
 
 export const metadata: Metadata = {
   title: "Edvantix - Главная",
@@ -47,17 +45,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function HomePage() {
-  const queryClient = getQueryClient();
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold">Добро пожаловать в Edvantix</h1>
-        <p className="text-muted-foreground">
-          Система управления образовательными учреждениями
-        </p>
-      </div>
-    </HydrationBoundary>
-  );
+export default function HomePage() {
+  return <Dashboard />;
 }

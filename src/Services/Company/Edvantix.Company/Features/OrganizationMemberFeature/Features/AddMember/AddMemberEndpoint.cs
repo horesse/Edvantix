@@ -1,0 +1,47 @@
+using Edvantix.Chassis.Endpoints;
+using Edvantix.Company.Domain.AggregatesModel.OrganizationMemberAggregate;
+using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+namespace Edvantix.Company.Features.OrganizationMemberFeature.Features.AddMember;
+
+public sealed record AddMemberRequest(int ProfileId, OrganizationRole Role);
+
+public class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISender>
+{
+    public void MapEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapPost(
+                "/organizations/{orgId:long}/members",
+                async (
+                    long orgId,
+                    AddMemberRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
+                {
+                    var command = new AddMemberCommand(orgId, request.ProfileId, request.Role);
+                    return await HandleAsync(command, sender, ct);
+                }
+            )
+            .WithName("AddOrganizationMember")
+            .WithTags("Organization Members")
+            .WithSummary("Добавить участника")
+            .WithDescription(
+                "Добавляет нового участника в организацию. Доступно владельцу и менеджеру."
+            )
+            .Produces<Guid>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status403Forbidden)
+            .RequireAuthorization();
+    }
+
+    public async Task<Created<Guid>> HandleAsync(
+        AddMemberCommand command,
+        ISender sender,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var id = await sender.Send(command, cancellationToken);
+        return TypedResults.Created($"/organizations/{command.OrganizationId}/members/{id}", id);
+    }
+}

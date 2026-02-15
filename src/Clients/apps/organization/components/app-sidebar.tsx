@@ -6,13 +6,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
-  BookOpen,
-  Calendar,
-  FileText,
-  GraduationCap,
+  Building,
+  Contact,
   Home,
   Settings,
+  UserPlus,
   Users,
+  UsersRound,
 } from "lucide-react";
 
 import {
@@ -28,37 +28,47 @@ import {
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
 
-// Меню навигации
+import { useOrganization } from "./organization-provider";
+import { OrganizationSelector } from "./organization-selector";
+
 const navItems = [
   {
     title: "Главная",
     url: "/",
     icon: Home,
+    exact: true,
   },
   {
-    title: "Ученики",
-    url: "/students",
-    icon: GraduationCap,
-  },
-  {
-    title: "Преподаватели",
-    url: "/teachers",
+    title: "Участники",
+    url: "/members",
     icon: Users,
+    exact: false,
   },
   {
-    title: "Расписание",
-    url: "/schedule",
-    icon: Calendar,
+    title: "Приглашения",
+    url: "/invitations",
+    icon: UserPlus,
+    exact: false,
   },
   {
-    title: "Курсы",
-    url: "/courses",
-    icon: BookOpen,
+    title: "Группы",
+    url: "/groups",
+    icon: UsersRound,
+    exact: false,
   },
   {
-    title: "Отчёты",
-    url: "/reports",
-    icon: FileText,
+    title: "Контакты",
+    url: "/contacts",
+    icon: Contact,
+    exact: false,
+  },
+];
+
+const managementItems = [
+  {
+    title: "Настройки орг.",
+    url: "/org-settings",
+    icon: Building,
   },
 ];
 
@@ -72,23 +82,14 @@ const settingsItems = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const { canManage } = useOrganization();
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <GraduationCap className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Edvantix</span>
-                  <span className="truncate text-xs">Управление школой</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
+            <OrganizationSelector />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -99,7 +100,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={
+                      item.exact
+                        ? pathname === item.url
+                        : pathname.startsWith(item.url)
+                    }
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -110,6 +118,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        {canManage && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Управление</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {managementItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith(item.url)}
+                    >
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>

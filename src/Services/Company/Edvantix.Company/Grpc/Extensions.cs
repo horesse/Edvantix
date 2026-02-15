@@ -29,8 +29,7 @@ internal static class Extensions
                     .WithHost(Constants.Aspire.Services.Profile)
                     .Build(),
                 HealthStatus.Degraded
-            )
-            .AddAuthTokenExchange(Constants.Aspire.Services.Profile);
+            );
 
         services.AddSingleton<IProfileService, Services.ProfileService>();
     }

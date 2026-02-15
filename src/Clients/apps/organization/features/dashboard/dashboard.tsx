@@ -2,46 +2,52 @@
 
 import Link from "next/link";
 
-import { Building, Plus, UserPlus, Users, UsersRound } from "lucide-react";
+import { Building, Plus, TrendingUp, UserPlus, Users, UsersRound } from "lucide-react";
 
-import useMyInvitations from "@workspace/api-hooks/company/useMyInvitations";
 import useOrganization from "@workspace/api-hooks/company/useOrganization";
-import { InvitationStatus } from "@workspace/types/company";
 import { Button } from "@workspace/ui/components/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
+  Island,
+  IslandContent,
+  IslandDescription,
+  IslandHeader,
+  IslandTitle,
+} from "@workspace/ui/components/island";
+import {
+  IslandColumn,
+  IslandLayout,
+} from "@workspace/ui/components/island-layout";
+import { Separator } from "@workspace/ui/components/separator";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
 import { useOrganization as useOrgContext } from "@/components/organization-provider";
-import { organizationRoleLabels } from "@/lib/company-options";
 
 import { IncomingInvitationsSection } from "../invitations/incoming-invitations-section";
 
 export function Dashboard() {
-  const { currentOrg, userRole, canManage } = useOrgContext();
+  const { currentOrg, canManage } = useOrgContext();
 
   if (!currentOrg) {
     return <EmptyState />;
   }
 
   return (
-    <div className="space-y-6">
-      <OrgHeader orgId={currentOrg.id} />
-      <StatsCards orgId={currentOrg.id} />
-      {canManage && <QuickActions />}
-      <IncomingInvitationsSection />
-    </div>
+    <IslandLayout>
+      <IslandColumn>
+        <OrgHeader orgId={currentOrg.id} />
+        <StatsCards orgId={currentOrg.id} />
+      </IslandColumn>
+      <IslandColumn>
+        {canManage && <QuickActions />}
+        <IncomingInvitationsSection />
+      </IslandColumn>
+    </IslandLayout>
   );
 }
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center py-16">
+    <Island className="flex min-h-[400px] flex-col items-center justify-center">
       <Building className="text-muted-foreground/50 mb-4 size-16" />
       <h2 className="text-xl font-semibold">Нет организаций</h2>
       <p className="text-muted-foreground mt-1 text-sm">
@@ -53,7 +59,7 @@ function EmptyState() {
           Создать организацию
         </Link>
       </Button>
-    </div>
+    </Island>
   );
 }
 
@@ -62,22 +68,26 @@ function OrgHeader({ orgId }: { orgId: number }) {
 
   if (isLoading) {
     return (
-      <div className="space-y-2">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-4 w-96" />
-      </div>
+      <Island>
+        <IslandHeader>
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-96" />
+        </IslandHeader>
+      </Island>
     );
   }
 
   if (!org) return null;
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold">{org.name}</h1>
-      {org.description && (
-        <p className="text-muted-foreground mt-1">{org.description}</p>
-      )}
-    </div>
+    <Island>
+      <IslandHeader>
+        <IslandTitle>{org.name}</IslandTitle>
+        {org.description && (
+          <IslandDescription>{org.description}</IslandDescription>
+        )}
+      </IslandHeader>
+    </Island>
   );
 }
 
@@ -90,60 +100,83 @@ function StatsCards({ orgId }: { orgId: number }) {
       value: org?.membersCount ?? 0,
       icon: Users,
       href: "/members",
+      change: "+12%",
     },
     {
       title: "Группы",
       value: org?.groupsCount ?? 0,
       icon: UsersRound,
       href: "/groups",
+      change: "+8%",
     },
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {stats.map((stat) => (
-        <Link key={stat.title} href={stat.href}>
-          <Card className="hover:bg-muted/50 transition-colors">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-              <stat.icon className="text-muted-foreground size-4" />
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <Skeleton className="h-8 w-16" />
-              ) : (
-                <p className="text-2xl font-bold">{stat.value}</p>
-              )}
-            </CardContent>
-          </Card>
-        </Link>
-      ))}
-    </div>
+    <Island>
+      <IslandHeader>
+        <IslandTitle>Статистика</IslandTitle>
+        <IslandDescription>Обзор активности организации</IslandDescription>
+      </IslandHeader>
+      <IslandContent className="space-y-4">
+        {stats.map((stat, index) => (
+          <div key={stat.title}>
+            {index > 0 && <Separator className="mb-4" />}
+            <Link
+              href={stat.href}
+              className="group block transition-opacity hover:opacity-80"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <stat.icon className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground text-sm font-medium">
+                      {stat.title}
+                    </p>
+                    {isLoading ? (
+                      <Skeleton className="mt-1 h-8 w-16" />
+                    ) : (
+                      <p className="text-2xl font-bold">{stat.value}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                  <TrendingUp className="size-4" />
+                  <span className="text-sm font-medium">{stat.change}</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </IslandContent>
+    </Island>
   );
 }
 
 function QuickActions() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Быстрые действия</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" asChild>
+    <Island>
+      <IslandHeader>
+        <IslandTitle>Быстрые действия</IslandTitle>
+        <IslandDescription>
+          Часто используемые операции
+        </IslandDescription>
+      </IslandHeader>
+      <IslandContent className="flex flex-col gap-2">
+        <Button variant="outline" asChild className="justify-start">
           <Link href="/invitations">
             <UserPlus className="size-4" />
             Пригласить участника
           </Link>
         </Button>
-        <Button variant="outline" size="sm" asChild>
+        <Button variant="outline" asChild className="justify-start">
           <Link href="/groups">
             <UsersRound className="size-4" />
             Создать группу
           </Link>
         </Button>
-      </CardContent>
-    </Card>
+      </IslandContent>
+    </Island>
   );
 }

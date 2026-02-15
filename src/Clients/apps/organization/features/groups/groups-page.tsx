@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import Link from "next/link";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, Trash2, UsersRound } from "lucide-react";
+import { Loader2, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import useCreateGroup from "@workspace/api-hooks/company/useCreateGroup";
 import useDeleteGroup from "@workspace/api-hooks/company/useDeleteGroup";
-import useOrganizationGroups from "@workspace/api-hooks/company/useOrganizationGroups";
+import useOrganizationGroupsPaginated from "@workspace/api-hooks/company/useOrganizationGroupsPaginated";
 import type { GroupModel } from "@workspace/types/company";
 import {
   AlertDialog,
@@ -25,13 +26,6 @@ import {
 } from "@workspace/ui/components/alert-dialog";
 import { Button } from "@workspace/ui/components/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -39,6 +33,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -48,13 +48,14 @@ import {
   FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
-import { Skeleton } from "@workspace/ui/components/skeleton";
 import { Textarea } from "@workspace/ui/components/textarea";
 import {
   type CreateGroupInput,
   createGroupSchema,
 } from "@workspace/validations/company";
 
+import { FilterTable } from "@/components/filter-table";
+import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 
 export function GroupsPage() {
@@ -62,8 +63,77 @@ export function GroupsPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteGroup, setDeleteGroup] = useState<GroupModel | null>(null);
 
+  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
+    usePaginatedTable();
+
   const orgId = currentOrg?.id ?? 0;
-  const { data: groups = [], isLoading } = useOrganizationGroups(orgId);
+  const { data, isLoading } = useOrganizationGroupsPaginated(orgId, {
+    pageIndex: pageIndex + 1,
+    pageSize,
+    ...sortingQuery,
+  });
+
+  const columns = useMemo<ColumnDef<GroupModel>[]>(
+    () => [
+      {
+        accessorKey: "name",
+        header: "Название",
+        cell: ({ row }) => (
+          <Link
+            href={`/groups/${row.original.id}`}
+            className="font-medium hover:underline"
+          >
+            {row.original.name}
+          </Link>
+        ),
+      },
+      {
+        accessorKey: "description",
+        header: "Описание",
+        cell: ({ row }) => (
+          <div className="text-muted-foreground max-w-md truncate">
+            {row.original.description ?? "—"}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "membersCount",
+        header: "Участники",
+        cell: ({ row }) => (
+          <div className="tabular-nums">{row.original.membersCount}</div>
+        ),
+      },
+      {
+        id: "actions",
+        cell: ({ row }) =>
+          canManage ? (
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="size-8 p-0">
+                    <MoreHorizontal className="size-4" />
+                    <span className="sr-only">Открыть меню</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href={`/groups/${row.original.id}`}>Открыть</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => setDeleteGroup(row.original)}
+                  >
+                    <Trash2 className="size-4" />
+                    Удалить
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : null,
+      },
+    ],
+    [canManage],
+  );
 
   if (!currentOrg) {
     return (
@@ -74,11 +144,11 @@ export function GroupsPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Группы</h1>
-          <p className="text-muted-foreground text-sm">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight">Группы</h1>
+          <p className="text-muted-foreground">
             Управление группами организации
           </p>
         </div>
@@ -90,39 +160,17 @@ export function GroupsPage() {
         )}
       </div>
 
-      {isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-32 w-full" />
-          ))}
-        </div>
-      ) : groups.length === 0 ? (
-        <div className="border-border/50 flex flex-col items-center justify-center rounded-lg border border-dashed py-12">
-          <UsersRound className="text-muted-foreground/50 mb-3 size-10" />
-          <p className="text-muted-foreground text-sm">Нет групп</p>
-          {canManage && (
-            <Button
-              variant="link"
-              size="sm"
-              className="mt-1"
-              onClick={() => setCreateOpen(true)}
-            >
-              Создать первую группу
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {groups.map((group) => (
-            <GroupCard
-              key={group.id}
-              group={group}
-              canManage={canManage}
-              onDelete={() => setDeleteGroup(group)}
-            />
-          ))}
-        </div>
-      )}
+      <FilterTable
+        columns={columns}
+        data={data?.items ?? []}
+        totalCount={data?.totalCount ?? 0}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        isLoading={isLoading}
+        onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
+        getRowId={(row) => String(row.id)}
+      />
 
       <CreateGroupDialog
         orgId={orgId}
@@ -136,63 +184,6 @@ export function GroupsPage() {
       />
     </div>
   );
-}
-
-function GroupCard({
-  group,
-  canManage,
-  onDelete,
-}: {
-  group: GroupModel;
-  canManage: boolean;
-  onDelete: () => void;
-}) {
-  return (
-    <Card className="group hover:bg-muted/50 relative transition-colors">
-      <Link href={`/groups/${group.id}`}>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">{group.name}</CardTitle>
-          {group.description && (
-            <CardDescription className="line-clamp-2">
-              {group.description}
-            </CardDescription>
-          )}
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">
-            {group.membersCount}{" "}
-            {pluralize(
-              group.membersCount,
-              "участник",
-              "участника",
-              "участников",
-            )}
-          </p>
-        </CardContent>
-      </Link>
-      {canManage && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground hover:text-destructive absolute top-2 right-2 size-8 p-0 opacity-0 transition-opacity group-hover:opacity-100"
-          onClick={(e) => {
-            e.preventDefault();
-            onDelete();
-          }}
-        >
-          <Trash2 className="size-4" />
-        </Button>
-      )}
-    </Card>
-  );
-}
-
-function pluralize(count: number, one: string, few: string, many: string) {
-  const mod10 = count % 10;
-  const mod100 = count % 100;
-  if (mod10 === 1 && mod100 !== 11) return one;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
-  return many;
 }
 
 function CreateGroupDialog({

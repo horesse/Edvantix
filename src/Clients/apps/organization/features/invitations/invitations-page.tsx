@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Clock, Loader2, Plus, Trash2, X } from "lucide-react";
+import { Clock, Loader2, Plus, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import useCancelInvitation from "@workspace/api-hooks/company/useCancelInvitation";
 import useCreateInvitation from "@workspace/api-hooks/company/useCreateInvitation";
-import usePendingInvitations from "@workspace/api-hooks/company/usePendingInvitations";
+import usePendingInvitationsPaginated from "@workspace/api-hooks/company/usePendingInvitationsPaginated";
 import type { InvitationModel } from "@workspace/types/company";
 import { OrganizationRole } from "@workspace/types/company";
 import { Badge } from "@workspace/ui/components/badge";
@@ -38,7 +39,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
-import { Skeleton } from "@workspace/ui/components/skeleton";
 import {
   Tabs,
   TabsContent,
@@ -50,6 +50,8 @@ import {
   createInvitationSchema,
 } from "@workspace/validations/company";
 
+import { FilterTable } from "@/components/filter-table";
+import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 import { organizationRoleLabels } from "@/lib/company-options";
 
@@ -67,10 +69,10 @@ export function InvitationsPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold">Приглашения</h1>
-        <p className="text-muted-foreground text-sm">
+    <div className="space-y-6">
+      <div className="space-y-1">
+        <h1 className="text-3xl font-bold tracking-tight">Приглашения</h1>
+        <p className="text-muted-foreground">
           Управление приглашениями организации
         </p>
       </div>
@@ -83,11 +85,11 @@ export function InvitationsPage() {
           <TabsTrigger value="incoming">Входящие</TabsTrigger>
         </TabsList>
         {canManage && (
-          <TabsContent value="outgoing" className="mt-4">
+          <TabsContent value="outgoing" className="mt-6">
             <OutgoingInvitations orgId={currentOrg.id} />
           </TabsContent>
         )}
-        <TabsContent value="incoming" className="mt-4">
+        <TabsContent value="incoming" className="mt-6">
           <IncomingInvitationsSection />
         </TabsContent>
       </Tabs>
@@ -97,90 +99,118 @@ export function InvitationsPage() {
 
 function OutgoingInvitations({ orgId }: { orgId: number }) {
   const [createOpen, setCreateOpen] = useState(false);
-  const { data: invitations = [], isLoading } = usePendingInvitations(orgId);
+
+  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
+    usePaginatedTable();
+
+  const { data, isLoading } = usePendingInvitationsPaginated(orgId, {
+    pageIndex: pageIndex + 1,
+    pageSize,
+    ...sortingQuery,
+  });
+
+  const cancelMutation = useCancelInvitation({
+    onSuccess: () => toast.success("Приглашение отменено"),
+    onError: () => toast.error("Не удалось отменить приглашение"),
+  });
+
+  const columns = useMemo<ColumnDef<InvitationModel>[]>(
+    () => [
+      {
+        accessorKey: "inviteeEmail",
+        header: "Получатель",
+        cell: ({ row }) => {
+          const target =
+            row.original.inviteeEmail ??
+            `Профиль #${row.original.inviteeProfileId}`;
+          return <div className="font-medium">{target}</div>;
+        },
+      },
+      {
+        accessorKey: "role",
+        header: "Роль",
+        cell: ({ row }) => (
+          <Badge variant="outline">
+            {organizationRoleLabels[row.original.role]}
+          </Badge>
+        ),
+      },
+      {
+        accessorKey: "expiresAt",
+        header: "Истекает",
+        cell: ({ row }) => {
+          const expiresAt = new Date(row.original.expiresAt);
+          return (
+            <div className="flex items-center gap-2 text-sm">
+              <Clock className="size-3" />
+              {expiresAt.toLocaleDateString("ru-RU")}
+            </div>
+          );
+        },
+      },
+      {
+        id: "actions",
+        cell: ({ row }) => (
+          <div className="flex justify-end">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                cancelMutation.mutate({
+                  orgId,
+                  invitationId: row.original.id,
+                })
+              }
+              disabled={cancelMutation.isPending}
+            >
+              {cancelMutation.isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <>
+                  <X className="size-4" />
+                  <span className="hidden sm:inline">Отменить</span>
+                </>
+              )}
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [orgId, cancelMutation],
+  );
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-end">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold">Отправленные приглашения</h2>
+          <p className="text-muted-foreground text-sm">
+            Приглашения, ожидающие принятия
+          </p>
+        </div>
         <Button onClick={() => setCreateOpen(true)}>
           <Plus className="size-4" />
           Пригласить
         </Button>
       </div>
 
-      {isLoading ? (
-        <div className="space-y-2">
-          <Skeleton className="h-16 w-full" />
-          <Skeleton className="h-16 w-full" />
-        </div>
-      ) : invitations.length === 0 ? (
-        <div className="border-border/50 flex flex-col items-center justify-center rounded-lg border border-dashed py-12">
-          <p className="text-muted-foreground text-sm">
-            Нет ожидающих приглашений
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {invitations.map((inv) => (
-            <InvitationRow key={inv.id} invitation={inv} orgId={orgId} />
-          ))}
-        </div>
-      )}
+      <FilterTable
+        columns={columns}
+        data={data?.items ?? []}
+        totalCount={data?.totalCount ?? 0}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        isLoading={isLoading}
+        onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
+        getRowId={(row) => row.id}
+      />
 
       <CreateInvitationDialog
         orgId={orgId}
         open={createOpen}
         onOpenChange={setCreateOpen}
       />
-    </div>
-  );
-}
-
-function InvitationRow({
-  invitation,
-  orgId,
-}: {
-  invitation: InvitationModel;
-  orgId: number;
-}) {
-  const cancelMutation = useCancelInvitation({
-    onSuccess: () => toast.success("Приглашение отменено"),
-    onError: () => toast.error("Не удалось отменить приглашение"),
-  });
-
-  const expiresAt = new Date(invitation.expiresAt).toLocaleDateString("ru-RU");
-  const target =
-    invitation.inviteeEmail ?? `Профиль #${invitation.inviteeProfileId}`;
-
-  return (
-    <div className="flex items-center gap-4 rounded-lg border p-4">
-      <div className="min-w-0 flex-1">
-        <p className="font-medium">{target}</p>
-        <div className="text-muted-foreground flex items-center gap-2 text-sm">
-          <Badge variant="outline">
-            {organizationRoleLabels[invitation.role]}
-          </Badge>
-          <span className="flex items-center gap-1">
-            <Clock className="size-3" />
-            до {expiresAt}
-          </span>
-        </div>
-      </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() =>
-          cancelMutation.mutate({ orgId, invitationId: invitation.id })
-        }
-        disabled={cancelMutation.isPending}
-      >
-        {cancelMutation.isPending ? (
-          <Loader2 className="size-4 animate-spin" />
-        ) : (
-          <X className="size-4" />
-        )}
-        <span className="hidden sm:inline">Отменить</span>
-      </Button>
     </div>
   );
 }

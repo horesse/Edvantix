@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -8,13 +10,6 @@ import { toast } from "sonner";
 import useOrganization from "@workspace/api-hooks/company/useOrganization";
 import useUpdateOrganization from "@workspace/api-hooks/company/useUpdateOrganization";
 import { Button } from "@workspace/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
 import {
   Form,
   FormControl,
@@ -49,9 +44,15 @@ export function OrgSettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-2xl space-y-4">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-96 w-full" />
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Skeleton className="h-96 w-full" />
+          <Skeleton className="h-96 w-full" />
+        </div>
       </div>
     );
   }
@@ -65,26 +66,30 @@ export function OrgSettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold">Настройки организации</h1>
-        <p className="text-muted-foreground text-sm">
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight">
+          Настройки организации
+        </h1>
+        <p className="text-muted-foreground">
           Основная информация о вашей организации
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Информация</CardTitle>
-          <CardDescription>
-            Дата регистрации:{" "}
-            {new Date(org.registrationDate).toLocaleDateString("ru-RU")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <OrganizationForm org={org} />
-        </CardContent>
-      </Card>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="bg-muted/50 lg:col-span-2 overflow-hidden rounded-xl border-0 shadow-sm">
+          <div className="space-y-6 p-6">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold">Основная информация</h2>
+              <p className="text-muted-foreground text-sm">
+                Дата регистрации:{" "}
+                {new Date(org.registrationDate).toLocaleDateString("ru-RU")}
+              </p>
+            </div>
+            <OrganizationForm org={org} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -111,6 +116,16 @@ function OrganizationForm({
       description: org.description ?? "",
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      name: org.name,
+      nameLatin: org.nameLatin,
+      shortName: org.shortName,
+      printName: org.printName ?? "",
+      description: org.description ?? "",
+    });
+  }, [org.id, org.name, org.nameLatin, org.shortName, org.printName, org.description, form]);
 
   const mutation = useUpdateOrganization({
     onSuccess: () => toast.success("Организация обновлена"),

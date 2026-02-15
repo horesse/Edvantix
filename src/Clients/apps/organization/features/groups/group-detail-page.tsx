@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowLeft,
@@ -20,7 +21,7 @@ import { toast } from "sonner";
 import useAddGroupMember from "@workspace/api-hooks/company/useAddGroupMember";
 import useDeleteGroup from "@workspace/api-hooks/company/useDeleteGroup";
 import useGroup from "@workspace/api-hooks/company/useGroup";
-import useGroupMembers from "@workspace/api-hooks/company/useGroupMembers";
+import useGroupMembersPaginated from "@workspace/api-hooks/company/useGroupMembersPaginated";
 import useRemoveGroupMember from "@workspace/api-hooks/company/useRemoveGroupMember";
 import useUpdateGroup from "@workspace/api-hooks/company/useUpdateGroup";
 import useUpdateGroupMemberRole from "@workspace/api-hooks/company/useUpdateGroupMemberRole";
@@ -70,20 +71,14 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@workspace/ui/components/table";
 import { Textarea } from "@workspace/ui/components/textarea";
 import {
   type UpdateGroupInput,
   updateGroupSchema,
 } from "@workspace/validations/company";
 
+import { FilterTable } from "@/components/filter-table";
+import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 import { groupRoleLabels } from "@/lib/company-options";
 
@@ -95,8 +90,18 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
   const router = useRouter();
   const { currentOrg, canManage } = useOrganization();
   const { data: group, isLoading: groupLoading } = useGroup(groupId);
-  const { data: members = [], isLoading: membersLoading } =
-    useGroupMembers(groupId);
+
+  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
+    usePaginatedTable();
+
+  const { data: membersData, isLoading: membersLoading } = useGroupMembersPaginated(
+    groupId,
+    {
+      pageIndex: pageIndex + 1,
+      pageSize,
+      ...sortingQuery,
+    },
+  );
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -109,9 +114,68 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
 
   const orgId = currentOrg?.id ?? 0;
 
+  const columns = useMemo<ColumnDef<GroupMemberModel>[]>(
+    () => [
+      {
+        accessorKey: "displayName",
+        header: "Имя",
+        cell: ({ row }) => (
+          <div className="font-medium">
+            {row.original.displayName ?? `Профиль #${row.original.profileId}`}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "role",
+        header: "Роль",
+        cell: ({ row }) => (
+          <Badge variant="outline">{groupRoleLabels[row.original.role]}</Badge>
+        ),
+      },
+      {
+        accessorKey: "joinedAt",
+        header: "Дата вступления",
+        cell: ({ row }) =>
+          new Date(row.original.joinedAt).toLocaleDateString("ru-RU"),
+      },
+      {
+        id: "actions",
+        cell: ({ row }) =>
+          canManage ? (
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="size-8 p-0">
+                    <MoreHorizontal className="size-4" />
+                    <span className="sr-only">Открыть меню</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => setChangeRoleMember(row.original)}
+                  >
+                    <UserCog className="size-4" />
+                    Изменить роль
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => setRemoveMember(row.original)}
+                  >
+                    <Trash2 className="size-4" />
+                    Удалить
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : null,
+      },
+    ],
+    [canManage],
+  );
+
   if (groupLoading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-6">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-4 w-96" />
         <Skeleton className="h-64 w-full" />
@@ -140,123 +204,65 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
         </Button>
       </div>
 
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">{group.name}</h1>
-          {group.description && (
-            <p className="text-muted-foreground mt-1">{group.description}</p>
-          )}
-        </div>
-        {canManage && (
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setEditOpen(true)}
-            >
-              <Pencil className="size-4" />
-              Редактировать
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setDeleteOpen(true)}
-            >
-              <Trash2 className="size-4" />
-            </Button>
+      <div className="bg-muted/50 overflow-hidden rounded-xl border-0 shadow-sm">
+        <div className="p-6">
+          <div className="flex items-start justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-bold">{group.name}</h2>
+              {group.description && (
+                <p className="text-muted-foreground">{group.description}</p>
+              )}
+            </div>
+            {canManage && (
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditOpen(true)}
+                >
+                  <Pencil className="size-4" />
+                  Редактировать
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setDeleteOpen(true)}
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Group members */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Участники группы</h2>
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold">Участники группы</h2>
+            <p className="text-muted-foreground text-sm">
+              Управление участниками группы
+            </p>
+          </div>
           {canManage && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setAddMemberOpen(true)}
-            >
+            <Button size="sm" onClick={() => setAddMemberOpen(true)}>
               <Plus className="size-4" />
               Добавить
             </Button>
           )}
         </div>
 
-        {membersLoading ? (
-          <div className="space-y-2">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} className="h-14 w-full" />
-            ))}
-          </div>
-        ) : members.length === 0 ? (
-          <div className="border-border/50 flex flex-col items-center justify-center rounded-lg border border-dashed py-8">
-            <p className="text-muted-foreground text-sm">
-              Нет участников в группе
-            </p>
-          </div>
-        ) : (
-          <div className="rounded-lg border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Имя</TableHead>
-                  <TableHead>Роль</TableHead>
-                  <TableHead>Дата вступления</TableHead>
-                  {canManage && <TableHead className="w-12" />}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {members.map((member) => (
-                  <TableRow key={member.id}>
-                    <TableCell className="font-medium">
-                      {member.displayName ?? `Профиль #${member.profileId}`}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {groupRoleLabels[member.role]}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(member.joinedAt).toLocaleDateString("ru-RU")}
-                    </TableCell>
-                    {canManage && (
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="size-8 p-0"
-                            >
-                              <MoreHorizontal className="size-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => setChangeRoleMember(member)}
-                            >
-                              <UserCog className="size-4" />
-                              Изменить роль
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              variant="destructive"
-                              onClick={() => setRemoveMember(member)}
-                            >
-                              <Trash2 className="size-4" />
-                              Удалить
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        )}
+        <FilterTable
+          columns={columns}
+          data={membersData?.items ?? []}
+          totalCount={membersData?.totalCount ?? 0}
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          isLoading={membersLoading}
+          onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
+          getRowId={(row) => row.id}
+        />
       </div>
 
       <EditGroupDialog

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import { Loader2, MoreHorizontal, Plus, Trash2, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import useAddMember from "@workspace/api-hooks/company/useAddMember";
-import useOrganizationMembers from "@workspace/api-hooks/company/useOrganizationMembers";
+import useOrganizationMembersPaginated from "@workspace/api-hooks/company/useOrganizationMembersPaginated";
 import useRemoveMember from "@workspace/api-hooks/company/useRemoveMember";
 import useUpdateMemberRole from "@workspace/api-hooks/company/useUpdateMemberRole";
 import type { OrganizationMemberModel } from "@workspace/types/company";
@@ -46,16 +47,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
-import { Skeleton } from "@workspace/ui/components/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@workspace/ui/components/table";
 
+import { FilterTable } from "@/components/filter-table";
+import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 import { organizationRoleLabels } from "@/lib/company-options";
 
@@ -67,8 +61,72 @@ export function MembersPage() {
   const [removeMember, setRemoveMember] =
     useState<OrganizationMemberModel | null>(null);
 
+  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
+    usePaginatedTable();
+
   const orgId = currentOrg?.id ?? 0;
-  const { data: members = [], isLoading } = useOrganizationMembers(orgId);
+  const { data, isLoading } = useOrganizationMembersPaginated(orgId, {
+    pageIndex: pageIndex + 1,
+    pageSize,
+    ...sortingQuery,
+  });
+
+  const columns = useMemo<ColumnDef<OrganizationMemberModel>[]>(
+    () => [
+      {
+        accessorKey: "displayName",
+        header: "Имя",
+        cell: ({ row }) => (
+          <div className="font-medium">
+            {row.original.displayName ?? `Профиль #${row.original.profileId}`}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "role",
+        header: "Роль",
+        cell: ({ row }) => <RoleBadge role={row.original.role} />,
+      },
+      {
+        accessorKey: "joinedAt",
+        header: "Дата вступления",
+        cell: ({ row }) =>
+          new Date(row.original.joinedAt).toLocaleDateString("ru-RU"),
+      },
+      {
+        id: "actions",
+        cell: ({ row }) =>
+          canManage ? (
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="size-8 p-0">
+                    <MoreHorizontal className="size-4" />
+                    <span className="sr-only">Открыть меню</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => setChangeRoleMember(row.original)}
+                  >
+                    <UserCog className="size-4" />
+                    Изменить роль
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => setRemoveMember(row.original)}
+                  >
+                    <Trash2 className="size-4" />
+                    Удалить
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : null,
+      },
+    ],
+    [canManage],
+  );
 
   if (!currentOrg) {
     return (
@@ -79,11 +137,11 @@ export function MembersPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Участники</h1>
-          <p className="text-muted-foreground text-sm">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight">Участники</h1>
+          <p className="text-muted-foreground">
             Управление участниками организации
           </p>
         </div>
@@ -95,75 +153,17 @@ export function MembersPage() {
         )}
       </div>
 
-      {isLoading ? (
-        <div className="space-y-2">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-14 w-full" />
-          ))}
-        </div>
-      ) : members.length === 0 ? (
-        <div className="border-border/50 flex flex-col items-center justify-center rounded-lg border border-dashed py-12">
-          <p className="text-muted-foreground text-sm">Нет участников</p>
-        </div>
-      ) : (
-        <div className="rounded-lg border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Имя</TableHead>
-                <TableHead>Роль</TableHead>
-                <TableHead>Дата вступления</TableHead>
-                {canManage && <TableHead className="w-12" />}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {members.map((member) => (
-                <TableRow key={member.id}>
-                  <TableCell className="font-medium">
-                    {member.displayName ?? `Профиль #${member.profileId}`}
-                  </TableCell>
-                  <TableCell>
-                    <RoleBadge role={member.role} />
-                  </TableCell>
-                  <TableCell>
-                    {new Date(member.joinedAt).toLocaleDateString("ru-RU")}
-                  </TableCell>
-                  {canManage && (
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="size-8 p-0"
-                          >
-                            <MoreHorizontal className="size-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => setChangeRoleMember(member)}
-                          >
-                            <UserCog className="size-4" />
-                            Изменить роль
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            variant="destructive"
-                            onClick={() => setRemoveMember(member)}
-                          >
-                            <Trash2 className="size-4" />
-                            Удалить
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+      <FilterTable
+        columns={columns}
+        data={data?.items ?? []}
+        totalCount={data?.totalCount ?? 0}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        isLoading={isLoading}
+        onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
+        getRowId={(row) => row.id}
+      />
 
       <AddMemberDialog
         orgId={orgId}

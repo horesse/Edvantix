@@ -21,15 +21,14 @@ internal static class Extensions
             options.Interceptors.Add<GrpcExceptionInterceptor>();
         });
 
-        services
-            .AddGrpcServiceReference<ProfileGrpcService.ProfileGrpcServiceClient>(
-                HttpUtilities
-                    .AsUrlBuilder()
-                    .WithScheme(builder.GetScheme())
-                    .WithHost(Constants.Aspire.Services.Profile)
-                    .Build(),
-                HealthStatus.Degraded
-            );
+        services.AddGrpcServiceReference<ProfileGrpcService.ProfileGrpcServiceClient>(
+            HttpUtilities
+                .AsUrlBuilder()
+                .WithScheme(builder.GetScheme())
+                .WithHost(Constants.Aspire.Services.Profile)
+                .Build(),
+            HealthStatus.Degraded
+        );
 
         services.AddSingleton<IProfileService, Services.ProfileService>();
     }

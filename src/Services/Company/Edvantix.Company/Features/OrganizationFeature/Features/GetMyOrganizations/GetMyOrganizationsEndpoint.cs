@@ -1,31 +1,37 @@
 using Edvantix.Chassis.Endpoints;
 using Edvantix.Company.Features.OrganizationFeature.Models;
+using Edvantix.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.Company.Features.OrganizationFeature.Features.GetMyOrganizations;
 
 public class GetMyOrganizationsEndpoint
-    : IEndpoint<Ok<IEnumerable<OrganizationSummaryModel>>, GetMyOrganizationsQuery, ISender>
+    : IEndpoint<Ok<PagedResult<OrganizationSummaryModel>>, GetMyOrganizationsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
                 "/organizations/my",
-                async (ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetMyOrganizationsQuery(), sender, ct)
+                async (
+                    [AsParameters] GetMyOrganizationsQuery query,
+                    ISender sender,
+                    CancellationToken ct
+                ) => await HandleAsync(query, sender, ct)
             )
             .WithName("GetMyOrganizations")
             .WithTags("Organizations")
             .WithSummary("Мои организации")
             .WithDescription(
-                "Возвращает список организаций, в которых состоит текущий пользователь."
+                "Возвращает пагинированный список организаций, в которых состоит текущий пользователь."
             )
-            .Produces<IEnumerable<OrganizationSummaryModel>>()
+            .WithPaginationHeaders()
+            .Produces<PagedResult<OrganizationSummaryModel>>()
             .RequireAuthorization();
     }
 
-    public async Task<Ok<IEnumerable<OrganizationSummaryModel>>> HandleAsync(
+    public async Task<Ok<PagedResult<OrganizationSummaryModel>>> HandleAsync(
         GetMyOrganizationsQuery query,
         ISender sender,
         CancellationToken cancellationToken = default

@@ -1,17 +1,33 @@
+using System.ComponentModel;
 using Edvantix.Company.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Company.Domain.AggregatesModel.GroupAggregate.Specifications;
 using Edvantix.Company.Features.GroupFeature.Models;
 using Edvantix.Company.Grpc.Services;
+using Edvantix.Constants.Core;
+using Edvantix.SharedKernel.Results;
 using MediatR;
 
 namespace Edvantix.Company.Features.GroupFeature.Features.GetMyGroups;
 
-public sealed record GetMyGroupsQuery : IRequest<IEnumerable<GroupSummaryModel>>;
+public sealed record GetMyGroupsQuery(
+    [property: Description("Индекс страницы")]
+    [property: DefaultValue(Pagination.DefaultPageIndex)]
+        int PageIndex = Pagination.DefaultPageIndex,
+    [property: Description(
+        "Количество элементов, которые должны быть отображены на одной странице результатов."
+    )]
+    [property: DefaultValue(Pagination.DefaultPageSize)]
+        int PageSize = Pagination.DefaultPageSize,
+    [property: Description("Свойство для упорядочивания результатов")] string? OrderBy = null,
+    [property: Description("При выборе порядка сортировки результат будет в порядке убывания.")]
+    [property: DefaultValue(false)]
+        bool IsDescending = false
+) : IRequest<PagedResult<GroupSummaryModel>>;
 
 public sealed class GetMyGroupsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetMyGroupsQuery, IEnumerable<GroupSummaryModel>>
+    : IRequestHandler<GetMyGroupsQuery, PagedResult<GroupSummaryModel>>
 {
-    public async Task<IEnumerable<GroupSummaryModel>> Handle(
+    public async Task<PagedResult<GroupSummaryModel>> Handle(
         GetMyGroupsQuery request,
         CancellationToken cancellationToken
     )
@@ -22,10 +38,20 @@ public sealed class GetMyGroupsQueryHandler(IServiceProvider provider)
 
         using var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
 
+        var count = await groupMemberRepo.GetCountByExpressionAsync(spec, cancellationToken);
+
+        spec.Skip = (request.PageIndex - 1) * request.PageSize;
+        spec.Take = request.PageSize;
+
         var memberships = await groupMemberRepo.GetByExpressionAsync(spec, cancellationToken);
 
         if (memberships.Count == 0)
-            return [];
+            return new PagedResult<GroupSummaryModel>(
+                [],
+                request.PageIndex,
+                request.PageSize,
+                count
+            );
 
         using var groupRepo = provider.GetRequiredService<IGroupRepository>();
 
@@ -48,6 +74,11 @@ public sealed class GetMyGroupsQueryHandler(IServiceProvider provider)
             );
         }
 
-        return result;
+        return new PagedResult<GroupSummaryModel>(
+            result,
+            request.PageIndex,
+            request.PageSize,
+            count
+        );
     }
 }

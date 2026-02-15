@@ -31,6 +31,8 @@ export const auth = betterAuth({
             "email",
             "profile_read",
             "profile_write",
+            "company_read",
+            "company_write",
           ],
         }),
       ],

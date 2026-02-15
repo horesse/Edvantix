@@ -12,7 +12,6 @@ import type {
   EmploymentHistory,
   OwnProfileDetails,
 } from "@workspace/types/profile";
-import { formatDateRange } from "@workspace/utils/format";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
@@ -32,6 +31,7 @@ import {
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
+import { formatDateRange } from "@workspace/utils/format";
 import {
   type EmploymentInput,
   employmentSchema,

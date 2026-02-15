@@ -17,8 +17,7 @@ public sealed class ProfileService(ISender sender, ILogger<ProfileService> logge
     /// <summary>
     /// Получить профиль по AccountId (GUID пользователя)
     /// </summary>
-    [Authorize]
-    [EnableRateLimiting("PerUserRateLimit")]
+    [AllowAnonymous]
     public override async Task<ProfileReply> GetProfileByAccountId(
         GetProfileByAccountIdRequest request,
         ServerCallContext context
@@ -71,8 +70,7 @@ public sealed class ProfileService(ISender sender, ILogger<ProfileService> logge
     /// <summary>
     /// Получить профиль по внутреннему ID профиля
     /// </summary>
-    [Authorize]
-    [EnableRateLimiting("PerUserRateLimit")]
+    [AllowAnonymous]
     public override async Task<ProfileReply> GetProfileById(
         GetProfileByIdRequest request,
         ServerCallContext context

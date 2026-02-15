@@ -1,18 +1,16 @@
-﻿using Edvantix.Chassis.EF.Configurations;
+using Edvantix.Chassis.EF.Configurations;
+using Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Constants.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Company.Infrastructure.EntityConfigurations;
 
-public sealed class OrganizationConfiguration
-    : IEntityTypeConfiguration<Domain.AggregatesModel.OrganizationAggregate.Organization>
+public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
 {
-    public void Configure(
-        EntityTypeBuilder<Domain.AggregatesModel.OrganizationAggregate.Organization> builder
-    )
+    public void Configure(EntityTypeBuilder<Organization> builder)
     {
-        builder.Configure<Domain.AggregatesModel.OrganizationAggregate.Organization, long>();
+        builder.Configure<Organization, long>();
 
         builder.Property(o => o.Name).IsRequired().HasMaxLength(DataSchemaLength.SuperLarge);
 
@@ -45,27 +43,21 @@ public sealed class OrganizationConfiguration
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasMany(o => o.Subscriptions)
-            .WithOne(s => s.Organization)
-            .HasForeignKey(s => s.OrganizationId)
+            .HasMany(o => o.Groups)
+            .WithOne(g => g.Organization)
+            .HasForeignKey(g => g.OrganizationId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .Metadata.FindNavigation(
-                nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Contacts)
-            )!
+            .Metadata.FindNavigation(nameof(Organization.Contacts))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(
-                nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Members)
-            )!
+            .Metadata.FindNavigation(nameof(Organization.Members))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(
-                nameof(Domain.AggregatesModel.OrganizationAggregate.Organization.Subscriptions)
-            )!
+            .Metadata.FindNavigation(nameof(Organization.Groups))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder.HasIndex(o => o.Name);

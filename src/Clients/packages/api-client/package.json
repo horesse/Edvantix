@@ -26,6 +26,7 @@
   "exports": {
     "./client": "./src/client.ts",
     "./config": "./src/config.ts",
-    "./profile/*": "./src/profile/*.ts"
+    "./profile/*": "./src/profile/*.ts",
+    "./company/*": "./src/company/*.ts"
   }
 }

@@ -5,16 +5,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import {
-  Building,
-  ChevronDown,
-  Contact,
-  Home,
-  Menu,
-  UserPlus,
-  Users,
-  UsersRound,
-} from "lucide-react";
+import { Building, ChevronDown, Menu } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -33,46 +24,8 @@ import {
 } from "@workspace/ui/components/sheet";
 import { cn } from "@workspace/ui/lib/utils";
 
+import { organizationNavItems } from "./organization-nav-items";
 import { OrganizationSelector } from "./organization-selector";
-
-const navItems = [
-  {
-    title: "Главная",
-    url: "/organization",
-    icon: Home,
-    exact: true,
-  },
-  {
-    title: "Участники",
-    url: "/organization/members",
-    icon: Users,
-    exact: false,
-  },
-  {
-    title: "Приглашения",
-    url: "/organization/invitations",
-    icon: UserPlus,
-    exact: false,
-  },
-  {
-    title: "Группы",
-    url: "/organization/groups",
-    icon: UsersRound,
-    exact: false,
-  },
-  {
-    title: "Контакты",
-    url: "/organization/contacts",
-    icon: Contact,
-    exact: false,
-  },
-  {
-    title: "Настройки организации",
-    url: "/organization/settings",
-    icon: Building,
-    exact: false,
-  },
-];
 
 export function MobileSidebar() {
   const pathname = usePathname();
@@ -125,7 +78,7 @@ export function MobileSidebar() {
                 </button>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-1 space-y-1 pl-6">
-                {navItems.map((item) => {
+                {organizationNavItems.map((item) => {
                   const isActive = item.exact
                     ? pathname === item.url
                     : pathname.startsWith(item.url) &&
@@ -133,7 +86,7 @@ export function MobileSidebar() {
 
                   return (
                     <Link
-                      key={item.title}
+                      key={item.id}
                       href={item.url}
                       onClick={() => setOpen(false)}
                       className={cn(

@@ -3,8 +3,8 @@ import * as React from "react";
 import { type VariantProps, cva } from "class-variance-authority";
 import { motion } from "framer-motion";
 
-import { cn } from "../lib/utils.js";
-import { ScrollArea } from "./scroll-area.js";
+import { cn } from "../lib/utils";
+import { ScrollArea } from "./scroll-area";
 
 const islandVariants = cva("bg-card text-card-foreground transition-shadow", {
   variants: {

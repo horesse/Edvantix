@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { AnimatePresence } from "framer-motion";
 
-import { cn } from "../lib/utils.js";
+import { cn } from "../lib/utils";
 
 export interface IslandLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   columns?: 2 | 3;

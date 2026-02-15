@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "../lib/utils.js";
+import { cn } from "../lib/utils";
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   gap?: "sm" | "md" | "lg";

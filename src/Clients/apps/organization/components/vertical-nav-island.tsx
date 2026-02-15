@@ -5,15 +5,6 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import {
-  Building,
-  Contact,
-  Home,
-  UserPlus,
-  Users,
-  UsersRound,
-} from "lucide-react";
-
 import { Island } from "@workspace/ui/components/island";
 import {
   Tooltip,
@@ -23,51 +14,19 @@ import {
 } from "@workspace/ui/components/tooltip";
 import { cn } from "@workspace/ui/lib/utils";
 
-const navItems = [
-  {
-    id: "home",
-    label: "Главная",
-    url: "/organization",
-    icon: Home,
-    exact: true,
-  },
-  {
-    id: "members",
-    label: "Участники",
-    url: "/organization/members",
-    icon: Users,
-    exact: false,
-  },
-  {
-    id: "invitations",
-    label: "Приглашения",
-    url: "/organization/invitations",
-    icon: UserPlus,
-    exact: false,
-  },
-  {
-    id: "groups",
-    label: "Группы",
-    url: "/organization/groups",
-    icon: UsersRound,
-    exact: false,
-  },
-  {
-    id: "contacts",
-    label: "Контакты",
-    url: "/organization/contacts",
-    icon: Contact,
-    exact: false,
-  },
-  {
-    id: "org-settings",
-    label: "Настройки организации",
-    url: "/organization/settings",
-    icon: Building,
-    exact: false,
-  },
-];
+import { organizationNavItems } from "./organization-nav-items";
 
+/**
+ * VerticalNavIsland - расширение AppSidebarIsland для раздела "Организация"
+ *
+ * Концептуально является вертикальным продолжением основного сайдбара,
+ * отображающим подразделы текущего активного раздела (Организация).
+ *
+ * Связь с другими компонентами навигации:
+ * - Desktop: Расширяет AppSidebarIsland (показывает детализацию раздела "Организация")
+ * - Mobile: Контент соответствует выпадающему списку "Организация" в MobileSidebar
+ * - Данные: Использует общий источник organizationNavItems
+ */
 export function VerticalNavIsland() {
   const pathname = usePathname();
 
@@ -86,7 +45,7 @@ export function VerticalNavIsland() {
       </div>
 
       <nav className="flex flex-col items-center justify-center gap-1.5">
-        {navItems.map((item) => {
+        {organizationNavItems.map((item) => {
           const isActive = item.exact
             ? pathname === item.url
             : pathname.startsWith(item.url) && item.url !== "/organization";
@@ -105,13 +64,13 @@ export function VerticalNavIsland() {
                     )}
                   >
                     <item.icon className="size-4" />
-                    <span className="sr-only">{item.label}</span>
+                    <span className="sr-only">{item.title}</span>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right">
                   <div className="flex items-center gap-2">
                     <item.icon className="size-3.5" />
-                    <span>{item.label}</span>
+                    <span>{item.title}</span>
                   </div>
                 </TooltipContent>
               </Tooltip>

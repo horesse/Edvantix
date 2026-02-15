@@ -1,36 +1,44 @@
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
-import { motion, type HTMLMotionProps } from "framer-motion";
+import { type VariantProps, cva } from "class-variance-authority";
+import { motion } from "framer-motion";
 
-import { cn } from "../lib/utils";
-import { ScrollArea } from "./scroll-area";
+import { cn } from "../lib/utils.js";
+import { ScrollArea } from "./scroll-area.js";
 
-const islandVariants = cva(
-  "rounded-2xl bg-card text-card-foreground shadow-lg transition-shadow hover:shadow-xl",
-  {
-    variants: {
-      variant: {
-        default: "",
-        floating: "shadow-2xl",
-        flat: "shadow-sm",
-      },
-      padding: {
-        none: "",
-        sm: "p-4",
-        md: "p-6",
-        lg: "p-8",
-      },
+const islandVariants = cva("bg-card text-card-foreground transition-shadow", {
+  variants: {
+    variant: {
+      default: "shadow-lg hover:shadow-xl",
+      floating: "shadow-2xl",
+      flat: "shadow-sm",
+      bordered: "border shadow-sm hover:shadow-md",
     },
-    defaultVariants: {
-      variant: "default",
-      padding: "md",
+    padding: {
+      none: "",
+      sm: "p-4",
+      md: "p-6",
+      lg: "p-8",
+    },
+    rounded: {
+      none: "rounded-none",
+      sm: "rounded-sm",
+      md: "rounded-md",
+      lg: "rounded-lg",
+      xl: "rounded-xl",
+      "2xl": "rounded-2xl",
     },
   },
-);
+  defaultVariants: {
+    variant: "default",
+    padding: "md",
+    rounded: "2xl",
+  },
+});
 
 export interface IslandProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof islandVariants> {
   asChild?: boolean;
   enableScroll?: boolean;
@@ -107,7 +115,7 @@ const IslandTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-xl font-semibold leading-none", className)}
+    className={cn("text-xl leading-none font-semibold", className)}
     {...props}
   />
 ));

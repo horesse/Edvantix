@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "../lib/utils";
+import { cn } from "../lib/utils.js";
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   gap?: "sm" | "md" | "lg";
@@ -14,11 +14,18 @@ const GridLayout = React.forwardRef<HTMLDivElement, GridLayoutProps>(
       lg: "gap-6",
     };
 
+    // Подсчитываем количество детей для динамической grid структуры
+    const childrenArray = React.Children.toArray(children);
+    const hasThreeColumns = childrenArray.length === 3;
+
     return (
       <div
         ref={ref}
         className={cn(
-          "grid h-full grid-cols-1 lg:grid-cols-[auto_1fr]",
+          "grid h-full grid-cols-1",
+          hasThreeColumns
+            ? "lg:grid-cols-[auto_auto_1fr]"
+            : "lg:grid-cols-[auto_1fr]",
           gapClasses[gap],
           className,
         )}
@@ -56,7 +63,7 @@ const MainArea = React.forwardRef<HTMLDivElement, MainAreaProps>(
 );
 MainArea.displayName = "MainArea";
 
-export interface ContentAreaProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type ContentAreaProps = React.HTMLAttributes<HTMLDivElement>;
 
 const ContentArea = React.forwardRef<HTMLDivElement, ContentAreaProps>(
   ({ className, children, ...props }, ref) => (

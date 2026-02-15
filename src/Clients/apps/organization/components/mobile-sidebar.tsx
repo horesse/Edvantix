@@ -7,16 +7,21 @@ import { usePathname } from "next/navigation";
 
 import {
   Building,
+  ChevronDown,
   Contact,
   Home,
   Menu,
-  Settings,
   UserPlus,
   Users,
   UsersRound,
 } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@workspace/ui/components/collapsible";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { Separator } from "@workspace/ui/components/separator";
 import {
@@ -28,54 +33,53 @@ import {
 } from "@workspace/ui/components/sheet";
 import { cn } from "@workspace/ui/lib/utils";
 
-import { useOrganization } from "./organization-provider";
 import { OrganizationSelector } from "./organization-selector";
 
 const navItems = [
   {
     title: "Главная",
-    url: "/",
+    url: "/organization",
     icon: Home,
     exact: true,
   },
   {
     title: "Участники",
-    url: "/members",
+    url: "/organization/members",
     icon: Users,
     exact: false,
   },
   {
     title: "Приглашения",
-    url: "/invitations",
+    url: "/organization/invitations",
     icon: UserPlus,
     exact: false,
   },
   {
     title: "Группы",
-    url: "/groups",
+    url: "/organization/groups",
     icon: UsersRound,
     exact: false,
   },
   {
     title: "Контакты",
-    url: "/contacts",
+    url: "/organization/contacts",
     icon: Contact,
     exact: false,
   },
-];
-
-const managementItems = [
   {
-    title: "Настройки орг.",
-    url: "/org-settings",
+    title: "Настройки организации",
+    url: "/organization/settings",
     icon: Building,
+    exact: false,
   },
 ];
 
 export function MobileSidebar() {
   const pathname = usePathname();
-  const { canManage } = useOrganization();
   const [open, setOpen] = React.useState(false);
+  const [isOrgOpen, setIsOrgOpen] = React.useState(true);
+
+  const isOrgActive = pathname.startsWith("/organization");
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -88,7 +92,7 @@ export function MobileSidebar() {
       <SheetContent side="left" className="w-64 p-0">
         <SheetHeader className="p-4">
           <SheetTitle className="flex items-center gap-2">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
               <Building className="size-4" />
             </div>
             <span className="text-lg font-bold">Edvantix</span>
@@ -97,34 +101,35 @@ export function MobileSidebar() {
         <Separator />
         <ScrollArea className="h-[calc(100vh-8rem)] px-4 py-4">
           <nav className="flex flex-col gap-1">
-            {navItems.map((item) => {
-              const isActive = item.exact
-                ? pathname === item.url
-                : pathname.startsWith(item.url) && item.url !== "/";
-
-              return (
-                <Link
-                  key={item.title}
-                  href={item.url}
-                  onClick={() => setOpen(false)}
+            <Collapsible open={isOrgOpen} onOpenChange={setIsOrgOpen}>
+              <CollapsibleTrigger asChild>
+                <button
+                  type="button"
                   className={cn(
-                    "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
-                    isActive
+                    "flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
+                    isOrgActive
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                   )}
                 >
-                  <item.icon className="size-4" />
-                  <span>{item.title}</span>
-                </Link>
-              );
-            })}
-
-            {canManage && (
-              <>
-                <Separator className="my-2" />
-                {managementItems.map((item) => {
-                  const isActive = pathname.startsWith(item.url);
+                  <div className="flex items-center gap-2">
+                    <Building className="size-4" />
+                    <span>Организация</span>
+                  </div>
+                  <ChevronDown
+                    className={cn(
+                      "size-4 transition-transform",
+                      isOrgOpen && "rotate-180",
+                    )}
+                  />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-1 space-y-1 pl-6">
+                {navItems.map((item) => {
+                  const isActive = item.exact
+                    ? pathname === item.url
+                    : pathname.startsWith(item.url) &&
+                      item.url !== "/organization";
 
                   return (
                     <Link
@@ -132,9 +137,9 @@ export function MobileSidebar() {
                       href={item.url}
                       onClick={() => setOpen(false)}
                       className={cn(
-                        "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
+                        "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
                         isActive
-                          ? "bg-primary text-primary-foreground"
+                          ? "bg-primary text-primary-foreground font-medium"
                           : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                       )}
                     >
@@ -143,11 +148,11 @@ export function MobileSidebar() {
                     </Link>
                   );
                 })}
-              </>
-            )}
+              </CollapsibleContent>
+            </Collapsible>
           </nav>
         </ScrollArea>
-        <div className="absolute bottom-0 left-0 right-0 border-t p-4">
+        <div className="absolute right-0 bottom-0 left-0 border-t p-4">
           <OrganizationSelector />
         </div>
       </SheetContent>

@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { AnimatePresence } from "framer-motion";
 
-import { cn } from "../lib/utils";
+import { cn } from "../lib/utils.js";
 
 export interface IslandLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   columns?: 2 | 3;
@@ -12,7 +12,14 @@ export interface IslandLayoutProps extends React.HTMLAttributes<HTMLDivElement> 
 
 const IslandLayout = React.forwardRef<HTMLDivElement, IslandLayoutProps>(
   (
-    { className, children, columns = 2, centerIsland, showCenter = false, ...props },
+    {
+      className,
+      children,
+      columns = 2,
+      centerIsland,
+      showCenter = false,
+      ...props
+    },
     ref,
   ) => {
     const childrenArray = React.Children.toArray(children);
@@ -33,7 +40,7 @@ const IslandLayout = React.forwardRef<HTMLDivElement, IslandLayoutProps>(
           <div className="flex flex-col gap-4">{childrenArray[0]}</div>
           <AnimatePresence mode="wait">
             {showCenter && centerIsland && (
-              <div className="hidden lg:flex flex-col gap-4 w-[400px]">
+              <div className="hidden w-100 flex-col gap-4 lg:flex">
                 {centerIsland}
               </div>
             )}
@@ -46,12 +53,7 @@ const IslandLayout = React.forwardRef<HTMLDivElement, IslandLayoutProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          "grid gap-4",
-          "grid-cols-1",
-          "lg:grid-cols-2",
-          className,
-        )}
+        className={cn("grid gap-4", "grid-cols-1", "lg:grid-cols-2", className)}
         {...props}
       >
         {childrenArray}
@@ -61,15 +63,11 @@ const IslandLayout = React.forwardRef<HTMLDivElement, IslandLayoutProps>(
 );
 IslandLayout.displayName = "IslandLayout";
 
-export interface IslandColumnProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type IslandColumnProps = React.HTMLAttributes<HTMLDivElement>;
 
 const IslandColumn = React.forwardRef<HTMLDivElement, IslandColumnProps>(
   ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("flex flex-col gap-4", className)}
-      {...props}
-    >
+    <div ref={ref} className={cn("flex flex-col gap-4", className)} {...props}>
       {children}
     </div>
   ),

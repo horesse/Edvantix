@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 import useCancelInvitation from "@workspace/api-hooks/company/useCancelInvitation";
 import useCreateInvitation from "@workspace/api-hooks/company/useCreateInvitation";
-import usePendingInvitationsPaginated from "@workspace/api-hooks/company/usePendingInvitationsPaginated";
+import usePendingInvitations from "@workspace/api-hooks/company/usePendingInvitations";
 import type { InvitationModel } from "@workspace/types/company";
 import { OrganizationRole } from "@workspace/types/company";
 import { Badge } from "@workspace/ui/components/badge";
@@ -51,7 +51,6 @@ import {
 } from "@workspace/validations/company";
 
 import { FilterTable } from "@/components/filter-table";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 import { organizationRoleLabels } from "@/lib/company-options";
 
@@ -100,14 +99,7 @@ export function InvitationsPage() {
 function OutgoingInvitations({ orgId }: { orgId: number }) {
   const [createOpen, setCreateOpen] = useState(false);
 
-  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
-    usePaginatedTable();
-
-  const { data, isLoading } = usePendingInvitationsPaginated(orgId, {
-    pageIndex: pageIndex + 1,
-    pageSize,
-    ...sortingQuery,
-  });
+  const { data, isLoading } = usePendingInvitations(orgId);
 
   const cancelMutation = useCancelInvitation({
     onSuccess: () => toast.success("Приглашение отменено"),
@@ -196,13 +188,13 @@ function OutgoingInvitations({ orgId }: { orgId: number }) {
 
       <FilterTable
         columns={columns}
-        data={data?.items ?? []}
-        totalCount={data?.totalCount ?? 0}
-        pageIndex={pageIndex}
-        pageSize={pageSize}
+        data={data ?? []}
+        totalItems={data?.length ?? 0}
+        pageIndex={0}
+        pageSize={data?.length ?? 10}
         isLoading={isLoading}
-        onPaginationChange={handlePaginationChange}
-        onSortingChange={handleSortingChange}
+        onPaginationChange={() => {}}
+        onSortingChange={() => {}}
         getRowId={(row) => row.id}
       />
 

@@ -1,18 +1,29 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import companyApiClient, {
+  type OrganizationGroupsQuery,
+} from "@workspace/api-client/company/company";
 import type { GroupModel } from "@workspace/types/company";
+import type { PagedResult } from "@workspace/types/shared";
 
 import { companyKeys } from "../keys";
 
 export default function useOrganizationGroups(
   orgId: number,
-  options?: Omit<UseQueryOptions<GroupModel[]>, "queryKey" | "queryFn">,
+  query?: Omit<OrganizationGroupsQuery, "organizationId">,
+  options?: Omit<
+    UseQueryOptions<PagedResult<GroupModel>>,
+    "queryKey" | "queryFn"
+  >,
 ) {
   return useQuery({
-    queryKey: companyKeys.groups(orgId),
-    queryFn: () => companyApiClient.getOrganizationGroups(orgId),
+    queryKey: companyKeys.groups(orgId, query),
+    queryFn: () =>
+      companyApiClient.getOrganizationGroups({
+        organizationId: orgId,
+        ...query,
+      }),
     enabled: orgId > 0,
     ...options,
   });

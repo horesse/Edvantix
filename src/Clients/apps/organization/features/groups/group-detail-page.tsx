@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import useAddGroupMember from "@workspace/api-hooks/company/useAddGroupMember";
 import useDeleteGroup from "@workspace/api-hooks/company/useDeleteGroup";
 import useGroup from "@workspace/api-hooks/company/useGroup";
-import useGroupMembersPaginated from "@workspace/api-hooks/company/useGroupMembersPaginated";
+import useGroupMembers from "@workspace/api-hooks/company/useGroupMembers";
 import useRemoveGroupMember from "@workspace/api-hooks/company/useRemoveGroupMember";
 import useUpdateGroup from "@workspace/api-hooks/company/useUpdateGroup";
 import useUpdateGroupMemberRole from "@workspace/api-hooks/company/useUpdateGroupMemberRole";
@@ -94,7 +94,7 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
   const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
     usePaginatedTable();
 
-  const { data: membersData, isLoading: membersLoading } = useGroupMembersPaginated(
+  const { data: membersData, isLoading: membersLoading } = useGroupMembers(
     groupId,
     {
       pageIndex: pageIndex + 1,
@@ -255,7 +255,7 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
         <FilterTable
           columns={columns}
           data={membersData?.items ?? []}
-          totalCount={membersData?.totalCount ?? 0}
+          totalItems={membersData?.totalItems ?? 0}
           pageIndex={pageIndex}
           pageSize={pageSize}
           isLoading={membersLoading}

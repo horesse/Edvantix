@@ -1,5 +1,9 @@
 export type PagedResult<T> = {
   items: T[];
-  totalCount: number;
-  link?: string;
+  pageIndex: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 };

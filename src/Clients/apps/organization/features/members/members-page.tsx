@@ -7,7 +7,7 @@ import { Loader2, MoreHorizontal, Plus, Trash2, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import useAddMember from "@workspace/api-hooks/company/useAddMember";
-import useOrganizationMembersPaginated from "@workspace/api-hooks/company/useOrganizationMembersPaginated";
+import useOrganizationMembers from "@workspace/api-hooks/company/useOrganizationMembers";
 import useRemoveMember from "@workspace/api-hooks/company/useRemoveMember";
 import useUpdateMemberRole from "@workspace/api-hooks/company/useUpdateMemberRole";
 import type { OrganizationMemberModel } from "@workspace/types/company";
@@ -65,7 +65,7 @@ export function MembersPage() {
     usePaginatedTable();
 
   const orgId = currentOrg?.id ?? 0;
-  const { data, isLoading } = useOrganizationMembersPaginated(orgId, {
+  const { data, isLoading } = useOrganizationMembers(orgId, {
     pageIndex: pageIndex + 1,
     pageSize,
     ...sortingQuery,
@@ -156,7 +156,7 @@ export function MembersPage() {
       <FilterTable
         columns={columns}
         data={data?.items ?? []}
-        totalCount={data?.totalCount ?? 0}
+        totalItems={data?.totalItems ?? 0}
         pageIndex={pageIndex}
         pageSize={pageSize}
         isLoading={isLoading}

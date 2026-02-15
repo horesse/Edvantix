@@ -1,18 +1,29 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import companyApiClient, {
+  type GroupMembersQuery,
+} from "@workspace/api-client/company/company";
 import type { GroupMemberModel } from "@workspace/types/company";
+import type { PagedResult } from "@workspace/types/shared";
 
 import { companyKeys } from "../keys";
 
 export default function useGroupMembers(
   groupId: number,
-  options?: Omit<UseQueryOptions<GroupMemberModel[]>, "queryKey" | "queryFn">,
+  query?: Omit<GroupMembersQuery, "groupId">,
+  options?: Omit<
+    UseQueryOptions<PagedResult<GroupMemberModel>>,
+    "queryKey" | "queryFn"
+  >,
 ) {
   return useQuery({
-    queryKey: companyKeys.groupMembers(groupId),
-    queryFn: () => companyApiClient.getGroupMembers(groupId),
+    queryKey: companyKeys.groupMembers(groupId, query),
+    queryFn: () =>
+      companyApiClient.getGroupMembers({
+        groupId,
+        ...query,
+      }),
     enabled: groupId > 0,
     ...options,
   });

@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 import useCreateGroup from "@workspace/api-hooks/company/useCreateGroup";
 import useDeleteGroup from "@workspace/api-hooks/company/useDeleteGroup";
-import useOrganizationGroupsPaginated from "@workspace/api-hooks/company/useOrganizationGroupsPaginated";
+import useOrganizationGroups from "@workspace/api-hooks/company/useOrganizationGroups";
 import type { GroupModel } from "@workspace/types/company";
 import {
   AlertDialog,
@@ -67,7 +67,7 @@ export function GroupsPage() {
     usePaginatedTable();
 
   const orgId = currentOrg?.id ?? 0;
-  const { data, isLoading } = useOrganizationGroupsPaginated(orgId, {
+  const { data, isLoading } = useOrganizationGroups(orgId, {
     pageIndex: pageIndex + 1,
     pageSize,
     ...sortingQuery,
@@ -163,7 +163,7 @@ export function GroupsPage() {
       <FilterTable
         columns={columns}
         data={data?.items ?? []}
-        totalCount={data?.totalCount ?? 0}
+        totalItems={data?.totalItems ?? 0}
         pageIndex={pageIndex}
         pageSize={pageSize}
         isLoading={isLoading}

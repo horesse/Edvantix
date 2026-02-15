@@ -1,21 +1,29 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import companyApiClient, {
+  type OrganizationMembersQuery,
+} from "@workspace/api-client/company/company";
 import type { OrganizationMemberModel } from "@workspace/types/company";
+import type { PagedResult } from "@workspace/types/shared";
 
 import { companyKeys } from "../keys";
 
 export default function useOrganizationMembers(
   orgId: number,
+  query?: Omit<OrganizationMembersQuery, "organizationId">,
   options?: Omit<
-    UseQueryOptions<OrganizationMemberModel[]>,
+    UseQueryOptions<PagedResult<OrganizationMemberModel>>,
     "queryKey" | "queryFn"
   >,
 ) {
   return useQuery({
-    queryKey: companyKeys.members(orgId),
-    queryFn: () => companyApiClient.getMembers(orgId),
+    queryKey: companyKeys.members(orgId, query),
+    queryFn: () =>
+      companyApiClient.getMembers({
+        organizationId: orgId,
+        ...query,
+      }),
     enabled: orgId > 0,
     ...options,
   });

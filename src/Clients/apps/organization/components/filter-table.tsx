@@ -39,7 +39,7 @@ type FilterTableProps<TData> = Readonly<{
   columns: ColumnDef<TData>[];
   data: TData[];
   description?: string;
-  totalCount: number;
+  totalItems: number;
   pageIndex: number;
   pageSize: number;
   isLoading: boolean;
@@ -53,7 +53,7 @@ export function FilterTable<TData>({
   columns,
   data,
   description,
-  totalCount,
+  totalItems,
   pageIndex,
   pageSize,
   isLoading,
@@ -94,8 +94,8 @@ export function FilterTable<TData>({
   });
 
   const totalPages = useMemo(
-    () => Math.ceil(totalCount / pageSize),
-    [totalCount, pageSize],
+    () => Math.ceil(totalItems / pageSize),
+    [totalItems, pageSize],
   );
 
   const handlePreviousPage = useCallback(() => {
@@ -187,13 +187,13 @@ export function FilterTable<TData>({
         </Table>
       </div>
 
-      {totalCount > 0 && (
+      {totalItems > 0 && (
         <nav
           className="flex items-center justify-between px-2"
           aria-label="Навигация по таблице"
         >
           <div className="text-muted-foreground flex-1 text-sm">
-            Показано {data.length} из {totalCount}
+            Показано {data.length} из {totalItems}
           </div>
           <div className="flex items-center space-x-6 lg:space-x-8">
             <div className="flex items-center space-x-2">

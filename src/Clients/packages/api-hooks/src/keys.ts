@@ -9,22 +9,18 @@ export const companyKeys = {
   myOrganizations: () => [...companyKeys.all, "organizations", "my"] as const,
   organization: (id: number) =>
     [...companyKeys.all, "organizations", id] as const,
-  members: (orgId: number) => [...companyKeys.all, "members", orgId] as const,
-  membersPaginated: (orgId: number, query?: unknown) =>
-    [...companyKeys.all, "members", orgId, "paginated", query] as const,
+  members: (orgId: number, query?: unknown) =>
+    [...companyKeys.all, "members", orgId, query] as const,
   invitations: (orgId: number) =>
     [...companyKeys.all, "invitations", orgId] as const,
-  pendingInvitationsPaginated: (orgId: number, query?: unknown) =>
-    [...companyKeys.all, "invitations", orgId, "paginated", query] as const,
   myInvitations: () => [...companyKeys.all, "invitations", "my"] as const,
-  groups: (orgId: number) => [...companyKeys.all, "groups", orgId] as const,
-  groupsPaginated: (orgId: number, query?: unknown) =>
-    [...companyKeys.all, "groups", orgId, "paginated", query] as const,
+  groups: (orgId: number, query?: unknown) =>
+    [...companyKeys.all, "groups", orgId, query] as const,
   group: (id: number) => [...companyKeys.all, "group", id] as const,
-  myGroups: () => [...companyKeys.all, "groups", "my"] as const,
-  groupMembers: (groupId: number) =>
-    [...companyKeys.all, "groupMembers", groupId] as const,
-  groupMembersPaginated: (groupId: number, query?: unknown) =>
-    [...companyKeys.all, "groupMembers", groupId, "paginated", query] as const,
-  contacts: (orgId: number) => [...companyKeys.all, "contacts", orgId] as const,
+  myGroups: (query?: unknown) =>
+    [...companyKeys.all, "groups", "my", query] as const,
+  groupMembers: (groupId: number, query?: unknown) =>
+    [...companyKeys.all, "groupMembers", groupId, query] as const,
+  contacts: (orgId: number, query?: unknown) =>
+    [...companyKeys.all, "contacts", orgId, query] as const,
 };

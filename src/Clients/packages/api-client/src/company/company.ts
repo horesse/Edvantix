@@ -19,9 +19,51 @@ import type {
   UpdateOrganizationContactRequest,
   UpdateOrganizationRequest,
 } from "@workspace/types/company";
+import type { PagedResult } from "@workspace/types/shared";
 
 import { apiClient } from "../client";
 import type ApiClient from "../client";
+
+// --- Query Types ---
+
+export type OrganizationMembersQuery = {
+  organizationId: number;
+  pageIndex?: number;
+  pageSize?: number;
+  orderBy?: string;
+  isDescending?: boolean;
+};
+
+export type OrganizationGroupsQuery = {
+  organizationId: number;
+  pageIndex?: number;
+  pageSize?: number;
+  orderBy?: string;
+  isDescending?: boolean;
+};
+
+export type GroupMembersQuery = {
+  groupId: number;
+  pageIndex?: number;
+  pageSize?: number;
+  orderBy?: string;
+  isDescending?: boolean;
+};
+
+export type MyGroupsQuery = {
+  pageIndex?: number;
+  pageSize?: number;
+  orderBy?: string;
+  isDescending?: boolean;
+};
+
+export type OrganizationContactsQuery = {
+  organizationId: number;
+  pageIndex?: number;
+  pageSize?: number;
+  orderBy?: string;
+  isDescending?: boolean;
+};
 
 const BASE = "/company/api/v1";
 
@@ -77,10 +119,14 @@ class CompanyApiClient {
     );
   }
 
-  public async getMembers(orgId: number): Promise<OrganizationMemberModel[]> {
-    const response = await this.client.get<OrganizationMemberModel[]>(
-      `${BASE}/organizations/${orgId}/members`,
-    );
+  public async getMembers(
+    query: OrganizationMembersQuery,
+  ): Promise<PagedResult<OrganizationMemberModel>> {
+    const response = await this.client.get<
+      PagedResult<OrganizationMemberModel>
+    >(`${BASE}/organizations/members`, {
+      params: query,
+    });
     return response.data;
   }
 
@@ -159,9 +205,14 @@ class CompanyApiClient {
     return response.data;
   }
 
-  public async getOrganizationGroups(orgId: number): Promise<GroupModel[]> {
-    const response = await this.client.get<GroupModel[]>(
-      `${BASE}/organizations/${orgId}/groups`,
+  public async getOrganizationGroups(
+    query: OrganizationGroupsQuery,
+  ): Promise<PagedResult<GroupModel>> {
+    const response = await this.client.get<PagedResult<GroupModel>>(
+      `${BASE}/organizations/groups`,
+      {
+        params: query,
+      },
     );
     return response.data;
   }
@@ -171,9 +222,14 @@ class CompanyApiClient {
     return response.data;
   }
 
-  public async getMyGroups(): Promise<GroupSummaryModel[]> {
-    const response = await this.client.get<GroupSummaryModel[]>(
+  public async getMyGroups(
+    query?: MyGroupsQuery,
+  ): Promise<PagedResult<GroupSummaryModel>> {
+    const response = await this.client.get<PagedResult<GroupSummaryModel>>(
       `${BASE}/groups/my`,
+      {
+        params: query,
+      },
     );
     return response.data;
   }
@@ -198,9 +254,14 @@ class CompanyApiClient {
     await this.client.post<void>(`${BASE}/groups/${groupId}/members`, request);
   }
 
-  public async getGroupMembers(groupId: number): Promise<GroupMemberModel[]> {
-    const response = await this.client.get<GroupMemberModel[]>(
-      `${BASE}/groups/${groupId}/members`,
+  public async getGroupMembers(
+    query: GroupMembersQuery,
+  ): Promise<PagedResult<GroupMemberModel>> {
+    const response = await this.client.get<PagedResult<GroupMemberModel>>(
+      `${BASE}/groups/members`,
+      {
+        params: query,
+      },
     );
     return response.data;
   }
@@ -238,10 +299,14 @@ class CompanyApiClient {
     return response.data;
   }
 
-  public async getContacts(orgId: number): Promise<OrganizationContactModel[]> {
-    const response = await this.client.get<OrganizationContactModel[]>(
-      `${BASE}/organizations/${orgId}/contacts`,
-    );
+  public async getContacts(
+    query: OrganizationContactsQuery,
+  ): Promise<PagedResult<OrganizationContactModel>> {
+    const response = await this.client.get<
+      PagedResult<OrganizationContactModel>
+    >(`${BASE}/organizations/contacts`, {
+      params: query,
+    });
     return response.data;
   }
 

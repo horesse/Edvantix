@@ -11,12 +11,12 @@ import { InvitationStatus } from "@workspace/types/company";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
+  Island,
+  IslandContent,
+  IslandDescription,
+  IslandHeader,
+  IslandTitle,
+} from "@workspace/ui/components/island";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
 import {
@@ -34,34 +34,34 @@ export function IncomingInvitationsSection() {
 
   if (isLoading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Входящие приглашения</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
+      <Island>
+        <IslandHeader>
+          <IslandTitle>Входящие приглашения</IslandTitle>
+        </IslandHeader>
+        <IslandContent className="space-y-3">
           <Skeleton className="h-16 w-full" />
           <Skeleton className="h-16 w-full" />
-        </CardContent>
-      </Card>
+        </IslandContent>
+      </Island>
     );
   }
 
   if (pending.length === 0) return null;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Входящие приглашения</CardTitle>
-        <CardDescription>
+    <Island>
+      <IslandHeader>
+        <IslandTitle>Входящие приглашения</IslandTitle>
+        <IslandDescription>
           Приглашения в организации, ожидающие вашего ответа
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
+        </IslandDescription>
+      </IslandHeader>
+      <IslandContent className="space-y-3">
         {pending.map((invitation) => (
           <IncomingInvitationCard key={invitation.id} invitation={invitation} />
         ))}
-      </CardContent>
-    </Card>
+      </IslandContent>
+    </Island>
   );
 }
 

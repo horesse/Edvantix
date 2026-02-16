@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 import { ChevronsUpDown, GraduationCap, Plus } from "lucide-react";
 
 import type { OrganizationSummaryModel } from "@workspace/types/company";
+import { Button } from "@workspace/ui/components/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@workspace/ui/components/popover";
-import { SidebarMenuButton } from "@workspace/ui/components/sidebar";
 
 import { useOrganization } from "./organization-provider";
 
@@ -34,49 +34,60 @@ export function OrganizationSelector() {
 
   if (isLoading) {
     return (
-      <SidebarMenuButton size="lg">
-        <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+      <Button
+        variant="outline"
+        className="h-auto w-full justify-start gap-3 px-3 py-2"
+      >
+        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <GraduationCap className="size-4" />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-semibold">Загрузка...</span>
         </div>
-      </SidebarMenuButton>
+      </Button>
     );
   }
 
   if (!currentOrg) {
     return (
-      <SidebarMenuButton size="lg" onClick={handleCreate}>
-        <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+      <Button
+        variant="outline"
+        className="h-auto w-full justify-start gap-3 px-3 py-2"
+        onClick={handleCreate}
+      >
+        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <Plus className="size-4" />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-semibold">Создать организацию</span>
-          <span className="truncate text-xs">Нет организаций</span>
+          <span className="text-muted-foreground truncate text-xs">
+            Нет организаций
+          </span>
         </div>
-      </SidebarMenuButton>
+      </Button>
     );
   }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <SidebarMenuButton
-          size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        <Button
+          variant="outline"
+          className="h-auto w-full justify-start gap-3 px-3 py-2 data-[state=open]:bg-accent"
         >
-          <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg text-xs font-bold">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
             {currentOrg.shortName.charAt(0).toUpperCase()}
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">
               {currentOrg.shortName}
             </span>
-            <span className="truncate text-xs">{currentOrg.name}</span>
+            <span className="text-muted-foreground truncate text-xs">
+              {currentOrg.name}
+            </span>
           </div>
           <ChevronsUpDown className="ml-auto size-4" />
-        </SidebarMenuButton>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-2" align="start">
         <div className="space-y-1">

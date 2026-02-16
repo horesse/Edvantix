@@ -1,38 +1,47 @@
+"use client";
+
 import type React from "react";
 
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@workspace/ui/components/sidebar";
+import { usePathname } from "next/navigation";
 
-import { AppSidebar } from "@/components/app-sidebar";
+import {
+  ContentArea,
+  GridLayout,
+  MainArea,
+} from "@workspace/ui/components/grid-layout";
+import { PageBase } from "@workspace/ui/components/page-base";
+
+import { AppSidebarIsland } from "@/components/app-sidebar-island";
 import { AuthGuard } from "@/components/auth-guard";
 import { Header } from "@/components/header";
 import { OrganizationProvider } from "@/components/organization-provider";
-import { PageBreadcrumb } from "@/components/page-breadcrumb";
 import { ProfileGuard } from "@/components/profile-guard";
+import { SidebarProvider } from "@/components/sidebar-context";
+import { VerticalNavIsland } from "@/components/vertical-nav-island";
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isOrganizationPage = pathname.startsWith("/organization");
+
   return (
     <AuthGuard>
       <ProfileGuard>
         <OrganizationProvider>
           <SidebarProvider>
-            <AppSidebar variant="inset" />
-            <SidebarInset>
-              <Header />
-              <main
-                className="flex flex-1 flex-col gap-6 p-4 lg:gap-8 lg:p-8"
-                id="main-content"
-              >
-                <PageBreadcrumb />
-                {children}
-              </main>
-            </SidebarInset>
+            <PageBase padding="md">
+              <GridLayout gap="md">
+                <AppSidebarIsland />
+                {isOrganizationPage && <VerticalNavIsland />}
+                <MainArea gap="sm">
+                  <Header />
+                  <ContentArea>{children}</ContentArea>
+                </MainArea>
+              </GridLayout>
+            </PageBase>
           </SidebarProvider>
         </OrganizationProvider>
       </ProfileGuard>

@@ -1,8 +1,10 @@
 "use client";
 
+import * as React from "react";
+
 import Link from "next/link";
 
-import { LogOut, User } from "lucide-react";
+import { Bell, LogOut, Search, Settings as SettingsIcon, User } from "lucide-react";
 
 import useOwnProfile from "@workspace/api-hooks/profiles/useOwnProfile";
 import {
@@ -10,6 +12,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar";
+import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
   DropdownMenu,
@@ -19,80 +22,116 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { Island } from "@workspace/ui/components/island";
 import { Separator } from "@workspace/ui/components/separator";
-import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { getInitials } from "@workspace/utils/format";
 
 import { useLogout } from "@/hooks/useLogout";
 
+import { MobileSidebar } from "./mobile-sidebar";
+import { PageBreadcrumb } from "./page-breadcrumb";
 import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
   const { data: profile, isLoading } = useOwnProfile();
   const { logout } = useLogout();
+  const [notificationsCount] = React.useState(0);
 
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
-      <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        <SidebarTrigger className="-ml-1" />
+    <Island
+      variant="flat"
+      padding="none"
+      className="flex items-center gap-3 px-4 py-2"
+    >
+      <MobileSidebar />
+      <PageBreadcrumb />
+      <div className="ml-auto flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative size-8 rounded-full"
+          aria-label="Поиск"
+        >
+          <Search className="size-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative size-8 rounded-full"
+          aria-label="Уведомления"
+        >
+          <Bell className="size-4" />
+          {notificationsCount > 0 && (
+            <Badge
+              variant="destructive"
+              className="absolute -right-1 -top-1 size-4 flex items-center justify-center rounded-full p-0 text-[9px]"
+            >
+              {notificationsCount}
+            </Badge>
+          )}
+        </Button>
+        <ThemeToggle />
         <Separator
           orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
+          className="mx-1 h-4"
         />
-        <div className="ml-auto flex items-center gap-2">
-          <ThemeToggle />
-          {isLoading ? (
-            <Skeleton className="size-8 rounded-full" />
-          ) : (
-            profile && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="relative size-8 rounded-full"
-                  >
-                    <Avatar>
-                      <AvatarImage
-                        src={profile.avatarUrl}
-                        alt={profile.name}
-                        itemProp="image"
-                      />
-                      <AvatarFallback>
-                        {getInitials(profile.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm leading-none font-medium">
-                        {profile.name}
-                      </p>
-                      <p className="text-muted-foreground text-xs leading-none">
-                        {profile.userName}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/settings/profile">
-                      <User />
-                      <span>Профиль</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem variant="destructive" onClick={logout}>
-                    <LogOut />
-                    <span>Выйти</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )
-          )}
-        </div>
+        {isLoading ? (
+          <Skeleton className="size-8 rounded-full" />
+        ) : (
+          profile && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative size-8 rounded-full"
+                >
+                  <Avatar className="size-8">
+                    <AvatarImage
+                      src={profile.avatarUrl}
+                      alt={profile.name}
+                      itemProp="image"
+                    />
+                    <AvatarFallback>
+                      {getInitials(profile.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm leading-none font-medium">
+                      {profile.name}
+                    </p>
+                    <p className="text-muted-foreground text-xs leading-none">
+                      {profile.userName}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/settings/profile">
+                    <User />
+                    <span>Профиль</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/settings">
+                    <SettingsIcon />
+                    <span>Настройки</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive" onClick={logout}>
+                  <LogOut />
+                  <span>Выйти</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )
+        )}
       </div>
-    </header>
+    </Island>
   );
 }

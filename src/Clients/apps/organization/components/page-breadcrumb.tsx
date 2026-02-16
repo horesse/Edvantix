@@ -27,49 +27,88 @@ export function PageBreadcrumb({ items = [], currentPage }: PageBreadcrumbProps)
   const displayedItems = allItems.length > 3 ? [allItems[0]!, ...allItems.slice(-2)] : allItems;
   const hasEllipsis = allItems.length > 3;
 
+  // На мобильных показываем только последний элемент
+  const lastItem = allItems[allItems.length - 1];
+  const showMobileCompact = allItems.length > 0;
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/">
-              <Home className="size-4" />
-              <span className="sr-only">Главная</span>
-            </Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        {hasEllipsis && (
-          <>
-            <BreadcrumbSeparator>
-              <ChevronRight />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <BreadcrumbEllipsis />
-            </BreadcrumbItem>
-          </>
-        )}
-        {displayedItems.map((item) => (
-          <span key={item.href} className="contents">
-            <BreadcrumbSeparator>
-              <ChevronRight />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href={item.href}>{item.label}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </span>
-        ))}
-        {currentPage && (
-          <>
-            <BreadcrumbSeparator>
-              <ChevronRight />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <BreadcrumbPage>{currentPage}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </>
-        )}
+        {/* Desktop версия */}
+        <div className="hidden md:contents">
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">
+                <Home className="size-4" />
+                <span className="sr-only">Главная</span>
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          {hasEllipsis && (
+            <>
+              <BreadcrumbSeparator>
+                <ChevronRight />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbEllipsis />
+              </BreadcrumbItem>
+            </>
+          )}
+          {displayedItems.map((item) => (
+            <span key={item.href} className="contents">
+              <BreadcrumbSeparator>
+                <ChevronRight />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href={item.href}>{item.label}</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </span>
+          ))}
+          {currentPage && (
+            <>
+              <BreadcrumbSeparator>
+                <ChevronRight />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentPage}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </>
+          )}
+        </div>
+
+        {/* Mobile версия - только последний элемент */}
+        <div className="md:hidden contents">
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">
+                <Home className="size-4" />
+                <span className="sr-only">Главная</span>
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          {showMobileCompact && (
+            <>
+              <BreadcrumbSeparator>
+                <ChevronRight />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbEllipsis />
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>
+                <ChevronRight />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                {currentPage ? (
+                  <BreadcrumbPage>{currentPage}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbPage>{lastItem?.label}</BreadcrumbPage>
+                )}
+              </BreadcrumbItem>
+            </>
+          )}
+        </div>
       </BreadcrumbList>
     </Breadcrumb>
   );
@@ -80,21 +119,34 @@ function generateBreadcrumbItems(pathname: string): { label: string; href: strin
   const items: { label: string; href: string }[] = [];
 
   const routeLabels: Record<string, string> = {
-    "org-settings": "Настройки организации",
-    "members": "Участники",
-    "groups": "Группы",
-    "invitations": "Приглашения",
-    "contacts": "Контакты",
-    "settings": "Настройки",
-    "profile": "Профиль",
-    "career": "Карьера",
+    organization: "Организация",
+    members: "Участники",
+    groups: "Группы",
+    invitations: "Приглашения",
+    contacts: "Контакты",
+    profile: "Профиль",
+    career: "Карьера",
     "create-organization": "Создать организацию",
   };
 
   let currentPath = "";
-  for (const segment of segments) {
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
+    if (!segment) continue;
+
     currentPath += `/${segment}`;
-    const label = routeLabels[segment] ?? segment;
+
+    // Специальная логика для "settings"
+    let label: string;
+    if (segment === "settings") {
+      // Если это /organization/settings - "Настройки организации"
+      // Если это просто /settings - "Настройки"
+      const isOrgSettings = segments[i - 1] === "organization";
+      label = isOrgSettings ? "Настройки организации" : "Настройки";
+    } else {
+      label = routeLabels[segment] ?? segment;
+    }
+
     items.push({ label, href: currentPath });
   }
 

@@ -87,11 +87,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <OrganizationSelector />
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex flex-col gap-4">
+          <Link href="/" className="flex items-center gap-2 px-2">
+            <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <Building className="size-5" />
+            </div>
+            <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">
+              Edvantix
+            </span>
+          </Link>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <OrganizationSelector />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

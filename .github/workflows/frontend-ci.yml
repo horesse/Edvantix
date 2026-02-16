@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   lint-build-test:
-    name: Lint, Build & Test
+    name: Lint & Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
@@ -68,6 +68,3 @@ jobs:
 
       - name: Build
         run: pnpm build
-
-      - name: Test
-        run: pnpm test

@@ -10,6 +10,7 @@ public static class Services
     public static readonly string System = nameof(System).ToLowerInvariant();
     public static readonly string Profile = nameof(Profile).ToLowerInvariant();
     public static readonly string Subscriptions = nameof(Subscriptions).ToLowerInvariant();
+    public static readonly string Blog = nameof(Blog).ToLowerInvariant();
 
     public static string ToClientName(string application, string? suffix = null)
     {

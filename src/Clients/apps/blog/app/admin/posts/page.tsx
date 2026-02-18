@@ -1,0 +1,226 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+
+import { format } from "date-fns";
+import {
+  Archive,
+  Edit,
+  Eye,
+  Loader2,
+  MoreHorizontal,
+  Plus,
+  Send,
+} from "lucide-react";
+import { toast } from "sonner";
+
+import { Badge } from "@workspace/ui/components/badge";
+import { Button } from "@workspace/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@workspace/ui/components/table";
+import useGetPosts from "@workspace/api-hooks/blog/useGetPosts";
+import usePublishPost from "@workspace/api-hooks/blog/usePublishPost";
+import useDeletePost from "@workspace/api-hooks/blog/useDeletePost";
+import { PostType } from "@workspace/types/blog";
+
+const TYPE_LABELS: Record<PostType, string> = {
+  [PostType.News]: "News",
+  [PostType.Changelog]: "Changelog",
+};
+
+export default function AdminPostsPage() {
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useGetPosts({ pageIndex: page, pageSize: 20 });
+  const { mutate: publish, isPending: isPublishing } = usePublishPost();
+  const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
+
+  const handlePublish = (postId: number) => {
+    publish(
+      { postId },
+      {
+        onSuccess: () => toast.success("Post published successfully"),
+        onError: () => toast.error("Failed to publish post"),
+      },
+    );
+  };
+
+  const handleDelete = (postId: number) => {
+    if (!confirm("Archive this post? It will no longer be visible publicly."))
+      return;
+    deletePost(postId, {
+      onSuccess: () => toast.success("Post archived"),
+      onError: () => toast.error("Failed to archive post"),
+    });
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Posts</h1>
+          <p className="text-muted-foreground mt-1">
+            Manage all blog posts.
+          </p>
+        </div>
+        <Button asChild size="sm" className="gap-2">
+          <Link href="/admin/posts/new">
+            <Plus className="h-4 w-4" />
+            New Post
+          </Link>
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <div className="space-y-3">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-14 w-full rounded-md" />
+          ))}
+        </div>
+      ) : (
+        <>
+          <div className="rounded-xl border border-border overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead className="hidden sm:table-cell">Type</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Published
+                  </TableHead>
+                  <TableHead className="hidden lg:table-cell">Likes</TableHead>
+                  <TableHead className="w-12" />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data?.items.map((post) => (
+                  <TableRow key={post.id}>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="font-medium line-clamp-1">
+                          {post.title}
+                        </span>
+                        <span className="text-xs text-muted-foreground font-mono">
+                          /{post.slug}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      <Badge variant="outline" className="text-xs">
+                        {TYPE_LABELS[post.type]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+                      {post.publishedAt
+                        ? format(new Date(post.publishedAt), "MMM d, yyyy")
+                        : "—"}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">
+                      {post.likesCount}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild>
+                            <Link
+                              href={`/${post.slug}`}
+                              target="_blank"
+                              className="flex items-center gap-2"
+                            >
+                              <Eye className="h-4 w-4" />
+                              View
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link
+                              href={`/admin/posts/${post.id}/edit?slug=${post.slug}`}
+                              className="flex items-center gap-2"
+                            >
+                              <Edit className="h-4 w-4" />
+                              Edit
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handlePublish(post.id)}
+                            disabled={isPublishing}
+                            className="flex items-center gap-2"
+                          >
+                            {isPublishing ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Send className="h-4 w-4" />
+                            )}
+                            Publish now
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(post.id)}
+                            disabled={isDeleting}
+                            className="flex items-center gap-2 text-destructive focus:text-destructive"
+                          >
+                            <Archive className="h-4 w-4" />
+                            Archive
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Pagination */}
+          {data && data.totalPages > 1 && (
+            <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
+              <span>
+                {data.totalItems} total posts
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!data.hasPreviousPage}
+                  onClick={() => setPage((p) => p - 1)}
+                >
+                  Previous
+                </Button>
+                <span className="flex items-center px-3">
+                  {page} / {data.totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!data.hasNextPage}
+                  onClick={() => setPage((p) => p + 1)}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}

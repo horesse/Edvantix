@@ -165,6 +165,20 @@ var front = turbo
 
 front.WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Http.Schemes.Http));
 
+var blogFront = turbo
+    .AddApp(Clients.BlogFront, Clients.BlogTurboApp)
+    .WithOtlpExporter()
+    .WithHttpEndpoint(env: "PORT")
+    .WithMappedEndpointPort()
+    .WithHttpHealthCheck()
+    .WithExternalHttpEndpoints()
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
+    .WithKeycloak(keycloak)
+    .WaitFor(gateway);
+
+blogFront.WithEnvironment("NEXT_PUBLIC_APP_URL", blogFront.GetEndpoint(Http.Schemes.Http));
+
 if (builder.ExecutionContext.IsRunMode)
 {
     builder

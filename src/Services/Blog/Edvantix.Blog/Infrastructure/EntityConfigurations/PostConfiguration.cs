@@ -61,7 +61,6 @@ public sealed class PostConfiguration : IEntityTypeConfiguration<Post>
             .UsingEntity(j =>
             {
                 j.ToTable("post_categories");
-                j.HasIndex("PostsId", "CategoriesId").IsUnique();
             });
 
         // Many-to-many: Post <-> Tag через таблицу post_tags
@@ -71,7 +70,6 @@ public sealed class PostConfiguration : IEntityTypeConfiguration<Post>
             .UsingEntity(j =>
             {
                 j.ToTable("post_tags");
-                j.HasIndex("PostsId", "TagsId").IsUnique();
             });
 
         // One-to-many: Post -> PostLike
@@ -86,11 +84,11 @@ public sealed class PostConfiguration : IEntityTypeConfiguration<Post>
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(nameof(Post.Categories))!
+            .Metadata.FindSkipNavigation(nameof(Post.Categories))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
-            .Metadata.FindNavigation(nameof(Post.Tags))!
+            .Metadata.FindSkipNavigation(nameof(Post.Tags))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

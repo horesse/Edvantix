@@ -16,8 +16,8 @@ public sealed class Category() : LongIdentity, IAggregateRoot
     public Category(string name, string slug, string? description = null)
         : this()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
         Name = name;
         Slug = slug;

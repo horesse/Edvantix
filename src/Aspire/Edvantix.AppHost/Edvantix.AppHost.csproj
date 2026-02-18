@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\Services\System\Edvantix.System\Edvantix.System.csproj" />
     <ProjectReference Include="..\..\Services\Profile\Edvantix.ProfileService\Edvantix.ProfileService.csproj" />
     <ProjectReference Include="..\..\Services\Subscriptions\Edvantix.Subscriptions\Edvantix.Subscriptions.csproj" />
+    <ProjectReference Include="..\..\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
   </ItemGroup>
   <ItemGroup Label="Integrations">
     <ProjectReference

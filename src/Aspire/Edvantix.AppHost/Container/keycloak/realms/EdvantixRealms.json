@@ -350,6 +350,16 @@
           "attributes": {}
         }
       ],
+      "${CLIENT_BLOG_ID}": [
+        {
+          "id": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "b1c2d3e4-8f9a-4b0c-1d2e-3f4a5b6c7d8e",
+          "attributes": {}
+        }
+      ],
       "${CLIENT_ENTITYHUB_ID}": [
         {
           "id": "80ca6b7d-6531-4459-8a70-a9053567f5c5",
@@ -573,6 +583,27 @@
       ],
       "clientRoles": {
         "${CLIENT_DATAVAULT_ID}": [
+          "uma_protection"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
+      "username": "service-account-${CLIENT_BLOG_ID}",
+      "emailVerified": false,
+      "createdTimestamp": 1748888580944,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "${CLIENT_BLOG_ID}",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-${REALM_NAME}"
+      ],
+      "clientRoles": {
+        "${CLIENT_BLOG_ID}": [
           "uma_protection"
         ]
       },
@@ -1588,6 +1619,84 @@
         "offline_access",
         "microprofile-jwt"
       ]
+    },
+    {
+      "id": "b1c2d3e4-8f9a-4b0c-1d2e-3f4a5b6c7d8e",
+      "clientId": "${CLIENT_BLOG_ID}",
+      "name": "${CLIENT_BLOG_NAME}",
+      "description": "",
+      "rootUrl": "${CLIENT_BLOG_URL}",
+      "adminUrl": "${CLIENT_BLOG_URL_CONTAINERHOST}",
+      "baseUrl": "/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${CLIENT_BLOG_SECRET}",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "request.object.signature.alg": "any",
+        "frontchannel.logout.session.required": "true",
+        "post.logout.redirect.uris": "*",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "require.pushed.authorization.requests": "false",
+        "request.object.encryption.enc": "any",
+        "pkce.code.challenge.method": "S256",
+        "client.secret.creation.time": "1748885122",
+        "request.object.encryption.alg": "any",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
+        "standard.token.exchange.enabled": "false",
+        "login_theme": "${THEME_NAME}",
+        "client.use.lightweight.access.token.enabled": "false",
+        "request.object.required": "not required",
+        "access.token.header.type.rfc9068": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "acr.loa.map": "{}",
+        "display.on.consent.screen": "false",
+        "token.response.type.bearer.lower-case": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "service_account",
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "${CLIENT_BLOG_ID}_read",
+        "${CLIENT_BLOG_ID}_write",
+        "address",
+        "phone",
+        "organization",
+        "offline_access",
+        "microprofile-jwt"
+      ]
     }
   ],
   "clientScopes": [
@@ -2076,6 +2185,30 @@
       "id": "39e7d424-6a58-4507-90a2-3887bd2952b5",
       "name": "${CLIENT_DATAVAULT_ID}_write",
       "description": "Write for ${CLIENT_DATAVAULT_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "e1f2a3b4-9c0d-4e1f-2a3b-4c5d6e7f8a9b",
+      "name": "${CLIENT_BLOG_ID}_read",
+      "description": "Read for ${CLIENT_BLOG_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "f2a3b4c5-0d1e-4f2a-3b4c-5d6e7f8a9b0c",
+      "name": "${CLIENT_BLOG_ID}_write",
+      "description": "Write for ${CLIENT_BLOG_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",

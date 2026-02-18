@@ -57,6 +57,7 @@ var organizationDb = postgres.AddDatabase(Components.Database.Organization);
 var systemDb = postgres.AddDatabase(Components.Database.System);
 var profileDb = postgres.AddDatabase(Components.Database.Profile);
 var subscriptionDb = postgres.AddDatabase(Components.Database.Subscription);
+var blogDb = postgres.AddDatabase(Components.Database.Blog);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -121,6 +122,16 @@ var subscriptionsApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+var blogApi = builder
+    .AddProject<Edvantix_Blog>(Services.Blog)
+    .WithReference(blogDb)
+    .WaitFor(blogDb)
+    .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
+    .WithReference(profileApi)
+    .WaitFor(profileApi)
+    .WithFriendlyUrls();
+
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(dataVaultApi)
@@ -129,6 +140,7 @@ var gateway = builder
     .WithService(systemApi, true)
     .WithService(profileApi, true)
     .WithService(subscriptionsApi, true)
+    .WithService(blogApi, true)
     .Build();
 
 var turbo = builder
@@ -162,7 +174,8 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(organizationApi)
         .WithOpenAPI(systemApi)
         .WithOpenAPI(profileApi)
-        .WithOpenAPI(subscriptionsApi);
+        .WithOpenAPI(subscriptionsApi)
+        .WithOpenAPI(blogApi);
 }
 
 await builder.Build().RunAsync();

@@ -16,6 +16,7 @@ import {
 } from "@workspace/ui/components/dropdown-menu";
 
 import { signIn, signOut, useSession } from "@/lib/auth-client";
+import { useIsAdmin } from "@/hooks/use-realm-roles";
 
 import { ThemeToggle } from "./theme-toggle";
 
@@ -28,14 +29,7 @@ export function BlogHeader() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const isAdmin =
-    (session?.user as { role?: string })?.role === "admin" ||
-    (
-      session?.user as {
-        realmRoles?: string[];
-      }
-    )?.realmRoles?.includes("admin");
+  const isAdmin = useIsAdmin();
 
   const handleSignIn = () => {
     void signIn.social({ provider: "keycloak" });

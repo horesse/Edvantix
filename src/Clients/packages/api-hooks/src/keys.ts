@@ -1,6 +1,7 @@
 ﻿export const blogKeys = {
   all: ["blog"] as const,
   posts: (query?: unknown) => [...blogKeys.all, "posts", query] as const,
+  adminPosts: (query?: unknown) => [...blogKeys.all, "admin", "posts", query] as const,
   post: (slug: string) => [...blogKeys.all, "posts", slug] as const,
   categories: () => [...blogKeys.all, "categories"] as const,
   tags: () => [...blogKeys.all, "tags"] as const,

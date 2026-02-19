@@ -21,6 +21,9 @@ public sealed class PostSummaryModel
     /// <summary>Краткое описание поста.</summary>
     public string? Summary { get; set; }
 
+    /// <summary>Статус поста.</summary>
+    public PostStatus Status { get; set; }
+
     /// <summary>Тип контента: News или Changelog.</summary>
     public PostType Type { get; set; }
 

@@ -9,12 +9,14 @@ using Edvantix.Constants.Core;
 using Edvantix.SharedKernel.Results;
 using MediatR;
 
-namespace Edvantix.Blog.Features.PostFeature.Features.GetPosts;
+namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 
 /// <summary>
-/// Запрос для получения пагинированного списка опубликованных постов с фильтрацией.
+/// Административный запрос для получения всех постов с любым статусом.
+/// В отличие от публичного GetPostsQuery не ограничивает выборку по статусу Published.
 /// </summary>
-public sealed record GetPostsQuery(
+public sealed record GetAdminPostsQuery(
+    [property: Description("Фильтр по статусу поста")] PostStatus? Status = null,
     [property: Description("Фильтр по типу контента")] PostType? Type = null,
     [property: Description("Фильтр по идентификатору категории")] long? CategoryId = null,
     [property: Description("Фильтр по идентификатору тега")] long? TagId = null,
@@ -28,19 +30,19 @@ public sealed record GetPostsQuery(
 ) : IRequest<PagedResult<PostSummaryModel>>;
 
 /// <summary>
-/// Обработчик запроса на получение списка постов.
-/// Возвращает только опубликованные посты, обогащённые данными автора из Profile.
+/// Обработчик административного запроса на получение постов.
+/// Возвращает посты любого статуса, обогащённые данными автора из Profile.
 /// </summary>
-public sealed class GetPostsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetPostsQuery, PagedResult<PostSummaryModel>>
+public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
+    : IRequestHandler<GetAdminPostsQuery, PagedResult<PostSummaryModel>>
 {
     public async Task<PagedResult<PostSummaryModel>> Handle(
-        GetPostsQuery request,
+        GetAdminPostsQuery request,
         CancellationToken cancellationToken
     )
     {
         var spec = new PostSpecification(
-            status: PostStatus.Published,
+            status: request.Status,
             type: request.Type,
             categoryId: request.CategoryId,
             tagId: request.TagId,

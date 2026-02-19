@@ -24,6 +24,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import {
   Table,
@@ -33,19 +40,44 @@ import {
   TableHeader,
   TableRow,
 } from "@workspace/ui/components/table";
-import useGetPosts from "@workspace/api-hooks/blog/useGetPosts";
+import useGetAdminPosts from "@workspace/api-hooks/blog/useGetAdminPosts";
 import usePublishPost from "@workspace/api-hooks/blog/usePublishPost";
 import useDeletePost from "@workspace/api-hooks/blog/useDeletePost";
-import { PostType } from "@workspace/types/blog";
+import { PostStatus, PostType } from "@workspace/types/blog";
 
 const TYPE_LABELS: Record<PostType, string> = {
   [PostType.News]: "News",
   [PostType.Changelog]: "Changelog",
 };
 
+const STATUS_LABELS: Record<PostStatus, string> = {
+  [PostStatus.Draft]: "Draft",
+  [PostStatus.Scheduled]: "Scheduled",
+  [PostStatus.Published]: "Published",
+  [PostStatus.Archived]: "Archived",
+};
+
+const STATUS_VARIANTS: Record<
+  PostStatus,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  [PostStatus.Draft]: "secondary",
+  [PostStatus.Scheduled]: "outline",
+  [PostStatus.Published]: "default",
+  [PostStatus.Archived]: "destructive",
+};
+
 export default function AdminPostsPage() {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useGetPosts({ pageIndex: page, pageSize: 20 });
+  const [statusFilter, setStatusFilter] = useState<PostStatus | undefined>(
+    undefined,
+  );
+
+  const { data, isLoading } = useGetAdminPosts({
+    pageIndex: page,
+    pageSize: 20,
+    status: statusFilter,
+  });
   const { mutate: publish, isPending: isPublishing } = usePublishPost();
   const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
 
@@ -68,14 +100,17 @@ export default function AdminPostsPage() {
     });
   };
 
+  const handleStatusFilter = (value: string) => {
+    setPage(1);
+    setStatusFilter(value === "all" ? undefined : (Number(value) as PostStatus));
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Posts</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage all blog posts.
-          </p>
+          <p className="text-muted-foreground mt-1">Manage all blog posts.</p>
         </div>
         <Button asChild size="sm" className="gap-2">
           <Link href="/admin/posts/new">
@@ -83,6 +118,21 @@ export default function AdminPostsPage() {
             New Post
           </Link>
         </Button>
+      </div>
+
+      <div className="flex gap-3 mb-4">
+        <Select defaultValue="all" onValueChange={handleStatusFilter}>
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="All statuses" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value={String(PostStatus.Draft)}>Draft</SelectItem>
+            <SelectItem value={String(PostStatus.Scheduled)}>Scheduled</SelectItem>
+            <SelectItem value={String(PostStatus.Published)}>Published</SelectItem>
+            <SelectItem value={String(PostStatus.Archived)}>Archived</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {isLoading ? (
@@ -98,6 +148,7 @@ export default function AdminPostsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
+                  <TableHead className="hidden sm:table-cell">Status</TableHead>
                   <TableHead className="hidden sm:table-cell">Type</TableHead>
                   <TableHead className="hidden md:table-cell">
                     Published
@@ -120,6 +171,14 @@ export default function AdminPostsPage() {
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
+                      <Badge
+                        variant={STATUS_VARIANTS[post.status]}
+                        className="text-xs"
+                      >
+                        {STATUS_LABELS[post.status]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <Badge variant="outline" className="text-xs">
                         {TYPE_LABELS[post.type]}
                       </Badge>
@@ -135,7 +194,11 @@ export default function AdminPostsPage() {
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                          >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -162,7 +225,10 @@ export default function AdminPostsPage() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handlePublish(post.id)}
-                            disabled={isPublishing}
+                            disabled={
+                              isPublishing ||
+                              post.status === PostStatus.Published
+                            }
                             className="flex items-center gap-2"
                           >
                             {isPublishing ? (
@@ -175,7 +241,10 @@ export default function AdminPostsPage() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handleDelete(post.id)}
-                            disabled={isDeleting}
+                            disabled={
+                              isDeleting ||
+                              post.status === PostStatus.Archived
+                            }
                             className="flex items-center gap-2 text-destructive focus:text-destructive"
                           >
                             <Archive className="h-4 w-4" />
@@ -193,9 +262,7 @@ export default function AdminPostsPage() {
           {/* Pagination */}
           {data && data.totalPages > 1 && (
             <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
-              <span>
-                {data.totalItems} total posts
-              </span>
+              <span>{data.totalItems} total posts</span>
               <div className="flex gap-2">
                 <Button
                   variant="outline"

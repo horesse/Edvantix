@@ -3,6 +3,7 @@ import type {
   CreateCategoryRequest,
   CreatePostRequest,
   CreateTagRequest,
+  GetAdminPostsQuery,
   GetPostsQuery,
   PostModel,
   PostSummaryModel,
@@ -58,6 +59,17 @@ class BlogApiClient {
   }
 
   // --- Posts (admin) ---
+
+  /** Returns paginated list of all posts (any status). Requires admin role. */
+  public async getAdminPosts(
+    query?: GetAdminPostsQuery,
+  ): Promise<PagedResult<PostSummaryModel>> {
+    const response = await this.client.get<PagedResult<PostSummaryModel>>(
+      `${BASE}/admin/posts`,
+      { params: query },
+    );
+    return response.data;
+  }
 
   /** Creates a new draft post. Requires admin role. */
   public async createPost(request: CreatePostRequest): Promise<number> {

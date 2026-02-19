@@ -38,6 +38,7 @@ export type PostSummaryModel = {
   title: string;
   slug: string;
   summary?: string;
+  status: PostStatus;
   type: PostType;
   isPremium: boolean;
   coverImageUrl?: string;
@@ -91,6 +92,16 @@ export type CreateTagRequest = {
 export type UpdateTagRequest = CreateTagRequest;
 
 export type GetPostsQuery = {
+  type?: PostType;
+  categoryId?: number;
+  tagId?: number;
+  search?: string;
+  pageIndex?: number;
+  pageSize?: number;
+};
+
+export type GetAdminPostsQuery = {
+  status?: PostStatus;
   type?: PostType;
   categoryId?: number;
   tagId?: number;

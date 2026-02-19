@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Calendar, Clock, Heart, Lock } from "lucide-react";
+import { ArrowRight, Calendar, Clock, Heart, Lock } from "lucide-react";
 
 import { Badge } from "@workspace/ui/components/badge";
 import type { PostSummaryModel } from "@workspace/types/blog";
@@ -31,17 +31,22 @@ export function PostCard({ post, featured = false }: PostCardProps) {
   }
 
   return (
-    <article className="group flex flex-col rounded-xl border border-border bg-card overflow-hidden hover:border-primary/30 transition-all duration-200 hover:shadow-md">
+    <article className="group relative flex flex-col h-full rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/30">
+      {/* Gradient accent line that appears on hover */}
+      <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
       {post.coverImageUrl && (
-        <Link href={`/${post.slug}`} className="block overflow-hidden">
+        <Link href={`/${post.slug}`} className="block overflow-hidden shrink-0">
           <div className="relative aspect-[16/9] overflow-hidden">
             <Image
               src={post.coverImageUrl}
               alt={post.title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
+            {/* Subtle overlay on hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
         </Link>
       )}
@@ -64,7 +69,7 @@ export function PostCard({ post, featured = false }: PostCardProps) {
 
         {/* Title */}
         <Link href={`/${post.slug}`}>
-          <h2 className="text-base font-semibold leading-snug text-card-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+          <h2 className="text-base font-semibold leading-snug text-card-foreground group-hover:text-primary transition-colors duration-200 line-clamp-2 mb-2">
             {post.title}
           </h2>
         </Link>
@@ -76,12 +81,15 @@ export function PostCard({ post, featured = false }: PostCardProps) {
           </p>
         )}
 
-        {/* Categories */}
+        {/* Category pills */}
         {post.categories.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-4">
             {post.categories.slice(0, 3).map((cat) => (
               <Link key={cat.id} href={`/category/${cat.slug}`}>
-                <Badge variant="secondary" className="text-xs cursor-pointer hover:bg-accent">
+                <Badge
+                  variant="secondary"
+                  className="text-xs cursor-pointer hover:bg-accent transition-colors"
+                >
                   {cat.name}
                 </Badge>
               </Link>
@@ -89,7 +97,7 @@ export function PostCard({ post, featured = false }: PostCardProps) {
           </div>
         )}
 
-        {/* Meta */}
+        {/* Meta row */}
         <div className="flex items-center gap-3 text-xs text-muted-foreground mt-auto pt-3 border-t border-border">
           {post.publishedAt && (
             <span className="flex items-center gap-1">
@@ -113,40 +121,45 @@ export function PostCard({ post, featured = false }: PostCardProps) {
 
 function FeaturedPostCard({ post }: { post: PostSummaryModel }) {
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-border bg-card">
+    <article className="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30">
+      {/* Animated gradient background */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-chart-2/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
       <div className="flex flex-col lg:flex-row">
-        {/* Image */}
+        {/* Cover image */}
         {post.coverImageUrl && (
           <Link
             href={`/${post.slug}`}
-            className="block relative lg:w-1/2 aspect-[16/9] lg:aspect-auto overflow-hidden"
+            className="block relative lg:w-1/2 aspect-[16/9] lg:aspect-auto overflow-hidden shrink-0"
           >
             <Image
               src={post.coverImageUrl}
               alt={post.title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-card/20" />
           </Link>
         )}
 
         {/* Content */}
-        <div className="flex flex-col justify-center p-6 lg:p-10 lg:w-1/2">
+        <div className="relative flex flex-col justify-center p-6 lg:p-10 lg:w-1/2">
           <div className="flex items-center gap-2 mb-4">
             <span
               className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${TYPE_COLORS[post.type]}`}
             >
               {TYPE_LABELS[post.type]}
             </span>
-            <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground font-medium uppercase tracking-wider">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary inline-block animate-pulse" />
               Featured
             </span>
           </div>
 
           <Link href={`/${post.slug}`}>
-            <h1 className="text-2xl lg:text-3xl font-bold leading-tight text-card-foreground group-hover:text-primary transition-colors mb-4">
+            <h1 className="text-2xl lg:text-3xl font-bold leading-tight text-card-foreground group-hover:text-primary transition-colors duration-200 mb-4">
               {post.title}
             </h1>
           </Link>
@@ -161,7 +174,10 @@ function FeaturedPostCard({ post }: { post: PostSummaryModel }) {
             <div className="flex flex-wrap gap-2 mb-6">
               {post.categories.map((cat) => (
                 <Link key={cat.id} href={`/category/${cat.slug}`}>
-                  <Badge variant="outline" className="cursor-pointer hover:bg-accent">
+                  <Badge
+                    variant="outline"
+                    className="cursor-pointer hover:bg-accent transition-colors"
+                  >
                     {cat.name}
                   </Badge>
                 </Link>
@@ -171,9 +187,7 @@ function FeaturedPostCard({ post }: { post: PostSummaryModel }) {
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             {post.author && (
-              <span className="font-medium text-foreground">
-                {post.author.fullName}
-              </span>
+              <span className="font-medium text-foreground">{post.author.fullName}</span>
             )}
             {post.publishedAt && (
               <span className="flex items-center gap-1">
@@ -181,10 +195,13 @@ function FeaturedPostCard({ post }: { post: PostSummaryModel }) {
                 {formatDate(post.publishedAt)}
               </span>
             )}
-            <span className="flex items-center gap-1 ml-auto">
-              <Heart className="h-3.5 w-3.5" />
-              {post.likesCount}
-            </span>
+            <Link
+              href={`/${post.slug}`}
+              className="ml-auto inline-flex items-center gap-1.5 text-primary font-medium hover:gap-2.5 transition-all duration-200 group/link"
+            >
+              Read more
+              <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5" />
+            </Link>
           </div>
         </div>
       </div>

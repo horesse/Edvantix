@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Edit, Loader2, Plus, Trash2 } from "lucide-react";
+import { Edit, Hash, Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@workspace/ui/components/button";
@@ -116,11 +116,17 @@ export default function AdminCategoriesPage() {
 
   return (
     <div>
+      {/* ── Page header ── */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Categories</h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-sm">
             Organize posts into categories.
+            {!isLoading && (
+              <span className="ml-2 text-xs bg-muted rounded-full px-2 py-0.5 font-mono">
+                {categories.length}
+              </span>
+            )}
           </p>
         </div>
 
@@ -149,20 +155,21 @@ export default function AdminCategoriesPage() {
         </Dialog>
       </div>
 
+      {/* ── Table ── */}
       {isLoading ? (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-14 w-full rounded-md" />
+            <Skeleton key={i} className="h-14 w-full rounded-lg" />
           ))}
         </div>
       ) : (
         <div className="rounded-xl border border-border overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead className="hidden sm:table-cell">Slug</TableHead>
-                <TableHead className="hidden md:table-cell">Description</TableHead>
+              <TableRow className="bg-muted/40">
+                <TableHead className="font-semibold">Name</TableHead>
+                <TableHead className="hidden sm:table-cell font-semibold">Slug</TableHead>
+                <TableHead className="hidden md:table-cell font-semibold">Description</TableHead>
                 <TableHead className="w-24" />
               </TableRow>
             </TableHeader>
@@ -171,20 +178,36 @@ export default function AdminCategoriesPage() {
                 <TableRow>
                   <TableCell
                     colSpan={4}
-                    className="text-center text-muted-foreground py-10"
+                    className="py-16 text-center"
                   >
-                    No categories yet. Create one to get started.
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                        <Hash className="h-5 w-5 text-muted-foreground" />
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        No categories yet. Create one to get started.
+                      </p>
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : (
                 categories.map((cat) => (
-                  <TableRow key={cat.id}>
-                    <TableCell className="font-medium">{cat.name}</TableCell>
-                    <TableCell className="hidden sm:table-cell font-mono text-xs text-muted-foreground">
-                      /{cat.slug}
+                  <TableRow key={cat.id} className="hover:bg-muted/30 transition-colors">
+                    <TableCell>
+                      <div className="flex items-center gap-2.5">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                          <Hash className="h-3.5 w-3.5 text-primary" />
+                        </div>
+                        <span className="font-medium">{cat.name}</span>
+                      </div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground line-clamp-1">
-                      {cat.description ?? "—"}
+                    <TableCell className="hidden sm:table-cell">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+                        /{cat.slug}
+                      </code>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+                      <span className="line-clamp-1">{cat.description ?? "—"}</span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1 justify-end">
@@ -196,10 +219,10 @@ export default function AdminCategoriesPage() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8"
+                              className="h-8 w-8 rounded-lg"
                               onClick={() => openEdit(cat)}
                             >
-                              <Edit className="h-4 w-4" />
+                              <Edit className="h-3.5 w-3.5" />
                             </Button>
                           </DialogTrigger>
                           <DialogContent>
@@ -228,11 +251,11 @@ export default function AdminCategoriesPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-destructive hover:text-destructive"
+                          className="h-8 w-8 rounded-lg text-destructive/60 hover:text-destructive hover:bg-destructive/10"
                           onClick={() => setDeleteTarget(cat)}
                           disabled={isDeleting}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                     </TableCell>
@@ -244,6 +267,7 @@ export default function AdminCategoriesPage() {
         </div>
       )}
 
+      {/* Delete confirmation */}
       <Dialog
         open={deleteTarget !== null}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
@@ -252,7 +276,9 @@ export default function AdminCategoriesPage() {
           <DialogHeader>
             <DialogTitle>Delete category</DialogTitle>
             <DialogDescription>
-              Delete category <span className="font-medium">"{deleteTarget?.name}"</span>? This cannot be undone.
+              Delete{" "}
+              <span className="font-medium">"{deleteTarget?.name}"</span>? This
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -297,14 +323,16 @@ function CategoryForm({
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="cat-slug">Slug *</Label>
-        <Input
-          id="cat-slug"
-          placeholder="engineering"
-          value={form.slug}
-          onChange={(e) =>
-            onChange({ ...form, slug: e.target.value })
-          }
-        />
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">/</span>
+          <Input
+            id="cat-slug"
+            placeholder="engineering"
+            className="font-mono text-sm"
+            value={form.slug}
+            onChange={(e) => onChange({ ...form, slug: e.target.value })}
+          />
+        </div>
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="cat-desc">Description</Label>
@@ -313,9 +341,7 @@ function CategoryForm({
           placeholder="Brief description…"
           rows={3}
           value={form.description}
-          onChange={(e) =>
-            onChange({ ...form, description: e.target.value })
-          }
+          onChange={(e) => onChange({ ...form, description: e.target.value })}
         />
       </div>
     </div>

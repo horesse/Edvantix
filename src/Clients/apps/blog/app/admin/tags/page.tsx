@@ -2,21 +2,18 @@
 
 import { useState } from "react";
 
-import { Edit, Loader2, Plus, Trash2 } from "lucide-react";
+import { Edit, Loader2, Plus, Tag, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@workspace/ui/components/dialog";
-import {
-  DialogDescription,
 } from "@workspace/ui/components/dialog";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
@@ -105,11 +102,17 @@ export default function AdminTagsPage() {
 
   return (
     <div>
+      {/* ── Page header ── */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Tags</h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-sm">
             Label posts for better discoverability.
+            {!isLoading && (
+              <span className="ml-2 text-xs bg-muted rounded-full px-2 py-0.5 font-mono">
+                {tags.length}
+              </span>
+            )}
           </p>
         </div>
 
@@ -130,9 +133,7 @@ export default function AdminTagsPage() {
                 onClick={handleCreate}
                 disabled={isCreating || !form.name || !form.slug}
               >
-                {isCreating && (
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                )}
+                {isCreating && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                 Create
               </Button>
             </DialogFooter>
@@ -140,36 +141,46 @@ export default function AdminTagsPage() {
         </Dialog>
       </div>
 
+      {/* ── Tag cloud ── */}
       {isLoading ? (
         <div className="flex flex-wrap gap-3">
           {Array.from({ length: 10 }).map((_, i) => (
-            <Skeleton key={i} className="h-8 w-20 rounded-full" />
+            <Skeleton key={i} className="h-10 w-24 rounded-full" />
           ))}
         </div>
       ) : tags.length === 0 ? (
-        <div className="rounded-xl border border-border py-16 text-center text-muted-foreground">
-          No tags yet. Create one to get started.
+        <div className="rounded-xl border border-border py-16 text-center">
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+              <Tag className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              No tags yet. Create one to get started.
+            </p>
+          </div>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2.5">
           {tags.map((tag) => (
             <div
               key={tag.id}
-              className="group flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm"
+              className="group flex items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-2 text-sm transition-colors hover:border-primary/30 hover:bg-primary/5"
             >
-              <span className="text-muted-foreground mr-0.5">#</span>
-              <span className="font-medium">{tag.name}</span>
-              <span className="ml-2 hidden group-hover:flex items-center gap-1">
+              <span className="text-primary/60 font-medium">#</span>
+              <span className="font-medium text-foreground">{tag.name}</span>
+              {/* Action buttons — always visible, not hover-only */}
+              <div className="ml-1.5 flex items-center gap-0.5 border-l border-border pl-1.5">
                 <Dialog
                   open={editTarget?.id === tag.id}
                   onOpenChange={(open) => !open && setEditTarget(null)}
                 >
                   <DialogTrigger asChild>
                     <button
-                      className="text-muted-foreground hover:text-foreground transition-colors"
+                      className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground/60 hover:text-foreground transition-colors"
                       onClick={() => openEdit(tag)}
+                      title="Edit tag"
                     >
-                      <Edit className="h-3.5 w-3.5" />
+                      <Edit className="h-3 w-3" />
                     </button>
                   </DialogTrigger>
                   <DialogContent>
@@ -195,24 +206,26 @@ export default function AdminTagsPage() {
                   </DialogContent>
                 </Dialog>
                 <button
-                  className="text-destructive/70 hover:text-destructive transition-colors"
+                  className="flex h-5 w-5 items-center justify-center rounded text-destructive/50 hover:text-destructive transition-colors"
                   onClick={() => setDeleteTarget(tag)}
                   disabled={isDeleting}
+                  title="Delete tag"
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
+                  <Trash2 className="h-3 w-3" />
                 </button>
-              </span>
+              </div>
             </div>
           ))}
         </div>
       )}
 
       {tags.length > 0 && (
-        <p className="mt-4 text-xs text-muted-foreground">
-          {tags.length} tag{tags.length !== 1 ? "s" : ""} total. Hover a tag to edit or delete.
+        <p className="mt-5 text-xs text-muted-foreground">
+          {tags.length} tag{tags.length !== 1 ? "s" : ""} total
         </p>
       )}
 
+      {/* Delete confirmation */}
       <Dialog
         open={deleteTarget !== null}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
@@ -221,7 +234,9 @@ export default function AdminTagsPage() {
           <DialogHeader>
             <DialogTitle>Delete tag</DialogTitle>
             <DialogDescription>
-              Delete tag <span className="font-medium">#{deleteTarget?.name}</span>? This cannot be undone.
+              Delete tag{" "}
+              <span className="font-medium">#{deleteTarget?.name}</span>? This
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -269,6 +284,7 @@ function TagForm({
         <Input
           id="tag-slug"
           placeholder="devops"
+          className="font-mono text-sm"
           value={form.slug}
           onChange={(e) => onChange({ ...form, slug: e.target.value })}
         />

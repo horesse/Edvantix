@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { ArrowLeft, FilePlus } from "lucide-react";
 import { toast } from "sonner";
 
 import useCreatePost from "@workspace/api-hooks/blog/useCreatePost";
@@ -41,11 +43,29 @@ export default function NewPostPage() {
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight">New Post</h1>
-        <p className="text-muted-foreground mt-1">
-          Create a new blog post. It will be saved as a draft.
-        </p>
+      {/* Back link */}
+      <Link
+        href="/admin/posts"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6 group"
+      >
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+        Back to posts
+      </Link>
+
+      {/* Page header */}
+      <div className="relative rounded-xl overflow-hidden border border-border bg-gradient-to-br from-primary/5 to-primary/0 px-6 py-5 mb-8">
+        <div className="pointer-events-none absolute top-0 right-0 w-40 h-40 rounded-full bg-primary/10 blur-2xl opacity-60" />
+        <div className="relative flex items-center gap-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <FilePlus className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight">New Post</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              Create a new blog post. It will be saved as a draft.
+            </p>
+          </div>
+        </div>
       </div>
 
       <PostForm

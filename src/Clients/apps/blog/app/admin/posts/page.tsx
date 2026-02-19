@@ -21,6 +21,7 @@ import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -94,6 +95,7 @@ export default function AdminPostsPage() {
     postId: number;
     scheduledAt: string;
   } | null>(null);
+  const [archivePostId, setArchivePostId] = useState<number | null>(null);
 
   const { data, isLoading } = useGetAdminPosts({
     pageIndex: page,
@@ -131,11 +133,13 @@ export default function AdminPostsPage() {
     );
   };
 
-  const handleDelete = (postId: number) => {
-    if (!confirm("Archive this post? It will no longer be visible publicly."))
-      return;
-    deletePost(postId, {
-      onSuccess: () => toast.success("Post archived"),
+  const handleArchiveConfirm = () => {
+    if (archivePostId === null) return;
+    deletePost(archivePostId, {
+      onSuccess: () => {
+        toast.success("Post archived");
+        setArchivePostId(null);
+      },
       onError: () => toast.error("Failed to archive post"),
     });
   };
@@ -300,7 +304,7 @@ export default function AdminPostsPage() {
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            onClick={() => handleDelete(post.id)}
+                            onClick={() => setArchivePostId(post.id)}
                             disabled={
                               isDeleting ||
                               post.status === PostStatus.Archived
@@ -348,6 +352,35 @@ export default function AdminPostsPage() {
           )}
         </>
       )}
+
+      {/* Archive confirmation dialog */}
+      <Dialog
+        open={archivePostId !== null}
+        onOpenChange={(open) => !open && setArchivePostId(null)}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Archive post</DialogTitle>
+            <DialogDescription>
+              Archive this post? It will no longer be visible publicly.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setArchivePostId(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleArchiveConfirm}
+              disabled={isDeleting}
+              className="gap-2"
+            >
+              {isDeleting && <Loader2 className="h-4 w-4 animate-spin" />}
+              Archive
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Schedule dialog */}
       <Dialog

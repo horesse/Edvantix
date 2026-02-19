@@ -15,6 +15,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@workspace/ui/components/dialog";
+import {
+  DialogDescription,
+} from "@workspace/ui/components/dialog";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import { Skeleton } from "@workspace/ui/components/skeleton";
@@ -41,6 +44,7 @@ export default function AdminTagsPage() {
 
   const [createOpen, setCreateOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<TagModel | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TagModel | null>(null);
   const [form, setForm] = useState<TagFormState>(defaultForm);
 
   const handleNameChange = (name: string) => {
@@ -88,10 +92,13 @@ export default function AdminTagsPage() {
     );
   };
 
-  const handleDelete = (tag: TagModel) => {
-    if (!confirm(`Delete tag "#${tag.name}"? This cannot be undone.`)) return;
-    deleteTag(tag.id, {
-      onSuccess: () => toast.success("Tag deleted"),
+  const handleDeleteConfirm = () => {
+    if (!deleteTarget) return;
+    deleteTag(deleteTarget.id, {
+      onSuccess: () => {
+        toast.success("Tag deleted");
+        setDeleteTarget(null);
+      },
       onError: () => toast.error("Failed to delete tag"),
     });
   };
@@ -189,7 +196,7 @@ export default function AdminTagsPage() {
                 </Dialog>
                 <button
                   className="text-destructive/70 hover:text-destructive transition-colors"
-                  onClick={() => handleDelete(tag)}
+                  onClick={() => setDeleteTarget(tag)}
                   disabled={isDeleting}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -205,6 +212,34 @@ export default function AdminTagsPage() {
           {tags.length} tag{tags.length !== 1 ? "s" : ""} total. Hover a tag to edit or delete.
         </p>
       )}
+
+      <Dialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete tag</DialogTitle>
+            <DialogDescription>
+              Delete tag <span className="font-medium">#{deleteTarget?.name}</span>? This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="gap-2"
+            >
+              {isDeleting && <Loader2 className="h-4 w-4 animate-spin" />}
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

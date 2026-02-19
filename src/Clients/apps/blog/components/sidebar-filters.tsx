@@ -45,19 +45,22 @@ export function SidebarFilters() {
             >
               All posts
             </Link>
-            {categories?.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/?category=${cat.id}`}
-                className={`flex items-center justify-between w-full rounded-md px-3 py-1.5 text-sm transition-colors ${
-                  activeCategoryId === String(cat.id)
-                    ? "bg-primary/10 text-primary font-medium"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
-                }`}
-              >
-                <span>{cat.name}</span>
-              </Link>
-            ))}
+            {categories?.map((cat) => {
+              const isActive = activeCategoryId === String(cat.id);
+              return (
+                <Link
+                  key={cat.id}
+                  href={isActive ? "/" : `/?category=${cat.id}`}
+                  className={`flex items-center justify-between w-full rounded-md px-3 py-1.5 text-sm transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                  }`}
+                >
+                  <span>{cat.name}</span>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
@@ -78,18 +81,19 @@ export function SidebarFilters() {
           </div>
         ) : (
           <div className="flex flex-wrap gap-2">
-            {tags?.map((tag) => (
-              <Link key={tag.id} href={`/?tag=${tag.id}`}>
-                <Badge
-                  variant={
-                    activeTagId === String(tag.id) ? "default" : "outline"
-                  }
-                  className="cursor-pointer hover:bg-primary/10 transition-colors"
-                >
-                  {tag.name}
-                </Badge>
-              </Link>
-            ))}
+            {tags?.map((tag) => {
+              const isActive = activeTagId === String(tag.id);
+              return (
+                <Link key={tag.id} href={isActive ? "/" : `/?tag=${tag.id}`}>
+                  <Badge
+                    variant={isActive ? "default" : "outline"}
+                    className="cursor-pointer hover:bg-primary/10 transition-colors"
+                  >
+                    {tag.name}
+                  </Badge>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>

@@ -9,6 +9,7 @@ import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -50,6 +51,7 @@ export default function AdminCategoriesPage() {
 
   const [createOpen, setCreateOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<CategoryModel | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<CategoryModel | null>(null);
   const [form, setForm] = useState<CategoryFormState>(defaultForm);
 
   const handleNameChange = (name: string) => {
@@ -101,10 +103,13 @@ export default function AdminCategoriesPage() {
     );
   };
 
-  const handleDelete = (cat: CategoryModel) => {
-    if (!confirm(`Delete category "${cat.name}"? This cannot be undone.`)) return;
-    deleteCategory(cat.id, {
-      onSuccess: () => toast.success("Category deleted"),
+  const handleDeleteConfirm = () => {
+    if (!deleteTarget) return;
+    deleteCategory(deleteTarget.id, {
+      onSuccess: () => {
+        toast.success("Category deleted");
+        setDeleteTarget(null);
+      },
       onError: () => toast.error("Failed to delete category"),
     });
   };
@@ -224,7 +229,7 @@ export default function AdminCategoriesPage() {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 text-destructive hover:text-destructive"
-                          onClick={() => handleDelete(cat)}
+                          onClick={() => setDeleteTarget(cat)}
                           disabled={isDeleting}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -238,6 +243,34 @@ export default function AdminCategoriesPage() {
           </Table>
         </div>
       )}
+
+      <Dialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete category</DialogTitle>
+            <DialogDescription>
+              Delete category <span className="font-medium">"{deleteTarget?.name}"</span>? This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="gap-2"
+            >
+              {isDeleting && <Loader2 className="h-4 w-4 animate-spin" />}
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

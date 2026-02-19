@@ -1,12 +1,12 @@
 "use client";
 
 import { use } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import useGetPost from "@workspace/api-hooks/blog/useGetPost";
+import useGetAdminPost from "@workspace/api-hooks/blog/useGetAdminPost";
 import useUpdatePost from "@workspace/api-hooks/blog/useUpdatePost";
 import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
 import useGetTags from "@workspace/api-hooks/blog/useGetTags";
@@ -20,11 +20,9 @@ export default function EditPostPage({
 }) {
   const { id } = use(params);
   const postId = Number(id);
-  const searchParams = useSearchParams();
-  const slug = searchParams.get("slug") ?? "";
 
   const router = useRouter();
-  const { data: post, isLoading } = useGetPost(slug);
+  const { data: post, isLoading } = useGetAdminPost(postId);
   const { data: categories = [] } = useGetCategories();
   const { data: tags = [] } = useGetTags();
   const { mutate: updatePost, isPending } = useUpdatePost();

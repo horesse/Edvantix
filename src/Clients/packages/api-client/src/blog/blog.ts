@@ -60,6 +60,14 @@ class BlogApiClient {
 
   // --- Posts (admin) ---
 
+  /** Returns full post by ID regardless of status. Requires admin role. */
+  public async getAdminPost(id: number): Promise<PostModel> {
+    const response = await this.client.get<PostModel>(
+      `${BASE}/admin/posts/${id}`,
+    );
+    return response.data;
+  }
+
   /** Returns paginated list of all posts (any status). Requires admin role. */
   public async getAdminPosts(
     query?: GetAdminPostsQuery,

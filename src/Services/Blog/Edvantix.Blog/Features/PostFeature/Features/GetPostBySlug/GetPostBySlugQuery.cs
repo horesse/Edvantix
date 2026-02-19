@@ -1,4 +1,5 @@
 using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
+using Edvantix.Blog.Domain.AggregatesModel.PostAggregate.Specifications;
 using Edvantix.Blog.Features.CategoryFeature.Models;
 using Edvantix.Blog.Features.PostFeature.Models;
 using Edvantix.Blog.Features.TagFeature.Models;
@@ -37,6 +38,18 @@ public sealed class GetPostBySlugQueryHandler(IServiceProvider provider)
         var profileService = provider.GetRequiredService<IProfileService>();
         var author = await profileService.GetAuthorById(post.AuthorId, cancellationToken);
 
+        // Проверяем, лайкнул ли текущий пользователь этот пост (безопасно для анонимных запросов)
+        var currentUserId = await provider.TryGetProfileId(cancellationToken);
+        var isLikedByMe = false;
+
+        if (currentUserId.HasValue)
+        {
+            using var likeRepo = provider.GetRequiredService<IPostLikeRepository>();
+            var likeSpec = new PostLikeSpecification(postId: post.Id, userId: currentUserId.Value);
+            var existingLike = await likeRepo.GetFirstByExpressionAsync(likeSpec, cancellationToken);
+            isLikedByMe = existingLike is not null;
+        }
+
         return new PostModel
         {
             Id = post.Id,
@@ -49,6 +62,7 @@ public sealed class GetPostBySlugQueryHandler(IServiceProvider provider)
             IsPremium = post.IsPremium,
             CoverImageUrl = post.CoverImageUrl,
             LikesCount = post.LikesCount,
+            IsLikedByMe = isLikedByMe,
             PublishedAt = post.PublishedAt,
             ScheduledAt = post.ScheduledAt,
             CreatedAt = post.CreatedAt,

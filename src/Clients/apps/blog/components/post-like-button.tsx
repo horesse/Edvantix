@@ -13,14 +13,16 @@ import { signIn } from "@/lib/auth-client";
 type PostLikeButtonProps = {
   postId: number;
   initialLikesCount: number;
+  initialLiked?: boolean;
 };
 
 export function PostLikeButton({
   postId,
   initialLikesCount,
+  initialLiked = false,
 }: PostLikeButtonProps) {
   const { data: session } = useSession();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(initialLiked);
   const [optimisticCount, setOptimisticCount] = useState(initialLikesCount);
   const { mutate: toggleLike, isPending } = useLikePost();
 

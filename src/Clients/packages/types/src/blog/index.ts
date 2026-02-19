@@ -53,6 +53,8 @@ export type PostSummaryModel = {
 export type PostModel = PostSummaryModel & {
   content: string;
   status: PostStatus;
+  /** Whether the currently authenticated user has liked this post. */
+  isLikedByMe: boolean;
   scheduledAt?: string;
   createdAt: string;
   updatedAt: string;

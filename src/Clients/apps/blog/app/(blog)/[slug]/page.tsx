@@ -159,7 +159,11 @@ function PostContent({ slug }: { slug: string }) {
 
       {/* Footer */}
       <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <PostLikeButton postId={post.id} initialLikesCount={post.likesCount} />
+        <PostLikeButton
+          postId={post.id}
+          initialLikesCount={post.likesCount}
+          initialLiked={post.isLikedByMe}
+        />
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"

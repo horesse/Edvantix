@@ -13,11 +13,20 @@ import type { GetPostsQuery } from "@workspace/types/blog";
 
 import { PostCard } from "@/components/post-card";
 import { SidebarFilters } from "@/components/sidebar-filters";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const SEARCH_DEBOUNCE_MS = 400;
 
 function PostList() {
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // Откладываем обновление запроса до паузы в наборе, чтобы не делать запрос на каждый символ
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const query: GetPostsQuery = {
     categoryId: searchParams.get("category")
@@ -29,7 +38,7 @@ function PostList() {
     type: searchParams.get("type")
       ? (Number(searchParams.get("type")) as PostType)
       : undefined,
-    search: search || undefined,
+    search: debouncedSearch || undefined,
     pageSize: 12,
   };
 

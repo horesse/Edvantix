@@ -44,6 +44,7 @@ export type PostSummaryModel = {
   coverImageUrl?: string;
   likesCount: number;
   publishedAt?: string;
+  scheduledAt?: string;
   author?: AuthorModel;
   categories: CategoryModel[];
   tags: TagModel[];
@@ -55,7 +56,6 @@ export type PostModel = PostSummaryModel & {
   status: PostStatus;
   /** Whether the currently authenticated user has liked this post. */
   isLikedByMe: boolean;
-  scheduledAt?: string;
   createdAt: string;
   updatedAt: string;
 };

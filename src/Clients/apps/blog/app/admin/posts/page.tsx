@@ -6,6 +6,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import {
   Archive,
+  Calendar,
   Edit,
   Eye,
   Loader2,
@@ -18,12 +19,21 @@ import { toast } from "sonner";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@workspace/ui/components/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { Input } from "@workspace/ui/components/input";
+import { Label } from "@workspace/ui/components/label";
 import {
   Select,
   SelectContent,
@@ -67,11 +77,23 @@ const STATUS_VARIANTS: Record<
   [PostStatus.Archived]: "destructive",
 };
 
+/** Минимальное значение для datetime-local: текущий момент в формате "YYYY-MM-DDThh:mm" */
+function nowDatetimeLocal(): string {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  return now.toISOString().slice(0, 16);
+}
+
 export default function AdminPostsPage() {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<PostStatus | undefined>(
     undefined,
   );
+  // Состояние диалога планирования: id поста и выбранная дата/время
+  const [scheduleDialog, setScheduleDialog] = useState<{
+    postId: number;
+    scheduledAt: string;
+  } | null>(null);
 
   const { data, isLoading } = useGetAdminPosts({
     pageIndex: page,
@@ -87,6 +109,24 @@ export default function AdminPostsPage() {
       {
         onSuccess: () => toast.success("Post published successfully"),
         onError: () => toast.error("Failed to publish post"),
+      },
+    );
+  };
+
+  const handleScheduleConfirm = () => {
+    if (!scheduleDialog) return;
+
+    publish(
+      {
+        postId: scheduleDialog.postId,
+        request: { scheduledAt: new Date(scheduleDialog.scheduledAt).toISOString() },
+      },
+      {
+        onSuccess: () => {
+          toast.success("Post scheduled successfully");
+          setScheduleDialog(null);
+        },
+        onError: () => toast.error("Failed to schedule post"),
       },
     );
   };
@@ -151,7 +191,7 @@ export default function AdminPostsPage() {
                   <TableHead className="hidden sm:table-cell">Status</TableHead>
                   <TableHead className="hidden sm:table-cell">Type</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Published
+                    Date
                   </TableHead>
                   <TableHead className="hidden lg:table-cell">Likes</TableHead>
                   <TableHead className="w-12" />
@@ -184,9 +224,16 @@ export default function AdminPostsPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                      {post.publishedAt
-                        ? format(new Date(post.publishedAt), "MMM d, yyyy")
-                        : "—"}
+                      {post.status === PostStatus.Scheduled && post.scheduledAt ? (
+                        <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                          <Calendar className="h-3 w-3" />
+                          {format(new Date(post.scheduledAt), "MMM d, yyyy HH:mm")}
+                        </span>
+                      ) : post.publishedAt ? (
+                        format(new Date(post.publishedAt), "MMM d, yyyy")
+                      ) : (
+                        "—"
+                      )}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">
                       {post.likesCount}
@@ -238,6 +285,19 @@ export default function AdminPostsPage() {
                             )}
                             Publish now
                           </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              setScheduleDialog({
+                                postId: post.id,
+                                scheduledAt: nowDatetimeLocal(),
+                              })
+                            }
+                            disabled={post.status === PostStatus.Published}
+                            className="flex items-center gap-2"
+                          >
+                            <Calendar className="h-4 w-4" />
+                            Schedule...
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handleDelete(post.id)}
@@ -288,6 +348,47 @@ export default function AdminPostsPage() {
           )}
         </>
       )}
+
+      {/* Schedule dialog */}
+      <Dialog
+        open={scheduleDialog !== null}
+        onOpenChange={(open) => !open && setScheduleDialog(null)}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Schedule post</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2 py-2">
+            <Label htmlFor="scheduled-at">Publish at</Label>
+            <Input
+              id="scheduled-at"
+              type="datetime-local"
+              min={nowDatetimeLocal()}
+              value={scheduleDialog?.scheduledAt ?? ""}
+              onChange={(e) =>
+                scheduleDialog &&
+                setScheduleDialog({ ...scheduleDialog, scheduledAt: e.target.value })
+              }
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setScheduleDialog(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleScheduleConfirm}
+              disabled={isPublishing || !scheduleDialog?.scheduledAt}
+              className="gap-2"
+            >
+              {isPublishing && <Loader2 className="h-4 w-4 animate-spin" />}
+              Schedule
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

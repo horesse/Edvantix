@@ -39,6 +39,9 @@ public sealed class PostSummaryModel
     /// <summary>Дата и время публикации.</summary>
     public DateTime? PublishedAt { get; set; }
 
+    /// <summary>Дата и время запланированной публикации.</summary>
+    public DateTime? ScheduledAt { get; set; }
+
     /// <summary>Краткая информация об авторе.</summary>
     public AuthorModel? Author { get; set; }
 

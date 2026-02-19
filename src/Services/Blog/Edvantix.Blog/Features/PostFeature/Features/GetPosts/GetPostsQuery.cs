@@ -77,6 +77,7 @@ public sealed class GetPostsQueryHandler(IServiceProvider provider)
                     CoverImageUrl = post.CoverImageUrl,
                     LikesCount = post.LikesCount,
                     PublishedAt = post.PublishedAt,
+                    ScheduledAt = post.ScheduledAt,
                     Author = author is null
                         ? null
                         : new AuthorModel { Id = author.Id, FullName = author.FullName },

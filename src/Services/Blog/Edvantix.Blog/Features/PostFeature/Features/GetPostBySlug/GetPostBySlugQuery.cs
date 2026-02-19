@@ -46,7 +46,10 @@ public sealed class GetPostBySlugQueryHandler(IServiceProvider provider)
         {
             using var likeRepo = provider.GetRequiredService<IPostLikeRepository>();
             var likeSpec = new PostLikeSpecification(postId: post.Id, userId: currentUserId.Value);
-            var existingLike = await likeRepo.GetFirstByExpressionAsync(likeSpec, cancellationToken);
+            var existingLike = await likeRepo.GetFirstByExpressionAsync(
+                likeSpec,
+                cancellationToken
+            );
             isLikedByMe = existingLike is not null;
         }
 

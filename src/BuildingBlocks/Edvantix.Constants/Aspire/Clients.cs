@@ -6,4 +6,7 @@ public static class Clients
 
     public const string OrganizationFront = "organizationfront";
     public const string OrganizationTurboApp = $"{Prefix}/{OrganizationFront}";
+
+    public const string BlogFront = "blogfront";
+    public const string BlogTurboApp = $"{Prefix}/{BlogFront}";
 }

@@ -27,6 +27,7 @@
     "./client": "./src/client.ts",
     "./config": "./src/config.ts",
     "./profile/*": "./src/profile/*.ts",
-    "./company/*": "./src/company/*.ts"
+    "./company/*": "./src/company/*.ts",
+    "./blog/*": "./src/blog/*.ts"
   }
 }

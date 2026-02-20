@@ -18,6 +18,10 @@
     "./company": {
       "import": "./src/company/index.ts",
       "types": "./src/company/index.ts"
+    },
+    "./blog": {
+      "import": "./src/blog/index.ts",
+      "types": "./src/blog/index.ts"
     }
   },
   "scripts": {

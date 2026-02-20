@@ -29,19 +29,28 @@ public sealed class PostSpecification : CommonSpecification<Post>
         string? searchText = null
     )
     {
-        // Все условия задаются в единственном Where для генерации одного SQL-предиката
-        Query.Where(p =>
-            (status == null || p.Status == status)
-            && (type == null || p.Type == type)
-            && (isPremium == null || p.IsPremium == isPremium)
-            && (authorId == null || p.AuthorId == authorId)
-            && (categoryId == null || p.Categories.Any(c => c.Id == categoryId))
-            && (tagId == null || p.Tags.Any(t => t.Id == tagId))
-            && (
-                searchText == null
-                || p.Title.Contains(searchText)
+        if (status != null)
+            Query.Where(p => p.Status == status);
+
+        if (type != null)
+            Query.Where(p => p.Type == type);
+
+        if (isPremium != null)
+            Query.Where(p => p.IsPremium == isPremium);
+
+        if (authorId != null)
+            Query.Where(p => p.AuthorId == authorId);
+
+        if (categoryId != null)
+            Query.Where(p => p.Categories.Any(c => c.Id == categoryId));
+
+        if (tagId != null)
+            Query.Where(p => p.Tags.Any(t => t.Id == tagId));
+
+        if (searchText != null)
+            Query.Where(p =>
+                p.Title.Contains(searchText)
                 || (p.Summary != null && p.Summary.Contains(searchText))
-            )
-        );
+            );
     }
 }

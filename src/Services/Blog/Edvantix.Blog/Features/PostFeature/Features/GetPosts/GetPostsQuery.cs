@@ -89,22 +89,24 @@ public sealed class GetPostsQueryHandler(IServiceProvider provider)
                     Author = author is null
                         ? null
                         : new AuthorModel { Id = author.Id, FullName = author.FullName },
-                    Categories = post
-                        .Categories.Select(c => new CategoryModel
+                    Categories =
+                    [
+                        .. post.Categories.Select(c => new CategoryModel
                         {
                             Id = c.Id,
                             Name = c.Name,
                             Slug = c.Slug,
-                        })
-                        .ToList(),
-                    Tags = post
-                        .Tags.Select(t => new TagModel
+                        }),
+                    ],
+                    Tags =
+                    [
+                        .. post.Tags.Select(t => new TagModel
                         {
                             Id = t.Id,
                             Name = t.Name,
                             Slug = t.Slug,
-                        })
-                        .ToList(),
+                        }),
+                    ],
                 }
             );
         }

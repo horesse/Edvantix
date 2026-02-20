@@ -39,6 +39,9 @@ public sealed class PostModel
     /// <summary>Количество лайков.</summary>
     public int LikesCount { get; set; }
 
+    /// <summary>Признак того, что текущий авторизованный пользователь поставил лайк.</summary>
+    public bool IsLikedByMe { get; set; }
+
     /// <summary>Дата и время публикации.</summary>
     public DateTime? PublishedAt { get; set; }
 

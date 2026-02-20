@@ -60,9 +60,17 @@ public sealed class GetPostsQueryHandler(IServiceProvider provider)
 
         var items = new List<PostSummaryModel>(posts.Count);
 
+        var localCache = new Dictionary<long, AuthorInfo?>();
+
         foreach (var post in posts)
         {
-            var author = await profileService.GetAuthorById(post.AuthorId, cancellationToken);
+            var authorId = post.AuthorId;
+
+            if (!localCache.TryGetValue(authorId, out var author))
+            {
+                author = await profileService.GetAuthorById(post.AuthorId, cancellationToken);
+                localCache[authorId] = author;
+            }
 
             items.Add(
                 new PostSummaryModel
@@ -71,30 +79,34 @@ public sealed class GetPostsQueryHandler(IServiceProvider provider)
                     Title = post.Title,
                     Slug = post.Slug,
                     Summary = post.Summary,
+                    Status = post.Status,
                     Type = post.Type,
                     IsPremium = post.IsPremium,
                     CoverImageUrl = post.CoverImageUrl,
                     LikesCount = post.LikesCount,
                     PublishedAt = post.PublishedAt,
+                    ScheduledAt = post.ScheduledAt,
                     Author = author is null
                         ? null
                         : new AuthorModel { Id = author.Id, FullName = author.FullName },
-                    Categories = post
-                        .Categories.Select(c => new CategoryModel
+                    Categories =
+                    [
+                        .. post.Categories.Select(c => new CategoryModel
                         {
                             Id = c.Id,
                             Name = c.Name,
                             Slug = c.Slug,
-                        })
-                        .ToList(),
-                    Tags = post
-                        .Tags.Select(t => new TagModel
+                        }),
+                    ],
+                    Tags =
+                    [
+                        .. post.Tags.Select(t => new TagModel
                         {
                             Id = t.Id,
                             Name = t.Name,
                             Slug = t.Slug,
-                        })
-                        .ToList(),
+                        }),
+                    ],
                 }
             );
         }

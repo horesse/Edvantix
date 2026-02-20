@@ -60,9 +60,17 @@ public sealed class GetPostsQueryHandler(IServiceProvider provider)
 
         var items = new List<PostSummaryModel>(posts.Count);
 
+        var localCache = new Dictionary<long, AuthorInfo?>();
+
         foreach (var post in posts)
         {
-            var author = await profileService.GetAuthorById(post.AuthorId, cancellationToken);
+            var authorId = post.AuthorId;
+
+            if (!localCache.TryGetValue(authorId, out var author))
+            {
+                author = await profileService.GetAuthorById(post.AuthorId, cancellationToken);
+                localCache[authorId] = author;
+            }
 
             items.Add(
                 new PostSummaryModel

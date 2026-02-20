@@ -18,29 +18,29 @@ var postgres = builder
     .RunAsLocalContainer()
     .ProvisionAsService();
 
-// var redis = builder
-//     .AddAzureRedis(Components.Redis)
-//     .WithAccessKeyAuthentication()
-//     .WithIconName("Memory")
-//     .RunAsLocalContainer()
-//     .ProvisionAsService();
-//
-// var qdrant = builder
-//     .AddQdrant(Components.VectorDb)
-//     .WithIconName("DatabaseSearch")
-//     .WithDataVolume()
-//     .WithImagePullPolicy(ImagePullPolicy.Always)
-//     .WithLifetime(ContainerLifetime.Persistent);
-//
-// var queue = builder
-//     .AddRabbitMQ(Components.Queue)
-//     .WithIconName("Pipeline")
-//     .WithManagementPlugin()
-//     .WithDataVolume()
-//     .WithImagePullPolicy(ImagePullPolicy.Always)
-//     .WithLifetime(ContainerLifetime.Persistent)
-//     .WithEndpoint(Network.Tcp, e => e.Port = 5672);
-//
+var redis = builder
+    .AddAzureManagedRedis(Components.Redis)
+    .WithAccessKeyAuthentication()
+    .WithIconName("Memory")
+    .RunAsLocalContainer()
+    .ProvisionAsService();
+
+var qdrant = builder
+    .AddQdrant(Components.VectorDb)
+    .WithIconName("DatabaseSearch")
+    .WithDataVolume()
+    .WithImagePullPolicy(ImagePullPolicy.Always)
+    .WithLifetime(ContainerLifetime.Persistent);
+
+var queue = builder
+    .AddRabbitMQ(Components.Queue)
+    .WithIconName("Pipeline")
+    .WithManagementPlugin()
+    .WithDataVolume()
+    .WithImagePullPolicy(ImagePullPolicy.Always)
+    .WithLifetime(ContainerLifetime.Persistent)
+    .WithEndpoint(Network.Tcp, e => e.Port = 5672);
+
 var storage = builder
     .AddAzureStorage(Components.Azure.Storage.Resource)
     .WithIconName("DatabasePlugConnected")
@@ -130,6 +130,8 @@ var blogApi = builder
     .WithContainerRegistry(registry)
     .WithReference(profileApi)
     .WaitFor(profileApi)
+    .WithReference(redis)
+    .WaitFor(redis)
     .WithFriendlyUrls();
 
 var gateway = builder

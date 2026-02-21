@@ -17,7 +17,6 @@ public static class Components
     {
         private const string Suffix = "db";
 
-        public static readonly string DataVault = $"{nameof(DataVault).ToLowerInvariant()}{Suffix}";
         public static readonly string EntityHub = $"{nameof(EntityHub).ToLowerInvariant()}{Suffix}";
 
         public static readonly string Organization =

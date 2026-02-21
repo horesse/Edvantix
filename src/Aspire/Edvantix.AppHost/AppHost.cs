@@ -1,10 +1,3 @@
-using Edvantix.AppHost.Extensions.Infrastructure;
-using Edvantix.AppHost.Extensions.Network;
-using Edvantix.AppHost.Extensions.Security;
-using Edvantix.Constants.Aspire;
-using Edvantix.Constants.Core;
-using Projects;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 builder.AddAzureContainerAppEnvironment(Components.Azure.ContainerApp).ProvisionAsService();
@@ -62,14 +55,6 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
-var systemApi = builder
-    .AddProject<Edvantix_System>(Services.System)
-    .WithReference(systemDb)
-    .WaitFor(systemDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
-
 var profileApi = builder
     .AddProject<Edvantix_ProfileService>(Services.Profile)
     .WithReference(profileDb)
@@ -113,7 +98,6 @@ var blogApi = builder
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(organizationApi, true)
-    .WithService(systemApi, true)
     .WithService(profileApi, true)
     .WithService(subscriptionsApi, true)
     .WithService(blogApi, true)
@@ -160,7 +144,6 @@ if (builder.ExecutionContext.IsRunMode)
     builder
         .AddScalar(keycloak)
         .WithOpenAPI(organizationApi)
-        .WithOpenAPI(systemApi)
         .WithOpenAPI(profileApi)
         .WithOpenAPI(subscriptionsApi)
         .WithOpenAPI(blogApi);

@@ -1,6 +1,4 @@
-﻿using Edvantix.Constants.Aspire;
-
-namespace Edvantix.AppHost.Extensions.Infrastructure;
+﻿namespace Edvantix.AppHost.Extensions.Infrastructure;
 
 public static class ContainerExtensions
 {

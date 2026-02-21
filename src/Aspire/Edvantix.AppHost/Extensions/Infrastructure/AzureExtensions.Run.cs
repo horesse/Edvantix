@@ -1,6 +1,4 @@
-﻿using Aspire.Hosting.Azure;
-
-namespace Edvantix.AppHost.Extensions.Infrastructure;
+﻿namespace Edvantix.AppHost.Extensions.Infrastructure;
 
 public static partial class AzureExtensions
 {

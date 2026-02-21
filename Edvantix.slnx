@@ -16,9 +16,7 @@
   <Folder Name="/Services/Core/Profile/">
     <Project Path="src/Services/Profile/Edvantix.ProfileService/Edvantix.ProfileService.csproj" />
   </Folder>
-  <Folder Name="/Services/Core/System/">
-    <Project Path="src/Services/System/Edvantix.System/Edvantix.System.csproj" />
-  </Folder>
+  <Folder Name="/Services/Core/System/" />
   <Folder Name="/Services/Core/Blog/">
     <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />
   </Folder>

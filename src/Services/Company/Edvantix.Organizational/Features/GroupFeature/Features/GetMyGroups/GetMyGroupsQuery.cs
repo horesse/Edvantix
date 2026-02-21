@@ -22,23 +22,23 @@ public sealed record GetMyGroupsQuery(
 public sealed class GetMyGroupsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetMyGroupsQuery, PagedResult<GroupSummaryModel>>
 {
-    public async Task<PagedResult<GroupSummaryModel>> Handle(
+    public async ValueTask<PagedResult<GroupSummaryModel>> Handle(
         GetMyGroupsQuery request,
         CancellationToken cancellationToken
     )
     {
         var profileId = await provider.GetProfileId(cancellationToken);
 
-        var spec = new GroupsByProfileSpecification(profileId);
+        var spec = new GroupMemberSpecification(profileId);
 
-        using var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
+        var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
 
-        var count = await groupMemberRepo.GetCountByExpressionAsync(spec, cancellationToken);
+        var count = await groupMemberRepo.CountAsync(spec, cancellationToken);
 
         spec.Skip = (request.PageIndex - 1) * request.PageSize;
         spec.Take = request.PageSize;
 
-        var memberships = await groupMemberRepo.GetByExpressionAsync(spec, cancellationToken);
+        var memberships = await groupMemberRepo.ListAsync(spec, cancellationToken);
 
         if (memberships.Count == 0)
             return new PagedResult<GroupSummaryModel>(
@@ -48,13 +48,12 @@ public sealed class GetMyGroupsQueryHandler(IServiceProvider provider)
                 count
             );
 
-        using var groupRepo = provider.GetRequiredService<IGroupRepository>();
-
-        var result = new List<GroupSummaryModel>();
+        var groupRepo = provider.GetRequiredService<IGroupRepository>();
+        var result = new List<GroupSummaryModel>(memberships.Count);
 
         foreach (var membership in memberships)
         {
-            var group = await groupRepo.GetByIdAsync(membership.GroupId, cancellationToken);
+            var group = await groupRepo.FindByIdAsync(membership.GroupId, cancellationToken);
             if (group is null)
                 continue;
 

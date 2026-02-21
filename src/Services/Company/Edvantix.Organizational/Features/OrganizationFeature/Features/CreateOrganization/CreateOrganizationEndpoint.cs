@@ -1,7 +1,7 @@
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.CreateOrganization;
 
 public class CreateOrganizationEndpoint
-    : IEndpoint<Created<long>, CreateOrganizationCommand, ISender>
+    : IEndpoint<Created<ulong>, CreateOrganizationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -16,11 +16,11 @@ public class CreateOrganizationEndpoint
             .WithDescription(
                 "Создаёт новую организацию. Текущий пользователь становится владельцем."
             )
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<ulong>(StatusCodes.Status201Created)
             .RequireAuthorization();
     }
 
-    public async Task<Created<long>> HandleAsync(
+    public async Task<Created<ulong>> HandleAsync(
         CreateOrganizationCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

@@ -6,7 +6,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.CancelInvi
 /// <summary>
 /// Команда отмены приглашения (Owner/Manager).
 /// </summary>
-public sealed record CancelInvitationCommand(long OrganizationId, Guid InvitationId)
+public sealed record CancelInvitationCommand(ulong OrganizationId, Guid InvitationId)
     : IRequest<Unit>;
 
 /// <summary>
@@ -15,7 +15,7 @@ public sealed record CancelInvitationCommand(long OrganizationId, Guid Invitatio
 public sealed class CancelInvitationCommandHandler(IServiceProvider provider)
     : IRequestHandler<CancelInvitationCommand, Unit>
 {
-    public async Task<Unit> Handle(
+    public async ValueTask<Unit> Handle(
         CancelInvitationCommand request,
         CancellationToken cancellationToken
     )
@@ -28,10 +28,9 @@ public sealed class CancelInvitationCommandHandler(IServiceProvider provider)
             OrganizationRole.Manager
         );
 
-        using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
-
+        var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
         var invitation =
-            await invitationRepo.GetByIdAsync(request.InvitationId, cancellationToken)
+            await invitationRepo.FindByIdAsync(request.InvitationId, cancellationToken)
             ?? throw new NotFoundException($"Приглашение с ID {request.InvitationId} не найдено.");
 
         if (invitation.OrganizationId != request.OrganizationId)
@@ -39,8 +38,7 @@ public sealed class CancelInvitationCommandHandler(IServiceProvider provider)
 
         invitation.Cancel();
 
-        await invitationRepo.UpdateAsync(invitation, cancellationToken);
-        await invitationRepo.SaveEntitiesAsync(cancellationToken);
+        await invitationRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

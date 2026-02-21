@@ -1,7 +1,7 @@
 namespace Edvantix.Organizational.Features.OrganizationFeature.Models;
 
 public sealed record OrganizationSummaryModel(
-    long Id,
+    ulong Id,
     string Name,
     string ShortName,
     string? Description,

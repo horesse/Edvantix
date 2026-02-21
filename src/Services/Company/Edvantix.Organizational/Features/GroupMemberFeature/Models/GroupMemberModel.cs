@@ -3,8 +3,8 @@ namespace Edvantix.Organizational.Features.GroupMemberFeature.Models;
 public sealed class GroupMemberModel
 {
     public Guid Id { get; set; }
-    public long GroupId { get; set; }
-    public long ProfileId { get; set; }
+    public ulong GroupId { get; set; }
+    public ulong ProfileId { get; set; }
     public GroupRole Role { get; set; }
     public DateTime JoinedAt { get; set; }
 

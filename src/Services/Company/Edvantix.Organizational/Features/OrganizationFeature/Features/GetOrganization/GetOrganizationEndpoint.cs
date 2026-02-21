@@ -10,7 +10,7 @@ public class GetOrganizationEndpoint
         app.MapGet(
                 "/organizations/{id:long}",
                 async (long id, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetOrganizationQuery(id), sender, ct)
+                    await HandleAsync(new GetOrganizationQuery((ulong)id), sender, ct)
             )
             .WithName("GetOrganization")
             .WithTags("Organizations")

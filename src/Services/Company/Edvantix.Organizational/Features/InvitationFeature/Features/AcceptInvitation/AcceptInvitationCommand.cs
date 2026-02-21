@@ -1,6 +1,4 @@
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Specifications;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 using Edvantix.Organizational.Grpc.Services;
 
 namespace Edvantix.Organizational.Features.InvitationFeature.Features.AcceptInvitation;
@@ -17,45 +15,35 @@ public sealed record AcceptInvitationCommand(Guid Token) : IRequest<Guid>;
 public sealed class AcceptInvitationCommandHandler(IServiceProvider provider)
     : IRequestHandler<AcceptInvitationCommand, Guid>
 {
-    public async Task<Guid> Handle(
+    public async ValueTask<Guid> Handle(
         AcceptInvitationCommand request,
         CancellationToken cancellationToken
     )
     {
         var profileId = await provider.GetProfileId(cancellationToken);
 
-        using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
-
-        var spec = new InvitationByTokenSpecification(request.Token);
+        var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
+        var spec = new InvitationSpecification(request.Token);
         var invitation =
-            await invitationRepo.GetFirstByExpressionAsync(spec, cancellationToken)
-            ?? throw new NotFoundException($"Приглашение с указанным токеном не найдено.");
+            await invitationRepo.FindAsync(spec, cancellationToken)
+            ?? throw new NotFoundException("Приглашение с указанным токеном не найдено.");
 
-        // Проверить, что пользователь ещё не является участником.
-        using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-
-        var memberSpec = new OrganizationMemberByProfileSpecification(
-            profileId,
-            invitation.OrganizationId
-        );
-
-        var existingMember = await memberRepo.GetFirstByExpressionAsync(
-            memberSpec,
-            cancellationToken
-        );
+        // Проверить, что пользователь ещё не является участником
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
+        var memberSpec = new OrganizationMemberSpecification(profileId, invitation.OrganizationId);
+        var existingMember = await memberRepo.FindAsync(memberSpec, cancellationToken);
 
         if (existingMember is not null)
             throw new InvalidOperationException("Вы уже являетесь участником данной организации.");
 
-        // Принять приглашение (domain logic: проверка статуса, TTL, profileId).
+        // Принять приглашение (domain logic: проверка статуса, TTL, profileId)
         invitation.Accept(profileId);
 
-        // Создать участника организации (inline, по аналогии с AddMemberCommand).
+        // Создать участника организации
         var member = new OrganizationMember(invitation.OrganizationId, profileId, invitation.Role);
 
-        await memberRepo.InsertAsync(member, cancellationToken);
-        await invitationRepo.UpdateAsync(invitation, cancellationToken);
-        await invitationRepo.SaveEntitiesAsync(cancellationToken);
+        await memberRepo.AddAsync(member, cancellationToken);
+        await invitationRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return member.Id;
     }

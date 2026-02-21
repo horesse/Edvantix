@@ -8,7 +8,7 @@ public class GetGroupEndpoint : IEndpoint<Ok<GroupModel>, GetGroupQuery, ISender
     {
         app.MapGet(
                 "/groups/{id:long}",
-                async (long id, ISender sender, CancellationToken ct) =>
+                async (ulong id, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetGroupQuery(id), sender, ct)
             )
             .WithName("GetGroup")

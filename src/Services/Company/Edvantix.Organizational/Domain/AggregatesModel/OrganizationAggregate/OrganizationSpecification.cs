@@ -2,9 +2,23 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
 public sealed class OrganizationSpecification : Specification<Organization>
 {
-    private OrganizationSpecification(string name, string nameLatin)
+    /// <summary>Найти организацию по идентификатору с опциональной загрузкой навигационных свойств.</summary>
+    public OrganizationSpecification(
+        ulong id,
+        bool includeMembers = false,
+        bool includeGroups = false,
+        bool includeContacts = false
+    )
     {
-        Query.Where(x => x.Name.Contains(name));
-        Query.Where(x => x.NameLatin.Contains(nameLatin));
+        Query.Where(x => x.Id == id);
+
+        if (includeMembers)
+            Query.Include(x => x.Members);
+
+        if (includeGroups)
+            Query.Include(x => x.Groups);
+
+        if (includeContacts)
+            Query.Include(x => x.Contacts);
     }
 }

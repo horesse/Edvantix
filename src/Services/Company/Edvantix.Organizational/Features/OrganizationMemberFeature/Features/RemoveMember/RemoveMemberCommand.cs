@@ -2,12 +2,15 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.RemoveMember;
 
-public sealed record RemoveMemberCommand(long OrganizationId, Guid MemberId) : IRequest<Unit>;
+public sealed record RemoveMemberCommand(ulong OrganizationId, Guid MemberId) : IRequest<Unit>;
 
 public sealed class RemoveMemberCommandHandler(IServiceProvider provider)
     : IRequestHandler<RemoveMemberCommand, Unit>
 {
-    public async Task<Unit> Handle(RemoveMemberCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(
+        RemoveMemberCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireOrgRoleAsync(
@@ -17,17 +20,19 @@ public sealed class RemoveMemberCommandHandler(IServiceProvider provider)
             OrganizationRole.Manager
         );
 
-        using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-        var member = await memberRepo.GetByIdAsync(request.MemberId, cancellationToken);
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
+        var member =
+            await memberRepo.FindByIdAsync(request.MemberId, cancellationToken)
+            ?? throw new NotFoundException($"Участник с ID {request.MemberId} не найден.");
 
-        if (member is null || member.OrganizationId != request.OrganizationId)
+        if (member.OrganizationId != request.OrganizationId)
             throw new NotFoundException($"Участник с ID {request.MemberId} не найден.");
 
         if (member.Role == OrganizationRole.Owner)
             throw new ForbiddenException("Невозможно удалить владельца организации.");
 
-        await memberRepo.DeleteAsync(member, cancellationToken);
-        await memberRepo.SaveEntitiesAsync(cancellationToken);
+        member.Delete();
+        await memberRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

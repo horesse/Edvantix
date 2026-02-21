@@ -1,5 +1,4 @@
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Specifications;
 using Edvantix.Organizational.Features.InvitationFeature.Models;
 using Edvantix.Organizational.Grpc.Services;
 
@@ -16,30 +15,29 @@ public sealed record GetMyInvitationsQuery : IRequest<IEnumerable<InvitationMode
 public sealed class GetMyInvitationsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetMyInvitationsQuery, IEnumerable<InvitationModel>>
 {
-    public async Task<IEnumerable<InvitationModel>> Handle(
+    public async ValueTask<IEnumerable<InvitationModel>> Handle(
         GetMyInvitationsQuery request,
         CancellationToken cancellationToken
     )
     {
         var profileId = await provider.GetProfileId(cancellationToken);
 
-        var spec = new InvitationsByInviteeProfileSpecification(profileId);
-
-        using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
-        var invitations = await invitationRepo.GetByExpressionAsync(spec, cancellationToken);
+        // Получаем все ожидающие приглашения для профиля (без фильтра по организации)
+        var spec = new InvitationSpecification(profileId: profileId, organizationId: null);
+        var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
+        var invitations = await invitationRepo.ListAsync(spec, cancellationToken);
 
         if (invitations.Count == 0)
             return [];
 
-        // Получить имена организаций для отображения.
+        // Получить имена организаций для отображения
         var organizationIds = invitations.Select(x => x.OrganizationId).Distinct().ToList();
-
-        using var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
-        var organizations = new Dictionary<long, string>();
+        var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
+        var organizations = new Dictionary<ulong, string>();
 
         foreach (var orgId in organizationIds)
         {
-            var org = await orgRepo.GetByIdAsync(orgId, cancellationToken);
+            var org = await orgRepo.FindByIdAsync(orgId, cancellationToken);
             if (org is not null)
                 organizations[orgId] = org.Name;
         }

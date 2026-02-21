@@ -2,13 +2,13 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.UpdateGroupMemberRole;
 
-public sealed record UpdateGroupMemberRoleCommand(long GroupId, Guid MemberId, GroupRole NewRole)
+public sealed record UpdateGroupMemberRoleCommand(ulong GroupId, Guid MemberId, GroupRole NewRole)
     : IRequest<Unit>;
 
 public sealed class UpdateGroupMemberRoleCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateGroupMemberRoleCommand, Unit>
 {
-    public async Task<Unit> Handle(
+    public async ValueTask<Unit> Handle(
         UpdateGroupMemberRoleCommand request,
         CancellationToken cancellationToken
     )
@@ -16,15 +16,16 @@ public sealed class UpdateGroupMemberRoleCommandHandler(IServiceProvider provide
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireGroupManagementAsync(request.GroupId, cancellationToken);
 
-        using var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
-        var member = await groupMemberRepo.GetByIdAsync(request.MemberId, cancellationToken);
+        var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
+        var member =
+            await groupMemberRepo.FindByIdAsync(request.MemberId, cancellationToken)
+            ?? throw new NotFoundException($"Участник группы с ID {request.MemberId} не найден.");
 
-        if (member is null || member.GroupId != request.GroupId)
+        if (member.GroupId != request.GroupId)
             throw new NotFoundException($"Участник группы с ID {request.MemberId} не найден.");
 
         member.UpdateRole(request.NewRole);
-        await groupMemberRepo.UpdateAsync(member, cancellationToken);
-        await groupMemberRepo.SaveEntitiesAsync(cancellationToken);
+        await groupMemberRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

@@ -5,7 +5,7 @@ using Edvantix.SharedKernel.Results;
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.GetGroupMembers;
 
 public sealed record GetGroupMembersQuery(
-    long GroupId,
+    ulong GroupId,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,
@@ -23,31 +23,29 @@ public sealed record GetGroupMembersQuery(
 public sealed class GetGroupMembersQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetGroupMembersQuery, PagedResult<GroupMemberModel>>
 {
-    public async Task<PagedResult<GroupMemberModel>> Handle(
+    public async ValueTask<PagedResult<GroupMemberModel>> Handle(
         GetGroupMembersQuery request,
         CancellationToken cancellationToken
     )
     {
-        // Проверить, что группа существует и получить organizationId
-        using var groupRepo = provider.GetRequiredService<IGroupRepository>();
-        var group = await groupRepo.GetByIdAsync(request.GroupId, cancellationToken);
-
-        if (group is null)
-            throw new NotFoundException($"Группа с ID {request.GroupId} не найдена.");
+        var groupRepo = provider.GetRequiredService<IGroupRepository>();
+        var group =
+            await groupRepo.FindByIdAsync(request.GroupId, cancellationToken)
+            ?? throw new NotFoundException($"Группа с ID {request.GroupId} не найдена.");
 
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.GetCurrentMemberAsync(group.OrganizationId, cancellationToken);
 
-        var spec = new GroupMemberSpecification { GroupId = request.GroupId };
+        var spec = new GroupMemberSpecification(groupId: request.GroupId);
 
-        using var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
+        var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
 
-        var count = await groupMemberRepo.GetCountByExpressionAsync(spec, cancellationToken);
+        var count = await groupMemberRepo.CountAsync(spec, cancellationToken);
 
         spec.Skip = (request.PageIndex - 1) * request.PageSize;
         spec.Take = request.PageSize;
 
-        var members = await groupMemberRepo.GetByExpressionAsync(spec, cancellationToken);
+        var members = await groupMemberRepo.ListAsync(spec, cancellationToken);
 
         // TODO: Fetch user profile data from Profile service via gRPC
         var items = members

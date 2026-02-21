@@ -8,51 +8,40 @@ public sealed record CreateOrganizationCommand(
     string ShortName,
     string? PrintName,
     string? Description
-) : IRequest<long>;
+) : IRequest<ulong>;
 
 public sealed class CreateOrganizationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateOrganizationCommand, long>
+    : IRequestHandler<CreateOrganizationCommand, ulong>
 {
-    public async Task<long> Handle(
+    public async ValueTask<ulong> Handle(
         CreateOrganizationCommand request,
         CancellationToken cancellationToken
     )
     {
         var profileId = await provider.GetProfileId(cancellationToken);
 
-        using var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
+        var organization = new Organization(
+            request.Name,
+            request.NameLatin,
+            request.ShortName,
+            DateTime.UtcNow,
+            request.PrintName,
+            request.Description
+        );
 
-        await using var transaction = await orgRepo.BeginTransactionAsync(cancellationToken);
+        var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
+        await orgRepo.AddAsync(organization, cancellationToken);
 
-        try
-        {
-            var organization = new Organization(
-                request.Name,
-                request.NameLatin,
-                request.ShortName,
-                DateTime.UtcNow,
-                request.PrintName,
-                request.Description
-            );
+        // Первое сохранение — получаем organization.Id из БД
+        await orgRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-            await orgRepo.InsertAsync(organization, cancellationToken);
-            await orgRepo.SaveEntitiesAsync(cancellationToken);
+        // Создатель становится Owner. Оба репозитория используют один DbContext (Scoped),
+        // поэтому второй SaveEntities включает оба изменения в одной транзакции EF Core.
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
+        var member = new OrganizationMember(organization.Id, profileId, OrganizationRole.Owner);
+        await memberRepo.AddAsync(member, cancellationToken);
+        await memberRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-            // Создатель становится Owner
-            using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-            var member = new OrganizationMember(organization.Id, profileId, OrganizationRole.Owner);
-
-            await memberRepo.InsertAsync(member, cancellationToken);
-            await memberRepo.SaveEntitiesAsync(cancellationToken);
-
-            await transaction.CommitAsync(cancellationToken);
-
-            return organization.Id;
-        }
-        catch
-        {
-            await transaction.RollbackAsync(cancellationToken);
-            throw;
-        }
+        return organization.Id;
     }
 }

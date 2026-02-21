@@ -1,4 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 using Edvantix.Organizational.Features.OrganizationFeature.Models;
 using Edvantix.Organizational.Grpc.Services;
 
@@ -9,29 +8,27 @@ public sealed record GetMyOrganizationsQuery : IRequest<IEnumerable<Organization
 public sealed class GetMyOrganizationsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetMyOrganizationsQuery, IEnumerable<OrganizationSummaryModel>>
 {
-    public async Task<IEnumerable<OrganizationSummaryModel>> Handle(
+    public async ValueTask<IEnumerable<OrganizationSummaryModel>> Handle(
         GetMyOrganizationsQuery request,
         CancellationToken cancellationToken
     )
     {
         var profileId = await provider.GetProfileId(cancellationToken);
 
-        var spec = new OrganizationMemberByProfileSpecification(profileId);
-
-        using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-
-        var members = await memberRepo.GetByExpressionAsync(spec, cancellationToken);
+        // Получаем все членства профиля (без фильтра по организации)
+        var memberSpec = new OrganizationMemberSpecification(profileId, (ulong?)null);
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
+        var members = await memberRepo.ListAsync(memberSpec, cancellationToken);
 
         if (members.Count == 0)
             return [];
 
-        using var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
-
-        var result = new List<OrganizationSummaryModel>();
+        var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
+        var result = new List<OrganizationSummaryModel>(members.Count);
 
         foreach (var member in members)
         {
-            var org = await orgRepo.GetByIdAsync(member.OrganizationId, cancellationToken);
+            var org = await orgRepo.FindByIdAsync(member.OrganizationId, cancellationToken);
             if (org is null)
                 continue;
 

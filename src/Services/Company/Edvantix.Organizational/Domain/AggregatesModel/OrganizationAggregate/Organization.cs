@@ -1,3 +1,5 @@
+using Edvantix.Constants.Other;
+
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
 public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
@@ -87,6 +89,47 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     public void UpdateDescription(string? description)
     {
         Description = description;
+    }
+
+    /// <summary>
+    /// Добавляет контакт организации. Возвращает созданный объект контакта.
+    /// Id будет заполнен EF Core после сохранения.
+    /// </summary>
+    public OrganizationContact AddContact(
+        ContactType type,
+        string value,
+        string? description = null
+    )
+    {
+        var contact = new OrganizationContact(Id, type, value, description);
+        _contacts.Add(contact);
+        return contact;
+    }
+
+    /// <summary>
+    /// Удаляет контакт организации по идентификатору.
+    /// </summary>
+    public void RemoveContact(ulong contactId)
+    {
+        var contact =
+            _contacts.FirstOrDefault(c => c.Id == contactId)
+            ?? throw new InvalidOperationException($"Контакт с ID {contactId} не найден.");
+
+        _contacts.Remove(contact);
+    }
+
+    /// <summary>
+    /// Обновляет существующий контакт организации.
+    /// </summary>
+    public void UpdateContact(ulong contactId, ContactType type, string value, string? description)
+    {
+        var contact =
+            _contacts.FirstOrDefault(c => c.Id == contactId)
+            ?? throw new InvalidOperationException($"Контакт с ID {contactId} не найден.");
+
+        contact.UpdateType(type);
+        contact.UpdateValue(value);
+        contact.UpdateDescription(description);
     }
 
     public bool IsDeleted { get; set; }

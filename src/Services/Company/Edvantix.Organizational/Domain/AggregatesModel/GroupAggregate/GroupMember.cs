@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 /// </summary>
 public sealed class GroupMember() : Entity<Guid>, IAggregateRoot, ISoftDelete
 {
-    public GroupMember(ulong groupId, uint profileId, GroupRole role)
+    public GroupMember(ulong groupId, ulong profileId, GroupRole role)
         : this()
     {
         if (groupId <= 0)

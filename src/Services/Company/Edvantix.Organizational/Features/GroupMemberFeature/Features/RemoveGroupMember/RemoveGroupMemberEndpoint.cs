@@ -6,7 +6,7 @@ public class RemoveGroupMemberEndpoint : IEndpoint<NoContent, RemoveGroupMemberC
     {
         app.MapDelete(
                 "/groups/{groupId:long}/members/{memberId:guid}",
-                async (long groupId, Guid memberId, ISender sender, CancellationToken ct) =>
+                async (ulong groupId, Guid memberId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new RemoveGroupMemberCommand(groupId, memberId), sender, ct)
             )
             .WithName("RemoveGroupMember")

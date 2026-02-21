@@ -1,10 +1,10 @@
 using Edvantix.Constants.Other;
 
-namespace Edvantix.Organizational.Features.ContactFeature.Features.AddContact;
+namespace Edvantix.Organizational.Features.OrganizationFeature.Features.AddContact;
 
 public sealed record AddContactRequest(ContactType Type, string Value, string? Description);
 
-public class AddContactEndpoint : IEndpoint<Created<long>, AddContactCommand, ISender>
+public class AddContactEndpoint : IEndpoint<Created<ulong>, AddContactCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -18,7 +18,7 @@ public class AddContactEndpoint : IEndpoint<Created<long>, AddContactCommand, IS
                 ) =>
                 {
                     var command = new AddContactCommand(
-                        orgId,
+                        (ulong)orgId,
                         request.Type,
                         request.Value,
                         request.Description
@@ -30,12 +30,13 @@ public class AddContactEndpoint : IEndpoint<Created<long>, AddContactCommand, IS
             .WithTags("Contacts")
             .WithSummary("Добавить контакт")
             .WithDescription("Добавляет контакт организации. Доступно владельцу и менеджеру.")
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<ulong>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status404NotFound)
             .RequireAuthorization();
     }
 
-    public async Task<Created<long>> HandleAsync(
+    public async Task<Created<ulong>> HandleAsync(
         AddContactCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

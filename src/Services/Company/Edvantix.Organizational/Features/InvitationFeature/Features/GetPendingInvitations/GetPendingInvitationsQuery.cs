@@ -1,5 +1,4 @@
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Specifications;
 using Edvantix.Organizational.Features.InvitationFeature.Models;
 using Edvantix.Organizational.Infrastructure.Services;
 
@@ -8,7 +7,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.GetPending
 /// <summary>
 /// Запрос списка ожидающих приглашений организации.
 /// </summary>
-public sealed record GetPendingInvitationsQuery(long OrganizationId)
+public sealed record GetPendingInvitationsQuery(ulong OrganizationId)
     : IRequest<IEnumerable<InvitationModel>>;
 
 /// <summary>
@@ -17,7 +16,7 @@ public sealed record GetPendingInvitationsQuery(long OrganizationId)
 public sealed class GetPendingInvitationsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetPendingInvitationsQuery, IEnumerable<InvitationModel>>
 {
-    public async Task<IEnumerable<InvitationModel>> Handle(
+    public async ValueTask<IEnumerable<InvitationModel>> Handle(
         GetPendingInvitationsQuery request,
         CancellationToken cancellationToken
     )
@@ -30,10 +29,10 @@ public sealed class GetPendingInvitationsQueryHandler(IServiceProvider provider)
             OrganizationRole.Manager
         );
 
-        var spec = new PendingInvitationsByOrganizationSpecification(request.OrganizationId);
-
-        using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
-        var invitations = await invitationRepo.GetByExpressionAsync(spec, cancellationToken);
+        // Pending-приглашения по organizationId (profileId не задан — все приглашения орга)
+        var spec = new InvitationSpecification(organizationId: request.OrganizationId);
+        var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
+        var invitations = await invitationRepo.ListAsync(spec, cancellationToken);
 
         return invitations.Select(MapToModel);
     }

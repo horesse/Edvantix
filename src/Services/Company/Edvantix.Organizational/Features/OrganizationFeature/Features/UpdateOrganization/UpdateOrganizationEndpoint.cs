@@ -22,7 +22,7 @@ public class UpdateOrganizationEndpoint : IEndpoint<NoContent, UpdateOrganizatio
                 ) =>
                 {
                     var command = new UpdateOrganizationCommand(
-                        id,
+                        (ulong)id,
                         request.Name,
                         request.NameLatin,
                         request.ShortName,

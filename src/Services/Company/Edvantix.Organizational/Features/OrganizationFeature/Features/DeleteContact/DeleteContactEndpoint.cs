@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.ContactFeature.Features.DeleteContact;
+namespace Edvantix.Organizational.Features.OrganizationFeature.Features.DeleteContact;
 
 public class DeleteContactEndpoint : IEndpoint<NoContent, DeleteContactCommand, ISender>
 {
@@ -7,7 +7,11 @@ public class DeleteContactEndpoint : IEndpoint<NoContent, DeleteContactCommand, 
         app.MapDelete(
                 "/organizations/{orgId:long}/contacts/{contactId:long}",
                 async (long orgId, long contactId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new DeleteContactCommand(orgId, contactId), sender, ct)
+                    await HandleAsync(
+                        new DeleteContactCommand((ulong)orgId, (ulong)contactId),
+                        sender,
+                        ct
+                    )
             )
             .WithName("DeleteOrganizationContact")
             .WithTags("Contacts")

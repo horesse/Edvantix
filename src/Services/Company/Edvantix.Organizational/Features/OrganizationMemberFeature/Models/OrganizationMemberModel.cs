@@ -3,8 +3,8 @@ namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Models;
 public sealed class OrganizationMemberModel
 {
     public Guid Id { get; set; }
-    public long OrganizationId { get; set; }
-    public long ProfileId { get; set; }
+    public ulong OrganizationId { get; set; }
+    public ulong ProfileId { get; set; }
     public OrganizationRole Role { get; set; }
     public DateTime JoinedAt { get; set; }
 

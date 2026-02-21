@@ -1,15 +1,17 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.AddMember;
 
-public sealed record AddMemberCommand(long OrganizationId, int ProfileId, OrganizationRole Role)
+public sealed record AddMemberCommand(ulong OrganizationId, ulong ProfileId, OrganizationRole Role)
     : IRequest<Guid>;
 
 public sealed class AddMemberCommandHandler(IServiceProvider provider)
     : IRequestHandler<AddMemberCommand, Guid>
 {
-    public async Task<Guid> Handle(AddMemberCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Guid> Handle(
+        AddMemberCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.RequireOrgRoleAsync(
@@ -20,14 +22,10 @@ public sealed class AddMemberCommandHandler(IServiceProvider provider)
         );
 
         // Проверить, что пользователь ещё не является участником
-        var spec = new OrganizationMemberByProfileSpecification(
-            request.ProfileId,
-            request.OrganizationId
-        );
+        var spec = new OrganizationMemberSpecification(request.ProfileId, request.OrganizationId);
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
 
-        using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-
-        var existing = await memberRepo.GetFirstByExpressionAsync(spec, cancellationToken);
+        var existing = await memberRepo.FindAsync(spec, cancellationToken);
         if (existing is not null)
             throw new InvalidOperationException(
                 "Пользователь уже является участником данной организации."
@@ -39,8 +37,8 @@ public sealed class AddMemberCommandHandler(IServiceProvider provider)
             request.Role
         );
 
-        await memberRepo.InsertAsync(member, cancellationToken);
-        await memberRepo.SaveEntitiesAsync(cancellationToken);
+        await memberRepo.AddAsync(member, cancellationToken);
+        await memberRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return member.Id;
     }

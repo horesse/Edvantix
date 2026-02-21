@@ -17,11 +17,10 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
         var profileId = await provider.GetProfileId(cancellationToken);
 
         var spec = new OrganizationMemberSpecification(profileId, organizationId);
-
         var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
 
         var member =
-            await memberRepo.GetFirstByExpressionAsync(spec, cancellationToken)
+            await memberRepo.FindAsync(spec, cancellationToken)
             ?? throw new ForbiddenException("Вы не являетесь участником данной организации.");
 
         return member;
@@ -29,7 +28,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
 
     /// <inheritdoc />
     public async Task<OrganizationMember> RequireOrgRoleAsync(
-        long organizationId,
+        ulong organizationId,
         CancellationToken cancellationToken,
         params OrganizationRole[] allowedRoles
     )
@@ -53,16 +52,15 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
         var profileId = await provider.GetProfileId(cancellationToken);
 
         // Получить группу для определения организации
-        using var groupRepo = provider.GetRequiredService<IGroupRepository>();
-        var group = await groupRepo.GetByIdAsync(groupId, cancellationToken);
-
-        if (group is null)
-            throw new NotFoundException($"Группа с ID {groupId} не найдена.");
+        var groupRepo = provider.GetRequiredService<IGroupRepository>();
+        var group =
+            await groupRepo.FindByIdAsync(groupId, cancellationToken)
+            ?? throw new NotFoundException($"Группа с ID {groupId} не найдена.");
 
         // Проверить роль на уровне организации
-        var orgSpec = new GroupMemberSpecification(profileId, group.OrganizationId);
-        using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-        var orgMember = await memberRepo.GetFirstByExpressionAsync(orgSpec, cancellationToken);
+        var orgSpec = new OrganizationMemberSpecification(profileId, group.OrganizationId);
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
+        var orgMember = await memberRepo.FindAsync(orgSpec, cancellationToken);
 
         if (orgMember is null)
             throw new ForbiddenException(
@@ -75,11 +73,8 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
 
         // Проверить роль на уровне группы (Teacher или Manager группы)
         var groupMemberSpec = new GroupMemberSpecification(profileId, groupId);
-        using var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
-        var groupMember = await groupMemberRepo.GetFirstByExpressionAsync(
-            groupMemberSpec,
-            cancellationToken
-        );
+        var groupMemberRepo = provider.GetRequiredService<IGroupMemberRepository>();
+        var groupMember = await groupMemberRepo.FindAsync(groupMemberSpec, cancellationToken);
 
         if (groupMember?.Role is not (GroupRole.Teacher or GroupRole.Manager))
         {

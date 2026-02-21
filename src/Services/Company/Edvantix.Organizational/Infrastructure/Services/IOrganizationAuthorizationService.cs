@@ -19,7 +19,7 @@ public interface IOrganizationAuthorizationService
     /// Выбрасывает ForbiddenException, если роль не соответствует.
     /// </summary>
     Task<OrganizationMember> RequireOrgRoleAsync(
-        long organizationId,
+        ulong organizationId,
         CancellationToken cancellationToken,
         params OrganizationRole[] allowedRoles
     );

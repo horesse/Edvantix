@@ -16,7 +16,11 @@ public class UpdateMemberRoleEndpoint : IEndpoint<NoContent, UpdateMemberRoleCom
                     CancellationToken ct
                 ) =>
                 {
-                    var command = new UpdateMemberRoleCommand(orgId, memberId, request.NewRole);
+                    var command = new UpdateMemberRoleCommand(
+                        (ulong)orgId,
+                        memberId,
+                        request.NewRole
+                    );
                     return await HandleAsync(command, sender, ct);
                 }
             )

@@ -1,6 +1,6 @@
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.AddMember;
 
-public sealed record AddMemberRequest(int ProfileId, OrganizationRole Role);
+public sealed record AddMemberRequest(ulong ProfileId, OrganizationRole Role);
 
 public class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISender>
 {
@@ -15,7 +15,11 @@ public class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISen
                     CancellationToken ct
                 ) =>
                 {
-                    var command = new AddMemberCommand(orgId, request.ProfileId, request.Role);
+                    var command = new AddMemberCommand(
+                        (ulong)orgId,
+                        request.ProfileId,
+                        request.Role
+                    );
                     return await HandleAsync(command, sender, ct);
                 }
             )

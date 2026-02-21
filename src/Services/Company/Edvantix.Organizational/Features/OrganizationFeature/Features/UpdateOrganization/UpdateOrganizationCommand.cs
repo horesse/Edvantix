@@ -3,7 +3,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateOrganization;
 
 public sealed record UpdateOrganizationCommand(
-    long Id,
+    ulong Id,
     string Name,
     string NameLatin,
     string ShortName,
@@ -14,7 +14,7 @@ public sealed record UpdateOrganizationCommand(
 public sealed class UpdateOrganizationCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateOrganizationCommand, Unit>
 {
-    public async Task<Unit> Handle(
+    public async ValueTask<Unit> Handle(
         UpdateOrganizationCommand request,
         CancellationToken cancellationToken
     )
@@ -27,17 +27,15 @@ public sealed class UpdateOrganizationCommandHandler(IServiceProvider provider)
             OrganizationRole.Manager
         );
 
-        using var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
-        var org = await orgRepo.GetByIdAsync(request.Id, cancellationToken);
-
-        if (org is null)
-            throw new NotFoundException($"Организация с ID {request.Id} не найдена.");
+        var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
+        var org =
+            await orgRepo.FindByIdAsync(request.Id, cancellationToken)
+            ?? throw new NotFoundException($"Организация с ID {request.Id} не найдена.");
 
         org.UpdateNames(request.Name, request.NameLatin, request.ShortName, request.PrintName);
         org.UpdateDescription(request.Description);
 
-        await orgRepo.UpdateAsync(org, cancellationToken);
-        await orgRepo.SaveEntitiesAsync(cancellationToken);
+        await orgRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

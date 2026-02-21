@@ -7,7 +7,7 @@ public class RemoveMemberEndpoint : IEndpoint<NoContent, RemoveMemberCommand, IS
         app.MapDelete(
                 "/organizations/{orgId:long}/members/{memberId:guid}",
                 async (long orgId, Guid memberId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new RemoveMemberCommand(orgId, memberId), sender, ct)
+                    await HandleAsync(new RemoveMemberCommand((ulong)orgId, memberId), sender, ct)
             )
             .WithName("RemoveOrganizationMember")
             .WithTags("Organization Members")

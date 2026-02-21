@@ -1,6 +1,6 @@
 using Edvantix.Constants.Other;
 
-namespace Edvantix.Organizational.Features.ContactFeature.Features.UpdateContact;
+namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateContact;
 
 public sealed record UpdateContactRequest(ContactType Type, string Value, string? Description);
 
@@ -19,8 +19,8 @@ public class UpdateContactEndpoint : IEndpoint<NoContent, UpdateContactCommand, 
                 ) =>
                 {
                     var command = new UpdateContactCommand(
-                        orgId,
-                        contactId,
+                        (ulong)orgId,
+                        (ulong)contactId,
                         request.Type,
                         request.Value,
                         request.Description

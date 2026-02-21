@@ -3,7 +3,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.UpdateMemberRole;
 
 public sealed record UpdateMemberRoleCommand(
-    long OrganizationId,
+    ulong OrganizationId,
     Guid MemberId,
     OrganizationRole NewRole
 ) : IRequest<Unit>;
@@ -11,7 +11,7 @@ public sealed record UpdateMemberRoleCommand(
 public sealed class UpdateMemberRoleCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateMemberRoleCommand, Unit>
 {
-    public async Task<Unit> Handle(
+    public async ValueTask<Unit> Handle(
         UpdateMemberRoleCommand request,
         CancellationToken cancellationToken
     )
@@ -24,10 +24,12 @@ public sealed class UpdateMemberRoleCommandHandler(IServiceProvider provider)
             OrganizationRole.Manager
         );
 
-        using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-        var target = await memberRepo.GetByIdAsync(request.MemberId, cancellationToken);
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
+        var target =
+            await memberRepo.FindByIdAsync(request.MemberId, cancellationToken)
+            ?? throw new NotFoundException($"Участник с ID {request.MemberId} не найден.");
 
-        if (target is null || target.OrganizationId != request.OrganizationId)
+        if (target.OrganizationId != request.OrganizationId)
             throw new NotFoundException($"Участник с ID {request.MemberId} не найден.");
 
         // Manager не может назначить Owner или понизить Owner
@@ -42,8 +44,7 @@ public sealed class UpdateMemberRoleCommandHandler(IServiceProvider provider)
         }
 
         target.UpdateRole(request.NewRole);
-        await memberRepo.UpdateAsync(target, cancellationToken);
-        await memberRepo.SaveEntitiesAsync(cancellationToken);
+        await memberRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

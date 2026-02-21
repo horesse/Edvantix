@@ -1,4 +1,6 @@
-﻿namespace Edvantix.Organizational.Grpc.Services;
+﻿using Edvantix.Persona.Grpc.Services;
+
+namespace Edvantix.Organizational.Grpc.Services;
 
 [ExcludeFromCodeCoverage]
 public class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service) : IProfileService
@@ -8,11 +10,8 @@ public class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service)
         CancellationToken cancellationToken
     )
     {
-        var request = new GetProfileByAccountIdRequest { AccountId = accountId.ToString() };
-        var result = await service.GetProfileByAccountIdAsync(
-            request,
-            cancellationToken: cancellationToken
-        );
+        var request = new GetProfileRequest() { AccountId = accountId.ToString() };
+        var result = await service.GetProfileAsync(request, cancellationToken: cancellationToken);
 
         return result?.Id ?? throw new NotFoundException("Профиль не найден.");
     }

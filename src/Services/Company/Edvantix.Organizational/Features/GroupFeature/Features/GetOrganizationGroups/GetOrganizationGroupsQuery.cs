@@ -5,7 +5,7 @@ using Edvantix.SharedKernel.Results;
 namespace Edvantix.Organizational.Features.GroupFeature.Features.GetOrganizationGroups;
 
 public sealed record GetOrganizationGroupsQuery(
-    long OrganizationId,
+    ulong OrganizationId,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,
@@ -23,7 +23,7 @@ public sealed record GetOrganizationGroupsQuery(
 public sealed class GetOrganizationGroupsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetOrganizationGroupsQuery, PagedResult<GroupModel>>
 {
-    public async Task<PagedResult<GroupModel>> Handle(
+    public async ValueTask<PagedResult<GroupModel>> Handle(
         GetOrganizationGroupsQuery request,
         CancellationToken cancellationToken
     )
@@ -31,16 +31,17 @@ public sealed class GetOrganizationGroupsQueryHandler(IServiceProvider provider)
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.GetCurrentMemberAsync(request.OrganizationId, cancellationToken);
 
-        var spec = new GroupSpecification { OrganizationId = request.OrganizationId };
+        // Spec с includeMembers для корректного подсчёта MembersCount
+        var spec = new GroupSpecification(request.OrganizationId, includeMembers: true);
 
-        using var groupRepo = provider.GetRequiredService<IGroupRepository>();
+        var groupRepo = provider.GetRequiredService<IGroupRepository>();
 
-        var count = await groupRepo.GetCountByExpressionAsync(spec, cancellationToken);
+        var count = await groupRepo.CountAsync(spec, cancellationToken);
 
         spec.Skip = (request.PageIndex - 1) * request.PageSize;
         spec.Take = request.PageSize;
 
-        var groups = await groupRepo.GetByExpressionAsync(spec, cancellationToken);
+        var groups = await groupRepo.ListAsync(spec, cancellationToken);
 
         var items = groups
             .Select(g => new GroupModel

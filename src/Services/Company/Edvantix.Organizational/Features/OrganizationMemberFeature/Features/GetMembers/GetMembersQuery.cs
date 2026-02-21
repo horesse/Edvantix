@@ -5,7 +5,7 @@ using Edvantix.SharedKernel.Results;
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.GetMembers;
 
 public sealed record GetMembersQuery(
-    long OrganizationId,
+    ulong OrganizationId,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,
@@ -14,16 +14,13 @@ public sealed record GetMembersQuery(
     )]
     [property: DefaultValue(Pagination.DefaultPageSize)]
         int PageSize = Pagination.DefaultPageSize,
-    [property: Description("Свойство для упорядочивания результатов")] string? OrderBy = null,
-    [property: Description("При выборе порядка сортировки результат будет в порядке убывания.")]
-    [property: DefaultValue(false)]
-        bool IsDescending = false
+    [property: Description("Свойство для упорядочивания результатов")] string? OrderBy = null
 ) : IRequest<PagedResult<OrganizationMemberModel>>;
 
 public sealed class GetMembersQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetMembersQuery, PagedResult<OrganizationMemberModel>>
 {
-    public async Task<PagedResult<OrganizationMemberModel>> Handle(
+    public async ValueTask<PagedResult<OrganizationMemberModel>> Handle(
         GetMembersQuery request,
         CancellationToken cancellationToken
     )
@@ -31,16 +28,15 @@ public sealed class GetMembersQueryHandler(IServiceProvider provider)
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.GetCurrentMemberAsync(request.OrganizationId, cancellationToken);
 
-        var spec = new OrganizationMemberSpecification { OrganizationId = request.OrganizationId };
+        var spec = new OrganizationMemberSpecification(request.OrganizationId);
+        var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
 
-        using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-
-        var count = await memberRepo.GetCountByExpressionAsync(spec, cancellationToken);
+        var count = await memberRepo.CountAsync(spec, cancellationToken);
 
         spec.Skip = (request.PageIndex - 1) * request.PageSize;
         spec.Take = request.PageSize;
 
-        var members = await memberRepo.GetByExpressionAsync(spec, cancellationToken);
+        var members = await memberRepo.ListAsync(spec, cancellationToken);
 
         // TODO: Fetch user profile data from Profile service via gRPC
         var items = members

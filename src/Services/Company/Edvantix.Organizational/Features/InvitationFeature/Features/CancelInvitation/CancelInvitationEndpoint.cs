@@ -9,7 +9,7 @@ public class CancelInvitationEndpoint : IEndpoint<NoContent, CancelInvitationCom
     {
         app.MapDelete(
                 "/organizations/{orgId:long}/invitations/{invitationId:guid}",
-                async (long orgId, Guid invitationId, ISender sender, CancellationToken ct) =>
+                async (ulong orgId, Guid invitationId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new CancelInvitationCommand(orgId, invitationId), sender, ct)
             )
             .WithName("CancelInvitation")

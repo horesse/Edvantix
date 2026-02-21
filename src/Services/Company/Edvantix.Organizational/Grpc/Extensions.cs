@@ -1,6 +1,7 @@
 ﻿using Edvantix.Chassis.Utilities;
 using Edvantix.Chassis.Utilities.Configuration;
 using Edvantix.Organizational.Grpc.Services;
+using Edvantix.Persona.Grpc.Services;
 
 namespace Edvantix.Organizational.Grpc;
 

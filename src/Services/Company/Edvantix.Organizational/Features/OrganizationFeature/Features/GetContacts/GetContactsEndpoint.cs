@@ -1,6 +1,6 @@
-using Edvantix.Organizational.Features.ContactFeature.Models;
+using Edvantix.Organizational.Features.OrganizationFeature.Models;
 
-namespace Edvantix.Organizational.Features.ContactFeature.Features.GetContacts;
+namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetContacts;
 
 public class GetContactsEndpoint
     : IEndpoint<Ok<IEnumerable<ContactModel>>, GetContactsQuery, ISender>
@@ -10,7 +10,7 @@ public class GetContactsEndpoint
         app.MapGet(
                 "/organizations/{orgId:long}/contacts",
                 async (long orgId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetContactsQuery(orgId), sender, ct)
+                    await HandleAsync(new GetContactsQuery((ulong)orgId), sender, ct)
             )
             .WithName("GetOrganizationContacts")
             .WithTags("Contacts")
@@ -18,6 +18,7 @@ public class GetContactsEndpoint
             .WithDescription("Возвращает список контактов организации. Доступно участникам.")
             .Produces<IEnumerable<ContactModel>>()
             .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status404NotFound)
             .RequireAuthorization();
     }
 

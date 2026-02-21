@@ -3,12 +3,12 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetOrganization;
 
-public sealed record GetOrganizationQuery(long Id) : IRequest<OrganizationModel>;
+public sealed record GetOrganizationQuery(ulong Id) : IRequest<OrganizationModel>;
 
 public sealed class GetOrganizationQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetOrganizationQuery, OrganizationModel>
 {
-    public async Task<OrganizationModel> Handle(
+    public async ValueTask<OrganizationModel> Handle(
         GetOrganizationQuery request,
         CancellationToken cancellationToken
     )
@@ -16,11 +16,10 @@ public sealed class GetOrganizationQueryHandler(IServiceProvider provider)
         var authService = provider.GetRequiredService<IOrganizationAuthorizationService>();
         await authService.GetCurrentMemberAsync(request.Id, cancellationToken);
 
-        using var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
-        var org = await orgRepo.GetByIdAsync(request.Id, cancellationToken);
-
-        if (org is null)
-            throw new NotFoundException($"Организация с ID {request.Id} не найдена.");
+        var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
+        var org =
+            await orgRepo.FindByIdAsync(request.Id, cancellationToken)
+            ?? throw new NotFoundException($"Организация с ID {request.Id} не найдена.");
 
         // TODO: Fetch user profile data from Profile service via gRPC
 

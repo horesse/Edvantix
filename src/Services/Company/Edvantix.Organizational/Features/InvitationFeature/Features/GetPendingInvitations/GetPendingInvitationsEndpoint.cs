@@ -12,7 +12,7 @@ public class GetPendingInvitationsEndpoint
     {
         app.MapGet(
                 "/organizations/{orgId:long}/invitations",
-                async (long orgId, ISender sender, CancellationToken ct) =>
+                async (ulong orgId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetPendingInvitationsQuery(orgId), sender, ct)
             )
             .WithName("GetPendingInvitations")

@@ -1,6 +1,4 @@
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Specifications;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.InvitationFeature.Features.CreateInvitation;
@@ -9,9 +7,9 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.CreateInvi
 /// Команда создания приглашения в организацию.
 /// </summary>
 public sealed record CreateInvitationCommand(
-    long OrganizationId,
+    ulong OrganizationId,
     string? InviteeEmail,
-    long? InviteeProfileId,
+    ulong? InviteeProfileId,
     OrganizationRole Role,
     int TtlDays = Invitation.DefaultTtlDays
 ) : IRequest<Guid>;
@@ -23,7 +21,7 @@ public sealed record CreateInvitationCommand(
 public sealed class CreateInvitationCommandHandler(IServiceProvider provider)
     : IRequestHandler<CreateInvitationCommand, Guid>
 {
-    public async Task<Guid> Handle(
+    public async ValueTask<Guid> Handle(
         CreateInvitationCommand request,
         CancellationToken cancellationToken
     )
@@ -36,7 +34,7 @@ public sealed class CreateInvitationCommandHandler(IServiceProvider provider)
             OrganizationRole.Manager
         );
 
-        // Manager не может назначить роль Owner.
+        // Manager не может назначить роль Owner
         if (
             currentMember.Role == OrganizationRole.Manager
             && request.Role == OrganizationRole.Owner
@@ -49,41 +47,31 @@ public sealed class CreateInvitationCommandHandler(IServiceProvider provider)
 
         var normalizedEmail = request.InviteeEmail?.Trim().ToLowerInvariant();
 
-        // Проверить, что пользователь ещё не является участником.
+        // Проверить, что пользователь ещё не является участником
         if (request.InviteeProfileId.HasValue)
         {
-            using var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
-
-            var memberSpec = new OrganizationMemberByProfileSpecification(
+            var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
+            var memberSpec = new OrganizationMemberSpecification(
                 request.InviteeProfileId.Value,
                 request.OrganizationId
             );
 
-            var existingMember = await memberRepo.GetFirstByExpressionAsync(
-                memberSpec,
-                cancellationToken
-            );
-
+            var existingMember = await memberRepo.FindAsync(memberSpec, cancellationToken);
             if (existingMember is not null)
                 throw new InvalidOperationException(
                     "Пользователь уже является участником данной организации."
                 );
         }
 
-        // Проверить дубликат ожидающего приглашения.
-        using var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
-
-        var duplicateSpec = new DuplicatePendingInvitationSpecification(
+        // Проверить дубликат ожидающего приглашения
+        var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
+        var duplicateSpec = new InvitationSpecification(
             request.OrganizationId,
             normalizedEmail,
             request.InviteeProfileId
         );
 
-        var existingInvitation = await invitationRepo.GetFirstByExpressionAsync(
-            duplicateSpec,
-            cancellationToken
-        );
-
+        var existingInvitation = await invitationRepo.FindAsync(duplicateSpec, cancellationToken);
         if (existingInvitation is not null)
             throw new InvalidOperationException(
                 "Ожидающее приглашение для данного пользователя уже существует."
@@ -98,8 +86,8 @@ public sealed class CreateInvitationCommandHandler(IServiceProvider provider)
             request.TtlDays
         );
 
-        await invitationRepo.InsertAsync(invitation, cancellationToken);
-        await invitationRepo.SaveEntitiesAsync(cancellationToken);
+        await invitationRepo.AddAsync(invitation, cancellationToken);
+        await invitationRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return invitation.Id;
     }

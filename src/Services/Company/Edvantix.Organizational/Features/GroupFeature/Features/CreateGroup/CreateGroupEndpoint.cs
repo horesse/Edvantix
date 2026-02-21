@@ -2,14 +2,14 @@ namespace Edvantix.Organizational.Features.GroupFeature.Features.CreateGroup;
 
 public sealed record CreateGroupRequest(string Name, string? Description);
 
-public class CreateGroupEndpoint : IEndpoint<Created<long>, CreateGroupCommand, ISender>
+public class CreateGroupEndpoint : IEndpoint<Created<ulong>, CreateGroupCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
                 "/organizations/{orgId:long}/groups",
                 async (
-                    long orgId,
+                    ulong orgId,
                     CreateGroupRequest request,
                     ISender sender,
                     CancellationToken ct
@@ -25,12 +25,12 @@ public class CreateGroupEndpoint : IEndpoint<Created<long>, CreateGroupCommand, 
             .WithDescription(
                 "Создаёт новую группу в организации. Доступно владельцу, менеджеру и учителю."
             )
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<ulong>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization();
     }
 
-    public async Task<Created<long>> HandleAsync(
+    public async Task<Created<ulong>> HandleAsync(
         CreateGroupCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

@@ -8,7 +8,12 @@ public class UpdateGroupEndpoint : IEndpoint<NoContent, UpdateGroupCommand, ISen
     {
         app.MapPut(
                 "/groups/{id:long}",
-                async (long id, UpdateGroupRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    ulong id,
+                    UpdateGroupRequest request,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
                 {
                     var command = new UpdateGroupCommand(id, request.Name, request.Description);
                     return await HandleAsync(command, sender, ct);

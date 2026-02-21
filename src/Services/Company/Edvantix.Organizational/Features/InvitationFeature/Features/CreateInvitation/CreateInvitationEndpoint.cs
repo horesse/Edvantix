@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.CreateInvi
 /// </summary>
 public sealed record CreateInvitationRequest(
     string? InviteeEmail,
-    long? InviteeProfileId,
+    ulong? InviteeProfileId,
     OrganizationRole Role,
     int TtlDays = 7
 );
@@ -20,7 +20,7 @@ public class CreateInvitationEndpoint : IEndpoint<Created<Guid>, CreateInvitatio
         app.MapPost(
                 "/organizations/{orgId:long}/invitations",
                 async (
-                    long orgId,
+                    ulong orgId,
                     CreateInvitationRequest request,
                     ISender sender,
                     CancellationToken ct

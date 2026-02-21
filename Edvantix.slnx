@@ -11,7 +11,7 @@
   <Folder Name="/Services/" />
   <Folder Name="/Services/Core/" />
   <Folder Name="/Services/Core/Company/">
-    <Project Path="src/Services/Company/Edvantix.Company/Edvantix.Company.csproj" />
+    <Project Path="src/Services/Company/Edvantix.Organizational/Edvantix.Organizational.csproj" />
   </Folder>
   <Folder Name="/Services/Core/Blog/">
     <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />

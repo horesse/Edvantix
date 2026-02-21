@@ -45,7 +45,7 @@ var profileContainer = storage.AddBlobContainer(
 );
 
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
-var organizationDb = postgres.AddDatabase(Components.Database.Organization);
+var organizationDb = postgres.AddDatabase(Components.Database.Organizational);
 var systemDb = postgres.AddDatabase(Components.Database.System);
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var subscriptionDb = postgres.AddDatabase(Components.Database.Subscription);
@@ -65,8 +65,8 @@ var profileApi = builder
     .WaitFor(profileContainer)
     .WithFriendlyUrls();
 
-var organizationApi = builder
-    .AddProject<Edvantix_Company>(Services.Company)
+var organizationalApi = builder
+    .AddProject<Edvantix_Organizational>(Services.Organizational)
     .WithReference(organizationDb)
     .WaitFor(organizationDb)
     .WithKeycloak(keycloak)
@@ -97,7 +97,7 @@ var blogApi = builder
 
 var gateway = builder
     .AddApiGatewayProxy()
-    .WithService(organizationApi, true)
+    .WithService(organizationalApi, true)
     .WithService(profileApi, true)
     .WithService(subscriptionsApi, true)
     .WithService(blogApi, true)
@@ -143,7 +143,7 @@ if (builder.ExecutionContext.IsRunMode)
 {
     builder
         .AddScalar(keycloak)
-        .WithOpenAPI(organizationApi)
+        .WithOpenAPI(organizationalApi)
         .WithOpenAPI(profileApi)
         .WithOpenAPI(subscriptionsApi)
         .WithOpenAPI(blogApi);

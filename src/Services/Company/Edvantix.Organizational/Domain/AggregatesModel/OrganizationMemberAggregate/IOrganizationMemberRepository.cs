@@ -1,0 +1,3 @@
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+
+public interface IOrganizationMemberRepository : IRepository<OrganizationMember>;

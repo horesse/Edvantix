@@ -492,7 +492,7 @@
           "attributes": {}
         }
       ],
-      "${CLIENT_PROFILE_ID}": [
+      "${CLIENT_PERSONA_ID}": [
         {
           "id": "0c696741-e978-41bc-be6f-136f7edaeac1",
           "name": "uma_protection",
@@ -675,19 +675,19 @@
     },
     {
       "id": "fe9fbf9a-6045-44a3-a730-cc6986cd3e1e",
-      "username": "service-account-${CLIENT_PROFILE_ID}",
+      "username": "service-account-${CLIENT_PERSONA_ID}",
       "emailVerified": false,
       "createdTimestamp": 1766698049617,
       "enabled": true,
       "totp": false,
-      "serviceAccountClientId": "${CLIENT_PROFILE_ID}",
+      "serviceAccountClientId": "${CLIENT_PERSONA_ID}",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
         "default-roles-${REALM_NAME}"
       ],
       "clientRoles": {
-        "${CLIENT_PROFILE_ID}": [
+        "${CLIENT_PERSONA_ID}": [
           "uma_protection"
         ]
       },
@@ -1384,8 +1384,8 @@
         "email"
       ],
       "optionalClientScopes": [
-        "${CLIENT_PROFILE_ID}_read",
-        "${CLIENT_PROFILE_ID}_write",
+        "${CLIENT_PERSONA_ID}_read",
+        "${CLIENT_PERSONA_ID}_write",
         "${CLIENT_COMPANY_ID}_read",
         "${CLIENT_COMPANY_ID}_write",
         "address",
@@ -1464,7 +1464,7 @@
       "optionalClientScopes": [
         "${CLIENT_BLOG_ID}_read",
         "${CLIENT_BLOG_ID}_write",
-        "${CLIENT_PROFILE_ID}_read",
+        "${CLIENT_PERSONA_ID}_read",
         "address",
         "phone",
         "organization",
@@ -1543,17 +1543,17 @@
     },
     {
       "id": "df6e2df7-15be-49f9-973d-64689e2da07d",
-      "clientId": "${CLIENT_PROFILE_ID}",
-      "name": "${CLIENT_PROFILE_NAME}",
+      "clientId": "${CLIENT_PERSONA_ID}",
+      "name": "${CLIENT_PERSONA_NAME}",
       "description": "",
-      "rootUrl": "${CLIENT_PROFILE_URL}",
-      "adminUrl": "${CLIENT_PROFILE_URL_CONTAINERHOST}",
+      "rootUrl": "${CLIENT_PERSONA_URL}",
+      "adminUrl": "${CLIENT_PERSONA_URL_CONTAINERHOST}",
       "baseUrl": "/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
-      "secret": "${CLIENT_PROFILE_SECRET}",
+      "secret": "${CLIENT_PERSONA_SECRET}",
       "redirectUris": [
         "*"
       ],
@@ -1610,8 +1610,8 @@
         "email"
       ],
       "optionalClientScopes": [
-        "${CLIENT_PROFILE_ID}_read",
-        "${CLIENT_PROFILE_ID}_write",
+        "${CLIENT_PERSONA_ID}_read",
+        "${CLIENT_PERSONA_ID}_write",
         "address",
         "phone",
         "organization",
@@ -2552,8 +2552,8 @@
     },
     {
       "id": "efc5465b-7bda-412a-ba0e-1594bad0f960",
-      "name": "${CLIENT_PROFILE_ID}_read",
-      "description": "Read for ${CLIENT_PROFILE_NAME}",
+      "name": "${CLIENT_PERSONA_ID}_read",
+      "description": "Read for ${CLIENT_PERSONA_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
@@ -2564,8 +2564,8 @@
     },
     {
       "id": "03f5b25c-2f97-45a5-b634-9d4cb12f7b8d",
-      "name": "${CLIENT_PROFILE_ID}_write",
-      "description": "Write for ${CLIENT_PROFILE_NAME}",
+      "name": "${CLIENT_PERSONA_ID}_write",
+      "description": "Write for ${CLIENT_PERSONA_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",

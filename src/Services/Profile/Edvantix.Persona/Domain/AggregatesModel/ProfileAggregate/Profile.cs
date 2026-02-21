@@ -65,12 +65,8 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
 
     // ─── Scalar updates ───────────────────────────────────────────────────────
 
-    /// <summary>Обновляет пол и дату рождения.</summary>
-    public void UpdatePersonalInfo(Gender gender, DateOnly birthDate)
-    {
-        Gender = gender;
-        BirthDate = birthDate;
-    }
+    /// <summary>Обновляет дату рождения. Пол устанавливается при регистрации и не может быть изменён.</summary>
+    public void UpdatePersonalInfo(DateOnly birthDate) => BirthDate = birthDate;
 
     /// <summary>
     /// Обновляет ФИО, изменяя значения существующей сущности FullName.

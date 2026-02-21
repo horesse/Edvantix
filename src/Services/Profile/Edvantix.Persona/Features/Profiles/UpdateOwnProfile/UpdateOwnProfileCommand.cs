@@ -2,9 +2,35 @@ using Edvantix.Chassis.Utilities;
 
 namespace Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
 
-/// <summary>Команда обновления собственного профиля. Возвращает обновлённое краткое представление.</summary>
-public sealed record UpdateOwnProfileCommand(UpdateProfileRequest Request)
-    : IRequest<ProfileViewModel>;
+/// <summary>
+/// Команда обновления собственного профиля. Принимается как multipart/form-data.
+/// Возвращает обновлённое краткое представление профиля.
+/// </summary>
+public sealed class UpdateOwnProfileCommand : IRequest<ProfileViewModel>
+{
+    public required string FirstName { get; init; }
+    public required string LastName { get; init; }
+    public string? MiddleName { get; init; }
+    public DateOnly BirthDate { get; init; }
+
+    /// <summary>Полный список контактов. Заменяет все существующие.</summary>
+    public List<ContactRequest> Contacts { get; init; } = [];
+
+    /// <summary>Полный список образования. Заменяет все существующие записи.</summary>
+    public List<EducationRequest> Educations { get; init; } = [];
+
+    /// <summary>Полная история занятости. Заменяет все существующие записи.</summary>
+    public List<EmploymentHistoryRequest> EmploymentHistories { get; init; } = [];
+
+    /// <summary>Новый аватар пользователя (необязательно, JPEG/PNG до 1 МБ).</summary>
+    public IFormFile? Avatar { get; init; }
+
+    /// <summary>URN загруженного аватара. Устанавливается PreProcessor'ом перед выполнением команды.</summary>
+    public string? AvatarUrn { get; set; }
+
+    /// <summary>URN предыдущего аватара. Устанавливается обработчиком для удаления PostProcessor'ом.</summary>
+    public string? OldAvatarUrn { get; set; }
+}
 
 public sealed class UpdateOwnProfileCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateOwnProfileCommand, ProfileViewModel>
@@ -17,39 +43,34 @@ public sealed class UpdateOwnProfileCommandHandler(IServiceProvider provider)
         var accountId = provider.GetUserId();
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        // Загружаем с коллекциями, так как ReplaceContacts/Educations/EmploymentHistories
-        // требуют загруженных навигационных свойств для каскадного удаления EF Core
+        // Загружаем с коллекциями, так как Replace* требуют загруженных навигационных свойств
         var spec = new ProfileByAccountIdSpec(accountId, withDetails: true);
         var profile =
             await profileRepo.FindAsync(spec, ct)
             ?? throw new NotFoundException("Профиль не найден.");
 
-        ApplyChanges(profile, command.Request);
+        if (command.AvatarUrn is not null)
+        {
+            // Сохраняем URN старого аватара для удаления в PostProcessor после успешного сохранения
+            command.OldAvatarUrn = profile.AvatarUrl;
+            profile.UploadAvatar(command.AvatarUrn);
+        }
 
-        await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
-
-        var mapper = provider.GetRequiredService<IMapper<Profile, ProfileViewModel>>();
-        return mapper.Map(profile);
-    }
-
-    /// <summary>Применяет изменения из запроса к агрегату Profile.</summary>
-    private static void ApplyChanges(Profile profile, UpdateProfileRequest request)
-    {
-        profile.UpdatePersonalInfo(request.Gender, request.BirthDate);
-        profile.UpdateFullName(request.FirstName, request.LastName, request.MiddleName);
+        profile.UpdatePersonalInfo(command.BirthDate);
+        profile.UpdateFullName(command.FirstName, command.LastName, command.MiddleName);
 
         profile.ReplaceContacts(
-            request.Contacts.Select(c => profile.CreateContact(c.Type, c.Value, c.Description))
+            command.Contacts.Select(c => profile.CreateContact(c.Type, c.Value, c.Description))
         );
 
         profile.ReplaceEducations(
-            request.Educations.Select(e =>
+            command.Educations.Select(e =>
                 profile.CreateEducation(e.DateStart, e.Institution, e.Level, e.Specialty, e.DateEnd)
             )
         );
 
         profile.ReplaceEmploymentHistories(
-            request.EmploymentHistories.Select(e =>
+            command.EmploymentHistories.Select(e =>
                 profile.CreateEmploymentHistory(
                     e.Workplace,
                     e.Position,
@@ -59,5 +80,10 @@ public sealed class UpdateOwnProfileCommandHandler(IServiceProvider provider)
                 )
             )
         );
+
+        await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
+
+        var mapper = provider.GetRequiredService<IMapper<Profile, ProfileViewModel>>();
+        return mapper.Map(profile);
     }
 }

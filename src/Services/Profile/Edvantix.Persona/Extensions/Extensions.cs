@@ -7,6 +7,8 @@ using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
+using Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
+using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
 
@@ -60,9 +62,27 @@ public static class Extensions
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
             )
+            // Open-generic behaviors run first (activity tracing → logging → validation)
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            // Avatar upload/delete processors — run after validation, before/after handler
+            .AddScoped<
+                IPipelineBehavior<UpdateOwnProfileCommand, ProfileViewModel>,
+                UpdateOwnProfilePreProcessor
+            >()
+            .AddScoped<
+                IPipelineBehavior<UpdateOwnProfileCommand, ProfileViewModel>,
+                UpdateOwnProfilePostProcessor
+            >()
+            .AddScoped<
+                IPipelineBehavior<UpdateProfileByAdminCommand, ProfileViewModel>,
+                UpdateProfileByAdminPreProcessor
+            >()
+            .AddScoped<
+                IPipelineBehavior<UpdateProfileByAdminCommand, ProfileViewModel>,
+                UpdateProfileByAdminPostProcessor
+            >();
 
         var appSettings = new AppSettings();
 

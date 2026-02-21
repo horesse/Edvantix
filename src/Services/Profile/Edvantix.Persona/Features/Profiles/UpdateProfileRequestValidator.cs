@@ -1,11 +1,12 @@
+using Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
+using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
+
 namespace Edvantix.Persona.Features.Profiles;
 
-public sealed class UpdateProfileRequestValidator : AbstractValidator<UpdateProfileRequest>
+public sealed class UpdateOwnProfileCommandValidator : AbstractValidator<UpdateOwnProfileCommand>
 {
-    public UpdateProfileRequestValidator()
+    public UpdateOwnProfileCommandValidator()
     {
-        RuleFor(x => x.Gender).IsInEnum().WithMessage("Указан некорректный пол");
-
         RuleFor(x => x.FirstName)
             .NotEmpty()
             .WithMessage("Имя является обязательным полем")
@@ -21,6 +22,44 @@ public sealed class UpdateProfileRequestValidator : AbstractValidator<UpdateProf
         RuleFor(x => x.MiddleName)
             .MaximumLength(DataSchemaLength.Large)
             .WithMessage($"Отчество не должно превышать {DataSchemaLength.Large} символов");
+
+        When(
+            x => x.Avatar is not null,
+            () => RuleFor(x => x.Avatar!).SetValidator(new ImageValidator())
+        );
+
+        RuleForEach(x => x.Contacts).SetValidator(new ContactRequestValidator());
+        RuleForEach(x => x.Educations).SetValidator(new EducationRequestValidator());
+        RuleForEach(x => x.EmploymentHistories)
+            .SetValidator(new EmploymentHistoryRequestValidator());
+    }
+}
+
+public sealed class UpdateProfileByAdminCommandValidator
+    : AbstractValidator<UpdateProfileByAdminCommand>
+{
+    public UpdateProfileByAdminCommandValidator()
+    {
+        RuleFor(x => x.FirstName)
+            .NotEmpty()
+            .WithMessage("Имя является обязательным полем")
+            .MaximumLength(DataSchemaLength.Large)
+            .WithMessage($"Имя не должно превышать {DataSchemaLength.Large} символов");
+
+        RuleFor(x => x.LastName)
+            .NotEmpty()
+            .WithMessage("Фамилия является обязательным полем")
+            .MaximumLength(DataSchemaLength.Large)
+            .WithMessage($"Фамилия не должна превышать {DataSchemaLength.Large} символов");
+
+        RuleFor(x => x.MiddleName)
+            .MaximumLength(DataSchemaLength.Large)
+            .WithMessage($"Отчество не должно превышать {DataSchemaLength.Large} символов");
+
+        When(
+            x => x.Avatar is not null,
+            () => RuleFor(x => x.Avatar!).SetValidator(new ImageValidator())
+        );
 
         RuleForEach(x => x.Contacts).SetValidator(new ContactRequestValidator());
         RuleForEach(x => x.Educations).SetValidator(new EducationRequestValidator());

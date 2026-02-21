@@ -1,20 +1,7 @@
-﻿namespace Edvantix.Persona.Features.Profiles.Registration;
+namespace Edvantix.Persona.Features.Profiles.Registration;
 
 public sealed class Validator : AbstractValidator<RegistrationCommand>
 {
-    private const long MaxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
-
-    private static readonly string[] AllowedContentTypes =
-    [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-    ];
-
-    private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
-
     public Validator()
     {
         RuleFor(x => x.Gender).IsInEnum().WithMessage("Указан некорректный пол");
@@ -37,33 +24,7 @@ public sealed class Validator : AbstractValidator<RegistrationCommand>
 
         When(
             x => x.Avatar is not null,
-            () =>
-            {
-                RuleFor(x => x.Avatar!.Length)
-                    .LessThanOrEqualTo(MaxFileSizeInBytes)
-                    .WithMessage(
-                        $"Размер файла не должен превышать {MaxFileSizeInBytes / 1024 / 1024} МБ"
-                    );
-
-                RuleFor(x => x.Avatar!.ContentType)
-                    .Must(contentType => AllowedContentTypes.Contains(contentType))
-                    .WithMessage(
-                        $"Недопустимый тип файла. Разрешены только: {string.Join(", ", AllowedContentTypes)}"
-                    );
-
-                RuleFor(x => x.Avatar!.FileName)
-                    .Must(fileName =>
-                    {
-                        var extension = Path.GetExtension(fileName).ToLowerInvariant();
-                        return AllowedExtensions.Contains(extension);
-                    })
-                    .WithMessage(
-                        $"Недопустимое расширение файла. Разрешены только: {string.Join(", ", AllowedExtensions)}"
-                    )
-                    .When(x =>
-                        x.Avatar is not null && !string.IsNullOrWhiteSpace(x.Avatar.FileName)
-                    );
-            }
+            () => RuleFor(x => x.Avatar!).SetValidator(new ImageValidator())
         );
     }
 }

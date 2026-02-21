@@ -17,7 +17,8 @@ All endpoints are under the versioned prefix `/api/v1/`.
 | `GET /profile/own` | **Removed** | `GET /profile` |
 | `GET /profiles/{id}/own` | **Removed** | `GET /profiles/{id}` |
 | `GET /profile/details/own` | **Removed** | `GET /profile/details` |
-| `PUT /profile` (with avatar in body) | **Changed** | Split: `PUT /profile` (JSON) + `PUT /profile/avatar` (form-data) |
+| `PUT /profile` (JSON) | **Changed** | `PUT /profile` (multipart/form-data, avatar included) |
+| `PUT /profile/avatar` | **Removed** | Avatar now sent in `PUT /profile` as `avatar` field |
 
 ---
 
@@ -106,42 +107,34 @@ Same shape as `GET /profile/details`. Requires `Admin` role.
 
 > **Breaking:** Was `NoContent` (204), now returns `200 OK` with the updated `ProfileViewModel`.
 
-> **Breaking:** Avatar is **no longer part of this request**. Update avatar separately via `PUT /profile/avatar`.
+> **Breaking:** Was JSON (`application/json`), now **`multipart/form-data`**. Avatar is included directly in this request.
 
-**Request** `Content-Type: application/json`:
-```json
-{
-  "firstName": "Иван",
-  "lastName": "Иванов",
-  "middleName": "Сергеевич",
-  "gender": 1,
-  "birthDate": "1990-01-15",
-  "contacts": [
-    { "type": 1, "value": "+7 999 000 00 00", "description": null }
-  ],
-  "educations": [
-    {
-      "dateStart": "2007-09-01",
-      "dateEnd": "2012-06-30",
-      "institution": "МГУ",
-      "specialty": "Прикладная математика",
-      "level": 3
-    }
-  ],
-  "employmentHistories": [
-    {
-      "workplace": "ООО Рога и Копыта",
-      "position": "Senior Developer",
-      "startDate": "2020-03-01T00:00:00Z",
-      "endDate": null,
-      "description": null
-    }
-  ]
-}
-```
+**Request** `Content-Type: multipart/form-data`:
+| Field | Type | Notes |
+|---|---|---|
+| `firstName` | `string` | Required |
+| `lastName` | `string` | Required |
+| `middleName` | `string` | Optional |
+| `birthDate` | `string` (`YYYY-MM-DD`) | Required |
+| `contacts[n].type` | `number` | ContactType enum value |
+| `contacts[n].value` | `string` | |
+| `contacts[n].description` | `string` | Optional |
+| `educations[n].dateStart` | `string` (`YYYY-MM-DD`) | |
+| `educations[n].dateEnd` | `string` (`YYYY-MM-DD`) | Optional |
+| `educations[n].institution` | `string` | |
+| `educations[n].specialty` | `string` | Optional |
+| `educations[n].level` | `number` | EducationLevel enum value |
+| `employmentHistories[n].workplace` | `string` | |
+| `employmentHistories[n].position` | `string` | |
+| `employmentHistories[n].startDate` | `string` (ISO 8601) | |
+| `employmentHistories[n].endDate` | `string` (ISO 8601) | Optional |
+| `employmentHistories[n].description` | `string` | Optional |
+| `avatar` | `file` | Optional, JPEG/PNG, max 1 MB |
+
+> **Breaking:** `gender` is **removed** from the update request. Gender is set only at registration and cannot be changed.
 
 > **Important:** `contacts`, `educations`, `employmentHistories` are **full-replace** lists.
-> Sending an empty array `[]` deletes all existing records of that type.
+> Sending an empty array deletes all existing records of that type.
 
 **Response** `200 OK`: `ProfileViewModel` (same as `GET /profile`).
 
@@ -152,17 +145,6 @@ Same shape as `GET /profile/details`. Requires `Admin` role.
 Same request body as `PUT /profile`. Returns `200 OK` with `ProfileViewModel`.
 
 > **Breaking:** Was `NoContent` (204), now returns `200 OK`.
-
----
-
-### `PUT /profile/avatar` — Upload avatar **(New)**
-
-Uploads or replaces the avatar for the current user. Previously this was part of the `PUT /profile` form-data request.
-
-**Request** `Content-Type: multipart/form-data`:
-- `avatar` — image file (JPEG or PNG, max 5 MB)
-
-**Response** `200 OK`: `ProfileViewModel` with the new `avatarUrl` (SAS URL).
 
 ---
 
@@ -212,10 +194,12 @@ Use the numeric value. Exact values are defined in the OpenAPI spec.
 | # | Change | Impact |
 |---|---|---|
 | 1 | `ProfileViewModel.id` type: `string` → `number` (`ulong`) | All places rendering/storing profile ID |
-| 2 | `PUT /profile` no longer accepts `multipart/form-data`; now JSON-only | Update request serialization |
+| 2 | `PUT /profile` changed from JSON to `multipart/form-data`; avatar included as `avatar` field | Update request format and add avatar field |
 | 3 | `PUT /profile` returns `200 ProfileViewModel` instead of `204 NoContent` | Handle new response body |
 | 4 | `PUT /profiles/{id}` returns `200 ProfileViewModel` instead of `204 NoContent` | Handle new response body |
-| 5 | Avatar upload moved to `PUT /profile/avatar` | Separate API call for avatar changes |
-| 6 | `GET /profile/own` → `GET /profile` (route rename) | Update all references |
-| 7 | `POST /profile/registration` response body is `number`, not `string` | Parse as number |
-| 8 | Contacts/Educations/EmploymentHistories are **full-replace** on every update | Do not send partial lists |
+| 5 | `PUT /profile/avatar` removed; avatar upload merged into `PUT /profile` | Remove separate avatar call |
+| 6 | `gender` removed from `PUT /profile` and `PUT /profiles/{id}` request body | Remove gender from update payloads |
+| 7 | `GET /profile/own` → `GET /profile` (route rename) | Update all references |
+| 8 | `POST /profile/registration` response body is `number`, not `string` | Parse as number |
+| 9 | Contacts/Educations/EmploymentHistories are **full-replace** on every update | Do not send partial lists |
+| 10 | Avatar max size reduced from 5 MB to **1 MB**; allowed types limited to **JPEG and PNG** | Validate before upload |

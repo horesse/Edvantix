@@ -19,6 +19,7 @@ global using Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 global using Edvantix.Persona.Features.Profiles;
 global using Edvantix.Persona.Grpc;
 global using Edvantix.Persona.Infrastructure;
+global using Edvantix.Persona.Validators;
 global using Edvantix.ServiceDefaults;
 global using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 global using Edvantix.ServiceDefaults.Kestrel;

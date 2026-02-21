@@ -1,8 +1,4 @@
-﻿using Edvantix.Chassis.EF;
-using Edvantix.Chassis.Repository;
-using Edvantix.Constants.Aspire;
-
-namespace Edvantix.Subscriptions.Infrastructure;
+﻿namespace Edvantix.Subscriptions.Infrastructure;
 
 /// <summary>
 /// Extension methods for configuring persistence services.

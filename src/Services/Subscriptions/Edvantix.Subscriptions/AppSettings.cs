@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Edvantix.Subscriptions;
+﻿namespace Edvantix.Subscriptions;
 
 /// <summary>
 /// Application settings for the Subscriptions service.

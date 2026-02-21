@@ -7,5 +7,5 @@ namespace Edvantix.Blog.Infrastructure.Repositories;
 /// Реализация репозитория лайков постов на основе BlogContext.
 /// </summary>
 public sealed class PostLikeRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, PostLike, long>(provider),
+    : CrudRepository<BlogContext, PostLike, ulong>(provider),
         IPostLikeRepository;

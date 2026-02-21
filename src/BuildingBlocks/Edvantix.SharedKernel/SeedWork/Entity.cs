@@ -1,9 +1,12 @@
 ﻿namespace Edvantix.SharedKernel.SeedWork;
 
-public abstract class Entity<TId> : HasDomainEvents
-    where TId : struct
+public abstract class Entity : HasDomainEvents
 {
-    public TId Id { get; set; } = default!;
+    public ulong Id { get; set; }
 }
 
-public abstract class LongIdentity : Entity<long>;
+public abstract class Entity<TId> : Entity
+    where TId : IEquatable<TId>
+{
+    public new TId Id { get; set; } = default!;
+}

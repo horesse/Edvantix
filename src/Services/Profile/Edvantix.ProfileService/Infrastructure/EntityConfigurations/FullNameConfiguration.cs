@@ -10,7 +10,7 @@ public sealed class FullNameConfiguration : IEntityTypeConfiguration<FullName>
 {
     public void Configure(EntityTypeBuilder<FullName> builder)
     {
-        builder.ConfigureSoftDeletable<FullName, long>();
+        builder.ConfigureSoftDeletable<FullName>();
 
         builder.Property(f => f.ProfileId).IsRequired();
 

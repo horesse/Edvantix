@@ -62,21 +62,6 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
-var entityHubApi = builder
-    .AddProject<Edvantix_EntityHub>(Services.EntityHub)
-    .WithReference(entityHubDb)
-    .WaitFor(entityHubDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
-
-builder
-    .AddProject<Edvantix_EntityHub_Worker>(Services.EntityHubWorker)
-    .WaitFor(entityHubApi)
-    .WithReference(entityHubDb)
-    .WithContainerRegistry(registry)
-    .WaitFor(entityHubDb);
-
 var systemApi = builder
     .AddProject<Edvantix_System>(Services.System)
     .WithReference(systemDb)
@@ -127,7 +112,6 @@ var blogApi = builder
 
 var gateway = builder
     .AddApiGatewayProxy()
-    .WithService(entityHubApi)
     .WithService(organizationApi, true)
     .WithService(systemApi, true)
     .WithService(profileApi, true)
@@ -175,7 +159,6 @@ if (builder.ExecutionContext.IsRunMode)
 {
     builder
         .AddScalar(keycloak)
-        .WithOpenAPI(entityHubApi)
         .WithOpenAPI(organizationApi)
         .WithOpenAPI(systemApi)
         .WithOpenAPI(profileApi)

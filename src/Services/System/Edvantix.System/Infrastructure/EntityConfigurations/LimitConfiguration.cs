@@ -10,7 +10,7 @@ public sealed class LimitConfiguration : IEntityTypeConfiguration<Limit>
 {
     public void Configure(EntityTypeBuilder<Limit> builder)
     {
-        builder.Configure<Limit, long>();
+        builder.Configure<Limit>();
 
         builder.Property(l => l.SubscriptionId).IsRequired();
 

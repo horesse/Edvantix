@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Edvantix.SharedKernel.SeedWork;
-using MediatR;
+using Mediator;
 
 namespace Edvantix.SharedKernel;
 

@@ -3,7 +3,7 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Company.Domain.AggregatesModel.ContactAggregate;
 
-public sealed class Contact() : LongIdentity, IAggregateRoot
+public sealed class Contact() : Entity, IAggregateRoot
 {
     public Contact(long organizationId, ContactType type, string value, string? description = null)
         : this()

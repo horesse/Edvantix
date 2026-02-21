@@ -6,7 +6,7 @@ using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Company.Domain.AggregatesModel.OrganizationAggregate;
 
-public sealed class Organization() : LongIdentity, IAggregateRoot
+public sealed class Organization() : Entity, IAggregateRoot
 {
     private readonly List<Contact> _contacts = [];
     private readonly List<OrganizationMember> _members = [];

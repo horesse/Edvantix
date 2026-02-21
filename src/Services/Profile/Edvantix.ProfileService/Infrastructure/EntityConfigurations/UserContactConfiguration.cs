@@ -10,7 +10,7 @@ public sealed class UserContactConfiguration : IEntityTypeConfiguration<UserCont
 {
     public void Configure(EntityTypeBuilder<UserContact> builder)
     {
-        builder.ConfigureSoftDeletable<UserContact, long>();
+        builder.ConfigureSoftDeletable<UserContact>();
 
         builder.Property(c => c.ProfileId).IsRequired();
 

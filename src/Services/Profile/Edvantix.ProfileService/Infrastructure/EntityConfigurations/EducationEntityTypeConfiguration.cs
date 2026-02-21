@@ -10,7 +10,7 @@ public sealed class EducationEntityTypeConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<Education> builder)
     {
-        builder.ConfigureSoftDeletable<Education, long>();
+        builder.ConfigureSoftDeletable<Education>();
 
         builder.Property(e => e.DateStart).IsRequired();
 

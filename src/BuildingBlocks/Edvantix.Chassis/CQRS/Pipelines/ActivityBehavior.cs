@@ -3,7 +3,7 @@ using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Chassis.CQRS.Pipelines;
@@ -14,11 +14,12 @@ public sealed class ActivityBehavior<TMessage, TResponse>(
     QueryHandlerMetrics queryMetrics,
     ILogger<ActivityBehavior<TMessage, TResponse>> logger
 ) : IPipelineBehavior<TMessage, TResponse>
-    where TMessage : notnull
+    where TMessage : IMessage
+    where TResponse : notnull
 {
-    public async Task<TResponse> Handle(
+    public async ValueTask<TResponse> Handle(
         TMessage message,
-        RequestHandlerDelegate<TResponse> next,
+        MessageHandlerDelegate<TMessage, TResponse> next,
         CancellationToken cancellationToken
     )
     {
@@ -36,7 +37,7 @@ public sealed class ActivityBehavior<TMessage, TResponse>(
 
         if (attr is not null)
         {
-            return await next(cancellationToken);
+            return await next(message, cancellationToken);
         }
 
         var messageType = message.GetType().Name;
@@ -54,7 +55,7 @@ public sealed class ActivityBehavior<TMessage, TResponse>(
         {
             return await activityScope.Run(
                 activityName,
-                async (_, ct) => await next(ct),
+                async (_, ct) => await next(message, ct),
                 new() { Tags = { { tagName, messageType } } },
                 cancellationToken
             );

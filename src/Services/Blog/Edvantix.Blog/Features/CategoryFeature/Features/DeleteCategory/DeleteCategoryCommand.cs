@@ -7,7 +7,7 @@ namespace Edvantix.Blog.Features.CategoryFeature.Features.DeleteCategory;
 /// <summary>
 /// Команда для физического удаления категории блога.
 /// </summary>
-public sealed record DeleteCategoryCommand(long CategoryId) : IRequest;
+public sealed record DeleteCategoryCommand(ulong CategoryId) : IRequest;
 
 /// <summary>
 /// Обработчик команды удаления категории.

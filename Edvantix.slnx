@@ -9,12 +9,6 @@
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/Services/" />
-  <Folder Name="/Services/Common/" />
-  <Folder Name="/Services/Common/EntityHub/">
-    <Project Path="src/Services/EntityHub/Edvantix.EntityHub.Worker/Edvantix.EntityHub.Worker.csproj" />
-    <Project Path="src/Services/EntityHub/Edvantix.EntityHub/Edvantix.EntityHub.csproj" />
-  </Folder>
-  <Folder Name="/Services/Common/History/" />
   <Folder Name="/Services/Core/" />
   <Folder Name="/Services/Core/Company/">
     <Project Path="src/Services/Company/Edvantix.Company/Edvantix.Company.csproj" />

@@ -14,7 +14,7 @@ public sealed record CreateCategoryRequest(string Name, string Slug, string? Des
 /// Административный эндпоинт для создания категории блога.
 /// </summary>
 public sealed class CreateCategoryEndpoint
-    : IEndpoint<Created<long>, CreateCategoryCommand, ISender>
+    : IEndpoint<Created<ulong>, CreateCategoryCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -37,7 +37,7 @@ public sealed class CreateCategoryEndpoint
             .RequireAuthorization(Authorization.Policies.Admin);
     }
 
-    public async Task<Created<long>> HandleAsync(
+    public async Task<Created<ulong>> HandleAsync(
         CreateCategoryCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

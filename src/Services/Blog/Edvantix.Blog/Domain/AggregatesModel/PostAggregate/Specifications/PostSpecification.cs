@@ -23,9 +23,9 @@ public sealed class PostSpecification : CommonSpecification<Post>
         PostStatus? status = null,
         PostType? type = null,
         bool? isPremium = null,
-        long? authorId = null,
-        long? categoryId = null,
-        long? tagId = null,
+        ulong? authorId = null,
+        ulong? categoryId = null,
+        ulong? tagId = null,
         string? searchText = null
     )
     {

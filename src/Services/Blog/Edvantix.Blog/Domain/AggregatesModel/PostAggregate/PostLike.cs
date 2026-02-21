@@ -6,7 +6,7 @@ namespace Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
 /// Лайк пользователя на пост блога.
 /// Один пользователь может поставить только один лайк на пост.
 /// </summary>
-public sealed class PostLike() : LongIdentity
+public sealed class PostLike() : Entity
 {
     /// <summary>
     /// Создаёт лайк от пользователя на пост.

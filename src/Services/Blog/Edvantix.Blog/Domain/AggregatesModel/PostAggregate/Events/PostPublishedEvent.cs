@@ -7,16 +7,16 @@ namespace Edvantix.Blog.Domain.AggregatesModel.PostAggregate.Events;
 /// Используется для уведомления подписчиков через сервис Notifications.
 /// </summary>
 public sealed class PostPublishedEvent(
-    long postId,
+    ulong postId,
     string title,
     string slug,
     PostType postType,
     bool isPremium,
-    long authorId
+    ulong authorId
 ) : DomainEvent
 {
     /// <summary>Идентификатор опубликованного поста.</summary>
-    public long PostId { get; } = postId;
+    public ulong PostId { get; } = postId;
 
     /// <summary>Заголовок поста.</summary>
     public string Title { get; } = title;
@@ -31,5 +31,5 @@ public sealed class PostPublishedEvent(
     public bool IsPremium { get; } = isPremium;
 
     /// <summary>Идентификатор профиля автора.</summary>
-    public long AuthorId { get; } = authorId;
+    public ulong AuthorId { get; } = authorId;
 }

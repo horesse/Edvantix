@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
 /// <summary>
 /// Тег для дополнительной классификации постов блога.
 /// </summary>
-public sealed class Tag() : LongIdentity, IAggregateRoot
+public sealed class Tag() : Entity, IAggregateRoot
 {
     /// <summary>
     /// Создаёт новый тег.

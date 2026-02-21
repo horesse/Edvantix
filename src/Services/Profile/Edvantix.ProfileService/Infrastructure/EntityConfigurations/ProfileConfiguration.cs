@@ -10,7 +10,7 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 {
     public void Configure(EntityTypeBuilder<Profile> builder)
     {
-        builder.ConfigureSoftDeletable<Profile, long>();
+        builder.ConfigureSoftDeletable<Profile>();
 
         builder.Property(p => p.AccountId).IsRequired();
 

@@ -9,7 +9,7 @@ public sealed class OrganizationMemberConfiguration : IEntityTypeConfiguration<O
 {
     public void Configure(EntityTypeBuilder<OrganizationMember> builder)
     {
-        builder.ConfigureSoftDeletable<OrganizationMember, Guid>();
+        builder.ConfigureSoftDeletable<OrganizationMember>();
 
         builder.Property(m => m.OrganizationId).IsRequired();
 

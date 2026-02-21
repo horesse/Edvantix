@@ -10,7 +10,7 @@ public sealed class ContactConfiguration : IEntityTypeConfiguration<Contact>
 {
     public void Configure(EntityTypeBuilder<Contact> builder)
     {
-        builder.Configure<Contact, long>();
+        builder.Configure<Contact>();
 
         builder.Property(c => c.OrganizationId).IsRequired();
 

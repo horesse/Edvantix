@@ -7,5 +7,5 @@ namespace Edvantix.Blog.Infrastructure.Repositories;
 /// Реализация репозитория подписок на блог на основе BlogContext.
 /// </summary>
 public sealed class BlogSubscriptionRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, BlogSubscription, long>(provider),
+    : CrudRepository<BlogContext, BlogSubscription, ulong>(provider),
         IBlogSubscriptionRepository;

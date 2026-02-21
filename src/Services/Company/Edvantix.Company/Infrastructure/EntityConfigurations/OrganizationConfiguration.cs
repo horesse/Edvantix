@@ -10,7 +10,7 @@ public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organiz
 {
     public void Configure(EntityTypeBuilder<Organization> builder)
     {
-        builder.Configure<Organization, long>();
+        builder.Configure<Organization>();
 
         builder.Property(o => o.Name).IsRequired().HasMaxLength(DataSchemaLength.SuperLarge);
 

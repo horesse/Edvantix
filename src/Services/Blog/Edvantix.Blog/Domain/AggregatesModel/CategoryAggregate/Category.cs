@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
 /// <summary>
 /// Категория постов блога. Создаётся и управляется администраторами платформы.
 /// </summary>
-public sealed class Category() : LongIdentity, IAggregateRoot
+public sealed class Category() : Entity, IAggregateRoot
 {
     /// <summary>
     /// Создаёт новую категорию блога.

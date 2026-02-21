@@ -5,7 +5,7 @@ namespace Edvantix.Company.Domain.AggregatesModel.GroupAggregate;
 /// <summary>
 /// Группа в рамках организации (класс, курс, подразделение).
 /// </summary>
-public sealed class Group() : LongIdentity, IAggregateRoot, ISoftDelete
+public sealed class Group() : Entity, IAggregateRoot, ISoftDelete
 {
     private readonly List<GroupMember> _members = [];
 

@@ -7,15 +7,15 @@ namespace Edvantix.Blog.Features.CategoryFeature.Features.CreateCategory;
 /// Команда для создания новой категории блога.
 /// </summary>
 public sealed record CreateCategoryCommand(string Name, string Slug, string? Description)
-    : IRequest<long>;
+    : IRequest<ulong>;
 
 /// <summary>
 /// Обработчик команды создания категории.
 /// </summary>
 public sealed class CreateCategoryCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateCategoryCommand, long>
+    : IRequestHandler<CreateCategoryCommand, ulong>
 {
-    public async Task<long> Handle(
+    public async Task<ulong> Handle(
         CreateCategoryCommand request,
         CancellationToken cancellationToken
     )

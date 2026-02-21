@@ -10,7 +10,7 @@ public sealed class SubscriptionConfiguration : IEntityTypeConfiguration<Subscri
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
-        builder.Configure<Subscription, long>();
+        builder.Configure<Subscription>();
 
         builder.Property(s => s.Name).IsRequired().HasMaxLength(DataSchemaLength.ExtraLarge);
 

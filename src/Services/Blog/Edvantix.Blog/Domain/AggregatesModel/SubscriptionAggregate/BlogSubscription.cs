@@ -6,7 +6,7 @@ namespace Edvantix.Blog.Domain.AggregatesModel.SubscriptionAggregate;
 /// Подписка пользователя на обновления блога платформы.
 /// Один пользователь — одна запись подписки с настраиваемыми типами контента.
 /// </summary>
-public sealed class BlogSubscription() : LongIdentity, IAggregateRoot
+public sealed class BlogSubscription() : Entity, IAggregateRoot
 {
     /// <summary>
     /// Создаёт подписку пользователя на контент блога.

@@ -7,5 +7,5 @@ namespace Edvantix.Blog.Infrastructure.Repositories;
 /// Реализация репозитория постов блога на основе BlogContext.
 /// </summary>
 public sealed class PostRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, Post, long>(provider),
+    : CrudRepository<BlogContext, Post, ulong>(provider),
         IPostRepository;

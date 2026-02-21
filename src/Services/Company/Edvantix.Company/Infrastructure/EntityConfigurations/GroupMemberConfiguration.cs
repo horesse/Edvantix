@@ -9,7 +9,7 @@ public sealed class GroupMemberConfiguration : IEntityTypeConfiguration<GroupMem
 {
     public void Configure(EntityTypeBuilder<GroupMember> builder)
     {
-        builder.ConfigureSoftDeletable<GroupMember, Guid>();
+        builder.ConfigureSoftDeletable<GroupMember>();
 
         builder.Property(m => m.GroupId).IsRequired();
 

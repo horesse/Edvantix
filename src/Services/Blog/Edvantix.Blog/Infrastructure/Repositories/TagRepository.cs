@@ -7,5 +7,5 @@ namespace Edvantix.Blog.Infrastructure.Repositories;
 /// Реализация репозитория тегов блога на основе BlogContext.
 /// </summary>
 public sealed class TagRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, Tag, long>(provider),
+    : CrudRepository<BlogContext, Tag, ulong>(provider),
         ITagRepository;

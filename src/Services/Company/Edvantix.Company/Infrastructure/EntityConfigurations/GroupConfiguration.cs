@@ -10,7 +10,7 @@ public sealed class GroupConfiguration : IEntityTypeConfiguration<Group>
 {
     public void Configure(EntityTypeBuilder<Group> builder)
     {
-        builder.ConfigureSoftDeletable<Group, long>();
+        builder.ConfigureSoftDeletable<Group>();
 
         builder.Property(g => g.OrganizationId).IsRequired();
 

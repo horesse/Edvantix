@@ -7,5 +7,5 @@ namespace Edvantix.Blog.Infrastructure.Repositories;
 /// Реализация репозитория категорий блога на основе BlogContext.
 /// </summary>
 public sealed class CategoryRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, Category, long>(provider),
+    : CrudRepository<BlogContext, Category, ulong>(provider),
         ICategoryRepository;

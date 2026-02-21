@@ -13,7 +13,7 @@ public sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitatio
 {
     public void Configure(EntityTypeBuilder<Invitation> builder)
     {
-        builder.Configure<Invitation, Guid>();
+        builder.Configure<Invitation>();
 
         builder.Property(x => x.OrganizationId).IsRequired();
 

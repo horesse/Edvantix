@@ -1,10 +1,11 @@
-﻿using System.Net.Mime;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.Persona.Features.Profiles.Registration;
 
-public class RegistrationEndpoint
-    : IEndpoint<Created<long>, RegistrationCommand, ISender, LinkGenerator>
+/// <summary>POST /v1/profile/registration — первичная регистрация профиля.</summary>
+public sealed class RegistrationEndpoint
+    : IEndpoint<Created<ulong>, RegistrationCommand, ISender, LinkGenerator>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -18,17 +19,20 @@ public class RegistrationEndpoint
                 ) => await HandleAsync(command, sender, linker, ct)
             )
             .Accepts<RegistrationCommand>(MediaTypeNames.Multipart.FormData)
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<ulong>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status409Conflict)
+            .Produces(StatusCodes.Status422UnprocessableEntity)
             .WithName("Registration")
             .WithTags("Profile")
             .WithSummary("Регистрация пользователя")
-            .WithDescription("Создать новую запись пользователя")
+            .WithDescription("Создаёт новый профиль для аутентифицированного пользователя.")
             .WithFormOptions(true)
             .MapToApiVersion(new(1, 0))
-            .RequirePerUserRateLimit();
+            .RequirePerUserRateLimit()
+            .RequireAuthorization();
     }
 
-    public async Task<Created<long>> HandleAsync(
+    public async Task<Created<ulong>> HandleAsync(
         RegistrationCommand command,
         ISender sender,
         LinkGenerator linker,
@@ -36,10 +40,7 @@ public class RegistrationEndpoint
     )
     {
         var id = await sender.Send(command, cancellationToken);
-
-        // TODO: Get Profile by ID
-        // var path = linker.GetPathByName(nameof(GetProfileById), new { id = result });
-
-        return TypedResults.Created($"/api/profile/{id}", id);
+        var location = linker.GetPathByName("GetProfileById", new { id }) ?? $"/api/profiles/{id}";
+        return TypedResults.Created(location, id);
     }
 }

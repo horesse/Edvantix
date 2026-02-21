@@ -1,48 +1,57 @@
 namespace Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 
-/// <summary>
-/// Команда для обновления профиля администратором
-/// </summary>
-public sealed record UpdateProfileByAdminCommand(long ProfileId, ProfileModel Profile)
-    : IRequest<Unit>;
+/// <summary>Команда обновления профиля администратором. Возвращает обновлённое краткое представление.</summary>
+public sealed record UpdateProfileByAdminCommand(ulong ProfileId, UpdateProfileRequest Request)
+    : IRequest<ProfileViewModel>;
 
-/// <summary>
-/// Обработчик команды обновления профиля администратором
-/// </summary>
 public sealed class UpdateProfileByAdminCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateProfileByAdminCommand, Unit>
+    : IRequestHandler<UpdateProfileByAdminCommand, ProfileViewModel>
 {
-    public async Task<Unit> Handle(
-        UpdateProfileByAdminCommand request,
-        CancellationToken cancellationToken
+    public async ValueTask<ProfileViewModel> Handle(
+        UpdateProfileByAdminCommand command,
+        CancellationToken ct
     )
     {
-        using var profileRepo = provider.GetRequiredService<IProfileRepository>();
+        var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        var profile = await profileRepo.GetByIdAsync(request.ProfileId, cancellationToken);
+        var spec = new ProfileByIdSpec(command.ProfileId, withDetails: true);
+        var profile =
+            await profileRepo.FindAsync(spec, ct)
+            ?? throw new NotFoundException($"Профиль с ID {command.ProfileId} не найден.");
 
-        if (profile is null)
-            throw new NotFoundException($"Профиль с ID {request.ProfileId} не найден.");
+        ApplyChanges(profile, command.Request);
 
-        await using var transaction = await profileRepo.BeginTransactionAsync(cancellationToken);
+        await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
 
-        try
-        {
-            var converter = provider.GetRequiredService<
-                IConverter<ProfileModel, Domain.AggregatesModel.ProfileAggregate.Profile>
-            >();
-            converter.SetProperties(request.Profile, profile);
+        var mapper = provider.GetRequiredService<IMapper<Profile, ProfileViewModel>>();
+        return mapper.Map(profile);
+    }
 
-            await profileRepo.UpdateAsync(profile, cancellationToken);
-            await profileRepo.SaveEntitiesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
+    private static void ApplyChanges(Profile profile, UpdateProfileRequest request)
+    {
+        profile.UpdatePersonalInfo(request.Gender, request.BirthDate);
+        profile.UpdateFullName(request.FirstName, request.LastName, request.MiddleName);
 
-            return Unit.Value;
-        }
-        catch
-        {
-            await transaction.RollbackAsync(cancellationToken);
-            throw;
-        }
+        profile.ReplaceContacts(
+            request.Contacts.Select(c => profile.CreateContact(c.Type, c.Value, c.Description))
+        );
+
+        profile.ReplaceEducations(
+            request.Educations.Select(e =>
+                profile.CreateEducation(e.DateStart, e.Institution, e.Level, e.Specialty, e.DateEnd)
+            )
+        );
+
+        profile.ReplaceEmploymentHistories(
+            request.EmploymentHistories.Select(e =>
+                profile.CreateEmploymentHistory(
+                    e.Workplace,
+                    e.Position,
+                    e.StartDate,
+                    e.EndDate,
+                    e.Description
+                )
+            )
+        );
     }
 }

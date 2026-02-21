@@ -1,13 +1,19 @@
-﻿using Edvantix.Constants.Other;
+using Edvantix.Constants.Other;
 
 namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
+/// <summary>
+/// Корневой агрегат профиля пользователя. Управляет всеми дочерними сущностями
+/// и обеспечивает инварианты домена.
+/// </summary>
 public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
 {
+    // Backing fields — EF Core обращается к ним напрямую через PropertyAccessMode.Field
     private readonly List<ProfileContact> _contacts = [];
     private readonly List<EmploymentHistory> _employmentHistories = [];
     private readonly List<Education> _educations = [];
 
+    /// <summary>Создаёт новый профиль при регистрации пользователя.</summary>
     public Profile(
         Guid accountId,
         string login,
@@ -21,7 +27,6 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
     {
         if (accountId == Guid.Empty)
             throw new ArgumentException("AccountId не может быть пустым.", nameof(accountId));
-
         ArgumentException.ThrowIfNullOrWhiteSpace(login, nameof(login));
 
         AccountId = accountId;
@@ -29,128 +34,126 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
         Gender = gender;
         BirthDate = birthDate;
         FullName = new FullName(firstName, lastName, middleName);
+
+        RegisterDomainEvent(new ProfileRegisteredEvent(accountId, login));
     }
 
+    /// <summary>GUID аккаунта в Keycloak.</summary>
     public Guid AccountId { get; private set; }
+
+    /// <summary>Preferred username из Keycloak.</summary>
     public string Login { get; private set; } = null!;
+
+    /// <summary>Пол пользователя.</summary>
     public Gender Gender { get; private set; }
+
+    /// <summary>Дата рождения.</summary>
     public DateOnly BirthDate { get; private set; }
 
+    /// <summary>ФИО пользователя (owned entity, хранится в отдельной таблице).</summary>
     public FullName FullName { get; private set; } = null!;
 
+    /// <summary>URN файла аватара в Azure Blob Storage. Null, если аватар не загружен.</summary>
     public string? AvatarUrl { get; private set; }
 
     public IReadOnlyCollection<ProfileContact> Contacts => _contacts.AsReadOnly();
     public IReadOnlyCollection<EmploymentHistory> EmploymentHistories =>
         _employmentHistories.AsReadOnly();
-
-    public IReadOnlyCollection<Education> Educations => _educations;
+    public IReadOnlyCollection<Education> Educations => _educations.AsReadOnly();
 
     public bool IsDeleted { get; set; }
 
-    public void UpdateFullName(string firstName, string lastName, string? middleName = null)
+    // ─── Scalar updates ───────────────────────────────────────────────────────
+
+    /// <summary>Обновляет пол и дату рождения.</summary>
+    public void UpdatePersonalInfo(Gender gender, DateOnly birthDate)
     {
-        FullName = new FullName(firstName, lastName, middleName);
+        Gender = gender;
+        BirthDate = birthDate;
     }
 
-    public void UploadAvatar(string? avatarUrl)
-    {
-        AvatarUrl = avatarUrl;
-    }
+    /// <summary>
+    /// Обновляет ФИО, изменяя значения существующей сущности FullName.
+    /// Не создаёт новую запись — обновляет текущую строку в БД.
+    /// </summary>
+    public void UpdateFullName(string firstName, string lastName, string? middleName = null) =>
+        FullName.Update(firstName, lastName, middleName);
 
-    public ProfileContact CreateContact(ContactType type, string value, string? description = null)
-    {
-        return new ProfileContact(type, value, description);
-    }
+    /// <summary>Устанавливает URN аватара (null — удалить аватар).</summary>
+    public void UploadAvatar(string? avatarUrl) => AvatarUrl = avatarUrl;
 
-    public void AddContact(ProfileContact profileContact)
-    {
-        _contacts.Add(profileContact);
-    }
+    // ─── Contact management ───────────────────────────────────────────────────
 
-    public void AddContacts(IEnumerable<ProfileContact> contacts)
-    {
-        _contacts.AddRange(contacts);
-    }
+    /// <summary>
+    /// Создаёт новый контакт. Не добавляет его в коллекцию —
+    /// используйте <see cref="ReplaceContacts"/> для сохранения.
+    /// </summary>
+    public ProfileContact CreateContact(
+        ContactType type,
+        string value,
+        string? description = null
+    ) => new(type, value, description);
 
-    public void ClearContacts()
-    {
-        _contacts.Clear();
-    }
-
+    /// <summary>
+    /// Заменяет все контакты профиля новым набором.
+    /// Старые записи удаляются через каскадное удаление EF Core.
+    /// </summary>
     public void ReplaceContacts(IEnumerable<ProfileContact> contacts)
     {
         _contacts.Clear();
         _contacts.AddRange(contacts);
     }
 
+    // ─── Employment history management ────────────────────────────────────────
+
+    /// <summary>
+    /// Создаёт новую запись об опыте работы. Не добавляет её в коллекцию —
+    /// используйте <see cref="ReplaceEmploymentHistories"/> для сохранения.
+    /// </summary>
     public EmploymentHistory CreateEmploymentHistory(
         string workplace,
         string position,
         DateTime startDate,
         DateTime? endDate = null,
         string? description = null
-    )
-    {
-        return new EmploymentHistory(workplace, position, startDate, endDate, description);
-    }
+    ) => new(workplace, position, startDate, endDate, description);
 
-    public void AddEmploymentHistory(EmploymentHistory employmentHistory)
-    {
-        _employmentHistories.Add(employmentHistory);
-    }
-
-    public void AddEmploymentHistories(IEnumerable<EmploymentHistory> employmentHistories)
-    {
-        _employmentHistories.AddRange(employmentHistories);
-    }
-
-    public void ClearEmploymentHistories()
-    {
-        _employmentHistories.Clear();
-    }
-
+    /// <summary>
+    /// Заменяет всю историю занятости новым набором.
+    /// Старые записи удаляются через каскадное удаление EF Core.
+    /// </summary>
     public void ReplaceEmploymentHistories(IEnumerable<EmploymentHistory> employmentHistories)
     {
         _employmentHistories.Clear();
         _employmentHistories.AddRange(employmentHistories);
     }
 
-    // Методы для управления образованием
+    // ─── Education management ─────────────────────────────────────────────────
+
+    /// <summary>
+    /// Создаёт новую запись об образовании. Не добавляет её в коллекцию —
+    /// используйте <see cref="ReplaceEducations"/> для сохранения.
+    /// </summary>
     public Education CreateEducation(
         DateOnly dateStart,
         string institution,
         EducationLevel educationLevel,
         string? specialty = null,
         DateOnly? dateEnd = null
-    )
-    {
-        return new Education(dateStart, institution, educationLevel, specialty, dateEnd);
-    }
+    ) => new(dateStart, institution, educationLevel, specialty, dateEnd);
 
-    public void AddEducation(Education education)
-    {
-        _educations.Add(education);
-    }
-
-    public void AddEducations(IEnumerable<Education> educations)
-    {
-        _educations.AddRange(educations);
-    }
-
-    public void ClearEducations()
-    {
-        _educations.Clear();
-    }
-
+    /// <summary>
+    /// Заменяет весь список образования новым набором.
+    /// Старые записи удаляются через каскадное удаление EF Core.
+    /// </summary>
     public void ReplaceEducations(IEnumerable<Education> educations)
     {
         _educations.Clear();
         _educations.AddRange(educations);
     }
 
-    public void Delete()
-    {
-        IsDeleted = true;
-    }
+    // ─── Lifecycle ────────────────────────────────────────────────────────────
+
+    /// <summary>Помечает профиль как удалённый (мягкое удаление).</summary>
+    public void Delete() => IsDeleted = true;
 }

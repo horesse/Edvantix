@@ -1,3 +1,4 @@
 namespace Edvantix.Persona.Features.Profiles;
 
-public sealed record ProfileViewModel(string Id, string Name, string UserName, string? AvatarUrl);
+/// <summary>Краткое представление профиля: отображается в списках и заголовках.</summary>
+public sealed record ProfileViewModel(ulong Id, string Name, string UserName, string? AvatarUrl);

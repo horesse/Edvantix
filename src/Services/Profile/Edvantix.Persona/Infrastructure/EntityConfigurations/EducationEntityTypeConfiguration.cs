@@ -24,5 +24,8 @@ public sealed class EducationEntityTypeConfiguration : IEntityTypeConfiguration<
 
         builder.HasIndex(e => e.ProfileId);
         builder.HasIndex(e => e.IsDeleted);
+
+        // Не показывать удалённые записи об образовании
+        builder.HasQueryFilter(e => !e.IsDeleted);
     }
 }

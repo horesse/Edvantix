@@ -1,37 +1,38 @@
 namespace Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
 
-/// <summary>
-/// Эндпоинт для обновления собственного профиля
-/// </summary>
-public class UpdateOwnProfileEndpoint : IEndpoint<NoContent, UpdateOwnProfileCommand, ISender>
+/// <summary>PUT /v1/profile — обновить собственный профиль, возвращает обновлённый ProfileViewModel.</summary>
+public sealed class UpdateOwnProfileEndpoint
+    : IEndpoint<Ok<ProfileViewModel>, UpdateOwnProfileCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
                 "/profile",
-                async (ProfileModel model, ISender sender, CancellationToken ct) =>
-                {
-                    var command = new UpdateOwnProfileCommand(model);
-                    return await HandleAsync(command, sender, ct);
-                }
+                async (UpdateProfileRequest request, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(new UpdateOwnProfileCommand(request), sender, ct)
             )
             .WithName("UpdateOwnProfile")
             .WithTags("Profile")
             .WithSummary("Обновить собственный профиль")
-            .WithDescription("Позволяет пользователю обновить свой профиль")
-            .Produces(StatusCodes.Status204NoContent)
+            .WithDescription(
+                "Обновляет персональные данные, контакты, образование и опыт работы. "
+                    + "Коллекции заменяются целиком. Аватар обновляется через PUT /profile/avatar."
+            )
+            .Produces<ProfileViewModel>()
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status422UnprocessableEntity)
+            .MapToApiVersion(new(1, 0))
             .RequireAuthorization();
     }
 
-    public async Task<NoContent> HandleAsync(
+    public async Task<Ok<ProfileViewModel>> HandleAsync(
         UpdateOwnProfileCommand command,
         ISender sender,
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(command, cancellationToken);
-        return TypedResults.NoContent();
+        var result = await sender.Send(command, cancellationToken);
+        return TypedResults.Ok(result);
     }
 }

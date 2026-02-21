@@ -1,38 +1,47 @@
-using Edvantix.Persona.Features.Profiles.GetProfileByAccountId;
-using Edvantix.Persona.Features.Profiles.GetProfileById;
-using Edvantix.ProfileService.Grpc.Services;
+using Edvantix.Persona.Grpc.Services;
 using Grpc.Core;
-using Mediator;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Persona.Grpc.Services;
 
 /// <summary>
-/// gRPC сервис для работы с профилями пользователей
+/// gRPC-сервис профилей для межсервисного взаимодействия.
+/// Обращается к репозиторию напрямую, минуя HTTP-маппер (SAS URL аватара не генерируется).
 /// </summary>
-public sealed class ProfileService(ISender sender, ILogger<ProfileService> logger)
+[AllowAnonymous]
+public sealed class ProfileService(IProfileRepository profileRepo, ILogger<ProfileService> logger)
     : ProfileGrpcService.ProfileGrpcServiceBase
 {
     /// <summary>
-    /// Получить профиль по AccountId (GUID пользователя)
+    /// Возвращает краткий профиль по ProfileId или AccountId (Keycloak GUID).
+    /// Ровно одно поле из oneof должно быть заполнено.
     /// </summary>
-    [AllowAnonymous]
-    public override async Task<ProfileReply> GetProfileByAccountId(
-        GetProfileByAccountIdRequest request,
+    public override async Task<ProfileReply> GetProfile(
+        GetProfileRequest request,
         ServerCallContext context
     )
     {
         try
         {
-            if (!Guid.TryParse(request.AccountId, out var accountId))
+            ISpecification<Profile> spec = request.IdentifierCase switch
             {
-                throw new RpcException(
-                    new Status(StatusCode.InvalidArgument, "Некорректный формат AccountId")
-                );
-            }
+                GetProfileRequest.IdentifierOneofCase.ProfileId => new ProfileByIdSpec(
+                    request.ProfileId
+                ),
 
-            var query = new GetProfileByAccountIdQuery(accountId);
-            var profile = await sender.Send(query, context.CancellationToken);
+                GetProfileRequest.IdentifierOneofCase.AccountId => BuildAccountIdSpec(
+                    request.AccountId
+                ),
+
+                _ => throw new RpcException(
+                    new Status(StatusCode.InvalidArgument, "Не задан идентификатор профиля.")
+                ),
+            };
+
+            var profile = await profileRepo.FindAsync(spec, context.CancellationToken);
+
+            if (profile is null)
+                throw new RpcException(new Status(StatusCode.NotFound, "Профиль не найден."));
 
             return new ProfileReply
             {
@@ -40,71 +49,31 @@ public sealed class ProfileService(ISender sender, ILogger<ProfileService> logge
                 AccountId = profile.AccountId.ToString(),
                 Gender = (int)profile.Gender,
                 BirthDate = profile.BirthDate.ToString("yyyy-MM-dd"),
-                FullName = profile.FullName,
-                FirstName = profile.FirstName,
-                LastName = profile.LastName,
-                MiddleName = profile.MiddleName ?? string.Empty,
+                FullName = profile.FullName.GetFullName(),
+                FirstName = profile.FullName.FirstName,
+                LastName = profile.FullName.LastName,
+                MiddleName = profile.FullName.MiddleName ?? string.Empty,
+                Login = profile.Login,
             };
         }
-        catch (NotFoundException ex)
+        catch (RpcException)
         {
-            logger.LogWarning(
-                ex,
-                "Профиль не найден для AccountId: {AccountId}",
-                request.AccountId
-            );
-            throw new RpcException(new Status(StatusCode.NotFound, ex.Message));
+            throw;
         }
         catch (Exception ex)
         {
-            logger.LogError(
-                ex,
-                "Ошибка при получении профиля по AccountId: {AccountId}",
-                request.AccountId
-            );
-            throw new RpcException(new Status(StatusCode.Internal, "Внутренняя ошибка сервера"));
+            logger.LogError(ex, "gRPC GetProfile: внутренняя ошибка. Request: {Request}", request);
+            throw new RpcException(new Status(StatusCode.Internal, "Внутренняя ошибка сервера."));
         }
     }
 
-    /// <summary>
-    /// Получить профиль по внутреннему ID профиля
-    /// </summary>
-    [AllowAnonymous]
-    public override async Task<ProfileReply> GetProfileById(
-        GetProfileByIdRequest request,
-        ServerCallContext context
-    )
+    private static ProfileByAccountIdSpec BuildAccountIdSpec(string rawAccountId)
     {
-        try
-        {
-            var query = new GetProfileByIdQuery(request.ProfileId);
-            var profile = await sender.Send(query, context.CancellationToken);
-
-            return new ProfileReply
-            {
-                Id = profile.Id,
-                AccountId = profile.AccountId.ToString(),
-                Gender = (int)profile.Gender,
-                BirthDate = profile.BirthDate.ToString("yyyy-MM-dd"),
-                FullName = profile.FullName,
-                FirstName = profile.FirstName,
-                LastName = profile.LastName,
-                MiddleName = profile.MiddleName ?? string.Empty,
-            };
-        }
-        catch (NotFoundException ex)
-        {
-            logger.LogWarning(ex, "Профиль не найден для ID: {ProfileId}", request.ProfileId);
-            throw new RpcException(new Status(StatusCode.NotFound, ex.Message));
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(
-                ex,
-                "Ошибка при получении профиля по ID: {ProfileId}",
-                request.ProfileId
+        if (!Guid.TryParse(rawAccountId, out var accountId))
+            throw new RpcException(
+                new Status(StatusCode.InvalidArgument, "Некорректный формат AccountId.")
             );
-            throw new RpcException(new Status(StatusCode.Internal, "Внутренняя ошибка сервера"));
-        }
+
+        return new ProfileByAccountIdSpec(accountId);
     }
 }

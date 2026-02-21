@@ -41,11 +41,22 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
+            .HasMany(p => p.Educations)
+            .WithOne(e => e.Profile)
+            .HasForeignKey(e => e.ProfileId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Все три коллекции хранятся через backing fields (_contacts, _employmentHistories, _educations)
+        builder
             .Metadata.FindNavigation(nameof(Profile.Contacts))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder
             .Metadata.FindNavigation(nameof(Profile.EmploymentHistories))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder
+            .Metadata.FindNavigation(nameof(Profile.Educations))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

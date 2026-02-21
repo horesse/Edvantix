@@ -1,69 +1,66 @@
-﻿using Edvantix.Chassis.Utilities;
+using Edvantix.Chassis.Utilities;
 using Edvantix.Constants.Other;
 using Edvantix.Persona.Infrastructure.Blob;
 
 namespace Edvantix.Persona.Features.Profiles.Registration;
 
-public sealed class RegistrationCommand : IRequest<long>
+/// <summary>Команда первичной регистрации профиля пользователя. Возвращает внутренний ID профиля.</summary>
+public sealed class RegistrationCommand : IRequest<ulong>
 {
-    public string FirstName { get; set; } = null!;
-    public string LastName { get; set; } = null!;
-    public string? MiddleName { get; set; }
-    public DateOnly BirthDate { get; set; }
-    public Gender Gender { get; set; }
-    public IFormFile? Avatar { get; set; }
+    public required string FirstName { get; init; }
+    public required string LastName { get; init; }
+    public string? MiddleName { get; init; }
+    public DateOnly BirthDate { get; init; }
+    public Gender Gender { get; init; }
+    public IFormFile? Avatar { get; init; }
 }
 
 public sealed class RegistrationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<RegistrationCommand, long>
+    : IRequestHandler<RegistrationCommand, ulong>
 {
-    public async Task<long> Handle(RegistrationCommand request, CancellationToken cancellationToken)
+    public async ValueTask<ulong> Handle(RegistrationCommand request, CancellationToken ct)
     {
-        var userGuid = provider.GetUserId();
+        var accountId = provider.GetUserId();
         var login = provider.GetUserLogin();
+        var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        using var profileRepo = provider.GetRequiredService<IProfileRepository>();
+        if (await profileRepo.ExistsByAccountIdAsync(accountId, ct))
+            throw new InvalidOperationException("Профиль для данного аккаунта уже существует.");
 
-        var isExists = await profileRepo.AnyAsync(p => p.AccountId == userGuid, cancellationToken);
+        var profile = new Profile(
+            accountId,
+            login,
+            request.Gender,
+            request.BirthDate,
+            request.FirstName,
+            request.LastName,
+            request.MiddleName
+        );
 
-        if (isExists)
-            throw new Exception("Пользователь с таким идентификатором уже существует");
+        string? avatarUrn = null;
 
-        await using var transaction = await profileRepo.BeginTransactionAsync(cancellationToken);
+        if (request.Avatar is not null)
+        {
+            var blobService = provider.GetRequiredService<IBlobService>();
+            avatarUrn = await blobService.UploadFileAsync(request.Avatar, ct);
+            profile.UploadAvatar(avatarUrn);
+        }
 
         try
         {
-            var profile = new Domain.AggregatesModel.ProfileAggregate.Profile(
-                userGuid,
-                login,
-                request.Gender,
-                request.BirthDate,
-                request.FirstName,
-                request.LastName,
-                request.MiddleName
-            );
-
-            if (request.Avatar is not null)
-            {
-                var blobService = provider.GetRequiredService<IBlobService>();
-
-                string? url = request.Avatar is null
-                    ? null
-                    : await blobService.UploadFileAsync(request.Avatar, cancellationToken);
-
-                profile.UploadAvatar(url);
-            }
-
-            await profileRepo.InsertAsync(profile, cancellationToken);
-
-            await profileRepo.SaveEntitiesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-
+            await profileRepo.AddAsync(profile, ct);
+            await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
             return profile.Id;
         }
         catch
         {
-            await transaction.RollbackAsync(cancellationToken);
+            // Если сохранение в БД не удалось — удаляем загруженный аватар из хранилища
+            if (avatarUrn is not null)
+            {
+                var blobService = provider.GetRequiredService<IBlobService>();
+                await blobService.DeleteFileAsync(avatarUrn, ct);
+            }
+
             throw;
         }
     }

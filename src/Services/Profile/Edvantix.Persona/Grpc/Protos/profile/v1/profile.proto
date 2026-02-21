@@ -1,24 +1,25 @@
-﻿edition = "2023";
+edition = "2023";
 
-option csharp_namespace = "Edvantix.ProfileService.Grpc.Services";
+option csharp_namespace = "Edvantix.Persona.Grpc.Services";
 
 package profile.v1;
 
+// Сервис профилей — используется другими микросервисами для получения данных пользователей.
 service ProfileGrpcService {
-  rpc GetProfileByAccountId (GetProfileByAccountIdRequest) returns (ProfileReply);
-  rpc GetProfileById (GetProfileByIdRequest) returns (ProfileReply);
+  // Возвращает краткий профиль по внутреннему ID или AccountId (Keycloak GUID).
+  // Ровно одно поле из oneof identifier должно быть заполнено.
+  rpc GetProfile (GetProfileRequest) returns (ProfileReply);
 }
 
-message GetProfileByAccountIdRequest {
-  string account_id = 1;
-}
-
-message GetProfileByIdRequest {
-  int64 profile_id = 1;
+message GetProfileRequest {
+  oneof identifier {
+    uint64 profile_id = 1;
+    string account_id = 2;
+  }
 }
 
 message ProfileReply {
-  int64 id = 1;
+  uint64 id = 1;
   string account_id = 2;
   int32 gender = 3;
   string birth_date = 4;
@@ -26,4 +27,5 @@ message ProfileReply {
   string first_name = 6;
   string last_name = 7;
   string middle_name = 8;
+  string login = 9;
 }

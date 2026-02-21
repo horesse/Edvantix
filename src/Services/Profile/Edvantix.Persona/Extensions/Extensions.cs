@@ -7,8 +7,6 @@ using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
-using Edvantix.Persona.Features;
-using Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
 
@@ -58,16 +56,13 @@ public static class Extensions
             new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
         );
 
-        services.AddApiFeature();
-
         services
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
             )
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-            .AddScoped<UpdateOwnProfilePreProcessor>();
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         var appSettings = new AppSettings();
 

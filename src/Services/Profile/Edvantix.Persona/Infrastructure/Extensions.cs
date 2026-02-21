@@ -1,4 +1,5 @@
 ﻿using Edvantix.Persona.Infrastructure.Blob;
+using Edvantix.Persona.Infrastructure.Repositories;
 
 namespace Edvantix.Persona.Infrastructure;
 
@@ -10,20 +11,12 @@ public static class Extensions
 
         builder.AddAzurePostgresDbContext<PersonaDbContext>(
             Components.Database.Persona,
-            app =>
-            {
-                if (app.Environment.IsDevelopment())
-                {
-                    services.AddMigration<PersonaDbContext>();
-                }
-                else
-                {
-                    services.AddMigration<PersonaDbContext>();
-                }
-
-                services.AddRepositories(typeof(IPersonaApiMarker));
-            }
+            _ => services.AddMigration<PersonaDbContext>()
         );
+
+        // Автономный репозиторий регистрируется вручную (не через AddRepositories,
+        // так как IProfileRepository не наследует IRepository<T>)
+        services.AddScoped<IProfileRepository, ProfileRepository>();
 
         builder.AddAzureBlobStorage();
     }

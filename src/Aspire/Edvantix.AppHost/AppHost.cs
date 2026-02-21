@@ -41,13 +41,13 @@ var storage = builder
     .ProvisionAsService();
 
 var profileContainer = storage.AddBlobContainer(
-    Components.Azure.Storage.BlobContainer(Services.Profile)
+    Components.Azure.Storage.BlobContainer(Services.Persona)
 );
 
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
 var organizationDb = postgres.AddDatabase(Components.Database.Organization);
 var systemDb = postgres.AddDatabase(Components.Database.System);
-var profileDb = postgres.AddDatabase(Components.Database.Profile);
+var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var subscriptionDb = postgres.AddDatabase(Components.Database.Subscription);
 var blogDb = postgres.AddDatabase(Components.Database.Blog);
 
@@ -56,7 +56,7 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
 var profileApi = builder
-    .AddProject<Edvantix_ProfileService>(Services.Profile)
+    .AddProject<Edvantix_ProfileService>(Services.Persona)
     .WithReference(profileDb)
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)

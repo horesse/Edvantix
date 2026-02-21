@@ -6,7 +6,7 @@ namespace Edvantix.Chassis.EF.Configurations;
 
 public static class EntityTypeConfigurationExtensions
 {
-    public static void Configure<TEntity>(this EntityTypeBuilder<TEntity> builder)
+    public static void UseDefaultConfiguration<TEntity>(this EntityTypeBuilder<TEntity> builder)
         where TEntity : Entity
     {
         builder.HasKey(bd => bd.Id);

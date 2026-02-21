@@ -30,7 +30,7 @@ internal static class Extensions
             HttpUtilities
                 .AsUrlBuilder()
                 .WithScheme(builder.GetScheme())
-                .WithHost(Constants.Aspire.Services.Profile)
+                .WithHost(Constants.Aspire.Services.Persona)
                 .Build(),
             HealthStatus.Degraded
         );

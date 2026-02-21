@@ -13,12 +13,11 @@
   <Folder Name="/Services/Core/Company/">
     <Project Path="src/Services/Company/Edvantix.Company/Edvantix.Company.csproj" />
   </Folder>
-  <Folder Name="/Services/Core/Profile/">
-    <Project Path="src/Services/Profile/Edvantix.ProfileService/Edvantix.ProfileService.csproj" />
-  </Folder>
-  <Folder Name="/Services/Core/System/" />
   <Folder Name="/Services/Core/Blog/">
     <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />
+  </Folder>
+  <Folder Name="/Services/Core/Persona/">
+    <Project Path="src/Services/Profile/Edvantix.Persona/Edvantix.Persona.csproj" />
   </Folder>
   <Folder Name="/Services/Educational/" />
   <Folder Name="/Services/Educational/Content/" />

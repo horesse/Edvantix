@@ -51,7 +51,6 @@ var profileContainer = storage.AddBlobContainer(
     Components.Azure.Storage.BlobContainer(Services.Profile)
 );
 
-var dataVaultDb = postgres.AddDatabase(Components.Database.DataVault);
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
 var organizationDb = postgres.AddDatabase(Components.Database.Organization);
 var systemDb = postgres.AddDatabase(Components.Database.System);
@@ -62,14 +61,6 @@ var blogDb = postgres.AddDatabase(Components.Database.Blog);
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
-
-var dataVaultApi = builder
-    .AddProject<Edvantix_DataVault>(Services.DataVault)
-    .WithReference(dataVaultDb)
-    .WaitFor(dataVaultDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
 
 var entityHubApi = builder
     .AddProject<Edvantix_EntityHub>(Services.EntityHub)
@@ -136,7 +127,6 @@ var blogApi = builder
 
 var gateway = builder
     .AddApiGatewayProxy()
-    .WithService(dataVaultApi)
     .WithService(entityHubApi)
     .WithService(organizationApi, true)
     .WithService(systemApi, true)
@@ -185,7 +175,6 @@ if (builder.ExecutionContext.IsRunMode)
 {
     builder
         .AddScalar(keycloak)
-        .WithOpenAPI(dataVaultApi)
         .WithOpenAPI(entityHubApi)
         .WithOpenAPI(organizationApi)
         .WithOpenAPI(systemApi)

@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
+    <PackageReference Include="Mediator.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
     <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
   </ItemGroup>
@@ -13,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf
-      Include="..\..\Profile\Edvantix.ProfileService\Grpc\Protos\profile\v1\profile.proto"
+      Include="..\..\Persona\Edvantix.Persona\Grpc\Protos\profile\v1\profile.proto"
       Link="Grpc\Protos\profile\v1\profile.proto"
       GrpcServices="Client"
     />

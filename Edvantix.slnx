@@ -9,41 +9,18 @@
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/Services/" />
-  <Folder Name="/Services/Common/" />
-  <Folder Name="/Services/Common/EntityHub/">
-    <Project Path="src/Services/EntityHub/Edvantix.EntityHub.Worker/Edvantix.EntityHub.Worker.csproj" />
-    <Project Path="src/Services/EntityHub/Edvantix.EntityHub/Edvantix.EntityHub.csproj" />
-  </Folder>
-  <Folder Name="/Services/Common/History/" />
-  <Folder Name="/Services/Core/" />
-  <Folder Name="/Services/Core/Company/">
-    <Project Path="src/Services/Company/Edvantix.Company/Edvantix.Company.csproj" />
-  </Folder>
-  <Folder Name="/Services/Core/Profile/">
-    <Project Path="src/Services/Profile/Edvantix.ProfileService/Edvantix.ProfileService.csproj" />
-  </Folder>
-  <Folder Name="/Services/Core/System/">
-    <Project Path="src/Services/System/Edvantix.System/Edvantix.System.csproj" />
-  </Folder>
-  <Folder Name="/Services/Core/Blog/">
+  <Folder Name="/Services/Blog/">
     <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />
   </Folder>
-  <Folder Name="/Services/Educational/" />
-  <Folder Name="/Services/Educational/Content/" />
-  <Folder Name="/Services/Educational/Course/" />
-  <Folder Name="/Services/Educational/Homework/" />
-  <Folder Name="/Services/Educational/Progress/" />
-  <Folder Name="/Services/Financial/" />
-  <Folder Name="/Services/Financial/Invoice/" />
-  <Folder Name="/Services/Financial/Payment/" />
-  <Folder Name="/Services/Financial/Subscription/">
+  <Folder Name="/Services/Organizational/">
+    <Project Path="src/Services/Company/Edvantix.Organizational/Edvantix.Organizational.csproj" />
+  </Folder>
+  <Folder Name="/Services/Persona/">
+    <Project Path="src/Services/Persona/Edvantix.Persona/Edvantix.Persona.csproj" />
+  </Folder>
+  <Folder Name="/Services/Subscription/">
     <Project Path="src/Services/Subscriptions/Edvantix.Subscriptions/Edvantix.Subscriptions.csproj" />
   </Folder>
-  <Folder Name="/Services/Management/" />
-  <Folder Name="/Services/Management/Attendance/" />
-  <Folder Name="/Services/Management/Certificate/" />
-  <Folder Name="/Services/Management/Rating/" />
-  <Folder Name="/Services/Management/Schedule/" />
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />

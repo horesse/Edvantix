@@ -1,6 +1,5 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Blog.Features.CategoryFeature.Models;
-using Edvantix.Blog.Features.TagFeature.Models;
+using Edvantix.Blog.Features.CategoryFeature;
+using Edvantix.Blog.Features.TagFeature;
 
 namespace Edvantix.Blog.Features.PostFeature.Models;
 
@@ -10,7 +9,7 @@ namespace Edvantix.Blog.Features.PostFeature.Models;
 public sealed class PostSummaryModel
 {
     /// <summary>Идентификатор поста.</summary>
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>Заголовок поста.</summary>
     public string Title { get; set; } = null!;

@@ -1,11 +1,33 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Chassis.Repository.Crud;
+using Edvantix.Chassis.Specification.Evaluators;
 
 namespace Edvantix.Blog.Infrastructure.Repositories;
 
-/// <summary>
-/// Реализация репозитория лайков постов на основе BlogContext.
-/// </summary>
-public sealed class PostLikeRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, PostLike, long>(provider),
-        IPostLikeRepository;
+public sealed class PostLikeRepository(BlogDbContext dbContext) : IPostLikeRepository
+{
+    private static SpecificationEvaluator Spec => SpecificationEvaluator.Instance;
+
+    /// <inheritdoc/>
+    public IUnitOfWork UnitOfWork => dbContext;
+
+    public async Task<PostLike?> Get(
+        Specification<PostLike> spec,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var likes = dbContext.Set<PostLike>();
+        return await Spec.GetQuery(likes, spec).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task AddAsync(PostLike like, CancellationToken cancellationToken = default)
+    {
+        var likes = dbContext.Set<PostLike>();
+        await likes.AddAsync(like, cancellationToken);
+    }
+
+    public Task DeleteAsync(PostLike like, CancellationToken cancellationToken = default)
+    {
+        var likes = dbContext.Set<PostLike>();
+        likes.Remove(like);
+        return Task.CompletedTask;
+    }
+}

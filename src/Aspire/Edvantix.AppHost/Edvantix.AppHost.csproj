@@ -19,11 +19,8 @@
     <PackageReference Include="Scalar.Aspire" />
   </ItemGroup>
   <ItemGroup Label="Services">
-    <ProjectReference Include="..\..\Services\EntityHub\Edvantix.EntityHub\Edvantix.EntityHub.csproj" />
-    <ProjectReference Include="..\..\Services\EntityHub\Edvantix.EntityHub.Worker\Edvantix.EntityHub.Worker.csproj" />
-    <ProjectReference Include="..\..\Services\Company\Edvantix.Company\Edvantix.Company.csproj" />
-    <ProjectReference Include="..\..\Services\System\Edvantix.System\Edvantix.System.csproj" />
-    <ProjectReference Include="..\..\Services\Profile\Edvantix.ProfileService\Edvantix.ProfileService.csproj" />
+    <ProjectReference Include="..\..\Services\Company\Edvantix.Organizational\Edvantix.Organizational.csproj" />
+    <ProjectReference Include="..\..\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
     <ProjectReference Include="..\..\Services\Subscriptions\Edvantix.Subscriptions\Edvantix.Subscriptions.csproj" />
     <ProjectReference Include="..\..\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
   </ItemGroup>

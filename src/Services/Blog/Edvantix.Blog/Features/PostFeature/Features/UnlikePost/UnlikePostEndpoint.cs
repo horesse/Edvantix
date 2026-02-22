@@ -1,7 +1,3 @@
-using Edvantix.Chassis.Endpoints;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.UnlikePost;
 
 /// <summary>
@@ -13,7 +9,7 @@ public sealed class UnlikePostEndpoint : IEndpoint<NoContent, UnlikePostCommand,
     {
         app.MapDelete(
                 "/posts/{postId:long}/like",
-                async (long postId, ISender sender, CancellationToken ct) =>
+                async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new UnlikePostCommand(postId), sender, ct)
             )
             .WithName("UnlikePost")

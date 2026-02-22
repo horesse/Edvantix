@@ -1,7 +1,3 @@
-using Edvantix.Chassis.Endpoints;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.LikePost;
 
 /// <summary>
@@ -14,7 +10,7 @@ public sealed class LikePostEndpoint : IEndpoint<NoContent, LikePostCommand, ISe
     {
         app.MapPost(
                 "/posts/{postId:long}/like",
-                async (long postId, ISender sender, CancellationToken ct) =>
+                async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new LikePostCommand(postId), sender, ct)
             )
             .WithName("LikePost")

@@ -1,8 +1,3 @@
-using Edvantix.Chassis.Endpoints;
-using Edvantix.Constants.Core;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.PublishPost;
 
 /// <summary>
@@ -20,7 +15,7 @@ public sealed class PublishPostEndpoint : IEndpoint<NoContent, PublishPostComman
         app.MapPost(
                 "/admin/posts/{postId:long}/publish",
                 async (
-                    long postId,
+                    Guid postId,
                     PublishPostRequest request,
                     ISender sender,
                     CancellationToken ct

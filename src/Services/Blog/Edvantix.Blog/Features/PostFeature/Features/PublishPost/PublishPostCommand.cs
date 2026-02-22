@@ -1,7 +1,3 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Chassis.Exceptions;
-using MediatR;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.PublishPost;
 
 /// <summary>
@@ -9,7 +5,7 @@ namespace Edvantix.Blog.Features.PostFeature.Features.PublishPost;
 /// При указании ScheduledAt пост переходит в статус Scheduled,
 /// иначе — немедленно в статус Published.
 /// </summary>
-public sealed record PublishPostCommand(long PostId, DateTime? ScheduledAt = null) : IRequest;
+public sealed record PublishPostCommand(Guid PostId, DateTime? ScheduledAt = null) : IRequest;
 
 /// <summary>
 /// Обработчик команды публикации поста.
@@ -17,9 +13,12 @@ public sealed record PublishPostCommand(long PostId, DateTime? ScheduledAt = nul
 public sealed class PublishPostCommandHandler(IServiceProvider provider)
     : IRequestHandler<PublishPostCommand>
 {
-    public async Task Handle(PublishPostCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(
+        PublishPostCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        using var postRepo = provider.GetRequiredService<IPostRepository>();
+        var postRepo = provider.GetRequiredService<IPostRepository>();
 
         var post =
             await postRepo.GetByIdAsync(request.PostId, cancellationToken)
@@ -34,7 +33,8 @@ public sealed class PublishPostCommandHandler(IServiceProvider provider)
             post.Publish();
         }
 
-        await postRepo.UpdateAsync(post, cancellationToken);
-        await postRepo.SaveEntitiesAsync(cancellationToken);
+        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 }

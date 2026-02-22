@@ -1,10 +1,7 @@
 using Edvantix.Blog.Grpc.Services;
-using Edvantix.Chassis.Exceptions;
 using Edvantix.Chassis.Utilities;
 using Edvantix.Chassis.Utilities.Configuration;
-using Edvantix.ProfileService.Grpc.Services;
-using Edvantix.ServiceDefaults.Kestrel;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Edvantix.Persona.Grpc.Services;
 
 namespace Edvantix.Blog.Grpc;
 
@@ -30,7 +27,7 @@ internal static class Extensions
             HttpUtilities
                 .AsUrlBuilder()
                 .WithScheme(builder.GetScheme())
-                .WithHost(Constants.Aspire.Services.Profile)
+                .WithHost(Constants.Aspire.Services.Persona)
                 .Build(),
             HealthStatus.Degraded
         );

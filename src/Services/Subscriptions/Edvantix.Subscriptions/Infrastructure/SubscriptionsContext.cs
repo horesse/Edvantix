@@ -1,5 +1,4 @@
 ﻿using Edvantix.Chassis.EF.Contexts;
-using Microsoft.EntityFrameworkCore;
 
 namespace Edvantix.Subscriptions.Infrastructure;
 

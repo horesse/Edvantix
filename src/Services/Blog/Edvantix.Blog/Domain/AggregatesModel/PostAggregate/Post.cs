@@ -1,7 +1,4 @@
-using Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate.Events;
-using Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
-using Edvantix.SharedKernel.SeedWork;
+using Edvantix.Blog.Domain.Events;
 
 namespace Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
 
@@ -9,7 +6,7 @@ namespace Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
 /// Пост блога платформы Edvantix.
 /// Является агрегатным корнем для управления контентом, лайками, категориями и тегами.
 /// </summary>
-public sealed class Post() : LongIdentity, IAggregateRoot
+public sealed class Post() : Entity, IAggregateRoot
 {
     private readonly List<PostLike> _likes = [];
     private readonly List<Category> _categories = [];
@@ -32,7 +29,7 @@ public sealed class Post() : LongIdentity, IAggregateRoot
         string content,
         string? summary,
         PostType type,
-        long authorId,
+        Guid authorId,
         bool isPremium = false,
         string? coverImageUrl = null
     )
@@ -41,9 +38,7 @@ public sealed class Post() : LongIdentity, IAggregateRoot
         ArgumentException.ThrowIfNullOrWhiteSpace(title, nameof(title));
         ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
         ArgumentException.ThrowIfNullOrWhiteSpace(content, nameof(content));
-
-        if (authorId <= 0)
-            throw new ArgumentException("Некорректный идентификатор автора.", nameof(authorId));
+        ;
 
         Title = title;
         Slug = slug;
@@ -81,7 +76,7 @@ public sealed class Post() : LongIdentity, IAggregateRoot
     public bool IsPremium { get; private set; }
 
     /// <summary>Идентификатор профиля автора поста.</summary>
-    public long AuthorId { get; private set; }
+    public Guid AuthorId { get; private set; }
 
     /// <summary>Дата и время публикации поста.</summary>
     public DateTime? PublishedAt { get; private set; }
@@ -228,36 +223,6 @@ public sealed class Post() : LongIdentity, IAggregateRoot
     }
 
     /// <summary>
-    /// Добавляет категорию к посту, если она ещё не добавлена.
-    /// </summary>
-    /// <param name="category">Категория для добавления.</param>
-    public void AddCategory(Category category)
-    {
-        ArgumentNullException.ThrowIfNull(category);
-
-        if (_categories.Any(c => c.Id == category.Id))
-            return;
-
-        _categories.Add(category);
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    /// <summary>
-    /// Удаляет категорию из поста.
-    /// </summary>
-    /// <param name="categoryId">Идентификатор категории.</param>
-    public void RemoveCategory(long categoryId)
-    {
-        var category = _categories.FirstOrDefault(c => c.Id == categoryId);
-
-        if (category is not null)
-        {
-            _categories.Remove(category);
-            UpdatedAt = DateTime.UtcNow;
-        }
-    }
-
-    /// <summary>
     /// Устанавливает новый набор категорий, заменяя текущий.
     /// </summary>
     /// <param name="categories">Новый набор категорий.</param>
@@ -271,36 +236,6 @@ public sealed class Post() : LongIdentity, IAggregateRoot
         }
 
         UpdatedAt = DateTime.UtcNow;
-    }
-
-    /// <summary>
-    /// Добавляет тег к посту, если он ещё не добавлен.
-    /// </summary>
-    /// <param name="tag">Тег для добавления.</param>
-    public void AddTag(Tag tag)
-    {
-        ArgumentNullException.ThrowIfNull(tag);
-
-        if (_tags.Any(t => t.Id == tag.Id))
-            return;
-
-        _tags.Add(tag);
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    /// <summary>
-    /// Удаляет тег из поста.
-    /// </summary>
-    /// <param name="tagId">Идентификатор тега.</param>
-    public void RemoveTag(long tagId)
-    {
-        var tag = _tags.FirstOrDefault(t => t.Id == tagId);
-
-        if (tag is not null)
-        {
-            _tags.Remove(tag);
-            UpdatedAt = DateTime.UtcNow;
-        }
     }
 
     /// <summary>

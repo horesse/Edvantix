@@ -17,7 +17,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "organization_id",
@@ -25,7 +26,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -35,7 +37,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "organization_id",
@@ -43,7 +46,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -53,7 +57,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -63,7 +68,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "organization_id",
@@ -71,7 +77,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "invitee_profile_id",
@@ -80,7 +87,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 nullable: true,
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldNullable: true);
+                oldNullable: true
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "invited_by_profile_id",
@@ -88,7 +96,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -98,7 +107,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "profile_id",
@@ -106,7 +116,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "group_id",
@@ -114,7 +125,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -124,7 +136,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "organization_id",
@@ -132,7 +145,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -142,7 +156,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
         }
 
         /// <inheritdoc />
@@ -154,7 +169,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "organization_id",
@@ -162,7 +178,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -172,7 +189,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "organization_id",
@@ -180,7 +198,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -190,7 +209,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -200,7 +220,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "organization_id",
@@ -208,7 +229,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "invitee_profile_id",
@@ -217,7 +239,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 nullable: true,
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldNullable: true);
+                oldNullable: true
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "invited_by_profile_id",
@@ -225,7 +248,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -235,7 +259,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "profile_id",
@@ -243,7 +268,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "group_id",
@@ -251,7 +277,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -261,7 +288,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "organization_id",
@@ -269,7 +297,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -279,7 +308,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
         }
     }
 }

@@ -17,7 +17,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -27,7 +28,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -37,7 +39,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "profile_id",
@@ -45,7 +48,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -55,7 +59,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "profile_id",
@@ -63,7 +68,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -73,7 +79,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "profile_id",
@@ -81,7 +88,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -91,7 +99,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
         }
 
         /// <inheritdoc />
@@ -103,7 +112,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -113,7 +123,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -123,7 +134,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "profile_id",
@@ -131,7 +143,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -141,7 +154,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "profile_id",
@@ -149,7 +163,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -159,7 +174,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "profile_id",
@@ -167,7 +183,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -177,7 +194,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
         }
     }
 }

@@ -19,7 +19,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "tags_id",
@@ -27,7 +28,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "post_id",
@@ -35,7 +37,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "profile_id",
@@ -43,7 +46,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "post_id",
@@ -51,7 +55,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -61,7 +66,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "post_id",
@@ -69,7 +75,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "categories_id",
@@ -77,7 +84,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "author_id",
@@ -85,7 +93,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "uuid",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric(20,0)");
+                oldType: "numeric(20,0)"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -95,7 +104,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -105,7 +115,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "id",
@@ -115,7 +126,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 defaultValueSql: "uuidv7()",
                 oldClrType: typeof(decimal),
                 oldType: "numeric(20,0)",
-                oldComment: "Идентификатор");
+                oldComment: "Идентификатор"
+            );
         }
 
         /// <inheritdoc />
@@ -129,7 +141,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "tags_id",
@@ -137,7 +150,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "post_id",
@@ -145,7 +159,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "profile_id",
@@ -153,7 +168,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "post_id",
@@ -161,7 +177,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -171,7 +188,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "post_id",
@@ -179,7 +197,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "categories_id",
@@ -187,7 +206,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "author_id",
@@ -195,7 +215,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 type: "numeric(20,0)",
                 nullable: false,
                 oldClrType: typeof(Guid),
-                oldType: "uuid");
+                oldType: "uuid"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -205,7 +226,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -215,7 +237,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "id",
@@ -225,7 +248,8 @@ namespace Edvantix.Blog.Infrastructure.Migrations
                 comment: "Идентификатор",
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
-                oldDefaultValueSql: "uuidv7()");
+                oldDefaultValueSql: "uuidv7()"
+            );
         }
     }
 }

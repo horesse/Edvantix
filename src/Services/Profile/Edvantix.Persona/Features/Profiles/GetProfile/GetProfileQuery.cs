@@ -10,7 +10,7 @@ namespace Edvantix.Persona.Features.Profiles.GetProfile;
 ///   <item>AccountId текущего аутентифицированного пользователя — иначе.</item>
 /// </list>
 /// </summary>
-public sealed record GetProfileQuery(ulong? ProfileId = null, Guid? AccountId = null)
+public sealed record GetProfileQuery(Guid? ProfileId = null, Guid? AccountId = null)
     : IRequest<ProfileViewModel>;
 
 public sealed class GetProfileQueryHandler(IServiceProvider provider)

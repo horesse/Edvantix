@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 /// </summary>
 public sealed class GroupMemberSpecification : Specification<GroupMember>
 {
-    public GroupMemberSpecification(ulong? groupId = null, ulong? profileId = null)
+    public GroupMemberSpecification(Guid? groupId = null, Guid? profileId = null)
     {
         if (groupId.HasValue)
             Query.Where(x => x.GroupId == groupId);
@@ -16,7 +16,7 @@ public sealed class GroupMemberSpecification : Specification<GroupMember>
 
     public GroupMemberSpecification() { }
 
-    public GroupMemberSpecification(ulong profileId, ulong? groupId = null)
+    public GroupMemberSpecification(Guid profileId, Guid? groupId = null)
     {
         Query.Where(x => x.ProfileId == profileId);
 

@@ -2,7 +2,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.UpdateGroupMemberRole;
 
-public sealed record UpdateGroupMemberRoleCommand(ulong GroupId, Guid MemberId, GroupRole NewRole)
+public sealed record UpdateGroupMemberRoleCommand(Guid GroupId, Guid MemberId, GroupRole NewRole)
     : IRequest<Unit>;
 
 public sealed class UpdateGroupMemberRoleCommandHandler(IServiceProvider provider)

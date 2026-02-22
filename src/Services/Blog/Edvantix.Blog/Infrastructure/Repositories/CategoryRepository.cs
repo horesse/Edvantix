@@ -14,7 +14,7 @@ public sealed class CategoryRepository(BlogDbContext dbContext) : ICategoryRepos
     }
 
     public async Task<Category?> GetByIdAsync(
-        ulong id,
+        Guid id,
         CancellationToken cancellationToken = default
     )
     {

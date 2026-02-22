@@ -6,7 +6,7 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetConta
 /// <summary>
 /// Запрос списка контактов организации.
 /// </summary>
-public sealed record GetContactsQuery(ulong OrganizationId) : IRequest<IEnumerable<ContactModel>>;
+public sealed record GetContactsQuery(Guid OrganizationId) : IRequest<IEnumerable<ContactModel>>;
 
 /// <summary>
 /// Обработчик запроса контактов. Доступно любому участнику организации.

@@ -3,9 +3,9 @@
 public sealed class InvitationSpecification : Specification<Invitation>
 {
     public InvitationSpecification(
-        ulong organizationId,
+        Guid organizationId,
         string? email = null,
-        ulong? profileId = null
+        Guid? profileId = null
     )
     {
         Query
@@ -24,7 +24,7 @@ public sealed class InvitationSpecification : Specification<Invitation>
         Query.Where(x => x.Token == token);
     }
 
-    public InvitationSpecification(ulong? profileId = null, ulong? organizationId = null)
+    public InvitationSpecification(Guid? profileId = null, Guid? organizationId = null)
     {
         Query.Where(x => x.Status == InvitationStatus.Pending);
 

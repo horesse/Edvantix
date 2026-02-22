@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Features.PostFeature.Features.UpdatePost;
 /// Доступна только администраторам платформы.
 /// </summary>
 public sealed record UpdatePostCommand(
-    ulong PostId,
+    Guid PostId,
     string Title,
     string Slug,
     string Content,
@@ -13,8 +13,8 @@ public sealed record UpdatePostCommand(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<ulong> CategoryIds,
-    IReadOnlyList<ulong> TagIds
+    IReadOnlyList<Guid> CategoryIds,
+    IReadOnlyList<Guid> TagIds
 ) : IRequest;
 
 /// <summary>

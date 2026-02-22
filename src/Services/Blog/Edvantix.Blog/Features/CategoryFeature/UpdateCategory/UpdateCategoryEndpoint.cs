@@ -15,7 +15,7 @@ public sealed class UpdateCategoryEndpoint : IEndpoint<NoContent, UpdateCategory
         app.MapPut(
                 "/admin/categories/{categoryId:long}",
                 async (
-                    ulong categoryId,
+                    Guid categoryId,
                     UpdateCategoryRequest request,
                     ISender sender,
                     CancellationToken ct

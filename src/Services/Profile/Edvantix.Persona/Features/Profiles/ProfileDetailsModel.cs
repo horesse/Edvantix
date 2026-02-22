@@ -7,7 +7,7 @@ namespace Edvantix.Persona.Features.Profiles;
 /// Возвращается эндпоинтами /profile/details и /profiles/{id}/details.
 /// </summary>
 public sealed record ProfileDetailsModel(
-    ulong Id,
+    Guid Id,
     Guid AccountId,
     string Login,
     Gender Gender,

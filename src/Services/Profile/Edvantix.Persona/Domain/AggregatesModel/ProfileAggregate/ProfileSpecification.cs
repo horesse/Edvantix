@@ -8,7 +8,7 @@ public sealed class ProfileByIdSpec : Specification<Profile>
     /// Загружать контакты, историю занятости и образование.
     /// По умолчанию загружается только <see cref="Profile.FullName"/>.
     /// </param>
-    public ProfileByIdSpec(ulong id, bool withDetails = false)
+    public ProfileByIdSpec(Guid id, bool withDetails = false)
     {
         Query.Where(p => p.Id == id);
         ApplyIncludes(withDetails);

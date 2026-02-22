@@ -6,7 +6,7 @@ namespace Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
 public interface ITagRepository : IRepository<Tag>
 {
     Task<IReadOnlyList<Tag>> ListAsync(CancellationToken cancellationToken = default);
-    Task<Tag?> GetByIdAsync(ulong id, CancellationToken cancellationToken = default);
+    Task<Tag?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task AddAsync(Tag tag, CancellationToken cancellationToken = default);
     Task DeleteAsync(Tag tag, CancellationToken cancellationToken = default);

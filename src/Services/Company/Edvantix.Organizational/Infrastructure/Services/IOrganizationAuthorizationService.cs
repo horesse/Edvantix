@@ -10,7 +10,7 @@ public interface IOrganizationAuthorizationService
     /// Выбрасывает ForbiddenException, если пользователь не является участником.
     /// </summary>
     Task<OrganizationMember> GetCurrentMemberAsync(
-        ulong organizationId,
+        Guid organizationId,
         CancellationToken cancellationToken
     );
 
@@ -19,7 +19,7 @@ public interface IOrganizationAuthorizationService
     /// Выбрасывает ForbiddenException, если роль не соответствует.
     /// </summary>
     Task<OrganizationMember> RequireOrgRoleAsync(
-        ulong organizationId,
+        Guid organizationId,
         CancellationToken cancellationToken,
         params OrganizationRole[] allowedRoles
     );
@@ -28,5 +28,5 @@ public interface IOrganizationAuthorizationService
     /// Проверяет, что текущий пользователь может управлять группой
     /// (Owner/Manager на уровне организации, или Teacher/Manager на уровне группы).
     /// </summary>
-    Task RequireGroupManagementAsync(ulong groupId, CancellationToken cancellationToken);
+    Task RequireGroupManagementAsync(Guid groupId, CancellationToken cancellationToken);
 }

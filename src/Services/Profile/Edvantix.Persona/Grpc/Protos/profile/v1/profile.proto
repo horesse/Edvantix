@@ -11,13 +11,13 @@ service ProfileGrpcService {
 
 message GetProfileRequest {
   oneof identifier {
-    uint64 profile_id = 1;
+    string profile_id = 1;
     string account_id = 2;
   }
 }
 
 message ProfileReply {
-  uint64 id = 1;
+  string id = 1;
   string account_id = 2;
   int32 gender = 3;
   string birth_date = 4;

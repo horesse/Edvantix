@@ -10,7 +10,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
 {
     /// <inheritdoc />
     public async Task<OrganizationMember> GetCurrentMemberAsync(
-        ulong organizationId,
+        Guid organizationId,
         CancellationToken cancellationToken
     )
     {
@@ -28,7 +28,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
 
     /// <inheritdoc />
     public async Task<OrganizationMember> RequireOrgRoleAsync(
-        ulong organizationId,
+        Guid organizationId,
         CancellationToken cancellationToken,
         params OrganizationRole[] allowedRoles
     )
@@ -44,10 +44,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
     }
 
     /// <inheritdoc />
-    public async Task RequireGroupManagementAsync(
-        ulong groupId,
-        CancellationToken cancellationToken
-    )
+    public async Task RequireGroupManagementAsync(Guid groupId, CancellationToken cancellationToken)
     {
         var profileId = await provider.GetProfileId(cancellationToken);
 

@@ -12,7 +12,7 @@ public sealed class GetAdminPostEndpoint : IEndpoint<Ok<PostModel>, GetAdminPost
     {
         app.MapGet(
                 "/admin/posts/{postId:long}",
-                async (ulong postId, ISender sender, CancellationToken ct) =>
+                async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetAdminPostQuery(postId), sender, ct)
             )
             .WithName("GetAdminPost")

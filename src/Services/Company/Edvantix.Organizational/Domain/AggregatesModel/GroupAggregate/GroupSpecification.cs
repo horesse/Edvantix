@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 /// </summary>
 public sealed class GroupSpecification : Specification<Group>
 {
-    public GroupSpecification(ulong organizationId, bool includeMembers = false)
+    public GroupSpecification(Guid organizationId, bool includeMembers = false)
     {
         Query.Where(x => x.OrganizationId == organizationId);
 

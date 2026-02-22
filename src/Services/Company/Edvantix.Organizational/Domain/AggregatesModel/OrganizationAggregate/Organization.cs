@@ -109,7 +109,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     /// <summary>
     /// Удаляет контакт организации по идентификатору.
     /// </summary>
-    public void RemoveContact(ulong contactId)
+    public void RemoveContact(Guid contactId)
     {
         var contact =
             _contacts.FirstOrDefault(c => c.Id == contactId)
@@ -121,7 +121,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     /// <summary>
     /// Обновляет существующий контакт организации.
     /// </summary>
-    public void UpdateContact(ulong contactId, ContactType type, string value, string? description)
+    public void UpdateContact(Guid contactId, ContactType type, string value, string? description)
     {
         var contact =
             _contacts.FirstOrDefault(c => c.Id == contactId)

@@ -5,7 +5,7 @@ using Edvantix.Persona.Infrastructure.Blob;
 namespace Edvantix.Persona.Features.Profiles.Registration;
 
 /// <summary>Команда первичной регистрации профиля пользователя. Возвращает внутренний ID профиля.</summary>
-public sealed class RegistrationCommand : IRequest<ulong>
+public sealed class RegistrationCommand : IRequest<Guid>
 {
     public required string FirstName { get; init; }
     public required string LastName { get; init; }
@@ -16,9 +16,9 @@ public sealed class RegistrationCommand : IRequest<ulong>
 }
 
 public sealed class RegistrationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<RegistrationCommand, ulong>
+    : IRequestHandler<RegistrationCommand, Guid>
 {
-    public async ValueTask<ulong> Handle(RegistrationCommand request, CancellationToken ct)
+    public async ValueTask<Guid> Handle(RegistrationCommand request, CancellationToken ct)
     {
         var accountId = provider.GetUserId();
         var login = provider.GetUserLogin();

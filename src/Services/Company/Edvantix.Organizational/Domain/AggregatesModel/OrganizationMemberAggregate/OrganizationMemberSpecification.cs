@@ -5,12 +5,12 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggre
 /// </summary>
 public sealed class OrganizationMemberSpecification : Specification<OrganizationMember>
 {
-    public OrganizationMemberSpecification(ulong organizationId)
+    public OrganizationMemberSpecification(Guid organizationId)
     {
         Query.Where(x => x.OrganizationId == organizationId);
     }
 
-    public OrganizationMemberSpecification(ulong profileId, ulong? organizationId = null)
+    public OrganizationMemberSpecification(Guid profileId, Guid? organizationId = null)
     {
         Query.Where(x => x.ProfileId == profileId);
 

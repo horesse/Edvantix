@@ -4,7 +4,7 @@ namespace Edvantix.Blog.Features.CategoryFeature.UpdateCategory;
 /// Команда для обновления категории блога.
 /// </summary>
 public sealed record UpdateCategoryCommand(
-    ulong CategoryId,
+    Guid CategoryId,
     string Name,
     string Slug,
     string? Description

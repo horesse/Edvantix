@@ -64,6 +64,6 @@ public sealed class AuthorMapper : Mapper<ProfileReply, AuthorModel>
 {
     public override AuthorModel Map(ProfileReply source)
     {
-        return new AuthorModel { Id = source.Id, FullName = source.FullName };
+        return new AuthorModel { Id = Guid.Parse(source.Id), FullName = source.FullName };
     }
 }

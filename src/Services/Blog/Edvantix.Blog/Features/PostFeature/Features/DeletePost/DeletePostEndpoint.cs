@@ -10,7 +10,7 @@ public sealed class DeletePostEndpoint : IEndpoint<NoContent, DeletePostCommand,
     {
         app.MapDelete(
                 "/admin/posts/{postId:long}",
-                async (ulong postId, ISender sender, CancellationToken ct) =>
+                async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new DeletePostCommand(postId), sender, ct)
             )
             .WithName("DeletePost")

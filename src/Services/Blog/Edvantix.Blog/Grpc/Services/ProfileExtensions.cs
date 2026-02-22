@@ -15,12 +15,17 @@ public static class ProfileExtensions
         /// через gRPC-сервис Profile.
         /// </summary>
         /// <param name="cancellationToken">Токен отмены операции.</param>
-        public async Task<ulong> GetProfileId(CancellationToken cancellationToken)
+        public async Task<Guid> GetProfileId(CancellationToken cancellationToken)
         {
             var userId = provider.GetUserId();
 
             var profileService = provider.GetRequiredService<IProfileService>();
-            return await profileService.GetProfileIdByAccountId(userId, cancellationToken);
+
+            var profile = await profileService.GetProfileByAccountId(userId, cancellationToken);
+
+            return profile is null
+                ? throw new NotFoundException("Профиль не найден.")
+                : Guid.Parse(profile.Id);
         }
 
         /// <summary>
@@ -28,7 +33,7 @@ public static class ProfileExtensions
         /// Возвращает <c>null</c>, если пользователь не авторизован.
         /// </summary>
         /// <param name="cancellationToken">Токен отмены операции.</param>
-        public async Task<ulong?> TryGetProfileId(CancellationToken cancellationToken)
+        public async Task<Guid?> TryGetProfileId(CancellationToken cancellationToken)
         {
             var claimsPrincipal = provider.GetService<ClaimsPrincipal>();
 

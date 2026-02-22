@@ -9,18 +9,18 @@ public class UpdateContactEndpoint : IEndpoint<NoContent, UpdateContactCommand, 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
-                "/organizations/{orgId:long}/contacts/{contactId:long}",
+                "/organizations/{orgId:guid}/contacts/{contactId:guid}",
                 async (
-                    long orgId,
-                    long contactId,
+                    Guid orgId,
+                    Guid contactId,
                     UpdateContactRequest request,
                     ISender sender,
                     CancellationToken ct
                 ) =>
                 {
                     var command = new UpdateContactCommand(
-                        (ulong)orgId,
-                        (ulong)contactId,
+                        orgId,
+                        contactId,
                         request.Type,
                         request.Value,
                         request.Description

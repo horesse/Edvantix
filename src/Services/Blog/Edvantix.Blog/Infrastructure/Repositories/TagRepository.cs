@@ -14,7 +14,7 @@ public sealed class TagRepository(BlogDbContext dbContext) : ITagRepository
         return await tags.OrderBy(t => t.Name).ToListAsync(cancellationToken);
     }
 
-    public async Task<Tag?> GetByIdAsync(ulong id, CancellationToken cancellationToken = default)
+    public async Task<Tag?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var tags = dbContext.Set<Tag>();
         return await tags.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);

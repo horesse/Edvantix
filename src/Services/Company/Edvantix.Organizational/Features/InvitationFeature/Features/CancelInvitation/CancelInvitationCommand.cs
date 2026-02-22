@@ -6,7 +6,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.CancelInvi
 /// <summary>
 /// Команда отмены приглашения (Owner/Manager).
 /// </summary>
-public sealed record CancelInvitationCommand(ulong OrganizationId, Guid InvitationId)
+public sealed record CancelInvitationCommand(Guid OrganizationId, Guid InvitationId)
     : IRequest<Unit>;
 
 /// <summary>

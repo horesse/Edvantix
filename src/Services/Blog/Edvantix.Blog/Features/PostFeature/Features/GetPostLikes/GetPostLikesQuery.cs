@@ -3,12 +3,12 @@ namespace Edvantix.Blog.Features.PostFeature.Features.GetPostLikes;
 /// <summary>
 /// Запрос для получения количества лайков поста.
 /// </summary>
-public sealed record GetPostLikesQuery(ulong PostId) : IRequest<PostLikesModel>;
+public sealed record GetPostLikesQuery(Guid PostId) : IRequest<PostLikesModel>;
 
 /// <summary>
 /// Данные о лайках поста.
 /// </summary>
-public sealed record PostLikesModel(ulong PostId, int LikesCount);
+public sealed record PostLikesModel(Guid PostId, int LikesCount);
 
 /// <summary>
 /// Обработчик запроса на получение количества лайков.

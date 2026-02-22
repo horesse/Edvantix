@@ -12,7 +12,7 @@ public sealed class UpdateProfileByAdminEndpoint
         app.MapPut(
                 "/profiles/{id:long}",
                 async (
-                    ulong id,
+                    Guid id,
                     [FromForm] UpdateProfileByAdminCommand command,
                     ISender sender,
                     CancellationToken ct

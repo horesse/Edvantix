@@ -6,6 +6,6 @@
 /// </summary>
 public abstract class PersonalData : Entity
 {
-    public ulong ProfileId { get; protected set; }
+    public Guid ProfileId { get; protected set; }
     public Profile Profile { get; protected set; } = null!;
 }

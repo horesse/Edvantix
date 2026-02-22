@@ -3,7 +3,7 @@ namespace Edvantix.Blog.Features.TagFeature.DeleteTag;
 /// <summary>
 /// Команда для удаления тега блога.
 /// </summary>
-public sealed record DeleteTagCommand(ulong TagId) : IRequest;
+public sealed record DeleteTagCommand(Guid TagId) : IRequest;
 
 public sealed class DeleteTagCommandHandler(IServiceProvider provider)
     : IRequestHandler<DeleteTagCommand>

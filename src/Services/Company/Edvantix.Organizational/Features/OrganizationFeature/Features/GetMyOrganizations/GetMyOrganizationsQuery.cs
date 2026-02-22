@@ -16,7 +16,7 @@ public sealed class GetMyOrganizationsQueryHandler(IServiceProvider provider)
         var profileId = await provider.GetProfileId(cancellationToken);
 
         // Получаем все членства профиля (без фильтра по организации)
-        var memberSpec = new OrganizationMemberSpecification(profileId, (ulong?)null);
+        var memberSpec = new OrganizationMemberSpecification(profileId, (Guid?)null);
         var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
         var members = await memberRepo.ListAsync(memberSpec, cancellationToken);
 

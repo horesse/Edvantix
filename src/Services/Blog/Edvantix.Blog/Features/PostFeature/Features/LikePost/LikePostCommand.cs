@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Features.PostFeature.Features.LikePost;
 /// <summary>
 /// Команда для постановки лайка на пост авторизованным пользователем.
 /// </summary>
-public sealed record LikePostCommand(ulong PostId) : IRequest;
+public sealed record LikePostCommand(Guid PostId) : IRequest;
 
 /// <summary>
 /// Обработчик команды постановки лайка.

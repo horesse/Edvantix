@@ -33,7 +33,7 @@ public sealed class GetMyInvitationsQueryHandler(IServiceProvider provider)
         // Получить имена организаций для отображения
         var organizationIds = invitations.Select(x => x.OrganizationId).Distinct().ToList();
         var orgRepo = provider.GetRequiredService<IOrganizationRepository>();
-        var organizations = new Dictionary<ulong, string>();
+        var organizations = new Dictionary<Guid, string>();
 
         foreach (var orgId in organizationIds)
         {

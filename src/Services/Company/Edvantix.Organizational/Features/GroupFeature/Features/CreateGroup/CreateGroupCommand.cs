@@ -2,13 +2,13 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.CreateGroup;
 
-public sealed record CreateGroupCommand(ulong OrganizationId, string Name, string? Description)
-    : IRequest<ulong>;
+public sealed record CreateGroupCommand(Guid OrganizationId, string Name, string? Description)
+    : IRequest<Guid>;
 
 public sealed class CreateGroupCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateGroupCommand, ulong>
+    : IRequestHandler<CreateGroupCommand, Guid>
 {
-    public async ValueTask<ulong> Handle(
+    public async ValueTask<Guid> Handle(
         CreateGroupCommand request,
         CancellationToken cancellationToken
     )

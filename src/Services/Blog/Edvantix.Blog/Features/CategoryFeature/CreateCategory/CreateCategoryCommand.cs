@@ -4,15 +4,15 @@ namespace Edvantix.Blog.Features.CategoryFeature.CreateCategory;
 /// Команда для создания новой категории блога.
 /// </summary>
 public sealed record CreateCategoryCommand(string Name, string Slug, string? Description)
-    : IRequest<ulong>;
+    : IRequest<Guid>;
 
 /// <summary>
 /// Обработчик команды создания категории.
 /// </summary>
 public sealed class CreateCategoryCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateCategoryCommand, ulong>
+    : IRequestHandler<CreateCategoryCommand, Guid>
 {
-    public async ValueTask<ulong> Handle(
+    public async ValueTask<Guid> Handle(
         CreateCategoryCommand request,
         CancellationToken cancellationToken
     )

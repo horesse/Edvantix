@@ -7,15 +7,9 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete
 {
     private readonly List<GroupMember> _members = [];
 
-    public Group(ulong organizationId, string name, string? description = null)
+    public Group(Guid organizationId, string name, string? description = null)
         : this()
     {
-        if (organizationId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор организации.",
-                nameof(organizationId)
-            );
-
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
         OrganizationId = organizationId;
@@ -24,7 +18,7 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete
         IsDeleted = false;
     }
 
-    public ulong OrganizationId { get; private set; }
+    public Guid OrganizationId { get; private set; }
     public Organization Organization { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public string? Description { get; private set; }

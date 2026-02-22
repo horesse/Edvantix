@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.DeleteCo
 /// <summary>
 /// Команда удаления контакта организации.
 /// </summary>
-public sealed record DeleteContactCommand(ulong OrganizationId, ulong ContactId) : IRequest<Unit>;
+public sealed record DeleteContactCommand(Guid OrganizationId, Guid ContactId) : IRequest<Unit>;
 
 /// <summary>
 /// Обработчик удаления контакта. Авторизация: Owner/Manager.

@@ -3,7 +3,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.UpdateMemberRole;
 
 public sealed record UpdateMemberRoleCommand(
-    ulong OrganizationId,
+    Guid OrganizationId,
     Guid MemberId,
     OrganizationRole NewRole
 ) : IRequest<Unit>;

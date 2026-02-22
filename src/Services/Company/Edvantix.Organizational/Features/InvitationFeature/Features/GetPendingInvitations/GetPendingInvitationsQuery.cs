@@ -7,7 +7,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.GetPending
 /// <summary>
 /// Запрос списка ожидающих приглашений организации.
 /// </summary>
-public sealed record GetPendingInvitationsQuery(ulong OrganizationId)
+public sealed record GetPendingInvitationsQuery(Guid OrganizationId)
     : IRequest<IEnumerable<InvitationModel>>;
 
 /// <summary>

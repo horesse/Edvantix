@@ -3,7 +3,7 @@ namespace Edvantix.Blog.Features.TagFeature.UpdateTag;
 /// <summary>
 /// Команда для обновления тега блога.
 /// </summary>
-public sealed record UpdateTagCommand(ulong TagId, string Name, string Slug) : IRequest;
+public sealed record UpdateTagCommand(Guid TagId, string Name, string Slug) : IRequest;
 
 public sealed class UpdateTagCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateTagCommand>

@@ -9,7 +9,7 @@ namespace Edvantix.Blog.Features.PostFeature.Models;
 public sealed class PostModel
 {
     /// <summary>Идентификатор поста.</summary>
-    public ulong Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>Заголовок поста.</summary>
     public string Title { get; set; } = null!;

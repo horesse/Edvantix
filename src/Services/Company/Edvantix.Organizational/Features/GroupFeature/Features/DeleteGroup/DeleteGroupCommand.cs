@@ -2,7 +2,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.DeleteGroup;
 
-public sealed record DeleteGroupCommand(ulong Id) : IRequest<Unit>;
+public sealed record DeleteGroupCommand(Guid Id) : IRequest<Unit>;
 
 public sealed class DeleteGroupCommandHandler(IServiceProvider provider)
     : IRequestHandler<DeleteGroupCommand, Unit>

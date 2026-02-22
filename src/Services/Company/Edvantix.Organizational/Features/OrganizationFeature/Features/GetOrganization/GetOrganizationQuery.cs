@@ -3,7 +3,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetOrganization;
 
-public sealed record GetOrganizationQuery(ulong Id) : IRequest<OrganizationModel>;
+public sealed record GetOrganizationQuery(Guid Id) : IRequest<OrganizationModel>;
 
 public sealed class GetOrganizationQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetOrganizationQuery, OrganizationModel>

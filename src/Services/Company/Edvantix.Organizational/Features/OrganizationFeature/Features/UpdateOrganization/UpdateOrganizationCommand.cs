@@ -3,7 +3,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateOrganization;
 
 public sealed record UpdateOrganizationCommand(
-    ulong Id,
+    Guid Id,
     string Name,
     string NameLatin,
     string ShortName,

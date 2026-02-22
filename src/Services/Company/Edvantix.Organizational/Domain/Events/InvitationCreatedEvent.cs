@@ -5,13 +5,13 @@ namespace Edvantix.Organizational.Domain.Events;
 /// </summary>
 public sealed class InvitationCreatedEvent(
     Guid invitationId,
-    ulong organizationId,
+    Guid organizationId,
     string? inviteeEmail,
-    ulong? inviteeProfileId
+    Guid? inviteeProfileId
 ) : DomainEvent
 {
     public Guid InvitationId { get; } = invitationId;
-    public ulong OrganizationId { get; } = organizationId;
+    public Guid OrganizationId { get; } = organizationId;
     public string? InviteeEmail { get; } = inviteeEmail;
-    public ulong? InviteeProfileId { get; } = inviteeProfileId;
+    public Guid? InviteeProfileId { get; } = inviteeProfileId;
 }

@@ -6,7 +6,7 @@ namespace Edvantix.Blog.Features.TagFeature;
 public sealed class TagModel
 {
     /// <summary>Идентификатор тега.</summary>
-    public ulong Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>Название тега.</summary>
     public string Name { get; set; } = null!;

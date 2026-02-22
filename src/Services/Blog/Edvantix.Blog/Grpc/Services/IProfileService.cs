@@ -4,7 +4,7 @@ namespace Edvantix.Blog.Grpc.Services;
 
 public interface IProfileService
 {
-    Task<ulong> GetProfileIdByAccountId(Guid accountId, CancellationToken cancellationToken);
+    Task<ProfileReply?> GetProfileByAccountId(Guid accountId, CancellationToken cancellationToken);
 
-    Task<ProfileReply?> GetProfileById(ulong profileId, CancellationToken cancellationToken);
+    Task<ProfileReply?> GetProfileById(Guid profileId, CancellationToken cancellationToken);
 }

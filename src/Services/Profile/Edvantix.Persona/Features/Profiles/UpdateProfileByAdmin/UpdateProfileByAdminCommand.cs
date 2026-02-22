@@ -7,7 +7,7 @@ namespace Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 public sealed class UpdateProfileByAdminCommand : IRequest<ProfileViewModel>
 {
     /// <summary>Идентификатор профиля. Устанавливается из маршрута.</summary>
-    public ulong ProfileId { get; set; }
+    public Guid ProfileId { get; set; }
 
     public required string FirstName { get; init; }
     public required string LastName { get; init; }

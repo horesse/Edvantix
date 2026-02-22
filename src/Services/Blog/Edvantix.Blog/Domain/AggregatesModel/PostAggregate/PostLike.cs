@@ -11,28 +11,19 @@ public sealed class PostLike() : Entity
     /// </summary>
     /// <param name="postId">Идентификатор поста.</param>
     /// <param name="profileId">Идентификатор профиля пользователя.</param>
-    public PostLike(ulong postId, ulong profileId)
+    public PostLike(Guid postId, Guid profileId)
         : this()
     {
-        if (postId <= 0)
-            throw new ArgumentException("Некорректный идентификатор поста.", nameof(postId));
-
-        if (profileId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор пользователя.",
-                nameof(profileId)
-            );
-
         PostId = postId;
         ProfileId = profileId;
         CreatedAt = DateTime.UtcNow;
     }
 
     /// <summary>Идентификатор поста.</summary>
-    public ulong PostId { get; private set; }
+    public Guid PostId { get; private set; }
 
     /// <summary>Идентификатор профиля пользователя, поставившего лайк.</summary>
-    public ulong ProfileId { get; private set; }
+    public Guid ProfileId { get; private set; }
 
     /// <summary>Дата и время постановки лайка.</summary>
     public DateTime CreatedAt { get; private set; }

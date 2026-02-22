@@ -26,7 +26,7 @@ public sealed class ProfileService(IProfileRepository profileRepo, ILogger<Profi
             ISpecification<Profile> spec = request.IdentifierCase switch
             {
                 GetProfileRequest.IdentifierOneofCase.ProfileId => new ProfileByIdSpec(
-                    request.ProfileId
+                    Guid.Parse(request.ProfileId)
                 ),
 
                 GetProfileRequest.IdentifierOneofCase.AccountId => BuildAccountIdSpec(
@@ -45,7 +45,7 @@ public sealed class ProfileService(IProfileRepository profileRepo, ILogger<Profi
 
             return new ProfileReply
             {
-                Id = profile.Id,
+                Id = profile.Id.ToString(),
                 AccountId = profile.AccountId.ToString(),
                 Gender = (int)profile.Gender,
                 BirthDate = profile.BirthDate.ToString("yyyy-MM-dd"),

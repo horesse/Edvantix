@@ -13,16 +13,16 @@ public class UpdateOrganizationEndpoint : IEndpoint<NoContent, UpdateOrganizatio
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
-                "/organizations/{id:long}",
+                "/organizations/{id:guid}",
                 async (
-                    long id,
+                    Guid id,
                     UpdateOrganizationRequest request,
                     ISender sender,
                     CancellationToken ct
                 ) =>
                 {
                     var command = new UpdateOrganizationCommand(
-                        (ulong)id,
+                        id,
                         request.Name,
                         request.NameLatin,
                         request.ShortName,

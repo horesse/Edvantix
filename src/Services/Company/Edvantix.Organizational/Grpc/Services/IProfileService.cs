@@ -2,5 +2,5 @@
 
 public interface IProfileService
 {
-    Task<ulong> GetProfileIdByAccountId(Guid accountId, CancellationToken cancellationToken);
+    Task<Guid> GetProfileIdByAccountId(Guid accountId, CancellationToken cancellationToken);
 }

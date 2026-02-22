@@ -2,7 +2,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.RemoveMember;
 
-public sealed record RemoveMemberCommand(ulong OrganizationId, Guid MemberId) : IRequest<Unit>;
+public sealed record RemoveMemberCommand(Guid OrganizationId, Guid MemberId) : IRequest<Unit>;
 
 public sealed class RemoveMemberCommandHandler(IServiceProvider provider)
     : IRequestHandler<RemoveMemberCommand, Unit>

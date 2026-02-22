@@ -10,8 +10,8 @@ namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 public sealed record GetAdminPostsQuery(
     [property: Description("Фильтр по статусу поста")] PostStatus? Status = null,
     [property: Description("Фильтр по типу контента")] PostType? Type = null,
-    [property: Description("Фильтр по идентификатору категории")] ulong? CategoryId = null,
-    [property: Description("Фильтр по идентификатору тега")] ulong? TagId = null,
+    [property: Description("Фильтр по идентификатору категории")] Guid? CategoryId = null,
+    [property: Description("Фильтр по идентификатору тега")] Guid? TagId = null,
     [property: Description("Текстовый поиск по заголовку и описанию")] string? Search = null,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]

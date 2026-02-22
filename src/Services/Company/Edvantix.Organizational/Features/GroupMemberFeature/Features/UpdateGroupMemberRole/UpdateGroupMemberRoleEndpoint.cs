@@ -10,7 +10,7 @@ public class UpdateGroupMemberRoleEndpoint
         app.MapPut(
                 "/groups/{groupId:long}/members/{memberId:guid}/role",
                 async (
-                    ulong groupId,
+                    Guid groupId,
                     Guid memberId,
                     UpdateGroupMemberRoleRequest request,
                     ISender sender,

@@ -27,7 +27,7 @@ public sealed class GroupRepository(OrganizationalDbContext context) : IGroupRep
         await Spec.GetQuery(context.Set<Group>(), spec).CountAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<Group?> FindByIdAsync(ulong id, CancellationToken ct = default) =>
+    public async Task<Group?> FindByIdAsync(Guid id, CancellationToken ct = default) =>
         await context.Set<Group>().Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == id, ct);
 
     /// <inheritdoc/>

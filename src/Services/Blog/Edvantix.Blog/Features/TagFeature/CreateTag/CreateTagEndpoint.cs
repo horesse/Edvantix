@@ -8,7 +8,7 @@ public sealed record CreateTagRequest(string Name, string Slug);
 /// <summary>
 /// Административный эндпоинт для создания тега блога.
 /// </summary>
-public sealed class CreateTagEndpoint : IEndpoint<Created<ulong>, CreateTagCommand, ISender>
+public sealed class CreateTagEndpoint : IEndpoint<Created<Guid>, CreateTagCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -21,12 +21,12 @@ public sealed class CreateTagEndpoint : IEndpoint<Created<ulong>, CreateTagComma
             .WithTags("Admin.Tags")
             .WithSummary("Создать тег")
             .WithDescription("Создаёт новый тег блога. Доступно только администраторам.")
-            .Produces<ulong>(StatusCodes.Status201Created)
+            .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization(Authorization.Policies.Admin);
     }
 
-    public async Task<Created<ulong>> HandleAsync(
+    public async Task<Created<Guid>> HandleAsync(
         CreateTagCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

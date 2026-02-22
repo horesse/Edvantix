@@ -5,18 +5,9 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggre
 /// </summary>
 public sealed class OrganizationMember() : Entity<Guid>, IAggregateRoot, ISoftDelete
 {
-    public OrganizationMember(ulong organizationId, ulong profileId, OrganizationRole role)
+    public OrganizationMember(Guid organizationId, Guid profileId, OrganizationRole role)
         : this()
     {
-        if (organizationId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор организации.",
-                nameof(organizationId)
-            );
-
-        if (profileId <= 0)
-            throw new ArgumentException("Некорректный идентификатор профиля.", nameof(profileId));
-
         OrganizationId = organizationId;
         ProfileId = profileId;
         Role = role;
@@ -24,9 +15,9 @@ public sealed class OrganizationMember() : Entity<Guid>, IAggregateRoot, ISoftDe
         IsDeleted = false;
     }
 
-    public ulong OrganizationId { get; private set; }
+    public Guid OrganizationId { get; private set; }
     public Organization Organization { get; private set; } = null!;
-    public ulong ProfileId { get; private set; }
+    public Guid ProfileId { get; private set; }
     public OrganizationRole Role { get; private set; }
     public DateTime JoinedAt { get; private set; }
     public bool IsDeleted { get; set; }

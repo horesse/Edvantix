@@ -4,7 +4,7 @@ namespace Edvantix.Organizational.Grpc.Services;
 
 public static class ProfileExtensions
 {
-    public static async Task<ulong> GetProfileId(
+    public static async Task<Guid> GetProfileId(
         this IServiceProvider provider,
         CancellationToken cancellationToken
     )

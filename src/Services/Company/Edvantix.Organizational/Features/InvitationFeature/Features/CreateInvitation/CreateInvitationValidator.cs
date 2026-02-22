@@ -7,10 +7,6 @@ public sealed class CreateInvitationValidator : AbstractValidator<CreateInvitati
 {
     public CreateInvitationValidator()
     {
-        RuleFor(x => x.OrganizationId)
-            .Must(id => id > 0)
-            .WithMessage("Идентификатор организации обязателен.");
-
         RuleFor(x => x)
             .Must(x => x.InviteeEmail is not null || x.InviteeProfileId.HasValue)
             .WithMessage("Необходимо указать email или идентификатор профиля приглашённого.");
@@ -19,10 +15,6 @@ public sealed class CreateInvitationValidator : AbstractValidator<CreateInvitati
             .EmailAddress()
             .When(x => x.InviteeEmail is not null)
             .WithMessage("Некорректный формат email.");
-
-        RuleFor(x => x.InviteeProfileId)
-            .Must(id => id is null or > 0)
-            .WithMessage("Некорректный идентификатор профиля.");
 
         RuleFor(x => x.Role).IsInEnum().WithMessage("Некорректная роль.");
 

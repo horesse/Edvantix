@@ -5,15 +5,9 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 /// </summary>
 public sealed class GroupMember() : Entity<Guid>, IAggregateRoot, ISoftDelete
 {
-    public GroupMember(ulong groupId, ulong profileId, GroupRole role)
+    public GroupMember(Guid groupId, Guid profileId, GroupRole role)
         : this()
     {
-        if (groupId <= 0)
-            throw new ArgumentException("Некорректный идентификатор группы.", nameof(groupId));
-
-        if (profileId <= 0)
-            throw new ArgumentException("Некорректный идентификатор профиля.", nameof(profileId));
-
         GroupId = groupId;
         ProfileId = profileId;
         Role = role;
@@ -21,9 +15,9 @@ public sealed class GroupMember() : Entity<Guid>, IAggregateRoot, ISoftDelete
         IsDeleted = false;
     }
 
-    public ulong GroupId { get; private set; }
+    public Guid GroupId { get; private set; }
     public Group Group { get; private set; } = null!;
-    public ulong ProfileId { get; private set; }
+    public Guid ProfileId { get; private set; }
     public GroupRole Role { get; private set; }
     public DateTime JoinedAt { get; private set; }
     public bool IsDeleted { get; set; }

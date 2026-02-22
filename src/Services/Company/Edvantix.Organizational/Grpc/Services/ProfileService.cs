@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Grpc.Services;
 [ExcludeFromCodeCoverage]
 public class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service) : IProfileService
 {
-    public async Task<ulong> GetProfileIdByAccountId(
+    public async Task<Guid> GetProfileIdByAccountId(
         Guid accountId,
         CancellationToken cancellationToken
     )
@@ -13,6 +13,9 @@ public class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service)
         var request = new GetProfileRequest() { AccountId = accountId.ToString() };
         var result = await service.GetProfileAsync(request, cancellationToken: cancellationToken);
 
-        return result?.Id ?? throw new NotFoundException("Профиль не найден.");
+        if (result is null)
+            throw new NotFoundException("Профиль не найден.");
+
+        return Guid.Parse(result.Id);
     }
 }

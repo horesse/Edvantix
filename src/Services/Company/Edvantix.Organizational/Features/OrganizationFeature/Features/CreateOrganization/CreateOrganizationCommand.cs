@@ -8,12 +8,12 @@ public sealed record CreateOrganizationCommand(
     string ShortName,
     string? PrintName,
     string? Description
-) : IRequest<ulong>;
+) : IRequest<Guid>;
 
 public sealed class CreateOrganizationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateOrganizationCommand, ulong>
+    : IRequestHandler<CreateOrganizationCommand, Guid>
 {
-    public async ValueTask<ulong> Handle(
+    public async ValueTask<Guid> Handle(
         CreateOrganizationCommand request,
         CancellationToken cancellationToken
     )

@@ -7,8 +7,8 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateCo
 /// Команда обновления контакта организации.
 /// </summary>
 public sealed record UpdateContactCommand(
-    ulong OrganizationId,
-    ulong ContactId,
+    Guid OrganizationId,
+    Guid ContactId,
     ContactType Type,
     string Value,
     string? Description

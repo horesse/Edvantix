@@ -2,7 +2,7 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Models;
 
 public sealed class OrganizationModel
 {
-    public ulong Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string NameLatin { get; set; } = null!;
     public string ShortName { get; set; } = null!;

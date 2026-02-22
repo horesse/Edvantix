@@ -7,7 +7,7 @@ namespace Edvantix.Blog.Features.PostFeature.Features;
 public static class Enrich
 {
     private static async Task<AuthorModel> ResolveAuthor(
-        ulong authorId,
+        Guid authorId,
         IServiceProvider provider,
         CancellationToken cancellationToken
     )
@@ -16,7 +16,7 @@ public static class Enrich
         var authorProfile = await profileService.GetProfileById(authorId, cancellationToken);
 
         if (authorProfile is null)
-            return new AuthorModel { Id = 0, FullName = "Анонимно" };
+            return new AuthorModel { Id = Guid.Empty, FullName = "Анонимно" };
 
         var authorMapper = provider.GetRequiredService<IMapper<ProfileReply, AuthorModel>>();
         return authorMapper.Map(authorProfile);
@@ -25,7 +25,7 @@ public static class Enrich
     extension(PostModel post)
     {
         public async Task EnrichAuthor(
-            ulong authorId,
+            Guid authorId,
             IServiceProvider provider,
             CancellationToken cancellationToken
         )
@@ -57,7 +57,7 @@ public static class Enrich
     extension(PostSummaryModel post)
     {
         public async Task EnrichAuthor(
-            ulong authorId,
+            Guid authorId,
             IServiceProvider provider,
             CancellationToken cancellationToken
         )

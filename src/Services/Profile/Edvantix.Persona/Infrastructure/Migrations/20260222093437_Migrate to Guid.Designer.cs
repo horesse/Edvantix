@@ -3,6 +3,7 @@ using System;
 using Edvantix.Persona.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Persona.Infrastructure.Migrations
 {
     [DbContext(typeof(PersonaDbContext))]
-    partial class PersonaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260222093437_Migrate to Guid")]
+    partial class MigratetoGuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

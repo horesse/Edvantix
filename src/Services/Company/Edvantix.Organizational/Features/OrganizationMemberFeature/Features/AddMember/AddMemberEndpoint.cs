@@ -1,25 +1,21 @@
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.AddMember;
 
-public sealed record AddMemberRequest(ulong ProfileId, OrganizationRole Role);
+public sealed record AddMemberRequest(Guid ProfileId, OrganizationRole Role);
 
 public class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "/organizations/{orgId:long}/members",
+                "/organizations/{orgId:guid}/members",
                 async (
-                    long orgId,
+                    Guid orgId,
                     AddMemberRequest request,
                     ISender sender,
                     CancellationToken ct
                 ) =>
                 {
-                    var command = new AddMemberCommand(
-                        (ulong)orgId,
-                        request.ProfileId,
-                        request.Role
-                    );
+                    var command = new AddMemberCommand(orgId, request.ProfileId, request.Role);
                     return await HandleAsync(command, sender, ct);
                 }
             )

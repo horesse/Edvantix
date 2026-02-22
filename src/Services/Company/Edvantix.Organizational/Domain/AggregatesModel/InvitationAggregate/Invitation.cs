@@ -22,27 +22,15 @@ public sealed class Invitation() : Entity<Guid>, IAggregateRoot
     /// <param name="inviteeProfileId">Профиль приглашённого (опционально).</param>
     /// <param name="ttlDays">Срок действия в днях.</param>
     public Invitation(
-        ulong organizationId,
-        ulong invitedByProfileId,
+        Guid organizationId,
+        Guid invitedByProfileId,
         OrganizationRole role,
         string? inviteeEmail = null,
-        ulong? inviteeProfileId = null,
+        Guid? inviteeProfileId = null,
         int ttlDays = DefaultTtlDays
     )
         : this()
     {
-        if (organizationId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор организации.",
-                nameof(organizationId)
-            );
-
-        if (invitedByProfileId <= 0)
-            throw new ArgumentException(
-                "Некорректный идентификатор профиля пригласившего.",
-                nameof(invitedByProfileId)
-            );
-
         if (inviteeEmail is null && inviteeProfileId is null)
             throw new ArgumentException(
                 "Необходимо указать email или идентификатор профиля приглашённого."
@@ -71,9 +59,9 @@ public sealed class Invitation() : Entity<Guid>, IAggregateRoot
         );
     }
 
-    public ulong OrganizationId { get; private set; }
-    public ulong InvitedByProfileId { get; private set; }
-    public ulong? InviteeProfileId { get; private set; }
+    public Guid OrganizationId { get; private set; }
+    public Guid InvitedByProfileId { get; private set; }
+    public Guid? InviteeProfileId { get; private set; }
     public string? InviteeEmail { get; private set; }
     public OrganizationRole Role { get; private set; }
     public InvitationStatus Status { get; private set; }
@@ -97,7 +85,7 @@ public sealed class Invitation() : Entity<Guid>, IAggregateRoot
     /// Принимает приглашение. Вызывающий код должен создать OrganizationMember.
     /// </summary>
     /// <param name="profileId">Профиль принимающего пользователя.</param>
-    public void Accept(ulong profileId)
+    public void Accept(Guid profileId)
     {
         EnsurePendingAndNotExpired();
 
@@ -115,7 +103,7 @@ public sealed class Invitation() : Entity<Guid>, IAggregateRoot
     /// Отклоняет приглашение.
     /// </summary>
     /// <param name="profileId">Профиль отклоняющего пользователя.</param>
-    public void Decline(ulong profileId)
+    public void Decline(Guid profileId)
     {
         EnsurePendingAndNotExpired();
 

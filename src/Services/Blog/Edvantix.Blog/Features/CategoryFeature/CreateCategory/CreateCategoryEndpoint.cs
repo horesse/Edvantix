@@ -9,7 +9,7 @@ public sealed record CreateCategoryRequest(string Name, string Slug, string? Des
 /// Административный эндпоинт для создания категории блога.
 /// </summary>
 public sealed class CreateCategoryEndpoint
-    : IEndpoint<Created<ulong>, CreateCategoryCommand, ISender>
+    : IEndpoint<Created<Guid>, CreateCategoryCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -26,13 +26,13 @@ public sealed class CreateCategoryEndpoint
             .WithTags("Admin.Categories")
             .WithSummary("Создать категорию")
             .WithDescription("Создаёт новую категорию блога. Доступно только администраторам.")
-            .Produces<ulong>(StatusCodes.Status201Created)
+            .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization(Authorization.Policies.Admin);
     }
 
-    public async Task<Created<ulong>> HandleAsync(
+    public async Task<Created<Guid>> HandleAsync(
         CreateCategoryCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

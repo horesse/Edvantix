@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Features.PostFeature.Features.PublishPost;
 /// При указании ScheduledAt пост переходит в статус Scheduled,
 /// иначе — немедленно в статус Published.
 /// </summary>
-public sealed record PublishPostCommand(ulong PostId, DateTime? ScheduledAt = null) : IRequest;
+public sealed record PublishPostCommand(Guid PostId, DateTime? ScheduledAt = null) : IRequest;
 
 /// <summary>
 /// Обработчик команды публикации поста.

@@ -1,16 +1,16 @@
 namespace Edvantix.Blog.Domain.Events;
 
 public sealed class PostPublishedEvent(
-    ulong postId,
+    Guid postId,
     string title,
     string slug,
     PostType postType,
     bool isPremium,
-    ulong authorId
+    Guid authorId
 ) : DomainEvent
 {
     /// <summary>Идентификатор опубликованного поста.</summary>
-    public ulong PostId { get; } = postId;
+    public Guid PostId { get; } = postId;
 
     /// <summary>Заголовок поста.</summary>
     public string Title { get; } = title;
@@ -25,5 +25,5 @@ public sealed class PostPublishedEvent(
     public bool IsPremium { get; } = isPremium;
 
     /// <summary>Идентификатор профиля автора.</summary>
-    public ulong AuthorId { get; } = authorId;
+    public Guid AuthorId { get; } = authorId;
 }

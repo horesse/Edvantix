@@ -7,20 +7,16 @@ public class UpdateMemberRoleEndpoint : IEndpoint<NoContent, UpdateMemberRoleCom
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
-                "/organizations/{orgId:long}/members/{memberId:guid}/role",
+                "/organizations/{orgId:guid}/members/{memberId:guid}/role",
                 async (
-                    long orgId,
+                    Guid orgId,
                     Guid memberId,
                     UpdateMemberRoleRequest request,
                     ISender sender,
                     CancellationToken ct
                 ) =>
                 {
-                    var command = new UpdateMemberRoleCommand(
-                        (ulong)orgId,
-                        memberId,
-                        request.NewRole
-                    );
+                    var command = new UpdateMemberRoleCommand(orgId, memberId, request.NewRole);
                     return await HandleAsync(command, sender, ct);
                 }
             )

@@ -14,18 +14,18 @@ public sealed record CreatePostCommand(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<ulong> CategoryIds,
-    IReadOnlyList<ulong> TagIds
-) : IRequest<ulong>;
+    IReadOnlyList<Guid> CategoryIds,
+    IReadOnlyList<Guid> TagIds
+) : IRequest<Guid>;
 
 /// <summary>
 /// Обработчик команды создания поста.
 /// Создаёт черновик поста с указанными категориями и тегами.
 /// </summary>
 public sealed class CreatePostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreatePostCommand, ulong>
+    : IRequestHandler<CreatePostCommand, Guid>
 {
-    public async ValueTask<ulong> Handle(
+    public async ValueTask<Guid> Handle(
         CreatePostCommand request,
         CancellationToken cancellationToken
     )

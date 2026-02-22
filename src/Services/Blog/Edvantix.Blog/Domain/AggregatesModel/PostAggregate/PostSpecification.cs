@@ -23,9 +23,9 @@ public sealed class PostSpecification : Specification<Post>
         PostStatus? status = null,
         PostType? type = null,
         bool? isPremium = null,
-        ulong? authorId = null,
-        ulong? categoryId = null,
-        ulong? tagId = null,
+        Guid? authorId = null,
+        Guid? categoryId = null,
+        Guid? tagId = null,
         string? searchText = null,
         bool includeRelations = false
     )
@@ -64,7 +64,7 @@ public sealed class PostSpecification : Specification<Post>
 
 public sealed class PostByIdSpecification : Specification<Post>
 {
-    public PostByIdSpecification(ulong id, bool includeRelations = true)
+    public PostByIdSpecification(Guid id, bool includeRelations = true)
     {
         Query.Where(p => p.Id == id);
 

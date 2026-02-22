@@ -8,9 +8,9 @@ public class GetContactsEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "/organizations/{orgId:long}/contacts",
-                async (long orgId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetContactsQuery((ulong)orgId), sender, ct)
+                "/organizations/{orgId:guid}/contacts",
+                async (Guid orgId, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(new GetContactsQuery(orgId), sender, ct)
             )
             .WithName("GetOrganizationContacts")
             .WithTags("Contacts")

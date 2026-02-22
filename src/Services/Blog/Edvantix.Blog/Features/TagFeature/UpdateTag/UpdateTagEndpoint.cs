@@ -15,7 +15,7 @@ public sealed class UpdateTagEndpoint : IEndpoint<NoContent, UpdateTagCommand, I
         app.MapPut(
                 "/admin/tags/{tagId:long}",
                 async (
-                    ulong tagId,
+                    Guid tagId,
                     UpdateTagRequest request,
                     ISender sender,
                     CancellationToken ct

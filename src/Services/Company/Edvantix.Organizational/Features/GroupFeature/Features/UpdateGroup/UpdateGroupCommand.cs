@@ -2,8 +2,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.UpdateGroup;
 
-public sealed record UpdateGroupCommand(ulong Id, string Name, string? Description)
-    : IRequest<Unit>;
+public sealed record UpdateGroupCommand(Guid Id, string Name, string? Description) : IRequest<Unit>;
 
 public sealed class UpdateGroupCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateGroupCommand, Unit>

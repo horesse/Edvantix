@@ -5,7 +5,7 @@ namespace Edvantix.Persona.Features.Profiles.Registration;
 
 /// <summary>POST /v1/profile/registration — первичная регистрация профиля.</summary>
 public sealed class RegistrationEndpoint
-    : IEndpoint<Created<ulong>, RegistrationCommand, ISender, LinkGenerator>
+    : IEndpoint<Created<Guid>, RegistrationCommand, ISender, LinkGenerator>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -19,7 +19,7 @@ public sealed class RegistrationEndpoint
                 ) => await HandleAsync(command, sender, linker, ct)
             )
             .Accepts<RegistrationCommand>(MediaTypeNames.Multipart.FormData)
-            .Produces<ulong>(StatusCodes.Status201Created)
+            .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status409Conflict)
             .Produces(StatusCodes.Status422UnprocessableEntity)
             .WithName("Registration")
@@ -32,7 +32,7 @@ public sealed class RegistrationEndpoint
             .RequireAuthorization();
     }
 
-    public async Task<Created<ulong>> HandleAsync(
+    public async Task<Created<Guid>> HandleAsync(
         RegistrationCommand command,
         ISender sender,
         LinkGenerator linker,

@@ -5,9 +5,9 @@ public class RemoveMemberEndpoint : IEndpoint<NoContent, RemoveMemberCommand, IS
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/organizations/{orgId:long}/members/{memberId:guid}",
-                async (long orgId, Guid memberId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new RemoveMemberCommand((ulong)orgId, memberId), sender, ct)
+                "/organizations/{orgId:guid}/members/{memberId:guid}",
+                async (Guid orgId, Guid memberId, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(new RemoveMemberCommand(orgId, memberId), sender, ct)
             )
             .WithName("RemoveOrganizationMember")
             .WithTags("Organization Members")

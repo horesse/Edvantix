@@ -29,7 +29,7 @@ public sealed class Post() : Entity, IAggregateRoot
         string content,
         string? summary,
         PostType type,
-        ulong authorId,
+        Guid authorId,
         bool isPremium = false,
         string? coverImageUrl = null
     )
@@ -38,9 +38,7 @@ public sealed class Post() : Entity, IAggregateRoot
         ArgumentException.ThrowIfNullOrWhiteSpace(title, nameof(title));
         ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
         ArgumentException.ThrowIfNullOrWhiteSpace(content, nameof(content));
-
-        if (authorId <= 0)
-            throw new ArgumentException("Некорректный идентификатор автора.", nameof(authorId));
+        ;
 
         Title = title;
         Slug = slug;
@@ -78,7 +76,7 @@ public sealed class Post() : Entity, IAggregateRoot
     public bool IsPremium { get; private set; }
 
     /// <summary>Идентификатор профиля автора поста.</summary>
-    public ulong AuthorId { get; private set; }
+    public Guid AuthorId { get; private set; }
 
     /// <summary>Дата и время публикации поста.</summary>
     public DateTime? PublishedAt { get; private set; }

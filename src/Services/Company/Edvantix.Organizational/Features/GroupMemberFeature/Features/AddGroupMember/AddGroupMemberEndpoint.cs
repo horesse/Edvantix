@@ -1,6 +1,6 @@
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.AddGroupMember;
 
-public sealed record AddGroupMemberRequest(ulong ProfileId, GroupRole Role);
+public sealed record AddGroupMemberRequest(Guid ProfileId, GroupRole Role);
 
 public class AddGroupMemberEndpoint : IEndpoint<Created<Guid>, AddGroupMemberCommand, ISender>
 {
@@ -9,7 +9,7 @@ public class AddGroupMemberEndpoint : IEndpoint<Created<Guid>, AddGroupMemberCom
         app.MapPost(
                 "/groups/{groupId:long}/members",
                 async (
-                    ulong groupId,
+                    Guid groupId,
                     AddGroupMemberRequest request,
                     ISender sender,
                     CancellationToken ct

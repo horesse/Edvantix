@@ -2,7 +2,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.AddGroupMember;
 
-public sealed record AddGroupMemberCommand(ulong GroupId, ulong ProfileId, GroupRole Role)
+public sealed record AddGroupMemberCommand(Guid GroupId, Guid ProfileId, GroupRole Role)
     : IRequest<Guid>;
 
 public sealed class AddGroupMemberCommandHandler(IServiceProvider provider)

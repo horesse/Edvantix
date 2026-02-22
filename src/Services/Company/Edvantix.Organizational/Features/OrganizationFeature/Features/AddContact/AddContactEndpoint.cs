@@ -4,21 +4,21 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.AddConta
 
 public sealed record AddContactRequest(ContactType Type, string Value, string? Description);
 
-public class AddContactEndpoint : IEndpoint<Created<ulong>, AddContactCommand, ISender>
+public class AddContactEndpoint : IEndpoint<Created<Guid>, AddContactCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "/organizations/{orgId:long}/contacts",
+                "/organizations/{orgId:guid}/contacts",
                 async (
-                    long orgId,
+                    Guid orgId,
                     AddContactRequest request,
                     ISender sender,
                     CancellationToken ct
                 ) =>
                 {
                     var command = new AddContactCommand(
-                        (ulong)orgId,
+                        orgId,
                         request.Type,
                         request.Value,
                         request.Description
@@ -30,13 +30,13 @@ public class AddContactEndpoint : IEndpoint<Created<ulong>, AddContactCommand, I
             .WithTags("Contacts")
             .WithSummary("Добавить контакт")
             .WithDescription("Добавляет контакт организации. Доступно владельцу и менеджеру.")
-            .Produces<ulong>(StatusCodes.Status201Created)
+            .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)
             .RequireAuthorization();
     }
 
-    public async Task<Created<ulong>> HandleAsync(
+    public async Task<Created<Guid>> HandleAsync(
         AddContactCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

@@ -18,7 +18,7 @@ public sealed class OrganizationRepository(OrganizationalDbContext context)
     ) => await Spec.GetQuery(context.Set<Organization>(), spec).FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<Organization?> FindByIdAsync(ulong id, CancellationToken ct = default) =>
+    public async Task<Organization?> FindByIdAsync(Guid id, CancellationToken ct = default) =>
         await context
             .Set<Organization>()
             .Include(o => o.Members)

@@ -7,20 +7,20 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.AddConta
 /// Команда добавления контакта организации.
 /// </summary>
 public sealed record AddContactCommand(
-    ulong OrganizationId,
+    Guid OrganizationId,
     ContactType Type,
     string Value,
     string? Description
-) : IRequest<ulong>;
+) : IRequest<Guid>;
 
 /// <summary>
 /// Обработчик добавления контакта. Авторизация: Owner/Manager.
 /// Контакт добавляется через агрегат Organization и сохраняется единой транзакцией.
 /// </summary>
 public sealed class AddContactCommandHandler(IServiceProvider provider)
-    : IRequestHandler<AddContactCommand, ulong>
+    : IRequestHandler<AddContactCommand, Guid>
 {
-    public async ValueTask<ulong> Handle(
+    public async ValueTask<Guid> Handle(
         AddContactCommand request,
         CancellationToken cancellationToken
     )

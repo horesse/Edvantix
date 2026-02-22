@@ -2,7 +2,7 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.AddMember;
 
-public sealed record AddMemberCommand(ulong OrganizationId, ulong ProfileId, OrganizationRole Role)
+public sealed record AddMemberCommand(Guid OrganizationId, Guid ProfileId, OrganizationRole Role)
     : IRequest<Guid>;
 
 public sealed class AddMemberCommandHandler(IServiceProvider provider)

@@ -10,7 +10,7 @@ public interface IPostRepository : IRepository<Post>
         Specification<Post> spec,
         CancellationToken cancellationToken = default
     );
-    Task<Post?> GetByIdAsync(ulong id, CancellationToken cancellationToken = default);
+    Task<Post?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Post?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<int> CountAsync(Specification<Post> spec, CancellationToken cancellationToken = default);
 

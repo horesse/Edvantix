@@ -5,13 +5,9 @@ public class DeleteContactEndpoint : IEndpoint<NoContent, DeleteContactCommand, 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/organizations/{orgId:long}/contacts/{contactId:long}",
-                async (long orgId, long contactId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(
-                        new DeleteContactCommand((ulong)orgId, (ulong)contactId),
-                        sender,
-                        ct
-                    )
+                "/organizations/{orgId:guid}/contacts/{contactId:guid}",
+                async (Guid orgId, Guid contactId, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(new DeleteContactCommand(orgId, contactId), sender, ct)
             )
             .WithName("DeleteOrganizationContact")
             .WithTags("Contacts")

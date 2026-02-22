@@ -7,9 +7,9 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.CreateInvi
 /// Команда создания приглашения в организацию.
 /// </summary>
 public sealed record CreateInvitationCommand(
-    ulong OrganizationId,
+    Guid OrganizationId,
     string? InviteeEmail,
-    ulong? InviteeProfileId,
+    Guid? InviteeProfileId,
     OrganizationRole Role,
     int TtlDays = Invitation.DefaultTtlDays
 ) : IRequest<Guid>;

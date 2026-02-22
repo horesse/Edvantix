@@ -5,7 +5,7 @@ using Edvantix.SharedKernel.Results;
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.GetGroupMembers;
 
 public sealed record GetGroupMembersQuery(
-    ulong GroupId,
+    Guid GroupId,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,

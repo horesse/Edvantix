@@ -6,7 +6,7 @@ namespace Edvantix.Blog.Features.CategoryFeature;
 public sealed class CategoryModel
 {
     /// <summary>Идентификатор категории.</summary>
-    public ulong Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>Название категории.</summary>
     public string Name { get; set; } = null!;

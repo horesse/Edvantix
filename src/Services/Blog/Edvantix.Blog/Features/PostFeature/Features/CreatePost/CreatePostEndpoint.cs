@@ -11,15 +11,15 @@ public sealed record CreatePostRequest(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<ulong> CategoryIds,
-    IReadOnlyList<ulong> TagIds
+    IReadOnlyList<Guid> CategoryIds,
+    IReadOnlyList<Guid> TagIds
 );
 
 /// <summary>
 /// Административный эндпоинт для создания нового поста блога.
 /// Доступен только пользователям с ролью администратора.
 /// </summary>
-public sealed class CreatePostEndpoint : IEndpoint<Created<ulong>, CreatePostCommand, ISender>
+public sealed class CreatePostEndpoint : IEndpoint<Created<Guid>, CreatePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -48,13 +48,13 @@ public sealed class CreatePostEndpoint : IEndpoint<Created<ulong>, CreatePostCom
             .WithDescription(
                 "Создаёт новый черновик поста блога. Доступно только администраторам платформы."
             )
-            .Produces<ulong>(StatusCodes.Status201Created)
+            .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization(Authorization.Policies.Admin);
     }
 
-    public async Task<Created<ulong>> HandleAsync(
+    public async Task<Created<Guid>> HandleAsync(
         CreatePostCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

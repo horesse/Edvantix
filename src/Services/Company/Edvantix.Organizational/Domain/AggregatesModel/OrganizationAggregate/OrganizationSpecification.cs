@@ -4,7 +4,7 @@ public sealed class OrganizationSpecification : Specification<Organization>
 {
     /// <summary>Найти организацию по идентификатору с опциональной загрузкой навигационных свойств.</summary>
     public OrganizationSpecification(
-        ulong id,
+        Guid id,
         bool includeMembers = false,
         bool includeGroups = false,
         bool includeContacts = false

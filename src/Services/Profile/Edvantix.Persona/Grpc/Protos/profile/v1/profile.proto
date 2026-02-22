@@ -6,8 +6,6 @@ package profile.v1;
 
 // Сервис профилей — используется другими микросервисами для получения данных пользователей.
 service ProfileGrpcService {
-  // Возвращает краткий профиль по внутреннему ID или AccountId (Keycloak GUID).
-  // Ровно одно поле из oneof identifier должно быть заполнено.
   rpc GetProfile (GetProfileRequest) returns (ProfileReply);
 }
 

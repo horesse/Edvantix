@@ -1,9 +1,5 @@
 using Edvantix.Blog.Extensions;
-using Edvantix.Chassis.Endpoints;
 using Edvantix.Chassis.Security.Keycloak;
-using Edvantix.ServiceDefaults;
-using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
-using Edvantix.ServiceDefaults.Kestrel;
 
 var builder = WebApplication.CreateBuilder(args);
 

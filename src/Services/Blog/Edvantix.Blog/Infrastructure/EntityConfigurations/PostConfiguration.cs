@@ -1,7 +1,4 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Constants.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 
@@ -13,9 +10,7 @@ public sealed class PostConfiguration : IEntityTypeConfiguration<Post>
 {
     public void Configure(EntityTypeBuilder<Post> builder)
     {
-        builder.ToTable("posts");
-
-        builder.HasKey(p => p.Id);
+        builder.UseDefaultConfiguration();
 
         builder.Property(p => p.Title).IsRequired().HasMaxLength(DataSchemaLength.SuperLarge);
 

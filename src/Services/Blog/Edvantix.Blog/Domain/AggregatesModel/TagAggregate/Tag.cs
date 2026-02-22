@@ -1,5 +1,3 @@
-using Edvantix.SharedKernel.SeedWork;
-
 namespace Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
 
 /// <summary>
@@ -15,8 +13,8 @@ public sealed class Tag() : Entity, IAggregateRoot
     public Tag(string name, string slug)
         : this()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
         Name = name;
         Slug = slug;
@@ -39,8 +37,8 @@ public sealed class Tag() : Entity, IAggregateRoot
     /// <param name="slug">Новый slug.</param>
     public void Update(string name, string slug)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
         Name = name;
         Slug = slug;

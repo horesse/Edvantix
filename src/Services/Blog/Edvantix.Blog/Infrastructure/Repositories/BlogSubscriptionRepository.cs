@@ -1,11 +1,12 @@
-using Edvantix.Blog.Domain.AggregatesModel.SubscriptionAggregate;
-using Edvantix.Chassis.Repository.Crud;
+using Edvantix.Chassis.Specification.Evaluators;
 
 namespace Edvantix.Blog.Infrastructure.Repositories;
 
-/// <summary>
-/// Реализация репозитория подписок на блог на основе BlogContext.
-/// </summary>
-public sealed class BlogSubscriptionRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, BlogSubscription, ulong>(provider),
-        IBlogSubscriptionRepository;
+public sealed class BlogSubscriptionRepository(BlogDbContext dbContext)
+    : IBlogSubscriptionRepository
+{
+    private static SpecificationEvaluator Spec => SpecificationEvaluator.Instance;
+
+    /// <inheritdoc/>
+    public IUnitOfWork UnitOfWork => dbContext;
+}

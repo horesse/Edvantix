@@ -1,9 +1,3 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Chassis.Endpoints;
-using Edvantix.Constants.Core;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.CreatePost;
 
 /// <summary>
@@ -17,15 +11,15 @@ public sealed record CreatePostRequest(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<long> CategoryIds,
-    IReadOnlyList<long> TagIds
+    IReadOnlyList<ulong> CategoryIds,
+    IReadOnlyList<ulong> TagIds
 );
 
 /// <summary>
 /// Административный эндпоинт для создания нового поста блога.
 /// Доступен только пользователям с ролью администратора.
 /// </summary>
-public sealed class CreatePostEndpoint : IEndpoint<Created<long>, CreatePostCommand, ISender>
+public sealed class CreatePostEndpoint : IEndpoint<Created<ulong>, CreatePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -60,7 +54,7 @@ public sealed class CreatePostEndpoint : IEndpoint<Created<long>, CreatePostComm
             .RequireAuthorization(Authorization.Policies.Admin);
     }
 
-    public async Task<Created<long>> HandleAsync(
+    public async Task<Created<ulong>> HandleAsync(
         CreatePostCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

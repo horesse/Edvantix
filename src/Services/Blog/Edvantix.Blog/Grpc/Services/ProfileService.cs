@@ -1,49 +1,29 @@
-using System.Diagnostics.CodeAnalysis;
-using Edvantix.Chassis.Exceptions;
-using Edvantix.ProfileService.Grpc.Services;
+using Edvantix.Persona.Grpc.Services;
 
 namespace Edvantix.Blog.Grpc.Services;
 
-/// <summary>
-/// Реализация клиента Profile gRPC-сервиса.
-/// Предоставляет данные об авторах постов из микросервиса Profile.
-/// </summary>
 [ExcludeFromCodeCoverage]
-public sealed class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient client)
-    : IProfileService
+public class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service) : IProfileService
 {
-    /// <inheritdoc />
-    public async Task<long> GetProfileIdByAccountId(
+    public async Task<ulong> GetProfileIdByAccountId(
         Guid accountId,
         CancellationToken cancellationToken
     )
     {
-        var request = new GetProfileByAccountIdRequest { AccountId = accountId.ToString() };
+        var request = new GetProfileRequest() { AccountId = accountId.ToString() };
+        var result = await service.GetProfileAsync(request, cancellationToken: cancellationToken);
 
-        var result = await client.GetProfileByAccountIdAsync(
-            request,
-            cancellationToken: cancellationToken
-        );
-
-        return result?.Id ?? throw new NotFoundException("Профиль пользователя не найден.");
+        return result?.Id ?? throw new NotFoundException("Профиль не найден.");
     }
 
-    /// <inheritdoc />
-    public async Task<AuthorInfo?> GetAuthorById(
-        long profileId,
+    public async Task<ProfileReply?> GetProfileById(
+        ulong profileId,
         CancellationToken cancellationToken
     )
     {
-        var request = new GetProfileByIdRequest { ProfileId = profileId };
+        var request = new GetProfileRequest() { ProfileId = profileId };
+        var result = await service.GetProfileAsync(request, cancellationToken: cancellationToken);
 
-        var result = await client.GetProfileByIdAsync(
-            request,
-            cancellationToken: cancellationToken
-        );
-
-        if (result is null)
-            return null;
-
-        return new AuthorInfo(result.Id, result.FullName, result.FirstName, result.LastName);
+        return result;
     }
 }

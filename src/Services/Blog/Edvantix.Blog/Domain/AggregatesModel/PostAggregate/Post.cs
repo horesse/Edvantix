@@ -1,7 +1,4 @@
-using Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate.Events;
-using Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
-using Edvantix.SharedKernel.SeedWork;
+using Edvantix.Blog.Domain.Events;
 
 namespace Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
 

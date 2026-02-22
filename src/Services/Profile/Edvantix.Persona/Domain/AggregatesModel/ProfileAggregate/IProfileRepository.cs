@@ -1,9 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Edvantix.Chassis.Repository;
-using Edvantix.Chassis.Specification;
-
 namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
 /// <summary>

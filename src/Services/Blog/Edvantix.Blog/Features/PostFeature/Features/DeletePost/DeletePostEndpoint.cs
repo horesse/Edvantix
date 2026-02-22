@@ -1,8 +1,3 @@
-using Edvantix.Chassis.Endpoints;
-using Edvantix.Constants.Core;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.DeletePost;
 
 /// <summary>
@@ -15,7 +10,7 @@ public sealed class DeletePostEndpoint : IEndpoint<NoContent, DeletePostCommand,
     {
         app.MapDelete(
                 "/admin/posts/{postId:long}",
-                async (long postId, ISender sender, CancellationToken ct) =>
+                async (ulong postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new DeletePostCommand(postId), sender, ct)
             )
             .WithName("DeletePost")

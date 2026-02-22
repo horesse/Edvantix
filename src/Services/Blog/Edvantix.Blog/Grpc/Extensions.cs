@@ -1,10 +1,7 @@
 using Edvantix.Blog.Grpc.Services;
-using Edvantix.Chassis.Exceptions;
 using Edvantix.Chassis.Utilities;
 using Edvantix.Chassis.Utilities.Configuration;
-using Edvantix.ProfileService.Grpc.Services;
-using Edvantix.ServiceDefaults.Kestrel;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Edvantix.Persona.Grpc.Services;
 
 namespace Edvantix.Blog.Grpc;
 

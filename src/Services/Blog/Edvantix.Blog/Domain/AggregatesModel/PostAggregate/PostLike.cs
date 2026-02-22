@@ -1,5 +1,3 @@
-using Edvantix.SharedKernel.SeedWork;
-
 namespace Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
 
 /// <summary>
@@ -12,26 +10,29 @@ public sealed class PostLike() : Entity
     /// Создаёт лайк от пользователя на пост.
     /// </summary>
     /// <param name="postId">Идентификатор поста.</param>
-    /// <param name="userId">Идентификатор профиля пользователя.</param>
-    public PostLike(long postId, long userId)
+    /// <param name="profileId">Идентификатор профиля пользователя.</param>
+    public PostLike(ulong postId, ulong profileId)
         : this()
     {
         if (postId <= 0)
             throw new ArgumentException("Некорректный идентификатор поста.", nameof(postId));
 
-        if (userId <= 0)
-            throw new ArgumentException("Некорректный идентификатор пользователя.", nameof(userId));
+        if (profileId <= 0)
+            throw new ArgumentException(
+                "Некорректный идентификатор пользователя.",
+                nameof(profileId)
+            );
 
         PostId = postId;
-        UserId = userId;
+        ProfileId = profileId;
         CreatedAt = DateTime.UtcNow;
     }
 
     /// <summary>Идентификатор поста.</summary>
-    public long PostId { get; private set; }
+    public ulong PostId { get; private set; }
 
     /// <summary>Идентификатор профиля пользователя, поставившего лайк.</summary>
-    public long UserId { get; private set; }
+    public ulong ProfileId { get; private set; }
 
     /// <summary>Дата и время постановки лайка.</summary>
     public DateTime CreatedAt { get; private set; }

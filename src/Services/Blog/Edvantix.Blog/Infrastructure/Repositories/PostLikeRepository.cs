@@ -1,11 +1,11 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Chassis.Repository.Crud;
+using Edvantix.Chassis.Specification.Evaluators;
 
 namespace Edvantix.Blog.Infrastructure.Repositories;
 
-/// <summary>
-/// Реализация репозитория лайков постов на основе BlogContext.
-/// </summary>
-public sealed class PostLikeRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, PostLike, ulong>(provider),
-        IPostLikeRepository;
+public sealed class PostLikeRepository(BlogDbContext dbContext) : IPostLikeRepository
+{
+    private static SpecificationEvaluator Spec => SpecificationEvaluator.Instance;
+
+    /// <inheritdoc/>
+    public IUnitOfWork UnitOfWork => dbContext;
+}

@@ -1,7 +1,3 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Chassis.Exceptions;
-using MediatR;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPostLikes;
 
 /// <summary>

@@ -1,5 +1,3 @@
-using Edvantix.SharedKernel.SeedWork;
-
 namespace Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
 
 /// <summary>
@@ -45,8 +43,8 @@ public sealed class Category() : Entity, IAggregateRoot
     /// <param name="description">Новое описание.</param>
     public void Update(string name, string slug, string? description)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
         Name = name;
         Slug = slug;

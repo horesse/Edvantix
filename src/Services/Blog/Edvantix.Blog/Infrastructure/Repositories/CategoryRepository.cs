@@ -1,11 +1,11 @@
-using Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Edvantix.Chassis.Repository.Crud;
+using Edvantix.Chassis.Specification.Evaluators;
 
 namespace Edvantix.Blog.Infrastructure.Repositories;
 
-/// <summary>
-/// Реализация репозитория категорий блога на основе BlogContext.
-/// </summary>
-public sealed class CategoryRepository(IServiceProvider provider)
-    : CrudRepository<BlogContext, Category, ulong>(provider),
-        ICategoryRepository;
+public sealed class CategoryRepository(BlogDbContext dbContext) : ICategoryRepository
+{
+    private static SpecificationEvaluator Spec => SpecificationEvaluator.Instance;
+
+    /// <inheritdoc/>
+    public IUnitOfWork UnitOfWork => dbContext;
+}

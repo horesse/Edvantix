@@ -1,7 +1,4 @@
 using Edvantix.Blog.Features.PostFeature.Models;
-using Edvantix.Chassis.Endpoints;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPostBySlug;
 

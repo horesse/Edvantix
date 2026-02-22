@@ -1,13 +1,8 @@
-using System.ComponentModel;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate.Specifications;
-using Edvantix.Blog.Features.CategoryFeature.Models;
+using Edvantix.Blog.Features.CategoryFeature;
 using Edvantix.Blog.Features.PostFeature.Models;
-using Edvantix.Blog.Features.TagFeature.Models;
+using Edvantix.Blog.Features.TagFeature;
 using Edvantix.Blog.Grpc.Services;
-using Edvantix.Constants.Core;
 using Edvantix.SharedKernel.Results;
-using MediatR;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPosts;
 

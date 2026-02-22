@@ -1,7 +1,3 @@
-using Edvantix.Chassis.Endpoints;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.UnlikePost;
 
 /// <summary>

@@ -1,13 +1,8 @@
-using System.ComponentModel;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate.Specifications;
-using Edvantix.Blog.Features.CategoryFeature.Models;
+using Edvantix.Blog.Features.CategoryFeature;
 using Edvantix.Blog.Features.PostFeature.Models;
-using Edvantix.Blog.Features.TagFeature.Models;
+using Edvantix.Blog.Features.TagFeature;
 using Edvantix.Blog.Grpc.Services;
-using Edvantix.Constants.Core;
 using Edvantix.SharedKernel.Results;
-using MediatR;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 
@@ -18,8 +13,8 @@ namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 public sealed record GetAdminPostsQuery(
     [property: Description("Фильтр по статусу поста")] PostStatus? Status = null,
     [property: Description("Фильтр по типу контента")] PostType? Type = null,
-    [property: Description("Фильтр по идентификатору категории")] long? CategoryId = null,
-    [property: Description("Фильтр по идентификатору тега")] long? TagId = null,
+    [property: Description("Фильтр по идентификатору категории")] ulong? CategoryId = null,
+    [property: Description("Фильтр по идентификатору тега")] ulong? TagId = null,
     [property: Description("Текстовый поиск по заголовку и описанию")] string? Search = null,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
@@ -36,7 +31,7 @@ public sealed record GetAdminPostsQuery(
 public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetAdminPostsQuery, PagedResult<PostSummaryModel>>
 {
-    public async Task<PagedResult<PostSummaryModel>> Handle(
+    public async ValueTask<PagedResult<PostSummaryModel>> Handle(
         GetAdminPostsQuery request,
         CancellationToken cancellationToken
     )
@@ -49,14 +44,14 @@ public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
             searchText: request.Search
         );
 
-        using var postRepo = provider.GetRequiredService<IPostRepository>();
+        var postRepo = provider.GetRequiredService<IPostRepository>();
 
-        var count = await postRepo.GetCountByExpressionAsync(spec, cancellationToken);
+        var count = await postRepo.CountAsync(spec, cancellationToken);
 
         spec.Skip = (request.PageIndex - 1) * request.PageSize;
         spec.Take = request.PageSize;
 
-        var posts = await postRepo.GetByExpressionAsync(spec, cancellationToken);
+        var posts = await postRepo.ListAsync(spec, cancellationToken);
 
         var profileService = provider.GetRequiredService<IProfileService>();
 
@@ -91,14 +86,15 @@ public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
                             Slug = c.Slug,
                         })
                         .ToList(),
-                    Tags = post
-                        .Tags.Select(t => new TagModel
+                    Tags =
+                    [
+                        .. post.Tags.Select(t => new TagModel
                         {
                             Id = t.Id,
                             Name = t.Name,
                             Slug = t.Slug,
-                        })
-                        .ToList(),
+                        }),
+                    ],
                 }
             );
         }

@@ -1,7 +1,4 @@
-using Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Edvantix.Constants.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 
@@ -12,9 +9,7 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.ToTable("categories");
-
-        builder.HasKey(c => c.Id);
+        builder.UseDefaultConfiguration();
 
         builder.Property(c => c.Name).IsRequired().HasMaxLength(DataSchemaLength.Large);
 

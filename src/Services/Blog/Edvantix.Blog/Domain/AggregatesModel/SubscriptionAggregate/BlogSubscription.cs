@@ -1,5 +1,3 @@
-using Edvantix.SharedKernel.SeedWork;
-
 namespace Edvantix.Blog.Domain.AggregatesModel.SubscriptionAggregate;
 
 /// <summary>

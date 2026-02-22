@@ -1,7 +1,4 @@
-using Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
-using Edvantix.Constants.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 
@@ -12,9 +9,7 @@ public sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
 {
     public void Configure(EntityTypeBuilder<Tag> builder)
     {
-        builder.ToTable("tags");
-
-        builder.HasKey(t => t.Id);
+        builder.UseDefaultConfiguration();
 
         builder.Property(t => t.Name).IsRequired().HasMaxLength(DataSchemaLength.Large);
 

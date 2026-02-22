@@ -38,7 +38,10 @@ public sealed class PostRepository(BlogDbContext dbContext) : IPostRepository
         return await Spec.GetQuery(posts, spec).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<Post?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    public async Task<Post?> GetBySlugAsync(
+        string slug,
+        CancellationToken cancellationToken = default
+    )
     {
         var posts = dbContext.Set<Post>();
         var spec = new PostBySlugSpecification(slug);

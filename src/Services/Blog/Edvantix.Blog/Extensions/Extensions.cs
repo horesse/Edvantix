@@ -60,7 +60,7 @@ public static class Extensions
         services.AddExceptionHandler<ForbiddenExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-        
+
         services
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped

@@ -5,13 +5,18 @@ public sealed class CategoryRepository(BlogDbContext dbContext) : ICategoryRepos
     /// <inheritdoc/>
     public IUnitOfWork UnitOfWork => dbContext;
 
-    public async Task<IReadOnlyList<Category>> ListAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Category>> ListAsync(
+        CancellationToken cancellationToken = default
+    )
     {
         var categories = dbContext.Set<Category>();
         return await categories.OrderBy(c => c.Name).ToListAsync(cancellationToken);
     }
 
-    public async Task<Category?> GetByIdAsync(ulong id, CancellationToken cancellationToken = default)
+    public async Task<Category?> GetByIdAsync(
+        ulong id,
+        CancellationToken cancellationToken = default
+    )
     {
         var categories = dbContext.Set<Category>();
         return await categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
@@ -23,7 +28,10 @@ public sealed class CategoryRepository(BlogDbContext dbContext) : ICategoryRepos
         await categories.AddAsync(category, cancellationToken);
     }
 
-    public Task<Category> UpdateAsync(Category category, CancellationToken cancellationToken = default)
+    public Task<Category> UpdateAsync(
+        Category category,
+        CancellationToken cancellationToken = default
+    )
     {
         var categories = dbContext.Set<Category>();
         return Task.FromResult(categories.Update(category).Entity);

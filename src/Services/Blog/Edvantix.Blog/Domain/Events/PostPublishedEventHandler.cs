@@ -7,10 +7,7 @@ namespace Edvantix.Blog.Domain.Events;
 public sealed class PostPublishedEventHandler(ILogger<PostPublishedEventHandler> logger)
     : INotificationHandler<PostPublishedEvent>
 {
-    public ValueTask Handle(
-        PostPublishedEvent notification,
-        CancellationToken cancellationToken
-    )
+    public ValueTask Handle(PostPublishedEvent notification, CancellationToken cancellationToken)
     {
         logger.LogInformation(
             "Post published: PostId={PostId}, Slug={Slug}, AuthorId={AuthorId}",

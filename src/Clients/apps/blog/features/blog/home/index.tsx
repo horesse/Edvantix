@@ -25,7 +25,6 @@ function PostList() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  // Debounce the search input to avoid a request per keystroke
   useEffect(() => {
     const timer = setTimeout(
       () => setDebouncedSearch(search),
@@ -41,7 +40,7 @@ function PostList() {
       ? (Number(searchParams.get("type")) as PostType)
       : undefined,
     search: debouncedSearch || undefined,
-    pageSize: 12,
+    pageSize: 3,
   };
 
   const { data, isLoading, isError } = useGetPosts(query);
@@ -71,7 +70,7 @@ function PostList() {
     );
   }
 
-  const posts = data?.items ?? [];
+  const posts = data ?? [];
   const [featuredPost, ...restPosts] = posts;
 
   return (

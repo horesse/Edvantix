@@ -28,6 +28,7 @@ import {
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
 import { formatDate } from "@/lib/utils";
+
 import { StatusBar } from "./status-bar";
 import { useStatusCount } from "./use-status-count";
 
@@ -226,7 +227,7 @@ export function AdminDashboardSection() {
               ? Array.from({ length: 5 }).map((_, i) => (
                   <Skeleton key={i} className="h-12 w-full rounded-lg" />
                 ))
-              : recentPosts?.items.map((post) => (
+              : recentPosts?.map((post) => (
                   <Link
                     key={post.id}
                     href={`/admin/posts/${post.id}/edit`}

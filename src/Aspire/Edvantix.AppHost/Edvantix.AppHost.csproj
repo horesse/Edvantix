@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup Label="Services">
     <ProjectReference Include="..\..\Services\Company\Edvantix.Organizational\Edvantix.Organizational.csproj" />
-    <ProjectReference Include="..\..\Services\Profile\Edvantix.Persona\Edvantix.Persona.csproj" />
+    <ProjectReference Include="..\..\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
     <ProjectReference Include="..\..\Services\Subscriptions\Edvantix.Subscriptions\Edvantix.Subscriptions.csproj" />
     <ProjectReference Include="..\..\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
   </ItemGroup>

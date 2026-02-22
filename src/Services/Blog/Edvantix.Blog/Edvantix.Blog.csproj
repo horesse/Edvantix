@@ -14,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf
-      Include="..\..\Profile\Edvantix.Persona\Grpc\Protos\profile\v1\profile.proto"
+      Include="..\..\Persona\Edvantix.Persona\Grpc\Protos\profile\v1\profile.proto"
       Link="Grpc\Protos\profile\v1\profile.proto"
       GrpcServices="Client"
     />

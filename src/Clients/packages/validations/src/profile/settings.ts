@@ -2,12 +2,7 @@ import { z } from "zod";
 
 import { ContactType } from "@workspace/types/profile";
 
-import {
-  birthDateField,
-  genderField,
-  middleNameField,
-  nameField,
-} from "./constants";
+import { birthDateField, middleNameField, nameField } from "./constants";
 
 const MAX_CONTACT_VALUE_LENGTH = 255;
 const MAX_CONTACT_DESCRIPTION_LENGTH = 500;
@@ -24,7 +19,6 @@ export const profileSettingsSchema = z.object({
   firstName: nameField("Имя"),
   middleName: middleNameField,
   birthDate: birthDateField,
-  gender: genderField,
 });
 
 export type ProfileSettingsInput = z.infer<typeof profileSettingsSchema>;
@@ -53,7 +47,7 @@ export const contactSchema = z.object({
 export type ContactInput = z.infer<typeof contactSchema>;
 
 export const employmentSchema = z.object({
-  companyName: z
+  workplace: z
     .string()
     .min(1, "Место работы обязательно")
     .max(
@@ -99,7 +93,7 @@ export const educationSchema = z.object({
     .or(z.literal("")),
   dateStart: z.string().min(1, "Дата начала обязательна"),
   dateEnd: z.string().optional().or(z.literal("")),
-  educationLevel: z.number({ message: "Уровень образования обязателен" }),
+  level: z.number({ message: "Уровень образования обязателен" }),
 });
 
 export type EducationInput = z.infer<typeof educationSchema>;

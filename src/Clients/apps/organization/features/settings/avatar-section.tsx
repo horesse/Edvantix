@@ -5,7 +5,8 @@ import { useRef, useState } from "react";
 import { Camera, Loader2, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 
-import useUploadAvatar from "@workspace/api-hooks/profiles/useUploadAvatar";
+import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
+import type { OwnProfileDetails } from "@workspace/types/profile";
 import {
   Avatar,
   AvatarFallback,
@@ -19,21 +20,21 @@ import {
   MAX_AVATAR_SIZE,
 } from "@workspace/validations/profile";
 
+import { buildProfileUpdateRequest } from "@/lib/profile-update";
+
 type AvatarSectionProps = {
-  avatarUrl?: string | null;
-  fullName: string;
+  profile: OwnProfileDetails;
   subtitle?: string;
 };
 
 export function AvatarSection({
-  avatarUrl,
-  fullName,
+  profile,
   subtitle,
 }: AvatarSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const uploadMutation = useUploadAvatar({
+  const uploadMutation = useUpdateProfile({
     onSuccess: () => {
       toast.success("Аватар обновлён");
       if (preview) {
@@ -67,7 +68,7 @@ export function AvatarSection({
       URL.revokeObjectURL(preview);
     }
     setPreview(URL.createObjectURL(file));
-    uploadMutation.mutate(file);
+    uploadMutation.mutate(buildProfileUpdateRequest(profile, { avatar: file }));
   }
 
   function clearFileInput() {
@@ -76,16 +77,20 @@ export function AvatarSection({
     }
   }
 
-  const displayUrl = preview ?? avatarUrl;
+  const displayUrl = preview ?? profile.avatarUrl;
 
   return (
     <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
       <div className="group relative">
         <Avatar className="ring-background size-20 ring-4 sm:size-24">
-          <AvatarImage src={displayUrl ?? undefined} alt={fullName} />
+          <AvatarImage src={displayUrl ?? undefined} alt={profile.firstName} />
           <AvatarFallback className="bg-primary/10 text-primary text-xl sm:text-2xl">
-            {fullName ? (
-              getInitials(fullName)
+            {profile.firstName || profile.lastName ? (
+              getInitials(
+                [profile.lastName, profile.firstName, profile.middleName]
+                  .filter(Boolean)
+                  .join(" "),
+              )
             ) : (
               <UserCircle className="size-10" />
             )}
@@ -105,7 +110,11 @@ export function AvatarSection({
         </button>
       </div>
       <div className="text-center sm:text-left">
-        <h2 className="text-lg font-semibold">{fullName}</h2>
+        <h2 className="text-lg font-semibold">
+          {[profile.lastName, profile.firstName, profile.middleName]
+            .filter(Boolean)
+            .join(" ")}
+        </h2>
         {subtitle && (
           <p className="text-muted-foreground text-sm">{subtitle}</p>
         )}

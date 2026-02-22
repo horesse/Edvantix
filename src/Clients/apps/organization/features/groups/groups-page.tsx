@@ -39,6 +39,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { FilterTable } from "@workspace/ui/components/filter-table";
 import {
   Form,
   FormControl,
@@ -49,14 +50,13 @@ import {
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
+import { usePaginatedTable } from "@workspace/ui/hooks/usePaginatedTable";
 import {
   type CreateGroupInput,
   createGroupSchema,
 } from "@workspace/validations/company";
 
-import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 
 export function GroupsPage() {
   const { currentOrg, canManage } = useOrganization();
@@ -196,7 +196,7 @@ function CreateGroupDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -295,7 +295,7 @@ function DeleteGroupDialog({
   group,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   group: GroupModel | null;
   onClose: () => void;
 }) {

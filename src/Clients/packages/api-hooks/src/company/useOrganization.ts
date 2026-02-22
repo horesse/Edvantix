@@ -7,13 +7,13 @@ import type { OrganizationModel } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 export default function useOrganization(
-  id: number,
+  id: string,
   options?: Omit<UseQueryOptions<OrganizationModel>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: companyKeys.organization(id),
     queryFn: () => companyApiClient.getOrganization(id),
-    enabled: id > 0,
+    enabled: Boolean(id),
     ...options,
   });
 }

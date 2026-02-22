@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useUpdateContacts from "@workspace/api-hooks/profiles/useUpdateContacts";
+import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
 import type { Contact, OwnProfileDetails } from "@workspace/types/profile";
 import { ContactType } from "@workspace/types/profile";
 import { Badge } from "@workspace/ui/components/badge";
@@ -49,6 +49,8 @@ import {
   contactSchema,
 } from "@workspace/validations/profile";
 
+import { buildProfileUpdateRequest } from "@/lib/profile-update";
+
 const contactTypeLabels: Record<ContactType, string> = {
   [ContactType.Email]: "Email",
   [ContactType.Phone]: "Телефон",
@@ -69,9 +71,9 @@ type ContactsSectionProps = {
 
 export function ContactsSection({ profile }: ContactsSectionProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const contacts = profile.contacts ?? [];
+  const contacts = profile.contacts;
 
-  const updateMutation = useUpdateContacts({
+  const updateMutation = useUpdateProfile({
     onSuccess: () => {
       toast.success("Контакты обновлены");
     },
@@ -82,7 +84,7 @@ export function ContactsSection({ profile }: ContactsSectionProps) {
 
   function handleRemoveContact(index: number) {
     const updated = contacts.filter((_, i) => i !== index);
-    updateMutation.mutate(updated);
+    updateMutation.mutate(buildProfileUpdateRequest(profile, { contacts: updated }));
   }
 
   function handleAddContact(data: ContactInput) {
@@ -94,12 +96,15 @@ export function ContactsSection({ profile }: ContactsSectionProps) {
         description: data.description || null,
       },
     ];
-    updateMutation.mutate(updated, {
-      onSuccess: () => {
-        setDialogOpen(false);
-        toast.success("Контакт добавлен");
+    updateMutation.mutate(
+      buildProfileUpdateRequest(profile, { contacts: updated }),
+      {
+        onSuccess: () => {
+          setDialogOpen(false);
+          toast.success("Контакт добавлен");
+        },
       },
-    });
+    );
   }
 
   return (

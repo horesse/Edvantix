@@ -154,7 +154,7 @@ function ContactRow({
   onEdit,
 }: {
   contact: OrganizationContactModel;
-  orgId: number;
+  orgId: string;
   canManage: boolean;
   onEdit: () => void;
 }) {
@@ -213,7 +213,7 @@ function AddContactDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -345,7 +345,7 @@ function EditContactDialog({
   contact,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   contact: OrganizationContactModel | null;
   onClose: () => void;
 }) {

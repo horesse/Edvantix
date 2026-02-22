@@ -38,6 +38,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { FilterTable } from "@workspace/ui/components/filter-table";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import {
@@ -47,10 +48,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
+import { usePaginatedTable } from "@workspace/ui/hooks/usePaginatedTable";
 
-import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { organizationRoleLabels } from "@/lib/company-options";
 
 export function MembersPage() {
@@ -69,7 +69,7 @@ export function MembersPage() {
     handleSortingChange,
   } = usePaginatedTable();
 
-  const orgId = currentOrg?.id ?? 0;
+  const orgId = currentOrg?.id ?? "";
   const { data, isLoading } = useOrganizationMembers(orgId, {
     pageIndex: pageIndex + 1,
     pageSize,
@@ -205,7 +205,7 @@ function AddMemberDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -223,9 +223,11 @@ function AddMemberDialog({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const id = Number(profileId);
-    if (id > 0) {
-      mutation.mutate({ orgId, request: { profileId: id, role } });
+    if (profileId.trim()) {
+      mutation.mutate({
+        orgId,
+        request: { profileId: profileId.trim(), role },
+      });
     }
   }
 
@@ -243,11 +245,9 @@ function AddMemberDialog({
             <Label htmlFor="profileId">ID профиля</Label>
             <Input
               id="profileId"
-              type="number"
-              min={1}
               value={profileId}
               onChange={(e) => setProfileId(e.target.value)}
-              placeholder="12345"
+              placeholder="3fa85f64-5717-4562-b3fc-2c963f66afa6"
               required
             />
           </div>
@@ -297,7 +297,7 @@ function ChangeRoleDialog({
   member,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   member: OrganizationMemberModel | null;
   onClose: () => void;
 }) {
@@ -376,7 +376,7 @@ function RemoveMemberDialog({
   member,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   member: OrganizationMemberModel | null;
   onClose: () => void;
 }) {

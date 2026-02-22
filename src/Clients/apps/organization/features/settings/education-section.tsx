@@ -7,7 +7,7 @@ import { GraduationCap, Loader2, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useUpdateEducation from "@workspace/api-hooks/profiles/useUpdateEducation";
+import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
 import type { Education, OwnProfileDetails } from "@workspace/types/profile";
 import { EducationLevel } from "@workspace/types/profile";
 import { Badge } from "@workspace/ui/components/badge";
@@ -42,6 +42,8 @@ import {
   educationSchema,
 } from "@workspace/validations/profile";
 
+import { buildProfileUpdateRequest } from "@/lib/profile-update";
+
 const educationLevelLabels: Record<EducationLevel, string> = {
   [EducationLevel.Preschool]: "Дошкольное",
   [EducationLevel.GeneralSecondary]: "Общее среднее",
@@ -61,9 +63,9 @@ type EducationSectionProps = {
 
 export function EducationSection({ profile }: EducationSectionProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const items = profile.educations ?? [];
+  const items = profile.educations;
 
-  const updateMutation = useUpdateEducation({
+  const updateMutation = useUpdateProfile({
     onSuccess: () => {
       toast.success("Образование обновлено");
     },
@@ -74,7 +76,7 @@ export function EducationSection({ profile }: EducationSectionProps) {
 
   function handleRemove(index: number) {
     const updated = items.filter((_, i) => i !== index);
-    updateMutation.mutate(updated);
+    updateMutation.mutate(buildProfileUpdateRequest(profile, { educations: updated }));
   }
 
   function handleAdd(data: EducationInput) {
@@ -85,15 +87,18 @@ export function EducationSection({ profile }: EducationSectionProps) {
         specialty: data.specialty || null,
         dateStart: data.dateStart,
         dateEnd: data.dateEnd || null,
-        educationLevel: data.educationLevel,
+        educationLevel: data.level,
       },
     ];
-    updateMutation.mutate(updated, {
-      onSuccess: () => {
-        setDialogOpen(false);
-        toast.success("Образование добавлено");
+    updateMutation.mutate(
+      buildProfileUpdateRequest(profile, { educations: updated }),
+      {
+        onSuccess: () => {
+          setDialogOpen(false);
+          toast.success("Образование добавлено");
+        },
       },
-    });
+    );
   }
 
   return (
@@ -218,7 +223,7 @@ function AddEducationDialog({
       specialty: "",
       dateStart: "",
       dateEnd: "",
-      educationLevel: undefined,
+      level: undefined,
     },
   });
 
@@ -277,7 +282,7 @@ function AddEducationDialog({
             />
             <FormField
               control={form.control}
-              name="educationLevel"
+              name="level"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Уровень образования</FormLabel>

@@ -1,7 +1,11 @@
 ﻿import type { ComponentProps, ReactNode } from "react";
 
-import { Card, CardContent, CardHeader } from "@workspace/ui/components/card";
-import { Skeleton } from "@workspace/ui/components/skeleton";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from "@workspace/ui/components/card.js";
+import { Skeleton } from "@workspace/ui/components/skeleton.js";
 
 type SkeletonWrapperProps = Readonly<{
   label: string;

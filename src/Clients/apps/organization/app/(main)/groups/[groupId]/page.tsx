@@ -12,5 +12,5 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const { groupId } = await params;
-  return <GroupDetailPage groupId={Number(groupId)} />;
+  return <GroupDetailPage groupId={groupId} />;
 }

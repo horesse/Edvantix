@@ -21,15 +21,11 @@ import {
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@workspace/ui/components/radio-group";
-import {
   ProfileSettingsInput,
   profileSettingsSchema,
 } from "@workspace/validations/profile";
 
-import { genderOptions } from "@/lib/profile-options";
+import { buildProfileUpdateRequest } from "@/lib/profile-update";
 
 type ProfileFormProps = {
   profile: OwnProfileDetails;
@@ -52,7 +48,6 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       firstName: profile.firstName,
       middleName: profile.middleName ?? "",
       birthDate: profile.birthDate,
-      gender: profile.gender,
     },
   });
 
@@ -62,18 +57,18 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       firstName: profile.firstName,
       middleName: profile.middleName ?? "",
       birthDate: profile.birthDate,
-      gender: profile.gender,
     });
   }, [profile, form]);
 
   function onSubmit(data: ProfileSettingsInput) {
-    updateMutation.mutate({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      middleName: data.middleName || null,
-      birthDate: data.birthDate,
-      gender: data.gender,
-    });
+    updateMutation.mutate(
+      buildProfileUpdateRequest(profile, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        middleName: data.middleName || null,
+        birthDate: data.birthDate,
+      }),
+    );
   }
 
   const isLoading = updateMutation.isPending;
@@ -138,41 +133,6 @@ export function ProfileForm({ profile }: ProfileFormProps) {
                 <FormLabel>Дата рождения</FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Пол</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                    className="flex gap-3 pt-2"
-                  >
-                    {genderOptions.map((option) => (
-                      <div
-                        key={option.value}
-                        className="flex items-center gap-1.5"
-                      >
-                        <RadioGroupItem
-                          value={option.value.toString()}
-                          id={`gender-${option.value}`}
-                        />
-                        <Label
-                          htmlFor={`gender-${option.value}`}
-                          className="text-sm"
-                        >
-                          {option.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
                 </FormControl>
                 <FormMessage />
               </FormItem>

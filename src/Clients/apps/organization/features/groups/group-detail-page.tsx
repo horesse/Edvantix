@@ -53,6 +53,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { FilterTable } from "@workspace/ui/components/filter-table";
 import {
   Form,
   FormControl,
@@ -72,18 +73,17 @@ import {
 } from "@workspace/ui/components/select";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { Textarea } from "@workspace/ui/components/textarea";
+import { usePaginatedTable } from "@workspace/ui/hooks/usePaginatedTable";
 import {
   type UpdateGroupInput,
   updateGroupSchema,
 } from "@workspace/validations/company";
 
-import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { groupRoleLabels } from "@/lib/company-options";
 
 type GroupDetailPageProps = {
-  groupId: number;
+  groupId: string;
 };
 
 export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
@@ -308,8 +308,8 @@ function EditGroupDialog({
   open,
   onOpenChange,
 }: {
-  group: { id: number; name: string; description?: string | null };
-  orgId: number;
+  group: { id: string; name: string; description?: string | null };
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -408,8 +408,8 @@ function DeleteGroupConfirm({
   onClose,
   onDeleted,
 }: {
-  group: { id: number; name: string };
-  orgId: number;
+  group: { id: string; name: string };
+  orgId: string;
   open: boolean;
   onClose: () => void;
   onDeleted: () => void;
@@ -452,7 +452,7 @@ function AddGroupMemberDialog({
   open,
   onOpenChange,
 }: {
-  groupId: number;
+  groupId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -541,7 +541,7 @@ function ChangeGroupMemberRoleDialog({
   member,
   onClose,
 }: {
-  groupId: number;
+  groupId: string;
   member: GroupMemberModel | null;
   onClose: () => void;
 }) {
@@ -618,7 +618,7 @@ function RemoveGroupMemberDialog({
   member,
   onClose,
 }: {
-  groupId: number;
+  groupId: string;
   member: GroupMemberModel | null;
   onClose: () => void;
 }) {

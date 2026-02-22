@@ -10,8 +10,8 @@ import type { UpdateGroupRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type UpdateGroupParams = {
-  id: number;
-  orgId: number;
+  id: string;
+  orgId: string;
   request: UpdateGroupRequest;
 };
 

@@ -9,8 +9,8 @@ import companyApiClient from "@workspace/api-client/company/company";
 import { companyKeys } from "../keys";
 
 type DeleteContactParams = {
-  orgId: number;
-  contactId: number;
+  orgId: string;
+  contactId: string;
 };
 
 export default function useDeleteOrganizationContact(

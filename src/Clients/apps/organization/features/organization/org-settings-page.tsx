@@ -98,7 +98,7 @@ function OrganizationForm({
   org,
 }: {
   org: {
-    id: number;
+    id: string;
     name: string;
     nameLatin: string;
     shortName: string;

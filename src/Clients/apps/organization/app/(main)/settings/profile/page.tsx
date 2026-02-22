@@ -59,15 +59,11 @@ export default function ProfileSettingsPage() {
     return null;
   }
 
-  const fullName = [profile.lastName, profile.firstName, profile.middleName]
-    .filter(Boolean)
-    .join(" ");
-
   return (
     <div className="space-y-6">
       <Card>
         <CardContent className="pt-6">
-          <AvatarSection avatarUrl={profile.avatarUrl} fullName={fullName} />
+          <AvatarSection profile={profile} />
         </CardContent>
       </Card>
 

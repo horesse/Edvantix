@@ -7,7 +7,7 @@ import { Briefcase, Loader2, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useUpdateEmployment from "@workspace/api-hooks/profiles/useUpdateEmployment";
+import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
 import type {
   EmploymentHistory,
   OwnProfileDetails,
@@ -37,15 +37,17 @@ import {
   employmentSchema,
 } from "@workspace/validations/profile";
 
+import { buildProfileUpdateRequest } from "@/lib/profile-update";
+
 type EmploymentSectionProps = {
   profile: OwnProfileDetails;
 };
 
 export function EmploymentSection({ profile }: EmploymentSectionProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const items = profile.employmentHistories ?? [];
+  const items = profile.employmentHistories;
 
-  const updateMutation = useUpdateEmployment({
+  const updateMutation = useUpdateProfile({
     onSuccess: () => {
       toast.success("Опыт работы обновлён");
     },
@@ -56,26 +58,31 @@ export function EmploymentSection({ profile }: EmploymentSectionProps) {
 
   function handleRemove(index: number) {
     const updated = items.filter((_, i) => i !== index);
-    updateMutation.mutate(updated);
+    updateMutation.mutate(
+      buildProfileUpdateRequest(profile, { employmentHistories: updated }),
+    );
   }
 
   function handleAdd(data: EmploymentInput) {
     const updated = [
       ...items,
       {
-        companyName: data.companyName,
+        workplace: data.workplace,
         position: data.position,
         startDate: data.startDate,
         endDate: data.endDate || null,
         description: data.description || null,
       },
     ];
-    updateMutation.mutate(updated, {
-      onSuccess: () => {
-        setDialogOpen(false);
-        toast.success("Место работы добавлено");
+    updateMutation.mutate(
+      buildProfileUpdateRequest(profile, { employmentHistories: updated }),
+      {
+        onSuccess: () => {
+          setDialogOpen(false);
+          toast.success("Место работы добавлено");
+        },
       },
-    });
+    );
   }
 
   return (
@@ -112,7 +119,7 @@ export function EmploymentSection({ profile }: EmploymentSectionProps) {
         <div className="space-y-3">
           {items.map((item, index) => (
             <EmploymentCard
-              key={`${item.companyName}-${item.startDate}`}
+              key={`${item.workplace}-${item.startDate}`}
               item={item}
               onRemove={() => handleRemove(index)}
               isLoading={updateMutation.isPending}
@@ -151,7 +158,7 @@ function EmploymentCard({
             <div className="min-w-0">
               <p className="truncate font-medium">{item.position}</p>
               <p className="text-muted-foreground truncate text-sm">
-                {item.companyName}
+                {item.workplace}
               </p>
             </div>
             <Button
@@ -192,7 +199,7 @@ function AddEmploymentDialog({
   const form = useForm<EmploymentInput>({
     resolver: zodResolver(employmentSchema),
     defaultValues: {
-      companyName: "",
+      workplace: "",
       position: "",
       startDate: "",
       endDate: "",
@@ -221,7 +228,7 @@ function AddEmploymentDialog({
           >
             <FormField
               control={form.control}
-              name="companyName"
+              name="workplace"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Организация</FormLabel>

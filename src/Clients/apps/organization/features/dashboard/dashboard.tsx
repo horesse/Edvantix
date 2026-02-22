@@ -84,7 +84,7 @@ function EmptyState() {
   );
 }
 
-function OrgHeader({ orgId }: { orgId: number }) {
+function OrgHeader({ orgId }: { orgId: string }) {
   const { data: org, isLoading } = useOrganization(orgId);
 
   if (isLoading) {
@@ -112,7 +112,7 @@ function OrgHeader({ orgId }: { orgId: number }) {
   );
 }
 
-function KPICards({ orgId }: { orgId: number }) {
+function KPICards({ orgId }: { orgId: string }) {
   const { data: org, isLoading } = useOrganization(orgId);
 
   const kpis = [
@@ -247,7 +247,7 @@ function GrowthChart() {
   );
 }
 
-function GroupsDistribution({ orgId }: { orgId: number }) {
+function GroupsDistribution({ orgId }: { orgId: string }) {
   const { data: org } = useOrganization(orgId);
 
   const groups = [

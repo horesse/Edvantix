@@ -23,6 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
+import { FilterTable } from "@workspace/ui/components/filter-table";
 import {
   Form,
   FormControl,
@@ -50,7 +51,6 @@ import {
   createInvitationSchema,
 } from "@workspace/validations/company";
 
-import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
 import { organizationRoleLabels } from "@/lib/company-options";
 
@@ -96,7 +96,7 @@ export function InvitationsPage() {
   );
 }
 
-function OutgoingInvitations({ orgId }: { orgId: number }) {
+function OutgoingInvitations({ orgId }: { orgId: string }) {
   const [createOpen, setCreateOpen] = useState(false);
 
   const { data, isLoading } = usePendingInvitations(orgId);
@@ -212,7 +212,7 @@ function CreateInvitationDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {

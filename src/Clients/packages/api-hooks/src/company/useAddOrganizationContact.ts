@@ -10,7 +10,7 @@ import type { AddOrganizationContactRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type AddContactParams = {
-  orgId: number;
+  orgId: string;
   request: AddOrganizationContactRequest;
 };
 

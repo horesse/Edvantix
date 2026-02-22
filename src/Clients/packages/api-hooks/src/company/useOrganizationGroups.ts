@@ -10,7 +10,7 @@ import type { PagedResult } from "@workspace/types/shared";
 import { companyKeys } from "../keys";
 
 export default function useOrganizationGroups(
-  orgId: number,
+  orgId: string,
   query?: Omit<OrganizationGroupsQuery, "organizationId">,
   options?: Omit<
     UseQueryOptions<PagedResult<GroupModel>>,
@@ -24,7 +24,7 @@ export default function useOrganizationGroups(
         organizationId: orgId,
         ...query,
       }),
-    enabled: orgId > 0,
+    enabled: Boolean(orgId),
     ...options,
   });
 }

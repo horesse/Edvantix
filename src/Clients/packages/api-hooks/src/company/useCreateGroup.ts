@@ -10,7 +10,7 @@ import type { CreateGroupRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type CreateGroupParams = {
-  orgId: number;
+  orgId: string;
   request: CreateGroupRequest;
 };
 

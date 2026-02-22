@@ -14,14 +14,15 @@ import {
 } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { Button } from "@workspace/ui/components/button";
+import { Button } from "@workspace/ui/components/button.js";
+import { FilterTableSkeleton } from "@workspace/ui/components/loading-skeleton.js";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@workspace/ui/components/select";
+} from "@workspace/ui/components/select.js";
 import {
   Table,
   TableBody,
@@ -29,11 +30,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table";
-
-import { PAGE_SIZES } from "@/lib/constants";
-
-import { FilterTableSkeleton } from "./loading-skeleton";
+} from "@workspace/ui/components/table.js";
+import { PAGE_SIZES } from "@workspace/ui/lib/constants.js";
 
 type FilterTableProps<TData> = Readonly<{
   columns: ColumnDef<TData>[];

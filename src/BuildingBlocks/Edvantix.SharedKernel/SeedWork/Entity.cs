@@ -2,7 +2,7 @@
 
 public abstract class Entity : HasDomainEvents
 {
-    public ulong Id { get; set; }
+    public Guid Id { get; set; }
 }
 
 public abstract class Entity<TId> : Entity

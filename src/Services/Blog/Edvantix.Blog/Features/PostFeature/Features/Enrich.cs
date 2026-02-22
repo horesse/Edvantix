@@ -48,4 +48,27 @@ public static class Enrich
             }
         }
     }
+
+    extension(PostSummaryModel post)
+    {
+        public async Task EnrichAuthor(
+            ulong authorId,
+            IServiceProvider provider,
+            CancellationToken cancellationToken
+        )
+        {
+            var profileService = provider.GetRequiredService<IProfileService>();
+            var authorProfile = await profileService.GetProfileById(authorId, cancellationToken);
+
+            if (authorProfile is null)
+            {
+                post.Author = new AuthorModel { Id = 0, FullName = "Анонимно" };
+                return;
+            }
+
+            var authorMapper = provider.GetRequiredService<IMapper<ProfileReply, AuthorModel>>();
+
+            post.Author = authorMapper.Map(authorProfile);
+        }
+    }
 }

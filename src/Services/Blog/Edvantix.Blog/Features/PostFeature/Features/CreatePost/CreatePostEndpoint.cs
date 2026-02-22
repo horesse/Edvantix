@@ -48,7 +48,7 @@ public sealed class CreatePostEndpoint : IEndpoint<Created<ulong>, CreatePostCom
             .WithDescription(
                 "Создаёт новый черновик поста блога. Доступно только администраторам платформы."
             )
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<ulong>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization(Authorization.Policies.Admin);

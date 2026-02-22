@@ -11,8 +11,8 @@ public sealed record UpdatePostRequest(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<long> CategoryIds,
-    IReadOnlyList<long> TagIds
+    IReadOnlyList<ulong> CategoryIds,
+    IReadOnlyList<ulong> TagIds
 );
 
 /// <summary>
@@ -25,7 +25,7 @@ public sealed class UpdatePostEndpoint : IEndpoint<NoContent, UpdatePostCommand,
         app.MapPut(
                 "/admin/posts/{postId:long}",
                 async (
-                    long postId,
+                    ulong postId,
                     UpdatePostRequest request,
                     ISender sender,
                     CancellationToken ct

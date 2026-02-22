@@ -3,12 +3,12 @@ namespace Edvantix.Blog.Features.PostFeature.Features.GetPostLikes;
 /// <summary>
 /// Запрос для получения количества лайков поста.
 /// </summary>
-public sealed record GetPostLikesQuery(long PostId) : IRequest<PostLikesModel>;
+public sealed record GetPostLikesQuery(ulong PostId) : IRequest<PostLikesModel>;
 
 /// <summary>
 /// Данные о лайках поста.
 /// </summary>
-public sealed record PostLikesModel(long PostId, int LikesCount);
+public sealed record PostLikesModel(ulong PostId, int LikesCount);
 
 /// <summary>
 /// Обработчик запроса на получение количества лайков.
@@ -16,12 +16,12 @@ public sealed record PostLikesModel(long PostId, int LikesCount);
 public sealed class GetPostLikesQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetPostLikesQuery, PostLikesModel>
 {
-    public async Task<PostLikesModel> Handle(
+    public async ValueTask<PostLikesModel> Handle(
         GetPostLikesQuery request,
         CancellationToken cancellationToken
     )
     {
-        using var postRepo = provider.GetRequiredService<IPostRepository>();
+        var postRepo = provider.GetRequiredService<IPostRepository>();
 
         var post =
             await postRepo.GetByIdAsync(request.PostId, cancellationToken)

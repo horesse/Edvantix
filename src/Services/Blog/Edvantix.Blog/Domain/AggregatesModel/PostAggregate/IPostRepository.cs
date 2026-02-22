@@ -11,6 +11,7 @@ public interface IPostRepository : IRepository<Post>
         CancellationToken cancellationToken = default
     );
     Task<Post?> GetByIdAsync(ulong id, CancellationToken cancellationToken = default);
+    Task<Post?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<int> CountAsync(Specification<Post> spec, CancellationToken cancellationToken = default);
 
     Task AddAsync(Post tag, CancellationToken cancellationToken = default);

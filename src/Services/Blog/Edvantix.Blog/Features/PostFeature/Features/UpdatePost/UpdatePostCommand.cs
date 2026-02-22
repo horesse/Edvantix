@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Features.PostFeature.Features.UpdatePost;
 /// Доступна только администраторам платформы.
 /// </summary>
 public sealed record UpdatePostCommand(
-    long PostId,
+    ulong PostId,
     string Title,
     string Slug,
     string Content,
@@ -13,8 +13,8 @@ public sealed record UpdatePostCommand(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<long> CategoryIds,
-    IReadOnlyList<long> TagIds
+    IReadOnlyList<ulong> CategoryIds,
+    IReadOnlyList<ulong> TagIds
 ) : IRequest;
 
 /// <summary>
@@ -23,16 +23,19 @@ public sealed record UpdatePostCommand(
 public sealed class UpdatePostCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdatePostCommand>
 {
-    public async Task Handle(UpdatePostCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(
+        UpdatePostCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        using var postRepo = provider.GetRequiredService<IPostRepository>();
+        var postRepo = provider.GetRequiredService<IPostRepository>();
 
         var post =
             await postRepo.GetByIdAsync(request.PostId, cancellationToken)
             ?? throw new NotFoundException($"Пост с ID {request.PostId} не найден.");
 
         // Проверяем существование категорий
-        using var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
+        var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
         var categories = new List<Category>(request.CategoryIds.Count);
 
         foreach (var categoryId in request.CategoryIds)
@@ -45,7 +48,7 @@ public sealed class UpdatePostCommandHandler(IServiceProvider provider)
         }
 
         // Проверяем существование тегов
-        using var tagRepo = provider.GetRequiredService<ITagRepository>();
+        var tagRepo = provider.GetRequiredService<ITagRepository>();
         var tags = new List<Tag>(request.TagIds.Count);
 
         foreach (var tagId in request.TagIds)
@@ -70,7 +73,8 @@ public sealed class UpdatePostCommandHandler(IServiceProvider provider)
         post.SetCategories(categories);
         post.SetTags(tags);
 
-        await postRepo.UpdateAsync(post, cancellationToken);
-        await postRepo.SaveEntitiesAsync(cancellationToken);
+        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        return Unit.Value;
     }
 }

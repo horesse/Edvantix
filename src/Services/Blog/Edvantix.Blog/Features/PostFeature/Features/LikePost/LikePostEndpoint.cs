@@ -10,7 +10,7 @@ public sealed class LikePostEndpoint : IEndpoint<NoContent, LikePostCommand, ISe
     {
         app.MapPost(
                 "/posts/{postId:long}/like",
-                async (long postId, ISender sender, CancellationToken ct) =>
+                async (ulong postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new LikePostCommand(postId), sender, ct)
             )
             .WithName("LikePost")

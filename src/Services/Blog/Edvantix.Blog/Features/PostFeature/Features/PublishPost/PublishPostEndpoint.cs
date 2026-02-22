@@ -15,7 +15,7 @@ public sealed class PublishPostEndpoint : IEndpoint<NoContent, PublishPostComman
         app.MapPost(
                 "/admin/posts/{postId:long}/publish",
                 async (
-                    long postId,
+                    ulong postId,
                     PublishPostRequest request,
                     ISender sender,
                     CancellationToken ct

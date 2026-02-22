@@ -26,7 +26,7 @@ public sealed class CreateCategoryEndpoint
             .WithTags("Admin.Categories")
             .WithSummary("Создать категорию")
             .WithDescription("Создаёт новую категорию блога. Доступно только администраторам.")
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<ulong>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization(Authorization.Policies.Admin);

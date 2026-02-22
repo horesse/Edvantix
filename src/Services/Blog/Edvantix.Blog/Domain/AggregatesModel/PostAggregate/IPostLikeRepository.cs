@@ -9,4 +9,7 @@ public interface IPostLikeRepository : IRepository<PostLike>
         Specification<PostLike> spec,
         CancellationToken cancellationToken = default
     );
+
+    Task AddAsync(PostLike like, CancellationToken cancellationToken = default);
+    Task DeleteAsync(PostLike like, CancellationToken cancellationToken = default);
 }

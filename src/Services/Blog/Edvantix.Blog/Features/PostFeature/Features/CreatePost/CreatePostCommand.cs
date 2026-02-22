@@ -1,9 +1,4 @@
-using Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
 using Edvantix.Blog.Grpc.Services;
-using Edvantix.Chassis.Exceptions;
-using MediatR;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.CreatePost;
 
@@ -19,23 +14,26 @@ public sealed record CreatePostCommand(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<long> CategoryIds,
-    IReadOnlyList<long> TagIds
-) : IRequest<long>;
+    IReadOnlyList<Guid> CategoryIds,
+    IReadOnlyList<Guid> TagIds
+) : IRequest<Guid>;
 
 /// <summary>
 /// Обработчик команды создания поста.
 /// Создаёт черновик поста с указанными категориями и тегами.
 /// </summary>
 public sealed class CreatePostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreatePostCommand, long>
+    : IRequestHandler<CreatePostCommand, Guid>
 {
-    public async Task<long> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Guid> Handle(
+        CreatePostCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var authorId = await provider.GetProfileId(cancellationToken);
 
         // Проверяем существование категорий
-        using var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
+        var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
         var categories = new List<Category>(request.CategoryIds.Count);
 
         foreach (var categoryId in request.CategoryIds)
@@ -48,7 +46,7 @@ public sealed class CreatePostCommandHandler(IServiceProvider provider)
         }
 
         // Проверяем существование тегов
-        using var tagRepo = provider.GetRequiredService<ITagRepository>();
+        var tagRepo = provider.GetRequiredService<ITagRepository>();
         var tags = new List<Tag>(request.TagIds.Count);
 
         foreach (var tagId in request.TagIds)
@@ -74,9 +72,9 @@ public sealed class CreatePostCommandHandler(IServiceProvider provider)
         post.SetCategories(categories);
         post.SetTags(tags);
 
-        using var postRepo = provider.GetRequiredService<IPostRepository>();
-        await postRepo.InsertAsync(post, cancellationToken);
-        await postRepo.SaveEntitiesAsync(cancellationToken);
+        var postRepo = provider.GetRequiredService<IPostRepository>();
+        await postRepo.AddAsync(post, cancellationToken);
+        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return post.Id;
     }

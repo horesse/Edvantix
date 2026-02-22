@@ -1,11 +1,9 @@
-using Edvantix.SharedKernel.SeedWork;
-
 namespace Edvantix.Blog.Domain.AggregatesModel.TagAggregate;
 
 /// <summary>
 /// Тег для дополнительной классификации постов блога.
 /// </summary>
-public sealed class Tag() : LongIdentity, IAggregateRoot
+public sealed class Tag() : Entity, IAggregateRoot
 {
     /// <summary>
     /// Создаёт новый тег.
@@ -15,8 +13,8 @@ public sealed class Tag() : LongIdentity, IAggregateRoot
     public Tag(string name, string slug)
         : this()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
         Name = name;
         Slug = slug;
@@ -39,8 +37,8 @@ public sealed class Tag() : LongIdentity, IAggregateRoot
     /// <param name="slug">Новый slug.</param>
     public void Update(string name, string slug)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
         Name = name;
         Slug = slug;

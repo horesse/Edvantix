@@ -5,9 +5,9 @@ public static class Services
     public static readonly string Gateway = nameof(Gateway).ToLowerInvariant();
     public static readonly string EntityHub = nameof(EntityHub).ToLowerInvariant();
     public static readonly string EntityHubWorker = nameof(EntityHubWorker).ToLowerInvariant();
-    public static readonly string Company = nameof(Company).ToLowerInvariant();
+    public static readonly string Organizational = nameof(Organizational).ToLowerInvariant();
     public static readonly string System = nameof(System).ToLowerInvariant();
-    public static readonly string Profile = nameof(Profile).ToLowerInvariant();
+    public static readonly string Persona = nameof(Persona).ToLowerInvariant();
     public static readonly string Subscriptions = nameof(Subscriptions).ToLowerInvariant();
     public static readonly string Blog = nameof(Blog).ToLowerInvariant();
 

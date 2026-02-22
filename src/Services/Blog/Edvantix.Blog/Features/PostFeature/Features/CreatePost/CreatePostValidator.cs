@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.CreatePost;
 
 /// <summary>

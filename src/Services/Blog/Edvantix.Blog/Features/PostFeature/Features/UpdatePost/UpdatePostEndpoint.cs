@@ -1,9 +1,3 @@
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Chassis.Endpoints;
-using Edvantix.Constants.Core;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.UpdatePost;
 
 /// <summary>
@@ -17,8 +11,8 @@ public sealed record UpdatePostRequest(
     PostType Type,
     bool IsPremium,
     string? CoverImageUrl,
-    IReadOnlyList<long> CategoryIds,
-    IReadOnlyList<long> TagIds
+    IReadOnlyList<Guid> CategoryIds,
+    IReadOnlyList<Guid> TagIds
 );
 
 /// <summary>
@@ -31,7 +25,7 @@ public sealed class UpdatePostEndpoint : IEndpoint<NoContent, UpdatePostCommand,
         app.MapPut(
                 "/admin/posts/{postId:long}",
                 async (
-                    long postId,
+                    Guid postId,
                     UpdatePostRequest request,
                     ISender sender,
                     CancellationToken ct

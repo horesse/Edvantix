@@ -1,6 +1,5 @@
 ﻿using Aspire.Hosting.Yarp;
 using Aspire.Hosting.Yarp.Transforms;
-using Edvantix.Constants.Aspire;
 
 namespace Edvantix.AppHost.Extensions.Network;
 

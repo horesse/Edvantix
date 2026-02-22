@@ -1,7 +1,3 @@
-using Edvantix.Chassis.Endpoints;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPostLikes;
 
 /// <summary>
@@ -13,7 +9,7 @@ public sealed class GetPostLikesEndpoint : IEndpoint<Ok<PostLikesModel>, GetPost
     {
         app.MapGet(
                 "/posts/{postId:long}/likes",
-                async (long postId, ISender sender, CancellationToken ct) =>
+                async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetPostLikesQuery(postId), sender, ct)
             )
             .WithName("GetPostLikes")

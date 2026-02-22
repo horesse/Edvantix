@@ -1,20 +1,12 @@
-using Edvantix.Blog.Domain.AggregatesModel.SubscriptionAggregate;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 
-/// <summary>
-/// Конфигурация EF Core для сущности BlogSubscription.
-/// ContentTypes хранится как int (битовая маска) для поддержки комбинаций типов контента.
-/// </summary>
 public sealed class BlogSubscriptionConfiguration : IEntityTypeConfiguration<BlogSubscription>
 {
     public void Configure(EntityTypeBuilder<BlogSubscription> builder)
     {
-        builder.ToTable("blog_subscriptions");
-
-        builder.HasKey(s => s.Id);
+        builder.UseDefaultConfiguration();
 
         builder.Property(s => s.UserId).IsRequired();
 

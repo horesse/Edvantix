@@ -1,7 +1,3 @@
-using Edvantix.Chassis.EF;
-using Edvantix.Chassis.Repository;
-using Edvantix.Constants.Aspire;
-
 namespace Edvantix.Blog.Infrastructure;
 
 /// <summary>
@@ -10,17 +6,17 @@ namespace Edvantix.Blog.Infrastructure;
 public static class Extensions
 {
     /// <summary>
-    /// Регистрирует BlogContext, запускает миграции и регистрирует все репозитории из сборки.
+    /// Регистрирует BlogDbContext, запускает миграции и регистрирует все репозитории из сборки.
     /// </summary>
     public static void AddPersistenceServices(this IHostApplicationBuilder builder)
     {
         var services = builder.Services;
 
-        builder.AddAzurePostgresDbContext<BlogContext>(
+        builder.AddAzurePostgresDbContext<BlogDbContext>(
             Components.Database.Blog,
             app =>
             {
-                services.AddMigration<BlogContext>();
+                services.AddMigration<BlogDbContext>();
                 services.AddRepositories(typeof(IBlogApiMarker));
             }
         );

@@ -1,13 +1,5 @@
-using System.ComponentModel;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate;
-using Edvantix.Blog.Domain.AggregatesModel.PostAggregate.Specifications;
-using Edvantix.Blog.Features.CategoryFeature.Models;
 using Edvantix.Blog.Features.PostFeature.Models;
-using Edvantix.Blog.Features.TagFeature.Models;
-using Edvantix.Blog.Grpc.Services;
-using Edvantix.Constants.Core;
 using Edvantix.SharedKernel.Results;
-using MediatR;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 
@@ -18,8 +10,8 @@ namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 public sealed record GetAdminPostsQuery(
     [property: Description("Фильтр по статусу поста")] PostStatus? Status = null,
     [property: Description("Фильтр по типу контента")] PostType? Type = null,
-    [property: Description("Фильтр по идентификатору категории")] long? CategoryId = null,
-    [property: Description("Фильтр по идентификатору тега")] long? TagId = null,
+    [property: Description("Фильтр по идентификатору категории")] Guid? CategoryId = null,
+    [property: Description("Фильтр по идентификатору тега")] Guid? TagId = null,
     [property: Description("Текстовый поиск по заголовку и описанию")] string? Search = null,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
@@ -36,12 +28,12 @@ public sealed record GetAdminPostsQuery(
 public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetAdminPostsQuery, PagedResult<PostSummaryModel>>
 {
-    public async Task<PagedResult<PostSummaryModel>> Handle(
+    public async ValueTask<PagedResult<PostSummaryModel>> Handle(
         GetAdminPostsQuery request,
         CancellationToken cancellationToken
     )
     {
-        var spec = new PostSpecification(
+        var countSpec = new PostSpecification(
             status: request.Status,
             type: request.Type,
             categoryId: request.CategoryId,
@@ -49,58 +41,32 @@ public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
             searchText: request.Search
         );
 
-        using var postRepo = provider.GetRequiredService<IPostRepository>();
+        var postRepo = provider.GetRequiredService<IPostRepository>();
 
-        var count = await postRepo.GetCountByExpressionAsync(spec, cancellationToken);
+        var count = await postRepo.CountAsync(countSpec, cancellationToken);
 
-        spec.Skip = (request.PageIndex - 1) * request.PageSize;
-        spec.Take = request.PageSize;
+        var listSpec = new PostSpecification(
+            status: request.Status,
+            type: request.Type,
+            categoryId: request.CategoryId,
+            tagId: request.TagId,
+            searchText: request.Search,
+            includeRelations: true
+        );
 
-        var posts = await postRepo.GetByExpressionAsync(spec, cancellationToken);
+        listSpec.Skip = (request.PageIndex - 1) * request.PageSize;
+        listSpec.Take = request.PageSize;
 
-        var profileService = provider.GetRequiredService<IProfileService>();
+        var posts = await postRepo.ListAsync(listSpec, cancellationToken);
+        var mapper = provider.GetRequiredService<IMapper<Post, PostSummaryModel>>();
 
         var items = new List<PostSummaryModel>(posts.Count);
 
         foreach (var post in posts)
         {
-            var author = await profileService.GetAuthorById(post.AuthorId, cancellationToken);
-
-            items.Add(
-                new PostSummaryModel
-                {
-                    Id = post.Id,
-                    Title = post.Title,
-                    Slug = post.Slug,
-                    Summary = post.Summary,
-                    Status = post.Status,
-                    Type = post.Type,
-                    IsPremium = post.IsPremium,
-                    CoverImageUrl = post.CoverImageUrl,
-                    LikesCount = post.LikesCount,
-                    PublishedAt = post.PublishedAt,
-                    ScheduledAt = post.ScheduledAt,
-                    Author = author is null
-                        ? null
-                        : new AuthorModel { Id = author.Id, FullName = author.FullName },
-                    Categories = post
-                        .Categories.Select(c => new CategoryModel
-                        {
-                            Id = c.Id,
-                            Name = c.Name,
-                            Slug = c.Slug,
-                        })
-                        .ToList(),
-                    Tags = post
-                        .Tags.Select(t => new TagModel
-                        {
-                            Id = t.Id,
-                            Name = t.Name,
-                            Slug = t.Slug,
-                        })
-                        .ToList(),
-                }
-            );
+            var item = mapper.Map(post);
+            await item.EnrichAuthor(post.AuthorId, provider, cancellationToken);
+            items.Add(item);
         }
 
         return new PagedResult<PostSummaryModel>(items, request.PageIndex, request.PageSize, count);

@@ -2,26 +2,20 @@
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Chassis.CQRS.Pipelines;
 
-/// <summary>
-/// Pipeline behavior для валидации запросов с помощью FluentValidation
-/// </summary>
-public sealed class ValidationBehavior<TRequest, TResponse>(
+public class ValidationBehavior<TMessage, TResponse>(
     IActivityScope activityScope,
-    IEnumerable<IValidator<TRequest>> validators,
-    ILogger<ValidationBehavior<TRequest, TResponse>> logger
-) : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    IEnumerable<IValidator<TMessage>> validators,
+    ILogger<ValidationBehavior<TMessage, TResponse>> logger
+) : MessagePreProcessor<TMessage, TResponse>
+    where TMessage : IMessage
+    where TResponse : notnull
 {
-    public async Task<TResponse> Handle(
-        TRequest request,
-        RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken
-    )
+    protected override async ValueTask Handle(TMessage message, CancellationToken cancellationToken)
     {
         const string behavior = nameof(ValidationBehavior<,>);
 
@@ -30,26 +24,23 @@ public sealed class ValidationBehavior<TRequest, TResponse>(
             logger.LogInformation(
                 "[{Behavior}] handle request={RequestData} and response={ResponseData}",
                 behavior,
-                typeof(TRequest).Name,
+                message.GetType().Name,
                 typeof(TResponse).Name
             );
         }
 
-        // Если валидаторов нет, пропускаем валидацию
         if (!validators.Any())
         {
-            return await next();
+            return;
         }
 
-        var context = new ValidationContext<TRequest>(request);
+        var context = new ValidationContext<TMessage>(message);
 
-        // Запускаем все валидаторы параллельно
-        var validationResults = await Task.WhenAll(
+        var validationResult = await Task.WhenAll(
             validators.Select(v => v.ValidateAsync(context, cancellationToken))
         );
 
-        // Собираем все ошибки валидации
-        var errors = validationResults
+        var errors = validationResult
             .Where(result => !result.IsValid)
             .SelectMany(result => result.Errors)
             .Select(failure => new ValidationFailure(failure.PropertyName, failure.ErrorMessage))
@@ -60,18 +51,15 @@ public sealed class ValidationBehavior<TRequest, TResponse>(
             throw new ValidationException(errors);
         }
 
-        // Трейсинг валидации
-        var requestType = typeof(TRequest).Name;
+        var messageType = message.GetType().Name;
         var validatorNames = validators.Aggregate("", (c, x) => $"{x.GetType().Name}, {c}");
-        var activityName = $"{requestType}-{validatorNames.Trim().TrimEnd(',')}";
+        var activityName = $"{messageType}-{validatorNames.Trim().TrimEnd(',')}";
 
         await activityScope.Run(
             activityName,
             (_, _) => Task.CompletedTask,
-            new() { Tags = { { TelemetryTags.Validator.Validation, requestType } } },
+            new() { Tags = { { TelemetryTags.Validator.Validation, messageType } } },
             cancellationToken
         );
-
-        return await next();
     }
 }

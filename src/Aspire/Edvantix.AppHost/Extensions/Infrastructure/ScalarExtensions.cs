@@ -1,5 +1,4 @@
-﻿using Edvantix.Constants.Core;
-using Microsoft.AspNetCore.Authentication.OAuth;
+﻿using Microsoft.AspNetCore.Authentication.OAuth;
 using Scalar.Aspire;
 
 namespace Edvantix.AppHost.Extensions.Infrastructure;

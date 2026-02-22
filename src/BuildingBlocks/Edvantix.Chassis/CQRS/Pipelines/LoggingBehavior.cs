@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Chassis.CQRS.Pipelines;
@@ -8,11 +8,11 @@ namespace Edvantix.Chassis.CQRS.Pipelines;
 public sealed class LoggingBehavior<TMessage, TResponse>(
     ILogger<LoggingBehavior<TMessage, TResponse>> logger
 ) : IPipelineBehavior<TMessage, TResponse>
-    where TMessage : notnull
+    where TMessage : IMessage
 {
-    public async Task<TResponse> Handle(
+    public async ValueTask<TResponse> Handle(
         TMessage message,
-        RequestHandlerDelegate<TResponse> next,
+        MessageHandlerDelegate<TMessage, TResponse> next,
         CancellationToken cancellationToken
     )
     {
@@ -42,7 +42,7 @@ public sealed class LoggingBehavior<TMessage, TResponse>(
 
         var start = Stopwatch.GetTimestamp();
 
-        var response = await next(cancellationToken);
+        var response = await next(message, cancellationToken);
 
         var timeTaken = Stopwatch.GetElapsedTime(start);
 

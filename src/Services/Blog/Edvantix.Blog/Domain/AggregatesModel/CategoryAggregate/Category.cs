@@ -1,11 +1,9 @@
-using Edvantix.SharedKernel.SeedWork;
-
 namespace Edvantix.Blog.Domain.AggregatesModel.CategoryAggregate;
 
 /// <summary>
 /// Категория постов блога. Создаётся и управляется администраторами платформы.
 /// </summary>
-public sealed class Category() : LongIdentity, IAggregateRoot
+public sealed class Category() : Entity, IAggregateRoot
 {
     /// <summary>
     /// Создаёт новую категорию блога.
@@ -45,8 +43,8 @@ public sealed class Category() : LongIdentity, IAggregateRoot
     /// <param name="description">Новое описание.</param>
     public void Update(string name, string slug, string? description)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
-        ArgumentException.ThrowIfNullOrWhiteSpace(slug, nameof(slug));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
         Name = name;
         Slug = slug;

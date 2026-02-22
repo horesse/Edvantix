@@ -1,10 +1,3 @@
-using Edvantix.AppHost.Extensions.Infrastructure;
-using Edvantix.AppHost.Extensions.Network;
-using Edvantix.AppHost.Extensions.Security;
-using Edvantix.Constants.Aspire;
-using Edvantix.Constants.Core;
-using Projects;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 builder.AddAzureContainerAppEnvironment(Components.Azure.ContainerApp).ProvisionAsService();
@@ -48,13 +41,13 @@ var storage = builder
     .ProvisionAsService();
 
 var profileContainer = storage.AddBlobContainer(
-    Components.Azure.Storage.BlobContainer(Services.Profile)
+    Components.Azure.Storage.BlobContainer(Services.Persona)
 );
 
 var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
-var organizationDb = postgres.AddDatabase(Components.Database.Organization);
+var organizationDb = postgres.AddDatabase(Components.Database.Organizational);
 var systemDb = postgres.AddDatabase(Components.Database.System);
-var profileDb = postgres.AddDatabase(Components.Database.Profile);
+var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var subscriptionDb = postgres.AddDatabase(Components.Database.Subscription);
 var blogDb = postgres.AddDatabase(Components.Database.Blog);
 
@@ -62,31 +55,8 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
-var entityHubApi = builder
-    .AddProject<Edvantix_EntityHub>(Services.EntityHub)
-    .WithReference(entityHubDb)
-    .WaitFor(entityHubDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
-
-builder
-    .AddProject<Edvantix_EntityHub_Worker>(Services.EntityHubWorker)
-    .WaitFor(entityHubApi)
-    .WithReference(entityHubDb)
-    .WithContainerRegistry(registry)
-    .WaitFor(entityHubDb);
-
-var systemApi = builder
-    .AddProject<Edvantix_System>(Services.System)
-    .WithReference(systemDb)
-    .WaitFor(systemDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
-
 var profileApi = builder
-    .AddProject<Edvantix_ProfileService>(Services.Profile)
+    .AddProject<Edvantix_Persona>(Services.Persona)
     .WithReference(profileDb)
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)
@@ -95,8 +65,8 @@ var profileApi = builder
     .WaitFor(profileContainer)
     .WithFriendlyUrls();
 
-var organizationApi = builder
-    .AddProject<Edvantix_Company>(Services.Company)
+var organizationalApi = builder
+    .AddProject<Edvantix_Organizational>(Services.Organizational)
     .WithReference(organizationDb)
     .WaitFor(organizationDb)
     .WithKeycloak(keycloak)
@@ -127,9 +97,7 @@ var blogApi = builder
 
 var gateway = builder
     .AddApiGatewayProxy()
-    .WithService(entityHubApi)
-    .WithService(organizationApi, true)
-    .WithService(systemApi, true)
+    .WithService(organizationalApi, true)
     .WithService(profileApi, true)
     .WithService(subscriptionsApi, true)
     .WithService(blogApi, true)
@@ -175,9 +143,7 @@ if (builder.ExecutionContext.IsRunMode)
 {
     builder
         .AddScalar(keycloak)
-        .WithOpenAPI(entityHubApi)
-        .WithOpenAPI(organizationApi)
-        .WithOpenAPI(systemApi)
+        .WithOpenAPI(organizationalApi)
         .WithOpenAPI(profileApi)
         .WithOpenAPI(subscriptionsApi)
         .WithOpenAPI(blogApi);

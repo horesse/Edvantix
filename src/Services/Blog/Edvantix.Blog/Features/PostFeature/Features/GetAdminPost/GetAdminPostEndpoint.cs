@@ -1,8 +1,4 @@
 using Edvantix.Blog.Features.PostFeature.Models;
-using Edvantix.Chassis.Endpoints;
-using Edvantix.Constants.Core;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPost;
 
@@ -16,7 +12,7 @@ public sealed class GetAdminPostEndpoint : IEndpoint<Ok<PostModel>, GetAdminPost
     {
         app.MapGet(
                 "/admin/posts/{postId:long}",
-                async (long postId, ISender sender, CancellationToken ct) =>
+                async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetAdminPostQuery(postId), sender, ct)
             )
             .WithName("GetAdminPost")

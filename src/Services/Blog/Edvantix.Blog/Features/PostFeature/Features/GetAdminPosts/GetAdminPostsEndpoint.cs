@@ -1,10 +1,5 @@
 using Edvantix.Blog.Features.PostFeature.Models;
-using Edvantix.Chassis.Endpoints;
-using Edvantix.Constants.Core;
 using Edvantix.SharedKernel.Results;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 

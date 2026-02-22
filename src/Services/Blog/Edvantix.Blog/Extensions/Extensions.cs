@@ -1,22 +1,13 @@
 using System.Text.Json;
 using Edvantix.Blog.Features;
 using Edvantix.Blog.Grpc;
-using Edvantix.Blog.Infrastructure;
-using Edvantix.Chassis.Converter;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
-using Edvantix.Chassis.Endpoints;
-using Edvantix.Chassis.Exceptions;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
-using Edvantix.Constants.Core;
-using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
-using Edvantix.ServiceDefaults.Kestrel;
-using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using AspireServices = Edvantix.Constants.Aspire.Services;
 
@@ -70,16 +61,14 @@ public static class Extensions
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
-        services.AddApiFeature();
-
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(IBlogApiMarker).Assembly);
-
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>));
-        });
+        services
+            .AddMediator(
+                (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
+            )
+            // Open-generic behaviors run first (activity tracing → logging → validation)
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         var appSettings = new AppSettings();
         builder.Configuration.Bind(appSettings);
@@ -108,7 +97,7 @@ public static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(IBlogApiMarker));
 
-        services.AddConverter(typeof(IBlogApiMarker));
+        services.AddMapper(typeof(IBlogApiMarker));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
 

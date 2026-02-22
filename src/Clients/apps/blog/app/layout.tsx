@@ -66,7 +66,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased bg-background text-foreground">
+      <body className="bg-background text-foreground font-sans antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

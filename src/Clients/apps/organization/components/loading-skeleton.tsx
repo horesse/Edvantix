@@ -222,14 +222,21 @@ export function FilterTableSkeleton({
   return (
     <div className="space-y-4">
       <div className="bg-muted/50 overflow-hidden rounded-xl border shadow-sm">
-        <div className="p-4 space-y-3">
-          <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+        <div className="space-y-3 p-4">
+          <div
+            className="grid gap-4"
+            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          >
             {keys(columns, "header-col").map((key) => (
               <Skeleton key={key} className="h-4 w-full" />
             ))}
           </div>
           {keys(rows, "filter-row").map((rowKey) => (
-            <div key={rowKey} className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+            <div
+              key={rowKey}
+              className="grid gap-4"
+              style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+            >
               {keys(columns, `${rowKey}-col`).map((colKey) => (
                 <Skeleton key={colKey} className="h-8 w-full" />
               ))}

@@ -5,6 +5,11 @@ import { useState } from "react";
 import { Edit, Hash, Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import useCreateCategory from "@workspace/api-hooks/blog/useCreateCategory";
+import useDeleteCategory from "@workspace/api-hooks/blog/useDeleteCategory";
+import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
+import useUpdateCategory from "@workspace/api-hooks/blog/useUpdateCategory";
+import type { CategoryModel } from "@workspace/types/blog";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
@@ -27,11 +32,6 @@ import {
   TableRow,
 } from "@workspace/ui/components/table";
 import { Textarea } from "@workspace/ui/components/textarea";
-import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
-import useCreateCategory from "@workspace/api-hooks/blog/useCreateCategory";
-import useUpdateCategory from "@workspace/api-hooks/blog/useUpdateCategory";
-import useDeleteCategory from "@workspace/api-hooks/blog/useDeleteCategory";
-import type { CategoryModel } from "@workspace/types/blog";
 
 import { slugify } from "@/lib/utils";
 
@@ -68,13 +68,21 @@ export default function AdminCategoriesPage() {
   };
 
   const openEdit = (cat: CategoryModel) => {
-    setForm({ name: cat.name, slug: cat.slug, description: cat.description ?? "" });
+    setForm({
+      name: cat.name,
+      slug: cat.slug,
+      description: cat.description ?? "",
+    });
     setEditTarget(cat);
   };
 
   const handleCreate = () => {
     createCategory(
-      { name: form.name, slug: form.slug, description: form.description || undefined },
+      {
+        name: form.name,
+        slug: form.slug,
+        description: form.description || undefined,
+      },
       {
         onSuccess: () => {
           toast.success("Category created");
@@ -91,7 +99,11 @@ export default function AdminCategoriesPage() {
     updateCategory(
       {
         id: editTarget.id,
-        request: { name: form.name, slug: form.slug, description: form.description || undefined },
+        request: {
+          name: form.name,
+          slug: form.slug,
+          description: form.description || undefined,
+        },
       },
       {
         onSuccess: () => {
@@ -117,13 +129,13 @@ export default function AdminCategoriesPage() {
   return (
     <div>
       {/* ── Page header ── */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Categories</h1>
           <p className="text-muted-foreground mt-1 text-sm">
             Organize posts into categories.
             {!isLoading && (
-              <span className="ml-2 text-xs bg-muted rounded-full px-2 py-0.5 font-mono">
+              <span className="bg-muted ml-2 rounded-full px-2 py-0.5 font-mono text-xs">
                 {categories.length}
               </span>
             )}
@@ -141,13 +153,19 @@ export default function AdminCategoriesPage() {
             <DialogHeader>
               <DialogTitle>New Category</DialogTitle>
             </DialogHeader>
-            <CategoryForm form={form} onNameChange={handleNameChange} onChange={setForm} />
+            <CategoryForm
+              form={form}
+              onNameChange={handleNameChange}
+              onChange={setForm}
+            />
             <DialogFooter>
               <Button
                 onClick={handleCreate}
                 disabled={isCreating || !form.name || !form.slug}
               >
-                {isCreating && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                {isCreating && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Create
               </Button>
             </DialogFooter>
@@ -163,28 +181,29 @@ export default function AdminCategoriesPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-border overflow-hidden">
+        <div className="border-border overflow-hidden rounded-xl border">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40">
                 <TableHead className="font-semibold">Name</TableHead>
-                <TableHead className="hidden sm:table-cell font-semibold">Slug</TableHead>
-                <TableHead className="hidden md:table-cell font-semibold">Description</TableHead>
+                <TableHead className="hidden font-semibold sm:table-cell">
+                  Slug
+                </TableHead>
+                <TableHead className="hidden font-semibold md:table-cell">
+                  Description
+                </TableHead>
                 <TableHead className="w-24" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {categories.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="py-16 text-center"
-                  >
+                  <TableCell colSpan={4} className="py-16 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                        <Hash className="h-5 w-5 text-muted-foreground" />
+                      <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-full">
+                        <Hash className="text-muted-foreground h-5 w-5" />
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         No categories yet. Create one to get started.
                       </p>
                     </div>
@@ -192,25 +211,30 @@ export default function AdminCategoriesPage() {
                 </TableRow>
               ) : (
                 categories.map((cat) => (
-                  <TableRow key={cat.id} className="hover:bg-muted/30 transition-colors">
+                  <TableRow
+                    key={cat.id}
+                    className="hover:bg-muted/30 transition-colors"
+                  >
                     <TableCell>
                       <div className="flex items-center gap-2.5">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                          <Hash className="h-3.5 w-3.5 text-primary" />
+                        <div className="bg-primary/10 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg">
+                          <Hash className="text-primary h-3.5 w-3.5" />
                         </div>
                         <span className="font-medium">{cat.name}</span>
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+                      <code className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 font-mono text-xs">
                         /{cat.slug}
                       </code>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                      <span className="line-clamp-1">{cat.description ?? "—"}</span>
+                    <TableCell className="text-muted-foreground hidden text-sm md:table-cell">
+                      <span className="line-clamp-1">
+                        {cat.description ?? "—"}
+                      </span>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1 justify-end">
+                      <div className="flex items-center justify-end gap-1">
                         <Dialog
                           open={editTarget?.id === cat.id}
                           onOpenChange={(open) => !open && setEditTarget(null)}
@@ -237,10 +261,12 @@ export default function AdminCategoriesPage() {
                             <DialogFooter>
                               <Button
                                 onClick={handleUpdate}
-                                disabled={isUpdating || !form.name || !form.slug}
+                                disabled={
+                                  isUpdating || !form.name || !form.slug
+                                }
                               >
                                 {isUpdating && (
-                                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 )}
                                 Save changes
                               </Button>
@@ -251,7 +277,7 @@ export default function AdminCategoriesPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 rounded-lg text-destructive/60 hover:text-destructive hover:bg-destructive/10"
+                          className="text-destructive/60 hover:text-destructive hover:bg-destructive/10 h-8 w-8 rounded-lg"
                           onClick={() => setDeleteTarget(cat)}
                           disabled={isDeleting}
                         >
@@ -276,9 +302,8 @@ export default function AdminCategoriesPage() {
           <DialogHeader>
             <DialogTitle>Delete category</DialogTitle>
             <DialogDescription>
-              Delete{" "}
-              <span className="font-medium">"{deleteTarget?.name}"</span>? This
-              cannot be undone.
+              Delete <span className="font-medium">"{deleteTarget?.name}"</span>
+              ? This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -324,7 +349,7 @@ function CategoryForm({
       <div className="space-y-1.5">
         <Label htmlFor="cat-slug">Slug *</Label>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">/</span>
+          <span className="text-muted-foreground text-sm">/</span>
           <Input
             id="cat-slug"
             placeholder="engineering"

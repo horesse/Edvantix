@@ -77,7 +77,7 @@ export function OrgSettingsPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="bg-muted/50 lg:col-span-2 overflow-hidden rounded-xl border-0 shadow-sm">
+        <div className="bg-muted/50 overflow-hidden rounded-xl border-0 shadow-sm lg:col-span-2">
           <div className="space-y-6 p-6">
             <div className="space-y-1">
               <h2 className="text-lg font-semibold">Основная информация</h2>
@@ -125,7 +125,15 @@ function OrganizationForm({
       printName: org.printName ?? "",
       description: org.description ?? "",
     });
-  }, [org.id, org.name, org.nameLatin, org.shortName, org.printName, org.description, form]);
+  }, [
+    org.id,
+    org.name,
+    org.nameLatin,
+    org.shortName,
+    org.printName,
+    org.description,
+    form,
+  ]);
 
   const mutation = useUpdateOrganization({
     onSuccess: () => toast.success("Организация обновлена"),

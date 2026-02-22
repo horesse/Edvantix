@@ -49,8 +49,8 @@ import {
 } from "@workspace/ui/components/select";
 
 import { FilterTable } from "@/components/filter-table";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
+import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { organizationRoleLabels } from "@/lib/company-options";
 
 export function MembersPage() {
@@ -61,8 +61,13 @@ export function MembersPage() {
   const [removeMember, setRemoveMember] =
     useState<OrganizationMemberModel | null>(null);
 
-  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
-    usePaginatedTable();
+  const {
+    pageIndex,
+    pageSize,
+    sortingQuery,
+    handlePaginationChange,
+    handleSortingChange,
+  } = usePaginatedTable();
 
   const orgId = currentOrg?.id ?? 0;
   const { data, isLoading } = useOrganizationMembers(orgId, {

@@ -8,7 +8,7 @@ export default function useLikePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ postId, liked }: { postId: number; liked: boolean }) =>
+    mutationFn: ({ postId, liked }: { postId: string; liked: boolean }) =>
       liked ? blogApiClient.unlikePost(postId) : blogApiClient.likePost(postId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: blogKeys.all });

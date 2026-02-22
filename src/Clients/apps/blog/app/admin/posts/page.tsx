@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+
+import Link from "next/link";
 
 import { format } from "date-fns";
 import {
@@ -16,6 +17,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import useDeletePost from "@workspace/api-hooks/blog/useDeletePost";
+import useGetAdminPosts from "@workspace/api-hooks/blog/useGetAdminPosts";
+import usePublishPost from "@workspace/api-hooks/blog/usePublishPost";
+import { PostStatus, PostType } from "@workspace/types/blog";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -51,10 +56,6 @@ import {
   TableHeader,
   TableRow,
 } from "@workspace/ui/components/table";
-import useGetAdminPosts from "@workspace/api-hooks/blog/useGetAdminPosts";
-import usePublishPost from "@workspace/api-hooks/blog/usePublishPost";
-import useDeletePost from "@workspace/api-hooks/blog/useDeletePost";
-import { PostStatus, PostType } from "@workspace/types/blog";
 
 const TYPE_LABELS: Record<PostType, string> = {
   [PostType.News]: "News",
@@ -92,10 +93,10 @@ export default function AdminPostsPage() {
   );
   // Состояние диалога планирования: id поста и выбранная дата/время
   const [scheduleDialog, setScheduleDialog] = useState<{
-    postId: number;
+    postId: string;
     scheduledAt: string;
   } | null>(null);
-  const [archivePostId, setArchivePostId] = useState<number | null>(null);
+  const [archivePostId, setArchivePostId] = useState<string | null>(null);
 
   const { data, isLoading } = useGetAdminPosts({
     pageIndex: page,
@@ -105,7 +106,7 @@ export default function AdminPostsPage() {
   const { mutate: publish, isPending: isPublishing } = usePublishPost();
   const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
 
-  const handlePublish = (postId: number) => {
+  const handlePublish = (postId: string) => {
     publish(
       { postId },
       {
@@ -121,7 +122,9 @@ export default function AdminPostsPage() {
     publish(
       {
         postId: scheduleDialog.postId,
-        request: { scheduledAt: new Date(scheduleDialog.scheduledAt).toISOString() },
+        request: {
+          scheduledAt: new Date(scheduleDialog.scheduledAt).toISOString(),
+        },
       },
       {
         onSuccess: () => {
@@ -146,12 +149,14 @@ export default function AdminPostsPage() {
 
   const handleStatusFilter = (value: string) => {
     setPage(1);
-    setStatusFilter(value === "all" ? undefined : (Number(value) as PostStatus));
+    setStatusFilter(
+      value === "all" ? undefined : (Number(value) as PostStatus),
+    );
   };
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Posts</h1>
           <p className="text-muted-foreground mt-1">Manage all blog posts.</p>
@@ -164,7 +169,7 @@ export default function AdminPostsPage() {
         </Button>
       </div>
 
-      <div className="flex gap-3 mb-4">
+      <div className="mb-4 flex gap-3">
         <Select defaultValue="all" onValueChange={handleStatusFilter}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="All statuses" />
@@ -172,9 +177,15 @@ export default function AdminPostsPage() {
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
             <SelectItem value={String(PostStatus.Draft)}>Draft</SelectItem>
-            <SelectItem value={String(PostStatus.Scheduled)}>Scheduled</SelectItem>
-            <SelectItem value={String(PostStatus.Published)}>Published</SelectItem>
-            <SelectItem value={String(PostStatus.Archived)}>Archived</SelectItem>
+            <SelectItem value={String(PostStatus.Scheduled)}>
+              Scheduled
+            </SelectItem>
+            <SelectItem value={String(PostStatus.Published)}>
+              Published
+            </SelectItem>
+            <SelectItem value={String(PostStatus.Archived)}>
+              Archived
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -187,16 +198,14 @@ export default function AdminPostsPage() {
         </div>
       ) : (
         <>
-          <div className="rounded-xl border border-border overflow-hidden">
+          <div className="border-border overflow-hidden rounded-xl border">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
                   <TableHead className="hidden sm:table-cell">Status</TableHead>
                   <TableHead className="hidden sm:table-cell">Type</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Date
-                  </TableHead>
+                  <TableHead className="hidden md:table-cell">Date</TableHead>
                   <TableHead className="hidden lg:table-cell">Likes</TableHead>
                   <TableHead className="w-12" />
                 </TableRow>
@@ -206,10 +215,10 @@ export default function AdminPostsPage() {
                   <TableRow key={post.id}>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-medium line-clamp-1">
+                        <span className="line-clamp-1 font-medium">
                           {post.title}
                         </span>
-                        <span className="text-xs text-muted-foreground font-mono">
+                        <span className="text-muted-foreground font-mono text-xs">
                           /{post.slug}
                         </span>
                       </div>
@@ -227,11 +236,15 @@ export default function AdminPostsPage() {
                         {TYPE_LABELS[post.type]}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                      {post.status === PostStatus.Scheduled && post.scheduledAt ? (
+                    <TableCell className="text-muted-foreground hidden text-sm md:table-cell">
+                      {post.status === PostStatus.Scheduled &&
+                      post.scheduledAt ? (
                         <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
                           <Calendar className="h-3 w-3" />
-                          {format(new Date(post.scheduledAt), "MMM d, yyyy HH:mm")}
+                          {format(
+                            new Date(post.scheduledAt),
+                            "MMM d, yyyy HH:mm",
+                          )}
                         </span>
                       ) : post.publishedAt ? (
                         format(new Date(post.publishedAt), "MMM d, yyyy")
@@ -239,7 +252,7 @@ export default function AdminPostsPage() {
                         "—"
                       )}
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">
+                    <TableCell className="text-muted-foreground hidden text-sm lg:table-cell">
                       {post.likesCount}
                     </TableCell>
                     <TableCell>
@@ -306,10 +319,9 @@ export default function AdminPostsPage() {
                           <DropdownMenuItem
                             onClick={() => setArchivePostId(post.id)}
                             disabled={
-                              isDeleting ||
-                              post.status === PostStatus.Archived
+                              isDeleting || post.status === PostStatus.Archived
                             }
-                            className="flex items-center gap-2 text-destructive focus:text-destructive"
+                            className="text-destructive focus:text-destructive flex items-center gap-2"
                           >
                             <Archive className="h-4 w-4" />
                             Archive
@@ -325,7 +337,7 @@ export default function AdminPostsPage() {
 
           {/* Pagination */}
           {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
+            <div className="text-muted-foreground mt-4 flex items-center justify-between text-sm">
               <span>{data.totalItems} total posts</span>
               <div className="flex gap-2">
                 <Button
@@ -400,15 +412,15 @@ export default function AdminPostsPage() {
               value={scheduleDialog?.scheduledAt ?? ""}
               onChange={(e) =>
                 scheduleDialog &&
-                setScheduleDialog({ ...scheduleDialog, scheduledAt: e.target.value })
+                setScheduleDialog({
+                  ...scheduleDialog,
+                  scheduledAt: e.target.value,
+                })
               }
             />
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setScheduleDialog(null)}
-            >
+            <Button variant="outline" onClick={() => setScheduleDialog(null)}>
               Cancel
             </Button>
             <Button

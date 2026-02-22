@@ -157,9 +157,7 @@ export function FilterTable<TData>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     className={
-                      isHighlighted
-                        ? "bg-green-50 dark:bg-green-950/20"
-                        : ""
+                      isHighlighted ? "bg-green-50 dark:bg-green-950/20" : ""
                     }
                   >
                     {row.getVisibleCells().map((cell) => (

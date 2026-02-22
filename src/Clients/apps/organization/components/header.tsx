@@ -4,7 +4,13 @@ import * as React from "react";
 
 import Link from "next/link";
 
-import { Bell, LogOut, Search, Settings as SettingsIcon, User } from "lucide-react";
+import {
+  Bell,
+  LogOut,
+  Search,
+  Settings as SettingsIcon,
+  User,
+} from "lucide-react";
 
 import useOwnProfile from "@workspace/api-hooks/profiles/useOwnProfile";
 import {
@@ -65,17 +71,14 @@ export function Header() {
           {notificationsCount > 0 && (
             <Badge
               variant="destructive"
-              className="absolute -right-1 -top-1 size-4 flex items-center justify-center rounded-full p-0 text-[9px]"
+              className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full p-0 text-[9px]"
             >
               {notificationsCount}
             </Badge>
           )}
         </Button>
         <ThemeToggle />
-        <Separator
-          orientation="vertical"
-          className="mx-1 h-4"
-        />
+        <Separator orientation="vertical" className="mx-1 h-4" />
         {isLoading ? (
           <Skeleton className="size-8 rounded-full" />
         ) : (
@@ -92,9 +95,7 @@ export function Header() {
                       alt={profile.name}
                       itemProp="image"
                     />
-                    <AvatarFallback>
-                      {getInitials(profile.name)}
-                    </AvatarFallback>
+                    <AvatarFallback>{getInitials(profile.name)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>

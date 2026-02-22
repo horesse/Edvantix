@@ -4,8 +4,8 @@ import { useMemo, useState } from "react";
 
 import Link from "next/link";
 
-import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Loader2, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -55,16 +55,21 @@ import {
 } from "@workspace/validations/company";
 
 import { FilterTable } from "@/components/filter-table";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
+import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 
 export function GroupsPage() {
   const { currentOrg, canManage } = useOrganization();
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteGroup, setDeleteGroup] = useState<GroupModel | null>(null);
 
-  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
-    usePaginatedTable();
+  const {
+    pageIndex,
+    pageSize,
+    sortingQuery,
+    handlePaginationChange,
+    handleSortingChange,
+  } = usePaginatedTable();
 
   const orgId = currentOrg?.id ?? 0;
   const { data, isLoading } = useOrganizationGroups(orgId, {

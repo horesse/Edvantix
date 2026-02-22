@@ -4,8 +4,8 @@ import { useMemo, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowLeft,
   Loader2,
@@ -78,8 +78,8 @@ import {
 } from "@workspace/validations/company";
 
 import { FilterTable } from "@/components/filter-table";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
+import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { groupRoleLabels } from "@/lib/company-options";
 
 type GroupDetailPageProps = {
@@ -91,8 +91,13 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
   const { currentOrg, canManage } = useOrganization();
   const { data: group, isLoading: groupLoading } = useGroup(groupId);
 
-  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
-    usePaginatedTable();
+  const {
+    pageIndex,
+    pageSize,
+    sortingQuery,
+    handlePaginationChange,
+    handleSortingChange,
+  } = usePaginatedTable();
 
   const { data: membersData, isLoading: membersLoading } = useGroupMembers(
     groupId,

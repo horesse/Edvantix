@@ -38,7 +38,7 @@ export function OrganizationSelector() {
         variant="outline"
         className="h-auto w-full justify-start gap-3 px-3 py-2"
       >
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
           <GraduationCap className="size-4" />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">
@@ -55,7 +55,7 @@ export function OrganizationSelector() {
         className="h-auto w-full justify-start gap-3 px-3 py-2"
         onClick={handleCreate}
       >
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
           <Plus className="size-4" />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">
@@ -73,9 +73,9 @@ export function OrganizationSelector() {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="h-auto w-full justify-start gap-3 px-3 py-2 data-[state=open]:bg-accent"
+          className="data-[state=open]:bg-accent h-auto w-full justify-start gap-3 px-3 py-2"
         >
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+          <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg text-xs font-bold">
             {currentOrg.shortName.charAt(0).toUpperCase()}
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">

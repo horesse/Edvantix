@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
 import { ScrollArea, ScrollBar } from "@workspace/ui/components/scroll-area";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
 
 /** Horizontal scrollable category tab bar for filtering posts on the home page. */
 export function CategoryTabs() {
@@ -32,14 +32,14 @@ export function CategoryTabs() {
           className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
             !activeCategoryId
               ? "bg-primary text-primary-foreground shadow-sm"
-              : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-card"
+              : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-card border"
           }`}
         >
           All Posts
         </Link>
 
         {categories?.map((cat) => {
-          const isActive = activeCategoryId === String(cat.id);
+          const isActive = activeCategoryId === cat.id;
           return (
             <Link
               key={cat.id}
@@ -47,7 +47,7 @@ export function CategoryTabs() {
               className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
+                  : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/40 border"
               }`}
             >
               {cat.name}

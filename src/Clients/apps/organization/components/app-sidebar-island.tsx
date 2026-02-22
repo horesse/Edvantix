@@ -5,12 +5,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import {
-  Building,
-  ChevronLeft,
-  ChevronRight,
-  Settings,
-} from "lucide-react";
+import { Building, ChevronLeft, ChevronRight, Settings } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
 import { Island } from "@workspace/ui/components/island";
@@ -25,7 +20,6 @@ import { cn } from "@workspace/ui/lib/utils";
 
 import { OrganizationSelector } from "./organization-selector";
 import { useSidebarContext } from "./sidebar-context";
-
 
 export function AppSidebarIsland() {
   const pathname = usePathname();
@@ -43,7 +37,7 @@ export function AppSidebarIsland() {
       <div className="flex items-center justify-between">
         {!isCollapsed && (
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
               <Building className="size-4" />
             </div>
             <span className="text-lg font-bold">Edvantix</span>

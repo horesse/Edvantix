@@ -1,19 +1,20 @@
 "use client";
 
 import { Suspense } from "react";
+import { useEffect, useState } from "react";
+
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
 
 import { Search, Sparkles } from "lucide-react";
 
-import { Input } from "@workspace/ui/components/input";
-import { Skeleton } from "@workspace/ui/components/skeleton";
 import useGetPosts from "@workspace/api-hooks/blog/useGetPosts";
 import { PostType } from "@workspace/types/blog";
 import type { GetPostsQuery } from "@workspace/types/blog";
+import { Input } from "@workspace/ui/components/input";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 
-import { PostCard } from "@/components/post-card";
 import { CategoryTabs } from "@/components/category-tabs";
+import { PostCard } from "@/components/post-card";
 import { TagFilterPopover } from "@/components/tag-filter-popover";
 
 const SEARCH_DEBOUNCE_MS = 400;
@@ -26,17 +27,16 @@ function PostList() {
 
   // Debounce the search input to avoid a request per keystroke
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), SEARCH_DEBOUNCE_MS);
+    const timer = setTimeout(
+      () => setDebouncedSearch(search),
+      SEARCH_DEBOUNCE_MS,
+    );
     return () => clearTimeout(timer);
   }, [search]);
 
   const query: GetPostsQuery = {
-    categoryId: searchParams.get("category")
-      ? Number(searchParams.get("category"))
-      : undefined,
-    tagId: searchParams.get("tag")
-      ? Number(searchParams.get("tag"))
-      : undefined,
+    categoryId: searchParams.get("category") ?? undefined,
+    tagId: searchParams.get("tag") ?? undefined,
     type: searchParams.get("type")
       ? (Number(searchParams.get("type")) as PostType)
       : undefined,
@@ -50,8 +50,10 @@ function PostList() {
 
   if (isError) {
     return (
-      <div className="text-center py-20">
-        <p className="text-muted-foreground">Failed to load posts. Please try again.</p>
+      <div className="py-20 text-center">
+        <p className="text-muted-foreground">
+          Failed to load posts. Please try again.
+        </p>
       </div>
     );
   }
@@ -60,7 +62,7 @@ function PostList() {
     return (
       <div className="space-y-8">
         <Skeleton className="h-80 w-full rounded-2xl" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <Skeleton key={i} className="h-72 w-full rounded-2xl" />
           ))}
@@ -75,12 +77,12 @@ function PostList() {
   return (
     <div className="space-y-8">
       {/* Search + Tags filter row */}
-      <div className="flex gap-3 items-center">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <div className="flex items-center gap-3">
+        <div className="relative max-w-sm flex-1">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search posts..."
-            className="pl-9 rounded-full bg-card"
+            className="bg-card rounded-full pl-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -91,10 +93,12 @@ function PostList() {
       </div>
 
       {posts.length === 0 ? (
-        <div className="text-center py-24">
-          <div className="text-5xl mb-4">🔍</div>
-          <p className="text-muted-foreground text-lg font-medium">No posts found.</p>
-          <p className="text-sm text-muted-foreground mt-1">
+        <div className="py-24 text-center">
+          <div className="mb-4 text-5xl">🔍</div>
+          <p className="text-muted-foreground text-lg font-medium">
+            No posts found.
+          </p>
+          <p className="text-muted-foreground mt-1 text-sm">
             Try adjusting your filters or search term.
           </p>
         </div>
@@ -108,24 +112,26 @@ function PostList() {
           )}
 
           {/* Post grid with staggered entrance animation */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-            {(featuredPost && !isFiltered ? restPosts : posts).map((post, index) => (
-              <div
-                key={post.id}
-                className="animate-in fade-in slide-in-from-bottom-4"
-                style={{
-                  animationDelay: `${index * 60}ms`,
-                  animationFillMode: "both",
-                  animationDuration: "400ms",
-                }}
-              >
-                <PostCard post={post} />
-              </div>
-            ))}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {(featuredPost && !isFiltered ? restPosts : posts).map(
+              (post, index) => (
+                <div
+                  key={post.id}
+                  className="animate-in fade-in slide-in-from-bottom-4"
+                  style={{
+                    animationDelay: `${index * 60}ms`,
+                    animationFillMode: "both",
+                    animationDuration: "400ms",
+                  }}
+                >
+                  <PostCard post={post} />
+                </div>
+              ),
+            )}
           </div>
 
           {data && data.totalPages > 1 && (
-            <p className="text-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-center text-sm">
               Showing {posts.length} of {data.totalItems} posts
             </p>
           )}
@@ -137,32 +143,30 @@ function PostList() {
 
 export default function BlogHomePage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       {/* ── Hero ── */}
-      <div className="mb-10 relative">
+      <div className="relative mb-10">
         {/* Decorative glow blobs */}
-        <div className="pointer-events-none absolute top-0 left-0 w-80 h-80 rounded-full bg-primary/10 blur-3xl opacity-60" />
-        <div className="pointer-events-none absolute top-4 right-0 w-64 h-64 rounded-full bg-chart-2/10 blur-3xl opacity-50" />
+        <div className="bg-primary/10 pointer-events-none absolute top-0 left-0 h-80 w-80 rounded-full opacity-60 blur-3xl" />
+        <div className="bg-chart-2/10 pointer-events-none absolute top-4 right-0 h-64 w-64 rounded-full opacity-50 blur-3xl" />
 
         <div className="relative">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-medium text-primary mb-5 animate-in fade-in duration-500">
+          <div className="bg-primary/10 border-primary/20 text-primary animate-in fade-in mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium duration-500">
             <Sparkles className="h-3 w-3" />
             Latest from our team
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-3 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75">
-            The{" "}
-            <span className="text-primary">Edvantix</span>{" "}
-            Blog
+          <h1 className="text-foreground animate-in fade-in slide-in-from-bottom-2 mb-3 text-4xl font-bold tracking-tight delay-75 duration-500 sm:text-5xl lg:text-6xl">
+            The <span className="text-primary">Edvantix</span> Blog
           </h1>
-          <p className="text-lg text-muted-foreground max-w-xl animate-in fade-in slide-in-from-bottom-2 duration-500 delay-150">
+          <p className="text-muted-foreground animate-in fade-in slide-in-from-bottom-2 max-w-xl text-lg delay-150 duration-500">
             News, updates, and insights from our team.
           </p>
         </div>
       </div>
 
       {/* ── Category tabs ── */}
-      <div className="mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200">
+      <div className="animate-in fade-in slide-in-from-bottom-2 mb-6 delay-200 duration-500">
         <Suspense
           fallback={
             <div className="flex gap-2">
@@ -181,7 +185,7 @@ export default function BlogHomePage() {
         fallback={
           <div className="space-y-8">
             <Skeleton className="h-80 w-full rounded-2xl" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
                 <Skeleton key={i} className="h-72 w-full rounded-2xl" />
               ))}

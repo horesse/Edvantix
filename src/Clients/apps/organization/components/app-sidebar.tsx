@@ -89,7 +89,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <div className="flex flex-col gap-4">
           <Link href="/" className="flex items-center gap-2 px-2">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
               <Building className="size-5" />
             </div>
             <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">

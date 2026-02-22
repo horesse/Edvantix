@@ -5,11 +5,11 @@ import { useSearchParams } from "next/navigation";
 
 import { Hash, Tag } from "lucide-react";
 
+import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
+import useGetTags from "@workspace/api-hooks/blog/useGetTags";
 import { Badge } from "@workspace/ui/components/badge";
 import { Separator } from "@workspace/ui/components/separator";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
-import useGetTags from "@workspace/api-hooks/blog/useGetTags";
 
 export function SidebarFilters() {
   const searchParams = useSearchParams();
@@ -23,8 +23,8 @@ export function SidebarFilters() {
     <aside className="space-y-6">
       {/* Categories */}
       <div>
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-          <Hash className="h-4 w-4 text-primary" />
+        <h3 className="text-foreground mb-3 flex items-center gap-2 text-sm font-semibold">
+          <Hash className="text-primary h-4 w-4" />
           Categories
         </h3>
         {categoriesLoading ? (
@@ -37,7 +37,7 @@ export function SidebarFilters() {
           <div className="space-y-1">
             <Link
               href="/"
-              className={`flex items-center justify-between w-full rounded-md px-3 py-1.5 text-sm transition-colors ${
+              className={`flex w-full items-center justify-between rounded-md px-3 py-1.5 text-sm transition-colors ${
                 !activeCategoryId
                   ? "bg-primary/10 text-primary font-medium"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -51,7 +51,7 @@ export function SidebarFilters() {
                 <Link
                   key={cat.id}
                   href={isActive ? "/" : `/?category=${cat.id}`}
-                  className={`flex items-center justify-between w-full rounded-md px-3 py-1.5 text-sm transition-colors ${
+                  className={`flex w-full items-center justify-between rounded-md px-3 py-1.5 text-sm transition-colors ${
                     isActive
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -69,8 +69,8 @@ export function SidebarFilters() {
 
       {/* Tags */}
       <div>
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-          <Tag className="h-4 w-4 text-primary" />
+        <h3 className="text-foreground mb-3 flex items-center gap-2 text-sm font-semibold">
+          <Tag className="text-primary h-4 w-4" />
           Tags
         </h3>
         {tagsLoading ? (
@@ -87,7 +87,7 @@ export function SidebarFilters() {
                 <Link key={tag.id} href={isActive ? "/" : `/?tag=${tag.id}`}>
                   <Badge
                     variant={isActive ? "default" : "outline"}
-                    className="cursor-pointer hover:bg-primary/10 transition-colors"
+                    className="hover:bg-primary/10 cursor-pointer transition-colors"
                   >
                     {tag.name}
                   </Badge>

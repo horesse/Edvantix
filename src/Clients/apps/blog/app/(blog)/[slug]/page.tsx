@@ -1,29 +1,23 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import {
-  ArrowLeft,
-  Calendar,
-  Clock,
-  Link2,
-  Lock,
-  Twitter,
-} from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Link2, Lock, Twitter } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import useGetPost from "@workspace/api-hooks/blog/useGetPost";
+import { PostType } from "@workspace/types/blog";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import useGetPost from "@workspace/api-hooks/blog/useGetPost";
-import { PostType } from "@workspace/types/blog";
 
 import { PostLikeButton } from "@/components/post-like-button";
-import { formatDate, estimateReadTime } from "@/lib/utils";
+import { estimateReadTime, formatDate } from "@/lib/utils";
 
 const TYPE_LABELS: Record<PostType, string> = {
   [PostType.News]: "News",
@@ -93,9 +87,9 @@ function ReadingProgressBar() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] h-0.5 pointer-events-none">
+    <div className="pointer-events-none fixed top-0 right-0 left-0 z-[60] h-0.5">
       <div
-        className="h-full bg-gradient-to-r from-primary to-chart-2"
+        className="from-primary to-chart-2 h-full bg-gradient-to-r"
         style={{ width: `${progress}%` }}
       />
     </div>
@@ -134,8 +128,8 @@ function TableOfContents({ headings }: { headings: Heading[] }) {
 
   return (
     <nav>
-      <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-        <span className="h-3 w-0.5 rounded-full bg-primary inline-block" />
+      <p className="text-muted-foreground mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider uppercase">
+        <span className="bg-primary inline-block h-3 w-0.5 rounded-full" />
         On this page
       </p>
       <ul className="space-y-0.5">
@@ -148,7 +142,7 @@ function TableOfContents({ headings }: { headings: Heading[] }) {
               } ${
                 activeId === h.id
                   ? "border-primary text-primary font-medium"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground border-transparent"
               }`}
               onClick={(e) => {
                 e.preventDefault();
@@ -189,7 +183,7 @@ function ShareSection() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground mr-1">
+      <span className="text-muted-foreground mr-1 text-xs font-medium tracking-wider uppercase">
         Share
       </span>
       <Button
@@ -205,13 +199,13 @@ function ShareSection() {
         href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-input bg-background text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        className="border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground inline-flex h-8 w-8 items-center justify-center rounded-full border transition-colors"
         title="Share on X"
       >
         <Twitter className="h-3.5 w-3.5" />
       </a>
       {copied && (
-        <span className="animate-in fade-in text-xs text-primary duration-200">
+        <span className="animate-in fade-in text-primary text-xs duration-200">
           Copied!
         </span>
       )}
@@ -225,7 +219,7 @@ function PostSkeleton() {
   return (
     <div className="space-y-6">
       <Skeleton className="h-5 w-28" />
-      <div className="rounded-2xl border border-border p-8 space-y-5">
+      <div className="border-border space-y-5 rounded-2xl border p-8">
         <div className="flex gap-2">
           <Skeleton className="h-6 w-20 rounded-full" />
         </div>
@@ -270,31 +264,31 @@ function PostContent({ slug }: { slug: string }) {
       {/* Back link */}
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 group"
+        className="text-muted-foreground hover:text-foreground group mb-8 inline-flex items-center gap-2 text-sm transition-colors"
       >
         <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
         Back to blog
       </Link>
 
       {/* ── Post header card ── */}
-      <header className="relative rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-primary/5 via-background to-chart-2/5 p-7 sm:p-10 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <header className="border-border from-primary/5 via-background to-chart-2/5 animate-in fade-in slide-in-from-bottom-4 relative mb-8 overflow-hidden rounded-2xl border bg-gradient-to-br p-7 duration-500 sm:p-10">
         {/* Decorative glow blobs */}
-        <div className="pointer-events-none absolute top-0 right-0 w-72 h-72 rounded-full bg-primary/10 blur-3xl opacity-50" />
-        <div className="pointer-events-none absolute bottom-0 left-0 w-52 h-52 rounded-full bg-chart-2/10 blur-3xl opacity-40" />
+        <div className="bg-primary/10 pointer-events-none absolute top-0 right-0 h-72 w-72 rounded-full opacity-50 blur-3xl" />
+        <div className="bg-chart-2/10 pointer-events-none absolute bottom-0 left-0 h-52 w-52 rounded-full opacity-40 blur-3xl" />
 
         <div className="relative">
           {/* Type badge + premium */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="mb-4 flex items-center gap-2">
             <Badge
               variant="outline"
-              className="text-xs font-semibold uppercase tracking-wide text-primary border-primary/30 bg-primary/5"
+              className="text-primary border-primary/30 bg-primary/5 text-xs font-semibold tracking-wide uppercase"
             >
               {TYPE_LABELS[post.type]}
             </Badge>
             {post.isPremium && (
               <Badge
                 variant="outline"
-                className="text-xs font-semibold text-amber-600 border-amber-500/30 bg-amber-500/5 dark:text-amber-400"
+                className="border-amber-500/30 bg-amber-500/5 text-xs font-semibold text-amber-600 dark:text-amber-400"
               >
                 <Lock className="mr-1 h-3 w-3" />
                 Premium
@@ -303,13 +297,13 @@ function PostContent({ slug }: { slug: string }) {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight tracking-tight text-foreground mb-4">
+          <h1 className="text-foreground mb-4 text-3xl leading-tight font-bold tracking-tight sm:text-4xl lg:text-[2.75rem]">
             {post.title}
           </h1>
 
           {/* Summary */}
           {post.summary && (
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-6 max-w-2xl">
+            <p className="text-muted-foreground mb-6 max-w-2xl text-base leading-relaxed sm:text-lg">
               {post.summary}
             </p>
           )}
@@ -317,22 +311,22 @@ function PostContent({ slug }: { slug: string }) {
           {/* Meta chips */}
           <div className="flex flex-wrap items-center gap-2.5">
             {post.author && (
-              <div className="flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[10px] font-bold text-primary">
+              <div className="bg-muted/50 flex items-center gap-2 rounded-full px-3 py-1.5">
+                <div className="bg-primary/20 text-primary flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold">
                   {post.author.fullName.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm font-medium text-foreground">
+                <span className="text-foreground text-sm font-medium">
                   {post.author.fullName}
                 </span>
               </div>
             )}
             {post.publishedAt && (
-              <div className="flex items-center gap-1.5 rounded-full bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground">
+              <div className="bg-muted/50 text-muted-foreground flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm">
                 <Calendar className="h-3.5 w-3.5" />
                 {formatDate(post.publishedAt)}
               </div>
             )}
-            <div className="flex items-center gap-1.5 rounded-full bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground">
+            <div className="bg-muted/50 text-muted-foreground flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm">
               <Clock className="h-3.5 w-3.5" />
               {readTime} min read
             </div>
@@ -340,12 +334,12 @@ function PostContent({ slug }: { slug: string }) {
 
           {/* Categories & Tags */}
           {(post.categories.length > 0 || post.tags.length > 0) && (
-            <div className="mt-5 flex flex-wrap gap-2 border-t border-border/60 pt-5">
+            <div className="border-border/60 mt-5 flex flex-wrap gap-2 border-t pt-5">
               {post.categories.map((cat) => (
                 <Link key={cat.id} href={`/category/${cat.slug}`}>
                   <Badge
                     variant="secondary"
-                    className="cursor-pointer transition-colors hover:bg-primary/10 hover:text-primary"
+                    className="hover:bg-primary/10 hover:text-primary cursor-pointer transition-colors"
                   >
                     {cat.name}
                   </Badge>
@@ -355,7 +349,7 @@ function PostContent({ slug }: { slug: string }) {
                 <Link key={tag.id} href={`/?tag=${tag.id}`}>
                   <Badge
                     variant="outline"
-                    className="cursor-pointer transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                    className="hover:border-primary/40 hover:bg-primary/5 hover:text-primary cursor-pointer transition-colors"
                   >
                     #{tag.name}
                   </Badge>
@@ -368,7 +362,7 @@ function PostContent({ slug }: { slug: string }) {
 
       {/* ── Cover image ── */}
       {post.coverImageUrl && (
-        <div className="animate-in fade-in relative mb-10 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg duration-700 delay-150">
+        <div className="animate-in fade-in relative mb-10 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg delay-150 duration-700">
           <Image
             src={post.coverImageUrl}
             alt={post.title}
@@ -382,9 +376,9 @@ function PostContent({ slug }: { slug: string }) {
       )}
 
       {/* ── Content + sticky ToC ── */}
-      <div className="animate-in fade-in duration-700 delay-200 lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
+      <div className="animate-in fade-in delay-200 duration-700 lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
         {/* Prose content */}
-        <div className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h3:text-xl prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:before:content-none prose-code:after:content-none prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.85em] prose-code:text-primary prose-pre:border prose-pre:border-border prose-pre:bg-muted prose-img:rounded-xl prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground">
+        <div className="prose prose-neutral dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h3:text-xl prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:before:content-none prose-code:after:content-none prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.85em] prose-code:text-primary prose-pre:border prose-pre:border-border prose-pre:bg-muted prose-img:rounded-xl prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={markdownComponents}
@@ -404,7 +398,7 @@ function PostContent({ slug }: { slug: string }) {
       </div>
 
       {/* ── Post footer ── */}
-      <div className="animate-in fade-in mt-14 space-y-6 border-t border-border pt-8 duration-500">
+      <div className="animate-in fade-in border-border mt-14 space-y-6 border-t pt-8 duration-500">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <PostLikeButton
             postId={post.id}
@@ -417,7 +411,7 @@ function PostContent({ slug }: { slug: string }) {
         <div>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground group"
+            className="text-muted-foreground hover:text-foreground group inline-flex items-center gap-2 text-sm transition-colors"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Back to blog
@@ -436,7 +430,7 @@ export default function PostPage({ params }: PostPageParams) {
   const { slug } = use(params);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
+    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <PostContent slug={slug} />
     </div>
   );

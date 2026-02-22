@@ -13,6 +13,11 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import useGetAdminPosts from "@workspace/api-hooks/blog/useGetAdminPosts";
+import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
+import useGetTags from "@workspace/api-hooks/blog/useGetTags";
+import { PostStatus } from "@workspace/types/blog";
+import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
   Card,
@@ -21,12 +26,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
-import { Badge } from "@workspace/ui/components/badge";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import useGetAdminPosts from "@workspace/api-hooks/blog/useGetAdminPosts";
-import useGetCategories from "@workspace/api-hooks/blog/useGetCategories";
-import useGetTags from "@workspace/api-hooks/blog/useGetTags";
-import { PostStatus } from "@workspace/types/blog";
+
 import { formatDate } from "@/lib/utils";
 
 /** Fetches a single page (size=1) of admin posts filtered by status to get totalItems efficiently. */
@@ -73,20 +74,21 @@ function StatusBar({
   total: number;
 }) {
   const cfg = STATUS_CONFIG[status];
-  const pct = total > 0 && count !== null ? Math.round((count / total) * 100) : 0;
+  const pct =
+    total > 0 && count !== null ? Math.round((count / total) * 100) : 0;
 
   return (
     <div className="flex items-center gap-3">
-      <span className={`text-xs font-medium w-20 shrink-0 ${cfg.text}`}>
+      <span className={`w-20 shrink-0 text-xs font-medium ${cfg.text}`}>
         {cfg.label}
       </span>
-      <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+      <div className="bg-muted h-2 flex-1 overflow-hidden rounded-full">
         <div
           className={`h-full rounded-full ${cfg.color} transition-all duration-700 ease-out`}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="text-xs font-mono text-muted-foreground w-8 text-right">
+      <span className="text-muted-foreground w-8 text-right font-mono text-xs">
         {count ?? "—"}
       </span>
     </div>
@@ -172,25 +174,27 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* ── Stats Grid ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {statCards.map((card) => {
           const Icon = card.icon;
           return (
             <Link key={card.label} href={card.href}>
               <Card
-                className={`relative overflow-hidden border-border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-br ${card.gradient}`}
+                className={`border-border relative overflow-hidden bg-gradient-to-br transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${card.gradient}`}
               >
-                <CardContent className="pt-5 pb-5 px-5">
-                  <div className="flex items-start justify-between mb-3">
+                <CardContent className="px-5 pt-5 pb-5">
+                  <div className="mb-3 flex items-start justify-between">
                     <div className={`rounded-xl p-2.5 ${card.iconBg}`}>
                       <Icon className={`h-5 w-5 ${card.iconColor}`} />
                     </div>
-                    <TrendingUp className="h-4 w-4 text-muted-foreground/40" />
+                    <TrendingUp className="text-muted-foreground/40 h-4 w-4" />
                   </div>
-                  <div className="text-3xl font-bold text-foreground mb-0.5">
+                  <div className="text-foreground mb-0.5 text-3xl font-bold">
                     {card.value}
                   </div>
-                  <div className="text-sm text-muted-foreground">{card.label}</div>
+                  <div className="text-muted-foreground text-sm">
+                    {card.label}
+                  </div>
                 </CardContent>
               </Card>
             </Link>
@@ -199,7 +203,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* ── Middle Row: Distribution + Recent Activity ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Post status distribution */}
         <Card>
           <CardHeader className="pb-3">
@@ -233,9 +237,9 @@ export default function AdminDashboardPage() {
 
             {/* Mini donut using conic-gradient */}
             {totalPosts > 0 && (
-              <div className="flex items-center gap-4 mt-2 pt-4 border-t border-border">
+              <div className="border-border mt-2 flex items-center gap-4 border-t pt-4">
                 <div
-                  className="w-14 h-14 rounded-full shrink-0"
+                  className="h-14 w-14 shrink-0 rounded-full"
                   style={{
                     background: `conic-gradient(
                       oklch(0.56 0.13 42.95) 0% ${Math.round(((publishedCount ?? 0) / totalPosts) * 100)}%,
@@ -245,21 +249,21 @@ export default function AdminDashboardPage() {
                     )`,
                   }}
                 />
-                <div className="space-y-1 text-xs text-muted-foreground">
+                <div className="text-muted-foreground space-y-1 text-xs">
                   <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-primary inline-block" />
+                    <span className="bg-primary inline-block h-2 w-2 rounded-full" />
                     Published ({publishedCount ?? 0})
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-amber-400 inline-block" />
+                    <span className="inline-block h-2 w-2 rounded-full bg-amber-400" />
                     Scheduled ({scheduledCount ?? 0})
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-muted-foreground inline-block" />
+                    <span className="bg-muted-foreground inline-block h-2 w-2 rounded-full" />
                     Draft ({draftCount ?? 0})
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-destructive inline-block" />
+                    <span className="bg-destructive inline-block h-2 w-2 rounded-full" />
                     Archived ({archivedCount ?? 0})
                   </div>
                 </div>
@@ -290,30 +294,30 @@ export default function AdminDashboardPage() {
                   <Link
                     key={post.id}
                     href={`/admin/posts/${post.id}/edit`}
-                    className="flex items-start gap-3 rounded-lg p-2.5 hover:bg-accent transition-colors group"
+                    className="hover:bg-accent group flex items-start gap-3 rounded-lg p-2.5 transition-colors"
                   >
-                    <div className="shrink-0 mt-0.5">
+                    <div className="mt-0.5 shrink-0">
                       {post.status === PostStatus.Published ? (
-                        <div className="h-2 w-2 rounded-full bg-green-500 mt-1.5" />
+                        <div className="mt-1.5 h-2 w-2 rounded-full bg-green-500" />
                       ) : post.status === PostStatus.Scheduled ? (
-                        <div className="h-2 w-2 rounded-full bg-amber-500 mt-1.5" />
+                        <div className="mt-1.5 h-2 w-2 rounded-full bg-amber-500" />
                       ) : post.status === PostStatus.Archived ? (
-                        <div className="h-2 w-2 rounded-full bg-destructive mt-1.5" />
+                        <div className="bg-destructive mt-1.5 h-2 w-2 rounded-full" />
                       ) : (
-                        <div className="h-2 w-2 rounded-full bg-muted-foreground mt-1.5" />
+                        <div className="bg-muted-foreground mt-1.5 h-2 w-2 rounded-full" />
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium line-clamp-1 group-hover:text-primary transition-colors">
+                    <div className="min-w-0 flex-1">
+                      <p className="group-hover:text-primary line-clamp-1 text-sm font-medium transition-colors">
                         {post.title}
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-xs">
                         {post.publishedAt
                           ? formatDate(post.publishedAt)
                           : "Not published"}
                       </p>
                     </div>
-                    <Edit3 className="h-3.5 w-3.5 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-0.5" />
+                    <Edit3 className="text-muted-foreground mt-0.5 h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
                   </Link>
                 ))}
           </CardContent>

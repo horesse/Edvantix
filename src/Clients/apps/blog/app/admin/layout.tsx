@@ -2,9 +2,9 @@ import type React from "react";
 
 import Link from "next/link";
 
-import { BlogHeader } from "@/components/blog-header";
 import { AdminGuard } from "@/components/admin/admin-guard";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { BlogHeader } from "@/components/blog-header";
 
 export default function AdminLayout({
   children,
@@ -17,7 +17,7 @@ export default function AdminLayout({
       <AdminGuard>
         <div className="flex flex-1">
           <AdminNav />
-          <main className="flex-1 p-6 md:p-8 overflow-auto">{children}</main>
+          <main className="flex-1 overflow-auto p-6 md:p-8">{children}</main>
         </div>
       </AdminGuard>
     </div>

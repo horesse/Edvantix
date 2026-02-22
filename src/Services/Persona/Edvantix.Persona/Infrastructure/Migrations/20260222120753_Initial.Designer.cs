@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Persona.Infrastructure.Migrations
 {
     [DbContext(typeof(PersonaDbContext))]
-    [Migration("20260222083713_Initial")]
+    [Migration("20260222120753_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,11 +27,11 @@ namespace Edvantix.Persona.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.Education", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<DateOnly?>("DateEnd")
                         .HasColumnType("date")
@@ -55,8 +55,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<decimal>("ProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("profile_id");
 
                     b.Property<string>("Specialty")
@@ -78,11 +78,11 @@ namespace Edvantix.Persona.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.EmploymentHistory", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -105,8 +105,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("position");
 
-                    b.Property<decimal>("ProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("profile_id");
 
                     b.Property<DateTime>("StartDate")
@@ -133,11 +133,11 @@ namespace Edvantix.Persona.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.FullName", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -156,8 +156,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("middle_name");
 
-                    b.Property<decimal>("ProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("profile_id");
 
                     b.HasKey("Id")
@@ -172,11 +172,11 @@ namespace Edvantix.Persona.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.Profile", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uuid")
@@ -217,19 +217,19 @@ namespace Edvantix.Persona.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.ProfileContact", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
                         .HasColumnName("description");
 
-                    b.Property<decimal>("ProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("profile_id");
 
                     b.Property<int>("Type")

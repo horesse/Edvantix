@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Organizational.Infrastructure.Migrations
 {
     [DbContext(typeof(OrganizationalDbContext))]
-    [Migration("20260222083657_Initial")]
+    [Migration("20260222120728_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,11 +27,11 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.Group", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<string>("Description")
                         .HasMaxLength(10000)
@@ -49,8 +49,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("character varying(500)")
                         .HasColumnName("name");
 
-                    b.Property<decimal>("OrganizationId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid")
                         .HasColumnName("organization_id");
 
                     b.HasKey("Id")
@@ -67,14 +67,14 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupMember", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
-                    b.Property<decimal>("GroupId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid")
                         .HasColumnName("group_id");
 
                     b.Property<bool>("IsDeleted")
@@ -86,8 +86,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("joined_at");
 
-                    b.Property<decimal>("ProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("profile_id");
 
                     b.Property<int>("Role")
@@ -111,11 +111,11 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Invitation", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -125,8 +125,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expires_at");
 
-                    b.Property<decimal>("InvitedByProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("InvitedByProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("invited_by_profile_id");
 
                     b.Property<string>("InviteeEmail")
@@ -134,12 +134,12 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("invitee_email");
 
-                    b.Property<decimal?>("InviteeProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid?>("InviteeProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("invitee_profile_id");
 
-                    b.Property<decimal>("OrganizationId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid")
                         .HasColumnName("organization_id");
 
                     b.Property<DateTime?>("RespondedAt")
@@ -179,11 +179,11 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.Organization", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<string>("Description")
                         .HasMaxLength(10000)
@@ -241,19 +241,19 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.OrganizationContact", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("description");
 
-                    b.Property<decimal>("OrganizationId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid")
                         .HasColumnName("organization_id");
 
                     b.Property<string>("Type")
@@ -285,11 +285,11 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMember", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(20,0)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id")
-                        .HasComment("Идентификатор");
+                        .HasDefaultValueSql("uuidv7()");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
@@ -300,12 +300,12 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("joined_at");
 
-                    b.Property<decimal>("OrganizationId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid")
                         .HasColumnName("organization_id");
 
-                    b.Property<decimal>("ProfileId")
-                        .HasColumnType("numeric(20,0)")
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
                         .HasColumnName("profile_id");
 
                     b.Property<int>("Role")

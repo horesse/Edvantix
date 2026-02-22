@@ -29,7 +29,7 @@
     <PackageVersion Include="Mediator.Abstractions" Version="3.0.1" />
     <PackageVersion Include="Mediator.SourceGenerator" Version="3.0.1" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.72.0-preview" />
-    <PackageVersion Include="Scalar.Aspire" Version="0.8.50" />
+    <PackageVersion Include="Scalar.Aspire" Version="0.8.55" />
   </ItemGroup>
   <ItemGroup Label="Core Packages">
     <!-- Microsoft Extensions -->

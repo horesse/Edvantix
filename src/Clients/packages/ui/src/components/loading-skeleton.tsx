@@ -4,8 +4,8 @@ import {
   Card,
   CardContent,
   CardHeader,
-} from "@workspace/ui/components/card.js";
-import { Skeleton } from "@workspace/ui/components/skeleton.js";
+} from "@workspace/ui/components/card";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 
 type SkeletonWrapperProps = Readonly<{
   label: string;
@@ -215,11 +215,9 @@ export function SimpleTableSkeleton({
 }
 
 export function FilterTableSkeleton({
-  description,
   rows = 10,
   columns = 4,
 }: Readonly<{
-  description?: string;
   rows?: number;
   columns?: number;
 }>) {

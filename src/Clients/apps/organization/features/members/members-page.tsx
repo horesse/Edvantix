@@ -38,7 +38,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { FilterTable } from "@workspace/ui/components/filter-table";
+import { FilterTable } from "@/components/filter-table";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import {
@@ -161,7 +161,7 @@ export function MembersPage() {
       <FilterTable
         columns={columns}
         data={data?.items ?? []}
-        totalItems={data?.totalItems ?? 0}
+        totalItems={data?.totalCount ?? 0}
         pageIndex={pageIndex}
         pageSize={pageSize}
         isLoading={isLoading}

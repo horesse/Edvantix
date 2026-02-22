@@ -13,7 +13,7 @@ public sealed class UpdateTagEndpoint : IEndpoint<NoContent, UpdateTagCommand, I
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
-                "/admin/tags/{tagId:long}",
+                "/admin/tags/{tagId:guid}",
                 async (
                     Guid tagId,
                     UpdateTagRequest request,

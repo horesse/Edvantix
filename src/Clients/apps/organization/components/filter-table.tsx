@@ -14,15 +14,9 @@ import {
 } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { Button } from "@workspace/ui/components/button.js";
-import { FilterTableSkeleton } from "@workspace/ui/components/loading-skeleton.js";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@workspace/ui/components/select.js";
+import { Button } from "@workspace/ui/components/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@workspace/ui/components/select";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -30,8 +24,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table.js";
-import { PAGE_SIZES } from "@workspace/ui/lib/constants.js";
+} from "@workspace/ui/components/table";
+import { PAGE_SIZES } from "@workspace/ui/lib/constants";
 
 type FilterTableProps<TData> = Readonly<{
   columns: ColumnDef<TData>[];
@@ -46,6 +40,50 @@ type FilterTableProps<TData> = Readonly<{
   highlightedId?: string | null;
   getRowId?: (row: TData) => string;
 }>;
+
+function FilterTableSkeleton({
+  rows = 10,
+  columns = 4,
+}: Readonly<{
+  rows?: number;
+  columns?: number;
+}>) {
+  return (
+    <div className="space-y-4">
+      <div className="bg-muted/50 overflow-hidden rounded-xl border shadow-sm">
+        <div className="space-y-3 p-4">
+          <div
+            className="grid gap-4"
+            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          >
+            {Array.from({ length: columns }).map((_, i) => (
+              <Skeleton key={`header-${i}`} className="h-4 w-full" />
+            ))}
+          </div>
+          {Array.from({ length: rows }).map((_, row) => (
+            <div
+              key={`row-${row}`}
+              className="grid gap-4"
+              style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+            >
+              {Array.from({ length: columns }).map((_, col) => (
+                <Skeleton key={`cell-${row}-${col}`} className="h-8 w-full" />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center justify-between px-2">
+        <Skeleton className="h-4 w-32" />
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-8 w-40" />
+          <Skeleton className="h-8 w-36" />
+          <Skeleton className="h-8 w-40" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function FilterTable<TData>({
   columns,
@@ -114,13 +152,7 @@ export function FilterTable<TData>({
   );
 
   if (isLoading) {
-    return (
-      <FilterTableSkeleton
-        description={description}
-        rows={pageSize}
-        columns={columns.length}
-      />
-    );
+    return <FilterTableSkeleton rows={pageSize} columns={columns.length} />;
   }
 
   return (
@@ -171,10 +203,7 @@ export function FilterTable<TData>({
               })
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   Данных нет
                 </TableCell>
               </TableRow>

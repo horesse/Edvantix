@@ -15,7 +15,7 @@ type AddContactParams = {
 };
 
 export default function useAddOrganizationContact(
-  options?: UseMutationOptions<number, Error, AddContactParams>,
+  options?: UseMutationOptions<string, Error, AddContactParams>,
 ) {
   const queryClient = useQueryClient();
 

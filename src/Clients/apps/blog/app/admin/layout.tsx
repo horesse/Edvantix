@@ -1,7 +1,5 @@
 import type React from "react";
 
-import Link from "next/link";
-
 import { AdminGuard } from "@/components/admin/admin-guard";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { BlogHeader } from "@/components/blog-header";

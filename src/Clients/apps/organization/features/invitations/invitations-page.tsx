@@ -23,7 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
-import { FilterTable } from "@workspace/ui/components/filter-table";
+import { FilterTable } from "@/components/filter-table";
 import {
   Form,
   FormControl,

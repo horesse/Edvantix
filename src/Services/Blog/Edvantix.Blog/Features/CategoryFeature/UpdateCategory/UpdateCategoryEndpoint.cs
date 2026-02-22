@@ -13,7 +13,7 @@ public sealed class UpdateCategoryEndpoint : IEndpoint<NoContent, UpdateCategory
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
-                "/admin/categories/{categoryId:long}",
+                "/admin/categories/{categoryId:guid}",
                 async (
                     Guid categoryId,
                     UpdateCategoryRequest request,

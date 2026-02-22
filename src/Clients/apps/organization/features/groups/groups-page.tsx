@@ -39,7 +39,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { FilterTable } from "@workspace/ui/components/filter-table";
+import { FilterTable } from "@/components/filter-table";
 import {
   Form,
   FormControl,
@@ -71,7 +71,7 @@ export function GroupsPage() {
     handleSortingChange,
   } = usePaginatedTable();
 
-  const orgId = currentOrg?.id ?? 0;
+  const orgId = currentOrg?.id ?? "";
   const { data, isLoading } = useOrganizationGroups(orgId, {
     pageIndex: pageIndex + 1,
     pageSize,
@@ -168,7 +168,7 @@ export function GroupsPage() {
       <FilterTable
         columns={columns}
         data={data?.items ?? []}
-        totalItems={data?.totalItems ?? 0}
+        totalItems={data?.totalCount ?? 0}
         pageIndex={pageIndex}
         pageSize={pageSize}
         isLoading={isLoading}

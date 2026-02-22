@@ -15,7 +15,7 @@ type CreateGroupParams = {
 };
 
 export default function useCreateGroup(
-  options?: UseMutationOptions<number, Error, CreateGroupParams>,
+  options?: UseMutationOptions<string, Error, CreateGroupParams>,
 ) {
   const queryClient = useQueryClient();
 

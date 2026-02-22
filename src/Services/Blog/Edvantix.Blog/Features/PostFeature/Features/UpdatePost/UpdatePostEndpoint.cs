@@ -23,7 +23,7 @@ public sealed class UpdatePostEndpoint : IEndpoint<NoContent, UpdatePostCommand,
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
-                "/admin/posts/{postId:long}",
+                "/admin/posts/{postId:guid}",
                 async (
                     Guid postId,
                     UpdatePostRequest request,

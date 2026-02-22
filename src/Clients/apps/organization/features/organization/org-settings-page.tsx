@@ -30,7 +30,7 @@ import { useOrganization as useOrgContext } from "@/components/organization-prov
 
 export function OrgSettingsPage() {
   const { currentOrg, canManage } = useOrgContext();
-  const orgId = currentOrg?.id ?? 0;
+  const orgId = currentOrg?.id ?? "";
   const { data: org, isLoading } = useOrganization(orgId);
 
   if (!canManage) {

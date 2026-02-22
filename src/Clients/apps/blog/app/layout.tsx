@@ -56,8 +56,11 @@ export const metadata: Metadata = {
   },
 };
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+});
 
 export default async function RootLayout({
   children,
@@ -66,7 +69,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-background text-foreground font-sans antialiased">
+      <body
+        className={`${geist.variable} ${geistMono.variable} bg-background text-foreground font-sans antialiased`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -8,7 +8,7 @@ public sealed class DeleteTagEndpoint : IEndpoint<NoContent, DeleteTagCommand, I
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/admin/tags/{tagId:long}",
+                "/admin/tags/{tagId:guid}",
                 async (Guid tagId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new DeleteTagCommand(tagId), sender, ct)
             )

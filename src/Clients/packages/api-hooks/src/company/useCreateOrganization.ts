@@ -10,7 +10,7 @@ import type { CreateOrganizationRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 export default function useCreateOrganization(
-  options?: UseMutationOptions<number, Error, CreateOrganizationRequest>,
+  options?: UseMutationOptions<string, Error, CreateOrganizationRequest>,
 ) {
   const queryClient = useQueryClient();
 

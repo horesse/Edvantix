@@ -66,8 +66,9 @@ const contactTypeIcons: Record<ContactType, React.ReactNode> = {
 
 export function ContactsPage() {
   const { currentOrg, canManage } = useOrganization();
-  const orgId = currentOrg?.id ?? 0;
-  const { data: contacts = [], isLoading } = useOrganizationContacts(orgId);
+  const orgId = currentOrg?.id ?? "";
+  const { data, isLoading } = useOrganizationContacts(orgId);
+  const contacts = data?.items ?? [];
 
   const [addOpen, setAddOpen] = useState(false);
   const [editContact, setEditContact] =

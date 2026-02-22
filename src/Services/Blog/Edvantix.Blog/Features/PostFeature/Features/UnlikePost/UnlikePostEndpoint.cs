@@ -8,7 +8,7 @@ public sealed class UnlikePostEndpoint : IEndpoint<NoContent, UnlikePostCommand,
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/posts/{postId:long}/like",
+                "/posts/{postId:guid}/like",
                 async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new UnlikePostCommand(postId), sender, ct)
             )

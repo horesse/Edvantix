@@ -8,7 +8,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
-import type { Education, OwnProfileDetails } from "@workspace/types/profile";
+import type {
+  Education,
+  EducationRequest,
+  OwnProfileDetails,
+} from "@workspace/types/profile";
 import { EducationLevel } from "@workspace/types/profile";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
@@ -61,6 +65,16 @@ type EducationSectionProps = {
   profile: OwnProfileDetails;
 };
 
+function toEducationRequest(education: Education): EducationRequest {
+  return {
+    institution: education.institution,
+    specialty: education.specialty ?? null,
+    dateStart: education.dateStart,
+    dateEnd: education.dateEnd ?? null,
+    level: education.educationLevel,
+  };
+}
+
 export function EducationSection({ profile }: EducationSectionProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const items = profile.educations;
@@ -75,19 +89,23 @@ export function EducationSection({ profile }: EducationSectionProps) {
   });
 
   function handleRemove(index: number) {
-    const updated = items.filter((_, i) => i !== index);
-    updateMutation.mutate(buildProfileUpdateRequest(profile, { educations: updated }));
+    const updated = items
+      .filter((_, i) => i !== index)
+      .map(toEducationRequest);
+    updateMutation.mutate(
+      buildProfileUpdateRequest(profile, { educations: updated }),
+    );
   }
 
   function handleAdd(data: EducationInput) {
     const updated = [
-      ...items,
+      ...items.map(toEducationRequest),
       {
         institution: data.institution,
         specialty: data.specialty || null,
         dateStart: data.dateStart,
         dateEnd: data.dateEnd || null,
-        educationLevel: data.level,
+        level: data.level,
       },
     ];
     updateMutation.mutate(

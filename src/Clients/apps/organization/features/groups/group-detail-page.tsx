@@ -53,7 +53,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { FilterTable } from "@workspace/ui/components/filter-table";
+import { FilterTable } from "@/components/filter-table";
 import {
   Form,
   FormControl,
@@ -117,7 +117,7 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
     null,
   );
 
-  const orgId = currentOrg?.id ?? 0;
+  const orgId = currentOrg?.id ?? "";
 
   const columns = useMemo<ColumnDef<GroupMemberModel>[]>(
     () => [
@@ -260,7 +260,7 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
         <FilterTable
           columns={columns}
           data={membersData?.items ?? []}
-          totalItems={membersData?.totalItems ?? 0}
+          totalItems={membersData?.totalCount ?? 0}
           pageIndex={pageIndex}
           pageSize={pageSize}
           isLoading={membersLoading}
@@ -470,9 +470,12 @@ function AddGroupMemberDialog({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const id = Number(profileId);
-    if (id > 0) {
-      mutation.mutate({ groupId, request: { profileId: id, role } });
+    const normalizedProfileId = profileId.trim();
+    if (normalizedProfileId) {
+      mutation.mutate({
+        groupId,
+        request: { profileId: normalizedProfileId, role },
+      });
     }
   }
 
@@ -490,10 +493,9 @@ function AddGroupMemberDialog({
             <Label htmlFor="groupProfileId">ID профиля</Label>
             <Input
               id="groupProfileId"
-              type="number"
-              min={1}
               value={profileId}
               onChange={(e) => setProfileId(e.target.value)}
+              placeholder="3fa85f64-5717-4562-b3fc-2c963f66afa6"
               required
             />
           </div>
@@ -508,7 +510,7 @@ function AddGroupMemberDialog({
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(groupRoleLabels).map(([key, label]) => (
-                  <SelectItem key={key} value={key}>
+                  <SelectItem key={String(key)} value={String(key)}>
                     {label}
                   </SelectItem>
                 ))}
@@ -589,7 +591,7 @@ function ChangeGroupMemberRoleDialog({
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(groupRoleLabels).map(([key, label]) => (
-                  <SelectItem key={key} value={key}>
+                  <SelectItem key={String(key)} value={String(key)}>
                     {label}
                   </SelectItem>
                 ))}

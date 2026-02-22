@@ -8,7 +8,7 @@ public sealed class DeleteCategoryEndpoint : IEndpoint<NoContent, DeleteCategory
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/admin/categories/{categoryId:long}",
+                "/admin/categories/{categoryId:guid}",
                 async (Guid categoryId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new DeleteCategoryCommand(categoryId), sender, ct)
             )

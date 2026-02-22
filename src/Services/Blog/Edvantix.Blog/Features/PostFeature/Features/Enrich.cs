@@ -6,6 +6,22 @@ namespace Edvantix.Blog.Features.PostFeature.Features;
 
 public static class Enrich
 {
+    private static async Task<AuthorModel> ResolveAuthor(
+        ulong authorId,
+        IServiceProvider provider,
+        CancellationToken cancellationToken
+    )
+    {
+        var profileService = provider.GetRequiredService<IProfileService>();
+        var authorProfile = await profileService.GetProfileById(authorId, cancellationToken);
+
+        if (authorProfile is null)
+            return new AuthorModel { Id = 0, FullName = "Анонимно" };
+
+        var authorMapper = provider.GetRequiredService<IMapper<ProfileReply, AuthorModel>>();
+        return authorMapper.Map(authorProfile);
+    }
+
     extension(PostModel post)
     {
         public async Task EnrichAuthor(
@@ -14,18 +30,7 @@ public static class Enrich
             CancellationToken cancellationToken
         )
         {
-            var profileService = provider.GetRequiredService<IProfileService>();
-            var authorProfile = await profileService.GetProfileById(authorId, cancellationToken);
-
-            if (authorProfile is null)
-            {
-                post.Author = new AuthorModel { Id = 0, FullName = "Анонимно" };
-                return;
-            }
-
-            var authorMapper = provider.GetRequiredService<IMapper<ProfileReply, AuthorModel>>();
-
-            post.Author = authorMapper.Map(authorProfile);
+            post.Author = await ResolveAuthor(authorId, provider, cancellationToken);
         }
 
         public async Task EnrichIsLikeByMe(
@@ -57,18 +62,7 @@ public static class Enrich
             CancellationToken cancellationToken
         )
         {
-            var profileService = provider.GetRequiredService<IProfileService>();
-            var authorProfile = await profileService.GetProfileById(authorId, cancellationToken);
-
-            if (authorProfile is null)
-            {
-                post.Author = new AuthorModel { Id = 0, FullName = "Анонимно" };
-                return;
-            }
-
-            var authorMapper = provider.GetRequiredService<IMapper<ProfileReply, AuthorModel>>();
-
-            post.Author = authorMapper.Map(authorProfile);
+            post.Author = await ResolveAuthor(authorId, provider, cancellationToken);
         }
     }
 }

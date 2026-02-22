@@ -56,7 +56,7 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
 var profileApi = builder
-    .AddProject<Edvantix_ProfileService>(Services.Persona)
+    .AddProject<Edvantix_Persona>(Services.Persona)
     .WithReference(profileDb)
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)

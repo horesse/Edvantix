@@ -4,11 +4,9 @@ import type { Metadata } from "next";
 
 import { Separator } from "@workspace/ui/components/separator";
 
-import { SettingsNav } from "@/features/settings/settings-nav";
-
 export const metadata: Metadata = {
-  title: "Настройки",
-  description: "Управление настройками вашего аккаунта",
+  title: "Профиль",
+  description: "Управление вашим профилем и персональными данными",
 };
 
 export default function SettingsLayout({
@@ -17,22 +15,15 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Настройки</h1>
-        <p className="text-muted-foreground text-sm">
-          Управляйте настройками вашего аккаунта и профиля
+    <div className="mx-auto w-full max-w-2xl">
+      <div className="mb-6">
+        <h1 className="text-xl font-semibold tracking-tight">Профиль</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Управляйте вашим профилем и персональными данными
         </p>
       </div>
-      <Separator />
-      <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row">
-        <aside className="w-full shrink-0 lg:w-44">
-          <div className="lg:sticky lg:top-4">
-            <SettingsNav />
-          </div>
-        </aside>
-        <div className="min-w-0 flex-1">{children}</div>
-      </div>
+      <Separator className="mb-6 opacity-50" />
+      {children}
     </div>
   );
 }

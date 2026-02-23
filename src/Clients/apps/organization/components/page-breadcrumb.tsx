@@ -133,6 +133,18 @@ function generateBreadcrumbItems(
     profile: "Профиль",
     career: "Карьера",
     "create-organization": "Создать организацию",
+    // School management routes
+    school: "Школа",
+    courses: "Курсы",
+    students: "Ученики",
+    teachers: "Преподаватели",
+    schedule: "Расписание",
+    finance: "Финансы",
+    crm: "CRM",
+    analytics: "Аналитика",
+    "my-courses": "Мои курсы",
+    messages: "Сообщения",
+    notifications: "Уведомления",
   };
 
   let currentPath = "";

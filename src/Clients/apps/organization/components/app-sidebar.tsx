@@ -6,168 +6,203 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
+  Bell,
+  BookOpen,
   Building,
-  Contact,
-  Home,
+  CalendarDays,
+  ChevronDown,
+  MessageSquare,
   Settings,
   UserPlus,
-  Users,
-  UsersRound,
 } from "lucide-react";
 
+import { OrganizationRole } from "@workspace/types/company";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@workspace/ui/components/sidebar";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@workspace/ui/components/collapsible";
+import { ScrollArea } from "@workspace/ui/components/scroll-area";
+import { Separator } from "@workspace/ui/components/separator";
+import { cn } from "@workspace/ui/lib/utils";
 
-import { useOrganization } from "./organization-provider";
 import { OrganizationSelector } from "./organization-selector";
+import { useOrganization } from "./organization-provider";
+import { getOrgNavItems } from "./school-nav-items";
 
-const navItems = [
-  {
-    title: "Главная",
-    url: "/",
-    icon: Home,
-    exact: true,
-  },
-  {
-    title: "Участники",
-    url: "/members",
-    icon: Users,
-    exact: false,
-  },
-  {
-    title: "Приглашения",
-    url: "/invitations",
-    icon: UserPlus,
-    exact: false,
-  },
-  {
-    title: "Группы",
-    url: "/groups",
-    icon: UsersRound,
-    exact: false,
-  },
-  {
-    title: "Контакты",
-    url: "/contacts",
-    icon: Contact,
-    exact: false,
-  },
+// ── Global navigation (workspace-level, all roles) ────────────────────────
+const globalNavItems = [
+  { id: "schedule", title: "Мое расписание", url: "/schedule", icon: CalendarDays },
+  { id: "my-courses", title: "Мои курсы", url: "/my-courses", icon: BookOpen },
+  { id: "messages", title: "Сообщения", url: "/messages", icon: MessageSquare },
+  { id: "notifications", title: "Уведомления", url: "/notifications", icon: Bell },
 ];
 
-const managementItems = [
-  {
-    title: "Настройки орг.",
-    url: "/org-settings",
-    icon: Building,
-  },
+// ── Footer actions ────────────────────────────────────────────────────────
+const footerItems = [
+  { id: "invite", title: "Пригласить", url: "/invitations/create", icon: UserPlus },
+  { id: "settings", title: "Настройки аккаунта", url: "/settings", icon: Settings },
 ];
 
-const settingsItems = [
-  {
-    title: "Настройки",
-    url: "/settings",
-    icon: Settings,
-  },
-];
+// ── Primitives ────────────────────────────────────────────────────────────
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+function NavItem({
+  href,
+  icon: Icon,
+  label,
+  isActive,
+  indent = false,
+}: {
+  href: string;
+  icon: React.ElementType;
+  label: string;
+  isActive: boolean;
+  indent?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
+        indent && "pl-7",
+        isActive
+          ? "bg-accent text-accent-foreground font-medium"
+          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+      )}
+    >
+      <Icon className="size-4 shrink-0" />
+      <span>{label}</span>
+    </Link>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-muted-foreground/60 px-2 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-widest">
+      {children}
+    </p>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────
+
+/**
+ * Primary sidebar — flat, Linear-style, no shadows or rounded cards.
+ * Desktop only (lg:flex). Mobile navigation is in MobileSidebar (Sheet).
+ *
+ * ScrollArea fix: `min-h-0` is required alongside `flex-1` so that the flex
+ * item can actually shrink and the Radix viewport gets a bounded height.
+ */
+export function AppSidebar() {
   const pathname = usePathname();
-  const { canManage } = useOrganization();
+  const { userRole, currentOrg } = useOrganization();
+
+  const [isOrgOpen, setIsOrgOpen] = React.useState(() =>
+    pathname === "/" ||
+    pathname.startsWith("/school") ||
+    pathname.startsWith("/organization"),
+  );
+
+  const orgNavItems = React.useMemo(
+    () => getOrgNavItems(userRole ?? OrganizationRole.Student),
+    [userRole],
+  );
+
+  const isOrgSectionActive =
+    pathname === "/" ||
+    pathname.startsWith("/school") ||
+    pathname.startsWith("/organization");
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <div className="flex flex-col gap-4">
-          <Link href="/" className="flex items-center gap-2 px-2">
-            <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
-              <Building className="size-5" />
-            </div>
-            <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">
-              Edvantix
-            </span>
-          </Link>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <OrganizationSelector />
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </div>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Навигация</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={
-                      item.exact
-                        ? pathname === item.url
-                        : pathname.startsWith(item.url)
-                    }
-                  >
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        {canManage && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Управление</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {managementItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname.startsWith(item.url)}
-                    >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          {settingsItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                asChild
+    <aside className="bg-sidebar text-sidebar-foreground hidden w-64 shrink-0 flex-col border-r border-border lg:flex">
+      {/* ── Org switcher ─────────────────────────────────────────── */}
+      <div className="border-b border-border px-3 py-2">
+        <OrganizationSelector />
+      </div>
+
+      {/* ── Nav (scroll fix: flex-1 + min-h-0) ──────────────────── */}
+      <ScrollArea className="min-h-0 flex-1">
+        <div className="px-2 pb-3">
+
+          {/* Global workspace nav */}
+          <SectionLabel>Общее</SectionLabel>
+          <div className="space-y-0.5">
+            {globalNavItems.map((item) => (
+              <NavItem
+                key={item.id}
+                href={item.url}
+                icon={item.icon}
+                label={item.title}
                 isActive={pathname.startsWith(item.url)}
+              />
+            ))}
+          </div>
+
+          <div className="py-2">
+            <Separator />
+          </div>
+
+          {/* Current organisation (= school) — one merged section */}
+          <Collapsible open={isOrgOpen} onOpenChange={setIsOrgOpen}>
+            <CollapsibleTrigger asChild>
+              <button
+                type="button"
+                className={cn(
+                  "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
+                  isOrgSectionActive && !isOrgOpen
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                )}
               >
-                <Link href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+                <Building className="size-4 shrink-0" />
+                <span className="flex-1 truncate text-left">
+                  {currentOrg?.shortName ?? "Организация"}
+                </span>
+                <ChevronDown
+                  className={cn(
+                    "size-3.5 shrink-0 transition-transform duration-150",
+                    isOrgOpen && "rotate-180",
+                  )}
+                />
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-0.5 space-y-0.5">
+              {orgNavItems.map((item) => {
+                const isActive = item.exact
+                  ? pathname === item.url
+                  : pathname.startsWith(item.url) && item.url !== "/";
+
+                return (
+                  <NavItem
+                    key={item.id}
+                    href={item.url}
+                    icon={item.icon}
+                    label={item.title}
+                    isActive={isActive}
+                    indent
+                  />
+                );
+              })}
+            </CollapsibleContent>
+          </Collapsible>
+
+        </div>
+      </ScrollArea>
+
+      {/* ── Footer ────────────────────────────────────────────────── */}
+      <div className="border-t border-border px-2 py-2">
+        <div className="space-y-0.5">
+          {footerItems.map((item) => (
+            <NavItem
+              key={item.id}
+              href={item.url}
+              icon={item.icon}
+              label={item.title}
+              isActive={pathname.startsWith(item.url)}
+            />
           ))}
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+        </div>
+      </div>
+    </aside>
   );
 }

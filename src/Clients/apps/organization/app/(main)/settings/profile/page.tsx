@@ -1,5 +1,11 @@
-import { ProfileSettingsFeature } from "@/features/settings/profile-settings-feature";
+import type { Metadata } from "next";
+
+import { ProfileSettings } from "@/features/settings/profile-settings";
+
+export const metadata: Metadata = {
+  title: "Профиль",
+};
 
 export default function ProfileSettingsPage() {
-  return <ProfileSettingsFeature />;
+  return <ProfileSettings />;
 }

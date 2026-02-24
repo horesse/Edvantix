@@ -7,6 +7,8 @@ import { Loader2, MoreHorizontal, Plus, Trash2, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import useAddMember from "@workspace/api-hooks/company/useAddMember";
+
+import { PageHeader } from "@/components/page-header";
 import useOrganizationMembers from "@workspace/api-hooks/company/useOrganizationMembers";
 import useRemoveMember from "@workspace/api-hooks/company/useRemoveMember";
 import useUpdateMemberRole from "@workspace/api-hooks/company/useUpdateMemberRole";
@@ -142,21 +144,18 @@ export function MembersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Участники</h1>
-          <p className="text-muted-foreground">
-            Управление участниками организации
-          </p>
-        </div>
-        {canManage && (
-          <Button onClick={() => setAddDialogOpen(true)}>
-            <Plus className="size-4" />
-            Добавить
-          </Button>
-        )}
-      </div>
+    <div className="space-y-4">
+      <PageHeader
+        title="Участники"
+        actions={
+          canManage && (
+            <Button size="sm" onClick={() => setAddDialogOpen(true)}>
+              <Plus className="size-4" />
+              Добавить
+            </Button>
+          )
+        }
+      />
 
       <FilterTable
         columns={columns}

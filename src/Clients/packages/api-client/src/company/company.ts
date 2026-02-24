@@ -1,20 +1,28 @@
-import type { AddGroupMemberRequest, AddMemberRequest, AddOrganizationContactRequest, CreateGroupRequest, CreateInvitationRequest, CreateOrganizationRequest, GroupMemberModel, GroupModel, GroupSummaryModel, InvitationModel, OrganizationContactModel, OrganizationMemberModel, OrganizationModel, OrganizationSummaryModel, UpdateGroupMemberRoleRequest, UpdateGroupRequest, UpdateMemberRoleRequest, UpdateOrganizationContactRequest, UpdateOrganizationRequest } from "@workspace/types/company";
+import type {
+  AddGroupMemberRequest,
+  AddMemberRequest,
+  AddOrganizationContactRequest,
+  CreateGroupRequest,
+  CreateInvitationRequest,
+  CreateOrganizationRequest,
+  GroupMemberModel,
+  GroupModel,
+  GroupSummaryModel,
+  InvitationModel,
+  OrganizationContactModel,
+  OrganizationMemberModel,
+  OrganizationModel,
+  OrganizationSummaryModel,
+  UpdateGroupMemberRoleRequest,
+  UpdateGroupRequest,
+  UpdateMemberRoleRequest,
+  UpdateOrganizationContactRequest,
+  UpdateOrganizationRequest,
+} from "@workspace/types/company";
 import type { PagedResult } from "@workspace/types/shared";
-
-
 
 import { apiClient } from "../client";
 import type ApiClient from "../client";
-
-
-
-
-
-
-
-
-
-
 
 // --- Query Types ---
 

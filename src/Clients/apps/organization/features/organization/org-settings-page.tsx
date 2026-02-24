@@ -26,7 +26,51 @@ import {
   updateOrganizationSchema,
 } from "@workspace/validations/company";
 
+import { PageHeader } from "@/components/page-header";
 import { useOrganization as useOrgContext } from "@/components/organization-provider";
+
+const SECTION = "grid gap-8 border-t border-border/40 py-6 md:grid-cols-[240px_1fr]";
+
+function SectionMeta({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div>
+      <p className="text-sm font-medium">{title}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+    </div>
+  );
+}
+
+function OrgSettingsSkeleton() {
+  return (
+    <div className="space-y-0">
+      <div className="pb-2">
+        <Skeleton className="h-5 w-44" />
+      </div>
+      {[3, 2].map((count, i) => (
+        <div key={i} className={SECTION}>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-3 w-44" />
+          </div>
+          <div className="space-y-3">
+            {Array.from({ length: count }).map((_, j) => (
+              <div key={j} className="space-y-1.5">
+                <Skeleton className="h-3 w-24" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function OrgSettingsPage() {
   const { currentOrg, canManage } = useOrgContext();
@@ -35,31 +79,18 @@ export function OrgSettingsPage() {
 
   if (!canManage) {
     return (
-      <p className="text-muted-foreground py-8 text-center">
+      <p className="text-muted-foreground py-8 text-center text-sm">
         Доступ запрещён. Только владелец или менеджер могут изменять настройки
         организации.
       </p>
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-4 w-96" />
-        </div>
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Skeleton className="h-96 w-full" />
-          <Skeleton className="h-96 w-full" />
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <OrgSettingsSkeleton />;
 
   if (!org) {
     return (
-      <p className="text-muted-foreground py-8 text-center">
+      <p className="text-muted-foreground py-8 text-center text-sm">
         Выберите организацию
       </p>
     );
@@ -67,29 +98,16 @@ export function OrgSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Настройки организации
-        </h1>
-        <p className="text-muted-foreground">
-          Основная информация о вашей организации
-        </p>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="bg-muted/50 overflow-hidden rounded-xl border-0 shadow-sm lg:col-span-2">
-          <div className="space-y-6 p-6">
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Основная информация</h2>
-              <p className="text-muted-foreground text-sm">
-                Дата регистрации:{" "}
-                {new Date(org.registrationDate).toLocaleDateString("ru-RU")}
-              </p>
-            </div>
-            <OrganizationForm org={org} />
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Настройки организации"
+        actions={
+          <p className="text-muted-foreground text-xs">
+            Зарегистрировано:{" "}
+            {new Date(org.registrationDate).toLocaleDateString("ru-RU")}
+          </p>
+        }
+      />
+      <OrganizationForm org={org} />
     </div>
   );
 }
@@ -125,18 +143,13 @@ function OrganizationForm({
       printName: org.printName ?? "",
       description: org.description ?? "",
     });
-  }, [
-    org.id,
-    org.name,
-    org.nameLatin,
-    org.shortName,
-    org.printName,
-    org.description,
-    form,
-  ]);
+  }, [org.id, org.name, org.nameLatin, org.shortName, org.printName, org.description, form]);
 
   const mutation = useUpdateOrganization({
-    onSuccess: () => toast.success("Организация обновлена"),
+    onSuccess: () => {
+      toast.success("Организация обновлена");
+      form.reset(form.getValues());
+    },
     onError: () => toast.error("Не удалось обновить организацию"),
   });
 
@@ -153,90 +166,121 @@ function OrganizationForm({
     });
   }
 
+  const isDirty = form.formState.isDirty;
+  const isPending = mutation.isPending;
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Название</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
+
+        {/* ── Названия ── */}
+        <section className={SECTION}>
+          <SectionMeta
+            title="Названия"
+            description="Официальное и сокращённое наименование"
+          />
+          <div className="space-y-3">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Полное название</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="nameLatin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Название (латиница)</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="shortName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Краткое название</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ── Дополнительно ── */}
+        <section className={SECTION}>
+          <SectionMeta
+            title="Дополнительно"
+            description="Печатное название и описание организации"
+          />
+          <div className="space-y-3">
+            <FormField
+              control={form.control}
+              name="printName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Печатное название{" "}
+                    <span className="font-normal opacity-60">(необязательно)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Описание{" "}
+                    <span className="font-normal opacity-60">(необязательно)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea rows={3} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </section>
+
+        {/* ── Save bar ── */}
+        <div className="flex items-center justify-between border-t border-border/40 pt-4">
+          {isDirty && !isPending ? (
+            <p className="text-xs text-muted-foreground">
+              Есть несохранённые изменения
+            </p>
+          ) : (
+            <span />
           )}
-        />
-        <FormField
-          control={form.control}
-          name="nameLatin"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Название (латиница)</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="shortName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Краткое название</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="printName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Печатное название{" "}
-                <span className="text-muted-foreground font-normal">
-                  (необязательно)
-                </span>
-              </FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Описание{" "}
-                <span className="text-muted-foreground font-normal">
-                  (необязательно)
-                </span>
-              </FormLabel>
-              <FormControl>
-                <Textarea rows={3} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <Button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending && <Loader2 className="size-4 animate-spin" />}
-            Сохранить
+          <Button type="submit" size="sm" disabled={isPending || !isDirty}>
+            {isPending && <Loader2 className="size-3.5 animate-spin" />}
+            Сохранить изменения
           </Button>
         </div>
+
       </form>
     </Form>
   );

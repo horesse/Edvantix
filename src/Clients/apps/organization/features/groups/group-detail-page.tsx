@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowLeft,
   Loader2,
   MoreHorizontal,
   Pencil,
@@ -54,6 +53,7 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
 import { FilterTable } from "@/components/filter-table";
+import { PageHeader } from "@/components/page-header";
 import {
   Form,
   FormControl,
@@ -180,10 +180,13 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
 
   if (groupLoading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-4 w-96" />
-        <Skeleton className="h-64 w-full" />
+      <div className="space-y-4">
+        <Skeleton className="h-5 w-32" />
+        <div className="space-y-1">
+          <Skeleton className="h-5 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <Skeleton className="h-48 w-full" />
       </div>
     );
   }
@@ -197,58 +200,37 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push("/groups")}
-        >
-          <ArrowLeft className="size-4" />
-          Группы
-        </Button>
-      </div>
-
-      <div className="bg-muted/50 overflow-hidden rounded-xl border-0 shadow-sm">
-        <div className="p-6">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-bold">{group.name}</h2>
-              {group.description && (
-                <p className="text-muted-foreground">{group.description}</p>
-              )}
+    <div className="space-y-4">
+      <PageHeader
+        title={group.name}
+        description={group.description ?? undefined}
+        back={{ label: "Группы", href: "/groups" }}
+        actions={
+          canManage && (
+            <div className="flex gap-1.5">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setEditOpen(true)}
+              >
+                <Pencil className="size-4" />
+                Редактировать
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setDeleteOpen(true)}
+              >
+                <Trash2 className="size-4" />
+              </Button>
             </div>
-            {canManage && (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setEditOpen(true)}
-                >
-                  <Pencil className="size-4" />
-                  Редактировать
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setDeleteOpen(true)}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+          )
+        }
+      />
 
-      <div className="space-y-4">
+      <div className="space-y-3 border-t pt-4">
         <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold">Участники группы</h2>
-            <p className="text-muted-foreground text-sm">
-              Управление участниками группы
-            </p>
-          </div>
+          <p className="text-sm font-medium">Участники</p>
           {canManage && (
             <Button size="sm" onClick={() => setAddMemberOpen(true)}>
               <Plus className="size-4" />

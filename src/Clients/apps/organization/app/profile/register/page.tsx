@@ -119,9 +119,9 @@ export default function ProfileRegisterPage() {
 
   return (
     <div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-linear-to-br p-4">
-      <Card className="border-muted/50 w-full max-w-lg shadow-lg">
+      <Card className="border-muted/50 w-full max-w-lg shadow-sm">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Регистрация профиля</CardTitle>
+          <CardTitle className="text-xl font-semibold">Регистрация профиля</CardTitle>
           <CardDescription>
             Заполните информацию для создания вашего профиля
           </CardDescription>
@@ -136,7 +136,7 @@ export default function ProfileRegisterPage() {
                   <FormItem className="flex flex-col items-center">
                     <FormLabel>
                       Аватар{" "}
-                      <span className="text-muted-foreground font-normal">
+                      <span className="font-normal opacity-60">
                         (необязательно)
                       </span>
                     </FormLabel>
@@ -225,7 +225,7 @@ export default function ProfileRegisterPage() {
                   <FormItem>
                     <FormLabel>
                       Отчество{" "}
-                      <span className="text-muted-foreground font-normal">
+                      <span className="font-normal opacity-60">
                         (необязательно)
                       </span>
                     </FormLabel>

@@ -24,6 +24,7 @@ import {
   DialogTitle,
 } from "@workspace/ui/components/dialog";
 import { FilterTable } from "@/components/filter-table";
+import { PageHeader } from "@/components/page-header";
 import {
   Form,
   FormControl,
@@ -68,13 +69,8 @@ export function InvitationsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Приглашения</h1>
-        <p className="text-muted-foreground">
-          Управление приглашениями организации
-        </p>
-      </div>
+    <div className="space-y-4">
+      <PageHeader title="Приглашения" />
 
       <Tabs defaultValue={canManage ? "outgoing" : "incoming"}>
         <TabsList>
@@ -172,15 +168,10 @@ function OutgoingInvitations({ orgId }: { orgId: string }) {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold">Отправленные приглашения</h2>
-          <p className="text-muted-foreground text-sm">
-            Приглашения, ожидающие принятия
-          </p>
-        </div>
-        <Button onClick={() => setCreateOpen(true)}>
+        <p className="text-sm font-medium text-muted-foreground">Отправленные</p>
+        <Button size="sm" onClick={() => setCreateOpen(true)}>
           <Plus className="size-4" />
           Пригласить
         </Button>

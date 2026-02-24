@@ -50,7 +50,7 @@ function FilterTableSkeleton({
 }>) {
   return (
     <div className="space-y-4">
-      <div className="bg-muted/50 overflow-hidden rounded-xl border shadow-sm">
+      <div className="overflow-hidden rounded-md border">
         <div className="space-y-3 p-4">
           <div
             className="grid gap-4"
@@ -157,7 +157,7 @@ export function FilterTable<TData>({
 
   return (
     <div className="space-y-4">
-      <div className="bg-muted/50 overflow-hidden rounded-xl border shadow-sm">
+      <div className="overflow-hidden rounded-md border">
         <Table>
           {description && <caption className="sr-only">{description}</caption>}
           <TableHeader>
@@ -214,16 +214,16 @@ export function FilterTable<TData>({
 
       {totalItems > 0 && (
         <nav
-          className="flex items-center justify-between px-2"
+          className="flex items-center justify-between"
           aria-label="Навигация по таблице"
         >
-          <div className="text-muted-foreground flex-1 text-sm">
-            Показано {data.length} из {totalItems}
-          </div>
-          <div className="flex items-center space-x-6 lg:space-x-8">
-            <div className="flex items-center space-x-2">
-              <p className="text-sm font-medium" id="rows-per-page-label">
-                Строк на странице
+          <p className="text-muted-foreground text-xs">
+            {data.length} из {totalItems}
+          </p>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <p className="text-muted-foreground text-xs" id="rows-per-page-label">
+                Строк:
               </p>
               <Select
                 value={pageSize.toString()}
@@ -232,7 +232,7 @@ export function FilterTable<TData>({
                 }
               >
                 <SelectTrigger
-                  className="h-8 w-17.5"
+                  className="h-7 w-14 text-xs"
                   aria-labelledby="rows-per-page-label"
                 >
                   <SelectValue />
@@ -246,32 +246,30 @@ export function FilterTable<TData>({
                 </SelectContent>
               </Select>
             </div>
-            <div
-              className="flex min-w-36 items-center justify-center text-sm font-medium"
+            <p
+              className="text-muted-foreground text-xs tabular-nums"
               aria-live="polite"
             >
-              Страница {pageIndex + 1} из {Math.max(1, totalPages)}
-            </div>
-            <div className="flex items-center space-x-2">
+              {pageIndex + 1} / {Math.max(1, totalPages)}
+            </p>
+            <div className="flex items-center gap-1">
               <Button
-                variant="outline"
-                size="sm"
+                variant="ghost"
+                size="icon-sm"
                 onClick={handlePreviousPage}
                 disabled={pageIndex === 0}
                 aria-label="Предыдущая страница"
               >
-                <ChevronLeft className="mr-2 h-4 w-4" aria-hidden="true" />
-                Назад
+                <ChevronLeft className="size-4" aria-hidden="true" />
               </Button>
               <Button
-                variant="outline"
-                size="sm"
+                variant="ghost"
+                size="icon-sm"
                 onClick={handleNextPage}
                 disabled={pageIndex >= totalPages - 1}
                 aria-label="Следующая страница"
               >
-                Вперед
-                <ChevronRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                <ChevronRight className="size-4" aria-hidden="true" />
               </Button>
             </div>
           </div>

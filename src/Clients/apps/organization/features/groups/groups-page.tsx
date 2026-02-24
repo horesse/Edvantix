@@ -1,5 +1,7 @@
 "use client";
 
+import { PageHeader } from "@/components/page-header";
+
 import { useMemo, useState } from "react";
 
 import Link from "next/link";
@@ -149,21 +151,18 @@ export function GroupsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Группы</h1>
-          <p className="text-muted-foreground">
-            Управление группами организации
-          </p>
-        </div>
-        {canManage && (
-          <Button onClick={() => setCreateOpen(true)}>
-            <Plus className="size-4" />
-            Создать группу
-          </Button>
-        )}
-      </div>
+    <div className="space-y-4">
+      <PageHeader
+        title="Группы"
+        actions={
+          canManage && (
+            <Button size="sm" onClick={() => setCreateOpen(true)}>
+              <Plus className="size-4" />
+              Создать группу
+            </Button>
+          )
+        }
+      />
 
       <FilterTable
         columns={columns}

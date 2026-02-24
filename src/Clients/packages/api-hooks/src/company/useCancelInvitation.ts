@@ -9,7 +9,7 @@ import companyApiClient from "@workspace/api-client/company/company";
 import { companyKeys } from "../keys";
 
 type CancelInvitationParams = {
-  orgId: number;
+  orgId: string;
   invitationId: string;
 };
 

@@ -8,7 +8,7 @@ export default function useDeleteCategory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => blogApiClient.deleteCategory(id),
+    mutationFn: (id: string) => blogApiClient.deleteCategory(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: blogKeys.categories() });
     },

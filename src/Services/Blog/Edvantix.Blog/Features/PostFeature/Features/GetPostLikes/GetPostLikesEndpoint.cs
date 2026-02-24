@@ -8,7 +8,7 @@ public sealed class GetPostLikesEndpoint : IEndpoint<Ok<PostLikesModel>, GetPost
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "/posts/{postId:long}/likes",
+                "/posts/{postId:guid}/likes",
                 async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetPostLikesQuery(postId), sender, ct)
             )

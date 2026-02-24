@@ -10,8 +10,8 @@ import type { UpdateOrganizationContactRequest } from "@workspace/types/company"
 import { companyKeys } from "../keys";
 
 type UpdateContactParams = {
-  orgId: number;
-  contactId: number;
+  orgId: string;
+  contactId: string;
   request: UpdateOrganizationContactRequest;
 };
 

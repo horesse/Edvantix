@@ -10,12 +10,12 @@ import type { CreateGroupRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type CreateGroupParams = {
-  orgId: number;
+  orgId: string;
   request: CreateGroupRequest;
 };
 
 export default function useCreateGroup(
-  options?: UseMutationOptions<number, Error, CreateGroupParams>,
+  options?: UseMutationOptions<string, Error, CreateGroupParams>,
 ) {
   const queryClient = useQueryClient();
 

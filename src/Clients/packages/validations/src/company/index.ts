@@ -71,7 +71,11 @@ export const createInvitationSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  inviteeProfileId: z.number().positive("Некорректный ID профиля").optional(),
+  inviteeProfileId: z
+    .string()
+    .uuid("Некорректный ID профиля")
+    .optional()
+    .or(z.literal("")),
   role: z.nativeEnum(OrganizationRole, {
     error: "Укажите роль",
   }),

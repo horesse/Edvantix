@@ -14,9 +14,6 @@
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Infrastructure\Migrations\" />
-  </ItemGroup>
-  <ItemGroup>
     <Protobuf Include="Grpc\Protos\profile\v1\profile.proto" GrpcService="Server" />
   </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ export enum InvitationStatus {
 // --- Organization ---
 
 export type OrganizationModel = {
-  id: number;
+  id: string;
   name: string;
   nameLatin: string;
   shortName: string;
@@ -38,7 +38,7 @@ export type OrganizationModel = {
 };
 
 export type OrganizationSummaryModel = {
-  id: number;
+  id: string;
   name: string;
   shortName: string;
   description?: string | null;
@@ -65,15 +65,15 @@ export type UpdateOrganizationRequest = {
 
 export type OrganizationMemberModel = {
   id: string;
-  organizationId: number;
-  profileId: number;
+  organizationId: string;
+  profileId: string;
   role: OrganizationRole;
   joinedAt: string;
   displayName?: string | null;
 };
 
 export type AddMemberRequest = {
-  profileId: number;
+  profileId: string;
   role: OrganizationRole;
 };
 
@@ -85,10 +85,10 @@ export type UpdateMemberRoleRequest = {
 
 export type InvitationModel = {
   id: string;
-  organizationId: number;
+  organizationId: string;
   organizationName?: string | null;
-  invitedByProfileId: number;
-  inviteeProfileId?: number | null;
+  invitedByProfileId: string;
+  inviteeProfileId?: string | null;
   inviteeEmail?: string | null;
   role: OrganizationRole;
   status: InvitationStatus;
@@ -100,7 +100,7 @@ export type InvitationModel = {
 
 export type CreateInvitationRequest = {
   inviteeEmail?: string | null;
-  inviteeProfileId?: number | null;
+  inviteeProfileId?: string | null;
   role: OrganizationRole;
   ttlDays?: number;
 };
@@ -108,16 +108,16 @@ export type CreateInvitationRequest = {
 // --- Groups ---
 
 export type GroupModel = {
-  id: number;
-  organizationId: number;
+  id: string;
+  organizationId: string;
   name: string;
   description?: string | null;
   membersCount: number;
 };
 
 export type GroupSummaryModel = {
-  id: number;
-  organizationId: number;
+  id: string;
+  organizationId: string;
   name: string;
   description?: string | null;
   role: string;
@@ -137,15 +137,15 @@ export type UpdateGroupRequest = {
 
 export type GroupMemberModel = {
   id: string;
-  groupId: number;
-  profileId: number;
+  groupId: string;
+  profileId: string;
   role: GroupRole;
   joinedAt: string;
   displayName?: string | null;
 };
 
 export type AddGroupMemberRequest = {
-  profileId: number;
+  profileId: string;
   role: GroupRole;
 };
 
@@ -156,8 +156,8 @@ export type UpdateGroupMemberRoleRequest = {
 // --- Organization Contacts ---
 
 export type OrganizationContactModel = {
-  id: number;
-  organizationId: number;
+  id: string;
+  organizationId: string;
   type: ContactType;
   value: string;
   description?: string | null;

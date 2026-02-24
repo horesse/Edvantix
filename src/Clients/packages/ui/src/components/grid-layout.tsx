@@ -53,7 +53,11 @@ const MainArea = React.forwardRef<HTMLDivElement, MainAreaProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex h-full flex-col overflow-hidden", gapClasses[gap], className)}
+        className={cn(
+          "flex h-full flex-col overflow-hidden",
+          gapClasses[gap],
+          className,
+        )}
         {...props}
       >
         {children}
@@ -70,7 +74,7 @@ const ContentArea = React.forwardRef<HTMLDivElement, ContentAreaProps>(
     <div
       ref={ref}
       className={cn(
-        "flex-1 overflow-y-auto rounded-2xl bg-card p-4 shadow-sm lg:p-5",
+        "bg-card flex-1 overflow-y-auto rounded-2xl p-4 shadow-sm lg:p-5",
         className,
       )}
       {...props}

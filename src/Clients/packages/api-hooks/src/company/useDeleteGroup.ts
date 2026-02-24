@@ -9,8 +9,8 @@ import companyApiClient from "@workspace/api-client/company/company";
 import { companyKeys } from "../keys";
 
 type DeleteGroupParams = {
-  id: number;
-  orgId: number;
+  id: string;
+  orgId: string;
 };
 
 export default function useDeleteGroup(

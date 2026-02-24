@@ -1,4 +1,8 @@
-import axios, { type AxiosInstance, type AxiosResponse } from "axios";
+import axios, {
+  AxiosHeaders,
+  type AxiosInstance,
+  type AxiosResponse,
+} from "axios";
 import axiosRetry, { exponentialDelay } from "axios-retry";
 
 import axiosConfig from "./config";
@@ -31,10 +35,15 @@ export default class ApiClient {
   private setupInterceptors(instance: AxiosInstance): AxiosInstance {
     instance.interceptors.request.use(
       async (config) => {
-        const accessToken = localStorage.getItem("access_token");
+        const accessToken =
+          typeof window !== "undefined"
+            ? window.localStorage.getItem("access_token")
+            : null;
 
         if (accessToken) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`;
+          const headers = AxiosHeaders.from(config.headers);
+          headers.set("Authorization", `Bearer ${accessToken}`);
+          config.headers = headers;
         }
 
         return config;

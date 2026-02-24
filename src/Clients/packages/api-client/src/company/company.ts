@@ -27,7 +27,7 @@ import type ApiClient from "../client";
 // --- Query Types ---
 
 export type OrganizationMembersQuery = {
-  organizationId: number;
+  organizationId: string;
   pageIndex?: number;
   pageSize?: number;
   orderBy?: string;
@@ -35,7 +35,7 @@ export type OrganizationMembersQuery = {
 };
 
 export type OrganizationGroupsQuery = {
-  organizationId: number;
+  organizationId: string;
   pageIndex?: number;
   pageSize?: number;
   orderBy?: string;
@@ -43,7 +43,7 @@ export type OrganizationGroupsQuery = {
 };
 
 export type GroupMembersQuery = {
-  groupId: number;
+  groupId: string;
   pageIndex?: number;
   pageSize?: number;
   orderBy?: string;
@@ -58,14 +58,14 @@ export type MyGroupsQuery = {
 };
 
 export type OrganizationContactsQuery = {
-  organizationId: number;
+  organizationId: string;
   pageIndex?: number;
   pageSize?: number;
   orderBy?: string;
   isDescending?: boolean;
 };
 
-const BASE = "/company/api/v1";
+const BASE = "/organizational/api/v1";
 
 class CompanyApiClient {
   private readonly client: ApiClient;
@@ -78,15 +78,15 @@ class CompanyApiClient {
 
   public async createOrganization(
     request: CreateOrganizationRequest,
-  ): Promise<number> {
-    const response = await this.client.post<number>(
+  ): Promise<string> {
+    const response = await this.client.post<string>(
       `${BASE}/organizations`,
       request,
     );
     return response.data;
   }
 
-  public async getOrganization(id: number): Promise<OrganizationModel> {
+  public async getOrganization(id: string): Promise<OrganizationModel> {
     const response = await this.client.get<OrganizationModel>(
       `${BASE}/organizations/${id}`,
     );
@@ -101,7 +101,7 @@ class CompanyApiClient {
   }
 
   public async updateOrganization(
-    id: number,
+    id: string,
     request: UpdateOrganizationRequest,
   ): Promise<void> {
     await this.client.put<void>(`${BASE}/organizations/${id}`, request);
@@ -110,7 +110,7 @@ class CompanyApiClient {
   // --- Members ---
 
   public async addMember(
-    orgId: number,
+    orgId: string,
     request: AddMemberRequest,
   ): Promise<void> {
     await this.client.post<void>(
@@ -130,14 +130,14 @@ class CompanyApiClient {
     return response.data;
   }
 
-  public async removeMember(orgId: number, memberId: string): Promise<void> {
+  public async removeMember(orgId: string, memberId: string): Promise<void> {
     await this.client.delete<void>(
       `${BASE}/organizations/${orgId}/members/${memberId}`,
     );
   }
 
   public async updateMemberRole(
-    orgId: number,
+    orgId: string,
     memberId: string,
     request: UpdateMemberRoleRequest,
   ): Promise<void> {
@@ -150,7 +150,7 @@ class CompanyApiClient {
   // --- Invitations ---
 
   public async createInvitation(
-    orgId: number,
+    orgId: string,
     request: CreateInvitationRequest,
   ): Promise<void> {
     await this.client.post<void>(
@@ -160,7 +160,7 @@ class CompanyApiClient {
   }
 
   public async getPendingInvitations(
-    orgId: number,
+    orgId: string,
   ): Promise<InvitationModel[]> {
     const response = await this.client.get<InvitationModel[]>(
       `${BASE}/organizations/${orgId}/invitations`,
@@ -169,7 +169,7 @@ class CompanyApiClient {
   }
 
   public async cancelInvitation(
-    orgId: number,
+    orgId: string,
     invitationId: string,
   ): Promise<void> {
     await this.client.delete<void>(
@@ -195,10 +195,10 @@ class CompanyApiClient {
   // --- Groups ---
 
   public async createGroup(
-    orgId: number,
+    orgId: string,
     request: CreateGroupRequest,
-  ): Promise<number> {
-    const response = await this.client.post<number>(
+  ): Promise<string> {
+    const response = await this.client.post<string>(
       `${BASE}/organizations/${orgId}/groups`,
       request,
     );
@@ -217,7 +217,7 @@ class CompanyApiClient {
     return response.data;
   }
 
-  public async getGroup(id: number): Promise<GroupModel> {
+  public async getGroup(id: string): Promise<GroupModel> {
     const response = await this.client.get<GroupModel>(`${BASE}/groups/${id}`);
     return response.data;
   }
@@ -235,20 +235,20 @@ class CompanyApiClient {
   }
 
   public async updateGroup(
-    id: number,
+    id: string,
     request: UpdateGroupRequest,
   ): Promise<void> {
     await this.client.put<void>(`${BASE}/groups/${id}`, request);
   }
 
-  public async deleteGroup(id: number): Promise<void> {
+  public async deleteGroup(id: string): Promise<void> {
     await this.client.delete<void>(`${BASE}/groups/${id}`);
   }
 
   // --- Group Members ---
 
   public async addGroupMember(
-    groupId: number,
+    groupId: string,
     request: AddGroupMemberRequest,
   ): Promise<void> {
     await this.client.post<void>(`${BASE}/groups/${groupId}/members`, request);
@@ -267,7 +267,7 @@ class CompanyApiClient {
   }
 
   public async removeGroupMember(
-    groupId: number,
+    groupId: string,
     memberId: string,
   ): Promise<void> {
     await this.client.delete<void>(
@@ -276,7 +276,7 @@ class CompanyApiClient {
   }
 
   public async updateGroupMemberRole(
-    groupId: number,
+    groupId: string,
     memberId: string,
     request: UpdateGroupMemberRoleRequest,
   ): Promise<void> {
@@ -289,10 +289,10 @@ class CompanyApiClient {
   // --- Contacts ---
 
   public async addContact(
-    orgId: number,
+    orgId: string,
     request: AddOrganizationContactRequest,
-  ): Promise<number> {
-    const response = await this.client.post<number>(
+  ): Promise<string> {
+    const response = await this.client.post<string>(
       `${BASE}/organizations/${orgId}/contacts`,
       request,
     );
@@ -311,8 +311,8 @@ class CompanyApiClient {
   }
 
   public async updateContact(
-    orgId: number,
-    contactId: number,
+    orgId: string,
+    contactId: string,
     request: UpdateOrganizationContactRequest,
   ): Promise<void> {
     await this.client.put<void>(
@@ -321,7 +321,7 @@ class CompanyApiClient {
     );
   }
 
-  public async deleteContact(orgId: number, contactId: number): Promise<void> {
+  public async deleteContact(orgId: string, contactId: string): Promise<void> {
     await this.client.delete<void>(
       `${BASE}/organizations/${orgId}/contacts/${contactId}`,
     );

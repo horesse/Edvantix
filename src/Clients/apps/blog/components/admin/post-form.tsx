@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 
 import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
 
+import type { CategoryModel, PostModel, TagModel } from "@workspace/types/blog";
+import { PostType } from "@workspace/types/blog";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Checkbox } from "@workspace/ui/components/checkbox";
@@ -26,10 +28,9 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select";
 import { Textarea } from "@workspace/ui/components/textarea";
-import type { CategoryModel, PostModel, TagModel } from "@workspace/types/blog";
-import { PostType } from "@workspace/types/blog";
 
 import { slugify } from "@/lib/utils";
+
 import { MarkdownEditor } from "./markdown-editor";
 
 export type PostFormValues = {
@@ -40,8 +41,8 @@ export type PostFormValues = {
   type: string;
   isPremium: boolean;
   coverImageUrl: string;
-  categoryIds: number[];
-  tagIds: number[];
+  categoryIds: string[];
+  tagIds: string[];
 };
 
 type PostFormProps = {
@@ -84,7 +85,7 @@ export function PostForm({
     }
   }, [title, defaultValues?.slug, form]);
 
-  const toggleId = (field: "categoryIds" | "tagIds", id: number) => {
+  const toggleId = (field: "categoryIds" | "tagIds", id: string) => {
     const current = form.getValues(field);
     form.setValue(
       field,
@@ -96,8 +97,8 @@ export function PostForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {/* ── Basic Info ── */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-5">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+        <div className="border-border bg-card space-y-5 rounded-xl border p-6">
+          <h2 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
             Basic Info
           </h2>
 
@@ -110,7 +111,11 @@ export function PostForm({
               <FormItem>
                 <FormLabel>Title *</FormLabel>
                 <FormControl>
-                  <Input placeholder="Post title" className="text-base" {...field} />
+                  <Input
+                    placeholder="Post title"
+                    className="text-base"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -127,11 +132,19 @@ export function PostForm({
                 <FormLabel>Slug *</FormLabel>
                 <FormControl>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground shrink-0">/</span>
-                    <Input placeholder="post-url-slug" className="font-mono text-sm" {...field} />
+                    <span className="text-muted-foreground shrink-0 text-sm">
+                      /
+                    </span>
+                    <Input
+                      placeholder="post-url-slug"
+                      className="font-mono text-sm"
+                      {...field}
+                    />
                   </div>
                 </FormControl>
-                <FormDescription>URL-friendly identifier for this post.</FormDescription>
+                <FormDescription>
+                  URL-friendly identifier for this post.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -161,12 +174,12 @@ export function PostForm({
         </div>
 
         {/* ── Settings ── */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-5">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+        <div className="border-border bg-card space-y-5 rounded-xl border p-6">
+          <h2 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
             Settings
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {/* Type */}
             <FormField
               control={form.control}
@@ -174,15 +187,22 @@ export function PostForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Post type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value={String(PostType.News)}>News</SelectItem>
-                      <SelectItem value={String(PostType.Changelog)}>Changelog</SelectItem>
+                      <SelectItem value={String(PostType.News)}>
+                        News
+                      </SelectItem>
+                      <SelectItem value={String(PostType.Changelog)}>
+                        Changelog
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -211,7 +231,7 @@ export function PostForm({
             control={form.control}
             name="isPremium"
             render={({ field }) => (
-              <FormItem className="flex items-center gap-3 space-y-0 rounded-lg border border-border p-4 bg-muted/20">
+              <FormItem className="border-border bg-muted/20 flex items-center gap-3 space-y-0 rounded-lg border p-4">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -219,7 +239,9 @@ export function PostForm({
                   />
                 </FormControl>
                 <div>
-                  <FormLabel className="cursor-pointer">Premium content</FormLabel>
+                  <FormLabel className="cursor-pointer">
+                    Premium content
+                  </FormLabel>
                   <FormDescription className="text-xs">
                     Only visible to subscribers.
                   </FormDescription>
@@ -230,8 +252,8 @@ export function PostForm({
         </div>
 
         {/* ── Taxonomy ── */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-5">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+        <div className="border-border bg-card space-y-5 rounded-xl border p-6">
+          <h2 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
             Taxonomy
           </h2>
 
@@ -242,15 +264,19 @@ export function PostForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Categories</FormLabel>
-                <div className="flex flex-wrap gap-2 mt-1">
+                <div className="mt-1 flex flex-wrap gap-2">
                   {categories.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No categories yet.</p>
+                    <p className="text-muted-foreground text-sm">
+                      No categories yet.
+                    </p>
                   ) : (
                     categories.map((cat) => (
                       <Badge
                         key={cat.id}
-                        variant={field.value.includes(cat.id) ? "default" : "outline"}
-                        className="cursor-pointer select-none transition-all"
+                        variant={
+                          field.value.includes(cat.id) ? "default" : "outline"
+                        }
+                        className="cursor-pointer transition-all select-none"
                         onClick={() => toggleId("categoryIds", cat.id)}
                       >
                         {cat.name}
@@ -270,15 +296,19 @@ export function PostForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tags</FormLabel>
-                <div className="flex flex-wrap gap-2 mt-1">
+                <div className="mt-1 flex flex-wrap gap-2">
                   {tags.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No tags yet.</p>
+                    <p className="text-muted-foreground text-sm">
+                      No tags yet.
+                    </p>
                   ) : (
                     tags.map((tag) => (
                       <Badge
                         key={tag.id}
-                        variant={field.value.includes(tag.id) ? "default" : "outline"}
-                        className="cursor-pointer select-none transition-all"
+                        variant={
+                          field.value.includes(tag.id) ? "default" : "outline"
+                        }
+                        className="cursor-pointer transition-all select-none"
                         onClick={() => toggleId("tagIds", tag.id)}
                       >
                         #{tag.name}
@@ -295,11 +325,12 @@ export function PostForm({
         {/* ── Content ── */}
         <div className="space-y-3">
           <div>
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+            <h2 className="text-muted-foreground mb-1 text-sm font-semibold tracking-wider uppercase">
               Content *
             </h2>
-            <p className="text-xs text-muted-foreground">
-              Write your post in Markdown. Use the toolbar for formatting shortcuts.
+            <p className="text-muted-foreground text-xs">
+              Write your post in Markdown. Use the toolbar for formatting
+              shortcuts.
             </p>
           </div>
 

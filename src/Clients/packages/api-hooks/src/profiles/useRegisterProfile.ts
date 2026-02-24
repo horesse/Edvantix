@@ -10,7 +10,7 @@ import type { RegisterProfileRequest } from "@workspace/types/profile";
 import { profileKeys } from "../keys";
 
 export default function useRegisterProfile(
-  options?: UseMutationOptions<number, Error, RegisterProfileRequest>,
+  options?: UseMutationOptions<string, Error, RegisterProfileRequest>,
 ) {
   const queryClient = useQueryClient();
 

@@ -13,7 +13,7 @@ export default function useUpdatePost() {
       postId,
       request,
     }: {
-      postId: number;
+      postId: string;
       request: UpdatePostRequest;
     }) => blogApiClient.updatePost(postId, request),
     onSuccess: () => {

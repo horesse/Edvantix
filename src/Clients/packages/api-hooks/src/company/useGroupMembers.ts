@@ -10,7 +10,7 @@ import type { PagedResult } from "@workspace/types/shared";
 import { companyKeys } from "../keys";
 
 export default function useGroupMembers(
-  groupId: number,
+  groupId: string,
   query?: Omit<GroupMembersQuery, "groupId">,
   options?: Omit<
     UseQueryOptions<PagedResult<GroupMemberModel>>,
@@ -24,7 +24,7 @@ export default function useGroupMembers(
         groupId,
         ...query,
       }),
-    enabled: groupId > 0,
+    enabled: Boolean(groupId),
     ...options,
   });
 }

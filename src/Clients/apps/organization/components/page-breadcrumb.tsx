@@ -20,11 +20,15 @@ type PageBreadcrumbProps = Readonly<{
   currentPage?: string;
 }>;
 
-export function PageBreadcrumb({ items = [], currentPage }: PageBreadcrumbProps) {
+export function PageBreadcrumb({
+  items = [],
+  currentPage,
+}: PageBreadcrumbProps) {
   const pathname = usePathname();
 
   const allItems = items.length > 0 ? items : generateBreadcrumbItems(pathname);
-  const displayedItems = allItems.length > 3 ? [allItems[0]!, ...allItems.slice(-2)] : allItems;
+  const displayedItems =
+    allItems.length > 3 ? [allItems[0]!, ...allItems.slice(-2)] : allItems;
   const hasEllipsis = allItems.length > 3;
 
   // На мобильных показываем только последний элемент
@@ -79,7 +83,7 @@ export function PageBreadcrumb({ items = [], currentPage }: PageBreadcrumbProps)
         </div>
 
         {/* Mobile версия - только последний элемент */}
-        <div className="md:hidden contents">
+        <div className="contents md:hidden">
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link href="/">
@@ -114,7 +118,9 @@ export function PageBreadcrumb({ items = [], currentPage }: PageBreadcrumbProps)
   );
 }
 
-function generateBreadcrumbItems(pathname: string): { label: string; href: string }[] {
+function generateBreadcrumbItems(
+  pathname: string,
+): { label: string; href: string }[] {
   const segments = pathname.split("/").filter(Boolean);
   const items: { label: string; href: string }[] = [];
 
@@ -127,6 +133,18 @@ function generateBreadcrumbItems(pathname: string): { label: string; href: strin
     profile: "Профиль",
     career: "Карьера",
     "create-organization": "Создать организацию",
+    // School management routes
+    school: "Школа",
+    courses: "Курсы",
+    students: "Ученики",
+    teachers: "Преподаватели",
+    schedule: "Расписание",
+    finance: "Финансы",
+    crm: "CRM",
+    analytics: "Аналитика",
+    "my-courses": "Мои курсы",
+    messages: "Сообщения",
+    notifications: "Уведомления",
   };
 
   let currentPath = "";

@@ -8,14 +8,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import useCreateOrganization from "@workspace/api-hooks/company/useCreateOrganization";
+
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@workspace/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
 import {
   Form,
   FormControl,
@@ -66,124 +61,118 @@ export default function CreateOrganizationPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl">
-      <Card>
-        <CardHeader>
-          <CardTitle>Создание организации</CardTitle>
-          <CardDescription>
-            Заполните информацию о вашей образовательной организации
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="space-y-4"
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Название</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Образовательный центр «Знание»"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+    <div className="mx-auto max-w-2xl space-y-6">
+      <PageHeader title="Создание организации" />
+      <div className="border-t pt-6">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Название</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Образовательный центр «Знание»"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="nameLatin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Название (латиница)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Knowledge Education Center"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="shortName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Краткое название</FormLabel>
+                  <FormControl>
+                    <Input placeholder="ОЦ Знание" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="printName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Печатное название{" "}
+                    <span className="font-normal opacity-60">
+                      (необязательно)
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="ОЦ «Знание»" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Описание{" "}
+                    <span className="font-normal opacity-60">
+                      (необязательно)
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Краткое описание организации"
+                      rows={3}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-end gap-2 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => router.back()}
+              >
+                Отмена
+              </Button>
+              <Button type="submit" size="sm" disabled={createMutation.isPending}>
+                {createMutation.isPending && (
+                  <Loader2 className="size-4 animate-spin" />
                 )}
-              />
-              <FormField
-                control={form.control}
-                name="nameLatin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Название (латиница)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Knowledge Education Center"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="shortName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Краткое название</FormLabel>
-                    <FormControl>
-                      <Input placeholder="ОЦ Знание" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="printName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Печатное название{" "}
-                      <span className="text-muted-foreground font-normal">
-                        (необязательно)
-                      </span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="ОЦ «Знание»" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Описание{" "}
-                      <span className="text-muted-foreground font-normal">
-                        (необязательно)
-                      </span>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Краткое описание организации"
-                        rows={3}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => router.back()}
-                >
-                  Отмена
-                </Button>
-                <Button type="submit" disabled={createMutation.isPending}>
-                  {createMutation.isPending && (
-                    <Loader2 className="size-4 animate-spin" />
-                  )}
-                  Создать
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                Создать
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

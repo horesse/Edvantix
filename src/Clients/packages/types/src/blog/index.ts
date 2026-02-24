@@ -18,7 +18,7 @@ export type AuthorModel = {
 };
 
 export type CategoryModel = {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   description?: string;
@@ -26,7 +26,7 @@ export type CategoryModel = {
 };
 
 export type TagModel = {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   createdAt?: string;
@@ -34,7 +34,7 @@ export type TagModel = {
 
 /** Summary model used in post listings */
 export type PostSummaryModel = {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   summary?: string;
@@ -68,8 +68,8 @@ export type CreatePostRequest = {
   type: PostType;
   isPremium: boolean;
   coverImageUrl?: string;
-  categoryIds: number[];
-  tagIds: number[];
+  categoryIds: string[];
+  tagIds: string[];
 };
 
 export type UpdatePostRequest = CreatePostRequest;
@@ -95,8 +95,8 @@ export type UpdateTagRequest = CreateTagRequest;
 
 export type GetPostsQuery = {
   type?: PostType;
-  categoryId?: number;
-  tagId?: number;
+  categoryId?: string;
+  tagId?: string;
   search?: string;
   pageIndex?: number;
   pageSize?: number;
@@ -105,8 +105,8 @@ export type GetPostsQuery = {
 export type GetAdminPostsQuery = {
   status?: PostStatus;
   type?: PostType;
-  categoryId?: number;
-  tagId?: number;
+  categoryId?: string;
+  tagId?: string;
   search?: string;
   pageIndex?: number;
   pageSize?: number;

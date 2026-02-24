@@ -21,7 +21,7 @@ export function LoadingScreen({
   return (
     <div className="from-background to-muted/20 flex h-screen items-center justify-center bg-linear-to-br">
       <Card
-        className="border-muted/50 w-full max-w-md shadow-lg"
+        className="border-muted/50 w-full max-w-md shadow-sm"
         role="status"
         aria-live="polite"
         aria-busy="true"

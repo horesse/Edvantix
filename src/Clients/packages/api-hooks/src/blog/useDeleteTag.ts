@@ -8,7 +8,7 @@ export default function useDeleteTag() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => blogApiClient.deleteTag(id),
+    mutationFn: (id: string) => blogApiClient.deleteTag(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: blogKeys.tags() });
     },

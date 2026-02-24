@@ -9,7 +9,7 @@ public sealed class DeletePostEndpoint : IEndpoint<NoContent, DeletePostCommand,
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/admin/posts/{postId:long}",
+                "/admin/posts/{postId:guid}",
                 async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new DeletePostCommand(postId), sender, ct)
             )

@@ -1685,30 +1685,6 @@
       ]
     },
     {
-      "id": "a2b3c4d5-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
-      "name": "${CLIENT_ORGANIZATIONAL_ID}_read",
-      "description": "Read for ${CLIENT_ORGANIZATIONAL_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
-      "id": "b3c4d5e6-7f8a-4b9c-0d1e-2f3a4b5c6d7e",
-      "name": "${CLIENT_ORGANIZATIONAL_ID}_write",
-      "description": "Write for ${CLIENT_ORGANIZATIONAL_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
       "id": "7d6a1313-822f-49b7-af83-7beb42f039f9",
       "name": "address",
       "description": "OpenID Connect built-in scope: address",
@@ -2193,6 +2169,30 @@
       "id": "03f5b25c-2f97-45a5-b634-9d4cb12f7b8d",
       "name": "${CLIENT_PERSONA_ID}_write",
       "description": "Write for ${CLIENT_PERSONA_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "913c1ceb-013e-4077-a619-cb7d0ebd6c03",
+      "name": "${CLIENT_ORGANIZATIONAL_ID}_read",
+      "description": "Read for ${CLIENT_ORGANIZATIONAL_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "463c1e7a-9eaa-409b-b4a3-420be45aa8a4",
+      "name": "${CLIENT_ORGANIZATIONAL_ID}_write",
+      "description": "Write for ${CLIENT_ORGANIZATIONAL_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",

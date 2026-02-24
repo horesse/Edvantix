@@ -4,10 +4,9 @@ import { useMemo, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowLeft,
   Loader2,
   MoreHorizontal,
   Pencil,
@@ -53,6 +52,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { FilterTable } from "@/components/filter-table";
+import { PageHeader } from "@/components/page-header";
 import {
   Form,
   FormControl,
@@ -72,18 +73,17 @@ import {
 } from "@workspace/ui/components/select";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { Textarea } from "@workspace/ui/components/textarea";
+import { usePaginatedTable } from "@workspace/ui/hooks/usePaginatedTable";
 import {
   type UpdateGroupInput,
   updateGroupSchema,
 } from "@workspace/validations/company";
 
-import { FilterTable } from "@/components/filter-table";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 import { groupRoleLabels } from "@/lib/company-options";
 
 type GroupDetailPageProps = {
-  groupId: number;
+  groupId: string;
 };
 
 export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
@@ -91,8 +91,13 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
   const { currentOrg, canManage } = useOrganization();
   const { data: group, isLoading: groupLoading } = useGroup(groupId);
 
-  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
-    usePaginatedTable();
+  const {
+    pageIndex,
+    pageSize,
+    sortingQuery,
+    handlePaginationChange,
+    handleSortingChange,
+  } = usePaginatedTable();
 
   const { data: membersData, isLoading: membersLoading } = useGroupMembers(
     groupId,
@@ -112,7 +117,7 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
     null,
   );
 
-  const orgId = currentOrg?.id ?? 0;
+  const orgId = currentOrg?.id ?? "";
 
   const columns = useMemo<ColumnDef<GroupMemberModel>[]>(
     () => [
@@ -175,10 +180,13 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
 
   if (groupLoading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-4 w-96" />
-        <Skeleton className="h-64 w-full" />
+      <div className="space-y-4">
+        <Skeleton className="h-5 w-32" />
+        <div className="space-y-1">
+          <Skeleton className="h-5 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <Skeleton className="h-48 w-full" />
       </div>
     );
   }
@@ -192,58 +200,37 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push("/groups")}
-        >
-          <ArrowLeft className="size-4" />
-          Группы
-        </Button>
-      </div>
-
-      <div className="bg-muted/50 overflow-hidden rounded-xl border-0 shadow-sm">
-        <div className="p-6">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-bold">{group.name}</h2>
-              {group.description && (
-                <p className="text-muted-foreground">{group.description}</p>
-              )}
+    <div className="space-y-4">
+      <PageHeader
+        title={group.name}
+        description={group.description ?? undefined}
+        back={{ label: "Группы", href: "/groups" }}
+        actions={
+          canManage && (
+            <div className="flex gap-1.5">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setEditOpen(true)}
+              >
+                <Pencil className="size-4" />
+                Редактировать
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setDeleteOpen(true)}
+              >
+                <Trash2 className="size-4" />
+              </Button>
             </div>
-            {canManage && (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setEditOpen(true)}
-                >
-                  <Pencil className="size-4" />
-                  Редактировать
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setDeleteOpen(true)}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+          )
+        }
+      />
 
-      <div className="space-y-4">
+      <div className="space-y-3 border-t pt-4">
         <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold">Участники группы</h2>
-            <p className="text-muted-foreground text-sm">
-              Управление участниками группы
-            </p>
-          </div>
+          <p className="text-sm font-medium">Участники</p>
           {canManage && (
             <Button size="sm" onClick={() => setAddMemberOpen(true)}>
               <Plus className="size-4" />
@@ -255,7 +242,7 @@ export function GroupDetailPage({ groupId }: GroupDetailPageProps) {
         <FilterTable
           columns={columns}
           data={membersData?.items ?? []}
-          totalItems={membersData?.totalItems ?? 0}
+          totalItems={membersData?.totalCount ?? 0}
           pageIndex={pageIndex}
           pageSize={pageSize}
           isLoading={membersLoading}
@@ -303,8 +290,8 @@ function EditGroupDialog({
   open,
   onOpenChange,
 }: {
-  group: { id: number; name: string; description?: string | null };
-  orgId: number;
+  group: { id: string; name: string; description?: string | null };
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -403,8 +390,8 @@ function DeleteGroupConfirm({
   onClose,
   onDeleted,
 }: {
-  group: { id: number; name: string };
-  orgId: number;
+  group: { id: string; name: string };
+  orgId: string;
   open: boolean;
   onClose: () => void;
   onDeleted: () => void;
@@ -447,7 +434,7 @@ function AddGroupMemberDialog({
   open,
   onOpenChange,
 }: {
-  groupId: number;
+  groupId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -465,9 +452,12 @@ function AddGroupMemberDialog({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const id = Number(profileId);
-    if (id > 0) {
-      mutation.mutate({ groupId, request: { profileId: id, role } });
+    const normalizedProfileId = profileId.trim();
+    if (normalizedProfileId) {
+      mutation.mutate({
+        groupId,
+        request: { profileId: normalizedProfileId, role },
+      });
     }
   }
 
@@ -485,10 +475,9 @@ function AddGroupMemberDialog({
             <Label htmlFor="groupProfileId">ID профиля</Label>
             <Input
               id="groupProfileId"
-              type="number"
-              min={1}
               value={profileId}
               onChange={(e) => setProfileId(e.target.value)}
+              placeholder="3fa85f64-5717-4562-b3fc-2c963f66afa6"
               required
             />
           </div>
@@ -503,7 +492,7 @@ function AddGroupMemberDialog({
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(groupRoleLabels).map(([key, label]) => (
-                  <SelectItem key={key} value={key}>
+                  <SelectItem key={String(key)} value={String(key)}>
                     {label}
                   </SelectItem>
                 ))}
@@ -536,7 +525,7 @@ function ChangeGroupMemberRoleDialog({
   member,
   onClose,
 }: {
-  groupId: number;
+  groupId: string;
   member: GroupMemberModel | null;
   onClose: () => void;
 }) {
@@ -584,7 +573,7 @@ function ChangeGroupMemberRoleDialog({
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(groupRoleLabels).map(([key, label]) => (
-                  <SelectItem key={key} value={key}>
+                  <SelectItem key={String(key)} value={String(key)}>
                     {label}
                   </SelectItem>
                 ))}
@@ -613,7 +602,7 @@ function RemoveGroupMemberDialog({
   member,
   onClose,
 }: {
-  groupId: number;
+  groupId: string;
   member: GroupMemberModel | null;
   onClose: () => void;
 }) {

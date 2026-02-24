@@ -9,8 +9,8 @@ import { ShieldAlert } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
-import { useSession, signIn } from "@/lib/auth-client";
 import { useIsAdmin } from "@/hooks/use-realm-roles";
+import { signIn, useSession } from "@/lib/auth-client";
 
 type AdminGuardProps = {
   children: React.ReactNode;

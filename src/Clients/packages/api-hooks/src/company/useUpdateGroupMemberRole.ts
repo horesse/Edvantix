@@ -10,7 +10,7 @@ import type { UpdateGroupMemberRoleRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type UpdateGroupMemberRoleParams = {
-  groupId: number;
+  groupId: string;
   memberId: string;
   request: UpdateGroupMemberRoleRequest;
 };

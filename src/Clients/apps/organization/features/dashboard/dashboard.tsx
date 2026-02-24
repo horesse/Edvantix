@@ -31,6 +31,7 @@ import {
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { cn } from "@workspace/ui/lib/utils";
 
+import { PageHeader } from "@/components/page-header";
 import { useOrganization as useOrgContext } from "@/components/organization-provider";
 
 import { IncomingInvitationsSection } from "../invitations/incoming-invitations-section";
@@ -84,35 +85,26 @@ function EmptyState() {
   );
 }
 
-function OrgHeader({ orgId }: { orgId: number }) {
+function OrgHeader({ orgId }: { orgId: string }) {
   const { data: org, isLoading } = useOrganization(orgId);
 
   if (isLoading) {
     return (
-      <Island variant="bordered">
-        <IslandHeader>
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-4 w-96" />
-        </IslandHeader>
-      </Island>
+      <div className="space-y-1">
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-4 w-72" />
+      </div>
     );
   }
 
   if (!org) return null;
 
   return (
-    <Island variant="bordered">
-      <IslandHeader>
-        <IslandTitle>{org.name}</IslandTitle>
-        {org.description && (
-          <IslandDescription>{org.description}</IslandDescription>
-        )}
-      </IslandHeader>
-    </Island>
+    <PageHeader title={org.name} description={org.description ?? undefined} />
   );
 }
 
-function KPICards({ orgId }: { orgId: number }) {
+function KPICards({ orgId }: { orgId: string }) {
   const { data: org, isLoading } = useOrganization(orgId);
 
   const kpis = [
@@ -155,28 +147,26 @@ function KPICards({ orgId }: { orgId: number }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {kpis.map((kpi) => (
         <div
           key={kpi.title}
-          className="bg-card space-y-2 rounded-2xl border p-4 shadow-sm transition-shadow hover:shadow-md"
+          className="bg-card space-y-3 rounded-lg border p-4"
         >
           <div className="flex items-center justify-between">
-            <p className="text-muted-foreground text-xs font-medium">
-              {kpi.title}
-            </p>
-            <div className={cn("rounded-lg p-2", kpi.bgColor)}>
-              <kpi.icon className={cn("size-4", kpi.color)} />
+            <p className="text-muted-foreground text-xs">{kpi.title}</p>
+            <div className={cn("rounded-md p-1.5", kpi.bgColor)}>
+              <kpi.icon className={cn("size-3.5", kpi.color)} />
             </div>
           </div>
           {isLoading ? (
-            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-7 w-16" />
           ) : (
             <div className="flex items-end justify-between">
-              <p className="text-2xl font-bold">{kpi.value}</p>
+              <p className="text-xl font-semibold tabular-nums">{kpi.value}</p>
               <div
                 className={cn(
-                  "flex items-center gap-1 text-xs font-medium",
+                  "flex items-center gap-0.5 text-xs",
                   kpi.trend === "up"
                     ? "text-green-600 dark:text-green-400"
                     : "text-red-600 dark:text-red-400",
@@ -247,7 +237,7 @@ function GrowthChart() {
   );
 }
 
-function GroupsDistribution({ orgId }: { orgId: number }) {
+function GroupsDistribution({ orgId }: { orgId: string }) {
   const { data: org } = useOrganization(orgId);
 
   const groups = [
@@ -360,14 +350,14 @@ function QuickActions() {
         <IslandTitle>Быстрые действия</IslandTitle>
         <IslandDescription>Часто используемые операции</IslandDescription>
       </IslandHeader>
-      <IslandContent className="flex flex-col gap-2">
-        <Button variant="outline" asChild className="justify-start">
+      <IslandContent className="flex flex-col gap-1">
+        <Button variant="ghost" size="sm" asChild className="justify-start">
           <Link href="/organization/invitations">
             <UserPlus className="size-4" />
             Пригласить участника
           </Link>
         </Button>
-        <Button variant="outline" asChild className="justify-start">
+        <Button variant="ghost" size="sm" asChild className="justify-start">
           <Link href="/organization/groups">
             <UsersRound className="size-4" />
             Создать группу

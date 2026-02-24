@@ -7,6 +7,8 @@ import { Loader2, MoreHorizontal, Plus, Trash2, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import useAddMember from "@workspace/api-hooks/company/useAddMember";
+
+import { PageHeader } from "@/components/page-header";
 import useOrganizationMembers from "@workspace/api-hooks/company/useOrganizationMembers";
 import useRemoveMember from "@workspace/api-hooks/company/useRemoveMember";
 import useUpdateMemberRole from "@workspace/api-hooks/company/useUpdateMemberRole";
@@ -38,6 +40,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { FilterTable } from "@/components/filter-table";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import {
@@ -47,9 +50,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
+import { usePaginatedTable } from "@workspace/ui/hooks/usePaginatedTable";
 
-import { FilterTable } from "@/components/filter-table";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 import { organizationRoleLabels } from "@/lib/company-options";
 
@@ -61,10 +63,15 @@ export function MembersPage() {
   const [removeMember, setRemoveMember] =
     useState<OrganizationMemberModel | null>(null);
 
-  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
-    usePaginatedTable();
+  const {
+    pageIndex,
+    pageSize,
+    sortingQuery,
+    handlePaginationChange,
+    handleSortingChange,
+  } = usePaginatedTable();
 
-  const orgId = currentOrg?.id ?? 0;
+  const orgId = currentOrg?.id ?? "";
   const { data, isLoading } = useOrganizationMembers(orgId, {
     pageIndex: pageIndex + 1,
     pageSize,
@@ -137,26 +144,23 @@ export function MembersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Участники</h1>
-          <p className="text-muted-foreground">
-            Управление участниками организации
-          </p>
-        </div>
-        {canManage && (
-          <Button onClick={() => setAddDialogOpen(true)}>
-            <Plus className="size-4" />
-            Добавить
-          </Button>
-        )}
-      </div>
+    <div className="space-y-4">
+      <PageHeader
+        title="Участники"
+        actions={
+          canManage && (
+            <Button size="sm" onClick={() => setAddDialogOpen(true)}>
+              <Plus className="size-4" />
+              Добавить
+            </Button>
+          )
+        }
+      />
 
       <FilterTable
         columns={columns}
         data={data?.items ?? []}
-        totalItems={data?.totalItems ?? 0}
+        totalItems={data?.totalCount ?? 0}
         pageIndex={pageIndex}
         pageSize={pageSize}
         isLoading={isLoading}
@@ -200,7 +204,7 @@ function AddMemberDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -218,9 +222,11 @@ function AddMemberDialog({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const id = Number(profileId);
-    if (id > 0) {
-      mutation.mutate({ orgId, request: { profileId: id, role } });
+    if (profileId.trim()) {
+      mutation.mutate({
+        orgId,
+        request: { profileId: profileId.trim(), role },
+      });
     }
   }
 
@@ -238,11 +244,9 @@ function AddMemberDialog({
             <Label htmlFor="profileId">ID профиля</Label>
             <Input
               id="profileId"
-              type="number"
-              min={1}
               value={profileId}
               onChange={(e) => setProfileId(e.target.value)}
-              placeholder="12345"
+              placeholder="3fa85f64-5717-4562-b3fc-2c963f66afa6"
               required
             />
           </div>
@@ -292,7 +296,7 @@ function ChangeRoleDialog({
   member,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   member: OrganizationMemberModel | null;
   onClose: () => void;
 }) {
@@ -371,7 +375,7 @@ function RemoveMemberDialog({
   member,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   member: OrganizationMemberModel | null;
   onClose: () => void;
 }) {

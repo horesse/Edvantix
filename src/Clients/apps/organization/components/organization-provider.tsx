@@ -36,16 +36,13 @@ export function OrganizationProvider({
   children: React.ReactNode;
 }) {
   const { data: organizations = [], isLoading } = useMyOrganizations();
-  const [selectedOrgId, setSelectedOrgId] = useState<number | null>(null);
+  const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
 
   // Restore persisted selection on mount
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      const parsed = Number(stored);
-      if (!Number.isNaN(parsed) && parsed > 0) {
-        setSelectedOrgId(parsed);
-      }
+      setSelectedOrgId(stored);
     }
   }, []);
 

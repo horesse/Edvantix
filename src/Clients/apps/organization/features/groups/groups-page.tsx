@@ -1,11 +1,13 @@
 "use client";
 
+import { PageHeader } from "@/components/page-header";
+
 import { useMemo, useState } from "react";
 
 import Link from "next/link";
 
-import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Loader2, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -39,6 +41,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
+import { FilterTable } from "@/components/filter-table";
 import {
   Form,
   FormControl,
@@ -49,13 +52,12 @@ import {
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
+import { usePaginatedTable } from "@workspace/ui/hooks/usePaginatedTable";
 import {
   type CreateGroupInput,
   createGroupSchema,
 } from "@workspace/validations/company";
 
-import { FilterTable } from "@/components/filter-table";
-import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { useOrganization } from "@/components/organization-provider";
 
 export function GroupsPage() {
@@ -63,10 +65,15 @@ export function GroupsPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteGroup, setDeleteGroup] = useState<GroupModel | null>(null);
 
-  const { pageIndex, pageSize, sortingQuery, handlePaginationChange, handleSortingChange } =
-    usePaginatedTable();
+  const {
+    pageIndex,
+    pageSize,
+    sortingQuery,
+    handlePaginationChange,
+    handleSortingChange,
+  } = usePaginatedTable();
 
-  const orgId = currentOrg?.id ?? 0;
+  const orgId = currentOrg?.id ?? "";
   const { data, isLoading } = useOrganizationGroups(orgId, {
     pageIndex: pageIndex + 1,
     pageSize,
@@ -144,26 +151,23 @@ export function GroupsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Группы</h1>
-          <p className="text-muted-foreground">
-            Управление группами организации
-          </p>
-        </div>
-        {canManage && (
-          <Button onClick={() => setCreateOpen(true)}>
-            <Plus className="size-4" />
-            Создать группу
-          </Button>
-        )}
-      </div>
+    <div className="space-y-4">
+      <PageHeader
+        title="Группы"
+        actions={
+          canManage && (
+            <Button size="sm" onClick={() => setCreateOpen(true)}>
+              <Plus className="size-4" />
+              Создать группу
+            </Button>
+          )
+        }
+      />
 
       <FilterTable
         columns={columns}
         data={data?.items ?? []}
-        totalItems={data?.totalItems ?? 0}
+        totalItems={data?.totalCount ?? 0}
         pageIndex={pageIndex}
         pageSize={pageSize}
         isLoading={isLoading}
@@ -191,7 +195,7 @@ function CreateGroupDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -290,7 +294,7 @@ function DeleteGroupDialog({
   group,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   group: GroupModel | null;
   onClose: () => void;
 }) {

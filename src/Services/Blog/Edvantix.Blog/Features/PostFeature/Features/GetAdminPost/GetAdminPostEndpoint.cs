@@ -11,7 +11,7 @@ public sealed class GetAdminPostEndpoint : IEndpoint<Ok<PostModel>, GetAdminPost
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "/admin/posts/{postId:long}",
+                "/admin/posts/{postId:guid}",
                 async (Guid postId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetAdminPostQuery(postId), sender, ct)
             )

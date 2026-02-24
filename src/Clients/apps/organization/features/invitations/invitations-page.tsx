@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 
-import type { ColumnDef } from "@tanstack/react-table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Clock, Loader2, Plus, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -23,6 +23,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
+import { FilterTable } from "@/components/filter-table";
+import { PageHeader } from "@/components/page-header";
 import {
   Form,
   FormControl,
@@ -50,7 +52,6 @@ import {
   createInvitationSchema,
 } from "@workspace/validations/company";
 
-import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
 import { organizationRoleLabels } from "@/lib/company-options";
 
@@ -68,13 +69,8 @@ export function InvitationsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Приглашения</h1>
-        <p className="text-muted-foreground">
-          Управление приглашениями организации
-        </p>
-      </div>
+    <div className="space-y-4">
+      <PageHeader title="Приглашения" />
 
       <Tabs defaultValue={canManage ? "outgoing" : "incoming"}>
         <TabsList>
@@ -96,7 +92,7 @@ export function InvitationsPage() {
   );
 }
 
-function OutgoingInvitations({ orgId }: { orgId: number }) {
+function OutgoingInvitations({ orgId }: { orgId: string }) {
   const [createOpen, setCreateOpen] = useState(false);
 
   const { data, isLoading } = usePendingInvitations(orgId);
@@ -172,15 +168,10 @@ function OutgoingInvitations({ orgId }: { orgId: number }) {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold">Отправленные приглашения</h2>
-          <p className="text-muted-foreground text-sm">
-            Приглашения, ожидающие принятия
-          </p>
-        </div>
-        <Button onClick={() => setCreateOpen(true)}>
+        <p className="text-sm font-medium text-muted-foreground">Отправленные</p>
+        <Button size="sm" onClick={() => setCreateOpen(true)}>
           <Plus className="size-4" />
           Пригласить
         </Button>
@@ -212,7 +203,7 @@ function CreateInvitationDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {

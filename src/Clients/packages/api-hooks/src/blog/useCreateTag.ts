@@ -9,8 +9,7 @@ export default function useCreateTag() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (request: CreateTagRequest) =>
-      blogApiClient.createTag(request),
+    mutationFn: (request: CreateTagRequest) => blogApiClient.createTag(request),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: blogKeys.tags() });
     },

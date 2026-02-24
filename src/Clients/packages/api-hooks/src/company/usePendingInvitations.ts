@@ -7,13 +7,13 @@ import type { InvitationModel } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 export default function usePendingInvitations(
-  orgId: number,
+  orgId: string,
   options?: Omit<UseQueryOptions<InvitationModel[]>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: companyKeys.invitations(orgId),
     queryFn: () => companyApiClient.getPendingInvitations(orgId),
-    enabled: orgId > 0,
+    enabled: Boolean(orgId),
     ...options,
   });
 }

@@ -18,7 +18,7 @@ const PageBase = React.forwardRef<HTMLDivElement, PageBaseProps>(
       <div
         ref={ref}
         className={cn(
-          "h-screen overflow-hidden bg-background",
+          "bg-background h-screen overflow-hidden",
           paddingClasses[padding],
           className,
         )}

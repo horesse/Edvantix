@@ -13,7 +13,7 @@ export default function usePublishPost() {
       postId,
       request,
     }: {
-      postId: number;
+      postId: string;
       request?: PublishPostRequest;
     }) => blogApiClient.publishPost(postId, request),
     onSuccess: () => {

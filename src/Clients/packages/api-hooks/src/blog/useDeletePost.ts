@@ -8,7 +8,7 @@ export default function useDeletePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (postId: number) => blogApiClient.deletePost(postId),
+    mutationFn: (postId: string) => blogApiClient.deletePost(postId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: blogKeys.all });
     },

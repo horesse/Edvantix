@@ -7,13 +7,13 @@ import type { GroupModel } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 export default function useGroup(
-  id: number,
+  id: string,
   options?: Omit<UseQueryOptions<GroupModel>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: companyKeys.group(id),
     queryFn: () => companyApiClient.getGroup(id),
-    enabled: id > 0,
+    enabled: Boolean(id),
     ...options,
   });
 }

@@ -9,7 +9,7 @@ import useLikePost from "@workspace/api-hooks/blog/useLikePost";
 import { signIn, useSession } from "@/lib/auth-client";
 
 type PostLikeButtonProps = {
-  postId: number;
+  postId: string;
   initialLikesCount: number;
   initialLiked?: boolean;
 };
@@ -57,10 +57,10 @@ export function PostLikeButton({
     >
       <Heart
         className={`h-5 w-5 transition-transform duration-200 ${
-          liked ? "fill-current scale-110" : "group-hover:scale-110"
+          liked ? "scale-110 fill-current" : "group-hover:scale-110"
         }`}
       />
-      <span className="tabular-nums font-medium">{optimisticCount}</span>
+      <span className="font-medium tabular-nums">{optimisticCount}</span>
       <span className="text-sm">{liked ? "Liked" : "Like this post"}</span>
     </button>
   );

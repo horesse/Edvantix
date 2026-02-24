@@ -6,19 +6,19 @@ import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 import { ScrollArea } from "./scroll-area";
 
-const islandVariants = cva("bg-card text-card-foreground transition-shadow", {
+const islandVariants = cva("bg-card text-card-foreground", {
   variants: {
     variant: {
-      default: "shadow-lg hover:shadow-xl",
-      floating: "shadow-2xl",
-      flat: "shadow-sm",
-      bordered: "border shadow-sm hover:shadow-md",
+      default: "border shadow-xs",
+      floating: "shadow-md",
+      flat: "",
+      bordered: "border",
     },
     padding: {
       none: "",
       sm: "p-4",
-      md: "p-6",
-      lg: "p-8",
+      md: "p-5",
+      lg: "p-6",
     },
     rounded: {
       none: "rounded-none",
@@ -32,7 +32,7 @@ const islandVariants = cva("bg-card text-card-foreground transition-shadow", {
   defaultVariants: {
     variant: "default",
     padding: "md",
-    rounded: "2xl",
+    rounded: "lg",
   },
 });
 
@@ -115,7 +115,7 @@ const IslandTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-xl leading-none font-semibold", className)}
+    className={cn("text-sm leading-none font-semibold", className)}
     {...props}
   />
 ));
@@ -127,7 +127,7 @@ const IslandDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-muted-foreground text-sm", className)}
+    className={cn("text-muted-foreground text-xs", className)}
     {...props}
   />
 ));

@@ -13,7 +13,7 @@ public sealed class PublishPostEndpoint : IEndpoint<NoContent, PublishPostComman
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "/admin/posts/{postId:long}/publish",
+                "/admin/posts/{postId:guid}/publish",
                 async (
                     Guid postId,
                     PublishPostRequest request,

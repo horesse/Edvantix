@@ -9,7 +9,7 @@ export default function useUpdateTag() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, request }: { id: number; request: UpdateTagRequest }) =>
+    mutationFn: ({ id, request }: { id: string; request: UpdateTagRequest }) =>
       blogApiClient.updateTag(id, request),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: blogKeys.tags() });

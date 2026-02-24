@@ -42,26 +42,24 @@ class BlogApiClient {
 
   /** Returns full post by slug. Anonymous access allowed. */
   public async getPostBySlug(slug: string): Promise<PostModel> {
-    const response = await this.client.get<PostModel>(
-      `${BASE}/posts/${slug}`,
-    );
+    const response = await this.client.get<PostModel>(`${BASE}/posts/${slug}`);
     return response.data;
   }
 
   /** Likes a post (requires auth). */
-  public async likePost(postId: number): Promise<void> {
+  public async likePost(postId: string): Promise<void> {
     await this.client.post<void>(`${BASE}/posts/${postId}/like`);
   }
 
   /** Removes like from a post (requires auth). */
-  public async unlikePost(postId: number): Promise<void> {
+  public async unlikePost(postId: string): Promise<void> {
     await this.client.delete<void>(`${BASE}/posts/${postId}/like`);
   }
 
   // --- Posts (admin) ---
 
   /** Returns full post by ID regardless of status. Requires admin role. */
-  public async getAdminPost(id: number): Promise<PostModel> {
+  public async getAdminPost(id: string): Promise<PostModel> {
     const response = await this.client.get<PostModel>(
       `${BASE}/admin/posts/${id}`,
     );
@@ -80,8 +78,8 @@ class BlogApiClient {
   }
 
   /** Creates a new draft post. Requires admin role. */
-  public async createPost(request: CreatePostRequest): Promise<number> {
-    const response = await this.client.post<number>(
+  public async createPost(request: CreatePostRequest): Promise<string> {
+    const response = await this.client.post<string>(
       `${BASE}/admin/posts`,
       request,
     );
@@ -90,7 +88,7 @@ class BlogApiClient {
 
   /** Updates post content. Requires admin role. */
   public async updatePost(
-    postId: number,
+    postId: string,
     request: UpdatePostRequest,
   ): Promise<void> {
     await this.client.put<void>(`${BASE}/admin/posts/${postId}`, request);
@@ -98,7 +96,7 @@ class BlogApiClient {
 
   /** Publishes or schedules a post. Requires admin role. */
   public async publishPost(
-    postId: number,
+    postId: string,
     request?: PublishPostRequest,
   ): Promise<void> {
     await this.client.post<void>(
@@ -108,7 +106,7 @@ class BlogApiClient {
   }
 
   /** Archives (soft-deletes) a post. Requires admin role. */
-  public async deletePost(postId: number): Promise<void> {
+  public async deletePost(postId: string): Promise<void> {
     await this.client.delete<void>(`${BASE}/admin/posts/${postId}`);
   }
 
@@ -123,10 +121,8 @@ class BlogApiClient {
   }
 
   /** Creates a new category. Requires admin role. */
-  public async createCategory(
-    request: CreateCategoryRequest,
-  ): Promise<number> {
-    const response = await this.client.post<number>(
+  public async createCategory(request: CreateCategoryRequest): Promise<string> {
+    const response = await this.client.post<string>(
       `${BASE}/admin/categories`,
       request,
     );
@@ -135,14 +131,14 @@ class BlogApiClient {
 
   /** Updates a category. Requires admin role. */
   public async updateCategory(
-    id: number,
+    id: string,
     request: UpdateCategoryRequest,
   ): Promise<void> {
     await this.client.put<void>(`${BASE}/admin/categories/${id}`, request);
   }
 
   /** Deletes a category. Requires admin role. */
-  public async deleteCategory(id: number): Promise<void> {
+  public async deleteCategory(id: string): Promise<void> {
     await this.client.delete<void>(`${BASE}/admin/categories/${id}`);
   }
 
@@ -155,8 +151,8 @@ class BlogApiClient {
   }
 
   /** Creates a new tag. Requires admin role. */
-  public async createTag(request: CreateTagRequest): Promise<number> {
-    const response = await this.client.post<number>(
+  public async createTag(request: CreateTagRequest): Promise<string> {
+    const response = await this.client.post<string>(
       `${BASE}/admin/tags`,
       request,
     );
@@ -164,15 +160,12 @@ class BlogApiClient {
   }
 
   /** Updates a tag. Requires admin role. */
-  public async updateTag(
-    id: number,
-    request: UpdateTagRequest,
-  ): Promise<void> {
+  public async updateTag(id: string, request: UpdateTagRequest): Promise<void> {
     await this.client.put<void>(`${BASE}/admin/tags/${id}`, request);
   }
 
   /** Deletes a tag. Requires admin role. */
-  public async deleteTag(id: number): Promise<void> {
+  public async deleteTag(id: string): Promise<void> {
     await this.client.delete<void>(`${BASE}/admin/tags/${id}`);
   }
 }

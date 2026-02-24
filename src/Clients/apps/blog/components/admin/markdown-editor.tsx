@@ -2,8 +2,6 @@
 
 import { useCallback, useRef, useState } from "react";
 
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import {
   Bold,
   Code2,
@@ -18,6 +16,8 @@ import {
   Quote,
   Strikethrough,
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import { Textarea } from "@workspace/ui/components/textarea";
 
@@ -39,25 +39,103 @@ function applyMarkdown(
 ): string {
   const { selectionStart: start, selectionEnd: end, value } = textarea;
   const selected = value.substring(start, end) || placeholder;
-  return value.substring(0, start) + prefix + selected + suffix + value.substring(end);
+  return (
+    value.substring(0, start) +
+    prefix +
+    selected +
+    suffix +
+    value.substring(end)
+  );
 }
 
 const TOOLBAR = [
-  { icon: Bold, label: "Bold (Ctrl+B)", prefix: "**", suffix: "**", placeholder: "bold text" },
-  { icon: Italic, label: "Italic (Ctrl+I)", prefix: "_", suffix: "_", placeholder: "italic text" },
-  { icon: Strikethrough, label: "Strikethrough", prefix: "~~", suffix: "~~", placeholder: "strikethrough" },
+  {
+    icon: Bold,
+    label: "Bold (Ctrl+B)",
+    prefix: "**",
+    suffix: "**",
+    placeholder: "bold text",
+  },
+  {
+    icon: Italic,
+    label: "Italic (Ctrl+I)",
+    prefix: "_",
+    suffix: "_",
+    placeholder: "italic text",
+  },
+  {
+    icon: Strikethrough,
+    label: "Strikethrough",
+    prefix: "~~",
+    suffix: "~~",
+    placeholder: "strikethrough",
+  },
   null, // separator
-  { icon: Heading2, label: "Heading 2", prefix: "## ", suffix: "", placeholder: "Heading" },
-  { icon: Heading3, label: "Heading 3", prefix: "### ", suffix: "", placeholder: "Heading" },
+  {
+    icon: Heading2,
+    label: "Heading 2",
+    prefix: "## ",
+    suffix: "",
+    placeholder: "Heading",
+  },
+  {
+    icon: Heading3,
+    label: "Heading 3",
+    prefix: "### ",
+    suffix: "",
+    placeholder: "Heading",
+  },
   null,
-  { icon: Link2, label: "Link", prefix: "[", suffix: "](url)", placeholder: "link text" },
-  { icon: Image, label: "Image", prefix: "![", suffix: "](url)", placeholder: "alt text" },
-  { icon: Code2, label: "Inline code", prefix: "`", suffix: "`", placeholder: "code" },
+  {
+    icon: Link2,
+    label: "Link",
+    prefix: "[",
+    suffix: "](url)",
+    placeholder: "link text",
+  },
+  {
+    icon: Image,
+    label: "Image",
+    prefix: "![",
+    suffix: "](url)",
+    placeholder: "alt text",
+  },
+  {
+    icon: Code2,
+    label: "Inline code",
+    prefix: "`",
+    suffix: "`",
+    placeholder: "code",
+  },
   null,
-  { icon: Quote, label: "Blockquote", prefix: "> ", suffix: "", placeholder: "quote" },
-  { icon: List, label: "Unordered list", prefix: "- ", suffix: "", placeholder: "item" },
-  { icon: ListOrdered, label: "Ordered list", prefix: "1. ", suffix: "", placeholder: "item" },
-  { icon: Minus, label: "Horizontal rule", prefix: "\n---\n", suffix: "", placeholder: "" },
+  {
+    icon: Quote,
+    label: "Blockquote",
+    prefix: "> ",
+    suffix: "",
+    placeholder: "quote",
+  },
+  {
+    icon: List,
+    label: "Unordered list",
+    prefix: "- ",
+    suffix: "",
+    placeholder: "item",
+  },
+  {
+    icon: ListOrdered,
+    label: "Ordered list",
+    prefix: "1. ",
+    suffix: "",
+    placeholder: "item",
+  },
+  {
+    icon: Minus,
+    label: "Horizontal rule",
+    prefix: "\n---\n",
+    suffix: "",
+    placeholder: "",
+  },
 ] as const;
 
 /**
@@ -88,20 +166,22 @@ export function MarkdownEditor({
   const minHeight = `${minRows * 1.5}rem`;
 
   return (
-    <div className="rounded-xl border border-border overflow-hidden bg-card shadow-sm">
+    <div className="border-border bg-card overflow-hidden rounded-xl border shadow-sm">
       {/* ── Toolbar ── */}
-      <div className="flex items-center gap-0.5 px-2 py-2 border-b border-border bg-muted/30 flex-wrap">
+      <div className="border-border bg-muted/30 flex flex-wrap items-center gap-0.5 border-b px-2 py-2">
         {TOOLBAR.map((item, i) =>
           item === null ? (
             // separator
-            <div key={`sep-${i}`} className="h-5 w-px bg-border mx-1.5" />
+            <div key={`sep-${i}`} className="bg-border mx-1.5 h-5 w-px" />
           ) : (
             <button
               key={item.label}
               type="button"
               title={item.label}
-              onClick={() => applyToolbar(item.prefix, item.suffix, item.placeholder)}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              onClick={() =>
+                applyToolbar(item.prefix, item.suffix, item.placeholder)
+              }
+              className="text-muted-foreground hover:text-foreground hover:bg-accent inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors"
             >
               <item.icon className="h-3.5 w-3.5" />
             </button>
@@ -109,13 +189,13 @@ export function MarkdownEditor({
         )}
 
         {/* Mode switcher — right-aligned */}
-        <div className="ml-auto flex items-center gap-1 border border-border rounded-lg p-0.5 bg-background">
+        <div className="border-border bg-background ml-auto flex items-center gap-1 rounded-lg border p-0.5">
           {(["write", "split", "preview"] as EditorMode[]).map((m) => (
             <button
               key={m}
               type="button"
               onClick={() => setMode(m)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-150 capitalize ${
+              className={`rounded-md px-2.5 py-1 text-xs font-medium capitalize transition-all duration-150 ${
                 mode === m
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
@@ -129,7 +209,7 @@ export function MarkdownEditor({
 
       {/* ── Editor / Preview panes ── */}
       <div
-        className={`flex divide-border ${mode === "split" ? "divide-x" : ""}`}
+        className={`divide-border flex ${mode === "split" ? "divide-x" : ""}`}
         style={{ minHeight }}
       >
         {/* Write pane */}
@@ -142,7 +222,7 @@ export function MarkdownEditor({
               value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 rounded-none border-0 ring-0 focus-visible:ring-0 font-mono text-sm resize-none bg-transparent p-4 leading-relaxed"
+              className="flex-1 resize-none rounded-none border-0 bg-transparent p-4 font-mono text-sm leading-relaxed ring-0 focus-visible:ring-0"
               style={{ minHeight }}
             />
           </div>
@@ -155,12 +235,16 @@ export function MarkdownEditor({
             style={{ minHeight }}
           >
             {value.trim() ? (
-              <div className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:text-primary prose-pre:bg-muted prose-pre:border prose-pre:border-border text-sm">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{value}</ReactMarkdown>
+              <div className="prose prose-neutral dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:text-primary prose-pre:bg-muted prose-pre:border prose-pre:border-border max-w-none text-sm">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {value}
+                </ReactMarkdown>
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center">
-                <p className="text-sm text-muted-foreground">Preview will appear here…</p>
+              <div className="flex h-full items-center justify-center">
+                <p className="text-muted-foreground text-sm">
+                  Preview will appear here…
+                </p>
               </div>
             )}
           </div>
@@ -168,7 +252,7 @@ export function MarkdownEditor({
       </div>
 
       {/* ── Footer ── */}
-      <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20 text-xs text-muted-foreground">
+      <div className="border-border bg-muted/20 text-muted-foreground flex items-center justify-between border-t px-4 py-2 text-xs">
         <span>Markdown supported · GFM enabled</span>
         <span className="font-mono">{value.length.toLocaleString()} chars</span>
       </div>

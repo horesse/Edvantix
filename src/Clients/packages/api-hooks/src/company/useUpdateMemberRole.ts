@@ -10,7 +10,7 @@ import type { UpdateMemberRoleRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type UpdateMemberRoleParams = {
-  orgId: number;
+  orgId: string;
   memberId: string;
   request: UpdateMemberRoleRequest;
 };

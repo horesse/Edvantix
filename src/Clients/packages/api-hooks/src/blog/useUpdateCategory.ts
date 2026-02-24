@@ -13,7 +13,7 @@ export default function useUpdateCategory() {
       id,
       request,
     }: {
-      id: number;
+      id: string;
       request: UpdateCategoryRequest;
     }) => blogApiClient.updateCategory(id, request),
     onSuccess: () => {

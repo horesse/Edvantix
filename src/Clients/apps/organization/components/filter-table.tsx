@@ -15,13 +15,8 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@workspace/ui/components/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@workspace/ui/components/select";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 import {
   Table,
   TableBody,
@@ -30,10 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@workspace/ui/components/table";
-
-import { PAGE_SIZES } from "@/lib/constants";
-
-import { FilterTableSkeleton } from "./loading-skeleton";
+import { PAGE_SIZES } from "@workspace/ui/lib/constants";
 
 type FilterTableProps<TData> = Readonly<{
   columns: ColumnDef<TData>[];
@@ -48,6 +40,50 @@ type FilterTableProps<TData> = Readonly<{
   highlightedId?: string | null;
   getRowId?: (row: TData) => string;
 }>;
+
+function FilterTableSkeleton({
+  rows = 10,
+  columns = 4,
+}: Readonly<{
+  rows?: number;
+  columns?: number;
+}>) {
+  return (
+    <div className="space-y-4">
+      <div className="overflow-hidden rounded-md border">
+        <div className="space-y-3 p-4">
+          <div
+            className="grid gap-4"
+            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          >
+            {Array.from({ length: columns }).map((_, i) => (
+              <Skeleton key={`header-${i}`} className="h-4 w-full" />
+            ))}
+          </div>
+          {Array.from({ length: rows }).map((_, row) => (
+            <div
+              key={`row-${row}`}
+              className="grid gap-4"
+              style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+            >
+              {Array.from({ length: columns }).map((_, col) => (
+                <Skeleton key={`cell-${row}-${col}`} className="h-8 w-full" />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center justify-between px-2">
+        <Skeleton className="h-4 w-32" />
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-8 w-40" />
+          <Skeleton className="h-8 w-36" />
+          <Skeleton className="h-8 w-40" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function FilterTable<TData>({
   columns,
@@ -116,18 +152,12 @@ export function FilterTable<TData>({
   );
 
   if (isLoading) {
-    return (
-      <FilterTableSkeleton
-        description={description}
-        rows={pageSize}
-        columns={columns.length}
-      />
-    );
+    return <FilterTableSkeleton rows={pageSize} columns={columns.length} />;
   }
 
   return (
     <div className="space-y-4">
-      <div className="bg-muted/50 overflow-hidden rounded-xl border shadow-sm">
+      <div className="overflow-hidden rounded-md border">
         <Table>
           {description && <caption className="sr-only">{description}</caption>}
           <TableHeader>
@@ -157,9 +187,7 @@ export function FilterTable<TData>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     className={
-                      isHighlighted
-                        ? "bg-green-50 dark:bg-green-950/20"
-                        : ""
+                      isHighlighted ? "bg-green-50 dark:bg-green-950/20" : ""
                     }
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -175,10 +203,7 @@ export function FilterTable<TData>({
               })
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   Данных нет
                 </TableCell>
               </TableRow>
@@ -189,16 +214,16 @@ export function FilterTable<TData>({
 
       {totalItems > 0 && (
         <nav
-          className="flex items-center justify-between px-2"
+          className="flex items-center justify-between"
           aria-label="Навигация по таблице"
         >
-          <div className="text-muted-foreground flex-1 text-sm">
-            Показано {data.length} из {totalItems}
-          </div>
-          <div className="flex items-center space-x-6 lg:space-x-8">
-            <div className="flex items-center space-x-2">
-              <p className="text-sm font-medium" id="rows-per-page-label">
-                Строк на странице
+          <p className="text-muted-foreground text-xs">
+            {data.length} из {totalItems}
+          </p>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <p className="text-muted-foreground text-xs" id="rows-per-page-label">
+                Строк:
               </p>
               <Select
                 value={pageSize.toString()}
@@ -207,7 +232,7 @@ export function FilterTable<TData>({
                 }
               >
                 <SelectTrigger
-                  className="h-8 w-17.5"
+                  className="h-7 w-14 text-xs"
                   aria-labelledby="rows-per-page-label"
                 >
                   <SelectValue />
@@ -221,32 +246,30 @@ export function FilterTable<TData>({
                 </SelectContent>
               </Select>
             </div>
-            <div
-              className="flex min-w-36 items-center justify-center text-sm font-medium"
+            <p
+              className="text-muted-foreground text-xs tabular-nums"
               aria-live="polite"
             >
-              Страница {pageIndex + 1} из {Math.max(1, totalPages)}
-            </div>
-            <div className="flex items-center space-x-2">
+              {pageIndex + 1} / {Math.max(1, totalPages)}
+            </p>
+            <div className="flex items-center gap-1">
               <Button
-                variant="outline"
-                size="sm"
+                variant="ghost"
+                size="icon-sm"
                 onClick={handlePreviousPage}
                 disabled={pageIndex === 0}
                 aria-label="Предыдущая страница"
               >
-                <ChevronLeft className="mr-2 h-4 w-4" aria-hidden="true" />
-                Назад
+                <ChevronLeft className="size-4" aria-hidden="true" />
               </Button>
               <Button
-                variant="outline"
-                size="sm"
+                variant="ghost"
+                size="icon-sm"
                 onClick={handleNextPage}
                 disabled={pageIndex >= totalPages - 1}
                 aria-label="Следующая страница"
               >
-                Вперед
-                <ChevronRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                <ChevronRight className="size-4" aria-hidden="true" />
               </Button>
             </div>
           </div>

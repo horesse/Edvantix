@@ -38,7 +38,7 @@ export function VerticalNavIsland() {
       className="sticky top-0 hidden h-full flex-col items-center justify-center p-2 lg:flex"
     >
       <div
-        className="absolute left-1/2 top-4 -translate-x-1/2 text-xs font-medium text-muted-foreground/50"
+        className="text-muted-foreground/50 absolute top-4 left-1/2 -translate-x-1/2 text-xs font-medium"
         style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
       >
         Организация

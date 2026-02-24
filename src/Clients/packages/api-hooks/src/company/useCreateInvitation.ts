@@ -10,7 +10,7 @@ import type { CreateInvitationRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type CreateInvitationParams = {
-  orgId: number;
+  orgId: string;
   request: CreateInvitationRequest;
 };
 

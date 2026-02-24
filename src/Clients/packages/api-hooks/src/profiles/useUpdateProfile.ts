@@ -5,12 +5,12 @@ import {
 } from "@tanstack/react-query";
 
 import profileApiClient from "@workspace/api-client/profile/profiles";
-import type { UpdateProfileRequest } from "@workspace/types/profile";
+import type { OwnProfile, UpdateProfileRequest } from "@workspace/types/profile";
 
 import { profileKeys } from "../keys";
 
 export default function useUpdateProfile(
-  options?: UseMutationOptions<void, Error, UpdateProfileRequest>,
+  options?: UseMutationOptions<OwnProfile, Error, UpdateProfileRequest>,
 ) {
   const queryClient = useQueryClient();
 

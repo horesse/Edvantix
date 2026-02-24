@@ -1,5 +1,7 @@
 "use client";
 
+import { PageHeader } from "@/components/page-header";
+
 import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,8 +68,9 @@ const contactTypeIcons: Record<ContactType, React.ReactNode> = {
 
 export function ContactsPage() {
   const { currentOrg, canManage } = useOrganization();
-  const orgId = currentOrg?.id ?? 0;
-  const { data: contacts = [], isLoading } = useOrganizationContacts(orgId);
+  const orgId = currentOrg?.id ?? "";
+  const { data, isLoading } = useOrganizationContacts(orgId);
+  const contacts = data?.items ?? [];
 
   const [addOpen, setAddOpen] = useState(false);
   const [editContact, setEditContact] =
@@ -83,20 +86,17 @@ export function ContactsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Контакты организации</h1>
-          <p className="text-muted-foreground text-sm">
-            Контактная информация организации
-          </p>
-        </div>
-        {canManage && (
-          <Button onClick={() => setAddOpen(true)}>
-            <Plus className="size-4" />
-            Добавить
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Контакты"
+        actions={
+          canManage && (
+            <Button size="sm" onClick={() => setAddOpen(true)}>
+              <Plus className="size-4" />
+              Добавить
+            </Button>
+          )
+        }
+      />
 
       {isLoading ? (
         <div className="space-y-2">
@@ -154,7 +154,7 @@ function ContactRow({
   onEdit,
 }: {
   contact: OrganizationContactModel;
-  orgId: number;
+  orgId: string;
   canManage: boolean;
   onEdit: () => void;
 }) {
@@ -213,7 +213,7 @@ function AddContactDialog({
   open,
   onOpenChange,
 }: {
-  orgId: number;
+  orgId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -345,7 +345,7 @@ function EditContactDialog({
   contact,
   onClose,
 }: {
-  orgId: number;
+  orgId: string;
   contact: OrganizationContactModel | null;
   onClose: () => void;
 }) {

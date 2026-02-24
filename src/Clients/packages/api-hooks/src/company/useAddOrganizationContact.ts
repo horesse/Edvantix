@@ -10,12 +10,12 @@ import type { AddOrganizationContactRequest } from "@workspace/types/company";
 import { companyKeys } from "../keys";
 
 type AddContactParams = {
-  orgId: number;
+  orgId: string;
   request: AddOrganizationContactRequest;
 };
 
 export default function useAddOrganizationContact(
-  options?: UseMutationOptions<number, Error, AddContactParams>,
+  options?: UseMutationOptions<string, Error, AddContactParams>,
 ) {
   const queryClient = useQueryClient();
 

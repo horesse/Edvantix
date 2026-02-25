@@ -31,14 +31,12 @@
     <ProjectReference Include="..\..\Services\Subscriptions\Edvantix.Subscriptions\Edvantix.Subscriptions.csproj" />
     <ProjectReference Include="..\..\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
     <ProjectReference Include="..\..\Services\Notification\Edvantix.Notification\Edvantix.Notification.csproj" />
+    <ProjectReference Include="..\..\Services\Scheduler\Edvantix.Scheduler\Edvantix.Scheduler.csproj" />
   </ItemGroup>
   <ItemGroup Label="Integrations">
     <ProjectReference
       Include="..\..\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj"
       IsAspireProjectResource="false"
     />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Container\keycloak\themes\" />
   </ItemGroup>
 </Project>

@@ -151,6 +151,14 @@ builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls(path: Http.Endpoints.AlivenessEndpointPath);
 
+builder
+    .AddProject<Edvantix_Scheduler>(Services.Scheduler)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls(path: Http.Endpoints.AlivenessEndpointPath)
+    .WithExplicitStart();
+
 blogFront.WithEnvironment("NEXT_PUBLIC_APP_URL", blogFront.GetEndpoint(Http.Schemes.Http));
 
 if (builder.ExecutionContext.IsRunMode)

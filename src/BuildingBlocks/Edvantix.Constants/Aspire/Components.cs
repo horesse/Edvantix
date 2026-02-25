@@ -28,6 +28,9 @@ public static class Components
             $"{nameof(Subscription).ToLowerInvariant()}{Suffix}";
 
         public static readonly string Blog = $"{nameof(Blog).ToLowerInvariant()}{Suffix}";
+
+        public static readonly string Notification =
+            $"{nameof(Notification).ToLowerInvariant()}{Suffix}";
     }
 
     public static class Azure

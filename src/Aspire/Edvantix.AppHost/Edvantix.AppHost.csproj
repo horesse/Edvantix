@@ -6,23 +6,31 @@
     <NoWarn>ASPIREINTERACTION001;ASPIREPIPELINES001;ASPIRECOMPUTE003;ASPIRECERTIFICATES001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.Azure.AppContainers" />
-    <PackageReference Include="Aspire.Hosting.Azure.PostgreSQL" />
-    <PackageReference Include="Aspire.Hosting.Azure.Redis" />
-    <PackageReference Include="Aspire.Hosting.Azure.Storage" />
-    <PackageReference Include="Aspire.Hosting.Keycloak" />
-    <PackageReference Include="Aspire.Hosting.Qdrant" />
-    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
-    <PackageReference Include="Aspire.Hosting.Yarp" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
+    <Compile Remove="**/node_modules/**/*.cs" />
+  </ItemGroup>
+  <ItemGroup Label="Aspire">
     <PackageReference Include="Scalar.Aspire" />
+    <PackageReference Include="Aspire.Hosting.Yarp" />
+    <PackageReference Include="Aspire.Hosting.Qdrant" />
+    <PackageReference Include="Aspire.Hosting.Keycloak" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+  </ItemGroup>
+  <ItemGroup Label="Azure">
+    <PackageReference Include="Aspire.Hosting.Azure.Redis" />
+    <PackageReference Include="Aspire.Hosting.Azure.PostgreSQL" />
+    <PackageReference Include="Aspire.Hosting.Azure.AppContainers" />
+  </ItemGroup>
+  <ItemGroup Label="CommunityToolkit">
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Azure.Extensions" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions" />
   </ItemGroup>
   <ItemGroup Label="Services">
     <ProjectReference Include="..\..\Services\Company\Edvantix.Organizational\Edvantix.Organizational.csproj" />
     <ProjectReference Include="..\..\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
     <ProjectReference Include="..\..\Services\Subscriptions\Edvantix.Subscriptions\Edvantix.Subscriptions.csproj" />
     <ProjectReference Include="..\..\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
+    <ProjectReference Include="..\..\Services\Notification\Edvantix.Notification\Edvantix.Notification.csproj" />
   </ItemGroup>
   <ItemGroup Label="Integrations">
     <ProjectReference

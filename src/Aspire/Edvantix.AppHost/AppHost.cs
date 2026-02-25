@@ -40,16 +40,15 @@ var storage = builder
     .RunAsLocalContainer()
     .ProvisionAsService();
 
-var profileContainer = storage.AddBlobContainer(
-    Components.Azure.Storage.BlobContainer(Services.Persona)
-);
+var profileContainer = storage
+    .AddBlobContainer(Components.Azure.Storage.BlobContainer(Services.Persona))
+    .WithAzureStorageExplorer();
 
-var entityHubDb = postgres.AddDatabase(Components.Database.EntityHub);
 var organizationDb = postgres.AddDatabase(Components.Database.Organizational);
-var systemDb = postgres.AddDatabase(Components.Database.System);
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var subscriptionDb = postgres.AddDatabase(Components.Database.Subscription);
 var blogDb = postgres.AddDatabase(Components.Database.Blog);
+var notificationDb = postgres.AddDatabase(Components.Database.Notification);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -63,6 +62,11 @@ var profileApi = builder
     .WithContainerRegistry(registry)
     .WithReference(profileContainer)
     .WaitFor(profileContainer)
+    .WithRoleAssignments(
+        storage,
+        StorageBuiltInRole.StorageBlobDataContributor,
+        StorageBuiltInRole.StorageBlobDataOwner
+    )
     .WithFriendlyUrls();
 
 var organizationalApi = builder
@@ -136,6 +140,16 @@ var blogFront = turbo
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
     .WithKeycloak(keycloak)
     .WaitFor(gateway);
+
+builder
+    .AddProject<Edvantix_Notification>(Services.Notification)
+    .WithEmailProvider()
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithReference(notificationDb)
+    .WaitFor(notificationDb)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls(path: Http.Endpoints.AlivenessEndpointPath);
 
 blogFront.WithEnvironment("NEXT_PUBLIC_APP_URL", blogFront.GetEndpoint(Http.Schemes.Http));
 

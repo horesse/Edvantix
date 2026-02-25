@@ -10,7 +10,7 @@ namespace Edvantix.AppHost.Extensions.Infrastructure;
 public static partial class AzureExtensions
 {
     /// <summary>
-    ///     Provisions an Azure Storage resource with Edvantix-specific configuration.
+    ///     Provisions an Azure Storage resource with BookWorm-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure Storage.</param>
     /// <returns>The configured resource builder for method chaining.</returns>
@@ -80,7 +80,7 @@ public static partial class AzureExtensions
     }
 
     /// <summary>
-    ///     Provisions an Azure PostgreSQL Flexible Server resource with Edvantix-specific configuration.
+    ///     Provisions an Azure PostgreSQL Flexible Server resource with BookWorm-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure PostgreSQL Flexible Server.</param>
     /// <returns>The configured resource builder for method chaining.</returns>
@@ -146,7 +146,7 @@ public static partial class AzureExtensions
     }
 
     /// <summary>
-    ///     Provisions an Azure Redis Cache resource with Edvantix-specific configuration.
+    ///     Provisions an Azure Redis Cache resource with BookWorm-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure Redis Cache.</param>
     /// <returns>The configured resource builder for method chaining.</returns>
@@ -194,7 +194,7 @@ public static partial class AzureExtensions
     }
 
     /// <summary>
-    ///     Provisions an Azure Container App Environment resource with Edvantix-specific configuration.
+    ///     Provisions an Azure Container App Environment resource with BookWorm-specific configuration.
     /// </summary>
     /// <param name="builder">The resource builder for Azure Container App Environment.</param>
     /// <remarks>

@@ -5,7 +5,7 @@ global using System.Text.Json;
 global using Edvantix.Chassis.EventBus;
 global using Edvantix.Chassis.Exceptions;
 global using Edvantix.Constants.Aspire;
-// global using Edvantix.Contracts;
+global using Edvantix.Contracts;
 global using Edvantix.Notification.Domain.Builders;
 global using Edvantix.Notification.Domain.Exceptions;
 global using Edvantix.Notification.Infrastructure.Render;

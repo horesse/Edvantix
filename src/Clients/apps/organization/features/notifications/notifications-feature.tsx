@@ -4,9 +4,9 @@ import * as React from "react";
 
 import { Bell } from "lucide-react";
 
+import { useInfiniteNotifications } from "@workspace/api-hooks/notifications/useInfiniteNotifications";
 import useMarkAllAsRead from "@workspace/api-hooks/notifications/useMarkAllAsRead";
 import useMarkAsRead from "@workspace/api-hooks/notifications/useMarkAsRead";
-import useNotifications from "@workspace/api-hooks/notifications/useNotifications";
 import { Button } from "@workspace/ui/components/button";
 import { Separator } from "@workspace/ui/components/separator";
 import { Skeleton } from "@workspace/ui/components/skeleton";
@@ -29,13 +29,8 @@ type TabValue = (typeof TABS)[number]["value"];
 export function NotificationsFeature() {
   const [activeTab, setActiveTab] = React.useState<TabValue>(undefined);
 
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteNotifications(activeTab);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteNotifications(activeTab);
 
   const { mutate: markAsRead } = useMarkAsRead();
   const { mutate: markAllAsRead, isPending: isMarkingAll } = useMarkAllAsRead();
@@ -51,7 +46,7 @@ export function NotificationsFeature() {
         <div>
           <h1 className="text-lg font-semibold">Уведомления</h1>
           {totalCount > 0 && (
-            <p className="text-sm text-muted-foreground">{totalCount} всего</p>
+            <p className="text-muted-foreground text-sm">{totalCount} всего</p>
           )}
         </div>
         {unreadInList > 0 && (
@@ -94,7 +89,7 @@ export function NotificationsFeature() {
       ) : notifications.length === 0 ? (
         <EmptyState tab={activeTab} />
       ) : (
-        <div className="divide-y divide-border">
+        <div className="divide-border divide-y">
           {notifications.map((n) => (
             <NotificationItem
               key={n.id}
@@ -123,38 +118,9 @@ export function NotificationsFeature() {
   );
 }
 
-// ── Infinite query ───────────────────────────────────────────────────────────
-
-import { useInfiniteQuery } from "@tanstack/react-query";
-
-import notificationApiClient from "@workspace/api-client/notifications/notifications";
-import { notificationKeys } from "@workspace/api-hooks/keys";
-
-const PAGE_SIZE = 25;
-
-function useInfiniteNotifications(isRead: boolean | undefined) {
-  return useInfiniteQuery({
-    queryKey: notificationKeys.list({ isRead }),
-    queryFn: ({ pageParam }) =>
-      notificationApiClient.getNotifications({
-        pageIndex: pageParam,
-        pageSize: PAGE_SIZE,
-        isRead,
-      }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      const loaded = allPages.reduce((acc, p) => acc + p.items.length, 0);
-
-      return loaded < lastPage.totalCount ? allPages.length + 1 : undefined;
-    },
-  });
-}
-
-// ── Вспомогательные компоненты ───────────────────────────────────────────────
-
 function NotificationsListSkeleton() {
   return (
-    <div className="divide-y divide-border">
+    <div className="divide-border divide-y">
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className="flex items-start gap-3 px-4 py-3">
           <Skeleton className="mt-0.5 size-4 shrink-0 rounded" />
@@ -179,8 +145,8 @@ function EmptyState({ tab }: { tab: TabValue }) {
 
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <Bell className="mb-3 size-10 text-muted-foreground/30" />
-      <p className="text-sm text-muted-foreground">{message}</p>
+      <Bell className="text-muted-foreground/30 mb-3 size-10" />
+      <p className="text-muted-foreground text-sm">{message}</p>
     </div>
   );
 }

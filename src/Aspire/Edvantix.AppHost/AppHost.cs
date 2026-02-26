@@ -153,8 +153,6 @@ var blogFront = turbo
     .WithKeycloak(keycloak)
     .WaitFor(gateway);
 
-// notificationApi уже объявлен выше (вместе с gateway)
-
 builder
     .AddProject<Edvantix_Scheduler>(Services.Scheduler)
     .WithReference(queue)

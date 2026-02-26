@@ -1119,6 +1119,7 @@
         "${CLIENT_ORGANIZATIONAL_ID}_read",
         "${CLIENT_ORGANIZATIONAL_ID}_write",
         "${CLIENT_NOTIFICATION_ID}_read",
+        "${CLIENT_NOTIFICATION_ID}_write",
         "address",
         "phone",
         "organization",
@@ -1990,7 +1991,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2002,7 +2003,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2270,7 +2271,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2282,7 +2283,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2294,7 +2295,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2306,7 +2307,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2318,7 +2319,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2330,7 +2331,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2342,7 +2343,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2354,7 +2355,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }

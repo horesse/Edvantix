@@ -1,3 +1,5 @@
+using Edvantix.Chassis.Security.Extensions;
+
 namespace Edvantix.Notification.Features.Notifications;
 
 /// <summary>
@@ -11,7 +13,7 @@ internal static class NotificationHelpers
     internal static Guid GetAccountId(ClaimsPrincipal user)
     {
         var sub =
-            user.FindFirstValue("sub")
+            user.GetClaimValue(ClaimTypes.NameIdentifier)
             ?? throw new UnauthorizedAccessException("Пользователь не аутентифицирован.");
 
         return Guid.TryParse(sub, out var id)

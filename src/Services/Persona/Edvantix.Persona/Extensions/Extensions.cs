@@ -2,14 +2,12 @@
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
-using Edvantix.Chassis.Mapper;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
 using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
-using Mediator;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Persona.Extensions;

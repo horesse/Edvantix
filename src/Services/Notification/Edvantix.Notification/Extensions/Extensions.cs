@@ -1,4 +1,6 @@
+using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
+using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.EF;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Repository;
@@ -30,10 +32,14 @@ internal static class Extensions
             .AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
+        builder.AddDefaultOpenApi();
+
+        services.AddExceptionHandler<ValidationExceptionHandler>();
+        services.AddExceptionHandler<NotFoundExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
-        builder.AddDefaultOpenApi();
+        services.AddRateLimiting();
 
         services.AddSingleton(
             new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
@@ -71,6 +77,10 @@ internal static class Extensions
 
         builder.AddEmailOutbox();
 
+        services.AddSingleton<IActivityScope, ActivityScope>();
+        services.AddSingleton<CommandHandlerMetrics>();
+        services.AddSingleton<QueryHandlerMetrics>();
+
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
 
@@ -83,6 +93,8 @@ internal static class Extensions
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+
+        services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 
         builder.AddEventBus(
             typeof(INotificationApiMarker),

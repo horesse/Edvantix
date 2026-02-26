@@ -54,9 +54,6 @@ internal static class Extensions
             true
         );
 
-        // Сервис чтения in-app уведомлений (REST-эндпоинты)
-        services.AddScoped<InAppNotificationService>();
-
         // Отправитель in-app уведомлений (используется MassTransit-потребителем)
         services.AddScoped<IInAppSender, InAppNotificationSender>();
 
@@ -81,6 +78,13 @@ internal static class Extensions
         // Версионированные REST-эндпоинты для фронтенда
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
+
+        // Mediator (CQRS) — один обработчик на каждую фичу
+        services
+            .AddMediator((MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped)
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(Edvantix.Chassis.CQRS.Pipelines.ActivityBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(Edvantix.Chassis.CQRS.Pipelines.LoggingBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(Edvantix.Chassis.CQRS.Pipelines.ValidationBehavior<,>));
 
         // Keycloak token introspection middleware (используется в pipeline)
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();

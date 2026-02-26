@@ -99,12 +99,24 @@ var blogApi = builder
     .WaitFor(redis)
     .WithFriendlyUrls();
 
+var notificationApi = builder
+    .AddProject<Edvantix_Notification>(Services.Notification)
+    .WithEmailProvider()
+    .WithKeycloak(keycloak)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithReference(notificationDb)
+    .WaitFor(notificationDb)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls();
+
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(organizationalApi, true)
     .WithService(profileApi, true)
     .WithService(subscriptionsApi, true)
     .WithService(blogApi, true)
+    .WithService(notificationApi, true)
     .Build();
 
 var turbo = builder
@@ -141,15 +153,7 @@ var blogFront = turbo
     .WithKeycloak(keycloak)
     .WaitFor(gateway);
 
-builder
-    .AddProject<Edvantix_Notification>(Services.Notification)
-    .WithEmailProvider()
-    .WithReference(queue)
-    .WaitFor(queue)
-    .WithReference(notificationDb)
-    .WaitFor(notificationDb)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls(path: Http.Endpoints.AlivenessEndpointPath);
+// notificationApi уже объявлен выше (вместе с gateway)
 
 builder
     .AddProject<Edvantix_Scheduler>(Services.Scheduler)
@@ -168,7 +172,8 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(organizationalApi)
         .WithOpenAPI(profileApi)
         .WithOpenAPI(subscriptionsApi)
-        .WithOpenAPI(blogApi);
+        .WithOpenAPI(blogApi)
+        .WithOpenAPI(notificationApi);
 }
 
 await builder.Build().RunAsync();

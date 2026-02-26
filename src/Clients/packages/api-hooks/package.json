@@ -30,6 +30,7 @@
     "./keys": "./src/keys.ts",
     "./profiles/*": "./src/profiles/*.ts",
     "./company/*": "./src/company/*.ts",
-    "./blog/*": "./src/blog/*.ts"
+    "./blog/*": "./src/blog/*.ts",
+    "./notifications/*": "./src/notifications/*.ts"
   }
 }

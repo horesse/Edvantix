@@ -28,6 +28,7 @@
     "./config": "./src/config.ts",
     "./profile/*": "./src/profile/*.ts",
     "./company/*": "./src/company/*.ts",
-    "./blog/*": "./src/blog/*.ts"
+    "./blog/*": "./src/blog/*.ts",
+    "./notifications/*": "./src/notifications/*.ts"
   }
 }

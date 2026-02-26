@@ -6,8 +6,7 @@ namespace Edvantix.Notification.Features.Notifications.GetNotifications;
 /// Запрос на получение страницы in-app уведомлений пользователя.
 /// </summary>
 public sealed record GetNotificationsQuery(
-    [property: Description("Идентификатор аккаунта Keycloak")]
-    Guid AccountId,
+    [property: Description("Идентификатор аккаунта Keycloak")] Guid AccountId,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,

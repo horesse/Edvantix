@@ -15,7 +15,9 @@ public sealed class MarkAllNotificationsAsReadEndpoint
                 "/notifications/read-all",
                 async (ClaimsPrincipal user, ISender sender, CancellationToken ct) =>
                     await HandleAsync(
-                        new MarkAllNotificationsAsReadCommand(NotificationHelpers.GetAccountId(user)),
+                        new MarkAllNotificationsAsReadCommand(
+                            NotificationHelpers.GetAccountId(user)
+                        ),
                         sender,
                         ct
                     )
@@ -23,7 +25,9 @@ public sealed class MarkAllNotificationsAsReadEndpoint
             .WithName("MarkAllNotificationsAsRead")
             .WithTags("Notifications")
             .WithSummary("Пометить все как прочитанные")
-            .WithDescription("Помечает все непрочитанные уведомления текущего пользователя как прочитанные.")
+            .WithDescription(
+                "Помечает все непрочитанные уведомления текущего пользователя как прочитанные."
+            )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(new(1, 0))

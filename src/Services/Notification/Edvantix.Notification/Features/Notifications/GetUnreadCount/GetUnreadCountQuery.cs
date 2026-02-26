@@ -8,8 +8,7 @@ public sealed record UnreadCountViewModel(int Count);
 /// <summary>
 /// Запрос на получение количества непрочитанных уведомлений (для бейджа в шапке).
 /// </summary>
-public sealed record GetUnreadCountQuery(Guid AccountId)
-    : IRequest<UnreadCountViewModel>;
+public sealed record GetUnreadCountQuery(Guid AccountId) : IRequest<UnreadCountViewModel>;
 
 /// <summary>
 /// Обработчик запроса: подсчитывает непрочитанные уведомления пользователя.

@@ -23,7 +23,9 @@ public sealed class GetUnreadCountEndpoint
             .WithName("GetUnreadNotificationsCount")
             .WithTags("Notifications")
             .WithSummary("Количество непрочитанных")
-            .WithDescription("Возвращает количество непрочитанных уведомлений текущего пользователя.")
+            .WithDescription(
+                "Возвращает количество непрочитанных уведомлений текущего пользователя."
+            )
             .Produces<UnreadCountViewModel>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(new(1, 0))

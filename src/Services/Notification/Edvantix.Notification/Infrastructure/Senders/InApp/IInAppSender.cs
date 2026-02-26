@@ -7,8 +7,5 @@ namespace Edvantix.Notification.Infrastructure.Senders.InApp;
 public interface IInAppSender
 {
     /// <summary>Создаёт и сохраняет in-app уведомление для пользователя.</summary>
-    Task SendAsync(
-        InAppNotificationMessage message,
-        CancellationToken cancellationToken = default
-    );
+    Task SendAsync(InAppNotificationMessage message, CancellationToken cancellationToken = default);
 }

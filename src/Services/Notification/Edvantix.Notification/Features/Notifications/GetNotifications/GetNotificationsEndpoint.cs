@@ -6,7 +6,8 @@ namespace Edvantix.Notification.Features.Notifications.GetNotifications;
 /// Запрос с параметрами пагинации и фильтрации (без AccountId — он приходит из JWT).
 /// </summary>
 public sealed record GetNotificationsRequest(
-    [property: DefaultValue(Pagination.DefaultPageIndex)] int PageIndex = Pagination.DefaultPageIndex,
+    [property: DefaultValue(Pagination.DefaultPageIndex)]
+        int PageIndex = Pagination.DefaultPageIndex,
     [property: DefaultValue(Pagination.DefaultPageSize)] int PageSize = Pagination.DefaultPageSize,
     bool? IsRead = null
 );
@@ -42,7 +43,9 @@ public sealed class GetNotificationsEndpoint
             .WithName("GetNotifications")
             .WithTags("Notifications")
             .WithSummary("Список уведомлений")
-            .WithDescription("Возвращает пагинированный список in-app уведомлений текущего пользователя.")
+            .WithDescription(
+                "Возвращает пагинированный список in-app уведомлений текущего пользователя."
+            )
             .WithPaginationHeaders()
             .Produces<PagedResult<NotificationViewModel>>()
             .Produces(StatusCodes.Status401Unauthorized)

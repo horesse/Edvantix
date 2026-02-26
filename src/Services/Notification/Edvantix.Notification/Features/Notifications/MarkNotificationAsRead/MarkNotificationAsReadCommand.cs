@@ -21,7 +21,10 @@ public sealed class MarkNotificationAsReadCommandHandler(IServiceProvider provid
     )
     {
         var repo = provider.GetRequiredService<IInAppNotificationRepository>();
-        var spec = new InAppNotificationByIdAndAccountSpec(request.NotificationId, request.AccountId);
+        var spec = new InAppNotificationByIdAndAccountSpec(
+            request.NotificationId,
+            request.AccountId
+        );
         var notification = await repo.FindAsync(spec, cancellationToken);
 
         if (notification is null)

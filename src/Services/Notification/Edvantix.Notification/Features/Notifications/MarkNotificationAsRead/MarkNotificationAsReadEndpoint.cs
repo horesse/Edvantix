@@ -15,7 +15,10 @@ public sealed class MarkNotificationAsReadEndpoint
                 "/notifications/{id:guid}/read",
                 async (Guid id, ClaimsPrincipal user, ISender sender, CancellationToken ct) =>
                     await HandleAsync(
-                        new MarkNotificationAsReadCommand(id, NotificationHelpers.GetAccountId(user)),
+                        new MarkNotificationAsReadCommand(
+                            id,
+                            NotificationHelpers.GetAccountId(user)
+                        ),
                         sender,
                         ct
                     )
@@ -23,7 +26,9 @@ public sealed class MarkNotificationAsReadEndpoint
             .WithName("MarkNotificationAsRead")
             .WithTags("Notifications")
             .WithSummary("Пометить как прочитанное")
-            .WithDescription("Помечает уведомление как прочитанное. Проверяет принадлежность уведомления текущему пользователю.")
+            .WithDescription(
+                "Помечает уведомление как прочитанное. Проверяет принадлежность уведомления текущему пользователю."
+            )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)

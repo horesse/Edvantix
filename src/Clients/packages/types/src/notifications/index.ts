@@ -23,12 +23,6 @@ export type Notification = {
   readAt: string | null;
 };
 
-/** Страница уведомлений (пагинация). */
-export type NotificationPage = {
-  items: Notification[];
-  totalCount: number;
-};
-
 /** Ответ на запрос количества непрочитанных. */
 export type UnreadCountResponse = {
   count: number;

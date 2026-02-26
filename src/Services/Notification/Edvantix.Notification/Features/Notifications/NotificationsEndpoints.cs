@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Edvantix.Chassis.Endpoints;
 using Edvantix.Notification.Infrastructure;
+using Edvantix.SharedKernel.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ public sealed class GetNotificationsEndpoint : IEndpoint
                 async (
                     ClaimsPrincipal user,
                     InAppNotificationService service,
-                    [FromQuery] int page = 1,
+                    [FromQuery] int pageIndex = 1,
                     [FromQuery] int pageSize = 20,
                     [FromQuery] bool? isRead = null,
                     CancellationToken ct = default
@@ -27,22 +28,27 @@ public sealed class GetNotificationsEndpoint : IEndpoint
                 {
                     var accountId = GetAccountId(user);
                     var clampedPageSize = Math.Clamp(pageSize, 1, 100);
-                    var clampedPage = Math.Max(page, 1);
+                    var clampedPageIndex = Math.Max(pageIndex, 1);
 
-                    var (items, total) = await service.GetAsync(
+                    var result = await service.GetAsync(
                         accountId,
-                        clampedPage,
+                        clampedPageIndex,
                         clampedPageSize,
                         isRead,
                         ct
                     );
 
+                    var viewModels = result
+                        .Select(NotificationViewModel.FromDomain)
+                        .ToList();
+
                     return TypedResults.Ok(
-                        new NotificationPage
-                        {
-                            Items = items.Select(NotificationViewModel.FromDomain).ToList(),
-                            TotalCount = total,
-                        }
+                        new PagedResult<NotificationViewModel>(
+                            viewModels,
+                            result.PageIndex,
+                            result.PageSize,
+                            result.TotalItems
+                        )
                     );
                 }
             )
@@ -50,7 +56,8 @@ public sealed class GetNotificationsEndpoint : IEndpoint
             .WithTags("Notifications")
             .WithSummary("Получить уведомления пользователя")
             .WithDescription("Возвращает страницу in-app уведомлений текущего пользователя")
-            .Produces<NotificationPage>()
+            .WithPaginationHeaders()
+            .Produces<PagedResult<NotificationViewModel>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(new(1, 0))
             .RequireAuthorization();
@@ -167,6 +174,8 @@ file static class EndpointHelpers
 
         return Guid.TryParse(sub, out var id)
             ? id
-            : throw new UnauthorizedAccessException("Некорректный формат идентификатора пользователя.");
+            : throw new UnauthorizedAccessException(
+                "Некорректный формат идентификатора пользователя."
+            );
     }
 }

@@ -4,8 +4,8 @@ using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
-using Edvantix.Notification.Grpc;
 using Edvantix.Notification.Infrastructure;
+using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.Infrastructure.Senders.MailKit;
 using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
@@ -54,8 +54,11 @@ internal static class Extensions
             true
         );
 
-        // In-app notification service — использется gRPC и REST-эндпоинтами
+        // Сервис чтения in-app уведомлений (REST-эндпоинты)
         services.AddScoped<InAppNotificationService>();
+
+        // Отправитель in-app уведомлений (используется MassTransit-потребителем)
+        services.AddScoped<IInAppSender, InAppNotificationSender>();
 
         // Resilience pipeline for the notification service
         builder.AddMailResiliencePipeline();
@@ -75,10 +78,7 @@ internal static class Extensions
 
         builder.AddEmailOutbox();
 
-        // gRPC-сервер для межсервисного взаимодействия (in-app уведомления)
-        builder.AddNotificationGrpcServices();
-
-        // Versioned REST endpoints для клиентского фронтенда
+        // Версионированные REST-эндпоинты для фронтенда
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
 

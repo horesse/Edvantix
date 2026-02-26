@@ -137,7 +137,7 @@ function useInfiniteNotifications(isRead: boolean | undefined) {
     queryKey: notificationKeys.list({ isRead }),
     queryFn: ({ pageParam }) =>
       notificationApiClient.getNotifications({
-        page: pageParam,
+        pageIndex: pageParam,
         pageSize: PAGE_SIZE,
         isRead,
       }),

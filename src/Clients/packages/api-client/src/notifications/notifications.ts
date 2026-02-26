@@ -1,15 +1,12 @@
-import type {
-  Notification,
-  NotificationPage,
-  UnreadCountResponse,
-} from "@workspace/types/notifications";
+import type { Notification, UnreadCountResponse } from "@workspace/types/notifications";
+import type { PagedResult } from "@workspace/types/shared";
 
 import { apiClient } from "../client";
 import type ApiClient from "../client";
 
 /** Параметры запроса списка уведомлений. */
 export type GetNotificationsParams = {
-  page?: number;
+  pageIndex?: number;
   pageSize?: number;
   isRead?: boolean;
 };
@@ -24,10 +21,10 @@ class NotificationApiClient {
   /** Получает страницу уведомлений текущего пользователя. */
   public async getNotifications(
     params: GetNotificationsParams = {},
-  ): Promise<NotificationPage> {
-    const { page = 1, pageSize = 20, isRead } = params;
+  ): Promise<PagedResult<Notification>> {
+    const { pageIndex = 1, pageSize = 20, isRead } = params;
     const query = new URLSearchParams({
-      page: String(page),
+      pageIndex: String(pageIndex),
       pageSize: String(pageSize),
     });
 
@@ -35,7 +32,7 @@ class NotificationApiClient {
       query.set("isRead", String(isRead));
     }
 
-    const response = await this.client.get<NotificationPage>(
+    const response = await this.client.get<PagedResult<Notification>>(
       `/notification/api/v1/notifications?${query.toString()}`,
     );
 

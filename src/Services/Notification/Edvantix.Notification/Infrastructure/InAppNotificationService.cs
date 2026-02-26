@@ -1,31 +1,30 @@
-using Edvantix.Notification.Domain.Models;
+using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Notification.Infrastructure;
 
 /// <summary>
-/// Сервис управления in-app уведомлениями.
-/// Используется как gRPC-сервисом (создание), так и REST-эндпоинтами (чтение, пометка).
+/// Сервис управления in-app уведомлениями (чтение и пометка как прочитанное).
+/// Создание уведомлений выполняется через <see cref="Senders.InApp.IInAppSender"/>.
 /// </summary>
-public sealed class InAppNotificationService(
-    IInAppNotificationRepository repository,
-    ILogger<InAppNotificationService> logger
-)
+public sealed class InAppNotificationService(IInAppNotificationRepository repository)
 {
     /// <summary>
-    /// Возвращает страницу уведомлений пользователя с общим количеством.
+    /// Возвращает страницу уведомлений пользователя в формате <see cref="PagedResult{T}"/>.
     /// </summary>
-    public async Task<(IReadOnlyList<InAppNotification> Items, int TotalCount)> GetAsync(
+    public async Task<PagedResult<InAppNotification>> GetAsync(
         Guid accountId,
-        int page,
+        int pageIndex,
         int pageSize,
         bool? isRead,
         CancellationToken cancellationToken = default
     )
     {
-        var spec = new InAppNotificationsByAccountSpec(accountId, page, pageSize, isRead);
+        var spec = new InAppNotificationsByAccountSpec(accountId, pageIndex, pageSize, isRead);
         var countSpec = new InAppNotificationsCountSpec(accountId, isRead);
 
-        return await repository.ListPagedAsync(spec, countSpec, cancellationToken);
+        var (items, totalCount) = await repository.ListPagedAsync(spec, countSpec, cancellationToken);
+
+        return new PagedResult<InAppNotification>(items, pageIndex, pageSize, totalCount);
     }
 
     /// <summary>
@@ -72,35 +71,5 @@ public sealed class InAppNotificationService(
     public async Task MarkAllAsReadAsync(
         Guid accountId,
         CancellationToken cancellationToken = default
-    )
-    {
-        await repository.MarkAllAsReadAsync(accountId, cancellationToken);
-    }
-
-    /// <summary>
-    /// Создаёт новое уведомление для пользователя и сохраняет его в БД.
-    /// </summary>
-    public async Task<InAppNotification> CreateAsync(
-        Guid accountId,
-        NotificationType type,
-        string title,
-        string message,
-        string? metadata = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var notification = new InAppNotification(accountId, type, title, message, metadata);
-
-        await repository.AddAsync(notification, cancellationToken);
-        await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
-
-        logger.LogInformation(
-            "In-app notification {NotificationId} created for account {AccountId} (type: {Type})",
-            notification.Id,
-            accountId,
-            type
-        );
-
-        return notification;
-    }
+    ) => await repository.MarkAllAsReadAsync(accountId, cancellationToken);
 }

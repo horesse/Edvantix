@@ -1,8 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <!-- Подавляем предупреждение о версии gRPC factory (как в Persona) -->
-    <SuppressCheckGrpcNetClientFactoryVersion>true</SuppressCheckGrpcNetClientFactoryVersion>
-  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
@@ -15,14 +11,6 @@
   <ItemGroup Label="EF Core">
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
-  </ItemGroup>
-  <ItemGroup Label="gRPC">
-    <!-- Кодогенерация из .proto файлов -->
-    <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
-    <!-- Health checks для gRPC-сервисов -->
-    <PackageReference Include="Grpc.AspNetCore.HealthChecks" />
-    <!-- Proto-файл in-app уведомлений (gRPC Server) -->
-    <Protobuf Include="Grpc\Protos\notifications\v1\notifications.proto" GrpcServices="Server" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Templates\**\*.mjml" />

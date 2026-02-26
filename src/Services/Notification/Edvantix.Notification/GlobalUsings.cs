@@ -15,7 +15,6 @@ global using Edvantix.Notification.Infrastructure.Render;
 global using Edvantix.Notification.Infrastructure.Senders;
 global using Edvantix.ServiceDefaults;
 global using Edvantix.ServiceDefaults.Kestrel;
-global using Grpc.Core;
 global using MailKit.Net.Smtp;
 global using MassTransit;
 global using Microsoft.AspNetCore.Http;

@@ -1,3 +1,4 @@
+using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.EF;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Repository;
@@ -5,10 +6,12 @@ using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Notification.Infrastructure;
+using Edvantix.Notification.Infrastructure.Senders;
 using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.Infrastructure.Senders.MailKit;
 using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
+using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Notification.Extensions;
@@ -21,16 +24,12 @@ internal static class Extensions
 
         builder.AddDefaultCors();
 
-        // Аутентификация через Keycloak JWT (тот же flow, что и в других сервисах)
         builder.AddDefaultAuthentication().WithKeycloakClaimsTransformation();
 
         services
             .AddAuthorizationBuilder()
-            .SetDefaultPolicy(
-                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()
-            );
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
-        // Add exception handlers
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
@@ -48,16 +47,13 @@ internal static class Extensions
             {
                 services.AddMigration<NotificationDbContext>();
 
-                // Регистрируем репозитории для всех маркированных типов
                 services.AddRepositories(typeof(INotificationApiMarker));
             },
             true
         );
 
-        // Отправитель in-app уведомлений (используется MassTransit-потребителем)
         services.AddScoped<IInAppSender, InAppNotificationSender>();
 
-        // Resilience pipeline for the notification service
         builder.AddMailResiliencePipeline();
 
         services.AddSingleton<IRenderer, MjmlTemplateRenderer>();
@@ -75,18 +71,17 @@ internal static class Extensions
 
         builder.AddEmailOutbox();
 
-        // Версионированные REST-эндпоинты для фронтенда
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
 
-        // Mediator (CQRS) — один обработчик на каждую фичу
         services
-            .AddMediator((MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped)
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(Edvantix.Chassis.CQRS.Pipelines.ActivityBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(Edvantix.Chassis.CQRS.Pipelines.LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(Edvantix.Chassis.CQRS.Pipelines.ValidationBehavior<,>));
+            .AddMediator(
+                (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
+            )
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-        // Keycloak token introspection middleware (используется в pipeline)
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
 
         builder.AddEventBus(

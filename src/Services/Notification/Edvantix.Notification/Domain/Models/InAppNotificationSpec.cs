@@ -1,4 +1,5 @@
 using Edvantix.Chassis.Specification;
+using Edvantix.Chassis.Specification.Builders;
 
 namespace Edvantix.Notification.Domain.Models;
 

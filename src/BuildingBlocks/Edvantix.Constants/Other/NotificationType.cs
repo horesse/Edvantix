@@ -1,4 +1,4 @@
-namespace Edvantix.Notification.Domain.Models;
+﻿namespace Edvantix.Constants.Other;
 
 /// <summary>
 /// Тип внутриприложенческого уведомления. Определяет иконку и цветовое оформление на фронтенде.

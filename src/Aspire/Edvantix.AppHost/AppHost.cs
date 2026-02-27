@@ -62,6 +62,8 @@ var profileApi = builder
     .WithContainerRegistry(registry)
     .WithReference(profileContainer)
     .WaitFor(profileContainer)
+    .WithReference(queue)
+    .WaitFor(queue)
     .WithRoleAssignments(
         storage,
         StorageBuiltInRole.StorageBlobDataContributor,

@@ -3,6 +3,7 @@ using System;
 using Edvantix.Persona.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Persona.Infrastructure.Migrations
 {
     [DbContext(typeof(PersonaDbContext))]
-    partial class PersonaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260226215817_Add Eventbus")]
+    partial class AddEventbus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,13 +206,13 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasColumnName("login");
 
                     b.HasKey("Id")
-                        .HasName("pk_profiles");
+                        .HasName("pk_profile");
 
                     b.HasIndex("AccountId")
                         .IsUnique()
-                        .HasDatabaseName("ix_profiles_account_id");
+                        .HasDatabaseName("ix_profile_account_id");
 
-                    b.ToTable("profiles", (string)null);
+                    b.ToTable("profile", (string)null);
                 });
 
             modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.ProfileContact", b =>
@@ -476,7 +479,7 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_education_profiles_profile_id");
+                        .HasConstraintName("fk_education_profile_profile_id");
 
                     b.Navigation("Profile");
                 });
@@ -488,7 +491,7 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_employment_history_profiles_profile_id");
+                        .HasConstraintName("fk_employment_history_profile_profile_id");
 
                     b.Navigation("Profile");
                 });
@@ -500,7 +503,7 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasForeignKey("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.FullName", "ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_full_name_profiles_profile_id");
+                        .HasConstraintName("fk_full_name_profile_profile_id");
 
                     b.Navigation("Profile");
                 });
@@ -512,7 +515,7 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_profile_contact_profiles_profile_id");
+                        .HasConstraintName("fk_profile_contact_profile_profile_id");
 
                     b.Navigation("Profile");
                 });

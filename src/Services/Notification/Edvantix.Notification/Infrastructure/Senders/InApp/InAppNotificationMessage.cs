@@ -1,3 +1,5 @@
+using Edvantix.Constants.Other;
+
 namespace Edvantix.Notification.Infrastructure.Senders.InApp;
 
 /// <summary>

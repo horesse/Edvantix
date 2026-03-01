@@ -29,6 +29,8 @@ public static class Components
 
         public static readonly string Blog = $"{nameof(Blog).ToLowerInvariant()}{Suffix}";
 
+        public static readonly string Catalog = $"{nameof(Catalog).ToLowerInvariant()}{Suffix}";
+
         public static readonly string Notification =
             $"{nameof(Notification).ToLowerInvariant()}{Suffix}";
     }

@@ -10,11 +10,13 @@ public static class RateLimiterExtensions
 {
     private const string PerUserPolicy = "PerUserRateLimit";
 
-    public static void AddRateLimiting(this IServiceCollection services)
+    public static void AddRateLimiting(this IHostApplicationBuilder builder)
     {
+        var services = builder.Services;
+
         services.AddRateLimiter();
 
-        services.Configure<FixedWindowRateLimiterOptions>(
+        builder.Configure<FixedWindowRateLimiterOptions>(
             nameof(FixedWindowRateLimiter),
             configure: options =>
             {
@@ -25,7 +27,7 @@ public static class RateLimiterExtensions
             }
         );
 
-        services.Configure<TokenBucketRateLimiterOptions>(
+        builder.Configure<TokenBucketRateLimiterOptions>(
             nameof(TokenBucketRateLimiter),
             configure: options =>
             {

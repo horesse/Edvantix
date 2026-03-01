@@ -6,14 +6,17 @@ using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Notification.Infrastructure;
 using Edvantix.Notification.Infrastructure.Senders;
 using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.Infrastructure.Senders.MailKit;
+using Edvantix.Notification.Configurations;
 using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
+using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Notification.Extensions;
@@ -37,7 +40,9 @@ internal static class Extensions
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
-        services.AddRateLimiting();
+        builder.AddAppSettings<NotificationAppSettings>();
+
+        builder.AddRateLimiting();
 
         services.AddSingleton(
             new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
@@ -81,7 +86,9 @@ internal static class Extensions
 
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
-        services.AddDefaultOpenApi();
+        services.AddDefaultOpenApi(options =>
+            options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<NotificationAppSettings>>()
+        );
 
         services
             .AddMediator(

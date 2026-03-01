@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Edvantix.Blog.Configurations;
 using Edvantix.Blog.Grpc;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
@@ -6,7 +7,9 @@ using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
+using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
 using AspireServices = Edvantix.Constants.Aspire.Services;
 
@@ -25,6 +28,8 @@ public static class Extensions
         var services = builder.Services;
 
         builder.AddDefaultCors();
+        
+        builder.AddAppSettings<BlogAppSettings>();
 
         builder.AddDefaultAuthentication().WithKeycloakClaimsTransformation();
 
@@ -67,11 +72,7 @@ public static class Extensions
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-        var appSettings = new AppSettings();
-        builder.Configuration.Bind(appSettings);
-        services.AddSingleton(appSettings);
-
-        services.AddRateLimiting();
+        builder.AddRateLimiting();
 
         services.AddSingleton(_ =>
         {
@@ -93,7 +94,9 @@ public static class Extensions
 
         services.AddVersioning();
         services.AddEndpoints(typeof(IBlogApiMarker));
-        services.AddDefaultOpenApi();
+        services.AddDefaultOpenApi(options =>
+            options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<BlogAppSettings>>()
+        );
 
         services.AddMapper(typeof(IBlogApiMarker));
 

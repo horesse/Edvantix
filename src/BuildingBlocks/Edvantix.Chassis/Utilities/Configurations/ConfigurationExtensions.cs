@@ -1,32 +1,51 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Edvantix.Chassis.Utilities.Configurations;
 
 public static class ConfigurationExtensions
 {
-    public static void Configure<TSetting>(
-        this IServiceCollection services,
-        string section,
-        string? name = null,
-        Action<TSetting>? configure = null
-    )
-        where TSetting : class
+    extension(IHostApplicationBuilder builder)
     {
-        services
-            .AddOptionsWithValidateOnStart<TSetting>(name)
-            .Configure(options => configure?.Invoke(options))
-            .BindConfiguration(section)
-            .ValidateDataAnnotations();
-
-        services.TryAddSingleton(sp =>
+        public void Configure<TSetting>(
+            string section,
+            string? name = null,
+            Action<TSetting>? configure = null
+        )
+            where TSetting : class
         {
-            var options = sp.GetRequiredService<IOptions<TSetting>>();
-            var setting = options.Value;
-            return setting;
-        });
+            var services = builder.Services;
+
+            services
+                .AddOptionsWithValidateOnStart<TSetting>(name)
+                .Configure(options => configure?.Invoke(options))
+                .BindConfiguration(section)
+                .ValidateDataAnnotations();
+
+            services.TryAddSingleton(sp =>
+            {
+                var options = sp.GetRequiredService<IOptions<TSetting>>();
+                var setting = options.Value;
+                return setting;
+            });
+        }
+
+        public IServiceCollection AddAppSettings<T>()
+            where T : AppSettings, new()
+        {
+            var services = builder.Services;
+
+            services.AddSingleton<T>(_ =>
+            {
+                var settings = AppSettings.Parse<T>(builder.Configuration);
+                return settings;
+            });
+
+            return services;
+        }
     }
 
     public static string GetRequiredConnectionString(this IConfiguration configuration, string name)

@@ -1,8 +1,7 @@
 ﻿using Edvantix.Chassis.Utilities.Configurations;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.Extensions.Logging;
+using Edvantix.ServiceDefaults.Kestrel;
 
-namespace Edvantix.ServiceDefaults.Kestrel;
+ namespace Edvantix.ServiceDefaults.Kestrel;
 
 public static class CorsExtensions
 {
@@ -32,7 +31,7 @@ public static class CorsExtensions
         }
         else
         {
-            services.Configure<CorsSettings>(CorsSettings.ConfigurationSection);
+            builder.Configure<CorsSettings>(CorsSettings.ConfigurationSection);
 
             services.AddCors(options =>
             {
@@ -67,9 +66,6 @@ public static class CorsExtensions
 
     public static void UseDefaultCors(this WebApplication app)
     {
-        var policyName = app.Environment.IsDevelopment()
-            ? AllowAllCorsPolicy
-            : AllowSpecificCorsPolicy;
-        app.UseCors(policyName);
+        app.UseCors(app.Environment.IsDevelopment() ? AllowAllCorsPolicy : AllowSpecificCorsPolicy);
     }
 }

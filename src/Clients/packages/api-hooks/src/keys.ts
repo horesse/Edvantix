@@ -34,6 +34,7 @@ export const companyKeys = {
     [...companyKeys.all, "groupMembers", groupId, query] as const,
   contacts: (orgId: string, query?: unknown) =>
     [...companyKeys.all, "contacts", orgId, query] as const,
+  legalForms: () => [...companyKeys.all, "legal-forms"] as const,
 };
 
 export const notificationKeys = {

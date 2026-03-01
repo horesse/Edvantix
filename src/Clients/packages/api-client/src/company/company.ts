@@ -9,6 +9,7 @@ import type {
   GroupModel,
   GroupSummaryModel,
   InvitationModel,
+  LegalFormModel,
   OrganizationContactModel,
   OrganizationMemberModel,
   OrganizationModel,
@@ -325,6 +326,15 @@ class CompanyApiClient {
     await this.client.delete<void>(
       `${BASE}/organizations/${orgId}/contacts/${contactId}`,
     );
+  }
+
+  // --- Legal Forms ---
+
+  public async getLegalForms(): Promise<LegalFormModel[]> {
+    const response = await this.client.get<LegalFormModel[]>(
+      `${BASE}/legal-forms`,
+    );
+    return response.data;
   }
 }
 

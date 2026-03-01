@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateOrganization;
@@ -7,6 +8,8 @@ public sealed record UpdateOrganizationCommand(
     string Name,
     string NameLatin,
     string ShortName,
+    OrganizationType OrganizationType,
+    Guid LegalFormId,
     string? PrintName,
     string? Description
 ) : IRequest<Unit>;
@@ -34,6 +37,7 @@ public sealed class UpdateOrganizationCommandHandler(IServiceProvider provider)
 
         org.UpdateNames(request.Name, request.NameLatin, request.ShortName, request.PrintName);
         org.UpdateDescription(request.Description);
+        org.UpdateClassification(request.OrganizationType, request.LegalFormId);
 
         await orgRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

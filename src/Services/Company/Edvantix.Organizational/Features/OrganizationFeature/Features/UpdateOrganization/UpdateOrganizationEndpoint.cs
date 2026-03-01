@@ -1,9 +1,13 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateOrganization;
 
 public sealed record UpdateOrganizationRequest(
     string Name,
     string NameLatin,
     string ShortName,
+    OrganizationType OrganizationType,
+    Guid LegalFormId,
     string? PrintName,
     string? Description
 );
@@ -26,6 +30,8 @@ public class UpdateOrganizationEndpoint : IEndpoint<NoContent, UpdateOrganizatio
                         request.Name,
                         request.NameLatin,
                         request.ShortName,
+                        request.OrganizationType,
+                        request.LegalFormId,
                         request.PrintName,
                         request.Description
                     );

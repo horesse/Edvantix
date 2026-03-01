@@ -5,7 +5,6 @@ import * as React from "react";
 import Link from "next/link";
 
 import {
-  Bell,
   LogOut,
   Search,
   Settings as SettingsIcon,
@@ -18,7 +17,6 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar";
-import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
   DropdownMenu,
@@ -35,6 +33,7 @@ import { getInitials } from "@workspace/utils/format";
 import { useLogout } from "@/hooks/useLogout";
 
 import { MobileSidebar } from "./mobile-sidebar";
+import { NotificationBell } from "./notification-bell";
 import { PageBreadcrumb } from "./page-breadcrumb";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -45,7 +44,6 @@ import { ThemeToggle } from "./theme-toggle";
 export function Header() {
   const { data: profile, isLoading } = useOwnProfile();
   const { logout } = useLogout();
-  const [notificationsCount] = React.useState(0);
 
   return (
     <header className="border-border flex h-12 shrink-0 items-center gap-3 border-b px-4">
@@ -61,22 +59,7 @@ export function Header() {
         >
           <Search className="size-4" />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative size-8 rounded-full"
-          aria-label="Уведомления"
-        >
-          <Bell className="size-4" />
-          {notificationsCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full p-0 text-[9px]"
-            >
-              {notificationsCount}
-            </Badge>
-          )}
-        </Button>
+        <NotificationBell />
         <ThemeToggle />
         <Separator orientation="vertical" className="mx-1 h-4" />
         {isLoading ? (

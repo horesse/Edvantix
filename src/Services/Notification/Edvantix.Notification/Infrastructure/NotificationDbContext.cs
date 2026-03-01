@@ -8,6 +8,8 @@ public sealed class NotificationDbContext(DbContextOptions options) : PostgresCo
 {
     public DbSet<Outbox> Outboxes => Set<Outbox>();
 
+    public DbSet<InAppNotification> InAppNotifications => Set<InAppNotification>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

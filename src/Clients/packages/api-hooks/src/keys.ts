@@ -35,3 +35,9 @@ export const companyKeys = {
   contacts: (orgId: string, query?: unknown) =>
     [...companyKeys.all, "contacts", orgId, query] as const,
 };
+
+export const notificationKeys = {
+  all: ["notifications"] as const,
+  list: (params?: unknown) => [...notificationKeys.all, "list", params] as const,
+  unreadCount: () => [...notificationKeys.all, "unread-count"] as const,
+};

@@ -2,14 +2,14 @@
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
-using Edvantix.Chassis.Mapper;
+using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
 using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
-using Mediator;
+using Edvantix.Persona.Infrastructure.EventServices;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Persona.Extensions;
@@ -62,27 +62,13 @@ public static class Extensions
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
             )
-            // Open-generic behaviors run first (activity tracing → logging → validation)
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-            // Avatar upload/delete processors — run after validation, before/after handler
-            .AddScoped<
-                IPipelineBehavior<UpdateOwnProfileCommand, ProfileViewModel>,
-                UpdateOwnProfilePreProcessor
-            >()
-            .AddScoped<
-                IPipelineBehavior<UpdateOwnProfileCommand, ProfileViewModel>,
-                UpdateOwnProfilePostProcessor
-            >()
-            .AddScoped<
-                IPipelineBehavior<UpdateProfileByAdminCommand, ProfileViewModel>,
-                UpdateProfileByAdminPreProcessor
-            >()
-            .AddScoped<
-                IPipelineBehavior<UpdateProfileByAdminCommand, ProfileViewModel>,
-                UpdateProfileByAdminPostProcessor
-            >();
+            .AddScoped<UpdateOwnProfilePreProcessor>()
+            .AddScoped<UpdateOwnProfilePostProcessor>()
+            .AddScoped<UpdateProfileByAdminPreProcessor>()
+            .AddScoped<UpdateProfileByAdminPostProcessor>();
 
         var appSettings = new AppSettings();
 
@@ -122,6 +108,31 @@ public static class Extensions
         services.AddEndpoints(typeof(IPersonaApiMarker));
 
         services.AddMapper(typeof(IPersonaApiMarker));
+
+        services.AddScoped<IEventMapper, EventMapper>();
+        services.AddScoped<IEventDispatcher, EventDispatcher>();
+
+        builder.AddEventBus(
+            typeof(IPersonaApiMarker),
+            cfg =>
+            {
+                cfg.AddEntityFrameworkOutbox<PersonaDbContext>(o =>
+                {
+                    o.QueryDelay = TimeSpan.FromSeconds(1);
+
+                    o.DuplicateDetectionWindow = TimeSpan.FromMinutes(5);
+
+                    o.UsePostgres();
+
+                    o.UseBusOutbox();
+                });
+
+                cfg.AddConfigureEndpointsCallback(
+                    (context, _, configurator) =>
+                        configurator.UseEntityFrameworkOutbox<PersonaDbContext>(context)
+                );
+            }
+        );
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
     }

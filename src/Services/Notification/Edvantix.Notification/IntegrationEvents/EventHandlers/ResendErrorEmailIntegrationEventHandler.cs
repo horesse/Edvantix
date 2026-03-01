@@ -7,7 +7,7 @@ public sealed class ResendErrorEmailIntegrationEventHandler(
     ILogger<ResendErrorEmailIntegrationEventHandler> logger,
     GlobalLogBuffer logBuffer,
     IOutboxRepository repository,
-    ISender sender
+    Edvantix.Notification.Infrastructure.Senders.ISender sender
 ) : IConsumer<ResendErrorEmailIntegrationEvent>
 {
     public async Task Consume(ConsumeContext<ResendErrorEmailIntegrationEvent> context)

@@ -12,6 +12,9 @@
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
   </ItemGroup>
+  <ItemGroup Label="CQRS">
+    <PackageReference Include="Mediator.SourceGenerator" PrivateAssets="all" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Templates\**\*.mjml" />
   </ItemGroup>

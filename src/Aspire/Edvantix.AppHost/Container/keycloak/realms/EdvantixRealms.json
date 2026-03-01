@@ -481,6 +481,16 @@
           "containerId": "f3a4b5c6-7d8e-4f9a-0b1c-2d3e4f5a6b7c",
           "attributes": {}
         }
+      ],
+      "${CLIENT_NOTIFICATION_ID}": [
+        {
+          "id": "e6f7a8b9-0c1d-4e2f-3a4b-5c6d7e8f9a0b",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "d5e6f7a8-9b0c-4d1e-2f3a-4b5c6d7e8f9a",
+          "attributes": {}
+        }
       ]
     }
   },
@@ -616,6 +626,27 @@
       ],
       "clientRoles": {
         "${CLIENT_SUBSCRIPTIONS_ID}": [
+          "uma_protection"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "f7a8b9c0-1d2e-4f3a-4b5c-6d7e8f9a0b1c",
+      "username": "service-account-${CLIENT_NOTIFICATION_ID}",
+      "emailVerified": false,
+      "createdTimestamp": 1766700001000,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "${CLIENT_NOTIFICATION_ID}",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-${REALM_NAME}"
+      ],
+      "clientRoles": {
+        "${CLIENT_NOTIFICATION_ID}": [
           "uma_protection"
         ]
       },
@@ -1087,6 +1118,8 @@
         "${CLIENT_PERSONA_ID}_write",
         "${CLIENT_ORGANIZATIONAL_ID}_read",
         "${CLIENT_ORGANIZATIONAL_ID}_write",
+        "${CLIENT_NOTIFICATION_ID}_read",
+        "${CLIENT_NOTIFICATION_ID}_write",
         "address",
         "phone",
         "organization",
@@ -1389,6 +1422,84 @@
       "optionalClientScopes": [
         "${CLIENT_SUBSCRIPTIONS_ID}_read",
         "${CLIENT_SUBSCRIPTIONS_ID}_write",
+        "address",
+        "phone",
+        "organization",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "d5e6f7a8-9b0c-4d1e-2f3a-4b5c6d7e8f9a",
+      "clientId": "${CLIENT_NOTIFICATION_ID}",
+      "name": "${CLIENT_NOTIFICATION_NAME}",
+      "description": "",
+      "rootUrl": "${CLIENT_NOTIFICATION_URL}",
+      "adminUrl": "${CLIENT_NOTIFICATION_URL_CONTAINERHOST}",
+      "baseUrl": "/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${CLIENT_NOTIFICATION_SECRET}",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "request.object.signature.alg": "any",
+        "post.logout.redirect.uris": "*",
+        "frontchannel.logout.session.required": "true",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "require.pushed.authorization.requests": "false",
+        "request.object.encryption.enc": "any",
+        "pkce.code.challenge.method": "S256",
+        "client.secret.creation.time": "1766700001",
+        "request.object.encryption.alg": "any",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
+        "standard.token.exchange.enabled": "true",
+        "login_theme": "${THEME_NAME}",
+        "client.use.lightweight.access.token.enabled": "false",
+        "request.object.required": "not required",
+        "access.token.header.type.rfc9068": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "acr.loa.map": "{}",
+        "display.on.consent.screen": "false",
+        "token.response.type.bearer.lower-case": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "service_account",
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "${CLIENT_NOTIFICATION_ID}_read",
+        "${CLIENT_NOTIFICATION_ID}_write",
         "address",
         "phone",
         "organization",
@@ -1880,7 +1991,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -1892,7 +2003,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2160,7 +2271,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2172,7 +2283,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2184,7 +2295,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2196,7 +2307,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2208,7 +2319,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }
@@ -2220,7 +2331,31 @@
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
-        "display.on.consent.screen": "true",
+        "display.on.consent.screen": "false",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "a8b9c0d1-2e3f-4a4b-5c6d-7e8f9a0b1c2d",
+      "name": "${CLIENT_NOTIFICATION_ID}_read",
+      "description": "Read for ${CLIENT_NOTIFICATION_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "id": "b9c0d1e2-3f4a-4b5c-6d7e-8f9a0b1c2d3e",
+      "name": "${CLIENT_NOTIFICATION_ID}_write",
+      "description": "Write for ${CLIENT_NOTIFICATION_NAME}",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false",
         "gui.order": "",
         "consent.screen.text": ""
       }

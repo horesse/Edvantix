@@ -1,3 +1,5 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.CreateOrganization;
 
 public sealed class CreateOrganizationValidator : AbstractValidator<CreateOrganizationCommand>
@@ -20,5 +22,13 @@ public sealed class CreateOrganizationValidator : AbstractValidator<CreateOrgani
             .MaximumLength(200);
 
         RuleFor(x => x.PrintName).MaximumLength(500).When(x => x.PrintName is not null);
+
+        RuleFor(x => x.OrganizationType)
+            .IsInEnum()
+            .WithMessage("Укажите корректный тип организации.");
+
+        RuleFor(x => x.LegalFormId)
+            .NotEmpty()
+            .WithMessage("Организационно-правовая форма обязательна.");
     }
 }

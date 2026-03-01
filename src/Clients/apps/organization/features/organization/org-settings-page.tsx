@@ -9,6 +9,11 @@ import { toast } from "sonner";
 
 import useOrganization from "@workspace/api-hooks/company/useOrganization";
 import useUpdateOrganization from "@workspace/api-hooks/company/useUpdateOrganization";
+import useLegalForms from "@workspace/api-hooks/company/useLegalForms";
+import {
+  ORGANIZATION_TYPE_LABELS,
+  OrganizationType,
+} from "@workspace/types/company";
 import { Button } from "@workspace/ui/components/button";
 import {
   Form,
@@ -19,6 +24,13 @@ import {
   FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { Textarea } from "@workspace/ui/components/textarea";
 import {
@@ -52,7 +64,7 @@ function OrgSettingsSkeleton() {
       <div className="pb-2">
         <Skeleton className="h-5 w-44" />
       </div>
-      {[3, 2].map((count, i) => (
+      {[3, 2, 2].map((count, i) => (
         <div key={i} className={SECTION}>
           <div className="space-y-2">
             <Skeleton className="h-4 w-28" />
@@ -122,14 +134,21 @@ function OrganizationForm({
     shortName: string;
     printName?: string | null;
     description?: string | null;
+    organizationType: OrganizationType;
+    legalForm: { id: string };
   };
 }) {
+  const { data: legalForms = [], isLoading: isLegalFormsLoading } =
+    useLegalForms();
+
   const form = useForm<UpdateOrganizationInput>({
     resolver: zodResolver(updateOrganizationSchema),
     defaultValues: {
       name: org.name,
       nameLatin: org.nameLatin,
       shortName: org.shortName,
+      organizationType: org.organizationType,
+      legalFormId: org.legalForm.id,
       printName: org.printName ?? "",
       description: org.description ?? "",
     },
@@ -140,10 +159,22 @@ function OrganizationForm({
       name: org.name,
       nameLatin: org.nameLatin,
       shortName: org.shortName,
+      organizationType: org.organizationType,
+      legalFormId: org.legalForm.id,
       printName: org.printName ?? "",
       description: org.description ?? "",
     });
-  }, [org.id, org.name, org.nameLatin, org.shortName, org.printName, org.description, form]);
+  }, [
+    org.id,
+    org.name,
+    org.nameLatin,
+    org.shortName,
+    org.printName,
+    org.description,
+    org.organizationType,
+    org.legalForm.id,
+    form,
+  ]);
 
   const mutation = useUpdateOrganization({
     onSuccess: () => {
@@ -160,6 +191,8 @@ function OrganizationForm({
         name: data.name,
         nameLatin: data.nameLatin,
         shortName: data.shortName,
+        organizationType: data.organizationType,
+        legalFormId: data.legalFormId,
         printName: data.printName || null,
         description: data.description || null,
       },
@@ -221,6 +254,87 @@ function OrganizationForm({
                 )}
               />
             </div>
+          </div>
+        </section>
+
+        {/* ── Классификация ── */}
+        <section className={SECTION}>
+          <SectionMeta
+            title="Классификация"
+            description="Правовая форма и тип деятельности организации"
+          />
+          <div className="space-y-3">
+            {/* Организационно-правовая форма */}
+            <FormField
+              control={form.control}
+              name="legalFormId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Правовая форма</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isLegalFormsLoading}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите форму" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {legalForms.map((lf) => (
+                        <SelectItem key={lf.id} value={lf.id}>
+                          <span className="font-medium">{lf.shortName}</span>
+                          <span className="text-muted-foreground">
+                            {" "}
+                            — {lf.name}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Тип организации */}
+            <FormField
+              control={form.control}
+              name="organizationType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Тип организации</FormLabel>
+                  <Select
+                    value={
+                      field.value !== undefined ? String(field.value) : ""
+                    }
+                    onValueChange={(v) =>
+                      field.onChange(Number(v) as OrganizationType)
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите тип" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {(
+                        Object.entries(ORGANIZATION_TYPE_LABELS) as [
+                          string,
+                          string,
+                        ][]
+                      ).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </section>
 

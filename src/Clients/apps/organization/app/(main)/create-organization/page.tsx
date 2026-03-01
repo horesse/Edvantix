@@ -8,8 +8,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import useCreateOrganization from "@workspace/api-hooks/company/useCreateOrganization";
-
-import { PageHeader } from "@/components/page-header";
+import useLegalForms from "@workspace/api-hooks/company/useLegalForms";
+import {
+  ORGANIZATION_TYPE_LABELS,
+  OrganizationType,
+} from "@workspace/types/company";
 import { Button } from "@workspace/ui/components/button";
 import {
   Form,
@@ -20,14 +23,26 @@ import {
   FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
 import { Textarea } from "@workspace/ui/components/textarea";
 import {
   type CreateOrganizationInput,
   createOrganizationSchema,
 } from "@workspace/validations/company";
 
+import { PageHeader } from "@/components/page-header";
+
 export default function CreateOrganizationPage() {
   const router = useRouter();
+
+  const { data: legalForms = [], isLoading: isLegalFormsLoading } =
+    useLegalForms();
 
   const form = useForm<CreateOrganizationInput>({
     resolver: zodResolver(createOrganizationSchema),
@@ -35,6 +50,7 @@ export default function CreateOrganizationPage() {
       name: "",
       nameLatin: "",
       shortName: "",
+      legalFormId: "",
       printName: "",
       description: "",
     },
@@ -55,6 +71,8 @@ export default function CreateOrganizationPage() {
       name: data.name,
       nameLatin: data.nameLatin,
       shortName: data.shortName,
+      organizationType: data.organizationType,
+      legalFormId: data.legalFormId,
       printName: data.printName || null,
       description: data.description || null,
     });
@@ -114,6 +132,79 @@ export default function CreateOrganizationPage() {
                 </FormItem>
               )}
             />
+
+            {/* Организационно-правовая форма */}
+            <FormField
+              control={form.control}
+              name="legalFormId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Правовая форма</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isLegalFormsLoading}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите форму" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {legalForms.map((lf) => (
+                        <SelectItem key={lf.id} value={lf.id}>
+                          <span className="font-medium">{lf.shortName}</span>
+                          <span className="text-muted-foreground">
+                            {" "}
+                            — {lf.name}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Тип организации */}
+            <FormField
+              control={form.control}
+              name="organizationType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Тип организации</FormLabel>
+                  <Select
+                    value={
+                      field.value !== undefined ? String(field.value) : ""
+                    }
+                    onValueChange={(v) =>
+                      field.onChange(Number(v) as OrganizationType)
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите тип" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {(
+                        Object.entries(ORGANIZATION_TYPE_LABELS) as [
+                          string,
+                          string,
+                        ][]
+                      ).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="printName"

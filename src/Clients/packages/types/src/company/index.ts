@@ -23,6 +23,59 @@ export enum InvitationStatus {
   Expired = 5,
 }
 
+/** Тип организации (информационное поле). */
+export enum OrganizationType {
+  EducationalInstitution = 1,
+  GeneralSecondaryEducation = 2,
+  Lyceum = 3,
+  Gymnasium = 4,
+  College = 5,
+  VocationalTechnicalSchool = 6,
+  University = 7,
+  AdditionalEducationForYouth = 8,
+  Preschool = 9,
+  PrivateEducationalCenter = 10,
+  TrainingCenter = 11,
+  LlcEducational = 12,
+  IndividualEntrepreneur = 13,
+  LanguageSchool = 14,
+  ItSchool = 15,
+  TutoringCenter = 16,
+  OnlinePlatform = 17,
+}
+
+/** Русские названия типов организаций. */
+export const ORGANIZATION_TYPE_LABELS: Record<OrganizationType, string> = {
+  [OrganizationType.EducationalInstitution]: "Учреждение образования",
+  [OrganizationType.GeneralSecondaryEducation]:
+    "Учреждение общего среднего образования",
+  [OrganizationType.Lyceum]: "Лицей",
+  [OrganizationType.Gymnasium]: "Гимназия",
+  [OrganizationType.College]: "Колледж",
+  [OrganizationType.VocationalTechnicalSchool]:
+    "Профессионально-техническое училище",
+  [OrganizationType.University]: "Университет, институт",
+  [OrganizationType.AdditionalEducationForYouth]:
+    "Учреждение дополнительного образования детей и молодёжи",
+  [OrganizationType.Preschool]: "Дошкольное учреждение образования",
+  [OrganizationType.PrivateEducationalCenter]: "Частный образовательный центр",
+  [OrganizationType.TrainingCenter]: "Учебный центр, обучающая компания",
+  [OrganizationType.LlcEducational]: "ООО в сфере образования",
+  [OrganizationType.IndividualEntrepreneur]: "Индивидуальный предприниматель",
+  [OrganizationType.LanguageSchool]: "Языковая школа",
+  [OrganizationType.ItSchool]: "IT-школа, школа программирования",
+  [OrganizationType.TutoringCenter]: "Репетиторский центр",
+  [OrganizationType.OnlinePlatform]: "Онлайн-платформа",
+};
+
+// --- Legal Forms ---
+
+export type LegalFormModel = {
+  id: string;
+  name: string;
+  shortName: string;
+};
+
 // --- Organization ---
 
 export type OrganizationModel = {
@@ -35,6 +88,8 @@ export type OrganizationModel = {
   registrationDate: string;
   membersCount: number;
   groupsCount: number;
+  organizationType: OrganizationType;
+  legalForm: LegalFormModel;
 };
 
 export type OrganizationSummaryModel = {
@@ -49,6 +104,8 @@ export type CreateOrganizationRequest = {
   name: string;
   nameLatin: string;
   shortName: string;
+  organizationType: OrganizationType;
+  legalFormId: string;
   printName?: string | null;
   description?: string | null;
 };
@@ -57,6 +114,8 @@ export type UpdateOrganizationRequest = {
   name: string;
   nameLatin: string;
   shortName: string;
+  organizationType: OrganizationType;
+  legalFormId: string;
   printName?: string | null;
   description?: string | null;
 };

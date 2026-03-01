@@ -133,75 +133,77 @@ export default function CreateOrganizationPage() {
               )}
             />
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {/* Организационно-правовая форма */}
-              <FormField
-                control={form.control}
-                name="legalFormId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Правовая форма</FormLabel>
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      disabled={isLegalFormsLoading}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Выберите форму" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {legalForms.map((lf) => (
-                          <SelectItem key={lf.id} value={lf.id}>
-                            {lf.shortName} — {lf.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {/* Организационно-правовая форма */}
+            <FormField
+              control={form.control}
+              name="legalFormId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Правовая форма</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isLegalFormsLoading}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите форму" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {legalForms.map((lf) => (
+                        <SelectItem key={lf.id} value={lf.id}>
+                          <span className="font-medium">{lf.shortName}</span>
+                          <span className="text-muted-foreground">
+                            {" "}
+                            — {lf.name}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              {/* Тип организации */}
-              <FormField
-                control={form.control}
-                name="organizationType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Тип организации</FormLabel>
-                    <Select
-                      value={
-                        field.value !== undefined ? String(field.value) : ""
-                      }
-                      onValueChange={(v) =>
-                        field.onChange(Number(v) as OrganizationType)
-                      }
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Выберите тип" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {(
-                          Object.entries(ORGANIZATION_TYPE_LABELS) as [
-                            string,
-                            string,
-                          ][]
-                        ).map(([value, label]) => (
-                          <SelectItem key={value} value={value}>
-                            {label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            {/* Тип организации */}
+            <FormField
+              control={form.control}
+              name="organizationType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Тип организации</FormLabel>
+                  <Select
+                    value={
+                      field.value !== undefined ? String(field.value) : ""
+                    }
+                    onValueChange={(v) =>
+                      field.onChange(Number(v) as OrganizationType)
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите тип" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {(
+                        Object.entries(ORGANIZATION_TYPE_LABELS) as [
+                          string,
+                          string,
+                        ][]
+                      ).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

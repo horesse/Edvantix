@@ -263,7 +263,7 @@ function OrganizationForm({
             title="Классификация"
             description="Правовая форма и тип деятельности организации"
           />
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="space-y-3">
             {/* Организационно-правовая форма */}
             <FormField
               control={form.control}
@@ -284,7 +284,11 @@ function OrganizationForm({
                     <SelectContent>
                       {legalForms.map((lf) => (
                         <SelectItem key={lf.id} value={lf.id}>
-                          {lf.shortName} — {lf.name}
+                          <span className="font-medium">{lf.shortName}</span>
+                          <span className="text-muted-foreground">
+                            {" "}
+                            — {lf.name}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectContent>

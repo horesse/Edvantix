@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <ItemGroup>
     <PackageReference Include="Aspire.Microsoft.Azure.StackExchangeRedis" />
+    <PackageReference Include="DistributedLock.Redis" />
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
     <PackageReference Include="Mediator.SourceGenerator">
       <PrivateAssets>all</PrivateAssets>

@@ -28,7 +28,7 @@ public static class Extensions
         var services = builder.Services;
 
         builder.AddDefaultCors();
-        
+
         builder.AddAppSettings<BlogAppSettings>();
 
         builder.AddDefaultAuthentication().WithKeycloakClaimsTransformation();

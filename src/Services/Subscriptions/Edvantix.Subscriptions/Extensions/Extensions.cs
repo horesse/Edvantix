@@ -111,7 +111,9 @@ public static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(ISubscriptionsApiMarker));
         services.AddDefaultOpenApi(options =>
-            options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<SubscriptionsAppSettings>>()
+            options.AddDocumentTransformer<
+                OpenApiInfoDefinitionsTransformer<SubscriptionsAppSettings>
+            >()
         );
 
         services.AddMapper(typeof(ISubscriptionsApiMarker));

@@ -91,7 +91,9 @@ public static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(IOrganizationalApiMarker));
         services.AddDefaultOpenApi(options =>
-            options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<OrganizationalAppSettings>>()
+            options.AddDocumentTransformer<
+                OpenApiInfoDefinitionsTransformer<OrganizationalAppSettings>
+            >()
         );
 
         services.AddMapper(typeof(IOrganizationalApiMarker));

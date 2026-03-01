@@ -8,11 +8,11 @@ using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
+using Edvantix.Notification.Configurations;
 using Edvantix.Notification.Infrastructure;
 using Edvantix.Notification.Infrastructure.Senders;
 using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.Infrastructure.Senders.MailKit;
-using Edvantix.Notification.Configurations;
 using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
@@ -87,7 +87,9 @@ internal static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
         services.AddDefaultOpenApi(options =>
-            options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<NotificationAppSettings>>()
+            options.AddDocumentTransformer<
+                OpenApiInfoDefinitionsTransformer<NotificationAppSettings>
+            >()
         );
 
         services

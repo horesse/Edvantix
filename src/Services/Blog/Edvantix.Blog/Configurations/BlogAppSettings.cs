@@ -11,8 +11,7 @@ public sealed class BlogAppSettings : AppSettings
         {
             Title = "Blog Service API",
             Summary = "Сервис новостей",
-            Description =
-                "Постинг новостей, списков изменений.",
+            Description = "Постинг новостей, списков изменений.",
             Contact = new()
             {
                 Name = "horesse",

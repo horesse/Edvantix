@@ -6,10 +6,13 @@ using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
+using Edvantix.Persona.Configurations;
 using Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
 using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 using Edvantix.Persona.Infrastructure.EventServices;
+using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Persona.Extensions;
@@ -46,8 +49,6 @@ public static class Extensions
                     .Build()
             );
 
-        builder.AddDefaultOpenApi();
-
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -70,13 +71,9 @@ public static class Extensions
             .AddScoped<UpdateProfileByAdminPreProcessor>()
             .AddScoped<UpdateProfileByAdminPostProcessor>();
 
-        var appSettings = new AppSettings();
+        builder.AddAppSettings<PersonaAppSettings>();
 
-        builder.Configuration.Bind(appSettings);
-
-        services.AddSingleton(appSettings);
-
-        services.AddRateLimiting();
+        builder.AddRateLimiting();
 
         services.AddGrpc(options =>
         {
@@ -106,6 +103,9 @@ public static class Extensions
 
         services.AddVersioning();
         services.AddEndpoints(typeof(IPersonaApiMarker));
+        services.AddDefaultOpenApi(options =>
+            options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<PersonaAppSettings>>()
+        );
 
         services.AddMapper(typeof(IPersonaApiMarker));
 

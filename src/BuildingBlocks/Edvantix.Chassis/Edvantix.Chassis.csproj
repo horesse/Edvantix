@@ -2,20 +2,22 @@
   <ItemGroup Label="Framework">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
-    <PackageReference Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" />
+  <ItemGroup Label="Integration">
     <PackageReference Include="Aspire.Keycloak.Authentication" />
+    <PackageReference Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
-    <PackageReference Include="Grpc.Core.Api" />
     <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Scrutor" />
+  </ItemGroup>
+  <ItemGroup Label="Telemetry">
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Middleware" />
     <PackageReference Include="Microsoft.Extensions.Compliance.Redaction" />
-    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
-    <PackageReference Include="Scrutor" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Grpc.Core.Api" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Edvantix.Constants\Edvantix.Constants.csproj" />

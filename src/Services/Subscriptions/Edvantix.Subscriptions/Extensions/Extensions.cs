@@ -6,7 +6,10 @@ using Edvantix.Chassis.Mapper;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
+using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
+using Edvantix.Subscriptions.Configurations;
 using Edvantix.Subscriptions.Features;
 using Edvantix.Subscriptions.Infrastructure;
 using Mediator;
@@ -53,8 +56,6 @@ public static class Extensions
                     .Build()
             );
 
-        builder.AddDefaultOpenApi();
-
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -75,13 +76,9 @@ public static class Extensions
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-        var appSettings = new AppSettings();
+        builder.AddAppSettings<SubscriptionsAppSettings>();
 
-        builder.Configuration.Bind(appSettings);
-
-        services.AddSingleton(appSettings);
-
-        services.AddRateLimiting();
+        builder.AddRateLimiting();
 
         services.AddGrpc(options =>
         {
@@ -113,6 +110,11 @@ public static class Extensions
 
         services.AddVersioning();
         services.AddEndpoints(typeof(ISubscriptionsApiMarker));
+        services.AddDefaultOpenApi(options =>
+            options.AddDocumentTransformer<
+                OpenApiInfoDefinitionsTransformer<SubscriptionsAppSettings>
+            >()
+        );
 
         services.AddMapper(typeof(ISubscriptionsApiMarker));
 

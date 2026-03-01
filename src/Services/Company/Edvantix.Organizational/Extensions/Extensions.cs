@@ -5,8 +5,11 @@ using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
+using Edvantix.Organizational.Configurations;
 using Edvantix.Organizational.Features;
+using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
 using AspireServices = Edvantix.Constants.Aspire.Services;
 
@@ -44,8 +47,6 @@ public static class Extensions
                     .Build()
             );
 
-        builder.AddDefaultOpenApi();
-
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -63,13 +64,9 @@ public static class Extensions
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-        var appSettings = new AppSettings();
+        builder.AddAppSettings<OrganizationalAppSettings>();
 
-        builder.Configuration.Bind(appSettings);
-
-        services.AddSingleton(appSettings);
-
-        services.AddRateLimiting();
+        builder.AddRateLimiting();
 
         services.AddSingleton(_ =>
         {
@@ -93,6 +90,11 @@ public static class Extensions
 
         services.AddVersioning();
         services.AddEndpoints(typeof(IOrganizationalApiMarker));
+        services.AddDefaultOpenApi(options =>
+            options.AddDocumentTransformer<
+                OpenApiInfoDefinitionsTransformer<OrganizationalAppSettings>
+            >()
+        );
 
         services.AddMapper(typeof(IOrganizationalApiMarker));
 

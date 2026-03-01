@@ -2,22 +2,24 @@
   <PropertyGroup>
     <IsAspireSharedProject>true</IsAspireSharedProject>
     <NoWarn>EXTEXP0001</NoWarn>
+    <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated</InterceptorsNamespaces>
   </PropertyGroup>
   <ItemGroup Label="Framework">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Label="HTTP Communication">
+    <PackageReference Include="Refit.HttpClientFactory" />
     <PackageReference Include="AspNetCore.HealthChecks.Uris" />
     <PackageReference Include="Grpc.AspNetCore.HealthChecks" />
     <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup Label="OpenTelemetry">
     <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
-    <PackageReference Include="Refit.HttpClientFactory" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Edvantix.Chassis\Edvantix.Chassis.csproj" />

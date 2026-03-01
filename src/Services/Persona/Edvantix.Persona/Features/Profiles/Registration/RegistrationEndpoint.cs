@@ -27,7 +27,7 @@ public sealed class RegistrationEndpoint
             .WithSummary("Регистрация пользователя")
             .WithDescription("Создаёт новый профиль для аутентифицированного пользователя.")
             .WithFormOptions(true)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequirePerUserRateLimit()
             .RequireAuthorization();
     }

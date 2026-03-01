@@ -30,10 +30,7 @@ public static class DbContextExtensions
             (sp, options) =>
             {
                 options
-                    .UseNpgsql(
-                        builder.Configuration.GetConnectionString(name),
-                        opts => opts.EnableRetryOnFailure(0)
-                    )
+                    .UseNpgsql(builder.Configuration.GetConnectionString(name))
                     .UseSnakeCaseNamingConvention()
                     // Issue: https://github.com/dotnet/efcore/issues/35285
                     .ConfigureWarnings(warnings =>

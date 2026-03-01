@@ -1,4 +1,5 @@
 using Edvantix.Constants.Other;
+using Edvantix.Persona.Domain.Events;
 
 namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 

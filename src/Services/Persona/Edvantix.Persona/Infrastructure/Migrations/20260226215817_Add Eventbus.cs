@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Edvantix.Notification.Infrastructure.Migrations
+namespace Edvantix.Persona.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class AddEventbus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,57 +83,6 @@ namespace Edvantix.Notification.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_outbox_state", x => x.outbox_id);
-                }
-            );
-
-            migrationBuilder.CreateTable(
-                name: "outboxes",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(
-                        type: "uuid",
-                        nullable: false,
-                        defaultValueSql: "uuidv7()"
-                    ),
-                    to_name = table.Column<string>(
-                        type: "character varying(100)",
-                        maxLength: 100,
-                        nullable: false
-                    ),
-                    to_email = table.Column<string>(
-                        type: "character varying(255)",
-                        maxLength: 255,
-                        nullable: false
-                    ),
-                    subject = table.Column<string>(
-                        type: "character varying(100)",
-                        maxLength: 100,
-                        nullable: false
-                    ),
-                    body = table.Column<string>(
-                        type: "character varying(10000)",
-                        maxLength: 10000,
-                        nullable: false
-                    ),
-                    is_sent = table.Column<bool>(type: "boolean", nullable: false),
-                    sequence_number = table
-                        .Column<long>(type: "bigint", nullable: false)
-                        .Annotation(
-                            "Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
-                        ),
-                    created_at = table.Column<DateTime>(
-                        type: "timestamp with time zone",
-                        nullable: false
-                    ),
-                    sent_at = table.Column<DateTime>(
-                        type: "timestamp with time zone",
-                        nullable: true
-                    ),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_outboxes", x => x.id);
                 }
             );
 
@@ -252,20 +201,12 @@ namespace Edvantix.Notification.Infrastructure.Migrations
                 table: "outbox_state",
                 column: "created"
             );
-
-            migrationBuilder.CreateIndex(
-                name: "ix_outboxes_is_sent",
-                table: "outboxes",
-                column: "is_sent"
-            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(name: "outbox_message");
-
-            migrationBuilder.DropTable(name: "outboxes");
 
             migrationBuilder.DropTable(name: "inbox_state");
 

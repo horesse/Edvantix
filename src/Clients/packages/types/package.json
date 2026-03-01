@@ -22,6 +22,10 @@
     "./blog": {
       "import": "./src/blog/index.ts",
       "types": "./src/blog/index.ts"
+    },
+    "./notifications": {
+      "import": "./src/notifications/index.ts",
+      "types": "./src/notifications/index.ts"
     }
   },
   "scripts": {

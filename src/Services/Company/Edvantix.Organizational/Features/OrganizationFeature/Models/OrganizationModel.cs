@@ -1,3 +1,6 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+using Edvantix.Organizational.Features.LegalFormFeature.Models;
+
 namespace Edvantix.Organizational.Features.OrganizationFeature.Models;
 
 public sealed class OrganizationModel
@@ -11,4 +14,10 @@ public sealed class OrganizationModel
     public DateTime RegistrationDate { get; set; }
     public int MembersCount { get; set; }
     public int GroupsCount { get; set; }
+
+    /// <summary>Тип организации.</summary>
+    public OrganizationType OrganizationType { get; set; }
+
+    /// <summary>Организационно-правовая форма.</summary>
+    public LegalFormModel LegalForm { get; set; } = null!;
 }

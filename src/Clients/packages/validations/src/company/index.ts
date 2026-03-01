@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { OrganizationRole } from "@workspace/types/company";
+import { OrganizationRole, OrganizationType } from "@workspace/types/company";
 import { ContactType } from "@workspace/types/profile";
 
 const MAX_NAME_LENGTH = 200;
@@ -36,6 +36,10 @@ export const createOrganizationSchema = z.object({
       MAX_SHORT_NAME_LENGTH,
       `Краткое название не должно превышать ${MAX_SHORT_NAME_LENGTH} символов`,
     ),
+  organizationType: z.nativeEnum(OrganizationType, {
+    error: "Укажите тип организации",
+  }),
+  legalFormId: z.string().uuid("Укажите организационно-правовую форму"),
   printName: z
     .string()
     .max(

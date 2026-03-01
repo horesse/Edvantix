@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Grpc.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.CreateOrganization;
@@ -6,6 +7,8 @@ public sealed record CreateOrganizationCommand(
     string Name,
     string NameLatin,
     string ShortName,
+    OrganizationType OrganizationType,
+    Guid LegalFormId,
     string? PrintName,
     string? Description
 ) : IRequest<Guid>;
@@ -25,6 +28,8 @@ public sealed class CreateOrganizationCommandHandler(IServiceProvider provider)
             request.NameLatin,
             request.ShortName,
             DateTime.UtcNow,
+            request.OrganizationType,
+            request.LegalFormId,
             request.PrintName,
             request.Description
         );

@@ -1,4 +1,5 @@
 using Edvantix.Constants.Other;
+using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
@@ -13,6 +14,8 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
         string nameLatin,
         string shortName,
         DateTime registrationDate,
+        OrganizationType organizationType,
+        Guid legalFormId,
         string? printName = null,
         string? description = null
     )
@@ -33,10 +36,18 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
                 nameof(shortName)
             );
 
+        if (legalFormId == Guid.Empty)
+            throw new ArgumentException(
+                "Организационно-правовая форма обязательна.",
+                nameof(legalFormId)
+            );
+
         Name = name;
         NameLatin = nameLatin;
         ShortName = shortName;
         RegistrationDate = registrationDate;
+        OrganizationType = organizationType;
+        LegalFormId = legalFormId;
         PrintName = printName;
         Description = description;
     }
@@ -47,6 +58,15 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     public string? PrintName { get; private set; }
     public string? Description { get; private set; }
     public DateTime RegistrationDate { get; private set; }
+
+    /// <summary>Тип организации — информационное поле для категоризации.</summary>
+    public OrganizationType OrganizationType { get; private set; }
+
+    /// <summary>Идентификатор организационно-правовой формы.</summary>
+    public Guid LegalFormId { get; private set; }
+
+    /// <summary>Организационно-правовая форма (навигационное свойство).</summary>
+    public LegalForm? LegalForm { get; private set; }
 
     public IReadOnlyCollection<OrganizationContact> Contacts => _contacts.AsReadOnly();
     public IReadOnlyCollection<OrganizationMember> Members => _members.AsReadOnly();
@@ -89,6 +109,21 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     public void UpdateDescription(string? description)
     {
         Description = description;
+    }
+
+    /// <summary>
+    /// Обновляет классификацию организации: тип и организационно-правовую форму.
+    /// </summary>
+    public void UpdateClassification(OrganizationType organizationType, Guid legalFormId)
+    {
+        if (legalFormId == Guid.Empty)
+            throw new ArgumentException(
+                "Организационно-правовая форма обязательна.",
+                nameof(legalFormId)
+            );
+
+        OrganizationType = organizationType;
+        LegalFormId = legalFormId;
     }
 
     /// <summary>

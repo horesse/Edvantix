@@ -1,3 +1,6 @@
+using Edvantix.Chassis.Mapper;
+using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
+using Edvantix.Organizational.Features.LegalFormFeature.Models;
 using Edvantix.Organizational.Features.OrganizationFeature.Models;
 using Edvantix.Organizational.Infrastructure.Services;
 
@@ -23,6 +26,15 @@ public sealed class GetOrganizationQueryHandler(IServiceProvider provider)
 
         // TODO: Fetch user profile data from Profile service via gRPC
 
+        var legalFormRepo = provider.GetRequiredService<ILegalFormRepository>();
+        var legalForm =
+            await legalFormRepo.FindByIdAsync(org.LegalFormId, cancellationToken)
+            ?? throw new NotFoundException(
+                $"Организационно-правовая форма с ID {org.LegalFormId} не найдена."
+            );
+
+        var legalFormMapper = provider.GetRequiredService<IMapper<LegalForm, LegalFormModel>>();
+
         return new OrganizationModel
         {
             Id = org.Id,
@@ -34,6 +46,8 @@ public sealed class GetOrganizationQueryHandler(IServiceProvider provider)
             RegistrationDate = org.RegistrationDate,
             MembersCount = org.Members.Count,
             GroupsCount = org.Groups.Count,
+            OrganizationType = org.OrganizationType,
+            LegalForm = legalFormMapper.Map(legalForm),
         };
     }
 }

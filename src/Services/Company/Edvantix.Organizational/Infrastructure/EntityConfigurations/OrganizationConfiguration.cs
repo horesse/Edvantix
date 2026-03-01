@@ -26,6 +26,20 @@ public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organiz
 
         builder.Property(o => o.RegistrationDate).IsRequired();
 
+        // OrganizationType хранится как int; поле информационное, обязательное.
+        builder.Property(o => o.OrganizationType).IsRequired().HasConversion<int>();
+
+        // LegalFormId — внешний ключ на справочник организационно-правовых форм.
+        builder.Property(o => o.LegalFormId).IsRequired();
+
+        builder
+            .HasOne(o => o.LegalForm)
+            .WithMany()
+            .HasForeignKey(o => o.LegalFormId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(o => o.LegalFormId);
+
         builder
             .HasMany(o => o.Contacts)
             .WithOne(c => c.Organization)

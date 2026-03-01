@@ -11,7 +11,8 @@ public sealed class CatalogAppSettings : AppSettings
         {
             Title = "Catalog Service API",
             Summary = "Сервис общих справочников",
-            Description = "Управление глобальными справочниками: валюты, страны, часовые пояса, языки, регионы.",
+            Description =
+                "Управление глобальными справочниками: валюты, страны, часовые пояса, языки, регионы.",
             Contact = new()
             {
                 Name = "horesse",

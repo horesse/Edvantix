@@ -1,5 +1,6 @@
 using Edvantix.Catalog.Infrastructure.DistributedLock;
 using Edvantix.Catalog.Infrastructure.Idempotency;
+using Edvantix.Catalog.Infrastructure.Seeders;
 using Edvantix.Chassis.Utilities.Configurations;
 
 namespace Edvantix.Catalog.Infrastructure;
@@ -20,7 +21,7 @@ public static class Extensions
             Components.Database.Catalog,
             app =>
             {
-                services.AddMigration<CatalogDbContext>();
+                services.AddMigration<CatalogDbContext, CatalogDbSeeder>();
                 services.AddRepositories(typeof(ICatalogApiMarker));
             }
         );

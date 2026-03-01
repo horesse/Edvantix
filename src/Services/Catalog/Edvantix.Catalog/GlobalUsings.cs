@@ -7,6 +7,7 @@ global using Edvantix.Catalog.Domain.AggregatesModel.CurrencyAggregate;
 global using Edvantix.Catalog.Domain.AggregatesModel.LanguageAggregate;
 global using Edvantix.Catalog.Domain.AggregatesModel.RegionAggregate;
 global using Edvantix.Catalog.Domain.AggregatesModel.TimezoneAggregate;
+global using Edvantix.Catalog.Domain.Events;
 global using Edvantix.Catalog.Infrastructure;
 global using Edvantix.Chassis.Caching;
 global using Edvantix.Chassis.EF;

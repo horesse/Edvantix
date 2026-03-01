@@ -1,0 +1,57 @@
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "memory": {
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "'ctx7sk-41d0cdc2-ece0-4519-af92-4117fd60f25c'"
+      ]
+    },
+    "aspire": {
+      "type": "stdio",
+      "command": "aspire",
+      "args": [
+        "mcp",
+        "start"
+      ]
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "drawio": {
+      "command": "bunx",
+      "args": [
+        "@drawio/mcp"
+      ]
+    },
+    "youtrack": {
+      "type": "http",
+      "url": "https://youtrack.moodschool.ru/mcp",
+      "headers": {
+        "Authorization": "Bearer perm-Y2xhdWRl.NDQtNA==.REzHiFa0XQyzKZK6nbuVHfT5YTxieR"
+      }
+    }
+  }
+}

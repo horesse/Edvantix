@@ -1,12 +1,3 @@
-using Edvantix.Catalog.Domain.AggregatesModel.CountryAggregate;
-using Edvantix.Catalog.Domain.AggregatesModel.CurrencyAggregate;
-using Edvantix.Catalog.Domain.AggregatesModel.LanguageAggregate;
-using Edvantix.Catalog.Domain.AggregatesModel.RegionAggregate;
-using Edvantix.Catalog.Domain.AggregatesModel.TimezoneAggregate;
-using Edvantix.Chassis.EF;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-
 namespace Edvantix.Catalog.Infrastructure.Seeders;
 
 /// <summary>

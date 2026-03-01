@@ -1,5 +1,3 @@
-using Edvantix.Catalog.Domain.Events;
-
 namespace Edvantix.Catalog.Application.EventHandlers;
 
 /// <summary>

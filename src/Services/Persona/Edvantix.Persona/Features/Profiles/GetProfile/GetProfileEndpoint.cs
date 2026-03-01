@@ -15,7 +15,7 @@ public sealed class GetProfileEndpoint : IEndpoint<Ok<ProfileViewModel>, ISender
             .WithDescription("Возвращает краткую информацию о профиле текущего пользователя")
             .Produces<ProfileViewModel>()
             .Produces(StatusCodes.Status401Unauthorized)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }
 

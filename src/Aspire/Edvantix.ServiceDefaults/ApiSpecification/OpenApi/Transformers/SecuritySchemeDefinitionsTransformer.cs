@@ -6,8 +6,7 @@ using Microsoft.OpenApi;
 
 namespace Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 
-internal sealed class SecuritySchemeDefinitionsTransformer(IdentityOptions identityOptions)
-    : IOpenApiDocumentTransformer
+public sealed class SecuritySchemeDefinitionsTransformer : IOpenApiDocumentTransformer
 {
     public Task TransformAsync(
         OpenApiDocument document,
@@ -15,11 +14,14 @@ internal sealed class SecuritySchemeDefinitionsTransformer(IdentityOptions ident
         CancellationToken cancellationToken
     )
     {
-        var keycloakUrl = ServiceDiscoveryUtilities.GetServiceEndpoint(
-            Components.KeyCloak,
-            0,
-            true
-        );
+        var identityOptions = context.ApplicationServices.GetService<IdentityOptions>();
+
+        if (identityOptions is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        var keycloakUrl = ServiceDiscoveryUtilities.GetServiceEndpoint(Components.KeyCloak);
 
         if (string.IsNullOrWhiteSpace(keycloakUrl))
         {

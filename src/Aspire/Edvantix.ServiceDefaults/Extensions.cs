@@ -2,8 +2,6 @@ using System.Diagnostics;
 using Edvantix.Chassis.Logging;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
-using Edvantix.Chassis.Utilities.Configuration;
-using Edvantix.ServiceDefaults.ApiSpecification;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
@@ -116,8 +114,6 @@ public static class Extensions
             builder.ConfigureOpenTelemetry();
 
             builder.AddDefaultHealthChecks();
-
-            builder.Services.Configure<DocumentOptions>(DocumentOptions.ConfigurationSection);
 
             builder.Services.AddServiceDiscovery();
 

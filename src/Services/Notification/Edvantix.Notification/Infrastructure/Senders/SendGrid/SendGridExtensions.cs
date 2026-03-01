@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.Utilities.Configuration;
+﻿using Edvantix.Chassis.Utilities.Configurations;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SendGrid;
 
@@ -32,7 +32,7 @@ internal static class SendGridExtensions
         {
             var services = builder.Services;
 
-            services.Configure<SendGridSettings>(SendGridSettings.ConfigurationSection);
+            builder.Configure<SendGridSettings>(SendGridSettings.ConfigurationSection);
 
             services.AddSendGrid(
                 (sp, options) => options.ApiKey = sp.GetRequiredService<SendGridSettings>().ApiKey

@@ -1,13 +1,12 @@
-﻿using Asp.Versioning.ApiExplorer;
+﻿using Edvantix.Chassis.Utilities.Configurations;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
 namespace Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 
-internal sealed class OpenApiInfoDefinitionsTransformer(
-    DocumentOptions? openApiDocument,
-    ApiVersionDescription apiDescription
-) : IOpenApiDocumentTransformer
+public sealed class OpenApiInfoDefinitionsTransformer<T>(T appSettings)
+    : IOpenApiDocumentTransformer
+    where T : AppSettings, new()
 {
     public Task TransformAsync(
         OpenApiDocument document,
@@ -15,33 +14,12 @@ internal sealed class OpenApiInfoDefinitionsTransformer(
         CancellationToken cancellationToken
     )
     {
-        document.Info.License = new()
+        if (appSettings.OpenApi is null)
         {
-            Name = openApiDocument?.LicenseName,
-            Url = openApiDocument?.LicenseUrl,
-        };
-
-        document.Info.Contact = new()
-        {
-            Name = openApiDocument?.AuthorName,
-            Url = openApiDocument?.AuthorUrl,
-            Email = openApiDocument?.AuthorEmail,
-        };
-
-        if (!string.IsNullOrWhiteSpace(openApiDocument?.Title))
-        {
-            document.Info.Title = $"{openApiDocument.Title} {apiDescription.ApiVersion}";
+            return Task.CompletedTask;
         }
 
-        document.Info.Version = apiDescription.ApiVersion.ToString();
-
-        if (!string.IsNullOrWhiteSpace(openApiDocument?.Description))
-        {
-            document.Info.Description = ApiVersionDescriptionBuilder.BuildDescription(
-                apiDescription,
-                openApiDocument.Description
-            );
-        }
+        document.Info = appSettings.OpenApi;
 
         return Task.CompletedTask;
     }

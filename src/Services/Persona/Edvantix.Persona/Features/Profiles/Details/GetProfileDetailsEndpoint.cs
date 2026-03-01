@@ -19,7 +19,7 @@ public sealed class GetProfileDetailsEndpoint : IEndpoint<Ok<ProfileDetailsModel
             .Produces<ProfileDetailsModel>()
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }
 

@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.Security.Settings;
 using Edvantix.Chassis.Utilities;
-using Edvantix.Chassis.Utilities.Configuration;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Constants.Aspire;
 using Edvantix.Constants.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,17 +17,19 @@ public static class AuthenticationExtensions
     {
         var services = builder.Services;
 
-        services.Configure<IdentityOptions>(IdentityOptions.ConfigurationSection);
+        builder.Configure<IdentityOptions>(IdentityOptions.ConfigurationSection);
 
         var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
-        var keycloakUrlBuilt = HttpUtilities
+
+        var scheme = builder.Environment.IsDevelopment()
+            ? Http.Schemes.Http
+            : Http.Schemes.HttpOrHttps;
+
+        var keycloakUrl = HttpUtilities
             .AsUrlBuilder()
-            .WithScheme(Http.Schemes.HttpOrHttps)
+            .WithScheme(scheme)
             .WithHost(Components.KeyCloak)
             .Build();
-
-        // TODO: Фронт локально запускается в http, из-за этого отличается issuer и токен не проходит валидацию
-        var keycloakUrl = builder.Configuration["KEYCLOAK_URL"] ?? keycloakUrlBuilt;
 
         services.AddHttpClient(
             Components.KeyCloak,
@@ -45,11 +47,12 @@ public static class AuthenticationExtensions
                 realm,
                 options =>
                 {
-                    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
                     options.Audience = "account";
-
-                    // TODO: In dev we start http keycloak for front
-                    options.TokenValidationParameters.ValidateIssuer = false;
+                    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+                    options.TokenValidationParameters.ValidateAudience =
+                        !builder.Environment.IsDevelopment();
+                    options.TokenValidationParameters.ValidateIssuer =
+                        !builder.Environment.IsDevelopment();
                 }
             );
 

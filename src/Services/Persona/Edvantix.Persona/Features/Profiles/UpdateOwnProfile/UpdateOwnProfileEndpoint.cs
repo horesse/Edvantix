@@ -31,7 +31,7 @@ public sealed class UpdateOwnProfileEndpoint
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status422UnprocessableEntity)
             .WithFormOptions(true)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }
 

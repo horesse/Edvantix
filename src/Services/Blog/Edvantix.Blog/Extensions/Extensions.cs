@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Edvantix.Blog.Features;
 using Edvantix.Blog.Grpc;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
@@ -52,8 +51,6 @@ public static class Extensions
                     .Build()
             );
 
-        builder.AddDefaultOpenApi();
-
         // Обработчики ошибок в порядке специфичности (сначала более специфичные)
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -96,6 +93,7 @@ public static class Extensions
 
         services.AddVersioning();
         services.AddEndpoints(typeof(IBlogApiMarker));
+        services.AddDefaultOpenApi();
 
         services.AddMapper(typeof(IBlogApiMarker));
 

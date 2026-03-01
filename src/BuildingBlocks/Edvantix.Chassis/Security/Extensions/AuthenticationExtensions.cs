@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.Security.Settings;
 using Edvantix.Chassis.Utilities;
-using Edvantix.Chassis.Utilities.Configuration;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Constants.Aspire;
 using Edvantix.Constants.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

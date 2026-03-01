@@ -49,7 +49,7 @@ public sealed class GetNotificationsEndpoint
             .WithPaginationHeaders()
             .Produces<PagedResult<NotificationViewModel>>()
             .Produces(StatusCodes.Status401Unauthorized)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }
 

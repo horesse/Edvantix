@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading.RateLimiting;
-using Edvantix.Chassis.Utilities.Configuration;
+using Edvantix.Chassis.Utilities.Configurations;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 

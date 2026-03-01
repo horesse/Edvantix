@@ -35,7 +35,7 @@ public sealed class UpdateProfileByAdminEndpoint
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status422UnprocessableEntity)
             .WithFormOptions(true)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization(Authorization.Policies.Admin);
     }
 

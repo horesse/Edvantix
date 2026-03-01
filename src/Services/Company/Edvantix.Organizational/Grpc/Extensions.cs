@@ -1,5 +1,5 @@
 ﻿using Edvantix.Chassis.Utilities;
-using Edvantix.Chassis.Utilities.Configuration;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Organizational.Grpc.Services;
 using Edvantix.Persona.Grpc.Services;
 

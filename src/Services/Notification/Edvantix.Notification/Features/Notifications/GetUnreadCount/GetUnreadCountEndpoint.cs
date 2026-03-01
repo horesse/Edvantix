@@ -28,7 +28,7 @@ public sealed class GetUnreadCountEndpoint
             )
             .Produces<UnreadCountViewModel>()
             .Produces(StatusCodes.Status401Unauthorized)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }
 

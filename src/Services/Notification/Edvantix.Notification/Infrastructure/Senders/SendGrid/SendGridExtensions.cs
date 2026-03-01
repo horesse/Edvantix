@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.Utilities.Configuration;
+﻿using Edvantix.Chassis.Utilities.Configurations;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SendGrid;
 

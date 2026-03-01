@@ -52,9 +52,7 @@ public static class Extensions
                     .RequireScope($"{Services.Subscriptions}_{Authorization.Actions.Read}")
                     .Build()
             );
-
-        builder.AddDefaultOpenApi();
-
+        
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -113,7 +111,8 @@ public static class Extensions
 
         services.AddVersioning();
         services.AddEndpoints(typeof(ISubscriptionsApiMarker));
-
+        services.AddDefaultOpenApi();
+        
         services.AddMapper(typeof(ISubscriptionsApiMarker));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();

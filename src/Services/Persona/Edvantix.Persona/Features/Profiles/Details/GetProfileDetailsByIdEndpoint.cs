@@ -18,7 +18,7 @@ public sealed class GetProfileDetailsByIdEndpoint
             .Produces<ProfileDetailsModel>()
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status403Forbidden)
-            .MapToApiVersion(new(1, 0))
+            .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization(Authorization.Policies.Admin);
     }
 

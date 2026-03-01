@@ -1,6 +1,6 @@
 using Edvantix.Blog.Grpc.Services;
 using Edvantix.Chassis.Utilities;
-using Edvantix.Chassis.Utilities.Configuration;
+using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Persona.Grpc.Services;
 
 namespace Edvantix.Blog.Grpc;

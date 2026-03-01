@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
-namespace Edvantix.Chassis.Utilities.Configuration;
+namespace Edvantix.Chassis.Utilities.Configurations;
 
 public static class ConfigurationExtensions
 {

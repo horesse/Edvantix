@@ -1,7 +1,7 @@
 ﻿using Edvantix.Constants.Core;
 using Microsoft.Extensions.Hosting;
 
-namespace Edvantix.Chassis.Utilities.Configuration;
+namespace Edvantix.Chassis.Utilities.Configurations;
 
 public static class LaunchProfileExtensions
 {

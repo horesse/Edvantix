@@ -45,7 +45,7 @@ public static class Extensions
                     .RequireScope($"{Services.Persona}_{Authorization.Actions.Read}")
                     .Build()
             );
-        
+
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -105,7 +105,7 @@ public static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(IPersonaApiMarker));
         services.AddDefaultOpenApi();
-        
+
         services.AddMapper(typeof(IPersonaApiMarker));
 
         services.AddScoped<IEventMapper, EventMapper>();

@@ -43,7 +43,7 @@ public static class Extensions
                     .RequireScope($"{AspireServices.Organizational}_{Authorization.Actions.Read}")
                     .Build()
             );
-        
+
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -92,7 +92,7 @@ public static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(IOrganizationalApiMarker));
         services.AddDefaultOpenApi();
-        
+
         services.AddMapper(typeof(IOrganizationalApiMarker));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();

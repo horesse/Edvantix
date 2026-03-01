@@ -31,7 +31,7 @@ internal static class Extensions
         services
             .AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
-        
+
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -82,7 +82,7 @@ internal static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
         services.AddDefaultOpenApi();
-        
+
         services
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped

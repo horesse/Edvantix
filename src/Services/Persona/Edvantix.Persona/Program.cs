@@ -27,7 +27,10 @@ app.UseMiddleware<KeycloakTokenIntrospectionMiddleware>();
 
 app.UseRateLimiter();
 
-var apiVersionSet = app.NewApiVersionSet().HasApiVersion(ApiVersions.V1).ReportApiVersions().Build();
+var apiVersionSet = app.NewApiVersionSet()
+    .HasApiVersion(ApiVersions.V1)
+    .ReportApiVersions()
+    .Build();
 
 app.MapEndpoints(apiVersionSet);
 

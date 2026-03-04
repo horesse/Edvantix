@@ -39,4 +39,22 @@ public sealed class CurrencyRepository(CatalogDbContext dbContext) : ICurrencyRe
             .Currencies.AsNoTracking()
             .FirstOrDefaultAsync(c => c.Code == normalized, cancellationToken);
     }
+
+    /// <inheritdoc/>
+    public async Task<Currency?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var normalized = code.ToUpperInvariant();
+
+        return await dbContext.Currencies.FirstOrDefaultAsync(
+            c => c.Code == normalized,
+            cancellationToken
+        );
+    }
+
+    /// <inheritdoc/>
+    public async Task AddAsync(Currency entity, CancellationToken cancellationToken = default) =>
+        await dbContext.Currencies.AddAsync(entity, cancellationToken);
 }

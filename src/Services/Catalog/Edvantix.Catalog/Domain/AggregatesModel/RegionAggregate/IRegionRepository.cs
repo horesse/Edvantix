@@ -12,4 +12,16 @@ public interface IRegionRepository : IRepository<Region>
         bool activeOnly = true,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>Возвращает регион по коду без трекинга или <c>null</c>.</summary>
+    Task<Region?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
+
+    /// <summary>Возвращает отслеживаемую EF Core сущность для операций записи или <c>null</c>.</summary>
+    Task<Region?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Добавляет новый регион в контекст EF Core.</summary>
+    Task AddAsync(Region entity, CancellationToken cancellationToken = default);
 }

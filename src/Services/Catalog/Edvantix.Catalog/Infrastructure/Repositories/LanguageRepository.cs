@@ -26,4 +26,35 @@ public sealed class LanguageRepository(CatalogDbContext dbContext) : ILanguageRe
 
         return await query.OrderBy(l => l.Code).ToListAsync(cancellationToken);
     }
+
+    /// <inheritdoc/>
+    public async Task<Language?> GetByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var normalized = code.ToLowerInvariant();
+
+        return await dbContext
+            .Languages.AsNoTracking()
+            .FirstOrDefaultAsync(l => l.Code == normalized, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task<Language?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var normalized = code.ToLowerInvariant();
+
+        return await dbContext.Languages.FirstOrDefaultAsync(
+            l => l.Code == normalized,
+            cancellationToken
+        );
+    }
+
+    /// <inheritdoc/>
+    public async Task AddAsync(Language entity, CancellationToken cancellationToken = default) =>
+        await dbContext.Languages.AddAsync(entity, cancellationToken);
 }

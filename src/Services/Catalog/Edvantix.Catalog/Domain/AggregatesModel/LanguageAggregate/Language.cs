@@ -78,6 +78,22 @@ public sealed class Language : HasDomainEvents, IAggregateRoot
     }
 
     /// <summary>
+    /// Активирует язык и публикует событие <see cref="CatalogChangeType.Updated"/>.
+    /// </summary>
+    public void Activate()
+    {
+        IsActive = true;
+
+        RegisterDomainEvent(
+            new CatalogEntryChangedEvent(
+                CatalogEntityType.Language,
+                Code,
+                CatalogChangeType.Updated
+            )
+        );
+    }
+
+    /// <summary>
     /// Деактивирует язык и публикует событие <see cref="CatalogChangeType.Deactivated"/>.
     /// </summary>
     public void Deactivate()

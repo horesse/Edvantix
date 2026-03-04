@@ -30,4 +30,23 @@ public sealed class TimezoneRepository(CatalogDbContext dbContext) : ITimezoneRe
             .ThenBy(t => t.Code)
             .ToListAsync(cancellationToken);
     }
+
+    /// <inheritdoc/>
+    public async Task<Timezone?> GetByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    ) =>
+        await dbContext
+            .Timezones.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Code == code, cancellationToken);
+
+    /// <inheritdoc/>
+    public async Task<Timezone?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    ) => await dbContext.Timezones.FirstOrDefaultAsync(t => t.Code == code, cancellationToken);
+
+    /// <inheritdoc/>
+    public async Task AddAsync(Timezone entity, CancellationToken cancellationToken = default) =>
+        await dbContext.Timezones.AddAsync(entity, cancellationToken);
 }

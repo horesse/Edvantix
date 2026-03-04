@@ -12,4 +12,16 @@ public interface ITimezoneRepository : IRepository<Timezone>
         bool activeOnly = true,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>Возвращает часовой пояс по IANA-коду без трекинга или <c>null</c>.</summary>
+    Task<Timezone?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
+
+    /// <summary>Возвращает отслеживаемую EF Core сущность для операций записи или <c>null</c>.</summary>
+    Task<Timezone?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Добавляет новый часовой пояс в контекст EF Core.</summary>
+    Task AddAsync(Timezone entity, CancellationToken cancellationToken = default);
 }

@@ -12,4 +12,16 @@ public interface ILanguageRepository : IRepository<Language>
         bool activeOnly = true,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>Возвращает язык по ISO 639-1 коду без трекинга или <c>null</c>.</summary>
+    Task<Language?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
+
+    /// <summary>Возвращает отслеживаемую EF Core сущность для операций записи или <c>null</c>.</summary>
+    Task<Language?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Добавляет новый язык в контекст EF Core.</summary>
+    Task AddAsync(Language entity, CancellationToken cancellationToken = default);
 }

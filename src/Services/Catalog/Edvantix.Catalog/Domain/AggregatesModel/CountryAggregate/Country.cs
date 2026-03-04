@@ -98,6 +98,18 @@ public sealed class Country : HasDomainEvents, IAggregateRoot
     }
 
     /// <summary>
+    /// Активирует страну и публикует событие <see cref="CatalogChangeType.Updated"/>.
+    /// </summary>
+    public void Activate()
+    {
+        IsActive = true;
+
+        RegisterDomainEvent(
+            new CatalogEntryChangedEvent(CatalogEntityType.Country, Code, CatalogChangeType.Updated)
+        );
+    }
+
+    /// <summary>
     /// Деактивирует страну и публикует событие <see cref="CatalogChangeType.Deactivated"/>.
     /// </summary>
     public void Deactivate()

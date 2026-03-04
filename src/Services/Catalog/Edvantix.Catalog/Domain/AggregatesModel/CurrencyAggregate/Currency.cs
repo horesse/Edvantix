@@ -95,6 +95,22 @@ public sealed class Currency : HasDomainEvents, IAggregateRoot
     }
 
     /// <summary>
+    /// Активирует валюту и публикует событие <see cref="CatalogChangeType.Updated"/>.
+    /// </summary>
+    public void Activate()
+    {
+        IsActive = true;
+
+        RegisterDomainEvent(
+            new CatalogEntryChangedEvent(
+                CatalogEntityType.Currency,
+                Code,
+                CatalogChangeType.Updated
+            )
+        );
+    }
+
+    /// <summary>
     /// Деактивирует валюту и публикует событие <see cref="CatalogChangeType.Deactivated"/>.
     /// </summary>
     public void Deactivate()

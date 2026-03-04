@@ -61,6 +61,18 @@ public sealed class Region : HasDomainEvents, IAggregateRoot
     }
 
     /// <summary>
+    /// Активирует регион и публикует событие <see cref="CatalogChangeType.Updated"/>.
+    /// </summary>
+    public void Activate()
+    {
+        IsActive = true;
+
+        RegisterDomainEvent(
+            new CatalogEntryChangedEvent(CatalogEntityType.Region, Code, CatalogChangeType.Updated)
+        );
+    }
+
+    /// <summary>
     /// Деактивирует регион и публикует событие <see cref="CatalogChangeType.Deactivated"/>.
     /// </summary>
     public void Deactivate()

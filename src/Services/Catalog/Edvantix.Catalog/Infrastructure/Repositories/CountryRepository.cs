@@ -39,4 +39,22 @@ public sealed class CountryRepository(CatalogDbContext dbContext) : ICountryRepo
             .Countries.AsNoTracking()
             .FirstOrDefaultAsync(c => c.Code == normalized, cancellationToken);
     }
+
+    /// <inheritdoc/>
+    public async Task<Country?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var normalized = code.ToUpperInvariant();
+
+        return await dbContext.Countries.FirstOrDefaultAsync(
+            c => c.Code == normalized,
+            cancellationToken
+        );
+    }
+
+    /// <inheritdoc/>
+    public async Task AddAsync(Country entity, CancellationToken cancellationToken = default) =>
+        await dbContext.Countries.AddAsync(entity, cancellationToken);
 }

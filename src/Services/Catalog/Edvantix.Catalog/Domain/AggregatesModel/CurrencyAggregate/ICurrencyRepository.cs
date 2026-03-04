@@ -17,4 +17,16 @@ public interface ICurrencyRepository : IRepository<Currency>
     /// <param name="code">Алфавитный код ISO 4217 (например, "USD").</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     Task<Currency?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Возвращает отслеживаемую EF Core сущность для операций записи или <c>null</c>.
+    /// В отличие от <see cref="GetByCodeAsync"/>, не использует <c>AsNoTracking</c>.
+    /// </summary>
+    Task<Currency?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Добавляет новую валюту в контекст EF Core.</summary>
+    Task AddAsync(Currency entity, CancellationToken cancellationToken = default);
 }

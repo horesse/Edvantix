@@ -26,4 +26,35 @@ public sealed class RegionRepository(CatalogDbContext dbContext) : IRegionReposi
 
         return await query.OrderBy(r => r.Code).ToListAsync(cancellationToken);
     }
+
+    /// <inheritdoc/>
+    public async Task<Region?> GetByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var normalized = code.ToUpperInvariant();
+
+        return await dbContext
+            .Regions.AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Code == normalized, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task<Region?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var normalized = code.ToUpperInvariant();
+
+        return await dbContext.Regions.FirstOrDefaultAsync(
+            r => r.Code == normalized,
+            cancellationToken
+        );
+    }
+
+    /// <inheritdoc/>
+    public async Task AddAsync(Region entity, CancellationToken cancellationToken = default) =>
+        await dbContext.Regions.AddAsync(entity, cancellationToken);
 }

@@ -91,6 +91,22 @@ public sealed class Timezone : HasDomainEvents, IAggregateRoot
     }
 
     /// <summary>
+    /// Активирует часовой пояс и публикует событие <see cref="CatalogChangeType.Updated"/>.
+    /// </summary>
+    public void Activate()
+    {
+        IsActive = true;
+
+        RegisterDomainEvent(
+            new CatalogEntryChangedEvent(
+                CatalogEntityType.Timezone,
+                Code,
+                CatalogChangeType.Updated
+            )
+        );
+    }
+
+    /// <summary>
     /// Деактивирует часовой пояс и публикует событие <see cref="CatalogChangeType.Deactivated"/>.
     /// </summary>
     public void Deactivate()

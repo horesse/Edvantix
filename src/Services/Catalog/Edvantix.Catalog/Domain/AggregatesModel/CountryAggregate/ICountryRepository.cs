@@ -17,4 +17,13 @@ public interface ICountryRepository : IRepository<Country>
     /// <param name="code">Двухбуквенный код ISO 3166-1 alpha-2 (например, "US").</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     Task<Country?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
+
+    /// <summary>Возвращает отслеживаемую EF Core сущность для операций записи или <c>null</c>.</summary>
+    Task<Country?> FindTrackedByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Добавляет новую страну в контекст EF Core.</summary>
+    Task AddAsync(Country entity, CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Edvantix.Catalog.Application.Behaviors;
 using Edvantix.Catalog.Configurations;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
@@ -66,10 +67,12 @@ public static class Extensions
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
             )
-            // Open-generic behaviors run first (activity tracing → logging → validation)
+            // Open-generic behaviors run first (activity tracing → logging → validation → caching)
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            // CachingBehavior применяется только к запросам, реализующим ICachedQuery
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
 
         builder.AddRateLimiting();
 

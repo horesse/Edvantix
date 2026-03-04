@@ -14,8 +14,7 @@ namespace Edvantix.Catalog.Grpc.Services;
 /// Временно разрешён анонимный доступ; заменить на service-to-service токен или mTLS.
 /// </remarks>
 [AllowAnonymous]
-public sealed class RegionGrpcService(IServiceProvider provider)
-    : RegionService.RegionServiceBase
+public sealed class RegionGrpcService(IServiceProvider provider) : RegionService.RegionServiceBase
 {
     /// <inheritdoc/>
     public override async Task<RegionResponse> GetRegion(

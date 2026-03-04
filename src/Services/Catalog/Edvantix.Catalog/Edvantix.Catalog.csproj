@@ -16,4 +16,14 @@
   <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Общие сообщения запросов -->
+    <Protobuf Include="Grpc\Protos\catalog\v1\shared.proto" GrpcService="None" ProtoRoot="Grpc\Protos" />
+    <!-- Сервис и сообщения по каждой сущности -->
+    <Protobuf Include="Grpc\Protos\catalog\v1\currency.proto" GrpcService="Server" ProtoRoot="Grpc\Protos" />
+    <Protobuf Include="Grpc\Protos\catalog\v1\country.proto" GrpcService="Server" ProtoRoot="Grpc\Protos" />
+    <Protobuf Include="Grpc\Protos\catalog\v1\timezone.proto" GrpcService="Server" ProtoRoot="Grpc\Protos" />
+    <Protobuf Include="Grpc\Protos\catalog\v1\language.proto" GrpcService="Server" ProtoRoot="Grpc\Protos" />
+    <Protobuf Include="Grpc\Protos\catalog\v1\region.proto" GrpcService="Server" ProtoRoot="Grpc\Protos" />
+  </ItemGroup>
 </Project>

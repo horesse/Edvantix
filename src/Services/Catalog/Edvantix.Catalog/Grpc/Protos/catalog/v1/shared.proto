@@ -1,0 +1,15 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Catalog.Grpc.Services";
+
+package catalog.v1;
+
+// Общие сообщения запросов, используемые во всех RPC-методах каталога.
+
+message GetByCodeRequest {
+  string code = 1;
+}
+
+message ListRequest {
+  bool active_only = 1;
+}

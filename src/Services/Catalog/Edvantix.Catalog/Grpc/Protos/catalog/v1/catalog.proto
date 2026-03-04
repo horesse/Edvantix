@@ -1,0 +1,30 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Catalog.Grpc.Services";
+
+package catalog.v1;
+
+import "catalog/v1/shared.proto";
+import "catalog/v1/currency.proto";
+import "catalog/v1/country.proto";
+import "catalog/v1/timezone.proto";
+import "catalog/v1/language.proto";
+import "catalog/v1/region.proto";
+
+// Сервис каталога справочников для межсервисного взаимодействия.
+service CatalogService {
+  rpc GetCurrency(GetByCodeRequest) returns (CurrencyResponse);
+  rpc ListCurrencies(ListRequest) returns (CurrenciesResponse);
+
+  rpc GetCountry(GetByCodeRequest) returns (CountryResponse);
+  rpc ListCountries(ListRequest) returns (CountriesResponse);
+
+  rpc GetTimezone(GetByCodeRequest) returns (TimezoneResponse);
+  rpc ListTimezones(ListRequest) returns (TimezonesResponse);
+
+  rpc GetLanguage(GetByCodeRequest) returns (LanguageResponse);
+  rpc ListLanguages(ListRequest) returns (LanguagesResponse);
+
+  rpc GetRegion(GetByCodeRequest) returns (RegionResponse);
+  rpc ListRegions(ListRequest) returns (RegionsResponse);
+}

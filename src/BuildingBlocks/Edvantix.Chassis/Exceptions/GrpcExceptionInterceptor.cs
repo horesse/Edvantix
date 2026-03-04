@@ -15,6 +15,11 @@ public sealed class GrpcExceptionInterceptor : Interceptor
         {
             return await continuation(request, context);
         }
+        catch (RpcException)
+        {
+            // Пропускаем RpcException без изменений — статус уже выставлен сервисом
+            throw;
+        }
         catch (Exception exception)
         {
             throw new RpcException(new(StatusCode.Internal, exception.Message));

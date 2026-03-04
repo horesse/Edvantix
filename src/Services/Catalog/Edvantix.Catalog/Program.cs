@@ -1,4 +1,5 @@
 using Edvantix.Catalog.Extensions;
+using Edvantix.Catalog.Grpc.Services;
 using Edvantix.Chassis.Security.Keycloak;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,12 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
+
+app.MapGrpcService<CountryGrpcService>();
+app.MapGrpcService<CurrencyGrpcService>();
+app.MapGrpcService<LanguageGrpcService>();
+app.MapGrpcService<RegionGrpcService>();
+app.MapGrpcService<TimezoneGrpcService>();
 
 app.MapGrpcHealthChecksService();
 

@@ -13,6 +13,9 @@ public sealed record GetCountryByCodeQuery(string Code) : IRequest<CountryModel>
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Country];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(4);
 }
 
 /// <summary>

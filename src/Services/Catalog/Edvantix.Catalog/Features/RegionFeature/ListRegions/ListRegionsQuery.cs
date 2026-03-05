@@ -18,6 +18,9 @@ public sealed record ListRegionsQuery(
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Region];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(1);
 }
 
 /// <summary>

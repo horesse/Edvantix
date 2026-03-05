@@ -12,6 +12,9 @@ public sealed record GetLanguageByCodeQuery(string Code) : IRequest<LanguageMode
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Language];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(4);
 }
 
 /// <summary>

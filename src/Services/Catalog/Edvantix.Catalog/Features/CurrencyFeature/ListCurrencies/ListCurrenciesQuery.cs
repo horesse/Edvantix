@@ -19,6 +19,9 @@ public sealed record ListCurrenciesQuery(
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Currency];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(1);
 }
 
 /// <summary>

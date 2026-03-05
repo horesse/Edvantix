@@ -18,6 +18,9 @@ public sealed record ListTimezonesQuery(
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Timezone];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(1);
 }
 
 /// <summary>

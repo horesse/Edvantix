@@ -18,6 +18,9 @@ public sealed record ListLanguagesQuery(
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Language];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(1);
 }
 
 /// <summary>

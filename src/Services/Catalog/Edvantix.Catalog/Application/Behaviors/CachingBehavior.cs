@@ -25,6 +25,7 @@ public sealed class CachingBehavior<TMessage, TResponse>(HybridCache cache)
             message.CacheKey,
             state,
             static async (s, ct) => await s.next(s.message, ct),
+            new HybridCacheEntryOptions { Expiration = message.Expiry },
             tags: message.Tags,
             cancellationToken: cancellationToken
         );

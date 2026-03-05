@@ -12,6 +12,9 @@ public sealed record GetRegionByCodeQuery(string Code) : IRequest<RegionModel>, 
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Region];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(4);
 }
 
 /// <summary>

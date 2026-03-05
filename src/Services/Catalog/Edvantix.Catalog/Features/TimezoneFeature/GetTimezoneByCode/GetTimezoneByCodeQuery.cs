@@ -12,6 +12,9 @@ public sealed record GetTimezoneByCodeQuery(string Code) : IRequest<TimezoneMode
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Timezone];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(4);
 }
 
 /// <summary>

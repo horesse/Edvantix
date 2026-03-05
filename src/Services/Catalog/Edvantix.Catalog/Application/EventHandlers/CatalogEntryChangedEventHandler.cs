@@ -2,7 +2,8 @@ namespace Edvantix.Catalog.Application.EventHandlers;
 
 /// <summary>
 /// Обрабатывает <see cref="CatalogEntryChangedEvent"/> — инвалидирует соответствующий тег HybridCache.
-/// Реализация инвалидации тегов будет расширена в рамках EDV-77.
+/// Один вызов <see cref="HybridCache.RemoveByTagAsync"/> сбрасывает все записи (list и by-code)
+/// для изменённого типа сущности, не требуя перечисления конкретных ключей.
 /// </summary>
 public sealed class CatalogEntryChangedEventHandler(
     HybridCache cache,

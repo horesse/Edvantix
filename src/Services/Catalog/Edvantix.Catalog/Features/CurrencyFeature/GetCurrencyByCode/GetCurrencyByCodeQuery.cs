@@ -13,6 +13,9 @@ public sealed record GetCurrencyByCodeQuery(string Code) : IRequest<CurrencyMode
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Currency];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(4);
 }
 
 /// <summary>

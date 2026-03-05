@@ -18,6 +18,9 @@ public sealed record ListCountriesQuery(
 
     /// <inheritdoc/>
     public string[] Tags => [CatalogEntityType.Country];
+
+    /// <inheritdoc/>
+    public TimeSpan? Expiry => TimeSpan.FromHours(1);
 }
 
 /// <summary>

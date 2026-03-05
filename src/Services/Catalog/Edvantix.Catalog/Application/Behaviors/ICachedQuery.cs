@@ -11,4 +11,9 @@ public interface ICachedQuery
 
     /// <summary>Теги кэша для групповой инвалидации через <see cref="HybridCache.RemoveByTagAsync"/>.</summary>
     string[] Tags { get; }
+
+    /// <summary>
+    /// TTL записи в кэше. <c>null</c> означает использование дефолтного TTL из конфигурации HybridCache.
+    /// </summary>
+    TimeSpan? Expiry { get; }
 }

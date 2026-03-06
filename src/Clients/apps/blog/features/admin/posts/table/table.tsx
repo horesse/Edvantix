@@ -83,7 +83,7 @@ export function PostsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((post) => (
+            {data?.items.map((post) => (
               <TableRow key={post.id}>
                 <TableCell>{renderPostTitle(post)}</TableCell>
                 <TableCell className="hidden sm:table-cell">

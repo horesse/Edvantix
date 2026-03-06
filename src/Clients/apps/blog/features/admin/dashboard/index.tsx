@@ -227,7 +227,7 @@ export function AdminDashboardSection() {
               ? Array.from({ length: 5 }).map((_, i) => (
                   <Skeleton key={i} className="h-12 w-full rounded-lg" />
                 ))
-              : recentPosts?.map((post) => (
+              : recentPosts?.items.map((post) => (
                   <Link
                     key={post.id}
                     href={`/admin/posts/${post.id}/edit`}

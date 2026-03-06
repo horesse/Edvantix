@@ -1,4 +1,4 @@
-﻿name: Edvantix CI (.NET)
+name: Edvantix CI (.NET)
 run-name: .NET CI - ${{ github.event_name }} by ${{ github.actor }}
 
 on:
@@ -165,7 +165,7 @@ jobs:
           fetch-depth: 0
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}

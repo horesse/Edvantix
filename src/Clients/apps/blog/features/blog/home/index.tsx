@@ -70,7 +70,7 @@ function PostList() {
     );
   }
 
-  const posts = data ?? [];
+  const posts = data?.items ?? [];
   const [featuredPost, ...restPosts] = posts;
 
   return (

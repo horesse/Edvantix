@@ -58,18 +58,22 @@ public sealed class UpdateProfileByAdminCommandHandler(IServiceProvider provider
         profile.UpdatePersonalInfo(command.BirthDate);
         profile.UpdateFullName(command.FirstName, command.LastName, command.MiddleName);
 
+        // Коллекции могут быть null, если multipart/form-data не содержит ни одного элемента —
+        // model binder не может различить "пустой список" и "поле не передано".
         profile.ReplaceContacts(
-            command.Contacts.Select(c => profile.CreateContact(c.Type, c.Value, c.Description))
+            (command.Contacts ?? []).Select(c =>
+                profile.CreateContact(c.Type, c.Value, c.Description)
+            )
         );
 
         profile.ReplaceEducations(
-            command.Educations.Select(e =>
+            (command.Educations ?? []).Select(e =>
                 profile.CreateEducation(e.DateStart, e.Institution, e.Level, e.Specialty, e.DateEnd)
             )
         );
 
         profile.ReplaceEmploymentHistories(
-            command.EmploymentHistories.Select(e =>
+            (command.EmploymentHistories ?? []).Select(e =>
                 profile.CreateEmploymentHistory(
                     e.Workplace,
                     e.Position,

@@ -15,9 +15,9 @@ import {
 } from "@workspace/validations/profile";
 
 export const profileFormSchema = profileSettingsSchema.extend({
-  contacts: z.array(contactSchema).default([]),
-  employmentHistories: z.array(employmentSchema).default([]),
-  educations: z.array(educationSchema).default([]),
+  contacts: z.array(contactSchema),
+  employmentHistories: z.array(employmentSchema),
+  educations: z.array(educationSchema),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;

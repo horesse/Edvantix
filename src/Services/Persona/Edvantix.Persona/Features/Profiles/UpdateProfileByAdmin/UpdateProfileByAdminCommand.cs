@@ -61,7 +61,9 @@ public sealed class UpdateProfileByAdminCommandHandler(IServiceProvider provider
         // Коллекции могут быть null, если multipart/form-data не содержит ни одного элемента —
         // model binder не может различить "пустой список" и "поле не передано".
         profile.ReplaceContacts(
-            (command.Contacts ?? []).Select(c => profile.CreateContact(c.Type, c.Value, c.Description))
+            (command.Contacts ?? []).Select(c =>
+                profile.CreateContact(c.Type, c.Value, c.Description)
+            )
         );
 
         profile.ReplaceEducations(

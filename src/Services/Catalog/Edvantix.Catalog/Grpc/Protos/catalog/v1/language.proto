@@ -1,0 +1,26 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Catalog.Grpc.Services";
+
+package catalog.v1;
+
+import "catalog/v1/shared.proto";
+
+// Сервис и сообщения для языков (ISO 639-1).
+
+service LanguageService {
+  rpc GetLanguage(GetByCodeRequest) returns (LanguageResponse);
+  rpc ListLanguages(ListRequest) returns (LanguagesResponse);
+}
+
+message LanguageResponse {
+  string code = 1;
+  string name_ru = 2;
+  string name_en = 3;
+  string native_name = 4;
+  bool is_active = 5;
+}
+
+message LanguagesResponse {
+  repeated LanguageResponse items = 1;
+}

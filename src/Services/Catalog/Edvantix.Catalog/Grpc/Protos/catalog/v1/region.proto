@@ -1,0 +1,25 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Catalog.Grpc.Services";
+
+package catalog.v1;
+
+import "catalog/v1/shared.proto";
+
+// Сервис и сообщения для географических регионов.
+
+service RegionService {
+  rpc GetRegion(GetByCodeRequest) returns (RegionResponse);
+  rpc ListRegions(ListRequest) returns (RegionsResponse);
+}
+
+message RegionResponse {
+  string code = 1;
+  string name_ru = 2;
+  string name_en = 3;
+  bool is_active = 4;
+}
+
+message RegionsResponse {
+  repeated RegionResponse items = 1;
+}

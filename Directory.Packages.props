@@ -28,7 +28,7 @@
     <!-- Extra -->
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.72.0-preview" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Quartz" Version="1.15.0-beta.1" />
-    <PackageVersion Include="Quartz.AspNetCore" Version="3.15.1" />
+    <PackageVersion Include="Quartz.AspNetCore" Version="3.16.1" />
     <PackageVersion Include="Scalar.Aspire" Version="0.8.59" />
   </ItemGroup>
   <ItemGroup Label="Core Packages">

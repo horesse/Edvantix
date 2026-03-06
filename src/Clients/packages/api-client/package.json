@@ -26,6 +26,7 @@
   "exports": {
     "./client": "./src/client.ts",
     "./config": "./src/config.ts",
+    "./token-utils": "./src/token-utils.ts",
     "./profile/*": "./src/profile/*.ts",
     "./company/*": "./src/company/*.ts",
     "./blog/*": "./src/blog/*.ts",

@@ -1,15 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { useRouter } from "next/navigation";
-
+import {
+  registerTokenRefresher,
+  unregisterTokenRefresher,
+} from "@workspace/api-client/client";
+import { isTokenExpiringSoon } from "@workspace/api-client/token-utils";
 import { Card, CardContent } from "@workspace/ui/components/card";
 import { Spinner } from "@workspace/ui/components/spinner";
 
 import { useUserContext } from "@/hooks/use-user-context";
-import { getAccessToken, signIn } from "@/lib/auth-client";
+import { getAccessToken, signIn, signOut } from "@/lib/auth-client";
 import { AUTH } from "@/lib/constants";
+
+/** How often (ms) to proactively check if the token needs refreshing. */
+const TOKEN_CHECK_INTERVAL_MS = 60_000;
+
+/** Refresh the token this many ms before it actually expires. */
+const TOKEN_REFRESH_BUFFER_MS = 5 * 60_000;
+
+/**
+ * Module-level flag preventing concurrent refresh calls.
+ * Lives outside the component because there is only one auth session per tab.
+ */
+let isRefreshing = false;
+
+/**
+ * Exchanges the current session's refresh token for a new Keycloak access token
+ * via better-auth's server-side token endpoint, then persists the result.
+ *
+ * Defined at module level so the reference is stable — no stale closures in
+ * effects and no need for useCallback or eslint-disable suppression.
+ */
+async function fetchFreshToken(): Promise<string | null> {
+  if (isRefreshing) return null;
+
+  isRefreshing = true;
+
+  try {
+    const result = await getAccessToken({ providerId: AUTH.PROVIDER });
+    const token = result.data?.accessToken ?? null;
+
+    if (token) {
+      window.localStorage.setItem("access_token", token);
+    }
+
+    return token;
+  } catch (error) {
+    console.error("[auth-guard] Token refresh error:", error);
+    return null;
+  } finally {
+    isRefreshing = false;
+  }
+}
 
 export function LoadingScreen({
   title,
@@ -43,51 +87,43 @@ export function LoadingScreen({
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useUserContext();
-  const router = useRouter();
-  const [tokenError, setTokenError] = useState<string | null>(null);
 
+  // Redirect unauthenticated users to Keycloak login.
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      signIn.social({
-        provider: AUTH.PROVIDER,
-        callbackURL: AUTH.CALLBACK_URL,
-      });
+      signIn.social({ provider: AUTH.PROVIDER, callbackURL: AUTH.CALLBACK_URL });
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading]);
 
+  // On authentication: fetch initial token, register the reactive refresher for
+  // the Axios 401 interceptor, and start the proactive expiry check interval.
   useEffect(() => {
-    let isMounted = true;
+    if (!isAuthenticated) return;
 
-    const fetchAndStoreToken = async () => {
-      if (!isAuthenticated) return;
+    // Register so the Axios 401 interceptor can silently refresh and retry.
+    registerTokenRefresher(fetchFreshToken);
 
-      try {
-        const result = await getAccessToken({ providerId: AUTH.PROVIDER });
+    // Fetch immediately so the token is available before the first API call.
+    fetchFreshToken();
 
-        if (!isMounted) return;
+    // Proactively renew the token before it expires to avoid 401 bursts.
+    const interval = setInterval(async () => {
+      const currentToken = window.localStorage.getItem("access_token");
 
-        if (result.data?.accessToken) {
-          if (typeof window !== "undefined") {
-            localStorage.setItem("access_token", result.data.accessToken);
-          }
-        } else {
-          setTokenError("Failed to retrieve access token");
-          console.error("Access token not found in response");
-        }
-      } catch (error) {
-        if (!isMounted) return;
+      if (!isTokenExpiringSoon(currentToken, TOKEN_REFRESH_BUFFER_MS)) return;
 
-        const errorMessage =
-          error instanceof Error ? error.message : "Unknown error";
-        setTokenError(errorMessage);
-        console.error("Error fetching access token:", error);
+      const newToken = await fetchFreshToken();
+
+      if (!newToken) {
+        // Refresh token itself has expired — force the user to re-authenticate.
+        console.warn("[auth-guard] Token refresh failed — signing out.");
+        await signOut();
       }
-    };
-
-    fetchAndStoreToken();
+    }, TOKEN_CHECK_INTERVAL_MS);
 
     return () => {
-      isMounted = false;
+      clearInterval(interval);
+      unregisterTokenRefresher();
     };
   }, [isAuthenticated]);
 
@@ -107,10 +143,6 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         description="Перенаправление на страницу входа..."
       />
     );
-  }
-
-  if (tokenError) {
-    console.warn("Token error:", tokenError);
   }
 
   return <>{children}</>;

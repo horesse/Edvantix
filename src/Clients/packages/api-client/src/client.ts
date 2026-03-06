@@ -2,6 +2,7 @@ import axios, {
   AxiosHeaders,
   type AxiosInstance,
   type AxiosResponse,
+  type InternalAxiosRequestConfig,
 } from "axios";
 import axiosRetry, { exponentialDelay } from "axios-retry";
 
@@ -10,8 +11,35 @@ import { AxiosRequestConfig } from "./global";
 
 const DEFAULT_MAX_RETRIES = Number(process.env.NEXT_PUBLIC_MAX_RETRIES) || 5;
 
+/** Function that returns a fresh access token, or null if refresh failed. */
+type TokenRefresher = () => Promise<string | null>;
+
+/**
+ * Module-level refresher registered by the auth layer (e.g. AuthGuard).
+ * Shared across all ApiClient instances — there is only one auth session per tab.
+ */
+let tokenRefresher: TokenRefresher | null = null;
+
+/**
+ * Registers the callback used by the 401 interceptor to silently refresh tokens.
+ * The provided function is responsible for persisting the new token.
+ * Call once after the user authenticates (e.g. inside AuthGuard).
+ */
+export function registerTokenRefresher(fn: TokenRefresher): void {
+  tokenRefresher = fn;
+}
+
+/** Clears the registered refresher. Call on sign-out. */
+export function unregisterTokenRefresher(): void {
+  tokenRefresher = null;
+}
+
+/** Extends InternalAxiosRequestConfig to track per-request retry state. */
+type RetryableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
+
 export default class ApiClient {
   private readonly client: AxiosInstance;
+
   constructor(config = axiosConfig, maxRetries = DEFAULT_MAX_RETRIES) {
     const axiosConfigs = "baseURL" in config ? config : axiosConfig;
 
@@ -27,14 +55,19 @@ export default class ApiClient {
     axiosRetry(this.client, {
       retries: maxRetries,
       retryDelay: exponentialDelay,
+      // Only retry network errors, idempotent requests, and rate-limits.
+      // 401 is handled separately by the response interceptor below.
       retryCondition: (error) =>
         axiosRetry.isNetworkOrIdempotentRequestError(error) ||
         error.response?.status === 429,
     });
   }
+
   private setupInterceptors(instance: AxiosInstance): AxiosInstance {
+    // Attach the current access token from localStorage to every outgoing request.
+    // localStorage.getItem is synchronous — no async needed here.
     instance.interceptors.request.use(
-      async (config) => {
+      (config) => {
         const accessToken =
           typeof window !== "undefined"
             ? window.localStorage.getItem("access_token")
@@ -49,13 +82,41 @@ export default class ApiClient {
         return config;
       },
       (error) => {
-        console.error(`[request error] [${JSON.stringify(error)}]`);
+        console.error(`[api-client] Request error: ${JSON.stringify(error)}`);
         return Promise.reject(error);
       },
     );
+
+    // On 401: attempt a silent token refresh and retry the original request once.
+    // The refresher (fetchFreshToken in AuthGuard) handles persisting the new token.
     instance.interceptors.response.use(
-      async (response) => response,
-      (error) => {
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config as RetryableConfig | undefined;
+
+        if (
+          error.response?.status === 401 &&
+          originalRequest &&
+          !originalRequest._retry &&
+          tokenRefresher
+        ) {
+          originalRequest._retry = true;
+
+          try {
+            const newToken = await tokenRefresher();
+
+            if (newToken) {
+              const headers = AxiosHeaders.from(originalRequest.headers);
+              headers.set("Authorization", `Bearer ${newToken}`);
+              originalRequest.headers = headers;
+
+              return instance(originalRequest);
+            }
+          } catch (refreshError) {
+            console.error("[api-client] Token refresh failed:", refreshError);
+          }
+        }
+
         return Promise.reject(error);
       },
     );

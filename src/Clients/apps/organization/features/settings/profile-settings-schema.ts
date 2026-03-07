@@ -1,9 +1,6 @@
 import { z } from "zod";
 
-import type {
-  OwnProfileDetails,
-  UpdateProfileRequest,
-} from "@workspace/types/profile";
+import type { OwnProfileDetails } from "@workspace/types/profile";
 import {
   type ContactInput,
   type EducationInput,
@@ -58,34 +55,3 @@ export function getDefaultValues(profile: OwnProfileDetails): ProfileFormValues 
   };
 }
 
-export function buildUpdateRequest(
-  values: ProfileFormValues,
-  avatar?: File,
-): UpdateProfileRequest {
-  return {
-    firstName: values.firstName,
-    lastName: values.lastName,
-    middleName: values.middleName || null,
-    birthDate: values.birthDate,
-    contacts: values.contacts.map((c) => ({
-      type: c.type,
-      value: c.value,
-      description: c.description || null,
-    })),
-    employmentHistories: values.employmentHistories.map((e) => ({
-      workplace: e.workplace,
-      position: e.position,
-      startDate: e.startDate,
-      endDate: e.endDate || null,
-      description: e.description || null,
-    })),
-    educations: values.educations.map((e) => ({
-      institution: e.institution,
-      specialty: e.specialty || null,
-      dateStart: e.dateStart,
-      dateEnd: e.dateEnd || null,
-      level: e.level,
-    })),
-    avatar,
-  };
-}

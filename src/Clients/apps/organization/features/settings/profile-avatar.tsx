@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { Camera, Loader2, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 
-import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
+import useUploadAvatar from "@workspace/api-hooks/profiles/useUploadAvatar";
 import type { OwnProfileDetails } from "@workspace/types/profile";
 import {
   Avatar,
@@ -23,7 +23,7 @@ export function AvatarBlock({ profile }: { profile: OwnProfileDetails }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const uploadMutation = useUpdateProfile({
+  const uploadMutation = useUploadAvatar({
     onSuccess: () => {
       toast.success("Аватар обновлён");
       if (preview) {
@@ -56,32 +56,7 @@ export function AvatarBlock({ profile }: { profile: OwnProfileDetails }) {
     if (preview) URL.revokeObjectURL(preview);
     setPreview(URL.createObjectURL(file));
 
-    uploadMutation.mutate({
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      middleName: profile.middleName,
-      birthDate: profile.birthDate,
-      contacts: profile.contacts.map((c) => ({
-        type: c.type,
-        value: c.value,
-        description: c.description ?? null,
-      })),
-      educations: profile.educations.map((e) => ({
-        dateStart: e.dateStart,
-        institution: e.institution,
-        level: e.educationLevel,
-        specialty: e.specialty ?? null,
-        dateEnd: e.dateEnd ?? null,
-      })),
-      employmentHistories: profile.employmentHistories.map((e) => ({
-        workplace: e.workplace,
-        position: e.position,
-        startDate: e.startDate,
-        endDate: e.endDate ?? null,
-        description: e.description ?? null,
-      })),
-      avatar: file,
-    });
+    uploadMutation.mutate(file);
   }
 
   const displayUrl = preview ?? profile.avatarUrl;

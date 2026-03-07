@@ -1,5 +1,3 @@
-using Edvantix.Catalog.Domain.AggregatesModel.TimezoneAggregate;
-
 namespace Edvantix.Catalog.Infrastructure.Repositories;
 
 /// <summary>

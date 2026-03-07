@@ -1,5 +1,4 @@
 using Edvantix.Catalog.Application.Behaviors;
-using Edvantix.Catalog.Features.CurrencyFeature;
 
 namespace Edvantix.Catalog.Features.CurrencyFeature.GetCurrencyByCode;
 

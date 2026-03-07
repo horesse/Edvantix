@@ -3,9 +3,8 @@ using Edvantix.Chassis.Utilities;
 namespace Edvantix.Persona.Features.Profiles.UpdateEmployment;
 
 /// <summary>PATCH /v1/profile/employment — обновить опыт работы профиля.</summary>
-public sealed record UpdateEmploymentCommand(
-    List<EmploymentHistoryRequest> EmploymentHistories
-) : IRequest<ProfileDetailsModel>;
+public sealed record UpdateEmploymentCommand(List<EmploymentHistoryRequest> EmploymentHistories)
+    : IRequest<ProfileDetailsModel>;
 
 public sealed class UpdateEmploymentCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateEmploymentCommand, ProfileDetailsModel>

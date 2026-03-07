@@ -3,9 +3,8 @@ using Edvantix.Chassis.Utilities;
 namespace Edvantix.Persona.Features.Profiles.UpdateEducation;
 
 /// <summary>PATCH /v1/profile/education — обновить образование профиля.</summary>
-public sealed record UpdateEducationCommand(
-    List<EducationRequest> Educations
-) : IRequest<ProfileDetailsModel>;
+public sealed record UpdateEducationCommand(List<EducationRequest> Educations)
+    : IRequest<ProfileDetailsModel>;
 
 public sealed class UpdateEducationCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateEducationCommand, ProfileDetailsModel>

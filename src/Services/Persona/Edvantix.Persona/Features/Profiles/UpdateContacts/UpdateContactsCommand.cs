@@ -3,9 +3,8 @@ using Edvantix.Chassis.Utilities;
 namespace Edvantix.Persona.Features.Profiles.UpdateContacts;
 
 /// <summary>PATCH /v1/profile/contacts — обновить контакты профиля.</summary>
-public sealed record UpdateContactsCommand(
-    List<ContactRequest> Contacts
-) : IRequest<ProfileDetailsModel>;
+public sealed record UpdateContactsCommand(List<ContactRequest> Contacts)
+    : IRequest<ProfileDetailsModel>;
 
 public sealed class UpdateContactsCommandHandler(IServiceProvider provider)
     : IRequestHandler<UpdateContactsCommand, ProfileDetailsModel>

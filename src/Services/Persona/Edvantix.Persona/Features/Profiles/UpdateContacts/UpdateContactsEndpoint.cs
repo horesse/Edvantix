@@ -8,11 +8,8 @@ public sealed class UpdateContactsEndpoint
     {
         app.MapPatch(
                 "/profile/contacts",
-                async (
-                    UpdateContactsCommand command,
-                    ISender sender,
-                    CancellationToken ct
-                ) => await HandleAsync(command, sender, ct)
+                async (UpdateContactsCommand command, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(command, sender, ct)
             )
             .WithName("UpdateContacts")
             .WithTags("Profile")

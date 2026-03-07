@@ -8,11 +8,8 @@ public sealed class UpdateEducationEndpoint
     {
         app.MapPatch(
                 "/profile/education",
-                async (
-                    UpdateEducationCommand command,
-                    ISender sender,
-                    CancellationToken ct
-                ) => await HandleAsync(command, sender, ct)
+                async (UpdateEducationCommand command, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(command, sender, ct)
             )
             .WithName("UpdateEducation")
             .WithTags("Profile")

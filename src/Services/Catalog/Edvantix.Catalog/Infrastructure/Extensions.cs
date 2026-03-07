@@ -1,7 +1,5 @@
-using Edvantix.Catalog.Infrastructure.DistributedLock;
 using Edvantix.Catalog.Infrastructure.Idempotency;
 using Edvantix.Catalog.Infrastructure.Seeders;
-using Edvantix.Chassis.Utilities.Configurations;
 
 namespace Edvantix.Catalog.Infrastructure;
 
@@ -39,22 +37,7 @@ public static class Extensions
             .AddRedisClientBuilder(Components.Redis, o => o.DisableAutoActivation = false)
             .WithAzureAuthentication();
 
-        builder.Configure<CachingOptions>(CachingOptions.ConfigurationSection);
-
-        var cachingOptions = services.BuildServiceProvider().GetRequiredService<CachingOptions>();
-
-        services.AddHybridCache(options =>
-        {
-            options.MaximumPayloadBytes = cachingOptions.MaximumPayloadBytes;
-
-            options.DefaultEntryOptions = new()
-            {
-                Expiration = cachingOptions.Expiration,
-                LocalCacheExpiration = cachingOptions.Expiration,
-            };
-        });
-
-        builder.AddDistributedLock();
+        builder.AddCaching();
 
         services.AddSingleton<IRequestManager, RequestManager>();
     }

@@ -6,7 +6,7 @@ namespace Edvantix.Catalog.Application.EventHandlers;
 /// для изменённого типа сущности, не требуя перечисления конкретных ключей.
 /// </summary>
 public sealed class CatalogEntryChangedEventHandler(
-    HybridCache cache,
+    IHybridCache cache,
     ILogger<CatalogEntryChangedEventHandler> logger
 ) : INotificationHandler<CatalogEntryChangedEvent>
 {

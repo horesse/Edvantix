@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using Edvantix.Catalog.Application.Behaviors;
-using Edvantix.Catalog.Features.LanguageFeature;
 
 namespace Edvantix.Catalog.Features.LanguageFeature.ListLanguages;
 

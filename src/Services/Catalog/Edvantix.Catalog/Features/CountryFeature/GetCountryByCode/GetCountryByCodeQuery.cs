@@ -1,5 +1,4 @@
 using Edvantix.Catalog.Application.Behaviors;
-using Edvantix.Catalog.Features.CountryFeature;
 
 namespace Edvantix.Catalog.Features.CountryFeature.GetCountryByCode;
 

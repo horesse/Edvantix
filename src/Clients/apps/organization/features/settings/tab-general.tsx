@@ -40,15 +40,13 @@ function toDateString(value: string | null | undefined): string {
   return value.slice(0, 10);
 }
 
-export function TabGeneral({ profile }: { profile: OwnProfileDetails }) {
-  const mutation = useUpdatePersonalInfo({
-    onSuccess: () => {
-      toast.success("Личная информация сохранена");
-      form.reset(form.getValues());
-    },
-    onError: () => toast.error("Не удалось сохранить"),
-  });
-
+export function TabGeneral({
+  profile,
+  onDirtyChange,
+}: {
+  profile: OwnProfileDetails;
+  onDirtyChange?: (dirty: boolean) => void;
+}) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -59,16 +57,18 @@ export function TabGeneral({ profile }: { profile: OwnProfileDetails }) {
     },
   });
 
-  useEffect(() => {
-    if (!form.formState.isDirty) {
+  const mutation = useUpdatePersonalInfo({
+    onSuccess: (data) => {
+      toast.success("Личная информация сохранена");
       form.reset({
-        lastName: profile.lastName,
-        firstName: profile.firstName,
-        middleName: profile.middleName ?? "",
-        birthDate: toDateString(profile.birthDate),
+        lastName: data.lastName,
+        firstName: data.firstName,
+        middleName: data.middleName ?? "",
+        birthDate: toDateString(data.birthDate),
       });
-    }
-  }, [profile]); // eslint-disable-line react-hooks/exhaustive-deps
+    },
+    onError: () => toast.error("Не удалось сохранить"),
+  });
 
   function onSubmit(data: FormValues) {
     mutation.mutate({
@@ -81,6 +81,10 @@ export function TabGeneral({ profile }: { profile: OwnProfileDetails }) {
 
   const isDirty = form.formState.isDirty;
   const isPending = mutation.isPending;
+
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty, onDirtyChange]);
 
   return (
     <Form {...form}>

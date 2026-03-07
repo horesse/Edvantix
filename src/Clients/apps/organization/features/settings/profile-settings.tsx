@@ -1,11 +1,21 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { Bell, Briefcase, GraduationCap, Mail, User } from "lucide-react";
 
 import useProfileDetails from "@workspace/api-hooks/profiles/useProfileDetails";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@workspace/ui/components/alert-dialog";
 import {
   Tabs,
   TabsContent,
@@ -39,7 +49,10 @@ export function ProfileSettings() {
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("tab") ?? "general";
 
-  const handleTabChange = useCallback(
+  const dirtyRef = useRef(false);
+  const [pendingTab, setPendingTab] = useState<string | null>(null);
+
+  const navigateToTab = useCallback(
     (value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       if (value === "general") {
@@ -52,6 +65,33 @@ export function ProfileSettings() {
     },
     [router, pathname, searchParams],
   );
+
+  const handleTabChange = useCallback(
+    (value: string) => {
+      if (dirtyRef.current) {
+        setPendingTab(value);
+      } else {
+        navigateToTab(value);
+      }
+    },
+    [navigateToTab],
+  );
+
+  const handleDirtyChange = useCallback((dirty: boolean) => {
+    dirtyRef.current = dirty;
+  }, []);
+
+  function handleConfirmLeave() {
+    if (pendingTab) {
+      dirtyRef.current = false;
+      navigateToTab(pendingTab);
+      setPendingTab(null);
+    }
+  }
+
+  function handleCancelLeave() {
+    setPendingTab(null);
+  }
 
   if (isLoading || !profile) {
     return (
@@ -105,22 +145,53 @@ export function ProfileSettings() {
         {/* Tab content */}
         <div className="min-w-0 flex-1">
           <TabsContent value="general" className="mt-0">
-            <TabGeneral profile={profile} />
+            <TabGeneral profile={profile} onDirtyChange={handleDirtyChange} />
           </TabsContent>
           <TabsContent value="contacts" className="mt-0">
-            <TabContacts profile={profile} />
+            <TabContacts profile={profile} onDirtyChange={handleDirtyChange} />
           </TabsContent>
           <TabsContent value="education" className="mt-0">
-            <TabEducation profile={profile} />
+            <TabEducation profile={profile} onDirtyChange={handleDirtyChange} />
           </TabsContent>
           <TabsContent value="employment" className="mt-0">
-            <TabEmployment profile={profile} />
+            <TabEmployment
+              profile={profile}
+              onDirtyChange={handleDirtyChange}
+            />
           </TabsContent>
           <TabsContent value="notifications" className="mt-0">
             <TabNotifications />
           </TabsContent>
         </div>
       </Tabs>
+
+      <AlertDialog
+        open={pendingTab !== null}
+        onOpenChange={(open) => {
+          if (!open) setPendingTab(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Несохранённые изменения</AlertDialogTitle>
+            <AlertDialogDescription>
+              У вас есть несохранённые изменения. Если вы покинете вкладку, они
+              будут потеряны.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={handleConfirmLeave}
+              className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+            >
+              Уйти без сохранения
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleCancelLeave}>
+              Остаться
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

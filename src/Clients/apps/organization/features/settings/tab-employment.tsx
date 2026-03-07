@@ -3,79 +3,66 @@
 import { useEffect, useState } from "react";
 
 import { Briefcase, Loader2, Plus } from "lucide-react";
-import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import useUpdateEmployment from "@workspace/api-hooks/profiles/useUpdateEmployment";
 import type { OwnProfileDetails } from "@workspace/types/profile";
 import { Button } from "@workspace/ui/components/button";
-import { Form } from "@workspace/ui/components/form";
-import { employmentSchema } from "@workspace/validations/profile";
 
 import { EmploymentCard, EmploymentDialog } from "./profile-employment";
 import type { EmploymentInput } from "./profile-settings-schema";
 import { EmptyState } from "./profile-settings-ui";
-
-const formSchema = z.object({
-  employmentHistories: z.array(employmentSchema),
-});
-
-type FormValues = z.infer<typeof formSchema>;
 
 function toDateString(value: string | null | undefined): string {
   if (!value) return "";
   return value.slice(0, 10);
 }
 
-export function TabEmployment({ profile }: { profile: OwnProfileDetails }) {
+export function TabEmployment({
+  profile,
+  onDirtyChange,
+}: {
+  profile: OwnProfileDetails;
+  onDirtyChange?: (dirty: boolean) => void;
+}) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [employments, setEmployments] = useState<EmploymentInput[]>(() =>
+    profile.employmentHistories.map((e) => ({
+      workplace: e.workplace,
+      position: e.position,
+      startDate: toDateString(e.startDate),
+      endDate: toDateString(e.endDate),
+      description: e.description ?? "",
+    })),
+  );
+  const [savedSnapshot, setSavedSnapshot] = useState(employments);
 
   const mutation = useUpdateEmployment({
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Опыт работы сохранён");
-      form.reset(form.getValues());
-    },
-    onError: () => toast.error("Не удалось сохранить опыт работы"),
-  });
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      employmentHistories: profile.employmentHistories.map((e) => ({
+      const server = data.employmentHistories.map((e) => ({
         workplace: e.workplace,
         position: e.position,
         startDate: toDateString(e.startDate),
         endDate: toDateString(e.endDate),
         description: e.description ?? "",
-      })),
+      }));
+      setSavedSnapshot(server);
     },
+    onError: () => toast.error("Не удалось сохранить опыт работы"),
   });
 
-  useEffect(() => {
-    if (!form.formState.isDirty) {
-      form.reset({
-        employmentHistories: profile.employmentHistories.map((e) => ({
-          workplace: e.workplace,
-          position: e.position,
-          startDate: toDateString(e.startDate),
-          endDate: toDateString(e.endDate),
-          description: e.description ?? "",
-        })),
-      });
-    }
-  }, [profile]); // eslint-disable-line react-hooks/exhaustive-deps
+  function handleAppend(data: EmploymentInput) {
+    setEmployments((prev) => [...prev, data]);
+  }
 
-  const employmentsArray = useFieldArray({
-    control: form.control,
-    name: "employmentHistories",
-  });
+  function handleRemove(index: number) {
+    setEmployments((prev) => prev.filter((_, i) => i !== index));
+  }
 
-  function onSubmit(data: FormValues) {
+  function handleSubmit() {
     mutation.mutate({
-      employmentHistories: data.employmentHistories.map((e) => ({
+      employmentHistories: employments.map((e) => ({
         workplace: e.workplace,
         position: e.position,
         startDate: e.startDate,
@@ -85,67 +72,76 @@ export function TabEmployment({ profile }: { profile: OwnProfileDetails }) {
     });
   }
 
-  const isDirty = form.formState.isDirty;
+  const isDirty =
+    JSON.stringify(employments) !== JSON.stringify(savedSnapshot);
   const isPending = mutation.isPending;
 
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty, onDirtyChange]);
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            История вашей трудовой деятельности
-          </p>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => setDialogOpen(true)}
-            className="h-7 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground"
-          >
-            <Plus className="size-3" />
-            Добавить
-          </Button>
-        </div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+      className="space-y-4"
+    >
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          История вашей трудовой деятельности
+        </p>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => setDialogOpen(true)}
+          className="h-7 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+        >
+          <Plus className="size-3" />
+          Добавить
+        </Button>
+      </div>
 
-        {employmentsArray.fields.length === 0 ? (
-          <EmptyState
-            icon={<Briefcase className="size-5" />}
-            text="Места работы не добавлены"
-            onAdd={() => setDialogOpen(true)}
-          />
-        ) : (
-          <div>
-            {employmentsArray.fields.map((field, index) => (
-              <EmploymentCard
-                key={field.id}
-                field={field}
-                onRemove={() => employmentsArray.remove(index)}
-                isLast={index === employmentsArray.fields.length - 1}
-              />
-            ))}
-          </div>
-        )}
-
-        <EmploymentDialog
-          open={dialogOpen}
-          onOpenChange={setDialogOpen}
-          onAppend={(data: EmploymentInput) => employmentsArray.append(data)}
+      {employments.length === 0 ? (
+        <EmptyState
+          icon={<Briefcase className="size-5" />}
+          text="Места работы не добавлены"
+          onAdd={() => setDialogOpen(true)}
         />
-
-        <div className="flex items-center justify-between border-t border-border/40 pt-4">
-          {isDirty && !isPending ? (
-            <p className="text-xs text-muted-foreground">
-              Есть несохранённые изменения
-            </p>
-          ) : (
-            <span />
-          )}
-          <Button type="submit" disabled={isPending || !isDirty} size="sm">
-            {isPending && <Loader2 className="size-3.5 animate-spin" />}
-            Сохранить
-          </Button>
+      ) : (
+        <div>
+          {employments.map((emp, index) => (
+            <EmploymentCard
+              key={`${emp.workplace}-${emp.startDate}-${index}`}
+              field={{ ...emp, id: String(index) }}
+              onRemove={() => handleRemove(index)}
+              isLast={index === employments.length - 1}
+            />
+          ))}
         </div>
-      </form>
-    </Form>
+      )}
+
+      <EmploymentDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onAppend={handleAppend}
+      />
+
+      <div className="flex items-center justify-between border-t border-border/40 pt-4">
+        {isDirty && !isPending ? (
+          <p className="text-xs text-muted-foreground">
+            Есть несохранённые изменения
+          </p>
+        ) : (
+          <span />
+        )}
+        <Button type="submit" disabled={isPending || !isDirty} size="sm">
+          {isPending && <Loader2 className="size-3.5 animate-spin" />}
+          Сохранить
+        </Button>
+      </div>
+    </form>
   );
 }

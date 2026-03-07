@@ -5,6 +5,10 @@
   OwnProfile,
   OwnProfileDetails,
   RegisterProfileRequest,
+  UpdateContactsRequest,
+  UpdateEducationRequest,
+  UpdateEmploymentRequest,
+  UpdatePersonalInfoRequest,
   UpdateProfileRequest,
 } from "@workspace/types/profile";
 
@@ -56,6 +60,46 @@ class ProfileApiClient {
       `/persona/api/v1/profile`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } },
+    );
+    return response.data;
+  }
+
+  public async updatePersonalInfo(
+    request: UpdatePersonalInfoRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/personal-info`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateContacts(
+    request: UpdateContactsRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/contacts`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateEducation(
+    request: UpdateEducationRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/education`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateEmployment(
+    request: UpdateEmploymentRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/employment`,
+      request,
     );
     return response.data;
   }

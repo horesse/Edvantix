@@ -10,7 +10,7 @@ public class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service)
         CancellationToken cancellationToken
     )
     {
-        var request = new GetProfileRequest() { AccountId = accountId.ToString() };
+        var request = new GetProfileRequest { AccountId = accountId.ToString() };
         ProfileReply? result = await service.GetProfileAsync(
             request,
             cancellationToken: cancellationToken
@@ -24,7 +24,7 @@ public class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service)
         CancellationToken cancellationToken
     )
     {
-        var request = new GetProfileRequest() { ProfileId = profileId.ToString() };
+        var request = new GetProfileRequest { ProfileId = profileId.ToString() };
         var result = await service.GetProfileAsync(request, cancellationToken: cancellationToken);
 
         return result;

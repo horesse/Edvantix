@@ -23,50 +23,39 @@ export function EmptyState({
   );
 }
 
-const SECTION_COL = "md:grid-cols-[240px_1fr]";
-
 export function ProfileSettingsSkeleton() {
   return (
-    <div>
+    <div className="space-y-6">
       {/* Avatar */}
-      <div className="flex items-center gap-4 pb-6">
-        <Skeleton className="size-14 shrink-0 rounded-full" />
+      <div className="flex items-center gap-5">
+        <Skeleton className="size-16 shrink-0 rounded-full" />
         <div className="space-y-2">
           <Skeleton className="h-4 w-36" />
           <Skeleton className="h-3 w-24" />
         </div>
       </div>
 
-      {/* Personal info */}
-      <div className={`grid gap-8 border-t border-border/40 py-6 ${SECTION_COL}`}>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-3 w-44" />
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-9 w-full rounded-md" />
+      {/* Vertical tabs layout */}
+      <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+        {/* Sidebar skeleton */}
+        <div className="flex w-full shrink-0 flex-row gap-1 md:w-48 md:flex-col md:gap-0.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-full rounded-md" />
           ))}
         </div>
-      </div>
 
-      {/* Contacts / Employment / Education */}
-      {[3, 2, 2].map((count, i) => (
-        <div key={i} className={`grid gap-8 border-t border-border/40 py-6 ${SECTION_COL}`}>
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-28" />
-            <Skeleton className="h-3 w-40" />
-          </div>
-          <div className="space-y-2">
-            <div className="flex justify-end">
-              <Skeleton className="h-7 w-24 rounded-md" />
-            </div>
-            {Array.from({ length: count }).map((_, j) => (
-              <Skeleton key={j} className="h-12 w-full rounded-lg" />
+        {/* Content skeleton */}
+        <div className="min-w-0 flex-1 space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="space-y-2">
+                <Skeleton className="h-3 w-20" />
+                <Skeleton className="h-9 w-full rounded-md" />
+              </div>
             ))}
           </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 }

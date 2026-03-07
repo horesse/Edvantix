@@ -19,18 +19,7 @@ import {
   MAX_AVATAR_SIZE,
 } from "@workspace/validations/profile";
 
-import {
-  buildUpdateRequest,
-  type ProfileFormValues,
-} from "./profile-settings-schema";
-
-export function AvatarBlock({
-  profile,
-  getFormValues,
-}: {
-  profile: OwnProfileDetails;
-  getFormValues: () => ProfileFormValues;
-}) {
+export function AvatarBlock({ profile }: { profile: OwnProfileDetails }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -67,8 +56,32 @@ export function AvatarBlock({
     if (preview) URL.revokeObjectURL(preview);
     setPreview(URL.createObjectURL(file));
 
-    // Use current form values so unsaved changes are not overwritten by avatar upload.
-    uploadMutation.mutate(buildUpdateRequest(getFormValues(), file));
+    uploadMutation.mutate({
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      middleName: profile.middleName,
+      birthDate: profile.birthDate,
+      contacts: profile.contacts.map((c) => ({
+        type: c.type,
+        value: c.value,
+        description: c.description ?? null,
+      })),
+      educations: profile.educations.map((e) => ({
+        dateStart: e.dateStart,
+        institution: e.institution,
+        level: e.educationLevel,
+        specialty: e.specialty ?? null,
+        dateEnd: e.dateEnd ?? null,
+      })),
+      employmentHistories: profile.employmentHistories.map((e) => ({
+        workplace: e.workplace,
+        position: e.position,
+        startDate: e.startDate,
+        endDate: e.endDate ?? null,
+        description: e.description ?? null,
+      })),
+      avatar: file,
+    });
   }
 
   const displayUrl = preview ?? profile.avatarUrl;
@@ -79,7 +92,7 @@ export function AvatarBlock({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
       <div className="relative shrink-0">
-        <Avatar className="size-14 ring-2 ring-background">
+        <Avatar className="size-16 ring-2 ring-background">
           <AvatarImage src={displayUrl ?? undefined} alt={profile.firstName} />
           <AvatarFallback className="bg-muted text-base font-medium text-foreground">
             {fullName ? (
@@ -106,7 +119,7 @@ export function AvatarBlock({
       </div>
 
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium">{fullName || "—"}</p>
+        <p className="truncate text-sm font-semibold">{fullName || "—"}</p>
         <p className="text-xs text-muted-foreground">{profile.login}</p>
         <button
           type="button"

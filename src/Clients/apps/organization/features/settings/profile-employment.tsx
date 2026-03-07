@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2 } from "lucide-react";
+import { MoreVertical, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@workspace/ui/components/button";
@@ -13,6 +13,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -31,38 +37,63 @@ import type { EmploymentInput } from "./profile-settings-schema";
 export function EmploymentCard({
   field,
   onRemove,
+  isLast,
 }: {
   field: EmploymentInput & { id: string };
   onRemove: () => void;
+  isLast?: boolean;
 }) {
   return (
-    <div className="group relative rounded-lg border border-border/40 p-3.5 transition-colors hover:bg-muted/20">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-sm font-medium">{field.position}</p>
-          <p className="mt-0.5 truncate text-xs text-muted-foreground">
-            {field.workplace}
-            {field.startDate && (
-              <>
-                {" · "}
-                {formatDateRange(field.startDate, field.endDate || null)}
-              </>
-            )}
-          </p>
-          {field.description && (
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              {field.description}
+    <div className="group relative flex gap-3">
+      {/* Timeline line + dot */}
+      <div className="flex flex-col items-center pt-1.5">
+        <div className="size-2 shrink-0 rounded-full bg-primary/70 ring-2 ring-background" />
+        {!isLast && <div className="mt-1 w-px flex-1 bg-border/60" />}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 pb-6">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-sm font-medium leading-tight">
+              {field.position}
             </p>
-          )}
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {field.workplace}
+            </p>
+            {field.startDate && (
+              <p className="mt-1 text-xs text-muted-foreground/60">
+                {formatDateRange(field.startDate, field.endDate || null)}
+              </p>
+            )}
+            {field.description && (
+              <p className="mt-2 max-w-lg text-xs leading-relaxed text-muted-foreground/80">
+                {field.description}
+              </p>
+            )}
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/50 opacity-0 transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100"
+                aria-label="Действия"
+              >
+                <MoreVertical className="size-3.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuItem
+                onClick={onRemove}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="size-3.5" />
+                Удалить
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <button
-          type="button"
-          onClick={onRemove}
-          className="shrink-0 text-transparent transition-colors group-hover:text-muted-foreground/40 hover:!text-destructive"
-          aria-label="Удалить место работы"
-        >
-          <Trash2 className="size-3.5" />
-        </button>
       </div>
     </div>
   );

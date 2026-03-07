@@ -38,7 +38,7 @@ public static class Extensions
             .WithAzureAuthentication();
 
         builder.AddCaching();
-        
+
         services.AddSingleton<IRequestManager, RequestManager>();
     }
 }

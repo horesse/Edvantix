@@ -1,5 +1,3 @@
-using Edvantix.Catalog.Domain.AggregatesModel.RegionAggregate;
-
 namespace Edvantix.Catalog.Infrastructure.Repositories;
 
 /// <summary>

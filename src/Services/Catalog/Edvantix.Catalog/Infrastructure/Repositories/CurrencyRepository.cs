@@ -1,5 +1,3 @@
-using Edvantix.Catalog.Domain.AggregatesModel.CurrencyAggregate;
-
 namespace Edvantix.Catalog.Infrastructure.Repositories;
 
 /// <summary>

@@ -21,12 +21,13 @@ public static class PolicyBuilderExtensions
     /// и кастомный <see cref="IAuthorizationMiddlewareResultHandler"/>,
     /// который возвращает <c>PROFILE_NOT_REGISTERED</c> при отсутствии профиля.
     /// </summary>
-    public static IServiceCollection AddProfileRequiredServices(
-        this IServiceCollection services
-    )
+    public static IServiceCollection AddProfileRequiredServices(this IServiceCollection services)
     {
         services.AddSingleton<IAuthorizationHandler, ProfileRegisteredRequirementHandler>();
-        services.AddSingleton<IAuthorizationMiddlewareResultHandler, ProfileAuthorizationResultHandler>();
+        services.AddSingleton<
+            IAuthorizationMiddlewareResultHandler,
+            ProfileAuthorizationResultHandler
+        >();
         return services;
     }
 

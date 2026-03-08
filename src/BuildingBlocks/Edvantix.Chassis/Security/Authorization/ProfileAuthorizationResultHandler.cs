@@ -31,8 +31,8 @@ internal sealed class ProfileAuthorizationResultHandler : IAuthorizationMiddlewa
     {
         if (
             authorizeResult.Forbidden
-            && authorizeResult.AuthorizationFailure?.FailureReasons
-                .OfType<ProfileNotRegisteredFailureReason>()
+            && authorizeResult
+                .AuthorizationFailure?.FailureReasons.OfType<ProfileNotRegisteredFailureReason>()
                 .Any() == true
         )
         {

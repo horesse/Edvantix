@@ -42,8 +42,7 @@ public static class Extensions
             )
             .AddPolicy(
                 Authorization.Policies.ProfileRequired,
-                policy =>
-                    policy.RequireAuthenticatedUser().RequireProfileRegistered()
+                policy => policy.RequireAuthenticatedUser().RequireProfileRegistered()
             )
             .SetDefaultPolicy(
                 new AuthorizationPolicyBuilder()

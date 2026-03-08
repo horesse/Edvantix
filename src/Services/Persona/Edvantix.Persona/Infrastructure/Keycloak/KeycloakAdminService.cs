@@ -18,7 +18,11 @@ public sealed class KeycloakAdminService(
 ) : IKeycloakAdminService
 {
     /// <inheritdoc />
-    public async Task SetProfileIdAsync(Guid accountId, Guid profileId, CancellationToken ct = default)
+    public async Task SetProfileIdAsync(
+        Guid accountId,
+        Guid profileId,
+        CancellationToken ct = default
+    )
     {
         var token = await GetServiceAccountTokenAsync(ct);
         await UpdateUserAttributesAsync(accountId, profileId, token, ct);
@@ -73,14 +77,16 @@ public sealed class KeycloakAdminService(
 
         var userEndpoint = $"admin/realms/{identityOptions.Realm}/users/{accountId}";
 
-        var payload = JsonSerializer.Serialize(new
-        {
-            attributes = new Dictionary<string, string[]>
+        var payload = JsonSerializer.Serialize(
+            new
             {
-                // Keycloak хранит атрибуты как массивы строк
-                ["profileId"] = [profileId.ToString()],
-            },
-        });
+                attributes = new Dictionary<string, string[]>
+                {
+                    // Keycloak хранит атрибуты как массивы строк
+                    ["profileId"] = [profileId.ToString()],
+                },
+            }
+        );
 
         using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint)
         {

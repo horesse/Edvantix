@@ -236,7 +236,7 @@ export const WithErrorMessage: Story = {
 };
 
 export const WithOneSocialProvider: Story = {
-  render: args => (
+  render: (args) => (
     <KcPageStory
       {...args}
       kcContext={{
@@ -250,7 +250,7 @@ export const WithOneSocialProvider: Story = {
 };
 
 export const WithTwoSocialProviders: Story = {
-  render: args => (
+  render: (args) => (
     <KcPageStory
       {...args}
       kcContext={{
@@ -263,7 +263,7 @@ export const WithTwoSocialProviders: Story = {
   ),
 };
 export const WithNoSocialProviders: Story = {
-  render: args => (
+  render: (args) => (
     <KcPageStory
       {...args}
       kcContext={{
@@ -276,7 +276,7 @@ export const WithNoSocialProviders: Story = {
   ),
 };
 export const WithMoreThanTwoSocialProviders: Story = {
-  render: args => (
+  render: (args) => (
     <KcPageStory
       {...args}
       kcContext={{
@@ -289,7 +289,7 @@ export const WithMoreThanTwoSocialProviders: Story = {
   ),
 };
 export const WithSocialProvidersAndWithoutRememberMe: Story = {
-  render: args => (
+  render: (args) => (
     <KcPageStory
       {...args}
       kcContext={{

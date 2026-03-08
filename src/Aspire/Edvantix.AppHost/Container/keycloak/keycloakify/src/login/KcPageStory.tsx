@@ -31,7 +31,7 @@ export function createKcPageStory<PageId extends KcContext["pageId"]>(params: {
   function KcPageStory(
     props: Readonly<{
       kcContext?: DeepPartial<Extract<KcContext, { pageId: PageId }>>;
-    }>
+    }>,
   ) {
     const { kcContext: overrides } = props;
 

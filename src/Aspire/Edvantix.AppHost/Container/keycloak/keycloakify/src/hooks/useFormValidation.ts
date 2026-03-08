@@ -41,7 +41,7 @@ export const commonValidationRules = {
   }),
   matchField: (
     getFieldValue: () => string,
-    message = "Значения не совпадают"
+    message = "Значения не совпадают",
   ): ValidationRule => ({
     validate: (value: string) => value === getFieldValue(),
     message,
@@ -59,7 +59,7 @@ export function useFormValidation(rules: ValidationRules) {
         isValid: true,
       },
     }),
-    {}
+    {},
   );
 
   const [fields, setFields] = useState<FormValidationState>(initialState);
@@ -76,13 +76,13 @@ export function useFormValidation(rules: ValidationRules) {
       }
       return null;
     },
-    [rules]
+    [rules],
   );
 
   const setValue = useCallback(
     (fieldName: string, value: string) => {
       const error = validateField(fieldName, value);
-      setFields(prev => ({
+      setFields((prev) => ({
         ...prev,
         [fieldName]: {
           value,
@@ -92,12 +92,12 @@ export function useFormValidation(rules: ValidationRules) {
         },
       }));
     },
-    [validateField]
+    [validateField],
   );
 
   const setTouched = useCallback(
     (fieldName: string) => {
-      setFields(prev => {
+      setFields((prev) => {
         const field = prev[fieldName];
         if (!field) return prev;
         const error = validateField(fieldName, field.value);
@@ -112,7 +112,7 @@ export function useFormValidation(rules: ValidationRules) {
         };
       });
     },
-    [validateField]
+    [validateField],
   );
 
   const validateAll = useCallback((): boolean => {
@@ -152,7 +152,7 @@ export function useFormValidation(rules: ValidationRules) {
         "aria-invalid": field?.touched && !field?.isValid,
       };
     },
-    [fields, setValue, setTouched]
+    [fields, setValue, setTouched],
   );
 
   return {

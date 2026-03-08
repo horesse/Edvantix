@@ -3,14 +3,13 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useState, useCallback } from "react";
 import type { I18n } from "../i18n";
 import type { KcContext } from "../KcContext";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { FormInput, PasswordInput } from "@/components/ui/form-input";
 import { AlertCircle } from "lucide-react";
+import { SocialProvidersList, FormSubmitButton } from "@/login/components";
 
 export default function Login(
-  props: Readonly<PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>>
+  props: Readonly<PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>>,
 ) {
   const { kcContext, i18n, Template, classes } = props;
 
@@ -53,7 +52,7 @@ export default function Login(
       }
       return null;
     },
-    [realm.loginWithEmailAllowed, realm.registrationEmailAsUsername]
+    [realm.loginWithEmailAllowed, realm.registrationEmailAsUsername],
   );
 
   const validatePassword = useCallback((value: string): string | null => {
@@ -66,7 +65,7 @@ export default function Login(
   const handleUsernameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      setFormState(prev => ({
+      setFormState((prev) => ({
         ...prev,
         username: {
           value,
@@ -75,11 +74,11 @@ export default function Login(
         },
       }));
     },
-    [validateUsername]
+    [validateUsername],
   );
 
   const handleUsernameBlur = useCallback(() => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       username: {
         ...prev.username,
@@ -92,7 +91,7 @@ export default function Login(
   const handlePasswordChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      setFormState(prev => ({
+      setFormState((prev) => ({
         ...prev,
         password: {
           value,
@@ -101,11 +100,11 @@ export default function Login(
         },
       }));
     },
-    [validatePassword]
+    [validatePassword],
   );
 
   const handlePasswordBlur = useCallback(() => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       password: {
         ...prev.password,
@@ -153,37 +152,10 @@ export default function Login(
         realm.password &&
         social?.providers !== undefined &&
         social.providers.length !== 0 && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <Separator className="flex-1" />
-              <p className="text-sm text-muted-foreground whitespace-nowrap">
-                {msg("identity-provider-login-label")}
-              </p>
-              <Separator className="flex-1" />
-            </div>
-
-            <div className="grid gap-2">
-              {social.providers.map(p => (
-                <Button
-                  key={p.alias}
-                  variant="outline"
-                  className="w-full h-10 gap-2"
-                  asChild
-                >
-                  <a id={`social-${p.alias}`} href={p.loginUrl}>
-                    {p.iconClasses && (
-                      <i className={p.iconClasses} aria-hidden="true" />
-                    )}
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: kcSanitize(p.displayName),
-                      }}
-                    />
-                  </a>
-                </Button>
-              ))}
-            </div>
-          </div>
+          <SocialProvidersList
+            providers={social.providers}
+            label={msgStr("identity-provider-login-label")}
+          />
         )
       }
     >
@@ -220,7 +192,7 @@ export default function Login(
                 className="text-sm"
                 dangerouslySetInnerHTML={{
                   __html: kcSanitize(
-                    messagesPerField.getFirstError("username", "password")
+                    messagesPerField.getFirstError("username", "password"),
                   ),
                 }}
               />
@@ -293,22 +265,12 @@ export default function Login(
             value={auth.selectedCredential}
           />
 
-          <Button
-            disabled={isLoginButtonDisabled}
-            className="w-full h-11 text-base font-medium"
+          <FormSubmitButton
+            isLoading={isLoginButtonDisabled}
+            label={msgStr("doLogIn")}
             name="login"
             id="kc-login"
-            type="submit"
-          >
-            {isLoginButtonDisabled ? (
-              <span className="flex items-center gap-2">
-                <span className="inline-block w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                {msgStr("doLogIn")}
-              </span>
-            ) : (
-              msgStr("doLogIn")
-            )}
-          </Button>
+          />
         </form>
       )}
     </Template>

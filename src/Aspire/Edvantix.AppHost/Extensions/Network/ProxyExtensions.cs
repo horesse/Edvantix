@@ -3,7 +3,7 @@ using Aspire.Hosting.Yarp.Transforms;
 
 namespace Edvantix.AppHost.Extensions.Network;
 
-public static class ProxyExtensions
+internal static class ProxyExtensions
 {
     extension(IDistributedApplicationBuilder builder)
     {

@@ -9,7 +9,7 @@ public sealed record CreateCategoryCommand(string Name, string Slug, string? Des
 /// <summary>
 /// Обработчик команды создания категории.
 /// </summary>
-public sealed class CreateCategoryCommandHandler(IServiceProvider provider)
+internal sealed class CreateCategoryCommandHandler(IServiceProvider provider)
     : IRequestHandler<CreateCategoryCommand, Guid>
 {
     public async ValueTask<Guid> Handle(

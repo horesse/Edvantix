@@ -5,12 +5,14 @@
     <AspireUnstableVersion>13.1.2-preview.1.26125.13</AspireUnstableVersion>
     <AspNetVersion>10.0.3</AspNetVersion>
     <GrpcVersion>2.76.0</GrpcVersion>
+    <!-- Integration Libraries -->
     <MassTransitVersion>8.5.8</MassTransitVersion>
+    <QuartzVersion>3.16.1</QuartzVersion>
     <!-- Microsoft Packages -->
     <MsExtVersion>10.3.0</MsExtVersion>
     <MsTestVersion>2.1.0</MsTestVersion>
     <ToolKitVersion>13.1.2-beta.518</ToolKitVersion>
-    <AgentFrameworkVersion>1.0.0-preview.260225.1</AgentFrameworkVersion>
+    <AgentFrameworkVersion>1.0.0-preview.260304.1</AgentFrameworkVersion>
     <!-- Observability & Health -->
     <HealthChecksVersion>9.0.0</HealthChecksVersion>
   </PropertyGroup>

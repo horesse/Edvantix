@@ -9,6 +9,9 @@
   <ItemGroup Label="Quartz">
     <PackageReference Include="OpenTelemetry.Instrumentation.Quartz" />
     <PackageReference Include="Quartz.AspNetCore" />
+    <PackageReference Include="Quartz.Dashboard" />
+    <PackageReference Include="Quartz.Plugins" />
+    <PackageReference Include="Quartz.Plugins.TimeZoneConverter" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />

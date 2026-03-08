@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Chassis.EF;
 
-public sealed class QueryPerformanceInterceptor(ILogger<QueryPerformanceInterceptor> logger)
+internal sealed class QueryPerformanceInterceptor(ILogger<QueryPerformanceInterceptor> logger)
     : DbCommandInterceptor
 {
     private const long QueryThreshold = 100;

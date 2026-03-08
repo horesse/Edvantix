@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Infrastructure.Repositories;
 /// <summary>
 /// Реализация репозитория постов блога на основе BlogDbContext.
 /// </summary>
-public sealed class PostRepository(BlogDbContext dbContext) : IPostRepository
+internal sealed class PostRepository(BlogDbContext dbContext) : IPostRepository
 {
     private static SpecificationEvaluator Spec => SpecificationEvaluator.Instance;
 

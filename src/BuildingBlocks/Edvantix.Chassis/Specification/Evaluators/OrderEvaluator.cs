@@ -1,6 +1,6 @@
 ﻿namespace Edvantix.Chassis.Specification.Evaluators;
 
-public sealed class OrderEvaluator : IEvaluator
+internal sealed class OrderEvaluator : IEvaluator
 {
     private OrderEvaluator() { }
 

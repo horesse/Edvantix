@@ -2,7 +2,7 @@
 
 namespace Edvantix.Chassis.Specification.Evaluators;
 
-public sealed class IgnoreQueryFiltersEvaluator : IEvaluator
+internal sealed class IgnoreQueryFiltersEvaluator : IEvaluator
 {
     private IgnoreQueryFiltersEvaluator() { }
 

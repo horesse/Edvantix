@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace Edvantix.Chassis.EventBus.Dispatcher;
 
-public sealed class EventDispatcher(IBus bus, IEventMapper eventMapper) : IEventDispatcher
+internal sealed class EventDispatcher(IBus bus, IEventMapper eventMapper) : IEventDispatcher
 {
     public async Task DispatchAsync(
         DomainEvent @event,

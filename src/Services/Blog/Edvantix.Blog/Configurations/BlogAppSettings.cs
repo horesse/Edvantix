@@ -4,7 +4,7 @@ using Microsoft.OpenApi;
 namespace Edvantix.Blog.Configurations;
 
 [ExcludeFromCodeCoverage]
-public sealed class BlogAppSettings : AppSettings
+internal sealed class BlogAppSettings : AppSettings
 {
     public override OpenApiInfo? OpenApi { get; set; } =
         new()

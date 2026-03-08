@@ -3,7 +3,7 @@ namespace Edvantix.Blog.Infrastructure.Repositories;
 /// <summary>
 /// Реализация репозитория тегов блога на основе BlogDbContext.
 /// </summary>
-public sealed class TagRepository(BlogDbContext dbContext) : ITagRepository
+internal sealed class TagRepository(BlogDbContext dbContext) : ITagRepository
 {
     /// <inheritdoc/>
     public IUnitOfWork UnitOfWork => dbContext;

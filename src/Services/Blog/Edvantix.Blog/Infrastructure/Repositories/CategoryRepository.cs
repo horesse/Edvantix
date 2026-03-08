@@ -1,6 +1,6 @@
 namespace Edvantix.Blog.Infrastructure.Repositories;
 
-public sealed class CategoryRepository(BlogDbContext dbContext) : ICategoryRepository
+internal sealed class CategoryRepository(BlogDbContext dbContext) : ICategoryRepository
 {
     /// <inheritdoc/>
     public IUnitOfWork UnitOfWork => dbContext;

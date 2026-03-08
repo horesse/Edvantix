@@ -2,10 +2,23 @@
 
 namespace Edvantix.Scheduler.Jobs;
 
-public sealed class ResendErrorEmailJob(IBus bus) : IJob
+[DisallowConcurrentExecution]
+internal sealed class ResendErrorEmailJob(IBus bus, ILogger<ResendErrorEmailJob> logger) : IJob
 {
     public async Task Execute(IJobExecutionContext context)
     {
-        await bus.Publish(new ResendErrorEmailIntegrationEvent(), context.CancellationToken);
+        try
+        {
+            await bus.Publish(new ResendErrorEmailIntegrationEvent(), context.CancellationToken);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            logger.LogError(
+                ex,
+                "Failed to publish {EventName}",
+                nameof(ResendErrorEmailIntegrationEvent)
+            );
+            throw new JobExecutionException(ex, false);
+        }
     }
 }

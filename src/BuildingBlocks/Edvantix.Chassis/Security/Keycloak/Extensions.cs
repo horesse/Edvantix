@@ -18,7 +18,7 @@ public static class KeycloakClaimsTransformationExtensions
         builder.Services.AddTransient<IClaimsTransformation, KeycloakRolesClaimsTransformation>();
         return builder;
     }
-    
+
     public static IServiceCollection AddKeycloakTokenIntrospection(this IServiceCollection services)
     {
         return services.AddScoped<KeycloakTokenIntrospectionMiddleware>();

@@ -100,7 +100,7 @@ public static class Extensions
         services.AddMapper(typeof(IBlogApiMarker));
 
         services.AddKeycloakTokenIntrospection();
-        
+
         builder.AddGrpcServices();
     }
 }

@@ -1,0 +1,43 @@
+﻿using Edvantix.Chassis.CQRS.Command;
+using Edvantix.Chassis.CQRS.Pipelines;
+using Edvantix.Chassis.CQRS.Query;
+using Mediator;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Edvantix.Chassis.CQRS;
+
+public static class Extensions
+{
+    extension(IServiceCollection services)
+    {
+        public IServiceCollection AddCommandHandlerMetrics()
+        {
+            services.AddSingleton<CommandHandlerMetrics>();
+            return services;
+        }
+
+        public IServiceCollection AddQueryHandlerMetrics()
+        {
+            services.AddSingleton<QueryHandlerMetrics>();
+            return services;
+        }
+
+        public IServiceCollection ApplyActivityBehavior()
+        {
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>));
+            return services;
+        }
+
+        public IServiceCollection ApplyLoggingBehavior()
+        {
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+            return services;
+        }
+
+        public IServiceCollection ApplyValidationBehavior()
+        {
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            return services;
+        }
+    }
+}

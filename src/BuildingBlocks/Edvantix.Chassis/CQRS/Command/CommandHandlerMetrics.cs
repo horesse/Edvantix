@@ -5,7 +5,7 @@ using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 
 namespace Edvantix.Chassis.CQRS.Command;
 
-public sealed class CommandHandlerMetrics : IDisposable
+internal sealed class CommandHandlerMetrics : IDisposable
 {
     private readonly UpDownCounter<long> _activeEventHandlingCounter;
     private readonly Histogram<double> _eventHandlingDuration;

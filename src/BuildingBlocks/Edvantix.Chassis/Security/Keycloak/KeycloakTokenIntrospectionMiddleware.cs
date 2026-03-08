@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Edvantix.Chassis.Security.Keycloak;
 
-public sealed class KeycloakTokenIntrospectionMiddleware(
+internal sealed class KeycloakTokenIntrospectionMiddleware(
     IHttpClientFactory httpClientFactory,
     IdentityOptions identityOptions
 ) : IMiddleware

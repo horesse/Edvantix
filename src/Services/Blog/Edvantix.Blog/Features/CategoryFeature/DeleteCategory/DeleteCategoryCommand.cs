@@ -8,7 +8,7 @@ public sealed record DeleteCategoryCommand(Guid CategoryId) : IRequest;
 /// <summary>
 /// Обработчик команды удаления категории.
 /// </summary>
-public sealed class DeleteCategoryCommandHandler(IServiceProvider provider)
+internal sealed class DeleteCategoryCommandHandler(IServiceProvider provider)
     : IRequestHandler<DeleteCategoryCommand>
 {
     public async ValueTask<Unit> Handle(

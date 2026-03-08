@@ -1,6 +1,6 @@
 ﻿namespace Edvantix.Chassis.Specification.Evaluators;
 
-public sealed class PaginationEvaluator : IEvaluator
+internal sealed class PaginationEvaluator : IEvaluator
 {
     private PaginationEvaluator() { }
 

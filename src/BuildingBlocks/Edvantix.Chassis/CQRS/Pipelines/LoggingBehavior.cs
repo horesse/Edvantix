@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Chassis.CQRS.Pipelines;
 
-public sealed class LoggingBehavior<TMessage, TResponse>(
+internal sealed class LoggingBehavior<TMessage, TResponse>(
     ILogger<LoggingBehavior<TMessage, TResponse>> logger
 ) : IPipelineBehavior<TMessage, TResponse>
     where TMessage : IMessage

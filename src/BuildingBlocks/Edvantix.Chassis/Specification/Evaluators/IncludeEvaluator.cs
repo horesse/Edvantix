@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Edvantix.Chassis.Specification.Evaluators;
 
-public sealed class IncludeEvaluator : IEvaluator
+internal sealed class IncludeEvaluator : IEvaluator
 {
     private static readonly MethodInfo _includeMethodInfo =
         typeof(EntityFrameworkQueryableExtensions)

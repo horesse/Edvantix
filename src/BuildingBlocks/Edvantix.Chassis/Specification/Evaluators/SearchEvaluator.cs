@@ -4,7 +4,7 @@ using Edvantix.Chassis.Specification.Extensions;
 
 namespace Edvantix.Chassis.Specification.Evaluators;
 
-public sealed class SearchEvaluator : IEvaluator
+internal sealed class SearchEvaluator : IEvaluator
 {
     private SearchEvaluator() { }
 

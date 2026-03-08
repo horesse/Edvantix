@@ -1,6 +1,6 @@
 ﻿namespace Edvantix.AppHost.Extensions.Security;
 
-public static class KeycloakExtensions
+internal static class KeycloakExtensions
 {
     private const string ThemeName = "THEME_NAME";
     private const string RealmName = "REALM_NAME";

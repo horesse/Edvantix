@@ -1,4 +1,5 @@
-﻿using Edvantix.Constants.Aspire;
+﻿using Edvantix.Chassis.EventBus.Dispatcher;
+using Edvantix.Constants.Aspire;
 using FluentValidation;
 using MassTransit;
 using MassTransit.Logging;
@@ -51,6 +52,11 @@ public static class Extensions
             .Services.AddOpenTelemetry()
             .WithMetrics(b => b.AddMeter(DiagnosticHeaders.DefaultListenerName))
             .WithTracing(p => p.AddSource(DiagnosticHeaders.DefaultListenerName));
+    }
+
+    public static void AddEventDispatcher(this IServiceCollection services)
+    {
+        services.AddScoped<IEventDispatcher, EventDispatcher>();
     }
 
     private static void AddRetryConfiguration(IRetryConfigurator retryConfigurator)

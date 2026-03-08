@@ -6,7 +6,7 @@ using Microsoft.OpenApi;
 
 namespace Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 
-public sealed class SecuritySchemeDefinitionsTransformer : IOpenApiDocumentTransformer
+internal sealed class SecuritySchemeDefinitionsTransformer : IOpenApiDocumentTransformer
 {
     public Task TransformAsync(
         OpenApiDocument document,

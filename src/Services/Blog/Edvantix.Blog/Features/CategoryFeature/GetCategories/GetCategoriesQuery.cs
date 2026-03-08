@@ -8,7 +8,7 @@ public sealed record GetCategoriesQuery : IRequest<IReadOnlyList<CategoryModel>>
 /// <summary>
 /// Обработчик запроса на получение всех категорий.
 /// </summary>
-public sealed class GetCategoriesQueryHandler(IServiceProvider provider)
+internal sealed class GetCategoriesQueryHandler(IServiceProvider provider)
     : IRequestHandler<GetCategoriesQuery, IReadOnlyList<CategoryModel>>
 {
     public async ValueTask<IReadOnlyList<CategoryModel>> Handle(

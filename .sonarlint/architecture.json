@@ -1,0 +1,403 @@
+﻿{
+  "perspectives": [
+    {
+      "label": "Layers",
+      "description": "Clean Architecture Layers - Domain, Application, Infrastructure, and API",
+      "groups": [
+        {
+          "label": "Domain",
+          "description": "Domain models, entities, value objects, and domain events",
+          "patterns": ["src/Services/*/BookWorm.*/Domain/**"]
+        },
+        {
+          "label": "Application",
+          "description": "Application logic, CQRS handlers, and use cases",
+          "patterns": [
+            "src/Services/*/BookWorm.*/Application/**",
+            "src/Services/*/BookWorm.*/Features/**"
+          ]
+        },
+        {
+          "label": "Infrastructure",
+          "description": "Data access, external services, and infrastructure concerns",
+          "patterns": ["src/Services/*/BookWorm.*/Infrastructure/**"]
+        },
+        {
+          "label": "API",
+          "description": "API endpoints and presentation layer",
+          "patterns": [
+            "src/Services/*/BookWorm.*/Endpoints/**",
+            "src/Services/*/BookWorm.*/Program.cs"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "message": "Domain layer must not depend on Application layer",
+          "from": ["Domain"],
+          "to": ["Application"],
+          "relation": "deny"
+        },
+        {
+          "message": "Domain layer must not depend on Infrastructure layer",
+          "from": ["Domain"],
+          "to": ["Infrastructure"],
+          "relation": "deny"
+        },
+        {
+          "message": "Domain layer must not depend on API layer",
+          "from": ["Domain"],
+          "to": ["API"],
+          "relation": "deny"
+        },
+        {
+          "message": "Application layer must not depend on Infrastructure layer",
+          "from": ["Application"],
+          "to": ["Infrastructure"],
+          "relation": "deny"
+        },
+        {
+          "message": "Application layer must not depend on API layer",
+          "from": ["Application"],
+          "to": ["API"],
+          "relation": "deny"
+        },
+        {
+          "message": "Infrastructure layer must not depend on API layer",
+          "from": ["Infrastructure"],
+          "to": ["API"],
+          "relation": "deny"
+        }
+      ]
+    },
+    {
+      "label": "Services",
+      "description": "Microservices bounded contexts",
+      "groups": [
+        {
+          "label": "Blog",
+          "description": "Blog management service",
+          "patterns": ["src/Services/Blog/Edvantix.Blog/**"]
+        },
+        {
+          "label": "Catalog",
+          "description": "Product catalog management service",
+          "patterns": ["src/Services/Catalog/Edvantix.Catalog/**"]
+        },
+        {
+          "label": "Company",
+          "description": "Company information and management service",
+          "patterns": ["src/Services/Company/Edvantix.Company/**"]
+        },
+        {
+          "label": "Notification",
+          "description": "Notification and messaging service",
+          "patterns": ["src/Services/Notification/Edvantix.Notification/**"]
+        },
+        {
+          "label": "Persona",
+          "description": "User persona and profile management service",
+          "patterns": ["src/Services/Persona/Edvantix.Persona/**"]
+        },
+        {
+          "label": "Scheduler",
+          "description": "Background job scheduling service",
+          "patterns": ["src/Services/Scheduler/Edvantix.Scheduler/**"]
+        },
+        {
+          "label": "Subscriptions",
+          "description": "Subscription management service",
+          "patterns": ["src/Services/Subscriptions/Edvantix.Subscriptions/**"]
+        }
+      ],
+      "constraints": [
+        {
+          "message": "Services should communicate via events, not direct references",
+          "from": ["Blog"],
+          "to": [
+            "Catalog",
+            "Company",
+            "Notification",
+            "Persona",
+            "Scheduler",
+            "Subscriptions"
+          ],
+          "relation": "deny"
+        },
+        {
+          "message": "Services should communicate via events, not direct references",
+          "from": ["Catalog"],
+          "to": [
+            "Blog",
+            "Company",
+            "Notification",
+            "Persona",
+            "Scheduler",
+            "Subscriptions"
+          ],
+          "relation": "deny"
+        },
+        {
+          "message": "Services should communicate via events, not direct references",
+          "from": ["Company"],
+          "to": [
+            "Blog",
+            "Catalog",
+            "Notification",
+            "Persona",
+            "Scheduler",
+            "Subscriptions"
+          ],
+          "relation": "deny"
+        },
+        {
+          "message": "Services should communicate via events, not direct references",
+          "from": ["Notification"],
+          "to": [
+            "Blog",
+            "Catalog",
+            "Company",
+            "Persona",
+            "Scheduler",
+            "Subscriptions"
+          ],
+          "relation": "deny"
+        },
+        {
+          "message": "Services should communicate via events, not direct references",
+          "from": ["Persona"],
+          "to": [
+            "Blog",
+            "Catalog",
+            "Company",
+            "Notification",
+            "Scheduler",
+            "Subscriptions"
+          ],
+          "relation": "deny"
+        },
+        {
+          "message": "Services should communicate via events, not direct references",
+          "from": ["Scheduler"],
+          "to": [
+            "Blog",
+            "Catalog",
+            "Company",
+            "Notification",
+            "Persona",
+            "Subscriptions"
+          ],
+          "relation": "deny"
+        },
+        {
+          "message": "Services should communicate via events, not direct references",
+          "from": ["Subscriptions"],
+          "to": [
+            "Blog",
+            "Catalog",
+            "Company",
+            "Notification",
+            "Persona",
+            "Scheduler"
+          ],
+          "relation": "deny"
+        }
+      ]
+    },
+    {
+      "label": "Components",
+      "description": "System components and building blocks",
+      "groups": [
+        {
+          "label": "Services",
+          "description": "Microservices",
+          "patterns": ["src/Services/**"]
+        },
+        {
+          "label": "BuildingBlocks",
+          "description": "Shared libraries and common code",
+          "patterns": ["src/BuildingBlocks/**"]
+        },
+        {
+          "label": "Aspire",
+          "description": "Aspire orchestration and service defaults",
+          "patterns": ["src/Aspire/**"]
+        },
+        {
+          "label": "Clients",
+          "description": "Frontend applications",
+          "patterns": ["src/Clients/**"]
+        },
+        {
+          "label": "Integrations",
+          "description": "External integrations and tools",
+          "patterns": ["src/Integrations/**"]
+        }
+      ],
+      "constraints": [
+        {
+          "message": "Services should only depend on BuildingBlocks, not on other services",
+          "from": ["Services"],
+          "to": ["Aspire", "Clients", "Integrations"],
+          "relation": "deny"
+        },
+        {
+          "message": "BuildingBlocks should not depend on Services",
+          "from": ["BuildingBlocks"],
+          "to": ["Services"],
+          "relation": "deny"
+        },
+        {
+          "message": "BuildingBlocks should not depend on Aspire",
+          "from": ["BuildingBlocks"],
+          "to": ["Aspire"],
+          "relation": "deny"
+        },
+        {
+          "message": "BuildingBlocks should not depend on Clients",
+          "from": ["BuildingBlocks"],
+          "to": ["Clients"],
+          "relation": "deny"
+        }
+      ]
+    },
+    {
+      "label": "MainAndTest",
+      "description": "Production code vs Test code separation",
+      "groups": [
+        {
+          "label": "Main",
+          "description": "Production code",
+          "patterns": ["src/**"]
+        },
+        {
+          "label": "Test",
+          "description": "Test code",
+          "patterns": ["tests/**"]
+        }
+      ],
+      "constraints": [
+        {
+          "message": "Production code must not depend on test code",
+          "from": ["Main"],
+          "to": ["Test"],
+          "relation": "deny"
+        }
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "message": "Tests should only reference their corresponding service code",
+      "from": [
+        "tests/Edvantix.Blog.UnitTests/**",
+        "tests/Edvantix.Blog.ContractTests/**"
+      ],
+      "to": [
+        "src/Services/Catalog/**",
+        "src/Services/Company/**",
+        "src/Services/Notification/**",
+        "src/Services/Persona/**",
+        "src/Services/Scheduler/**",
+        "src/Services/Subscriptions/**"
+      ],
+      "relation": "deny"
+    },
+    {
+      "message": "Tests should only reference their corresponding service code",
+      "from": [
+        "tests/Edvantix.Catalog.UnitTests/**",
+        "tests/Edvantix.Catalog.ContractTests/**"
+      ],
+      "to": [
+        "src/Services/Blog/**",
+        "src/Services/Company/**",
+        "src/Services/Notification/**",
+        "src/Services/Persona/**",
+        "src/Services/Scheduler/**",
+        "src/Services/Subscriptions/**"
+      ],
+      "relation": "deny"
+    },
+    {
+      "message": "Tests should only reference their corresponding service code",
+      "from": [
+        "tests/Edvantix.Company.UnitTests/**",
+        "tests/Edvantix.Company.ContractTests/**"
+      ],
+      "to": [
+        "src/Services/Blog/**",
+        "src/Services/Catalog/**",
+        "src/Services/Notification/**",
+        "src/Services/Persona/**",
+        "src/Services/Scheduler/**",
+        "src/Services/Subscriptions/**"
+      ],
+      "relation": "deny"
+    },
+    {
+      "message": "Tests should only reference their corresponding service code",
+      "from": [
+        "tests/Edvantix.Notification.UnitTests/**",
+        "tests/Edvantix.Notification.ContractTests/**"
+      ],
+      "to": [
+        "src/Services/Blog/**",
+        "src/Services/Catalog/**",
+        "src/Services/Company/**",
+        "src/Services/Persona/**",
+        "src/Services/Scheduler/**",
+        "src/Services/Subscriptions/**"
+      ],
+      "relation": "deny"
+    },
+    {
+      "message": "Tests should only reference their corresponding service code",
+      "from": [
+        "tests/Edvantix.Persona.UnitTests/**",
+        "tests/Edvantix.Persona.ContractTests/**"
+      ],
+      "to": [
+        "src/Services/Blog/**",
+        "src/Services/Catalog/**",
+        "src/Services/Company/**",
+        "src/Services/Notification/**",
+        "src/Services/Scheduler/**",
+        "src/Services/Subscriptions/**"
+      ],
+      "relation": "deny"
+    },
+    {
+      "message": "Tests should only reference their corresponding service code",
+      "from": [
+        "tests/Edvantix.Scheduler.UnitTests/**",
+        "tests/Edvantix.Scheduler.ContractTests/**"
+      ],
+      "to": [
+        "src/Services/Blog/**",
+        "src/Services/Catalog/**",
+        "src/Services/Company/**",
+        "src/Services/Notification/**",
+        "src/Services/Persona/**",
+        "src/Services/Subscriptions/**"
+      ],
+      "relation": "deny"
+    },
+    {
+      "message": "Tests should only reference their corresponding service code",
+      "from": [
+        "tests/Edvantix.Subscriptions.UnitTests/**",
+        "tests/Edvantix.Subscriptions.ContractTests/**"
+      ],
+      "to": [
+        "src/Services/Blog/**",
+        "src/Services/Catalog/**",
+        "src/Services/Company/**",
+        "src/Services/Notification/**",
+        "src/Services/Persona/**",
+        "src/Services/Scheduler/**"
+      ],
+      "relation": "deny"
+    }
+  ]
+}

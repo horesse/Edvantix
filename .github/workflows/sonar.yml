@@ -1,0 +1,171 @@
+﻿name: SonarQube Analysis
+run-name: SonarQube Analysis - ${{ github.actor }} (${{ github.ref_name }})
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "tests/**"
+      - ".sonarlint/**"
+      - "!src/Aspire/Edvantix.AppHost/Container/**"
+      - ".github/workflows/sonar.yml"
+      - "SonarQube.Analysis.xml"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+env:
+  JAVA_VERSION: "25"
+  GLOBAL_JSON_PATH: ${{ github.workspace }}/global.json
+  BUN_VERSION_FILE: ${{ github.workspace }}/.bun-version
+  HANG_TIMEOUT: "7m"
+  SESSION_TIMEOUT: "15m"
+
+jobs:
+  frontend-test:
+    name: Frontend tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: src/Clients/package.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: "src/Clients/.nvmrc"
+          cache: "pnpm"
+          cache-dependency-path: "src/Clients/pnpm-lock.yaml"
+
+      - name: Install frontend dependencies
+        working-directory: src/Clients
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Frontend test with coverage
+        working-directory: src/Clients
+        run: pnpm turbo run test:coverage
+
+      - name: Upload frontend coverage
+        uses: actions/upload-artifact@v7
+        with:
+          name: frontend-coverage
+          path: |
+            src/Clients/apps/storefront/coverage/lcov.info
+            src/Clients/apps/backoffice/coverage/lcov.info
+          retention-days: 1
+          if-no-files-found: warn
+
+  security-scan:
+    name: Security scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Security Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  analyze:
+    name: Build and analyze
+    needs: [frontend-test, security-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: ${{ env.GLOBAL_JSON_PATH }}
+
+      - name: Download frontend coverage
+        uses: actions/download-artifact@v8
+        with:
+          name: frontend-coverage
+          path: src/Clients/apps
+
+      - name: Cache SonarQube Cloud packages
+        uses: actions/cache@v5
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache SonarQube Cloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v5
+        with:
+          path: ./.sonar/scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          mkdir -p .sonar/scanner
+          dotnet tool update dotnet-sonarscanner --tool-path .sonar/scanner
+
+      - name: Sonarqube Begin
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >
+          .sonar/scanner/dotnet-sonarscanner begin
+          /k:"Edvantix_Edvantix"
+          /o:"edvantix"
+          /d:sonar.token="$SONAR_TOKEN"
+          /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
+
+      - name: Build
+        run: >
+          dotnet build
+          --configuration Release
+          --no-incremental
+          -p:SkipK6Build=true
+          -p:SkipKeycloakifyBuild=true
+
+      - name: Test
+        run: >
+          dotnet test
+          --configuration Release
+          --report-trx
+          --coverage
+          --coverage-settings Coverage.runsettings
+          --results-directory ./test-results
+          --github-reporter-style full
+          --hangdump --hangdump-timeout ${{ env.HANG_TIMEOUT }}
+          --crashdump
+          --timeout ${{ env.SESSION_TIMEOUT }}
+
+      - name: Sonarqube End
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >
+          .sonar/scanner/dotnet-sonarscanner end
+          /d:sonar.token="$SONAR_TOKEN"

@@ -173,7 +173,7 @@ builder
     .WithReference(queue)
     .WaitFor(queue)
     .WithContainerRegistry(registry)
-    .WithFriendlyUrls(path: Http.Endpoints.AlivenessEndpointPath)
+    .WithFriendlyUrls("Quartz Dashboard", path: Http.Endpoints.QuartzDashboardEndpointPath)
     .WithExplicitStart();
 
 blogFront.WithEnvironment("NEXT_PUBLIC_APP_URL", blogFront.GetEndpoint(Http.Schemes.Http));

@@ -138,5 +138,10 @@ public static class Extensions
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
 
         services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
+
+        if (builder.Environment.IsDevelopment())
+        {
+            services.AddHostedService<KeycloakProfileSyncService>();
+        }
     }
 }

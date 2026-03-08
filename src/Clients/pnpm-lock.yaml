@@ -77,8 +77,8 @@ importers:
         specifier: ^7.71.2
         version: 7.71.2(react@19.2.4)
       react-markdown:
-        specifier: ^9.1.0
-        version: 9.1.0(@types/react@19.2.14)(react@19.2.4)
+        specifier: ^10.1.0
+        version: 10.1.0(@types/react@19.2.14)(react@19.2.4)
       remark-gfm:
         specifier: ^4.0.1
         version: 4.0.1
@@ -5496,8 +5496,8 @@ packages:
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
-  react-markdown@9.1.0:
-    resolution: {integrity: sha512-xaijuJB0kzGiUdG7nc2MOMDUDBWPyGAjZtUrow9XxUeua8IqeP+VlIfAZ3bphpcLTnSZXz6z9jcVC/TCwbfgdw==}
+  react-markdown@10.1.0:
+    resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
     peerDependencies:
       '@types/react': '>=18'
       react: '>=18'
@@ -6729,7 +6729,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@32.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -6767,7 +6767,7 @@ snapshots:
       yaml: 2.8.2
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@32.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -11673,7 +11673,7 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-markdown@9.1.0(@types/react@19.2.14)(react@19.2.4):
+  react-markdown@10.1.0(@types/react@19.2.14)(react@19.2.4):
     dependencies:
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4

@@ -37,7 +37,7 @@ import {
   registrationSchema,
 } from "@workspace/validations/profile";
 
-import { getAccessToken } from "@/lib/auth-client";
+import { forceTokenRefresh } from "@/lib/auth-client";
 import { AUTH } from "@/lib/constants";
 import { genderOptions } from "@/lib/profile-options";
 
@@ -49,11 +49,11 @@ export default function ProfileRegisterPage() {
 
   const registerMutation = useRegisterProfile({
     onSuccess: async () => {
-      // После регистрации профиля Keycloak добавил claim `profile_id` в атрибуты
-      // пользователя. Принудительно обновляем токен, чтобы новый claim сразу
-      // попал в access token и был доступен во всех микросервисах.
-      const result = await getAccessToken({ providerId: AUTH.PROVIDER });
-      const token = result.data?.accessToken ?? null;
+      // После регистрации профиля Keycloak записал claim `profile_id` в атрибуты
+      // пользователя. Принудительно обновляем токен через /refresh-token, который
+      // всегда обменивает refresh token на новый access token у Keycloak — в отличие
+      // от getAccessToken, возвращающего кэш пока срок действия не истёк.
+      const token = await forceTokenRefresh(AUTH.PROVIDER);
       if (token) {
         window.localStorage.setItem("access_token", token);
       }

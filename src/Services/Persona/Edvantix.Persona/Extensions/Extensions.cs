@@ -1,8 +1,10 @@
 ﻿using System.Text.Json;
+using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.EventBus.Dispatcher;
+using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
@@ -64,9 +66,9 @@ public static class Extensions
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
             )
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            .ApplyActivityBehavior()
+            .ApplyLoggingBehavior()
+            .ApplyValidationBehavior()
             .AddScoped<UpdateAvatarPreProcessor>()
             .AddScoped<UpdateAvatarPostProcessor>()
             .AddScoped<UpdateProfileByAdminPreProcessor>()
@@ -98,9 +100,7 @@ public static class Extensions
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 
-        services.AddSingleton<IActivityScope, ActivityScope>();
-        services.AddSingleton<CommandHandlerMetrics>();
-        services.AddSingleton<QueryHandlerMetrics>();
+        services.AddActivityScope().AddCommandHandlerMetrics().AddQueryHandlerMetrics();
 
         services.AddVersioning();
         services.AddEndpoints(typeof(IPersonaApiMarker));
@@ -111,7 +111,7 @@ public static class Extensions
         services.AddMapper(typeof(IPersonaApiMarker));
 
         services.AddScoped<IEventMapper, EventMapper>();
-        services.AddScoped<IEventDispatcher, EventDispatcher>();
+        services.AddEventDispatcher();
 
         builder.AddEventBus(
             typeof(IPersonaApiMarker),
@@ -135,7 +135,7 @@ public static class Extensions
             }
         );
 
-        services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+        services.AddKeycloakTokenIntrospection();
 
         services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
 

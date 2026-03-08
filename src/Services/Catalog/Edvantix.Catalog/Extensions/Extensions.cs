@@ -1,9 +1,11 @@
 using System.Text.Json;
 using Edvantix.Catalog.Application.Behaviors;
 using Edvantix.Catalog.Configurations;
+using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
+using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
@@ -67,10 +69,9 @@ public static class Extensions
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
             )
-            // Open-generic behaviors run first (activity tracing → logging → validation → caching)
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            .ApplyActivityBehavior()
+            .ApplyLoggingBehavior()
+            .ApplyValidationBehavior()
             // CachingBehavior применяется только к запросам, реализующим ICachedQuery
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
 
@@ -91,9 +92,7 @@ public static class Extensions
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 
-        services.AddSingleton<IActivityScope, ActivityScope>();
-        services.AddSingleton<CommandHandlerMetrics>();
-        services.AddSingleton<QueryHandlerMetrics>();
+        services.AddActivityScope().AddCommandHandlerMetrics().AddQueryHandlerMetrics();
 
         services.AddVersioning();
         services.AddEndpoints(typeof(ICatalogApiMarker));
@@ -103,7 +102,7 @@ public static class Extensions
 
         services.AddMapper(typeof(ICatalogApiMarker));
 
-        services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+        services.AddKeycloakTokenIntrospection();
 
         // gRPC-сервер для предоставления справочных данных другим сервисам
         services.AddGrpc(options =>

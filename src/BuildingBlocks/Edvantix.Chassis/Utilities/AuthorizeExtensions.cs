@@ -14,7 +14,8 @@ public static class AuthorizeExtensions
         public Guid GetUserId()
         {
             var claimsPrincipal =
-                provider.GetService<ClaimsPrincipal>() ?? throw new Exception("Вы не авторизованы.");
+                provider.GetService<ClaimsPrincipal>()
+                ?? throw new Exception("Вы не авторизованы.");
 
             var sub = claimsPrincipal.GetClaimValue(ClaimTypes.NameIdentifier);
             var userId = Guard.Against.NotAuthenticated(sub);
@@ -30,7 +31,8 @@ public static class AuthorizeExtensions
         public string GetUserLogin()
         {
             var claimsPrincipal =
-                provider.GetService<ClaimsPrincipal>() ?? throw new Exception("Вы не авторизованы.");
+                provider.GetService<ClaimsPrincipal>()
+                ?? throw new Exception("Вы не авторизованы.");
 
             var login = claimsPrincipal.GetClaimValue(KeycloakClaimTypes.PreferredUsername);
 

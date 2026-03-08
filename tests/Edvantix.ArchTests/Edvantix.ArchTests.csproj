@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
+  </PropertyGroup>
+  <ItemGroup Label="Architecture Test">
+    <PackageReference Include="TngTech.ArchUnitNET.TUnit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
+    <ProjectReference Include="..\..\src\Services\Catalog\Edvantix.Catalog\Edvantix.Catalog.csproj" />
+    <ProjectReference Include="..\..\src\Services\Company\Edvantix.Organizational\Edvantix.Organizational.csproj" />
+    <ProjectReference Include="..\..\src\Services\Notification\Edvantix.Notification\Edvantix.Notification.csproj" />
+    <ProjectReference Include="..\..\src\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
+    <ProjectReference Include="..\..\src\Services\Scheduler\Edvantix.Scheduler\Edvantix.Scheduler.csproj" />
+    <ProjectReference Include="..\..\src\Services\Subscriptions\Edvantix.Subscriptions\Edvantix.Subscriptions.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.Chassis\Edvantix.Chassis.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.SharedKernel\Edvantix.SharedKernel.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,203 @@
+﻿using ArchUnitNET.TUnit;
+using Edvantix.ArchTests.Abstractions;
+using Edvantix.Chassis.Endpoints;
+using Edvantix.Chassis.EventBus;
+using Edvantix.Chassis.Repository;
+using FluentValidation;
+using Mediator;
+using Microsoft.EntityFrameworkCore;
+using static ArchUnitNET.Fluent.ArchRuleDefinition;
+
+namespace Edvantix.ArchTests.Dependencies;
+
+public sealed class DependenciesTests : ArchUnitBaseTest
+{
+    private const string ExtensionNamespace = $"{nameof(Edvantix)}.*.Extensions";
+    private const string FeatureNamespace = $"{nameof(Edvantix)}.*.Features.*";
+    private const string IntegrationNamespace = $"{nameof(Edvantix)}.Contracts";
+    private const string InfrastructureNamespace = $"{nameof(Edvantix)}.*.Infrastructure.*";
+
+    [Test]
+    public void GivenCommands_WhenCommandHandler_ThenShouldNotHaveListOrGet()
+    {
+        Types()
+            .That()
+            .ResideInNamespaceMatching(FeatureNamespace)
+            .And()
+            .HaveNameEndingWith("Command")
+            .Should()
+            .NotHaveNameContaining("List")
+            .OrShould()
+            .NotHaveNameContaining("Get")
+            .AndShould()
+            .ImplementInterface(typeof(ICommand))
+            .OrShould()
+            .ImplementInterface(typeof(ICommand<>))
+            .Because(
+                "Command handlers should not have List or Get methods, as they are responsible for handling commands and not for querying data."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenQueries_WhenQueryHandler_ThenShouldContainListOrGetOrVisualizeOrSummarize()
+    {
+        Types()
+            .That()
+            .ResideInNamespaceMatching(FeatureNamespace)
+            .And()
+            .HaveNameEndingWith("Query")
+            .Should()
+            .HaveNameContaining("List")
+            .OrShould()
+            .HaveNameContaining("Get")
+            .OrShould()
+            .HaveNameContaining("Visualize")
+            .OrShould()
+            .HaveNameContaining("Summarize")
+            .AndShould()
+            .ImplementInterface(typeof(IQuery<>))
+            .Because(
+                "Query handlers should contain List, Get, Visualize or Summarize methods, as they are responsible for querying data and not for modifying it."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenEndpoints_WhenChecking_ThenShouldImplementIEndpoint()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching(FeatureNamespace)
+            .And()
+            .HaveNameEndingWith("Endpoint")
+            .Should()
+            .ImplementInterface(typeof(IEndpoint))
+            .Because(
+                $"Endpoints should implement the {nameof(IEndpoint)} interface to ensure they follow the required structure and behavior."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenValidators_WhenChecking_ThenShouldImplementIValidator()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching(FeatureNamespace)
+            .And()
+            .HaveNameEndingWith("Validator")
+            .Should()
+            .ImplementInterface(typeof(IValidator<>))
+            .Because(
+                $"Validators should implement the {nameof(IValidator)} interface to ensure they follow the required structure and behavior."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenIntegrationEvents_WhenChecking_ThenShouldExtendIntegrationEvent()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching(IntegrationNamespace)
+            .And()
+            .HaveNameEndingWith("IntegrationEvent")
+            .Should()
+            .BeRecord()
+            .OrShould()
+            .BeSealed()
+            .AndShould()
+            .NotImplementInterface(typeof(ICommand))
+            .AndShould()
+            .NotImplementInterface(typeof(IQuery<>))
+            .AndShould()
+            .NotImplementInterface(typeof(IEndpoint))
+            .AndShould()
+            .NotImplementInterface(typeof(IValidator<>))
+            .AndShould()
+            .BeAssignableTo(typeof(IntegrationEvent))
+            .Because(
+                $"Integration events should extend the {nameof(IntegrationEvent)} class to ensure they follow the required structure and behavior."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenRepositories_WhenChecking_ThenShouldNotImplementIQueryOrICommand()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching(InfrastructureNamespace)
+            .And()
+            .HaveNameEndingWith("Repository")
+            .Should()
+            .NotImplementInterface(typeof(IQuery<>))
+            .AndShould()
+            .NotImplementInterface(typeof(ICommand))
+            .AndShould()
+            .NotImplementInterface(typeof(ICommand<>))
+            .OrShould()
+            .ImplementInterface(typeof(IRepository<>))
+            .OrShould()
+            .ImplementInterface(typeof(IUnitOfWork))
+            .Because(
+                $"Repositories should not implement the IQuery or {nameof(ICommand)} interfaces to ensure they follow the required structure and behavior."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenExtensions_WhenChecking_ThenShouldBeInternal()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching(ExtensionNamespace)
+            .And()
+            .HaveName("Extensions")
+            .Should()
+            .BeInternal()
+            .Because(
+                "Extension classes should be internal to prevent exposure outside the service boundary."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenExtensions_WhenChecking_ThenShouldBeStatic()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching(ExtensionNamespace)
+            .And()
+            .HaveName("Extensions")
+            .Should()
+            .BeAbstract()
+            .AndShould()
+            .BeSealed()
+            .Because(
+                "Extension classes should be static (abstract sealed in IL) to enforce they only contain extension methods."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
+    public void GivenEntityConfigurations_WhenChecking_ThenShouldImplementIEntityTypeConfiguration()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching($"{InfrastructureNamespace}")
+            .And()
+            .HaveNameEndingWith("Configuration")
+            .And()
+            .DoNotResideInNamespaceMatching($"{nameof(Edvantix)}.*.Infrastructure.Migrations")
+            .Should()
+            .BeInternal()
+            .AndShould()
+            .ImplementInterface(typeof(IEntityTypeConfiguration<>))
+            .Because(
+                "Entity configurations should implement the IEntityTypeConfiguration interface to ensure they follow the required structure and behavior."
+            )
+            .Check(Architecture);
+    }
+}

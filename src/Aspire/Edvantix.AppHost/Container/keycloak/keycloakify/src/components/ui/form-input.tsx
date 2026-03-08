@@ -16,7 +16,10 @@ function FormFieldLabel({
   children: React.ReactNode;
 }) {
   return (
-    <Label htmlFor={htmlFor} className="flex items-center gap-1 text-sm font-medium">
+    <Label
+      htmlFor={htmlFor}
+      className="flex items-center gap-1 text-sm font-medium"
+    >
       {children}
       {required && (
         <span className="text-destructive" aria-hidden="true">
@@ -35,7 +38,7 @@ function FormFieldError({ id, error }: { id: string; error: string }) {
       role="alert"
       className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
     >
-      <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" aria-hidden="true" />
+      <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" aria-hidden="true" />
       <span className="text-sm">{error}</span>
     </div>
   );

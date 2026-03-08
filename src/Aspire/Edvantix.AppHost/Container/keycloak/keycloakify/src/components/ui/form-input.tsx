@@ -5,6 +5,42 @@ import { cn } from "@/lib/utils";
 import { Input } from "./input";
 import { Label } from "./label";
 
+/** Label with optional required asterisk, shared by FormInput and PasswordInput. */
+function FormFieldLabel({
+  htmlFor,
+  required,
+  children,
+}: {
+  htmlFor: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Label htmlFor={htmlFor} className="flex items-center gap-1 text-sm font-medium">
+      {children}
+      {required && (
+        <span className="text-destructive" aria-hidden="true">
+          *
+        </span>
+      )}
+    </Label>
+  );
+}
+
+/** Inline error message with icon, shared by FormInput and PasswordInput. */
+function FormFieldError({ id, error }: { id: string; error: string }) {
+  return (
+    <div
+      id={id}
+      role="alert"
+      className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
+    >
+      <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" aria-hidden="true" />
+      <span className="text-sm">{error}</span>
+    </div>
+  );
+}
+
 export type FormInputProps = {
   label: string;
   name: string;
@@ -47,17 +83,9 @@ export function FormInput({
 
   return (
     <div className={cn("space-y-2", className)}>
-      <Label
-        htmlFor={id}
-        className="flex items-center gap-1 text-sm font-medium"
-      >
+      <FormFieldLabel htmlFor={id} required={required}>
         {label}
-        {required && (
-          <span className="text-destructive" aria-hidden="true">
-            *
-          </span>
-        )}
-      </Label>
+      </FormFieldLabel>
       <Input
         id={id}
         name={name}
@@ -78,19 +106,7 @@ export function FormInput({
           inputClassName,
         )}
       />
-      {hasError && (
-        <div
-          id={`${id}-error`}
-          role="alert"
-          className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
-        >
-          <AlertCircle
-            className="h-4 w-4 mt-0.5 flex-shrink-0"
-            aria-hidden="true"
-          />
-          <span className="text-sm">{error}</span>
-        </div>
-      )}
+      {hasError && <FormFieldError id={`${id}-error`} error={error} />}
     </div>
   );
 }
@@ -214,17 +230,9 @@ export function PasswordInput({
 
   return (
     <div className={cn("space-y-2", className)}>
-      <Label
-        htmlFor={id}
-        className="flex items-center gap-1 text-sm font-medium"
-      >
+      <FormFieldLabel htmlFor={id} required={required}>
         {label}
-        {required && (
-          <span className="text-destructive" aria-hidden="true">
-            *
-          </span>
-        )}
-      </Label>
+      </FormFieldLabel>
       <div className="relative">
         <Input
           id={id}
@@ -323,19 +331,7 @@ export function PasswordInput({
         </ul>
       )}
 
-      {hasError && (
-        <div
-          id={`${id}-error`}
-          role="alert"
-          className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
-        >
-          <AlertCircle
-            className="h-4 w-4 mt-0.5 flex-shrink-0"
-            aria-hidden="true"
-          />
-          <span className="text-sm">{error}</span>
-        </div>
-      )}
+      {hasError && <FormFieldError id={`${id}-error`} error={error} />}
     </div>
   );
 }

@@ -51,7 +51,7 @@
     "@cucumber/pretty-formatter": "^2.4.1",
     "@faker-js/faker": "^10.3.0",
     "@playwright/test": "^1.58.2",
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/postcss": "^4.2.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

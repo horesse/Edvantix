@@ -2,7 +2,7 @@ using Edvantix.Organizational.Features.OrganizationFeature.Models;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetContacts;
 
-public class GetContactsEndpoint
+public sealed class GetContactsEndpoint
     : IEndpoint<Ok<IEnumerable<ContactModel>>, GetContactsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

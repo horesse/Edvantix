@@ -2,7 +2,7 @@ namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.UpdateGro
 
 public sealed record UpdateGroupMemberRoleRequest(GroupRole NewRole);
 
-public class UpdateGroupMemberRoleEndpoint
+public sealed class UpdateGroupMemberRoleEndpoint
     : IEndpoint<NoContent, UpdateGroupMemberRoleCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

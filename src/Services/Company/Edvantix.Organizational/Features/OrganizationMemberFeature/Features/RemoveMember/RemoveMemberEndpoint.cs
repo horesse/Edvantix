@@ -1,6 +1,6 @@
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.RemoveMember;
 
-public class RemoveMemberEndpoint : IEndpoint<NoContent, RemoveMemberCommand, ISender>
+public sealed class RemoveMemberEndpoint : IEndpoint<NoContent, RemoveMemberCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

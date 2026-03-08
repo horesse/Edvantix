@@ -10,7 +10,7 @@ public sealed record UpdateOrganizationRequest(
     string? Description
 );
 
-public class UpdateOrganizationEndpoint : IEndpoint<NoContent, UpdateOrganizationCommand, ISender>
+public sealed class UpdateOrganizationEndpoint : IEndpoint<NoContent, UpdateOrganizationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

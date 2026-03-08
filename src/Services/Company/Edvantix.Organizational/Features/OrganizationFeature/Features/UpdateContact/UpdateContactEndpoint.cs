@@ -4,7 +4,7 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateCo
 
 public sealed record UpdateContactRequest(ContactType Type, string Value, string? Description);
 
-public class UpdateContactEndpoint : IEndpoint<NoContent, UpdateContactCommand, ISender>
+public sealed class UpdateContactEndpoint : IEndpoint<NoContent, UpdateContactCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

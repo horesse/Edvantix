@@ -1,6 +1,6 @@
 namespace Edvantix.Organizational.Features.GroupFeature.Features.DeleteGroup;
 
-public class DeleteGroupEndpoint : IEndpoint<NoContent, DeleteGroupCommand, ISender>
+public sealed class DeleteGroupEndpoint : IEndpoint<NoContent, DeleteGroupCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

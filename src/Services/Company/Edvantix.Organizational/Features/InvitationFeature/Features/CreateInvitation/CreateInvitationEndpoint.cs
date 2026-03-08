@@ -13,7 +13,7 @@ public sealed record CreateInvitationRequest(
 /// <summary>
 /// POST /organizations/{orgId}/invitations — создать приглашение.
 /// </summary>
-public class CreateInvitationEndpoint : IEndpoint<Created<Guid>, CreateInvitationCommand, ISender>
+public sealed class CreateInvitationEndpoint : IEndpoint<Created<Guid>, CreateInvitationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

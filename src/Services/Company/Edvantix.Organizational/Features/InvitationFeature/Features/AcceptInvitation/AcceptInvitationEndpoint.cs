@@ -3,7 +3,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.AcceptInvi
 /// <summary>
 /// POST /invitations/{token}/accept — принять приглашение.
 /// </summary>
-public class AcceptInvitationEndpoint : IEndpoint<Ok<Guid>, AcceptInvitationCommand, ISender>
+public sealed class AcceptInvitationEndpoint : IEndpoint<Ok<Guid>, AcceptInvitationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

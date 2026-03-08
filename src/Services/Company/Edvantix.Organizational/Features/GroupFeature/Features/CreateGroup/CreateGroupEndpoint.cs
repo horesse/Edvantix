@@ -2,7 +2,7 @@ namespace Edvantix.Organizational.Features.GroupFeature.Features.CreateGroup;
 
 public sealed record CreateGroupRequest(string Name, string? Description);
 
-public class CreateGroupEndpoint : IEndpoint<Created<Guid>, CreateGroupCommand, ISender>
+public sealed class CreateGroupEndpoint : IEndpoint<Created<Guid>, CreateGroupCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

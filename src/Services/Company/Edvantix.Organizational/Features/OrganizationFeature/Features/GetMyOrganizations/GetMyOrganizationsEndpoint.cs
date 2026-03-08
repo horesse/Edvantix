@@ -2,7 +2,7 @@ using Edvantix.Organizational.Features.OrganizationFeature.Models;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetMyOrganizations;
 
-public class GetMyOrganizationsEndpoint
+public sealed class GetMyOrganizationsEndpoint
     : IEndpoint<Ok<IEnumerable<OrganizationSummaryModel>>, GetMyOrganizationsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

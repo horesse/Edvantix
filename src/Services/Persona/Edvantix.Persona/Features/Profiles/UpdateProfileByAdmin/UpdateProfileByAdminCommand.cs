@@ -1,10 +1,12 @@
 namespace Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 
+using Mediator;
+
 /// <summary>
 /// Команда обновления профиля пользователя администратором. Принимается как multipart/form-data.
 /// Возвращает обновлённое краткое представление профиля.
 /// </summary>
-public sealed class UpdateProfileByAdminCommand : IRequest<ProfileViewModel>
+public sealed class UpdateProfileByAdminCommand : ICommand<ProfileViewModel>
 {
     /// <summary>Идентификатор профиля. Устанавливается из маршрута.</summary>
     public Guid ProfileId { get; set; }
@@ -34,7 +36,7 @@ public sealed class UpdateProfileByAdminCommand : IRequest<ProfileViewModel>
 }
 
 public sealed class UpdateProfileByAdminCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateProfileByAdminCommand, ProfileViewModel>
+    : ICommandHandler<UpdateProfileByAdminCommand, ProfileViewModel>
 {
     public async ValueTask<ProfileViewModel> Handle(
         UpdateProfileByAdminCommand command,

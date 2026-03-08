@@ -1,10 +1,6 @@
 using System.Text.Json;
 using Edvantix.Chassis.CQRS;
-using Edvantix.Chassis.CQRS.Command;
-using Edvantix.Chassis.CQRS.Pipelines;
-using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.OpenTelemetry;
-using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
@@ -17,7 +13,7 @@ using AspireServices = Edvantix.Constants.Aspire.Services;
 
 namespace Edvantix.Organizational.Extensions;
 
-public static class Extensions
+internal static class Extensions
 {
     public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {

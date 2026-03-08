@@ -1,6 +1,4 @@
-﻿using Edvantix.Notification.Domain.Models;
-
-namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
+﻿namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
 public sealed class CleanUpSentEmailIntegrationEventHandler(
     ILogger<CleanUpSentEmailIntegrationEventHandler> logger,

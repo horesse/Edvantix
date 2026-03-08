@@ -1,7 +1,6 @@
 ﻿using Edvantix.Chassis.Security.Authorization;
 using Edvantix.Chassis.Security.Keycloak;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Edvantix.Chassis.Security.Extensions;

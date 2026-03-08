@@ -2,11 +2,7 @@ using System.Text.Json;
 using Edvantix.Blog.Configurations;
 using Edvantix.Blog.Grpc;
 using Edvantix.Chassis.CQRS;
-using Edvantix.Chassis.CQRS.Command;
-using Edvantix.Chassis.CQRS.Pipelines;
-using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.OpenTelemetry;
-using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
@@ -20,7 +16,7 @@ namespace Edvantix.Blog.Extensions;
 /// <summary>
 /// Регистрация всех сервисов микросервиса Blog.
 /// </summary>
-public static class Extensions
+internal static class Extensions
 {
     /// <summary>
     /// Регистрирует CQRS, persistence, gRPC-клиенты, авторизацию и все feature-сервисы.

@@ -1,11 +1,7 @@
 ﻿using System.Text.Json;
 using Edvantix.Chassis.CQRS;
-using Edvantix.Chassis.CQRS.Command;
-using Edvantix.Chassis.CQRS.Pipelines;
-using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.Mapper;
 using Edvantix.Chassis.OpenTelemetry;
-using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
@@ -22,7 +18,7 @@ namespace Edvantix.Subscriptions.Extensions;
 /// <summary>
 /// Extension methods for configuring application services.
 /// </summary>
-public static class Extensions
+internal static class Extensions
 {
     /// <summary>
     /// Adds all application services required for the Subscriptions microservice.

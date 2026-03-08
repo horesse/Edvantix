@@ -1,15 +1,17 @@
 namespace Edvantix.Blog.Features.CategoryFeature.DeleteCategory;
 
+using Mediator;
+
 /// <summary>
 /// Команда для физического удаления категории блога.
 /// </summary>
-public sealed record DeleteCategoryCommand(Guid CategoryId) : IRequest;
+public sealed record DeleteCategoryCommand(Guid CategoryId) : ICommand;
 
 /// <summary>
 /// Обработчик команды удаления категории.
 /// </summary>
 internal sealed class DeleteCategoryCommandHandler(IServiceProvider provider)
-    : IRequestHandler<DeleteCategoryCommand>
+    : ICommandHandler<DeleteCategoryCommand>
 {
     public async ValueTask<Unit> Handle(
         DeleteCategoryCommand request,

@@ -1,12 +1,14 @@
 namespace Edvantix.Blog.Features.TagFeature.UpdateTag;
 
+using Mediator;
+
 /// <summary>
 /// Команда для обновления тега блога.
 /// </summary>
-public sealed record UpdateTagCommand(Guid TagId, string Name, string Slug) : IRequest;
+public sealed record UpdateTagCommand(Guid TagId, string Name, string Slug) : ICommand;
 
 public sealed class UpdateTagCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateTagCommand>
+    : ICommandHandler<UpdateTagCommand>
 {
     public async ValueTask<Unit> Handle(
         UpdateTagCommand request,

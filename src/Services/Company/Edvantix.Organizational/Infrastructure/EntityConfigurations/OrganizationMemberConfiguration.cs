@@ -2,7 +2,7 @@ using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Organizational.Infrastructure.EntityConfigurations;
 
-public sealed class OrganizationMemberConfiguration : IEntityTypeConfiguration<OrganizationMember>
+internal sealed class OrganizationMemberConfiguration : IEntityTypeConfiguration<OrganizationMember>
 {
     public void Configure(EntityTypeBuilder<OrganizationMember> builder)
     {

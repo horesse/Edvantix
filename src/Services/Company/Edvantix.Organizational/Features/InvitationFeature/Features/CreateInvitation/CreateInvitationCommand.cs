@@ -12,14 +12,14 @@ public sealed record CreateInvitationCommand(
     Guid? InviteeProfileId,
     OrganizationRole Role,
     int TtlDays = Invitation.DefaultTtlDays
-) : IRequest<Guid>;
+) : ICommand<Guid>;
 
 /// <summary>
 /// Обработчик создания приглашения.
 /// Авторизация: Owner/Manager. Проверки: дубликат, уже участник, Manager не может давать Owner.
 /// </summary>
 public sealed class CreateInvitationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateInvitationCommand, Guid>
+    : ICommandHandler<CreateInvitationCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         CreateInvitationCommand request,

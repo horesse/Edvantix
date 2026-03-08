@@ -1,17 +1,19 @@
 namespace Edvantix.Catalog.Features.RegionFeature.CreateRegion;
 
+using Mediator;
+
 /// <summary>
 /// Команда создания региона.
 /// </summary>
 public sealed record CreateRegionCommand(string Code, string NameRu, string NameEn)
-    : IRequest<RegionModel>;
+    : ICommand<RegionModel>;
 
 /// <summary>
 /// Обработчик <see cref="CreateRegionCommand"/>.
 /// HTTP 409 — если регион с таким кодом уже существует.
 /// </summary>
 public sealed class CreateRegionCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateRegionCommand, RegionModel>
+    : ICommandHandler<CreateRegionCommand, RegionModel>
 {
     /// <inheritdoc/>
     public async ValueTask<RegionModel> Handle(

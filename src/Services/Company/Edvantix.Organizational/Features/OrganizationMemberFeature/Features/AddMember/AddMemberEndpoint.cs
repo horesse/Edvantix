@@ -2,7 +2,7 @@ namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.Ad
 
 public sealed record AddMemberRequest(Guid ProfileId, OrganizationRole Role);
 
-public class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISender>
+public sealed class AddMemberEndpoint : IEndpoint<Created<Guid>, AddMemberCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

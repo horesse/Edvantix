@@ -1,11 +1,7 @@
 ﻿using System.Text.Json;
 using Edvantix.Chassis.CQRS;
-using Edvantix.Chassis.CQRS.Command;
-using Edvantix.Chassis.CQRS.Pipelines;
-using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Chassis.OpenTelemetry;
-using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
@@ -20,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Persona.Extensions;
 
-public static class Extensions
+internal static class Extensions
 {
     public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {

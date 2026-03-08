@@ -2,7 +2,8 @@ namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.Up
 
 public sealed record UpdateMemberRoleRequest(OrganizationRole NewRole);
 
-public class UpdateMemberRoleEndpoint : IEndpoint<NoContent, UpdateMemberRoleCommand, ISender>
+public sealed class UpdateMemberRoleEndpoint
+    : IEndpoint<NoContent, UpdateMemberRoleCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

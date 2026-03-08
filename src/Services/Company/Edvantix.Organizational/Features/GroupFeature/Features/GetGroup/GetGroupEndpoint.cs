@@ -2,7 +2,7 @@ using Edvantix.Organizational.Features.GroupFeature.Models;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.GetGroup;
 
-public class GetGroupEndpoint : IEndpoint<Ok<GroupModel>, GetGroupQuery, ISender>
+public sealed class GetGroupEndpoint : IEndpoint<Ok<GroupModel>, GetGroupQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

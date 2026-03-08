@@ -1,5 +1,3 @@
-using Edvantix.SharedKernel.Results;
-
 namespace Edvantix.Notification.Features.Notifications;
 
 /// <summary>

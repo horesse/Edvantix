@@ -1,4 +1,3 @@
-using Edvantix.Persona.Grpc.Services;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 

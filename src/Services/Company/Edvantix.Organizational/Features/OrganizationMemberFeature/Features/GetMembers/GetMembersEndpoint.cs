@@ -3,7 +3,7 @@ using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Organizational.Features.OrganizationMemberFeature.Features.GetMembers;
 
-public class GetMembersEndpoint
+public sealed class GetMembersEndpoint
     : IEndpoint<Ok<PagedResult<OrganizationMemberModel>>, GetMembersQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

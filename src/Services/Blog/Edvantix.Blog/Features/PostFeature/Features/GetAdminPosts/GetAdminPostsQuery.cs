@@ -19,14 +19,14 @@ public sealed record GetAdminPostsQuery(
     [property: Description("Количество элементов на странице")]
     [property: DefaultValue(Pagination.DefaultPageSize)]
         int PageSize = Pagination.DefaultPageSize
-) : IRequest<PagedResult<PostSummaryModel>>;
+) : IQuery<PagedResult<PostSummaryModel>>;
 
 /// <summary>
 /// Обработчик административного запроса на получение постов.
 /// Возвращает посты любого статуса, обогащённые данными автора из Profile.
 /// </summary>
 public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetAdminPostsQuery, PagedResult<PostSummaryModel>>
+    : IQueryHandler<GetAdminPostsQuery, PagedResult<PostSummaryModel>>
 {
     public async ValueTask<PagedResult<PostSummaryModel>> Handle(
         GetAdminPostsQuery request,

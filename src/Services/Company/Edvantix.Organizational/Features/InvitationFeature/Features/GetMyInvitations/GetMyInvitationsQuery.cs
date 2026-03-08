@@ -6,13 +6,13 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.GetMyInvit
 /// <summary>
 /// Запрос списка приглашений текущего пользователя.
 /// </summary>
-public sealed record GetMyInvitationsQuery : IRequest<IEnumerable<InvitationModel>>;
+public sealed record GetMyInvitationsQuery : IQuery<IEnumerable<InvitationModel>>;
 
 /// <summary>
 /// Обработчик запроса приглашений текущего пользователя (с именем организации).
 /// </summary>
 public sealed class GetMyInvitationsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetMyInvitationsQuery, IEnumerable<InvitationModel>>
+    : IQueryHandler<GetMyInvitationsQuery, IEnumerable<InvitationModel>>
 {
     public async ValueTask<IEnumerable<InvitationModel>> Handle(
         GetMyInvitationsQuery request,

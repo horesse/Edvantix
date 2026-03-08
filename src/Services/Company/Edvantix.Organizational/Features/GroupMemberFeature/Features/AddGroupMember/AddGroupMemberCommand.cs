@@ -3,10 +3,10 @@ using Edvantix.Organizational.Infrastructure.Services;
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.AddGroupMember;
 
 public sealed record AddGroupMemberCommand(Guid GroupId, Guid ProfileId, GroupRole Role)
-    : IRequest<Guid>;
+    : ICommand<Guid>;
 
 public sealed class AddGroupMemberCommandHandler(IServiceProvider provider)
-    : IRequestHandler<AddGroupMemberCommand, Guid>
+    : ICommandHandler<AddGroupMemberCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         AddGroupMemberCommand request,

@@ -1,5 +1,7 @@
 namespace Edvantix.Catalog.Features.RegionFeature.UpdateRegion;
 
+using Mediator;
+
 /// <summary>
 /// Команда обновления региона. Требует передачи всех изменяемых полей.
 /// <para>
@@ -7,14 +9,14 @@ namespace Edvantix.Catalog.Features.RegionFeature.UpdateRegion;
 /// </para>
 /// </summary>
 public sealed record UpdateRegionCommand(string Code, string NameRu, string NameEn, bool? IsActive)
-    : IRequest<RegionModel>;
+    : ICommand<RegionModel>;
 
 /// <summary>
 /// Обработчик <see cref="UpdateRegionCommand"/>.
 /// HTTP 404 — если регион не найден.
 /// </summary>
 public sealed class UpdateRegionCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateRegionCommand, RegionModel>
+    : ICommandHandler<UpdateRegionCommand, RegionModel>
 {
     /// <inheritdoc/>
     public async ValueTask<RegionModel> Handle(

@@ -5,7 +5,7 @@ namespace Edvantix.Catalog.Features.CurrencyFeature.GetCurrencyByCode;
 /// <summary>
 /// Запрос валюты по ISO 4217-коду. Реализует <see cref="ICachedQuery"/> — результат кэшируется через HybridCache.
 /// </summary>
-public sealed record GetCurrencyByCodeQuery(string Code) : IRequest<CurrencyModel>, ICachedQuery
+public sealed record GetCurrencyByCodeQuery(string Code) : IQuery<CurrencyModel>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:currency:{Code.ToUpperInvariant()}";
@@ -22,7 +22,7 @@ public sealed record GetCurrencyByCodeQuery(string Code) : IRequest<CurrencyMode
 /// Выбрасывает <see cref="NotFoundException"/>, если валюта не найдена — преобразуется в HTTP 404.
 /// </summary>
 public sealed class GetCurrencyByCodeQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetCurrencyByCodeQuery, CurrencyModel>
+    : IQueryHandler<GetCurrencyByCodeQuery, CurrencyModel>
 {
     /// <inheritdoc/>
     public async ValueTask<CurrencyModel> Handle(

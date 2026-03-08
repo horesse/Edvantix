@@ -10,7 +10,7 @@ public sealed record ListLanguagesQuery(
     [property: Description("Фильтровать только активные языки")]
     [property: DefaultValue(true)]
         bool ActiveOnly = true
-) : IRequest<IReadOnlyList<LanguageModel>>, ICachedQuery
+) : IQuery<IReadOnlyList<LanguageModel>>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:languages:list:{ActiveOnly}";
@@ -26,7 +26,7 @@ public sealed record ListLanguagesQuery(
 /// Обработчик <see cref="ListLanguagesQuery"/>.
 /// </summary>
 public sealed class ListLanguagesQueryHandler(IServiceProvider provider)
-    : IRequestHandler<ListLanguagesQuery, IReadOnlyList<LanguageModel>>
+    : IQueryHandler<ListLanguagesQuery, IReadOnlyList<LanguageModel>>
 {
     /// <inheritdoc/>
     public async ValueTask<IReadOnlyList<LanguageModel>> Handle(

@@ -2,10 +2,10 @@ using Edvantix.Organizational.Features.OrganizationFeature.Models;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetMyOrganizations;
 
-public sealed record GetMyOrganizationsQuery : IRequest<IEnumerable<OrganizationSummaryModel>>;
+public sealed record GetMyOrganizationsQuery : IQuery<IEnumerable<OrganizationSummaryModel>>;
 
 public sealed class GetMyOrganizationsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetMyOrganizationsQuery, IEnumerable<OrganizationSummaryModel>>
+    : IQueryHandler<GetMyOrganizationsQuery, IEnumerable<OrganizationSummaryModel>>
 {
     public async ValueTask<IEnumerable<OrganizationSummaryModel>> Handle(
         GetMyOrganizationsQuery request,

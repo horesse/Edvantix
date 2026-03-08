@@ -11,10 +11,10 @@ public sealed record UpdateOrganizationCommand(
     Guid LegalFormId,
     string? PrintName,
     string? Description
-) : IRequest<Unit>;
+) : ICommand<Unit>;
 
 public sealed class UpdateOrganizationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateOrganizationCommand, Unit>
+    : ICommandHandler<UpdateOrganizationCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         UpdateOrganizationCommand request,

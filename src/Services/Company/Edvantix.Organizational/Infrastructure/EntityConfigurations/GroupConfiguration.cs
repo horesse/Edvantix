@@ -2,7 +2,7 @@ using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Organizational.Infrastructure.EntityConfigurations;
 
-public sealed class GroupConfiguration : IEntityTypeConfiguration<Group>
+internal sealed class GroupConfiguration : IEntityTypeConfiguration<Group>
 {
     public void Configure(EntityTypeBuilder<Group> builder)
     {

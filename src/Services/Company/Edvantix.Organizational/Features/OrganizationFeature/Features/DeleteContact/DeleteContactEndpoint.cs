@@ -1,6 +1,6 @@
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.DeleteContact;
 
-public class DeleteContactEndpoint : IEndpoint<NoContent, DeleteContactCommand, ISender>
+public sealed class DeleteContactEndpoint : IEndpoint<NoContent, DeleteContactCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

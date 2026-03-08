@@ -1,16 +1,18 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.DeletePost;
 
+using Mediator;
+
 /// <summary>
 /// Команда для архивирования поста (мягкое удаление через перевод в статус Archived).
 /// </summary>
-public sealed record DeletePostCommand(Guid PostId) : IRequest;
+public sealed record DeletePostCommand(Guid PostId) : ICommand;
 
 /// <summary>
 /// Обработчик команды удаления/архивирования поста.
 /// Переводит пост в статус Archived вместо физического удаления.
 /// </summary>
 public sealed class DeletePostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<DeletePostCommand>
+    : ICommandHandler<DeletePostCommand>
 {
     public async ValueTask<Unit> Handle(
         DeletePostCommand request,

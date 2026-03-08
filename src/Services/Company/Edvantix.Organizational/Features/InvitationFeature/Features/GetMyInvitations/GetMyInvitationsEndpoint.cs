@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.GetMyInvit
 /// <summary>
 /// GET /invitations/my — мои приглашения.
 /// </summary>
-public class GetMyInvitationsEndpoint
+public sealed class GetMyInvitationsEndpoint
     : IEndpoint<Ok<IEnumerable<InvitationModel>>, GetMyInvitationsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

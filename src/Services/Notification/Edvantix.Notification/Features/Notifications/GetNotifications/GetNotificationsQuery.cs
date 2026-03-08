@@ -1,6 +1,6 @@
-using Edvantix.Notification.Features.Notifications;
-
 namespace Edvantix.Notification.Features.Notifications.GetNotifications;
+
+using Mediator;
 
 /// <summary>
 /// Запрос на получение страницы in-app уведомлений пользователя.
@@ -14,13 +14,13 @@ public sealed record GetNotificationsQuery(
     [property: DefaultValue(Pagination.DefaultPageSize)]
         int PageSize = Pagination.DefaultPageSize,
     [property: Description("Фильтр по статусу прочтения")] bool? IsRead = null
-) : IRequest<PagedResult<NotificationViewModel>>;
+) : IQuery<PagedResult<NotificationViewModel>>;
 
 /// <summary>
 /// Обработчик запроса: возвращает пагинированный список уведомлений.
 /// </summary>
 public sealed class GetNotificationsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetNotificationsQuery, PagedResult<NotificationViewModel>>
+    : IQueryHandler<GetNotificationsQuery, PagedResult<NotificationViewModel>>
 {
     /// <inheritdoc />
     public async ValueTask<PagedResult<NotificationViewModel>> Handle(

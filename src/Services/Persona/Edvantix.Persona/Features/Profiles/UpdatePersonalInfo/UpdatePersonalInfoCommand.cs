@@ -8,10 +8,10 @@ public sealed record UpdatePersonalInfoCommand(
     string LastName,
     string? MiddleName,
     DateOnly BirthDate
-) : IRequest<ProfileDetailsModel>;
+) : ICommand<ProfileDetailsModel>;
 
 public sealed class UpdatePersonalInfoCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdatePersonalInfoCommand, ProfileDetailsModel>
+    : ICommandHandler<UpdatePersonalInfoCommand, ProfileDetailsModel>
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         UpdatePersonalInfoCommand command,

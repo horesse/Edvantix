@@ -1,10 +1,9 @@
 using Edvantix.Chassis.Utilities;
-using Edvantix.Persona.Infrastructure.Blob;
 
 namespace Edvantix.Persona.Features.Profiles.UpdateAvatar;
 
 /// <summary>PATCH /v1/profile/avatar — загрузить или заменить аватар профиля.</summary>
-public sealed class UpdateAvatarCommand : IRequest<ProfileDetailsModel>
+public sealed class UpdateAvatarCommand : ICommand<ProfileDetailsModel>
 {
     /// <summary>Новый аватар пользователя (JPEG/PNG до 1 МБ).</summary>
     public required IFormFile Avatar { get; init; }
@@ -17,7 +16,7 @@ public sealed class UpdateAvatarCommand : IRequest<ProfileDetailsModel>
 }
 
 public sealed class UpdateAvatarCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateAvatarCommand, ProfileDetailsModel>
+    : ICommandHandler<UpdateAvatarCommand, ProfileDetailsModel>
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         UpdateAvatarCommand command,

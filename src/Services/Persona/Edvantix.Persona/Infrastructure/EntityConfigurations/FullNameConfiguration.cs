@@ -2,7 +2,7 @@
 
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 
-public sealed class FullNameConfiguration : IEntityTypeConfiguration<FullName>
+internal sealed class FullNameConfiguration : IEntityTypeConfiguration<FullName>
 {
     public void Configure(EntityTypeBuilder<FullName> builder)
     {

@@ -10,7 +10,7 @@ public sealed record ListCountriesQuery(
     [property: Description("Фильтровать только активные страны")]
     [property: DefaultValue(true)]
         bool ActiveOnly = true
-) : IRequest<IReadOnlyList<CountryModel>>, ICachedQuery
+) : IQuery<IReadOnlyList<CountryModel>>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:countries:list:{ActiveOnly}";
@@ -26,7 +26,7 @@ public sealed record ListCountriesQuery(
 /// Обработчик <see cref="ListCountriesQuery"/>.
 /// </summary>
 public sealed class ListCountriesQueryHandler(IServiceProvider provider)
-    : IRequestHandler<ListCountriesQuery, IReadOnlyList<CountryModel>>
+    : IQueryHandler<ListCountriesQuery, IReadOnlyList<CountryModel>>
 {
     /// <inheritdoc/>
     public async ValueTask<IReadOnlyList<CountryModel>> Handle(

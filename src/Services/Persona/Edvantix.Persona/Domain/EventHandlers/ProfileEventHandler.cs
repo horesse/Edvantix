@@ -4,9 +4,9 @@ using Edvantix.Persona.Extensions;
 
 namespace Edvantix.Persona.Domain.EventHandlers;
 
-public sealed class ProfileEventHandlers(
+public sealed class ProfileEventHandler(
     IEventDispatcher dispatcher,
-    ILogger<ProfileEventHandlers> logger
+    ILogger<ProfileEventHandler> logger
 ) : INotificationHandler<ProfileRegisteredEvent>
 {
     public async ValueTask Handle(

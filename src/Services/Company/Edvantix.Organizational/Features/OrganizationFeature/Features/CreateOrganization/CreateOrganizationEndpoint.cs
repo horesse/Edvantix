@@ -1,6 +1,6 @@
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.CreateOrganization;
 
-public class CreateOrganizationEndpoint
+public sealed class CreateOrganizationEndpoint
     : IEndpoint<Created<Guid>, CreateOrganizationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

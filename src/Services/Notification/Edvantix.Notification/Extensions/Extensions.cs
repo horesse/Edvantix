@@ -1,7 +1,4 @@
 using Edvantix.Chassis.CQRS;
-using Edvantix.Chassis.CQRS.Command;
-using Edvantix.Chassis.CQRS.Pipelines;
-using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.EF;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;

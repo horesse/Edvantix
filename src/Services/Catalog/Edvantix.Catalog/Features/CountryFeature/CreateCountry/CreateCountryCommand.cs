@@ -1,5 +1,7 @@
 namespace Edvantix.Catalog.Features.CountryFeature.CreateCountry;
 
+using Mediator;
+
 /// <summary>
 /// Команда создания страны.
 /// </summary>
@@ -11,14 +13,14 @@ public sealed record CreateCountryCommand(
     int NumericCode,
     string PhonePrefix,
     string CurrencyCode
-) : IRequest<CountryModel>;
+) : ICommand<CountryModel>;
 
 /// <summary>
 /// Обработчик <see cref="CreateCountryCommand"/>.
 /// HTTP 409 — если страна с таким кодом уже существует.
 /// </summary>
 public sealed class CreateCountryCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateCountryCommand, CountryModel>
+    : ICommandHandler<CreateCountryCommand, CountryModel>
 {
     /// <inheritdoc/>
     public async ValueTask<CountryModel> Handle(

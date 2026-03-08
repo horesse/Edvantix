@@ -16,14 +16,14 @@ public sealed record CreatePostCommand(
     string? CoverImageUrl,
     IReadOnlyList<Guid> CategoryIds,
     IReadOnlyList<Guid> TagIds
-) : IRequest<Guid>;
+) : ICommand<Guid>;
 
 /// <summary>
 /// Обработчик команды создания поста.
 /// Создаёт черновик поста с указанными категориями и тегами.
 /// </summary>
 public sealed class CreatePostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreatePostCommand, Guid>
+    : ICommandHandler<CreatePostCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         CreatePostCommand request,

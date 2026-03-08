@@ -1,16 +1,18 @@
 namespace Edvantix.Blog.Features.CategoryFeature.CreateCategory;
 
+using Mediator;
+
 /// <summary>
 /// Команда для создания новой категории блога.
 /// </summary>
 public sealed record CreateCategoryCommand(string Name, string Slug, string? Description)
-    : IRequest<Guid>;
+    : ICommand<Guid>;
 
 /// <summary>
 /// Обработчик команды создания категории.
 /// </summary>
 internal sealed class CreateCategoryCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateCategoryCommand, Guid>
+    : ICommandHandler<CreateCategoryCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         CreateCategoryCommand request,

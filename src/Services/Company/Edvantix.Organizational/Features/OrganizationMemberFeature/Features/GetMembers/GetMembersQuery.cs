@@ -15,10 +15,10 @@ public sealed record GetMembersQuery(
     [property: DefaultValue(Pagination.DefaultPageSize)]
         int PageSize = Pagination.DefaultPageSize,
     [property: Description("Свойство для упорядочивания результатов")] string? OrderBy = null
-) : IRequest<PagedResult<OrganizationMemberModel>>;
+) : IQuery<PagedResult<OrganizationMemberModel>>;
 
 public sealed class GetMembersQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetMembersQuery, PagedResult<OrganizationMemberModel>>
+    : IQueryHandler<GetMembersQuery, PagedResult<OrganizationMemberModel>>
 {
     public async ValueTask<PagedResult<OrganizationMemberModel>> Handle(
         GetMembersQuery request,

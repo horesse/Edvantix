@@ -5,10 +5,10 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetOrganization;
 
-public sealed record GetOrganizationQuery(Guid Id) : IRequest<OrganizationModel>;
+public sealed record GetOrganizationQuery(Guid Id) : IQuery<OrganizationModel>;
 
 public sealed class GetOrganizationQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetOrganizationQuery, OrganizationModel>
+    : IQueryHandler<GetOrganizationQuery, OrganizationModel>
 {
     public async ValueTask<OrganizationModel> Handle(
         GetOrganizationQuery request,

@@ -3,7 +3,7 @@ using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.GetOrganizationGroups;
 
-public class GetOrganizationGroupsEndpoint
+public sealed class GetOrganizationGroupsEndpoint
     : IEndpoint<Ok<PagedResult<GroupModel>>, GetOrganizationGroupsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

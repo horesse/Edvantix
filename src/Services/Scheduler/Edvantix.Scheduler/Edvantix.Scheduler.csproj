@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
+  </PropertyGroup>
   <ItemGroup Label="OCI Labels">
     <ContainerLabel
       Include="org.opencontainers.image.description"
@@ -12,6 +15,15 @@
     <PackageReference Include="Quartz.Dashboard" />
     <PackageReference Include="Quartz.Plugins" />
     <PackageReference Include="Quartz.Plugins.TimeZoneConverter" />
+  </ItemGroup>
+  <ItemGroup Label="Quartz XML Config">
+    <None Update="jobs.xml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).ContractTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />

@@ -1,5 +1,4 @@
 ﻿using Edvantix.Chassis.Utilities.Configurations;
-using Edvantix.ServiceDefaults.Kestrel;
 
 namespace Edvantix.ServiceDefaults.Kestrel;
 

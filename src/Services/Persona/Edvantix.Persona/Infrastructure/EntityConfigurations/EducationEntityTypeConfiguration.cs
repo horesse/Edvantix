@@ -2,7 +2,7 @@
 
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 
-public sealed class EducationEntityTypeConfiguration : IEntityTypeConfiguration<Education>
+internal sealed class EducationEntityTypeConfiguration : IEntityTypeConfiguration<Education>
 {
     public void Configure(EntityTypeBuilder<Education> builder)
     {

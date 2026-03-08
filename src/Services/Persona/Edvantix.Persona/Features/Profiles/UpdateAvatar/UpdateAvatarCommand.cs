@@ -1,5 +1,4 @@
 using Edvantix.Chassis.Utilities;
-using Edvantix.Persona.Infrastructure.Blob;
 
 namespace Edvantix.Persona.Features.Profiles.UpdateAvatar;
 

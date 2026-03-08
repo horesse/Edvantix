@@ -1,5 +1,4 @@
-﻿using Edvantix.Notification.Domain.Models;
-using Edvantix.Notification.Infrastructure.Senders.MailKit;
+﻿using Edvantix.Notification.Infrastructure.Senders.MailKit;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
 
 namespace Edvantix.Notification.Infrastructure.Senders.Outbox;

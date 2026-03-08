@@ -2,7 +2,7 @@
 
 namespace Edvantix.Organizational.Infrastructure.EntityConfigurations;
 
-public sealed class ContactConfiguration : IEntityTypeConfiguration<OrganizationContact>
+internal sealed class ContactConfiguration : IEntityTypeConfiguration<OrganizationContact>
 {
     public void Configure(EntityTypeBuilder<OrganizationContact> builder)
     {

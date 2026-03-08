@@ -4,7 +4,7 @@ namespace Edvantix.Catalog.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности <see cref="Language"/>.
 /// Использует натуральный строковый PK Code (ISO 639-1 alpha-2).
 /// </summary>
-public sealed class LanguageConfiguration : IEntityTypeConfiguration<Language>
+internal sealed class LanguageConfiguration : IEntityTypeConfiguration<Language>
 {
     public void Configure(EntityTypeBuilder<Language> builder)
     {

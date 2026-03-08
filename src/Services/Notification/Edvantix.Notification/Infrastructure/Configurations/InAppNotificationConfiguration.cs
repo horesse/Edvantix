@@ -1,5 +1,3 @@
-using Edvantix.Constants.Core;
-using Edvantix.Notification.Domain.Models;
 using Edvantix.SharedKernel.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

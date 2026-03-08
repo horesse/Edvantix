@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 /// <summary>
 /// Конфигурация EF Core для сущности Category.
 /// </summary>
-public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
+internal sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {

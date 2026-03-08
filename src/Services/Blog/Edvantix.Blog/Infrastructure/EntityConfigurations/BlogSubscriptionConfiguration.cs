@@ -2,7 +2,7 @@ using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 
-public sealed class BlogSubscriptionConfiguration : IEntityTypeConfiguration<BlogSubscription>
+internal sealed class BlogSubscriptionConfiguration : IEntityTypeConfiguration<BlogSubscription>
 {
     public void Configure(EntityTypeBuilder<BlogSubscription> builder)
     {

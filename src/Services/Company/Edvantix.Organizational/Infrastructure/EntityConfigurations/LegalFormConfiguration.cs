@@ -3,7 +3,7 @@ using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
 
 namespace Edvantix.Organizational.Infrastructure.EntityConfigurations;
 
-public sealed class LegalFormConfiguration : IEntityTypeConfiguration<LegalForm>
+internal sealed class LegalFormConfiguration : IEntityTypeConfiguration<LegalForm>
 {
     public void Configure(EntityTypeBuilder<LegalForm> builder)
     {

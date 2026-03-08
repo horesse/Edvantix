@@ -4,7 +4,7 @@ namespace Edvantix.Catalog.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности <see cref="Currency"/>.
 /// Использует натуральный строковый PK Code (ISO 4217).
 /// </summary>
-public sealed class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
+internal sealed class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
 {
     public void Configure(EntityTypeBuilder<Currency> builder)
     {

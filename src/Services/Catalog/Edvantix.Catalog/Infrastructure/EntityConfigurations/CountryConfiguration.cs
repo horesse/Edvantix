@@ -4,7 +4,7 @@ namespace Edvantix.Catalog.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности <see cref="Country"/>.
 /// Использует натуральный строковый PK Code (ISO 3166-1 alpha-2).
 /// </summary>
-public sealed class CountryConfiguration : IEntityTypeConfiguration<Country>
+internal sealed class CountryConfiguration : IEntityTypeConfiguration<Country>
 {
     public void Configure(EntityTypeBuilder<Country> builder)
     {

@@ -2,7 +2,7 @@
 
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 
-public sealed class EmploymentHistoryConfiguration : IEntityTypeConfiguration<EmploymentHistory>
+internal sealed class EmploymentHistoryConfiguration : IEntityTypeConfiguration<EmploymentHistory>
 {
     public void Configure(EntityTypeBuilder<EmploymentHistory> builder)
     {

@@ -12,7 +12,7 @@ internal static class Extensions
         builder.AddEventBus(typeof(ISchedulerApiMarker));
 
         services.AddAntiforgery();
-        
+
         services.Configure<QuartzOptions>(options =>
         {
             options["quartz.plugin.jobHistory.type"] =
@@ -20,19 +20,19 @@ internal static class Extensions
             options["quartz.plugin.triggerHistory.type"] =
                 "Quartz.Plugin.History.LoggingTriggerHistoryPlugin, Quartz.Plugins";
         });
-        
+
         services.AddQuartz(q =>
         {
             q.SchedulerId = $"{nameof(Edvantix)}-{nameof(Scheduler)}-{Environment.MachineName}";
             q.SchedulerName = nameof(Scheduler);
-            
+
             q.InterruptJobsOnShutdown = true;
             q.InterruptJobsOnShutdownWithWait = true;
-            
+
             q.UseTimeZoneConverter();
             q.UseDefaultThreadPool(tp => tp.MaxConcurrency = Environment.ProcessorCount);
             q.AddJobListener<JobTelemetryListener>();
-            
+
             q.UseXmlSchedulingConfiguration(x =>
             {
                 x.Files = ["~/jobs.xml"];
@@ -43,9 +43,9 @@ internal static class Extensions
         });
 
         services.AddQuartzDashboard();
-        
+
         services.AddQuartzServer(q => q.WaitForJobsToComplete = true);
-        
+
         services.AddOpenTelemetry().WithTracing(t => t.AddQuartzInstrumentation());
     }
 }

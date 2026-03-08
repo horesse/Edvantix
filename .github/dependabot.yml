@@ -35,6 +35,9 @@ updates:
       prefix: "NuGet"
       include: scope
     open-pull-requests-limit: 15
+    ignore:
+      - dependency-name: "MassTransit.*"
+        update-types: ["version-update:semver-major"]
     groups:
       Aspire:
         patterns:
@@ -56,6 +59,12 @@ updates:
       EntityFrameworkCore:
         patterns:
           - "Microsoft.EntityFrameworkCore.*"
+      MicrosoftAgents:
+        patterns:
+          - "Microsoft.Agents.*"
+      CommunityToolkit:
+        patterns:
+          - "CommunityToolkit.*"
 
   - package-ecosystem: "npm"
     directory: "/docs/eventcatalog"
@@ -146,15 +155,71 @@ updates:
           - "@storybook/*"
           - "storybook"
 
-  - package-ecosystem: docker
-    directory: "/docs/eventcatalog"
+  - package-ecosystem: "npm"
+    directory: "/src/Clients"
     schedule:
       interval: weekly
       day: friday
       time: "10:00"
       timezone: "Asia/Ho_Chi_Minh"
     commit-message:
-      prefix: "Docker (Event Catalog)"
+      prefix: "Node (Frontend)"
+      include: scope
+    open-pull-requests-limit: 15
+    versioning-strategy: increase
+    groups:
+      nextjs:
+        patterns:
+          - "next"
+          - "@next/*"
+          - "eslint-config-next"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react*"
+      tanstack:
+        patterns:
+          - "@tanstack/*"
+      radix:
+        patterns:
+          - "@radix-ui/*"
+      better-auth:
+        patterns:
+          - "better-auth"
+      turbo:
+        patterns:
+          - "turbo"
+          - "@turbo/*"
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/*"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"
+
+  - package-ecosystem: docker
+    directory: "/src/Clients/apps/organization"
+    schedule:
+      interval: weekly
+      day: friday
+      time: "10:00"
+      timezone: "Asia/Ho_Chi_Minh"
+    commit-message:
+      prefix: "Docker (organization)"
+      include: scope
+
+  - package-ecosystem: docker
+    directory: "/src/Clients/apps/blog"
+    schedule:
+      interval: weekly
+      day: friday
+      time: "10:00"
+      timezone: "Asia/Ho_Chi_Minh"
+    commit-message:
+      prefix: "Docker (blog)"
       include: scope
 
   - package-ecosystem: github-actions
@@ -169,3 +234,5 @@ updates:
     commit-message:
       prefix: "GitHub Actions"
       include: scope
+    ignore:
+      - dependency-name: "github/gh-aw/*"

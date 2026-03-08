@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
 
-
 namespace Edvantix.Scheduler.UnitTests;
 
 public sealed class DummyCleanUpSentEmailConsumer : IConsumer<CleanUpSentEmailIntegrationEvent>

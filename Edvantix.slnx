@@ -41,8 +41,9 @@
   <Folder Name="/src/Services/Persona/">
     <Project Path="src/Services/Persona/Edvantix.Persona/Edvantix.Persona.csproj" />
   </Folder>
-  <Folder Name="/src/Services/Scheduler/" />
-  <Folder Name="/src/Services/Scheduler/Scheduler/">
+  <Folder Name="/src/Services/Scheduler/">
+    <Project Path="src/Services/Scheduler/Edvantix.Scheduler.ContractTests/Edvantix.Scheduler.ContractTests.csproj" />
+    <Project Path="src/Services/Scheduler/Edvantix.Scheduler.UnitTests/Edvantix.Scheduler.UnitTests.csproj" />
     <Project Path="src/Services/Scheduler/Edvantix.Scheduler/Edvantix.Scheduler.csproj" />
   </Folder>
   <Folder Name="/src/Services/Subscription/">

@@ -156,7 +156,7 @@ const defaultI18n = {
   },
 };
 
-export function calculatePasswordStrength(password: string): {
+function calculatePasswordStrength(password: string): {
   strength: PasswordStrength;
   score: number;
   requirements: {

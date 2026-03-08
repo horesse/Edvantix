@@ -25,7 +25,7 @@ type FormState = {
 export default function Register(
   props: Readonly<
     PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>
-  >
+  >,
 ) {
   const { kcContext, i18n, Template, classes } = props;
 
@@ -131,7 +131,7 @@ export default function Register(
       }
       return null;
     },
-    []
+    [],
   );
 
   const createFieldHandler = useCallback(
@@ -142,7 +142,7 @@ export default function Register(
     ) => ({
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           [fieldName]: {
             value,
@@ -154,7 +154,7 @@ export default function Register(
         }));
       },
       onBlur: () => {
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           [fieldName]: {
             ...prev[fieldName],
@@ -164,24 +164,24 @@ export default function Register(
         }));
       },
     }),
-    []
+    [],
   );
 
   const emailHandlers = useMemo(
     () => createFieldHandler("email", validateEmail),
-    [createFieldHandler, validateEmail]
+    [createFieldHandler, validateEmail],
   );
 
   const usernameHandlers = useMemo(
     () => createFieldHandler("username", validateUsername),
-    [createFieldHandler, validateUsername]
+    [createFieldHandler, validateUsername],
   );
 
   const passwordHandlers = useMemo(
     () => ({
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setFormState(prev => {
+        setFormState((prev) => {
           const passwordError = prev.password.touched
             ? validatePassword(value)
             : null;
@@ -204,7 +204,7 @@ export default function Register(
         });
       },
       onBlur: () => {
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           password: {
             ...prev.password,
@@ -214,14 +214,14 @@ export default function Register(
         }));
       },
     }),
-    [validatePassword, validatePasswordConfirm]
+    [validatePassword, validatePasswordConfirm],
   );
 
   const passwordConfirmHandlers = useMemo(
     () => ({
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           passwordConfirm: {
             value,
@@ -233,20 +233,20 @@ export default function Register(
         }));
       },
       onBlur: () => {
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           passwordConfirm: {
             ...prev.passwordConfirm,
             touched: true,
             error: validatePasswordConfirm(
               prev.passwordConfirm.value,
-              prev.password.value
+              prev.password.value,
             ),
           },
         }));
       },
     }),
-    [validatePasswordConfirm]
+    [validatePasswordConfirm],
   );
 
   const hasGlobalError = messagesPerField.exists("global");
@@ -273,7 +273,7 @@ export default function Register(
             </div>
 
             <div className="grid gap-2">
-              {social.providers.map(p => (
+              {social.providers.map((p) => (
                 <Button
                   key={p.alias}
                   variant="outline"
@@ -404,7 +404,7 @@ export default function Register(
               error={
                 messagesPerField.existsError("password-confirm")
                   ? kcSanitize(
-                      messagesPerField.getFirstError("password-confirm")
+                      messagesPerField.getFirstError("password-confirm"),
                     )
                   : formState.passwordConfirm.error
               }
@@ -423,7 +423,9 @@ export default function Register(
                 id="termsAccepted"
                 name="termsAccepted"
                 checked={termsAccepted}
-                onCheckedChange={checked => setTermsAccepted(checked === true)}
+                onCheckedChange={(checked) =>
+                  setTermsAccepted(checked === true)
+                }
                 aria-invalid={messagesPerField.existsError("termsAccepted")}
                 className={
                   messagesPerField.existsError("termsAccepted")
@@ -454,7 +456,7 @@ export default function Register(
                   className="text-sm"
                   dangerouslySetInnerHTML={{
                     __html: kcSanitize(
-                      messagesPerField.getFirstError("termsAccepted")
+                      messagesPerField.getFirstError("termsAccepted"),
                     ),
                   }}
                 />

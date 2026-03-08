@@ -75,7 +75,7 @@ export function FormInput({
         className={cn(
           "transition-colors duration-200",
           hasError && "border-destructive focus-visible:ring-destructive/50",
-          inputClassName
+          inputClassName,
         )}
       />
       {hasError && (
@@ -191,7 +191,7 @@ export function PasswordInput({
   const hasError = touched && error;
   const [isRevealed, toggleRevealed] = useReducer(
     (state: boolean) => !state,
-    false
+    false,
   );
   const i18n = { ...defaultI18n, ...customI18n };
 
@@ -243,7 +243,7 @@ export function PasswordInput({
           className={cn(
             "pr-10 transition-colors duration-200",
             hasError && "border-destructive focus-visible:ring-destructive/50",
-            inputClassName
+            inputClassName,
           )}
         />
         <button
@@ -254,7 +254,7 @@ export function PasswordInput({
             "flex items-center justify-center rounded-md",
             "text-muted-foreground hover:text-foreground",
             "transition-colors duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           )}
           aria-label={isRevealed ? i18n.hidePassword : i18n.showPassword}
           aria-controls={id}
@@ -280,7 +280,7 @@ export function PasswordInput({
                 strength === "weak" && "text-destructive",
                 strength === "fair" && "text-yellow-600 dark:text-yellow-500",
                 strength === "good" && "text-blue-600 dark:text-blue-500",
-                strength === "strong" && "text-green-600 dark:text-green-500"
+                strength === "strong" && "text-green-600 dark:text-green-500",
               )}
             >
               {i18n.passwordStrength?.[strength]}
@@ -291,7 +291,7 @@ export function PasswordInput({
               className={cn(
                 "h-full rounded-full transition-all duration-300 ease-out",
                 strengthColors[strength],
-                strengthWidths[strength]
+                strengthWidths[strength],
               )}
             />
           </div>
@@ -307,7 +307,7 @@ export function PasswordInput({
                 "flex items-center gap-1.5 transition-colors duration-200",
                 met
                   ? "text-green-600 dark:text-green-500"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {met ? (

@@ -10,7 +10,7 @@ import { FormInput, PasswordInput } from "@/components/ui/form-input";
 import { AlertCircle } from "lucide-react";
 
 export default function Login(
-  props: Readonly<PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>>
+  props: Readonly<PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>>,
 ) {
   const { kcContext, i18n, Template, classes } = props;
 
@@ -53,7 +53,7 @@ export default function Login(
       }
       return null;
     },
-    [realm.loginWithEmailAllowed, realm.registrationEmailAsUsername]
+    [realm.loginWithEmailAllowed, realm.registrationEmailAsUsername],
   );
 
   const validatePassword = useCallback((value: string): string | null => {
@@ -66,7 +66,7 @@ export default function Login(
   const handleUsernameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      setFormState(prev => ({
+      setFormState((prev) => ({
         ...prev,
         username: {
           value,
@@ -75,11 +75,11 @@ export default function Login(
         },
       }));
     },
-    [validateUsername]
+    [validateUsername],
   );
 
   const handleUsernameBlur = useCallback(() => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       username: {
         ...prev.username,
@@ -92,7 +92,7 @@ export default function Login(
   const handlePasswordChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      setFormState(prev => ({
+      setFormState((prev) => ({
         ...prev,
         password: {
           value,
@@ -101,11 +101,11 @@ export default function Login(
         },
       }));
     },
-    [validatePassword]
+    [validatePassword],
   );
 
   const handlePasswordBlur = useCallback(() => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       password: {
         ...prev.password,
@@ -163,7 +163,7 @@ export default function Login(
             </div>
 
             <div className="grid gap-2">
-              {social.providers.map(p => (
+              {social.providers.map((p) => (
                 <Button
                   key={p.alias}
                   variant="outline"
@@ -220,7 +220,7 @@ export default function Login(
                 className="text-sm"
                 dangerouslySetInnerHTML={{
                   __html: kcSanitize(
-                    messagesPerField.getFirstError("username", "password")
+                    messagesPerField.getFirstError("username", "password"),
                   ),
                 }}
               />

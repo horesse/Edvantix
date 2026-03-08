@@ -3,10 +3,10 @@ using Edvantix.Organizational.Infrastructure.Services;
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.UpdateGroupMemberRole;
 
 public sealed record UpdateGroupMemberRoleCommand(Guid GroupId, Guid MemberId, GroupRole NewRole)
-    : IRequest<Unit>;
+    : ICommand<Unit>;
 
 public sealed class UpdateGroupMemberRoleCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateGroupMemberRoleCommand, Unit>
+    : ICommandHandler<UpdateGroupMemberRoleCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         UpdateGroupMemberRoleCommand request,

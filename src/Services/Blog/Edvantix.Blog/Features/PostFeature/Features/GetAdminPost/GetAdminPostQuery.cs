@@ -6,13 +6,13 @@ namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPost;
 /// Административный запрос для получения полного содержимого поста по ID.
 /// В отличие от публичного GetPostBySlugQuery возвращает пост любого статуса.
 /// </summary>
-public sealed record GetAdminPostQuery(Guid PostId) : IRequest<PostModel>;
+public sealed record GetAdminPostQuery(Guid PostId) : IQuery<PostModel>;
 
 /// <summary>
 /// Обработчик административного запроса на получение поста.
 /// </summary>
 public sealed class GetAdminPostQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetAdminPostQuery, PostModel>
+    : IQueryHandler<GetAdminPostQuery, PostModel>
 {
     public async ValueTask<PostModel> Handle(
         GetAdminPostQuery request,

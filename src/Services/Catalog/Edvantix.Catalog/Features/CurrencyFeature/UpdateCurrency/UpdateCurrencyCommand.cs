@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.CurrencyFeature.UpdateCurrency;
+using Mediator;
 
 /// <summary>
 /// Команда обновления валюты. Требует передачи всех изменяемых полей.
@@ -12,14 +13,14 @@ public sealed record UpdateCurrencyCommand(
     string NameEn,
     string Symbol,
     bool? IsActive
-) : IRequest<CurrencyModel>;
+) : ICommand<CurrencyModel>;
 
 /// <summary>
 /// Обработчик <see cref="UpdateCurrencyCommand"/>.
 /// HTTP 404 — если валюта не найдена.
 /// </summary>
 public sealed class UpdateCurrencyCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateCurrencyCommand, CurrencyModel>
+    : ICommandHandler<UpdateCurrencyCommand, CurrencyModel>
 {
     /// <inheritdoc/>
     public async ValueTask<CurrencyModel> Handle(

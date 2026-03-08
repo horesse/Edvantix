@@ -3,10 +3,10 @@ using Edvantix.Organizational.Features.LegalFormFeature.Models;
 
 namespace Edvantix.Organizational.Features.LegalFormFeature.Features.GetLegalForms;
 
-public sealed record GetLegalFormsQuery : IRequest<IReadOnlyList<LegalFormModel>>;
+public sealed record GetLegalFormsQuery : IQuery<IReadOnlyList<LegalFormModel>>;
 
 public sealed class GetLegalFormsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetLegalFormsQuery, IReadOnlyList<LegalFormModel>>
+    : IQueryHandler<GetLegalFormsQuery, IReadOnlyList<LegalFormModel>>
 {
     public async ValueTask<IReadOnlyList<LegalFormModel>> Handle(
         GetLegalFormsQuery request,

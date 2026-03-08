@@ -17,14 +17,14 @@ public sealed record GetPostsQuery(
     [property: Description("Количество элементов на странице")]
     [property: DefaultValue(Pagination.DefaultPageSize)]
         int PageSize = Pagination.DefaultPageSize
-) : IRequest<PagedResult<PostSummaryModel>>;
+) : IQuery<PagedResult<PostSummaryModel>>;
 
 /// <summary>
 /// Обработчик запроса на получение списка постов.
 /// Возвращает только опубликованные посты, обогащённые данными автора из Profile.
 /// </summary>
 public sealed class GetPostsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetPostsQuery, PagedResult<PostSummaryModel>>
+    : IQueryHandler<GetPostsQuery, PagedResult<PostSummaryModel>>
 {
     public async ValueTask<PagedResult<PostSummaryModel>> Handle(
         GetPostsQuery request,

@@ -2,10 +2,10 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.UpdateGroup;
 
-public sealed record UpdateGroupCommand(Guid Id, string Name, string? Description) : IRequest<Unit>;
+public sealed record UpdateGroupCommand(Guid Id, string Name, string? Description) : ICommand<Unit>;
 
 public sealed class UpdateGroupCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateGroupCommand, Unit>
+    : ICommandHandler<UpdateGroupCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         UpdateGroupCommand request,

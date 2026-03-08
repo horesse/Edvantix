@@ -5,14 +5,14 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.DeleteCo
 /// <summary>
 /// Команда удаления контакта организации.
 /// </summary>
-public sealed record DeleteContactCommand(Guid OrganizationId, Guid ContactId) : IRequest<Unit>;
+public sealed record DeleteContactCommand(Guid OrganizationId, Guid ContactId) : ICommand<Unit>;
 
 /// <summary>
 /// Обработчик удаления контакта. Авторизация: Owner/Manager.
 /// Удаление выполняется через агрегат Organization.
 /// </summary>
 public sealed class DeleteContactCommandHandler(IServiceProvider provider)
-    : IRequestHandler<DeleteContactCommand, Unit>
+    : ICommandHandler<DeleteContactCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         DeleteContactCommand request,

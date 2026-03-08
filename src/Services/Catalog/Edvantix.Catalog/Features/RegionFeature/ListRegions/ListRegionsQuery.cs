@@ -10,7 +10,7 @@ public sealed record ListRegionsQuery(
     [property: Description("Фильтровать только активные регионы")]
     [property: DefaultValue(true)]
         bool ActiveOnly = true
-) : IRequest<IReadOnlyList<RegionModel>>, ICachedQuery
+) : IQuery<IReadOnlyList<RegionModel>>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:regions:list:{ActiveOnly}";
@@ -26,7 +26,7 @@ public sealed record ListRegionsQuery(
 /// Обработчик <see cref="ListRegionsQuery"/>.
 /// </summary>
 public sealed class ListRegionsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<ListRegionsQuery, IReadOnlyList<RegionModel>>
+    : IQueryHandler<ListRegionsQuery, IReadOnlyList<RegionModel>>
 {
     /// <inheritdoc/>
     public async ValueTask<IReadOnlyList<RegionModel>> Handle(

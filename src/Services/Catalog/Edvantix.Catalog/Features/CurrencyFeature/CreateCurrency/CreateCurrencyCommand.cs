@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.CurrencyFeature.CreateCurrency;
+using Mediator;
 
 /// <summary>
 /// Команда создания новой валюты в справочнике.
@@ -12,14 +13,14 @@ public sealed record CreateCurrencyCommand(
     string Symbol,
     int NumericCode,
     int DecimalDigits
-) : IRequest<CurrencyModel>;
+) : ICommand<CurrencyModel>;
 
 /// <summary>
 /// Обработчик <see cref="CreateCurrencyCommand"/>.
 /// HTTP 409 — при попытке создать валюту с уже существующим кодом.
 /// </summary>
 public sealed class CreateCurrencyCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateCurrencyCommand, CurrencyModel>
+    : ICommandHandler<CreateCurrencyCommand, CurrencyModel>
 {
     /// <inheritdoc/>
     public async ValueTask<CurrencyModel> Handle(

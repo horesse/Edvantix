@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.LanguageFeature.UpdateLanguage;
+using Mediator;
 
 /// <summary>
 /// Команда обновления языка. Требует передачи всех изменяемых полей.
@@ -12,14 +13,14 @@ public sealed record UpdateLanguageCommand(
     string NameEn,
     string NativeName,
     bool? IsActive
-) : IRequest<LanguageModel>;
+) : ICommand<LanguageModel>;
 
 /// <summary>
 /// Обработчик <see cref="UpdateLanguageCommand"/>.
 /// HTTP 404 — если язык не найден.
 /// </summary>
 public sealed class UpdateLanguageCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateLanguageCommand, LanguageModel>
+    : ICommandHandler<UpdateLanguageCommand, LanguageModel>
 {
     /// <inheritdoc/>
     public async ValueTask<LanguageModel> Handle(

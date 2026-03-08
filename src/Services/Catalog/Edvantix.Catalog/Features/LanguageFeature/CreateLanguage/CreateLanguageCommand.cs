@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.LanguageFeature.CreateLanguage;
+using Mediator;
 
 /// <summary>
 /// Команда создания языка.
@@ -8,14 +9,14 @@ public sealed record CreateLanguageCommand(
     string NameRu,
     string NameEn,
     string NativeName
-) : IRequest<LanguageModel>;
+) : ICommand<LanguageModel>;
 
 /// <summary>
 /// Обработчик <see cref="CreateLanguageCommand"/>.
 /// HTTP 409 — если язык с таким кодом уже существует.
 /// </summary>
 public sealed class CreateLanguageCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateLanguageCommand, LanguageModel>
+    : ICommandHandler<CreateLanguageCommand, LanguageModel>
 {
     /// <inheritdoc/>
     public async ValueTask<LanguageModel> Handle(

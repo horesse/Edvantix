@@ -1,12 +1,13 @@
 namespace Edvantix.Blog.Features.TagFeature.DeleteTag;
+using Mediator;
 
 /// <summary>
 /// Команда для удаления тега блога.
 /// </summary>
-public sealed record DeleteTagCommand(Guid TagId) : IRequest;
+public sealed record DeleteTagCommand(Guid TagId) : ICommand;
 
 public sealed class DeleteTagCommandHandler(IServiceProvider provider)
-    : IRequestHandler<DeleteTagCommand>
+    : ICommandHandler<DeleteTagCommand>
 {
     public async ValueTask<Unit> Handle(
         DeleteTagCommand request,

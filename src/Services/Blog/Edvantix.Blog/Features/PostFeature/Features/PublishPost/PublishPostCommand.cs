@@ -1,17 +1,18 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.PublishPost;
+using Mediator;
 
 /// <summary>
 /// Команда для публикации или планирования поста.
 /// При указании ScheduledAt пост переходит в статус Scheduled,
 /// иначе — немедленно в статус Published.
 /// </summary>
-public sealed record PublishPostCommand(Guid PostId, DateTime? ScheduledAt = null) : IRequest;
+public sealed record PublishPostCommand(Guid PostId, DateTime? ScheduledAt = null) : ICommand;
 
 /// <summary>
 /// Обработчик команды публикации поста.
 /// </summary>
 public sealed class PublishPostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<PublishPostCommand>
+    : ICommandHandler<PublishPostCommand>
 {
     public async ValueTask<Unit> Handle(
         PublishPostCommand request,

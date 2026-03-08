@@ -5,7 +5,7 @@ namespace Edvantix.Catalog.Features.LanguageFeature.GetLanguageByCode;
 /// <summary>
 /// Запрос языка по ISO 639-1-коду. Реализует <see cref="ICachedQuery"/> — результат кэшируется через HybridCache.
 /// </summary>
-public sealed record GetLanguageByCodeQuery(string Code) : IRequest<LanguageModel>, ICachedQuery
+public sealed record GetLanguageByCodeQuery(string Code) : IQuery<LanguageModel>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:language:{Code.ToLowerInvariant()}";
@@ -22,7 +22,7 @@ public sealed record GetLanguageByCodeQuery(string Code) : IRequest<LanguageMode
 /// Выбрасывает <see cref="NotFoundException"/>, если язык не найден.
 /// </summary>
 public sealed class GetLanguageByCodeQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetLanguageByCodeQuery, LanguageModel>
+    : IQueryHandler<GetLanguageByCodeQuery, LanguageModel>
 {
     /// <inheritdoc/>
     public async ValueTask<LanguageModel> Handle(

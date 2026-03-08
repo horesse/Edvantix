@@ -2,10 +2,10 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.RemoveGroupMember;
 
-public sealed record RemoveGroupMemberCommand(Guid GroupId, Guid MemberId) : IRequest<Unit>;
+public sealed record RemoveGroupMemberCommand(Guid GroupId, Guid MemberId) : ICommand<Unit>;
 
 public sealed class RemoveGroupMemberCommandHandler(IServiceProvider provider)
-    : IRequestHandler<RemoveGroupMemberCommand, Unit>
+    : ICommandHandler<RemoveGroupMemberCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         RemoveGroupMemberCommand request,

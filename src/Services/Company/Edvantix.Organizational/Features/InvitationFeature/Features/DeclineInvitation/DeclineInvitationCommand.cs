@@ -5,13 +5,13 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.DeclineInv
 /// <summary>
 /// Команда отклонения приглашения по токену.
 /// </summary>
-public sealed record DeclineInvitationCommand(Guid Token) : IRequest<Unit>;
+public sealed record DeclineInvitationCommand(Guid Token) : ICommand<Unit>;
 
 /// <summary>
 /// Обработчик отклонения приглашения.
 /// </summary>
 public sealed class DeclineInvitationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<DeclineInvitationCommand, Unit>
+    : ICommandHandler<DeclineInvitationCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         DeclineInvitationCommand request,

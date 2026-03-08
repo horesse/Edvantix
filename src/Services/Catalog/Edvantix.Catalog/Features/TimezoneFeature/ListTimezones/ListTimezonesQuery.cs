@@ -10,7 +10,7 @@ public sealed record ListTimezonesQuery(
     [property: Description("Фильтровать только активные часовые пояса")]
     [property: DefaultValue(true)]
         bool ActiveOnly = true
-) : IRequest<IReadOnlyList<TimezoneModel>>, ICachedQuery
+) : IQuery<IReadOnlyList<TimezoneModel>>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:timezones:list:{ActiveOnly}";
@@ -26,7 +26,7 @@ public sealed record ListTimezonesQuery(
 /// Обработчик <see cref="ListTimezonesQuery"/>.
 /// </summary>
 public sealed class ListTimezonesQueryHandler(IServiceProvider provider)
-    : IRequestHandler<ListTimezonesQuery, IReadOnlyList<TimezoneModel>>
+    : IQueryHandler<ListTimezonesQuery, IReadOnlyList<TimezoneModel>>
 {
     /// <inheritdoc/>
     public async ValueTask<IReadOnlyList<TimezoneModel>> Handle(

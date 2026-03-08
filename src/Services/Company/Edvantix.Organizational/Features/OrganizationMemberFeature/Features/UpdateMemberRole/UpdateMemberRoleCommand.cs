@@ -6,10 +6,10 @@ public sealed record UpdateMemberRoleCommand(
     Guid OrganizationId,
     Guid MemberId,
     OrganizationRole NewRole
-) : IRequest<Unit>;
+) : ICommand<Unit>;
 
 public sealed class UpdateMemberRoleCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateMemberRoleCommand, Unit>
+    : ICommandHandler<UpdateMemberRoleCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         UpdateMemberRoleCommand request,

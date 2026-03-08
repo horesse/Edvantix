@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.TimezoneFeature.CreateTimezone;
+using Mediator;
 
 /// <summary>
 /// Команда создания часового пояса.
@@ -9,14 +10,14 @@ public sealed record CreateTimezoneCommand(
     string NameEn,
     string DisplayName,
     int UtcOffsetMinutes
-) : IRequest<TimezoneModel>;
+) : ICommand<TimezoneModel>;
 
 /// <summary>
 /// Обработчик <see cref="CreateTimezoneCommand"/>.
 /// HTTP 409 — если часовой пояс с таким кодом уже существует.
 /// </summary>
 public sealed class CreateTimezoneCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateTimezoneCommand, TimezoneModel>
+    : ICommandHandler<CreateTimezoneCommand, TimezoneModel>
 {
     /// <inheritdoc/>
     public async ValueTask<TimezoneModel> Handle(

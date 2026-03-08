@@ -1,9 +1,10 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPostLikes;
+using Mediator;
 
 /// <summary>
 /// Запрос для получения количества лайков поста.
 /// </summary>
-public sealed record GetPostLikesQuery(Guid PostId) : IRequest<PostLikesModel>;
+public sealed record GetPostLikesQuery(Guid PostId) : IQuery<PostLikesModel>;
 
 /// <summary>
 /// Данные о лайках поста.
@@ -14,7 +15,7 @@ public sealed record PostLikesModel(Guid PostId, int LikesCount);
 /// Обработчик запроса на получение количества лайков.
 /// </summary>
 public sealed class GetPostLikesQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetPostLikesQuery, PostLikesModel>
+    : IQueryHandler<GetPostLikesQuery, PostLikesModel>
 {
     public async ValueTask<PostLikesModel> Handle(
         GetPostLikesQuery request,

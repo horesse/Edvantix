@@ -4,10 +4,10 @@ namespace Edvantix.Persona.Features.Profiles.UpdateEmployment;
 
 /// <summary>PATCH /v1/profile/employment — обновить опыт работы профиля.</summary>
 public sealed record UpdateEmploymentCommand(List<EmploymentHistoryRequest> EmploymentHistories)
-    : IRequest<ProfileDetailsModel>;
+    : ICommand<ProfileDetailsModel>;
 
 public sealed class UpdateEmploymentCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateEmploymentCommand, ProfileDetailsModel>
+    : ICommandHandler<UpdateEmploymentCommand, ProfileDetailsModel>
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         UpdateEmploymentCommand command,

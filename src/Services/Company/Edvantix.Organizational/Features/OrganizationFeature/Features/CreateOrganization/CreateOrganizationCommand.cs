@@ -1,4 +1,5 @@
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.CreateOrganization;
+
 using Mediator;
 
 public sealed record CreateOrganizationCommand(

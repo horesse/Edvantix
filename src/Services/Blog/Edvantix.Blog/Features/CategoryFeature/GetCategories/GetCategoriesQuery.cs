@@ -1,4 +1,5 @@
 namespace Edvantix.Blog.Features.CategoryFeature.GetCategories;
+
 using Mediator;
 
 /// <summary>

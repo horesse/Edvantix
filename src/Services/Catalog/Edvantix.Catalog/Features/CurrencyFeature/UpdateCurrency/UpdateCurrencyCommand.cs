@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.CurrencyFeature.UpdateCurrency;
+
 using Mediator;
 
 /// <summary>

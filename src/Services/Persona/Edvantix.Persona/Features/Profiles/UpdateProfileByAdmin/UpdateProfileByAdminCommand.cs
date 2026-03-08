@@ -1,4 +1,5 @@
 namespace Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
+
 using Mediator;
 
 /// <summary>

@@ -1,4 +1,5 @@
 namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
+
 using Mediator;
 
 /// <summary>

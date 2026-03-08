@@ -1,4 +1,5 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.UpdatePost;
+
 using Mediator;
 
 /// <summary>

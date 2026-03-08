@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.RegionFeature.UpdateRegion;
+
 using Mediator;
 
 /// <summary>

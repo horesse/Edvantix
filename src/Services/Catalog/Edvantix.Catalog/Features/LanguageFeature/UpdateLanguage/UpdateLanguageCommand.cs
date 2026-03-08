@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.LanguageFeature.UpdateLanguage;
+
 using Mediator;
 
 /// <summary>

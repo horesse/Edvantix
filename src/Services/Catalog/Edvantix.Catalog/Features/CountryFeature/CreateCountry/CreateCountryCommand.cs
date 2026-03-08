@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.CountryFeature.CreateCountry;
+
 using Mediator;
 
 /// <summary>

@@ -1,4 +1,5 @@
 namespace Edvantix.Blog.Features.TagFeature.GetTags;
+
 using Mediator;
 
 public sealed record GetTagsQuery : IQuery<IReadOnlyList<TagModel>>;

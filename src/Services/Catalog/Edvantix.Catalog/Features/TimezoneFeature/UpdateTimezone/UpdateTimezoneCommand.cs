@@ -1,4 +1,5 @@
 namespace Edvantix.Catalog.Features.TimezoneFeature.UpdateTimezone;
+
 using Mediator;
 
 /// <summary>

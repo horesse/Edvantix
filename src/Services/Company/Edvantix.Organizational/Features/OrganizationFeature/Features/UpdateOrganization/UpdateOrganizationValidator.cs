@@ -1,5 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
-
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateOrganization;
 
 public sealed class UpdateOrganizationValidator : AbstractValidator<UpdateOrganizationCommand>

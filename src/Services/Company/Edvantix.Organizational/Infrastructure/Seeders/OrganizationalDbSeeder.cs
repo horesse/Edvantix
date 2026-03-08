@@ -1,7 +1,4 @@
-using Edvantix.Chassis.EF;
 using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Organizational.Infrastructure.Seeders;
 

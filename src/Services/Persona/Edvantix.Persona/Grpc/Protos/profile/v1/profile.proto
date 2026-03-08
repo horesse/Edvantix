@@ -10,10 +10,7 @@ service ProfileGrpcService {
 }
 
 message GetProfileRequest {
-  oneof identifier {
-    string profile_id = 1;
-    string account_id = 2;
-  }
+  string profile_id = 1;
 }
 
 message ProfileReply {

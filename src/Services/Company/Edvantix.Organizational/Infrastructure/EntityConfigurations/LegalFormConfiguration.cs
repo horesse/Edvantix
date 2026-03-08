@@ -1,8 +1,5 @@
 using Edvantix.Chassis.EF.Configurations;
-using Edvantix.Constants.Core;
 using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Organizational.Infrastructure.EntityConfigurations;
 

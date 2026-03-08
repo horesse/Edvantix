@@ -1,5 +1,3 @@
-using Edvantix.Chassis.Repository;
-
 namespace Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
 
 /// <summary>

@@ -1,4 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Features.LegalFormFeature.Models;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Models;

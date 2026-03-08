@@ -1,22 +1,35 @@
-import { type UseMutationOptions, useQueryClient } from "@tanstack/react-query";
+import {
+  type UseMutationOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
-import type { OwnProfile, UpdateProfileRequest } from "@workspace/types/profile";
+import profileApiClient from "@workspace/api-client/profile/profiles";
+import type {
+  OwnProfileDetails,
+  UpdateEmploymentRequest,
+} from "@workspace/types/profile";
 
 import { profileKeys } from "../keys";
-import useUpdateProfile from "./useUpdateProfile";
 
 export default function useUpdateEmployment(
-  options?: UseMutationOptions<OwnProfile, Error, UpdateProfileRequest>,
+  options?: UseMutationOptions<
+    OwnProfileDetails,
+    Error,
+    UpdateEmploymentRequest
+  >,
 ) {
   const queryClient = useQueryClient();
 
-  const mutation = useUpdateProfile({
+  return useMutation({
     ...options,
+    mutationFn: (request) => profileApiClient.updateEmployment(request),
     onSuccess: (...args) => {
       queryClient.invalidateQueries({ queryKey: profileKeys.all });
       options?.onSuccess?.(...args);
     },
+    onError: (...args) => {
+      options?.onError?.(...args);
+    },
   });
-
-  return mutation;
 }

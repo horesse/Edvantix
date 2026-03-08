@@ -1,6 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
-using Edvantix.Organizational.Grpc.Services;
-
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.CreateOrganization;
 
 public sealed record CreateOrganizationCommand(
@@ -21,7 +18,7 @@ public sealed class CreateOrganizationCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileId = await provider.GetProfileId(cancellationToken);
+        var profileId = provider.GetProfileIdOrError();
 
         var organization = new Organization(
             request.Name,

@@ -1,8 +1,4 @@
-using Edvantix.Chassis.Endpoints;
 using Edvantix.Organizational.Features.LegalFormFeature.Models;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 
 namespace Edvantix.Organizational.Features.LegalFormFeature.Features.GetLegalForms;
 

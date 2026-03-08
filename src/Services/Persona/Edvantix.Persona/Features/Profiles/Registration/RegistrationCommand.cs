@@ -1,6 +1,7 @@
 using Edvantix.Chassis.Utilities;
 using Edvantix.Constants.Other;
 using Edvantix.Persona.Infrastructure.Blob;
+using Edvantix.Persona.Infrastructure.Keycloak;
 
 namespace Edvantix.Persona.Features.Profiles.Registration;
 
@@ -50,7 +51,6 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         {
             await profileRepo.AddAsync(profile, ct);
             await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
-            return profile.Id;
         }
         catch
         {
@@ -63,5 +63,13 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
 
             throw;
         }
+
+        // Сохраняем profileId в Keycloak как пользовательский атрибут.
+        // Это позволяет связать Keycloak-аккаунт с профилем в Persona-сервисе
+        // без дополнительного запроса к БД при каждом обращении.
+        var keycloakAdmin = provider.GetRequiredService<IKeycloakAdminService>();
+        await keycloakAdmin.SetProfileIdAsync(accountId, profile.Id, ct);
+
+        return profile.Id;
     }
 }

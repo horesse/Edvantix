@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { Camera, Loader2, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 
-import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
+import useUploadAvatar from "@workspace/api-hooks/profiles/useUploadAvatar";
 import type { OwnProfileDetails } from "@workspace/types/profile";
 import {
   Avatar,
@@ -19,22 +19,11 @@ import {
   MAX_AVATAR_SIZE,
 } from "@workspace/validations/profile";
 
-import {
-  buildUpdateRequest,
-  type ProfileFormValues,
-} from "./profile-settings-schema";
-
-export function AvatarBlock({
-  profile,
-  getFormValues,
-}: {
-  profile: OwnProfileDetails;
-  getFormValues: () => ProfileFormValues;
-}) {
+export function AvatarBlock({ profile }: { profile: OwnProfileDetails }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const uploadMutation = useUpdateProfile({
+  const uploadMutation = useUploadAvatar({
     onSuccess: () => {
       toast.success("Аватар обновлён");
       if (preview) {
@@ -67,8 +56,7 @@ export function AvatarBlock({
     if (preview) URL.revokeObjectURL(preview);
     setPreview(URL.createObjectURL(file));
 
-    // Use current form values so unsaved changes are not overwritten by avatar upload.
-    uploadMutation.mutate(buildUpdateRequest(getFormValues(), file));
+    uploadMutation.mutate(file);
   }
 
   const displayUrl = preview ?? profile.avatarUrl;
@@ -79,7 +67,7 @@ export function AvatarBlock({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
       <div className="relative shrink-0">
-        <Avatar className="size-14 ring-2 ring-background">
+        <Avatar className="size-16 ring-2 ring-background">
           <AvatarImage src={displayUrl ?? undefined} alt={profile.firstName} />
           <AvatarFallback className="bg-muted text-base font-medium text-foreground">
             {fullName ? (
@@ -106,7 +94,7 @@ export function AvatarBlock({
       </div>
 
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium">{fullName || "—"}</p>
+        <p className="truncate text-sm font-semibold">{fullName || "—"}</p>
         <p className="text-xs text-muted-foreground">{profile.login}</p>
         <button
           type="button"

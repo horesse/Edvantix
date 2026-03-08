@@ -2,7 +2,8 @@ namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.AddGroupM
 
 public sealed record AddGroupMemberRequest(Guid ProfileId, GroupRole Role);
 
-public class AddGroupMemberEndpoint : IEndpoint<Created<Guid>, AddGroupMemberCommand, ISender>
+public sealed class AddGroupMemberEndpoint
+    : IEndpoint<Created<Guid>, AddGroupMemberCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Polly;
-using Polly.CircuitBreaker;
+﻿using Polly.CircuitBreaker;
 using Polly.Retry;
 using Polly.Timeout;
 

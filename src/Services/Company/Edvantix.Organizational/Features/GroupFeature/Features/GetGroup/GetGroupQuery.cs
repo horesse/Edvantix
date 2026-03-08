@@ -3,10 +3,10 @@ using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.GetGroup;
 
-public sealed record GetGroupQuery(Guid Id) : IRequest<GroupModel>;
+public sealed record GetGroupQuery(Guid Id) : IQuery<GroupModel>;
 
 public sealed class GetGroupQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetGroupQuery, GroupModel>
+    : IQueryHandler<GetGroupQuery, GroupModel>
 {
     public async ValueTask<GroupModel> Handle(
         GetGroupQuery request,

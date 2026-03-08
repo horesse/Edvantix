@@ -1,9 +1,11 @@
 namespace Edvantix.Blog.Features.TagFeature.GetTags;
 
-public sealed record GetTagsQuery : IRequest<IReadOnlyList<TagModel>>;
+using Mediator;
+
+public sealed record GetTagsQuery : IQuery<IReadOnlyList<TagModel>>;
 
 public sealed class GetTagsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetTagsQuery, IReadOnlyList<TagModel>>
+    : IQueryHandler<GetTagsQuery, IReadOnlyList<TagModel>>
 {
     public async ValueTask<IReadOnlyList<TagModel>> Handle(
         GetTagsQuery request,

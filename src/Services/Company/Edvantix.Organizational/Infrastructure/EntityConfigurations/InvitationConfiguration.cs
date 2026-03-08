@@ -7,7 +7,7 @@ namespace Edvantix.Organizational.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности <see cref="Invitation"/>.
 /// Без soft delete — статусный lifecycle (Pending → Accepted/Declined/Cancelled/Expired).
 /// </summary>
-public sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitation>
+internal sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitation>
 {
     public void Configure(EntityTypeBuilder<Invitation> builder)
     {

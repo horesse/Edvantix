@@ -6,7 +6,7 @@ namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности Post.
 /// Настраивает схему таблицы posts и связи с категориями, тегами и лайками.
 /// </summary>
-public sealed class PostConfiguration : IEntityTypeConfiguration<Post>
+internal sealed class PostConfiguration : IEntityTypeConfiguration<Post>
 {
     public void Configure(EntityTypeBuilder<Post> builder)
     {

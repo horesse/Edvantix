@@ -1,5 +1,7 @@
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.CreateOrganization;
 
+using Mediator;
+
 public sealed record CreateOrganizationCommand(
     string Name,
     string NameLatin,
@@ -8,10 +10,10 @@ public sealed record CreateOrganizationCommand(
     Guid LegalFormId,
     string? PrintName,
     string? Description
-) : IRequest<Guid>;
+) : ICommand<Guid>;
 
 public sealed class CreateOrganizationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateOrganizationCommand, Guid>
+    : ICommandHandler<CreateOrganizationCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         CreateOrganizationCommand request,

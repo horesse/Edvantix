@@ -1,5 +1,7 @@
 namespace Edvantix.Notification.Features.Notifications.GetUnreadCount;
 
+using Mediator;
+
 /// <summary>
 /// ViewModel для количества непрочитанных уведомлений.
 /// </summary>
@@ -8,13 +10,13 @@ public sealed record UnreadCountViewModel(int Count);
 /// <summary>
 /// Запрос на получение количества непрочитанных уведомлений (для бейджа в шапке).
 /// </summary>
-public sealed record GetUnreadCountQuery(Guid AccountId) : IRequest<UnreadCountViewModel>;
+public sealed record GetUnreadCountQuery(Guid AccountId) : IQuery<UnreadCountViewModel>;
 
 /// <summary>
 /// Обработчик запроса: подсчитывает непрочитанные уведомления пользователя.
 /// </summary>
 public sealed class GetUnreadCountQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetUnreadCountQuery, UnreadCountViewModel>
+    : IQueryHandler<GetUnreadCountQuery, UnreadCountViewModel>
 {
     /// <inheritdoc />
     public async ValueTask<UnreadCountViewModel> Handle(

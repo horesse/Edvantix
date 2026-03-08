@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using Edvantix.Notification.Domain.Models;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 

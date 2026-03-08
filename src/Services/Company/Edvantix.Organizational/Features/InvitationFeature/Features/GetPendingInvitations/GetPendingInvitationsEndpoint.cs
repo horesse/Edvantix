@@ -5,7 +5,7 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.GetPending
 /// <summary>
 /// GET /organizations/{orgId}/invitations — список ожидающих приглашений.
 /// </summary>
-public class GetPendingInvitationsEndpoint
+public sealed class GetPendingInvitationsEndpoint
     : IEndpoint<Ok<IEnumerable<InvitationModel>>, GetPendingInvitationsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

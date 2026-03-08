@@ -5,14 +5,14 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.AcceptInvi
 /// <summary>
 /// Команда принятия приглашения по токену.
 /// </summary>
-public sealed record AcceptInvitationCommand(Guid Token) : IRequest<Guid>;
+public sealed record AcceptInvitationCommand(Guid Token) : ICommand<Guid>;
 
 /// <summary>
 /// Обработчик принятия приглашения.
 /// Проверяет profileId текущего пользователя, создаёт OrganizationMember.
 /// </summary>
 public sealed class AcceptInvitationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<AcceptInvitationCommand, Guid>
+    : ICommandHandler<AcceptInvitationCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         AcceptInvitationCommand request,

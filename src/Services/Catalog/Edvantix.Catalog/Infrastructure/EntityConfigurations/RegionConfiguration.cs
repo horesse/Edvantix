@@ -4,7 +4,7 @@ namespace Edvantix.Catalog.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности <see cref="Region"/>.
 /// Использует натуральный строковый PK Code (пользовательский идентификатор макрорегиона).
 /// </summary>
-public sealed class RegionConfiguration : IEntityTypeConfiguration<Region>
+internal sealed class RegionConfiguration : IEntityTypeConfiguration<Region>
 {
     public void Configure(EntityTypeBuilder<Region> builder)
     {

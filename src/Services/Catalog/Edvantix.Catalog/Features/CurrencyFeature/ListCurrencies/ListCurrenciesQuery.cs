@@ -11,7 +11,7 @@ public sealed record ListCurrenciesQuery(
     [property: Description("Фильтровать только активные валюты")]
     [property: DefaultValue(true)]
         bool ActiveOnly = true
-) : IRequest<IReadOnlyList<CurrencyModel>>, ICachedQuery
+) : IQuery<IReadOnlyList<CurrencyModel>>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:currencies:list:{ActiveOnly}";
@@ -28,7 +28,7 @@ public sealed record ListCurrenciesQuery(
 /// Возвращает список валют из БД; при cache-hit вызов пропускается <see cref="CachingBehavior{TMessage,TResponse}"/>.
 /// </summary>
 public sealed class ListCurrenciesQueryHandler(IServiceProvider provider)
-    : IRequestHandler<ListCurrenciesQuery, IReadOnlyList<CurrencyModel>>
+    : IQueryHandler<ListCurrenciesQuery, IReadOnlyList<CurrencyModel>>
 {
     /// <inheritdoc/>
     public async ValueTask<IReadOnlyList<CurrencyModel>> Handle(

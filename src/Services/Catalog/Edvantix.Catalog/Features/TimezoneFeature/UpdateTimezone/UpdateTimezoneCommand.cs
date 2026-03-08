@@ -1,5 +1,7 @@
 namespace Edvantix.Catalog.Features.TimezoneFeature.UpdateTimezone;
 
+using Mediator;
+
 /// <summary>
 /// Команда обновления часового пояса. Требует передачи всех изменяемых полей.
 /// <para>
@@ -13,14 +15,14 @@ public sealed record UpdateTimezoneCommand(
     string DisplayName,
     int UtcOffsetMinutes,
     bool? IsActive
-) : IRequest<TimezoneModel>;
+) : ICommand<TimezoneModel>;
 
 /// <summary>
 /// Обработчик <see cref="UpdateTimezoneCommand"/>.
 /// HTTP 404 — если часовой пояс не найден.
 /// </summary>
 public sealed class UpdateTimezoneCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateTimezoneCommand, TimezoneModel>
+    : ICommandHandler<UpdateTimezoneCommand, TimezoneModel>
 {
     /// <inheritdoc/>
     public async ValueTask<TimezoneModel> Handle(

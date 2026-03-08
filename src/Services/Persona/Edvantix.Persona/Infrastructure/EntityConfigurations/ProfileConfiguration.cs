@@ -2,7 +2,7 @@
 
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 
-public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
+internal sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 {
     public void Configure(EntityTypeBuilder<Profile> builder)
     {

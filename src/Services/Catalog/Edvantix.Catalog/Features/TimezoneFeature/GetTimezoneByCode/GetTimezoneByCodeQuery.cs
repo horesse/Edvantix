@@ -5,7 +5,7 @@ namespace Edvantix.Catalog.Features.TimezoneFeature.GetTimezoneByCode;
 /// <summary>
 /// Запрос часового пояса по IANA-коду. Реализует <see cref="ICachedQuery"/> — результат кэшируется через HybridCache.
 /// </summary>
-public sealed record GetTimezoneByCodeQuery(string Code) : IRequest<TimezoneModel>, ICachedQuery
+public sealed record GetTimezoneByCodeQuery(string Code) : IQuery<TimezoneModel>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:timezone:{Code}";
@@ -22,7 +22,7 @@ public sealed record GetTimezoneByCodeQuery(string Code) : IRequest<TimezoneMode
 /// Выбрасывает <see cref="NotFoundException"/>, если часовой пояс не найден.
 /// </summary>
 public sealed class GetTimezoneByCodeQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetTimezoneByCodeQuery, TimezoneModel>
+    : IQueryHandler<GetTimezoneByCodeQuery, TimezoneModel>
 {
     /// <inheritdoc/>
     public async ValueTask<TimezoneModel> Handle(

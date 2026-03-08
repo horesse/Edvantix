@@ -4,10 +4,10 @@ namespace Edvantix.Persona.Features.Profiles.UpdateEducation;
 
 /// <summary>PATCH /v1/profile/education — обновить образование профиля.</summary>
 public sealed record UpdateEducationCommand(List<EducationRequest> Educations)
-    : IRequest<ProfileDetailsModel>;
+    : ICommand<ProfileDetailsModel>;
 
 public sealed class UpdateEducationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateEducationCommand, ProfileDetailsModel>
+    : ICommandHandler<UpdateEducationCommand, ProfileDetailsModel>
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         UpdateEducationCommand command,

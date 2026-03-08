@@ -3,10 +3,10 @@ using Edvantix.Organizational.Infrastructure.Services;
 namespace Edvantix.Organizational.Features.GroupFeature.Features.CreateGroup;
 
 public sealed record CreateGroupCommand(Guid OrganizationId, string Name, string? Description)
-    : IRequest<Guid>;
+    : ICommand<Guid>;
 
 public sealed class CreateGroupCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateGroupCommand, Guid>
+    : ICommandHandler<CreateGroupCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         CreateGroupCommand request,

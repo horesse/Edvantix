@@ -5,14 +5,14 @@ namespace Edvantix.Blog.Features.PostFeature.Features.UnlikePost;
 /// <summary>
 /// Команда для снятия лайка с поста.
 /// </summary>
-public sealed record UnlikePostCommand(Guid PostId) : IRequest;
+public sealed record UnlikePostCommand(Guid PostId) : ICommand;
 
 /// <summary>
 /// Обработчик команды снятия лайка.
 /// Находит лайк через репозиторий, удаляет его и уменьшает счётчик на посте.
 /// </summary>
 public sealed class UnlikePostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UnlikePostCommand>
+    : ICommandHandler<UnlikePostCommand>
 {
     public async ValueTask<Unit> Handle(
         UnlikePostCommand request,

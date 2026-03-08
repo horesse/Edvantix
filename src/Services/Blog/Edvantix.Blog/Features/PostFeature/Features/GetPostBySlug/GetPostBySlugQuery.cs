@@ -5,7 +5,7 @@ namespace Edvantix.Blog.Features.PostFeature.Features.GetPostBySlug;
 /// <summary>
 /// Запрос для получения полного содержимого поста по slug.
 /// </summary>
-public sealed record GetPostBySlugQuery(string Slug) : IRequest<PostModel>;
+public sealed record GetPostBySlugQuery(string Slug) : IQuery<PostModel>;
 
 /// <summary>
 /// Обработчик запроса на получение поста по slug.
@@ -13,7 +13,7 @@ public sealed record GetPostBySlugQuery(string Slug) : IRequest<PostModel>;
 /// (проверка осуществляется клиентом или через middleware в будущем).
 /// </summary>
 public sealed class GetPostBySlugQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetPostBySlugQuery, PostModel>
+    : IQueryHandler<GetPostBySlugQuery, PostModel>
 {
     public async ValueTask<PostModel> Handle(
         GetPostBySlugQuery request,

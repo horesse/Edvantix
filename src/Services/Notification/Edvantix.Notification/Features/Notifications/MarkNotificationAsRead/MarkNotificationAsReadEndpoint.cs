@@ -1,5 +1,3 @@
-using Edvantix.Notification.Features.Notifications;
-
 namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
 
 /// <summary>

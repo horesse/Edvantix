@@ -11,14 +11,14 @@ public sealed record AddContactCommand(
     ContactType Type,
     string Value,
     string? Description
-) : IRequest<Guid>;
+) : ICommand<Guid>;
 
 /// <summary>
 /// Обработчик добавления контакта. Авторизация: Owner/Manager.
 /// Контакт добавляется через агрегат Organization и сохраняется единой транзакцией.
 /// </summary>
 public sealed class AddContactCommandHandler(IServiceProvider provider)
-    : IRequestHandler<AddContactCommand, Guid>
+    : ICommandHandler<AddContactCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         AddContactCommand request,

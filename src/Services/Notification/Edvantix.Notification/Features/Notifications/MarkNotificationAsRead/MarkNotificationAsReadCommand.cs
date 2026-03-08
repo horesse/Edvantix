@@ -1,18 +1,20 @@
 namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
 
+using Mediator;
+
 /// <summary>
 /// Команда: пометить одно уведомление как прочитанное.
 /// Проверяет принадлежность уведомления пользователю через <see cref="AccountId"/>.
 /// </summary>
 public sealed record MarkNotificationAsReadCommand(Guid NotificationId, Guid AccountId)
-    : IRequest<bool>;
+    : ICommand<bool>;
 
 /// <summary>
 /// Обработчик команды: ищет уведомление по id+accountId, помечает прочитанным.
 /// Возвращает false если уведомление не найдено (→ 404 в эндпоинте).
 /// </summary>
 public sealed class MarkNotificationAsReadCommandHandler(IServiceProvider provider)
-    : IRequestHandler<MarkNotificationAsReadCommand, bool>
+    : ICommandHandler<MarkNotificationAsReadCommand, bool>
 {
     /// <inheritdoc />
     public async ValueTask<bool> Handle(

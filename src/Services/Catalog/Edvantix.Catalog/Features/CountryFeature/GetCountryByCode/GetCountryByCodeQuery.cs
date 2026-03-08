@@ -5,7 +5,7 @@ namespace Edvantix.Catalog.Features.CountryFeature.GetCountryByCode;
 /// <summary>
 /// Запрос страны по ISO 3166-1 alpha-2 коду. Реализует <see cref="ICachedQuery"/> — результат кэшируется через HybridCache.
 /// </summary>
-public sealed record GetCountryByCodeQuery(string Code) : IRequest<CountryModel>, ICachedQuery
+public sealed record GetCountryByCodeQuery(string Code) : IQuery<CountryModel>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:country:{Code.ToUpperInvariant()}";
@@ -22,7 +22,7 @@ public sealed record GetCountryByCodeQuery(string Code) : IRequest<CountryModel>
 /// Выбрасывает <see cref="NotFoundException"/>, если страна не найдена — преобразуется в HTTP 404.
 /// </summary>
 public sealed class GetCountryByCodeQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetCountryByCodeQuery, CountryModel>
+    : IQueryHandler<GetCountryByCodeQuery, CountryModel>
 {
     /// <inheritdoc/>
     public async ValueTask<CountryModel> Handle(

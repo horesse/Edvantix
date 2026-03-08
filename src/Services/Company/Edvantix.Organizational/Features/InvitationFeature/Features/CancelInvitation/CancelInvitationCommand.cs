@@ -7,13 +7,13 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.CancelInvi
 /// Команда отмены приглашения (Owner/Manager).
 /// </summary>
 public sealed record CancelInvitationCommand(Guid OrganizationId, Guid InvitationId)
-    : IRequest<Unit>;
+    : ICommand<Unit>;
 
 /// <summary>
 /// Обработчик отмены приглашения.
 /// </summary>
 public sealed class CancelInvitationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CancelInvitationCommand, Unit>
+    : ICommandHandler<CancelInvitationCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         CancelInvitationCommand request,

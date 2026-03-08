@@ -4,10 +4,10 @@ namespace Edvantix.Persona.Features.Profiles.UpdateContacts;
 
 /// <summary>PATCH /v1/profile/contacts — обновить контакты профиля.</summary>
 public sealed record UpdateContactsCommand(List<ContactRequest> Contacts)
-    : IRequest<ProfileDetailsModel>;
+    : ICommand<ProfileDetailsModel>;
 
 public sealed class UpdateContactsCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateContactsCommand, ProfileDetailsModel>
+    : ICommandHandler<UpdateContactsCommand, ProfileDetailsModel>
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         UpdateContactsCommand command,

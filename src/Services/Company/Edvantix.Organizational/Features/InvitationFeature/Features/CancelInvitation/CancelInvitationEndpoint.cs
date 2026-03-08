@@ -3,7 +3,8 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.CancelInvi
 /// <summary>
 /// DELETE /organizations/{orgId}/invitations/{invitationId} — отменить приглашение.
 /// </summary>
-public class CancelInvitationEndpoint : IEndpoint<NoContent, CancelInvitationCommand, ISender>
+public sealed class CancelInvitationEndpoint
+    : IEndpoint<NoContent, CancelInvitationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

@@ -1,15 +1,17 @@
 namespace Edvantix.Blog.Features.TagFeature.CreateTag;
 
+using Mediator;
+
 /// <summary>
 /// Команда для создания нового тега блога.
 /// </summary>
-public sealed record CreateTagCommand(string Name, string Slug) : IRequest<Guid>;
+public sealed record CreateTagCommand(string Name, string Slug) : ICommand<Guid>;
 
 /// <summary>
 /// Обработчик команды создания тега.
 /// </summary>
 public sealed class CreateTagCommandHandler(IServiceProvider provider)
-    : IRequestHandler<CreateTagCommand, Guid>
+    : ICommandHandler<CreateTagCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         CreateTagCommand request,

@@ -11,10 +11,10 @@ namespace Edvantix.Persona.Features.Profiles.GetProfile;
 /// </list>
 /// </summary>
 public sealed record GetProfileQuery(Guid? ProfileId = null, Guid? AccountId = null)
-    : IRequest<ProfileViewModel>;
+    : IQuery<ProfileViewModel>;
 
 public sealed class GetProfileQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetProfileQuery, ProfileViewModel>
+    : IQueryHandler<GetProfileQuery, ProfileViewModel>
 {
     public async ValueTask<ProfileViewModel> Handle(GetProfileQuery request, CancellationToken ct)
     {

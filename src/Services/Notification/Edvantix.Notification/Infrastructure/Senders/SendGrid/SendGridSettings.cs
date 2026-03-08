@@ -1,6 +1,4 @@
-﻿using Edvantix.Constants.Core;
-
-namespace Edvantix.Notification.Infrastructure.Senders.SendGrid;
+﻿namespace Edvantix.Notification.Infrastructure.Senders.SendGrid;
 
 [OptionsValidator]
 public sealed partial class SendGridSettings : IValidateOptions<SendGridSettings>

@@ -5,14 +5,14 @@ namespace Edvantix.Blog.Features.PostFeature.Features.LikePost;
 /// <summary>
 /// Команда для постановки лайка на пост авторизованным пользователем.
 /// </summary>
-public sealed record LikePostCommand(Guid PostId) : IRequest;
+public sealed record LikePostCommand(Guid PostId) : ICommand;
 
 /// <summary>
 /// Обработчик команды постановки лайка.
 /// Проверяет уникальность через репозиторий PostLike и атомарно обновляет счётчик на посте.
 /// </summary>
 public sealed class LikePostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<LikePostCommand>
+    : ICommandHandler<LikePostCommand>
 {
     public async ValueTask<Unit> Handle(
         LikePostCommand request,

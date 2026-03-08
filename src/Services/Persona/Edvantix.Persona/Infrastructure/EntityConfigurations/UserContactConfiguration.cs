@@ -2,7 +2,7 @@
 
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 
-public sealed class UserContactConfiguration : IEntityTypeConfiguration<ProfileContact>
+internal sealed class UserContactConfiguration : IEntityTypeConfiguration<ProfileContact>
 {
     public void Configure(EntityTypeBuilder<ProfileContact> builder)
     {

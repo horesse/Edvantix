@@ -5,7 +5,7 @@ namespace Edvantix.Catalog.Features.RegionFeature.GetRegionByCode;
 /// <summary>
 /// Запрос региона по коду. Реализует <see cref="ICachedQuery"/> — результат кэшируется через HybridCache.
 /// </summary>
-public sealed record GetRegionByCodeQuery(string Code) : IRequest<RegionModel>, ICachedQuery
+public sealed record GetRegionByCodeQuery(string Code) : IQuery<RegionModel>, ICachedQuery
 {
     /// <inheritdoc/>
     public string CacheKey => $"catalog:region:{Code.ToUpperInvariant()}";
@@ -22,7 +22,7 @@ public sealed record GetRegionByCodeQuery(string Code) : IRequest<RegionModel>, 
 /// Выбрасывает <see cref="NotFoundException"/>, если регион не найден.
 /// </summary>
 public sealed class GetRegionByCodeQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetRegionByCodeQuery, RegionModel>
+    : IQueryHandler<GetRegionByCodeQuery, RegionModel>
 {
     /// <inheritdoc/>
     public async ValueTask<RegionModel> Handle(

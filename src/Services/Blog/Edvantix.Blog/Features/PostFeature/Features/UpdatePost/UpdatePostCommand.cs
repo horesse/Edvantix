@@ -1,5 +1,7 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.UpdatePost;
 
+using Mediator;
+
 /// <summary>
 /// Команда для обновления содержимого поста.
 /// Доступна только администраторам платформы.
@@ -15,13 +17,13 @@ public sealed record UpdatePostCommand(
     string? CoverImageUrl,
     IReadOnlyList<Guid> CategoryIds,
     IReadOnlyList<Guid> TagIds
-) : IRequest;
+) : ICommand;
 
 /// <summary>
 /// Обработчик команды обновления поста.
 /// </summary>
 public sealed class UpdatePostCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdatePostCommand>
+    : ICommandHandler<UpdatePostCommand>
 {
     public async ValueTask<Unit> Handle(
         UpdatePostCommand request,

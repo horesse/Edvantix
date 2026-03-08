@@ -1,5 +1,7 @@
 namespace Edvantix.Catalog.Features.CountryFeature.UpdateCountry;
 
+using Mediator;
+
 /// <summary>
 /// Команда обновления страны. Требует передачи всех изменяемых полей.
 /// <para>
@@ -13,14 +15,14 @@ public sealed record UpdateCountryCommand(
     string PhonePrefix,
     string CurrencyCode,
     bool? IsActive
-) : IRequest<CountryModel>;
+) : ICommand<CountryModel>;
 
 /// <summary>
 /// Обработчик <see cref="UpdateCountryCommand"/>.
 /// HTTP 404 — если страна не найдена.
 /// </summary>
 public sealed class UpdateCountryCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateCountryCommand, CountryModel>
+    : ICommandHandler<UpdateCountryCommand, CountryModel>
 {
     /// <inheritdoc/>
     public async ValueTask<CountryModel> Handle(

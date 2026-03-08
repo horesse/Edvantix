@@ -8,13 +8,13 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.GetPending
 /// Запрос списка ожидающих приглашений организации.
 /// </summary>
 public sealed record GetPendingInvitationsQuery(Guid OrganizationId)
-    : IRequest<IEnumerable<InvitationModel>>;
+    : IQuery<IEnumerable<InvitationModel>>;
 
 /// <summary>
 /// Обработчик запроса ожидающих приглашений. Доступно Owner/Manager.
 /// </summary>
 public sealed class GetPendingInvitationsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetPendingInvitationsQuery, IEnumerable<InvitationModel>>
+    : IQueryHandler<GetPendingInvitationsQuery, IEnumerable<InvitationModel>>
 {
     public async ValueTask<IEnumerable<InvitationModel>> Handle(
         GetPendingInvitationsQuery request,

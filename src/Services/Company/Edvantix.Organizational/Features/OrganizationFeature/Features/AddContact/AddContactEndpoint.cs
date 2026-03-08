@@ -4,7 +4,7 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.AddConta
 
 public sealed record AddContactRequest(ContactType Type, string Value, string? Description);
 
-public class AddContactEndpoint : IEndpoint<Created<Guid>, AddContactCommand, ISender>
+public sealed class AddContactEndpoint : IEndpoint<Created<Guid>, AddContactCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

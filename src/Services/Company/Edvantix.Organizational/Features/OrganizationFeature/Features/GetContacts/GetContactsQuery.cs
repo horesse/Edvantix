@@ -6,13 +6,13 @@ namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetConta
 /// <summary>
 /// Запрос списка контактов организации.
 /// </summary>
-public sealed record GetContactsQuery(Guid OrganizationId) : IRequest<IEnumerable<ContactModel>>;
+public sealed record GetContactsQuery(Guid OrganizationId) : IQuery<IEnumerable<ContactModel>>;
 
 /// <summary>
 /// Обработчик запроса контактов. Доступно любому участнику организации.
 /// </summary>
 public sealed class GetContactsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetContactsQuery, IEnumerable<ContactModel>>
+    : IQueryHandler<GetContactsQuery, IEnumerable<ContactModel>>
 {
     public async ValueTask<IEnumerable<ContactModel>> Handle(
         GetContactsQuery request,

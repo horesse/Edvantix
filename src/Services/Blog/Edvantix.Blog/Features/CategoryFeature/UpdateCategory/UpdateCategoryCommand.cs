@@ -1,5 +1,7 @@
 namespace Edvantix.Blog.Features.CategoryFeature.UpdateCategory;
 
+using Mediator;
+
 /// <summary>
 /// Команда для обновления категории блога.
 /// </summary>
@@ -8,13 +10,13 @@ public sealed record UpdateCategoryCommand(
     string Name,
     string Slug,
     string? Description
-) : IRequest;
+) : ICommand;
 
 /// <summary>
 /// Обработчик команды обновления категории.
 /// </summary>
 public sealed class UpdateCategoryCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateCategoryCommand>
+    : ICommandHandler<UpdateCategoryCommand>
 {
     public async ValueTask<Unit> Handle(
         UpdateCategoryCommand request,

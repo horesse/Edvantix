@@ -6,7 +6,7 @@ namespace Edvantix.Blog.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности PostLike.
 /// Гарантирует уникальность пары (post_id, user_id) — один лайк на пользователя.
 /// </summary>
-public sealed class PostLikeConfiguration : IEntityTypeConfiguration<PostLike>
+internal sealed class PostLikeConfiguration : IEntityTypeConfiguration<PostLike>
 {
     public void Configure(EntityTypeBuilder<PostLike> builder)
     {

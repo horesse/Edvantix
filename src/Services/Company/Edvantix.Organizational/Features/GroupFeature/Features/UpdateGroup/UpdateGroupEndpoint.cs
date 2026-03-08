@@ -2,7 +2,7 @@ namespace Edvantix.Organizational.Features.GroupFeature.Features.UpdateGroup;
 
 public sealed record UpdateGroupRequest(string Name, string? Description);
 
-public class UpdateGroupEndpoint : IEndpoint<NoContent, UpdateGroupCommand, ISender>
+public sealed class UpdateGroupEndpoint : IEndpoint<NoContent, UpdateGroupCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

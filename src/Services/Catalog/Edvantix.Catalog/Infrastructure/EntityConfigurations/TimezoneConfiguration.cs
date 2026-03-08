@@ -4,7 +4,7 @@ namespace Edvantix.Catalog.Infrastructure.EntityConfigurations;
 /// Конфигурация EF Core для сущности <see cref="Timezone"/>.
 /// Использует натуральный строковый PK Code (IANA TZ Database identifier).
 /// </summary>
-public sealed class TimezoneConfiguration : IEntityTypeConfiguration<Timezone>
+internal sealed class TimezoneConfiguration : IEntityTypeConfiguration<Timezone>
 {
     public void Configure(EntityTypeBuilder<Timezone> builder)
     {

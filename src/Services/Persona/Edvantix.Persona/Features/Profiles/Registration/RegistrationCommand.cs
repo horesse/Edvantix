@@ -6,7 +6,7 @@ using Edvantix.Persona.Infrastructure.Keycloak;
 namespace Edvantix.Persona.Features.Profiles.Registration;
 
 /// <summary>Команда первичной регистрации профиля пользователя. Возвращает внутренний ID профиля.</summary>
-public sealed class RegistrationCommand : IRequest<Guid>
+public sealed class RegistrationCommand : ICommand<Guid>
 {
     public required string FirstName { get; init; }
     public required string LastName { get; init; }
@@ -17,7 +17,7 @@ public sealed class RegistrationCommand : IRequest<Guid>
 }
 
 public sealed class RegistrationCommandHandler(IServiceProvider provider)
-    : IRequestHandler<RegistrationCommand, Guid>
+    : ICommandHandler<RegistrationCommand, Guid>
 {
     public async ValueTask<Guid> Handle(RegistrationCommand request, CancellationToken ct)
     {

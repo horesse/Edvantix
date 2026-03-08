@@ -1,6 +1,4 @@
-﻿using Edvantix.Notification.Domain.Models;
-
-namespace Edvantix.Notification.Infrastructure.Senders.Outbox;
+﻿namespace Edvantix.Notification.Infrastructure.Senders.Outbox;
 
 internal sealed class EmailOutboxService(IOutboxRepository repository, ISender actualSender)
     : ISender

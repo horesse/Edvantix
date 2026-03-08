@@ -18,10 +18,10 @@ public sealed record GetOrganizationGroupsQuery(
     [property: Description("При выборе порядка сортировки результат будет в порядке убывания.")]
     [property: DefaultValue(false)]
         bool IsDescending = false
-) : IRequest<PagedResult<GroupModel>>;
+) : IQuery<PagedResult<GroupModel>>;
 
 public sealed class GetOrganizationGroupsQueryHandler(IServiceProvider provider)
-    : IRequestHandler<GetOrganizationGroupsQuery, PagedResult<GroupModel>>
+    : IQueryHandler<GetOrganizationGroupsQuery, PagedResult<GroupModel>>
 {
     public async ValueTask<PagedResult<GroupModel>> Handle(
         GetOrganizationGroupsQuery request,

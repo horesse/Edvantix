@@ -12,14 +12,14 @@ public sealed record UpdateContactCommand(
     ContactType Type,
     string Value,
     string? Description
-) : IRequest<Unit>;
+) : ICommand<Unit>;
 
 /// <summary>
 /// Обработчик обновления контакта. Авторизация: Owner/Manager.
 /// Обновление выполняется через агрегат Organization.
 /// </summary>
 public sealed class UpdateContactCommandHandler(IServiceProvider provider)
-    : IRequestHandler<UpdateContactCommand, Unit>
+    : ICommandHandler<UpdateContactCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
         UpdateContactCommand request,

@@ -3,11 +3,10 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useState, useCallback, useMemo } from "react";
 import type { I18n } from "../i18n";
 import type { KcContext } from "../KcContext";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { FormInput, PasswordInput } from "@/components/ui/form-input";
 import { AlertCircle } from "lucide-react";
+import { SocialProvidersList, FormSubmitButton } from "@/login/components";
 
 type FormField = {
   value: string;
@@ -263,37 +262,10 @@ export default function Register(
       socialProvidersNode={
         social?.providers !== undefined &&
         social.providers.length !== 0 && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <Separator className="flex-1" />
-              <p className="text-sm text-muted-foreground whitespace-nowrap">
-                {msg("identity-provider-login-label")}
-              </p>
-              <Separator className="flex-1" />
-            </div>
-
-            <div className="grid gap-2">
-              {social.providers.map((p) => (
-                <Button
-                  key={p.alias}
-                  variant="outline"
-                  className="w-full h-10 gap-2"
-                  asChild
-                >
-                  <a id={`social-${p.alias}`} href={p.loginUrl}>
-                    {p.iconClasses && (
-                      <i className={p.iconClasses} aria-hidden="true" />
-                    )}
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: kcSanitize(p.displayName),
-                      }}
-                    />
-                  </a>
-                </Button>
-              ))}
-            </div>
-          </div>
+          <SocialProvidersList
+            providers={social.providers}
+            label={msgStr("identity-provider-login-label")}
+          />
         )
       }
     >
@@ -474,21 +446,11 @@ export default function Register(
           />
         )}
 
-        <Button
-          disabled={isFormSubmitting}
-          className="w-full h-11 text-base font-medium"
-          type="submit"
+        <FormSubmitButton
+          isLoading={isFormSubmitting}
+          label={msgStr("doRegister")}
           id="kc-register"
-        >
-          {isFormSubmitting ? (
-            <span className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-              {msgStr("doRegister")}
-            </span>
-          ) : (
-            msgStr("doRegister")
-          )}
-        </Button>
+        />
 
         <div className="text-center">
           <p className="text-muted-foreground text-sm">

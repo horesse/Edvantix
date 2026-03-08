@@ -1,4 +1,4 @@
-name: BookWorm Clean Up
+name: Edvantix Clean Up
 run-name: Delete untagged package versions
 
 on:

@@ -1,4 +1,4 @@
-﻿name: BookWorm CI (Keycloakify)
+﻿name: Edvantix CI (Keycloakify)
 run-name: Keycloakify CI - ${{ github.event_name }} by ${{ github.actor }}
 
 on:

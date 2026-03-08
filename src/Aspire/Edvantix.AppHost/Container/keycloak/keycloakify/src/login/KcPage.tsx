@@ -7,7 +7,7 @@ import type { KcContext } from "./KcContext";
 import Template from "@/login/kcTemplate.tsx";
 
 const UserProfileFormFields = lazy(
-  () => import("keycloakify/login/UserProfileFormFields")
+  () => import("keycloakify/login/UserProfileFormFields"),
 );
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));

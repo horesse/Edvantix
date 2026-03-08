@@ -235,21 +235,21 @@ function LanguageSelector({
           <span className="text-sm">
             {
               enabledLanguages.find(
-                lang => lang.languageTag === currentLanguage.languageTag
+                (lang) => lang.languageTag === currentLanguage.languageTag,
               )?.label
             }
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        {enabledLanguages.map(lang => (
+        {enabledLanguages.map((lang) => (
           <DropdownMenuItem key={lang.languageTag} asChild>
             <a
               href={lang.href}
               className={clsx(
                 "cursor-pointer flex items-center justify-between",
                 lang.languageTag === currentLanguage.languageTag &&
-                  "font-medium"
+                  "font-medium",
               )}
             >
               <span>{lang.label}</span>
@@ -282,7 +282,7 @@ function MessageAlert({
         message.type === "error" &&
           "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/50 text-red-800 dark:text-red-300",
         message.type === "info" &&
-          "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/50 text-blue-800 dark:text-blue-300"
+          "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/50 text-blue-800 dark:text-blue-300",
       )}
       role="alert"
     >

@@ -1,4 +1,4 @@
-﻿name: BookWorm CI (Frontend)
+﻿name: Edvantix CI (Frontend)
 run-name: Frontend CI - ${{ github.event_name }} by ${{ github.actor }}
 
 on:

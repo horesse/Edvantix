@@ -1,4 +1,4 @@
-﻿name: BookWorm CI (.NET)
+﻿name: Edvantix CI (.NET)
 run-name: .NET CI - ${{ github.event_name }} by ${{ github.actor }}
 
 on:

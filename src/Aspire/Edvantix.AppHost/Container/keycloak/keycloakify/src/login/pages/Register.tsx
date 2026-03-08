@@ -3,11 +3,10 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useState, useCallback, useMemo } from "react";
 import type { I18n } from "../i18n";
 import type { KcContext } from "../KcContext";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { FormInput, PasswordInput } from "@/components/ui/form-input";
 import { AlertCircle } from "lucide-react";
+import { SocialProvidersList, FormSubmitButton } from "@/login/components";
 
 type FormField = {
   value: string;
@@ -25,7 +24,7 @@ type FormState = {
 export default function Register(
   props: Readonly<
     PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>
-  >
+  >,
 ) {
   const { kcContext, i18n, Template, classes } = props;
 
@@ -131,7 +130,7 @@ export default function Register(
       }
       return null;
     },
-    []
+    [],
   );
 
   const createFieldHandler = useCallback(
@@ -142,7 +141,7 @@ export default function Register(
     ) => ({
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           [fieldName]: {
             value,
@@ -154,7 +153,7 @@ export default function Register(
         }));
       },
       onBlur: () => {
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           [fieldName]: {
             ...prev[fieldName],
@@ -164,24 +163,24 @@ export default function Register(
         }));
       },
     }),
-    []
+    [],
   );
 
   const emailHandlers = useMemo(
     () => createFieldHandler("email", validateEmail),
-    [createFieldHandler, validateEmail]
+    [createFieldHandler, validateEmail],
   );
 
   const usernameHandlers = useMemo(
     () => createFieldHandler("username", validateUsername),
-    [createFieldHandler, validateUsername]
+    [createFieldHandler, validateUsername],
   );
 
   const passwordHandlers = useMemo(
     () => ({
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setFormState(prev => {
+        setFormState((prev) => {
           const passwordError = prev.password.touched
             ? validatePassword(value)
             : null;
@@ -204,7 +203,7 @@ export default function Register(
         });
       },
       onBlur: () => {
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           password: {
             ...prev.password,
@@ -214,14 +213,14 @@ export default function Register(
         }));
       },
     }),
-    [validatePassword, validatePasswordConfirm]
+    [validatePassword, validatePasswordConfirm],
   );
 
   const passwordConfirmHandlers = useMemo(
     () => ({
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           passwordConfirm: {
             value,
@@ -233,20 +232,20 @@ export default function Register(
         }));
       },
       onBlur: () => {
-        setFormState(prev => ({
+        setFormState((prev) => ({
           ...prev,
           passwordConfirm: {
             ...prev.passwordConfirm,
             touched: true,
             error: validatePasswordConfirm(
               prev.passwordConfirm.value,
-              prev.password.value
+              prev.password.value,
             ),
           },
         }));
       },
     }),
-    [validatePasswordConfirm]
+    [validatePasswordConfirm],
   );
 
   const hasGlobalError = messagesPerField.exists("global");
@@ -263,37 +262,10 @@ export default function Register(
       socialProvidersNode={
         social?.providers !== undefined &&
         social.providers.length !== 0 && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <Separator className="flex-1" />
-              <p className="text-sm text-muted-foreground whitespace-nowrap">
-                {msg("identity-provider-login-label")}
-              </p>
-              <Separator className="flex-1" />
-            </div>
-
-            <div className="grid gap-2">
-              {social.providers.map(p => (
-                <Button
-                  key={p.alias}
-                  variant="outline"
-                  className="w-full h-10 gap-2"
-                  asChild
-                >
-                  <a id={`social-${p.alias}`} href={p.loginUrl}>
-                    {p.iconClasses && (
-                      <i className={p.iconClasses} aria-hidden="true" />
-                    )}
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: kcSanitize(p.displayName),
-                      }}
-                    />
-                  </a>
-                </Button>
-              ))}
-            </div>
-          </div>
+          <SocialProvidersList
+            providers={social.providers}
+            label={msgStr("identity-provider-login-label")}
+          />
         )
       }
     >
@@ -404,7 +376,7 @@ export default function Register(
               error={
                 messagesPerField.existsError("password-confirm")
                   ? kcSanitize(
-                      messagesPerField.getFirstError("password-confirm")
+                      messagesPerField.getFirstError("password-confirm"),
                     )
                   : formState.passwordConfirm.error
               }
@@ -423,7 +395,9 @@ export default function Register(
                 id="termsAccepted"
                 name="termsAccepted"
                 checked={termsAccepted}
-                onCheckedChange={checked => setTermsAccepted(checked === true)}
+                onCheckedChange={(checked) =>
+                  setTermsAccepted(checked === true)
+                }
                 aria-invalid={messagesPerField.existsError("termsAccepted")}
                 className={
                   messagesPerField.existsError("termsAccepted")
@@ -454,7 +428,7 @@ export default function Register(
                   className="text-sm"
                   dangerouslySetInnerHTML={{
                     __html: kcSanitize(
-                      messagesPerField.getFirstError("termsAccepted")
+                      messagesPerField.getFirstError("termsAccepted"),
                     ),
                   }}
                 />
@@ -472,21 +446,11 @@ export default function Register(
           />
         )}
 
-        <Button
-          disabled={isFormSubmitting}
-          className="w-full h-11 text-base font-medium"
-          type="submit"
+        <FormSubmitButton
+          isLoading={isFormSubmitting}
+          label={msgStr("doRegister")}
           id="kc-register"
-        >
-          {isFormSubmitting ? (
-            <span className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-              {msgStr("doRegister")}
-            </span>
-          ) : (
-            msgStr("doRegister")
-          )}
-        </Button>
+        />
 
         <div className="text-center">
           <p className="text-muted-foreground text-sm">

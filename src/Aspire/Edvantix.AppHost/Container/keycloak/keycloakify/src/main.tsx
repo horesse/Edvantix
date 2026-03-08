@@ -9,5 +9,5 @@ createRoot(document.getElementById("root")!).render(
     ) : (
       <h1>No Keycloak Context</h1>
     )}
-  </StrictMode>
+  </StrictMode>,
 );

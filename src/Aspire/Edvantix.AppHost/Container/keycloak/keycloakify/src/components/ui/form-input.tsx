@@ -5,6 +5,45 @@ import { cn } from "@/lib/utils";
 import { Input } from "./input";
 import { Label } from "./label";
 
+/** Label with optional required asterisk, shared by FormInput and PasswordInput. */
+function FormFieldLabel({
+  htmlFor,
+  required,
+  children,
+}: {
+  htmlFor: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Label
+      htmlFor={htmlFor}
+      className="flex items-center gap-1 text-sm font-medium"
+    >
+      {children}
+      {required && (
+        <span className="text-destructive" aria-hidden="true">
+          *
+        </span>
+      )}
+    </Label>
+  );
+}
+
+/** Inline error message with icon, shared by FormInput and PasswordInput. */
+function FormFieldError({ id, error }: { id: string; error: string }) {
+  return (
+    <div
+      id={id}
+      role="alert"
+      className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
+    >
+      <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" aria-hidden="true" />
+      <span className="text-sm">{error}</span>
+    </div>
+  );
+}
+
 export type FormInputProps = {
   label: string;
   name: string;
@@ -47,17 +86,9 @@ export function FormInput({
 
   return (
     <div className={cn("space-y-2", className)}>
-      <Label
-        htmlFor={id}
-        className="flex items-center gap-1 text-sm font-medium"
-      >
+      <FormFieldLabel htmlFor={id} required={required}>
         {label}
-        {required && (
-          <span className="text-destructive" aria-hidden="true">
-            *
-          </span>
-        )}
-      </Label>
+      </FormFieldLabel>
       <Input
         id={id}
         name={name}
@@ -75,22 +106,10 @@ export function FormInput({
         className={cn(
           "transition-colors duration-200",
           hasError && "border-destructive focus-visible:ring-destructive/50",
-          inputClassName
+          inputClassName,
         )}
       />
-      {hasError && (
-        <div
-          id={`${id}-error`}
-          role="alert"
-          className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
-        >
-          <AlertCircle
-            className="h-4 w-4 mt-0.5 flex-shrink-0"
-            aria-hidden="true"
-          />
-          <span className="text-sm">{error}</span>
-        </div>
-      )}
+      {hasError && <FormFieldError id={`${id}-error`} error={error} />}
     </div>
   );
 }
@@ -137,7 +156,7 @@ const defaultI18n = {
   },
 };
 
-export function calculatePasswordStrength(password: string): {
+function calculatePasswordStrength(password: string): {
   strength: PasswordStrength;
   score: number;
   requirements: {
@@ -191,7 +210,7 @@ export function PasswordInput({
   const hasError = touched && error;
   const [isRevealed, toggleRevealed] = useReducer(
     (state: boolean) => !state,
-    false
+    false,
   );
   const i18n = { ...defaultI18n, ...customI18n };
 
@@ -214,17 +233,9 @@ export function PasswordInput({
 
   return (
     <div className={cn("space-y-2", className)}>
-      <Label
-        htmlFor={id}
-        className="flex items-center gap-1 text-sm font-medium"
-      >
+      <FormFieldLabel htmlFor={id} required={required}>
         {label}
-        {required && (
-          <span className="text-destructive" aria-hidden="true">
-            *
-          </span>
-        )}
-      </Label>
+      </FormFieldLabel>
       <div className="relative">
         <Input
           id={id}
@@ -243,7 +254,7 @@ export function PasswordInput({
           className={cn(
             "pr-10 transition-colors duration-200",
             hasError && "border-destructive focus-visible:ring-destructive/50",
-            inputClassName
+            inputClassName,
           )}
         />
         <button
@@ -254,7 +265,7 @@ export function PasswordInput({
             "flex items-center justify-center rounded-md",
             "text-muted-foreground hover:text-foreground",
             "transition-colors duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           )}
           aria-label={isRevealed ? i18n.hidePassword : i18n.showPassword}
           aria-controls={id}
@@ -280,7 +291,7 @@ export function PasswordInput({
                 strength === "weak" && "text-destructive",
                 strength === "fair" && "text-yellow-600 dark:text-yellow-500",
                 strength === "good" && "text-blue-600 dark:text-blue-500",
-                strength === "strong" && "text-green-600 dark:text-green-500"
+                strength === "strong" && "text-green-600 dark:text-green-500",
               )}
             >
               {i18n.passwordStrength?.[strength]}
@@ -291,7 +302,7 @@ export function PasswordInput({
               className={cn(
                 "h-full rounded-full transition-all duration-300 ease-out",
                 strengthColors[strength],
-                strengthWidths[strength]
+                strengthWidths[strength],
               )}
             />
           </div>
@@ -307,7 +318,7 @@ export function PasswordInput({
                 "flex items-center gap-1.5 transition-colors duration-200",
                 met
                   ? "text-green-600 dark:text-green-500"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {met ? (
@@ -323,19 +334,7 @@ export function PasswordInput({
         </ul>
       )}
 
-      {hasError && (
-        <div
-          id={`${id}-error`}
-          role="alert"
-          className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
-        >
-          <AlertCircle
-            className="h-4 w-4 mt-0.5 flex-shrink-0"
-            aria-hidden="true"
-          />
-          <span className="text-sm">{error}</span>
-        </div>
-      )}
+      {hasError && <FormFieldError id={`${id}-error`} error={error} />}
     </div>
   );
 }

@@ -3,7 +3,8 @@ namespace Edvantix.Organizational.Features.InvitationFeature.Features.DeclineInv
 /// <summary>
 /// POST /invitations/{token}/decline — отклонить приглашение.
 /// </summary>
-public sealed class DeclineInvitationEndpoint : IEndpoint<NoContent, DeclineInvitationCommand, ISender>
+public sealed class DeclineInvitationEndpoint
+    : IEndpoint<NoContent, DeclineInvitationCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

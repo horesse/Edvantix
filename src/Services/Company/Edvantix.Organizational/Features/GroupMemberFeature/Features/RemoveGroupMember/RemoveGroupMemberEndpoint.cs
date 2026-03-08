@@ -1,6 +1,7 @@
 namespace Edvantix.Organizational.Features.GroupMemberFeature.Features.RemoveGroupMember;
 
-public sealed class RemoveGroupMemberEndpoint : IEndpoint<NoContent, RemoveGroupMemberCommand, ISender>
+public sealed class RemoveGroupMemberEndpoint
+    : IEndpoint<NoContent, RemoveGroupMemberCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

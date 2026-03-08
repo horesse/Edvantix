@@ -56,8 +56,7 @@ internal sealed class KeycloakProfileSyncService(
         var keycloak = scope.ServiceProvider.GetRequiredService<IKeycloakAdminService>();
 
         // Читаем только нужные поля — нет смысла загружать весь граф агрегата
-        var profiles = await db
-            .Set<Profile>()
+        var profiles = await db.Set<Profile>()
             .AsNoTracking()
             .Select(p => new { p.Id, p.AccountId })
             .ToListAsync(ct);

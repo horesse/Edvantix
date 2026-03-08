@@ -1,7 +1,9 @@
+using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.CQRS.Command;
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
 using Edvantix.Chassis.EF;
+using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
 using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Security.Extensions;
@@ -80,9 +82,7 @@ internal static class Extensions
 
         builder.AddEmailOutbox();
 
-        services.AddSingleton<IActivityScope, ActivityScope>();
-        services.AddSingleton<CommandHandlerMetrics>();
-        services.AddSingleton<QueryHandlerMetrics>();
+        services.AddActivityScope().AddCommandHandlerMetrics().AddQueryHandlerMetrics();
 
         services.AddVersioning();
         services.AddEndpoints(typeof(INotificationApiMarker));
@@ -96,11 +96,11 @@ internal static class Extensions
             .AddMediator(
                 (MediatorOptions options) => options.ServiceLifetime = ServiceLifetime.Scoped
             )
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            .ApplyActivityBehavior()
+            .ApplyLoggingBehavior()
+            .ApplyValidationBehavior();
 
-        services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+        services.AddKeycloakTokenIntrospection();
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 

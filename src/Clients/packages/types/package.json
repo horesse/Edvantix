@@ -33,7 +33,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "eslint": "^10.0.0",
+    "eslint": "^10.0.3",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*"
   }

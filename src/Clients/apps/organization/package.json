@@ -68,7 +68,7 @@
     "@workspace/utils": "workspace:*",
     "@workspace/validations": "workspace:*",
     "cucumber-html-reporter": "^7.2.0",
-    "eslint": "^10.0.0",
+    "eslint": "^10.0.3",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "happy-dom": "^20.6.1",
     "multiple-cucumber-html-reporter": "^3.10.0",

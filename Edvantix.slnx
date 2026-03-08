@@ -1,8 +1,4 @@
 <Solution>
-  <Folder Name="/Aspire/">
-    <Project Path="src/Aspire/Edvantix.AppHost/Edvantix.AppHost.csproj" />
-    <Project Path="src/Aspire/Edvantix.ServiceDefaults/Edvantix.ServiceDefaults.csproj" />
-  </Folder>
   <Folder Name="/build/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
@@ -19,32 +15,40 @@
   <Folder Name="/build/.config/">
     <File Path=".config/dotnet-tools.json" />
   </Folder>
-  <Folder Name="/BuildingBlocks/">
+  <Folder Name="/src/" />
+  <Folder Name="/src/Aspire/">
+    <Project Path="src/Aspire/Edvantix.AppHost/Edvantix.AppHost.csproj" />
+    <Project Path="src/Aspire/Edvantix.ServiceDefaults/Edvantix.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/">
     <Project Path="src/BuildingBlocks/Edvantix.Chassis/Edvantix.Chassis.csproj" />
     <Project Path="src/BuildingBlocks/Edvantix.Constants/Edvantix.Constants.csproj" />
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
-  <Folder Name="/Services/" />
-  <Folder Name="/Services/Catalog/">
-    <Project Path="src/Services/Catalog/Edvantix.Catalog/Edvantix.Catalog.csproj" />
-  </Folder>
-  <Folder Name="/Services/Blog/">
+  <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/Blog/">
     <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />
   </Folder>
-  <Folder Name="/Services/Notification/">
+  <Folder Name="/src/Services/Catalog/">
+    <Project Path="src/Services/Catalog/Edvantix.Catalog/Edvantix.Catalog.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/Notification/">
     <Project Path="src/Services/Notification/Edvantix.Notification/Edvantix.Notification.csproj" />
   </Folder>
-  <Folder Name="/Services/Organizational/">
+  <Folder Name="/src/Services/Organizational/">
     <Project Path="src/Services/Company/Edvantix.Organizational/Edvantix.Organizational.csproj" />
   </Folder>
-  <Folder Name="/Services/Persona/">
+  <Folder Name="/src/Services/Persona/">
     <Project Path="src/Services/Persona/Edvantix.Persona/Edvantix.Persona.csproj" />
   </Folder>
-  <Folder Name="/Services/Scheduler/" />
-  <Folder Name="/Services/Scheduler/Scheduler/">
+  <Folder Name="/src/Services/Scheduler/" />
+  <Folder Name="/src/Services/Scheduler/Scheduler/">
     <Project Path="src/Services/Scheduler/Edvantix.Scheduler/Edvantix.Scheduler.csproj" />
   </Folder>
-  <Folder Name="/Services/Subscription/">
+  <Folder Name="/src/Services/Subscription/">
     <Project Path="src/Services/Subscriptions/Edvantix.Subscriptions/Edvantix.Subscriptions.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Edvantix.ArchTests/Edvantix.ArchTests.csproj" />
   </Folder>
 </Solution>

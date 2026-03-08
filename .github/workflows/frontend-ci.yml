@@ -1,4 +1,4 @@
-﻿name: Edvantix CI (Frontend)
+﻿name: BookWorm CI (Frontend)
 run-name: Frontend CI - ${{ github.event_name }} by ${{ github.actor }}
 
 on:
@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 env:
-  PNPM_VERSION: "10.27.0"
+  RETENTION_DAYS: ${{ github.event_name == 'pull_request' && 1 || 3 }}
 
 permissions:
   checks: write
@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   lint-build-test:
-    name: Lint & Build
+    name: Lint, Build & Test
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
@@ -51,7 +51,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: ${{ env.PNPM_VERSION }}
+          package_json_file: src/Clients/package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -61,10 +61,45 @@ jobs:
           cache-dependency-path: "src/Clients/pnpm-lock.yaml"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Lint
         run: pnpm lint
 
       - name: Build
         run: pnpm build
+
+      - name: Test
+        run: pnpm test
+
+      - name: Generate Allure Reports
+        if: always()
+        run: pnpm turbo allure:generate --continue
+
+      - name: Upload Allure Report (organization)
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: allure-report-organization
+          path: src/Clients/apps/organization/allure-report/
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Upload Allure Report (blog)
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: allure-report-blog
+          path: src/Clients/apps/blog/allure-report/
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Post Allure Summary (organization)
+        uses: allure-framework/allure-action@v0
+        with:
+          report-directory: src/Clients/apps/organization/allure-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post Allure Summary (blog)
+        uses: allure-framework/allure-action@v0
+        with:
+          report-directory: src/Clients/apps/blog/allure-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}

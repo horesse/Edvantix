@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
-      tailwindcss(),
+    tailwindcss(),
     keycloakify({
       themeName: "edvantix",
       themeVersion: "1.0.0",

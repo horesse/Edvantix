@@ -1,5 +1,4 @@
 using Edvantix.Organizational.Features.GroupFeature.Models;
-using Edvantix.Organizational.Grpc.Services;
 using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Organizational.Features.GroupFeature.Features.GetMyGroups;
@@ -27,7 +26,7 @@ public sealed class GetMyGroupsQueryHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileId = await provider.GetProfileId(cancellationToken);
+        var profileId = provider.GetProfileIdOrError();
 
         var spec = new GroupMemberSpecification(profileId);
 

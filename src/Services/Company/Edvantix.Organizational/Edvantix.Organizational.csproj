@@ -12,12 +12,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf
-      Include="..\..\Persona\Edvantix.Persona\Grpc\Protos\profile\v1\profile.proto"
-      Link="Grpc\Protos\profile\v1\profile.proto"
-      GrpcServices="Client"
-    />
-  </ItemGroup>
 </Project>

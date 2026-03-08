@@ -108,7 +108,5 @@ public static class Extensions
         services.AddMapper(typeof(IOrganizationalApiMarker));
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
-
-        builder.AddGrpcServices();
     }
 }

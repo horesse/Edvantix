@@ -1,5 +1,3 @@
-using Edvantix.Organizational.Grpc.Services;
-
 namespace Edvantix.Organizational.Infrastructure.Services;
 
 /// <summary>
@@ -14,7 +12,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileId = await provider.GetProfileId(cancellationToken);
+        var profileId = provider.GetProfileIdOrError();
 
         var spec = new OrganizationMemberSpecification(profileId, organizationId);
         var memberRepo = provider.GetRequiredService<IOrganizationMemberRepository>();
@@ -46,7 +44,7 @@ public sealed class OrganizationAuthorizationService(IServiceProvider provider)
     /// <inheritdoc />
     public async Task RequireGroupManagementAsync(Guid groupId, CancellationToken cancellationToken)
     {
-        var profileId = await provider.GetProfileId(cancellationToken);
+        var profileId = provider.GetProfileIdOrError();
 
         // Получить группу для определения организации
         var groupRepo = provider.GetRequiredService<IGroupRepository>();

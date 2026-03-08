@@ -1,6 +1,4 @@
-using Edvantix.Chassis.Utilities;
 using Edvantix.Organizational.Features.OrganizationFeature.Models;
-using Edvantix.Organizational.Grpc.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.GetMyOrganizations;
 
@@ -15,7 +13,7 @@ public sealed class GetMyOrganizationsQueryHandler(IServiceProvider provider)
     )
     {
         // TODO: normal exception
-        var profileId = provider.TryGetProfileId() ?? throw new Exception();
+        var profileId = provider.GetProfileIdOrError();
 
         // Получаем все членства профиля (без фильтра по организации)
         var memberSpec = new OrganizationMemberSpecification(profileId, (Guid?)null);

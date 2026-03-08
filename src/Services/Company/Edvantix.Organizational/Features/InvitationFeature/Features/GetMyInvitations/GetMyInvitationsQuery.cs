@@ -1,6 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Features.InvitationFeature.Models;
-using Edvantix.Organizational.Grpc.Services;
 
 namespace Edvantix.Organizational.Features.InvitationFeature.Features.GetMyInvitations;
 
@@ -20,7 +19,7 @@ public sealed class GetMyInvitationsQueryHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileId = await provider.GetProfileId(cancellationToken);
+        var profileId = provider.GetProfileIdOrError();
 
         // Получаем все ожидающие приглашения для профиля (без фильтра по организации)
         var spec = new InvitationSpecification(profileId: profileId, organizationId: null);

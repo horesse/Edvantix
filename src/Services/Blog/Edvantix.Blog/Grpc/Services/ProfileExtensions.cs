@@ -17,11 +17,10 @@ public static class ProfileExtensions
         /// <param name="cancellationToken">Токен отмены операции.</param>
         public async Task<Guid> GetProfileId(CancellationToken cancellationToken)
         {
-            var userId = provider.GetUserId();
-
+            var userId = provider.GetProfileIdOrError();
             var profileService = provider.GetRequiredService<IProfileService>();
 
-            var profile = await profileService.GetProfileByAccountId(userId, cancellationToken);
+            var profile = await profileService.GetProfileById(userId, cancellationToken);
 
             return profile is null
                 ? throw new NotFoundException("Профиль не найден.")

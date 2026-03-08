@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Mapper;
 using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
 using Edvantix.Organizational.Features.LegalFormFeature.Models;
 

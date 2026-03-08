@@ -1,7 +1,5 @@
-using Edvantix.Chassis.Mapper;
 using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
 using Edvantix.Organizational.Features.LegalFormFeature.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Edvantix.Organizational.Features.LegalFormFeature.Features.GetLegalForms;
 

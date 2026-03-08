@@ -12,6 +12,7 @@ using Edvantix.Persona.Configurations;
 using Edvantix.Persona.Features.Profiles.UpdateAvatar;
 using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 using Edvantix.Persona.Infrastructure.EventServices;
+using Edvantix.Persona.Infrastructure.Keycloak;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -135,5 +136,7 @@ public static class Extensions
         );
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+
+        services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
     }
 }

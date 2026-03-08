@@ -33,4 +33,16 @@ public static class AuthorizeExtensions
 
         return Guard.Against.NotAuthenticated(login);
     }
+
+    /// <summary>
+    /// Извлекает <c>profile_id</c> из claims.
+    /// Клейм появляется только после регистрации профиля в Persona-сервисе.
+    /// </summary>
+    public static Guid? TryGetProfileId(this IServiceProvider provider)
+    {
+        var claimsPrincipal = provider.GetService<ClaimsPrincipal>();
+        var value = claimsPrincipal?.GetClaimValue(KeycloakClaimTypes.ProfileId);
+
+        return Guid.TryParse(value, out var id) ? id : null;
+    }
 }

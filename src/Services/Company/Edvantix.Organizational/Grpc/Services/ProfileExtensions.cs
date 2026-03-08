@@ -1,4 +1,6 @@
-﻿using Edvantix.Chassis.Utilities;
+﻿using Edvantix.Chassis.Security.Extensions;
+using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Chassis.Utilities;
 
 namespace Edvantix.Organizational.Grpc.Services;
 

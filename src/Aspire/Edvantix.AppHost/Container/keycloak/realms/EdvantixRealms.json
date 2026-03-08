@@ -616,6 +616,9 @@
       "clientRoles": {
         "${CLIENT_PERSONA_ID}": [
           "uma_protection"
+        ],
+        "realm-management": [
+          "manage-users"
         ]
       },
       "notBefore": 0,
@@ -2371,6 +2374,22 @@
             "claim.name": "birthdate",
             "jsonType.label": "String"
           }
+        },
+        {
+          "id": "3a4b5c6d-7e8f-4a1b-2c3d-4e5f6a7b8c9d",
+          "name": "profile_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "user.attribute": "profileId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "profile_id",
+            "jsonType.label": "String"
+          }
         }
       ]
     },
@@ -2640,6 +2659,19 @@
             "oidc-usermodel-property-mapper",
             "oidc-usermodel-attribute-mapper",
             "saml-user-attribute-mapper"
+          ]
+        }
+      }
+    ],
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "id": "a1f2e3d4-b5c6-4d7e-8f9a-0b1c2d3e4f5a",
+        "name": "declarative-user-profile",
+        "providerId": "declarative-user-profile",
+        "subComponents": {},
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{},\"length\":{\"max\":255}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"annotations\":{\"inputType\":\"hidden\"},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"annotations\":{\"inputType\":\"hidden\"},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"profileId\",\"displayName\":\"Profile ID\",\"validations\":{\"length\":{\"max\":36}},\"annotations\":{\"inputType\":\"hidden\"},\"permissions\":{\"view\":[\"admin\"],\"edit\":[\"admin\"]},\"multivalued\":false}],\"groups\":[]}"
           ]
         }
       }

@@ -23,20 +23,7 @@ public sealed class ProfileService(IProfileRepository profileRepo, ILogger<Profi
     {
         try
         {
-            ISpecification<Profile> spec = request.IdentifierCase switch
-            {
-                GetProfileRequest.IdentifierOneofCase.ProfileId => new ProfileByIdSpec(
-                    Guid.Parse(request.ProfileId)
-                ),
-
-                GetProfileRequest.IdentifierOneofCase.AccountId => BuildAccountIdSpec(
-                    request.AccountId
-                ),
-
-                _ => throw new RpcException(
-                    new Status(StatusCode.InvalidArgument, "Не задан идентификатор профиля.")
-                ),
-            };
+            ISpecification<Profile> spec = new ProfileByIdSpec(Guid.Parse(request.ProfileId));
 
             var profile = await profileRepo.FindAsync(spec, context.CancellationToken);
 
@@ -65,15 +52,5 @@ public sealed class ProfileService(IProfileRepository profileRepo, ILogger<Profi
             logger.LogError(ex, "gRPC GetProfile: внутренняя ошибка. Request: {Request}", request);
             throw new RpcException(new Status(StatusCode.Internal, "Внутренняя ошибка сервера."));
         }
-    }
-
-    private static ProfileByAccountIdSpec BuildAccountIdSpec(string rawAccountId)
-    {
-        if (!Guid.TryParse(rawAccountId, out var accountId))
-            throw new RpcException(
-                new Status(StatusCode.InvalidArgument, "Некорректный формат AccountId.")
-            );
-
-        return new ProfileByAccountIdSpec(accountId);
     }
 }

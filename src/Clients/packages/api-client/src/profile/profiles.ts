@@ -1,11 +1,11 @@
 ﻿import type {
-  ContactRequest,
-  EducationRequest,
-  EmploymentHistoryRequest,
   OwnProfile,
   OwnProfileDetails,
   RegisterProfileRequest,
-  UpdateProfileRequest,
+  UpdateContactsRequest,
+  UpdateEducationRequest,
+  UpdateEmploymentRequest,
+  UpdatePersonalInfoRequest,
 } from "@workspace/types/profile";
 
 import { apiClient } from "../client";
@@ -32,30 +32,54 @@ class ProfileApiClient {
     return response.data;
   }
 
-  public async updateProfile(
-    request: UpdateProfileRequest,
-  ): Promise<OwnProfile> {
+  public async uploadAvatar(avatar: File): Promise<OwnProfileDetails> {
     const formData = new FormData();
-    formData.append("firstName", request.firstName);
-    formData.append("lastName", request.lastName);
-    formData.append("birthDate", request.birthDate);
+    formData.append("avatar", avatar);
 
-    if (request.middleName) {
-      formData.append("middleName", request.middleName);
-    }
-
-    appendContacts(formData, request.contacts);
-    appendEducations(formData, request.educations);
-    appendEmploymentHistories(formData, request.employmentHistories);
-
-    if (request.avatar) {
-      formData.append("avatar", request.avatar);
-    }
-
-    const response = await this.client.put<OwnProfile>(
-      `/persona/api/v1/profile`,
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/avatar`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } },
+    );
+    return response.data;
+  }
+
+  public async updatePersonalInfo(
+    request: UpdatePersonalInfoRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/personal-info`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateContacts(
+    request: UpdateContactsRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/contacts`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateEducation(
+    request: UpdateEducationRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/education`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateEmployment(
+    request: UpdateEmploymentRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/employment`,
+      request,
     );
     return response.data;
   }
@@ -87,47 +111,3 @@ class ProfileApiClient {
 }
 
 export default new ProfileApiClient();
-
-function appendContacts(formData: FormData, contacts: ContactRequest[]) {
-  contacts.forEach((contact, index) => {
-    const prefix = `contacts[${index}]`;
-    formData.append(`${prefix}.type`, String(contact.type));
-    formData.append(`${prefix}.value`, contact.value);
-    if (contact.description) {
-      formData.append(`${prefix}.description`, contact.description);
-    }
-  });
-}
-
-function appendEducations(formData: FormData, educations: EducationRequest[]) {
-  educations.forEach((education, index) => {
-    const prefix = `educations[${index}]`;
-    formData.append(`${prefix}.dateStart`, education.dateStart);
-    formData.append(`${prefix}.institution`, education.institution);
-    formData.append(`${prefix}.level`, String(education.level));
-    if (education.specialty) {
-      formData.append(`${prefix}.specialty`, education.specialty);
-    }
-    if (education.dateEnd) {
-      formData.append(`${prefix}.dateEnd`, education.dateEnd);
-    }
-  });
-}
-
-function appendEmploymentHistories(
-  formData: FormData,
-  employmentHistories: EmploymentHistoryRequest[],
-) {
-  employmentHistories.forEach((employment, index) => {
-    const prefix = `employmentHistories[${index}]`;
-    formData.append(`${prefix}.workplace`, employment.workplace);
-    formData.append(`${prefix}.position`, employment.position);
-    formData.append(`${prefix}.startDate`, employment.startDate);
-    if (employment.endDate) {
-      formData.append(`${prefix}.endDate`, employment.endDate);
-    }
-    if (employment.description) {
-      formData.append(`${prefix}.description`, employment.description);
-    }
-  });
-}

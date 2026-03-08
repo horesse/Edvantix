@@ -1,5 +1,4 @@
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Grpc.Services;
 
 namespace Edvantix.Organizational.Features.InvitationFeature.Features.DeclineInvitation;
 
@@ -19,7 +18,7 @@ public sealed class DeclineInvitationCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileId = await provider.GetProfileId(cancellationToken);
+        var profileId = provider.GetProfileIdOrError();
 
         var invitationRepo = provider.GetRequiredService<IInvitationRepository>();
         var spec = new InvitationSpecification(request.Token);

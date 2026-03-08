@@ -9,9 +9,10 @@ using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Persona.Configurations;
-using Edvantix.Persona.Features.Profiles.UpdateOwnProfile;
+using Edvantix.Persona.Features.Profiles.UpdateAvatar;
 using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 using Edvantix.Persona.Infrastructure.EventServices;
+using Edvantix.Persona.Infrastructure.Keycloak;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -66,8 +67,8 @@ public static class Extensions
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-            .AddScoped<UpdateOwnProfilePreProcessor>()
-            .AddScoped<UpdateOwnProfilePostProcessor>()
+            .AddScoped<UpdateAvatarPreProcessor>()
+            .AddScoped<UpdateAvatarPostProcessor>()
             .AddScoped<UpdateProfileByAdminPreProcessor>()
             .AddScoped<UpdateProfileByAdminPostProcessor>();
 
@@ -135,5 +136,12 @@ public static class Extensions
         );
 
         services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+
+        services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
+
+        if (builder.Environment.IsDevelopment())
+        {
+            services.AddHostedService<KeycloakProfileSyncService>();
+        }
     }
 }

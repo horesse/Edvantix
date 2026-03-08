@@ -55,11 +55,12 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
-var profileApi = builder
+var personaApi = builder
     .AddProject<Edvantix_Persona>(Services.Persona)
     .WithReference(profileDb)
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)
+    .WaitFor(keycloak)
     .WithContainerRegistry(registry)
     .WithReference(profileContainer)
     .WaitFor(profileContainer)
@@ -78,8 +79,8 @@ var organizationalApi = builder
     .WaitFor(organizationDb)
     .WithKeycloak(keycloak)
     .WithContainerRegistry(registry)
-    .WithReference(profileApi)
-    .WaitFor(profileApi)
+    .WithReference(personaApi)
+    .WaitFor(personaApi)
     .WithFriendlyUrls();
 
 var subscriptionsApi = builder
@@ -96,8 +97,8 @@ var blogApi = builder
     .WaitFor(blogDb)
     .WithKeycloak(keycloak)
     .WithContainerRegistry(registry)
-    .WithReference(profileApi)
-    .WaitFor(profileApi)
+    .WithReference(personaApi)
+    .WaitFor(personaApi)
     .WithReference(redis)
     .WaitFor(redis)
     .WithFriendlyUrls();
@@ -126,7 +127,7 @@ var catalogApi = builder
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(organizationalApi, true)
-    .WithService(profileApi, true)
+    .WithService(personaApi, true)
     .WithService(subscriptionsApi, true)
     .WithService(blogApi, true)
     .WithService(notificationApi, true)
@@ -182,7 +183,7 @@ if (builder.ExecutionContext.IsRunMode)
     builder
         .AddScalar(keycloak)
         .WithOpenAPI(organizationalApi)
-        .WithOpenAPI(profileApi)
+        .WithOpenAPI(personaApi)
         .WithOpenAPI(subscriptionsApi)
         .WithOpenAPI(blogApi)
         .WithOpenAPI(notificationApi)

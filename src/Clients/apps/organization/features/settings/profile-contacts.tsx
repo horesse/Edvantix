@@ -1,11 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Globe, Mail, MoreHorizontal, Phone, Trash2 } from "lucide-react";
+import { Globe, Mail, MoreHorizontal, MoreVertical, Phone, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { ContactType } from "@workspace/types/profile";
-import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
@@ -15,6 +14,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -31,22 +36,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
+import { cn } from "@workspace/ui/lib/utils";
 import { contactSchema } from "@workspace/validations/profile";
 
 import type { ContactInput } from "./profile-settings-schema";
 
-const contactTypeLabels: Record<ContactType, string> = {
-  [ContactType.Email]: "Email",
-  [ContactType.Phone]: "Телефон",
-  [ContactType.Uri]: "Веб-сайт",
-  [ContactType.Other]: "Другое",
-};
-
-const contactTypeIcons: Record<ContactType, React.ReactNode> = {
-  [ContactType.Email]: <Mail className="size-3.5" />,
-  [ContactType.Phone]: <Phone className="size-3.5" />,
-  [ContactType.Uri]: <Globe className="size-3.5" />,
-  [ContactType.Other]: <MoreHorizontal className="size-3.5" />,
+const contactTypeMeta: Record<
+  ContactType,
+  { label: string; icon: typeof Mail; color: string }
+> = {
+  [ContactType.Email]: {
+    label: "Email",
+    icon: Mail,
+    color: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  },
+  [ContactType.Phone]: {
+    label: "Телефон",
+    icon: Phone,
+    color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  },
+  [ContactType.Uri]: {
+    label: "Веб-сайт",
+    icon: Globe,
+    color: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+  },
+  [ContactType.Other]: {
+    label: "Другое",
+    icon: MoreHorizontal,
+    color: "bg-muted text-muted-foreground",
+  },
 };
 
 export function ContactRow({
@@ -56,33 +74,48 @@ export function ContactRow({
   field: ContactInput & { id: string };
   onRemove: () => void;
 }) {
+  const meta = contactTypeMeta[field.type];
+  const Icon = meta.icon;
+
   return (
-    <div className="group flex items-center gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-muted/30">
-      <span className="shrink-0 text-muted-foreground">
-        {contactTypeIcons[field.type]}
-      </span>
-      <div className="min-w-0 flex-1">
-        <span className="truncate text-sm">{field.value}</span>
-        {field.description && (
-          <p className="truncate text-xs text-muted-foreground/60">
-            {field.description}
-          </p>
+    <div className="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/40">
+      <span
+        className={cn(
+          "flex size-8 shrink-0 items-center justify-center rounded-lg",
+          meta.color,
         )}
+      >
+        <Icon className="size-3.5" />
+      </span>
+
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium">{field.value}</p>
+        <p className="truncate text-xs text-muted-foreground">
+          {meta.label}
+          {field.description ? ` · ${field.description}` : ""}
+        </p>
       </div>
-      <Badge
-        variant="secondary"
-        className="shrink-0 rounded-sm px-1.5 py-0 text-[10px] font-normal"
-      >
-        {contactTypeLabels[field.type]}
-      </Badge>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="ml-0.5 shrink-0 text-transparent transition-colors group-hover:text-muted-foreground/40 hover:!text-destructive"
-        aria-label="Удалить контакт"
-      >
-        <Trash2 className="size-3.5" />
-      </button>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/50 opacity-0 transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100"
+            aria-label="Действия"
+          >
+            <MoreVertical className="size-3.5" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-36">
+          <DropdownMenuItem
+            onClick={onRemove}
+            className="text-destructive focus:text-destructive"
+          >
+            <Trash2 className="size-3.5" />
+            Удалить
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
@@ -135,9 +168,12 @@ export function ContactDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.entries(contactTypeLabels).map(([key, label]) => (
+                      {Object.entries(contactTypeMeta).map(([key, meta]) => (
                         <SelectItem key={key} value={key}>
-                          {label}
+                          <span className="flex items-center gap-2">
+                            <meta.icon className="size-3.5 text-muted-foreground" />
+                            {meta.label}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectContent>

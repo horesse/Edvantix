@@ -37,6 +37,8 @@ import {
   registrationSchema,
 } from "@workspace/validations/profile";
 
+import { forceTokenRefresh } from "@/lib/auth-client";
+import { AUTH } from "@/lib/constants";
 import { genderOptions } from "@/lib/profile-options";
 
 export default function ProfileRegisterPage() {
@@ -46,7 +48,15 @@ export default function ProfileRegisterPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const registerMutation = useRegisterProfile({
-    onSuccess: () => {
+    onSuccess: async () => {
+      // После регистрации профиля Keycloak записал claim `profile_id` в атрибуты
+      // пользователя. Принудительно обновляем токен через /refresh-token, который
+      // всегда обменивает refresh token на новый access token у Keycloak — в отличие
+      // от getAccessToken, возвращающего кэш пока срок действия не истёк.
+      const token = await forceTokenRefresh(AUTH.PROVIDER);
+      if (token) {
+        window.localStorage.setItem("access_token", token);
+      }
       router.push("/");
     },
     onError: (error) => {

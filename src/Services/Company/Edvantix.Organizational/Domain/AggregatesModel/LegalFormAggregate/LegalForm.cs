@@ -1,5 +1,3 @@
-using Edvantix.SharedKernel.SeedWork;
-
 namespace Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
 
 /// <summary>

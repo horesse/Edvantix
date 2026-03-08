@@ -68,17 +68,6 @@ export type OwnProfileDetails = {
   educations: Education[];
 };
 
-export type UpdateProfileRequest = {
-  birthDate: string;
-  firstName: string;
-  lastName: string;
-  middleName?: string | null;
-  contacts: ContactRequest[];
-  educations: EducationRequest[];
-  employmentHistories: EmploymentHistoryRequest[];
-  avatar?: File | null;
-};
-
 export type ContactRequest = {
   type: ContactType;
   value: string;
@@ -99,6 +88,25 @@ export type EducationRequest = {
   level: EducationLevel;
   specialty?: string | null;
   dateEnd?: string | null;
+};
+
+export type UpdatePersonalInfoRequest = {
+  firstName: string;
+  lastName: string;
+  middleName?: string | null;
+  birthDate: string;
+};
+
+export type UpdateContactsRequest = {
+  contacts: ContactRequest[];
+};
+
+export type UpdateEducationRequest = {
+  educations: EducationRequest[];
+};
+
+export type UpdateEmploymentRequest = {
+  employmentHistories: EmploymentHistoryRequest[];
 };
 
 export type RegisterProfileRequest = {

@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.Helpers;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;

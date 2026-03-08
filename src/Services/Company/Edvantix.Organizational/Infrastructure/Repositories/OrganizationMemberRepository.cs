@@ -1,5 +1,4 @@
 using Edvantix.Chassis.Specification.Evaluators;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
 

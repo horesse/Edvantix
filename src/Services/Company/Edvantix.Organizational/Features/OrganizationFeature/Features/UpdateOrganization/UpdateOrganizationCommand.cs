@@ -1,4 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Infrastructure.Services;
 
 namespace Edvantix.Organizational.Features.OrganizationFeature.Features.UpdateOrganization;

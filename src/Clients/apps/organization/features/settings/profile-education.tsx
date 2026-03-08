@@ -1,11 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2 } from "lucide-react";
+import { MoreVertical, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { EducationLevel } from "@workspace/types/profile";
-import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
@@ -15,6 +14,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -52,46 +57,72 @@ const educationLevelLabels: Record<EducationLevel, string> = {
 export function EducationCard({
   field,
   onRemove,
+  isLast,
 }: {
   field: EducationInput & { id: string };
   onRemove: () => void;
+  isLast?: boolean;
 }) {
   const levelLabel = field.level
     ? (educationLevelLabels[field.level as EducationLevel] ?? "Не указано")
     : "Не указано";
 
   return (
-    <div className="group relative rounded-lg border border-border/40 p-3.5 transition-colors hover:bg-muted/20">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-sm font-medium">{field.institution}</p>
-          {field.specialty && (
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              {field.specialty}
+    <div className="group relative flex gap-3">
+      {/* Timeline line + dot */}
+      <div className="flex flex-col items-center pt-1.5">
+        <div className="size-2 shrink-0 rounded-full bg-primary/70 ring-2 ring-background" />
+        {!isLast && <div className="mt-1 w-px flex-1 bg-border/60" />}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 pb-6">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-sm font-medium leading-tight">
+              {field.institution}
             </p>
-          )}
-          <div className="mt-1.5 flex flex-wrap items-center gap-2">
-            <Badge
-              variant="secondary"
-              className="rounded-sm px-1.5 py-0 text-[10px] font-normal"
-            >
-              {levelLabel}
-            </Badge>
-            {field.dateStart && (
-              <span className="text-xs text-muted-foreground/60">
-                {formatDateRange(field.dateStart, field.dateEnd || null)}
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <span className="text-xs font-medium text-primary/80">
+                {levelLabel}
               </span>
+              {field.specialty && (
+                <>
+                  <span className="text-muted-foreground/30">·</span>
+                  <span className="text-xs text-muted-foreground">
+                    {field.specialty}
+                  </span>
+                </>
+              )}
+            </div>
+            {field.dateStart && (
+              <p className="mt-1 text-xs text-muted-foreground/60">
+                {formatDateRange(field.dateStart, field.dateEnd || null)}
+              </p>
             )}
           </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/50 opacity-0 transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100"
+                aria-label="Действия"
+              >
+                <MoreVertical className="size-3.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-36">
+              <DropdownMenuItem
+                onClick={onRemove}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="size-3.5" />
+                Удалить
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <button
-          type="button"
-          onClick={onRemove}
-          className="shrink-0 text-transparent transition-colors group-hover:text-muted-foreground/40 hover:!text-destructive"
-          aria-label="Удалить образование"
-        >
-          <Trash2 className="size-3.5" />
-        </button>
       </div>
     </div>
   );

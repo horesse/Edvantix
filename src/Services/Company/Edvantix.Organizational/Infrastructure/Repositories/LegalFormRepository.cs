@@ -1,6 +1,4 @@
-using Edvantix.Chassis.Repository;
 using Edvantix.Organizational.Domain.AggregatesModel.LegalFormAggregate;
-using Microsoft.EntityFrameworkCore;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
 

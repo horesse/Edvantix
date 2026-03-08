@@ -24,5 +24,7 @@ public sealed class UserContactConfiguration : IEntityTypeConfiguration<ProfileC
             c.Type,
             c.Value,
         });
+
+        builder.HasQueryFilter(c => !c.Profile.IsDeleted);
     }
 }

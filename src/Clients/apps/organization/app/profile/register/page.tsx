@@ -37,6 +37,8 @@ import {
   registrationSchema,
 } from "@workspace/validations/profile";
 
+import { getAccessToken } from "@/lib/auth-client";
+import { AUTH } from "@/lib/constants";
 import { genderOptions } from "@/lib/profile-options";
 
 export default function ProfileRegisterPage() {
@@ -46,7 +48,15 @@ export default function ProfileRegisterPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const registerMutation = useRegisterProfile({
-    onSuccess: () => {
+    onSuccess: async () => {
+      // После регистрации профиля Keycloak добавил claim `profile_id` в атрибуты
+      // пользователя. Принудительно обновляем токен, чтобы новый claim сразу
+      // попал в access token и был доступен во всех микросервисах.
+      const result = await getAccessToken({ providerId: AUTH.PROVIDER });
+      const token = result.data?.accessToken ?? null;
+      if (token) {
+        window.localStorage.setItem("access_token", token);
+      }
       router.push("/");
     },
     onError: (error) => {

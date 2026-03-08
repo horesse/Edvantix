@@ -40,12 +40,22 @@ public static class Extensions
                         );
                 }
             )
+            .AddPolicy(
+                Authorization.Policies.ProfileRequired,
+                policy =>
+                    policy.RequireAuthenticatedUser().RequireProfileRegistered()
+            )
             .SetDefaultPolicy(
                 new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .RequireScope($"{AspireServices.Organizational}_{Authorization.Actions.Read}")
+                    .RequireProfileRegistered()
                     .Build()
             );
+
+        // Регистрируем обработчик ProfileRegisteredRequirement и кастомный
+        // IAuthorizationMiddlewareResultHandler для возврата PROFILE_NOT_REGISTERED.
+        services.AddProfileRequiredServices();
 
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();

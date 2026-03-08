@@ -89,6 +89,10 @@ export default class ApiClient {
 
     // On 401: attempt a silent token refresh and retry the original request once.
     // The refresher (fetchFreshToken in AuthGuard) handles persisting the new token.
+    //
+    // On 403 PROFILE_NOT_REGISTERED: the user is authenticated but their token
+    // doesn't yet include the `profile_id` claim (stale token case). Refresh and
+    // retry once. If the retry still fails, redirect to the registration page.
     instance.interceptors.response.use(
       (response) => response,
       async (error) => {
@@ -114,6 +118,39 @@ export default class ApiClient {
             }
           } catch (refreshError) {
             console.error("[api-client] Token refresh failed:", refreshError);
+          }
+        }
+
+        if (
+          error.response?.status === 403 &&
+          error.response?.data?.code === "PROFILE_NOT_REGISTERED" &&
+          originalRequest &&
+          !originalRequest._retry &&
+          tokenRefresher
+        ) {
+          originalRequest._retry = true;
+
+          try {
+            const newToken = await tokenRefresher();
+
+            if (newToken) {
+              const headers = AxiosHeaders.from(originalRequest.headers);
+              headers.set("Authorization", `Bearer ${newToken}`);
+              originalRequest.headers = headers;
+
+              // Retry — if profile_id is now in the new token, this succeeds.
+              return instance(originalRequest);
+            }
+          } catch (refreshError) {
+            console.error("[api-client] Token refresh after PROFILE_NOT_REGISTERED failed:", refreshError);
+          }
+
+          // Token refreshed but profile_id still missing — user hasn't registered a profile.
+          if (
+            typeof window !== "undefined" &&
+            !window.location.pathname.includes("/profile/register")
+          ) {
+            window.location.href = "/profile/register";
           }
         }
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { ArrowRight, Rocket } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
@@ -7,11 +8,11 @@ export function Cta() {
   return (
     <section
       aria-label="Призыв к действию"
-      className="relative py-24 sm:py-32 bg-background overflow-hidden"
+      className="bg-background relative overflow-hidden py-24 sm:py-32"
     >
       {/* Animated aurora — primary + secondary */}
       <div
-        className="absolute inset-0 animate-aurora pointer-events-none"
+        className="animate-aurora pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           /* Secondary: analogous amber (H≈70°) keeps the palette warm */
@@ -22,62 +23,68 @@ export function Cta() {
       />
 
       {/* Grid overlay */}
-      <div className="absolute inset-0 grid-bg opacity-40" aria-hidden="true" />
+      <div className="grid-bg absolute inset-0 opacity-40" aria-hidden="true" />
 
       {/* Glow orbs */}
       <div
-        className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{ background: "color-mix(in oklch, var(--primary) 14%, transparent)" }}
+        className="pointer-events-none absolute -top-24 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full blur-3xl"
+        style={{
+          background: "color-mix(in oklch, var(--primary) 14%, transparent)",
+        }}
         aria-hidden="true"
       />
       <div
-        className="absolute -bottom-24 left-1/4 w-64 h-64 rounded-full blur-3xl pointer-events-none"
-        style={{ background: "color-mix(in oklch, oklch(0.83 0.14 70) 10%, transparent)" }}
+        className="pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full blur-3xl"
+        style={{
+          background:
+            "color-mix(in oklch, oklch(0.83 0.14 70) 10%, transparent)",
+        }}
         aria-hidden="true"
       />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
         {/* Icon */}
         <div
-          className="inline-flex w-16 h-16 rounded-2xl bg-primary items-center justify-center shadow-2xl shadow-primary/30 mb-8 animate-float"
+          className="bg-primary shadow-primary/30 animate-float mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl shadow-2xl"
           style={{ animationDuration: "5s" }}
           aria-hidden="true"
         >
-          <Rocket className="w-7 h-7 text-primary-foreground" />
+          <Rocket className="text-primary-foreground h-7 w-7" />
         </div>
 
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-card-foreground mb-6 tracking-tight leading-tight">
+        <h2 className="text-card-foreground mb-6 text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl lg:text-5xl xl:text-6xl">
           Готовы трансформировать
-          <span className="block text-shimmer">вашу онлайн-школу?</span>
+          <span className="text-shimmer block">вашу онлайн-школу?</span>
         </h2>
 
-        <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-muted-foreground mx-auto mb-10 max-w-2xl text-lg leading-relaxed">
           Присоединяйтесь к&nbsp;500+ школам, которые уже управляют бизнесом
-          эффективнее. Первые&nbsp;14&nbsp;дней — бесплатно, без кредитной карты.
+          эффективнее. Первые&nbsp;14&nbsp;дней — бесплатно, без кредитной
+          карты.
         </p>
 
         {/* CTA buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
+        <div className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button
             asChild
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-12 text-base shadow-xl shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/25 hover:shadow-primary/40 focus-visible:ring-ring focus-visible:ring-offset-background h-12 px-8 text-base shadow-xl transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-offset-2"
           >
             <Link href="/signup">
               Начать бесплатно сегодня
-              <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
+              <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="border-border bg-muted/30 hover:bg-muted/60 text-foreground px-8 h-12 text-base hover:border-border transition-all duration-300 focus-visible:ring-2 focus-visible:ring-ring"
+            className="border-border bg-muted/30 hover:bg-muted/60 text-foreground hover:border-border focus-visible:ring-ring h-12 px-8 text-base transition-all duration-300 focus-visible:ring-2"
           >
             <Link href="/demo">Запросить демонстрацию</Link>
           </Button>
         </div>
 
         {/* Trust badges */}
-        <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex flex-wrap justify-center gap-6 text-sm">
           {[
             "14 дней бесплатного периода",
             "Без кредитной карты",
@@ -85,7 +92,10 @@ export function Cta() {
             "Данные принадлежат вам",
           ].map((item) => (
             <span key={item} className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary/60" aria-hidden="true" />
+              <span
+                className="bg-primary/60 h-1.5 w-1.5 rounded-full"
+                aria-hidden="true"
+              />
               {item}
             </span>
           ))}

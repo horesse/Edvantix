@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+
 import { Quote, Star } from "lucide-react";
 
 interface Testimonial {
@@ -93,36 +94,39 @@ const SECOND_ROW = [...TESTIMONIALS.slice(4), ...TESTIMONIALS.slice(4)];
 
 function TestimonialCard({ item }: { item: Testimonial }) {
   return (
-    <article className="flex-shrink-0 w-80 rounded-2xl border border-border bg-card/60 p-6 mx-2">
+    <article className="border-border bg-card/60 mx-2 w-80 flex-shrink-0 rounded-2xl border p-6">
       {/* Rating */}
-      <div className="flex gap-0.5 mb-4" aria-label={`Оценка: ${item.rating} из 5`}>
+      <div
+        className="mb-4 flex gap-0.5"
+        aria-label={`Оценка: ${item.rating} из 5`}
+      >
         {Array.from({ length: item.rating }).map((_, i) => (
           <Star
             key={i}
-            className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400"
+            className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400"
             aria-hidden="true"
           />
         ))}
       </div>
 
-      <Quote className="w-5 h-5 text-primary/40 mb-3" aria-hidden="true" />
+      <Quote className="text-primary/40 mb-3 h-5 w-5" aria-hidden="true" />
 
-      <p className="text-foreground text-sm leading-relaxed mb-5">
+      <p className="text-foreground mb-5 text-sm leading-relaxed">
         &ldquo;{item.text}&rdquo;
       </p>
 
       <div className="flex items-center gap-3">
         <div
-          className={`w-9 h-9 rounded-full bg-gradient-to-br ${item.avatarColor} flex items-center justify-center shrink-0`}
+          className={`h-9 w-9 rounded-full bg-gradient-to-br ${item.avatarColor} flex shrink-0 items-center justify-center`}
           aria-hidden="true"
         >
-          <span className="text-white text-xs font-bold">{item.initials}</span>
+          <span className="text-xs font-bold text-white">{item.initials}</span>
         </div>
         <div className="min-w-0">
-          <div className="text-card-foreground text-sm font-semibold truncate">
+          <div className="text-card-foreground truncate text-sm font-semibold">
             {item.author}
           </div>
-          <div className="text-muted-foreground text-xs truncate">
+          <div className="text-muted-foreground truncate text-xs">
             {item.role}, {item.school}
           </div>
         </div>
@@ -131,17 +135,25 @@ function TestimonialCard({ item }: { item: Testimonial }) {
   );
 }
 
-function MarqueeRow({ items, reverse = false }: { items: Testimonial[]; reverse?: boolean }) {
+function MarqueeRow({
+  items,
+  reverse = false,
+}: {
+  items: Testimonial[];
+  reverse?: boolean;
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
       className="flex overflow-hidden"
       onMouseEnter={() => {
-        if (trackRef.current) trackRef.current.style.animationPlayState = "paused";
+        if (trackRef.current)
+          trackRef.current.style.animationPlayState = "paused";
       }}
       onMouseLeave={() => {
-        if (trackRef.current) trackRef.current.style.animationPlayState = "running";
+        if (trackRef.current)
+          trackRef.current.style.animationPlayState = "running";
       }}
     >
       <div
@@ -162,10 +174,10 @@ export function Testimonials() {
     <section
       id="testimonials"
       aria-label="Отзывы клиентов"
-      className="relative py-24 sm:py-32 bg-background overflow-hidden"
+      className="bg-background relative overflow-hidden py-24 sm:py-32"
     >
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           background:
@@ -173,17 +185,20 @@ export function Testimonials() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+      <div className="mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-yellow-500/20 bg-yellow-500/5 text-yellow-500 text-xs font-medium mb-4">
-            <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" aria-hidden="true" />
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-yellow-500/20 bg-yellow-500/5 px-3 py-1 text-xs font-medium text-yellow-500">
+            <Star
+              className="h-3 w-3 fill-yellow-500 text-yellow-500"
+              aria-hidden="true"
+            />
             Отзывы клиентов
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-card-foreground mb-4 tracking-tight">
+          <h2 className="text-card-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Их школы уже
-            <span className="block text-primary">работают по-новому</span>
+            <span className="text-primary block">работают по-новому</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground mx-auto max-w-xl text-lg">
             Более&nbsp;500&nbsp;школ выбрали Edvantix. Вот что они говорят.
           </p>
         </div>
@@ -193,11 +208,11 @@ export function Testimonials() {
       <div className="relative space-y-4">
         {/* Fade masks */}
         <div
-          className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"
+          className="from-background pointer-events-none absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r to-transparent"
           aria-hidden="true"
         />
         <div
-          className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"
+          className="from-background pointer-events-none absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l to-transparent"
           aria-hidden="true"
         />
 

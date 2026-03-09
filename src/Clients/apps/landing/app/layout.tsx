@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "@workspace/ui/globals.css";
+
 import "./landing.css";
 
 /* Initialize Geist so Next.js optimizes it — same pattern as organization */
@@ -41,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className="dark scroll-smooth">
-      <body className="font-sans antialiased bg-background text-foreground">
+      <body className="bg-background text-foreground font-sans antialiased">
         {children}
       </body>
     </html>

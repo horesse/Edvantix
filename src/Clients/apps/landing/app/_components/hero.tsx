@@ -1,20 +1,21 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
+
 import {
   ArrowRight,
-  Play,
-  CheckCircle2,
-  TrendingUp,
-  Users,
-  BookOpen,
-  Star,
   BarChart3,
   Bell,
-  Settings,
+  BookOpen,
+  CheckCircle2,
   ChevronRight,
+  Play,
+  Settings,
+  Star,
+  TrendingUp,
+  Users,
 } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
@@ -56,15 +57,18 @@ export function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background"
+      className="bg-background relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
       aria-label="Главный экран"
     >
       {/* Dot grid */}
-      <div className="absolute inset-0 dot-pattern opacity-60" aria-hidden="true" />
+      <div
+        className="dot-pattern absolute inset-0 opacity-60"
+        aria-hidden="true"
+      />
 
       {/* Aurora glow — primary + ring colors */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           background: [
@@ -77,7 +81,7 @@ export function Hero() {
 
       {/* Mouse spotlight */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           background: `radial-gradient(700px circle at ${mousePos.x}px ${mousePos.y}px, ${PRIMARY_RGBA(0.04)}, transparent 40%)`,
@@ -86,48 +90,48 @@ export function Hero() {
 
       {/* Decorative rings */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-primary/5 animate-spin-slow pointer-events-none"
+        className="border-primary/5 animate-spin-slow pointer-events-none absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full border"
         aria-hidden="true"
       />
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full border border-primary/[0.03] animate-spin-slow pointer-events-none"
+        className="border-primary/[0.03] animate-spin-slow pointer-events-none absolute top-1/2 left-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full border"
         style={{ animationDirection: "reverse", animationDuration: "40s" }}
         aria-hidden="true"
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 flex flex-col items-center text-center">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-4 pt-28 pb-16 text-center sm:px-6 lg:px-8">
         {/* Announcement badge */}
         <div
-          className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/25 bg-primary/8 text-primary text-sm mb-10 transition-all duration-700 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`border-primary/25 bg-primary/8 text-primary mb-10 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-all duration-700 ${
+            isLoaded ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
           style={{ transitionDelay: "100ms" }}
         >
           <span
-            className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"
+            className="bg-primary h-1.5 w-1.5 animate-pulse rounded-full"
             aria-hidden="true"
           />
           <span>Новое: AI-аналитика и умные отчёты 2.0</span>
-          <ChevronRight className="w-3.5 h-3.5 opacity-60" aria-hidden="true" />
+          <ChevronRight className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
         </div>
 
         {/* Headline */}
         <h1
-          className={`text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight mb-6 leading-[0.95] transition-all duration-700 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`mb-6 text-5xl leading-[0.95] font-extrabold tracking-tight transition-all duration-700 sm:text-6xl lg:text-7xl xl:text-8xl ${
+            isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
           style={{ transitionDelay: "200ms" }}
         >
-          <span className="block text-card-foreground">Управляйте</span>
-          <span className="block text-shimmer py-1">онлайн-школой</span>
-          <span className="block text-card-foreground">без хаоса</span>
+          <span className="text-card-foreground block">Управляйте</span>
+          <span className="text-shimmer block py-1">онлайн-школой</span>
+          <span className="text-card-foreground block">без хаоса</span>
         </h1>
 
         {/* Subtitle */}
         <p
-          className={`text-lg sm:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed transition-all duration-700 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          className={`text-muted-foreground mb-10 max-w-2xl text-lg leading-relaxed transition-all duration-700 sm:text-xl ${
+            isLoaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
           style={{ transitionDelay: "300ms" }}
         >
@@ -137,27 +141,27 @@ export function Hero() {
 
         {/* CTA buttons */}
         <div
-          className={`flex flex-col sm:flex-row gap-4 mb-10 transition-all duration-700 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          className={`mb-10 flex flex-col gap-4 transition-all duration-700 sm:flex-row ${
+            isLoaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
           style={{ transitionDelay: "400ms" }}
         >
           <Button
             asChild
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-12 text-base shadow-xl shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/25 hover:shadow-primary/40 focus-visible:ring-ring focus-visible:ring-offset-background h-12 px-8 text-base shadow-xl transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-offset-2"
           >
             <Link href="/signup">
               Начать бесплатно
-              <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
+              <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="border-border bg-muted/30 hover:bg-muted/60 text-foreground px-8 h-12 text-base hover:border-border transition-all duration-300 focus-visible:ring-2 focus-visible:ring-ring"
+            className="border-border bg-muted/30 hover:bg-muted/60 text-foreground hover:border-border focus-visible:ring-ring h-12 px-8 text-base transition-all duration-300 focus-visible:ring-2"
           >
             <Link href="/demo">
-              <Play className="w-4 h-4 mr-2 text-primary" aria-hidden="true" />
+              <Play className="text-primary mr-2 h-4 w-4" aria-hidden="true" />
               Смотреть демо
             </Link>
           </Button>
@@ -165,8 +169,8 @@ export function Hero() {
 
         {/* Trust indicators */}
         <div
-          className={`flex flex-wrap justify-center gap-6 text-sm text-muted-foreground mb-24 transition-all duration-700 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`text-muted-foreground mb-24 flex flex-wrap justify-center gap-6 text-sm transition-all duration-700 ${
+            isLoaded ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
           style={{ transitionDelay: "500ms" }}
         >
@@ -177,7 +181,7 @@ export function Hero() {
           ].map((item) => (
             <span key={item} className="flex items-center gap-1.5">
               <CheckCircle2
-                className="w-4 h-4 text-primary shrink-0"
+                className="text-primary h-4 w-4 shrink-0"
                 aria-hidden="true"
               />
               {item}
@@ -188,7 +192,7 @@ export function Hero() {
         {/* Dashboard mockup */}
         <div
           className={`w-full max-w-5xl transition-all duration-1000 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16"
+            isLoaded ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
           }`}
           style={{ transitionDelay: "600ms" }}
         >
@@ -198,7 +202,7 @@ export function Hero() {
 
       {/* Bottom fade */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent pointer-events-none"
+        className="from-background pointer-events-none absolute right-0 bottom-0 left-0 h-40 bg-gradient-to-t to-transparent"
         aria-hidden="true"
       />
     </section>
@@ -207,10 +211,10 @@ export function Hero() {
 
 function DashboardMockup() {
   return (
-    <div className="relative animate-float" style={{ animationDuration: "8s" }}>
+    <div className="animate-float relative" style={{ animationDuration: "8s" }}>
       {/* Ambient glow */}
       <div
-        className="absolute -inset-8 rounded-[40px] blur-3xl opacity-15 animate-pulse-glow"
+        className="animate-pulse-glow absolute -inset-8 rounded-[40px] opacity-15 blur-3xl"
         style={{
           background: `radial-gradient(ellipse, ${PRIMARY_RGBA(0.5)} 0%, ${SECONDARY_RGBA(0.15)} 60%, transparent 80%)`,
         }}
@@ -218,17 +222,19 @@ function DashboardMockup() {
       />
 
       {/* Browser window */}
-      <div className="relative rounded-2xl border border-border bg-card shadow-[0_32px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+      <div className="border-border bg-card relative overflow-hidden rounded-2xl border shadow-[0_32px_80px_rgba(0,0,0,0.4)]">
         {/* Title bar */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-card">
+        <div className="border-border bg-card flex items-center gap-2 border-b px-4 py-3">
           <div className="flex gap-1.5" aria-hidden="true">
-            <div className="w-3 h-3 rounded-full bg-destructive/70" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
-            <div className="w-3 h-3 rounded-full bg-emerald-500/70" />
+            <div className="bg-destructive/70 h-3 w-3 rounded-full" />
+            <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
+            <div className="h-3 w-3 rounded-full bg-emerald-500/70" />
           </div>
-          <div className="flex-1 mx-4 flex justify-center">
-            <div className="w-52 h-5 bg-muted rounded-md flex items-center justify-center">
-              <span className="text-muted-foreground text-xs">app.edvantix.ru/dashboard</span>
+          <div className="mx-4 flex flex-1 justify-center">
+            <div className="bg-muted flex h-5 w-52 items-center justify-center rounded-md">
+              <span className="text-muted-foreground text-xs">
+                app.edvantix.ru/dashboard
+              </span>
             </div>
           </div>
           <div className="w-16" aria-hidden="true" />
@@ -237,12 +243,16 @@ function DashboardMockup() {
         {/* Dashboard */}
         <div className="flex h-[420px] sm:h-[460px]">
           {/* Sidebar */}
-          <aside className="w-52 shrink-0 border-r border-border bg-card p-3 hidden sm:flex flex-col gap-1">
-            <div className="flex items-center gap-2 px-3 py-2 mb-4">
-              <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground text-xs font-bold">E</span>
+          <aside className="border-border bg-card hidden w-52 shrink-0 flex-col gap-1 border-r p-3 sm:flex">
+            <div className="mb-4 flex items-center gap-2 px-3 py-2">
+              <div className="bg-primary flex h-6 w-6 items-center justify-center rounded-md">
+                <span className="text-primary-foreground text-xs font-bold">
+                  E
+                </span>
               </div>
-              <span className="text-card-foreground text-sm font-semibold">Edvantix</span>
+              <span className="text-card-foreground text-sm font-semibold">
+                Edvantix
+              </span>
             </div>
             {[
               { icon: BarChart3, label: "Дашборд", active: true },
@@ -254,38 +264,44 @@ function DashboardMockup() {
             ].map(({ icon: Icon, label, active }) => (
               <div
                 key={label}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm select-none ${
+                className={`flex items-center gap-2.5 rounded-md px-3 py-2 text-sm select-none ${
                   active
-                    ? "bg-primary/15 text-primary border border-primary/15"
+                    ? "bg-primary/15 text-primary border-primary/15 border"
                     : "text-muted-foreground hover:text-foreground hover:bg-accent"
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                 {label}
               </div>
             ))}
           </aside>
 
           {/* Main content */}
-          <div className="flex-1 p-5 overflow-hidden flex flex-col gap-4 bg-background/50">
+          <div className="bg-background/50 flex flex-1 flex-col gap-4 overflow-hidden p-5">
             {/* Header row */}
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-card-foreground text-sm font-semibold">Дашборд</h2>
-                <p className="text-muted-foreground text-xs mt-0.5">Июль 2026</p>
+                <h2 className="text-card-foreground text-sm font-semibold">
+                  Дашборд
+                </h2>
+                <p className="text-muted-foreground mt-0.5 text-xs">
+                  Июль 2026
+                </p>
               </div>
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-md text-muted-foreground">
-                  <Bell className="w-4 h-4" aria-hidden="true" />
+                <div className="text-muted-foreground rounded-md p-1.5">
+                  <Bell className="h-4 w-4" aria-hidden="true" />
                 </div>
-                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-primary-foreground text-xs font-semibold">А</span>
+                <div className="bg-primary flex h-7 w-7 items-center justify-center rounded-full">
+                  <span className="text-primary-foreground text-xs font-semibold">
+                    А
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Stats row */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
               {[
                 { label: "Студентов", value: "1&nbsp;247", change: "+12%" },
                 { label: "Курсов", value: "24", change: "+3" },
@@ -294,14 +310,18 @@ function DashboardMockup() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="bg-card border border-border rounded-xl p-3"
+                  className="bg-card border-border rounded-xl border p-3"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-muted-foreground text-xs">{stat.label}</span>
-                    <span className="text-emerald-500 text-xs">{stat.change}</span>
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-muted-foreground text-xs">
+                      {stat.label}
+                    </span>
+                    <span className="text-xs text-emerald-500">
+                      {stat.change}
+                    </span>
                   </div>
                   <div
-                    className="text-card-foreground font-semibold text-base"
+                    className="text-card-foreground text-base font-semibold"
                     dangerouslySetInnerHTML={{ __html: stat.value }}
                   />
                 </div>
@@ -309,16 +329,18 @@ function DashboardMockup() {
             </div>
 
             {/* Chart + Students */}
-            <div className="grid grid-cols-5 gap-2.5 flex-1 min-h-0">
+            <div className="grid min-h-0 flex-1 grid-cols-5 gap-2.5">
               {/* Bar chart */}
-              <div className="col-span-3 bg-card border border-border rounded-xl p-4 flex flex-col">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-card-foreground text-xs font-medium">Записи студентов</span>
+              <div className="bg-card border-border col-span-3 flex flex-col rounded-xl border p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="text-card-foreground text-xs font-medium">
+                    Записи студентов
+                  </span>
                   <span className="text-muted-foreground text-xs">7 дней</span>
                 </div>
-                <div className="flex items-end gap-1.5 flex-1">
+                <div className="flex flex-1 items-end gap-1.5">
                   {[42, 68, 45, 82, 58, 95, 73].map((height, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center">
+                    <div key={i} className="flex flex-1 flex-col items-center">
                       <div
                         className="w-full rounded-sm transition-all"
                         style={{
@@ -332,9 +354,12 @@ function DashboardMockup() {
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-between mt-2">
+                <div className="mt-2 flex justify-between">
                   {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((d) => (
-                    <span key={d} className="text-muted-foreground text-[10px] flex-1 text-center">
+                    <span
+                      key={d}
+                      className="text-muted-foreground flex-1 text-center text-[10px]"
+                    >
                       {d}
                     </span>
                   ))}
@@ -342,31 +367,50 @@ function DashboardMockup() {
               </div>
 
               {/* Recent students */}
-              <div className="col-span-2 bg-card border border-border rounded-xl p-4 flex flex-col">
-                <span className="text-card-foreground text-xs font-medium block mb-3">
+              <div className="bg-card border-border col-span-2 flex flex-col rounded-xl border p-4">
+                <span className="text-card-foreground mb-3 block text-xs font-medium">
                   Новые студенты
                 </span>
-                <div className="flex flex-col gap-3 flex-1">
+                <div className="flex flex-1 flex-col gap-3">
                   {[
-                    { name: "Анна К.", course: "UI/UX дизайн", color: "from-pink-500 to-rose-400" },
-                    { name: "Михаил С.", course: "Python Pro", color: "from-blue-500 to-cyan-400" },
-                    { name: "Елена П.", course: "SMM-курс", color: "from-emerald-500 to-green-400" },
-                    { name: "Дмитрий В.", course: "Маркетинг", color: "from-orange-500 to-amber-400" },
+                    {
+                      name: "Анна К.",
+                      course: "UI/UX дизайн",
+                      color: "from-pink-500 to-rose-400",
+                    },
+                    {
+                      name: "Михаил С.",
+                      course: "Python Pro",
+                      color: "from-blue-500 to-cyan-400",
+                    },
+                    {
+                      name: "Елена П.",
+                      course: "SMM-курс",
+                      color: "from-emerald-500 to-green-400",
+                    },
+                    {
+                      name: "Дмитрий В.",
+                      course: "Маркетинг",
+                      color: "from-orange-500 to-amber-400",
+                    },
                   ].map((student) => (
-                    <div key={student.name} className="flex items-center gap-2 min-w-0">
+                    <div
+                      key={student.name}
+                      className="flex min-w-0 items-center gap-2"
+                    >
                       <div
-                        className={`w-6 h-6 rounded-full bg-gradient-to-br ${student.color} flex items-center justify-center shrink-0`}
+                        className={`h-6 w-6 rounded-full bg-gradient-to-br ${student.color} flex shrink-0 items-center justify-center`}
                         aria-hidden="true"
                       >
-                        <span className="text-white text-[10px] font-bold">
+                        <span className="text-[10px] font-bold text-white">
                           {student.name[0]}
                         </span>
                       </div>
                       <div className="min-w-0">
-                        <div className="text-card-foreground text-xs font-medium truncate">
+                        <div className="text-card-foreground truncate text-xs font-medium">
                           {student.name}
                         </div>
-                        <div className="text-muted-foreground text-[10px] truncate">
+                        <div className="text-muted-foreground truncate text-[10px]">
                           {student.course}
                         </div>
                       </div>

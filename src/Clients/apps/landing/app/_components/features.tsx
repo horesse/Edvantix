@@ -3,13 +3,13 @@ import type { ReactNode } from "react";
 import {
   BarChart3,
   BookOpen,
-  CreditCard,
-  MessageSquare,
-  Users,
   Calendar,
-  Zap,
-  Shield,
+  CreditCard,
   type LucideIcon,
+  MessageSquare,
+  Shield,
+  Users,
+  Zap,
 } from "lucide-react";
 
 interface Feature {
@@ -65,14 +65,16 @@ function AnalyticsPreview() {
   const bars = [35, 55, 45, 75, 60, 90, 70, 85];
 
   return (
-    <div className="mt-6 p-4 rounded-xl bg-background/60 border border-border">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-foreground text-xs font-medium">Выручка за месяц</span>
-        <span className="text-emerald-500 text-xs font-medium">+24%</span>
+    <div className="bg-background/60 border-border mt-6 rounded-xl border p-4">
+      <div className="mb-4 flex items-center justify-between">
+        <span className="text-foreground text-xs font-medium">
+          Выручка за месяц
+        </span>
+        <span className="text-xs font-medium text-emerald-500">+24%</span>
       </div>
-      <div className="flex items-end gap-1.5 h-20">
+      <div className="flex h-20 items-end gap-1.5">
         {bars.map((h, i) => (
-          <div key={i} className="flex-1 flex items-end">
+          <div key={i} className="flex flex-1 items-end">
             <div
               className="w-full rounded-sm"
               style={{
@@ -88,9 +90,11 @@ function AnalyticsPreview() {
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-2">
+      <div className="mt-2 flex justify-between">
         {["01", "05", "10", "15", "20", "25", "29", "31"].map((d) => (
-          <span key={d} className="text-muted-foreground text-[10px]">{d}</span>
+          <span key={d} className="text-muted-foreground text-[10px]">
+            {d}
+          </span>
         ))}
       </div>
       <div className="mt-4 grid grid-cols-3 gap-2">
@@ -100,8 +104,12 @@ function AnalyticsPreview() {
           { label: "Месяц", value: "₽284 000" },
         ].map((item) => (
           <div key={item.label} className="text-center">
-            <div className="text-card-foreground text-sm font-semibold">{item.value}</div>
-            <div className="text-muted-foreground text-[10px]">{item.label}</div>
+            <div className="text-card-foreground text-sm font-semibold">
+              {item.value}
+            </div>
+            <div className="text-muted-foreground text-[10px]">
+              {item.label}
+            </div>
           </div>
         ))}
       </div>
@@ -114,11 +122,11 @@ export function Features() {
     <section
       id="features"
       aria-label="Возможности платформы"
-      className="relative py-24 sm:py-32 bg-background"
+      className="bg-background relative py-24 sm:py-32"
     >
       {/* Subtle background accent */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           background:
@@ -126,52 +134,52 @@ export function Features() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-medium mb-4">
-            <Zap className="w-3 h-3" aria-hidden="true" />
+        <div className="mb-16 text-center">
+          <div className="border-primary/20 bg-primary/5 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium">
+            <Zap className="h-3 w-3" aria-hidden="true" />
             Возможности
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-card-foreground mb-4 tracking-tight">
+          <h2 className="text-card-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Всё, что нужно для работы
-            <span className="block text-primary">вашей школы</span>
+            <span className="text-primary block">вашей школы</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
-            Единая экосистема вместо десяти разрозненных инструментов. Управляйте
-            всем бизнесом из одного окна.
+          <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed">
+            Единая экосистема вместо десяти разрозненных инструментов.
+            Управляйте всем бизнесом из одного окна.
           </p>
         </div>
 
         {/* Bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((feature, index) => {
             const isWide = feature.span === "wide";
 
             return (
               <div
                 key={feature.title}
-                className={`group relative rounded-2xl border border-border bg-card/50 p-6 transition-all duration-300 hover:bg-card hover:shadow-xl card-glow ${
+                className={`group border-border bg-card/50 hover:bg-card card-glow relative rounded-2xl border p-6 transition-all duration-300 hover:shadow-xl ${
                   isWide ? "md:col-span-2 lg:col-span-2" : ""
                 }`}
                 style={{ animationDelay: `${index * 80}ms` }}
               >
                 {/* Hover glow orb */}
                 <div
-                  className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-primary/10"
+                  className="bg-primary/10 absolute top-0 right-0 h-32 w-32 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
                   aria-hidden="true"
                 />
 
                 {/* Icon */}
-                <div className="inline-flex p-2.5 rounded-xl bg-primary/10 mb-4">
+                <div className="bg-primary/10 mb-4 inline-flex rounded-xl p-2.5">
                   <feature.icon
-                    className="w-5 h-5 text-primary"
+                    className="text-primary h-5 w-5"
                     aria-hidden="true"
                   />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-card-foreground font-semibold text-lg mb-2 leading-tight">
+                <h3 className="text-card-foreground mb-2 text-lg leading-tight font-semibold">
                   {feature.title}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
@@ -182,10 +190,10 @@ export function Features() {
 
                 {/* Hover beam */}
                 <div
-                  className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   aria-hidden="true"
                 >
-                  <div className="animate-beam absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+                  <div className="animate-beam via-primary/40 absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent to-transparent" />
                 </div>
               </div>
             );
@@ -193,8 +201,8 @@ export function Features() {
         </div>
 
         {/* Security badge */}
-        <div className="mt-12 flex items-center justify-center gap-3 text-muted-foreground text-sm">
-          <Shield className="w-4 h-4 text-emerald-500" aria-hidden="true" />
+        <div className="text-muted-foreground mt-12 flex items-center justify-center gap-3 text-sm">
+          <Shield className="h-4 w-4 text-emerald-500" aria-hidden="true" />
           <span>Соответствует требованиям 152-ФЗ о персональных данных</span>
         </div>
       </div>

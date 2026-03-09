@@ -1,4 +1,4 @@
-import { Settings2, BookPlus, TrendingUp, ArrowRight } from "lucide-react";
+import { ArrowRight, BookPlus, Settings2, TrendingUp } from "lucide-react";
 
 const STEPS = [
   {
@@ -44,41 +44,41 @@ export function HowItWorks() {
     <section
       id="how-it-works"
       aria-label="Как это работает"
-      className="relative py-24 sm:py-32 bg-background overflow-hidden"
+      className="bg-background relative overflow-hidden py-24 sm:py-32"
     >
       {/* Background decoration */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           background:
             "radial-gradient(ellipse 70% 50% at 50% 100%, color-mix(in oklch, var(--primary) 7%, transparent) 0%, transparent 60%)",
         }}
       />
-      <div className="absolute inset-0 grid-bg opacity-30" aria-hidden="true" />
+      <div className="grid-bg absolute inset-0 opacity-30" aria-hidden="true" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-medium mb-4">
-            <ArrowRight className="w-3 h-3" aria-hidden="true" />
+        <div className="mb-20 text-center">
+          <div className="border-primary/20 bg-primary/5 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium">
+            <ArrowRight className="h-3 w-3" aria-hidden="true" />
             Как это работает
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-card-foreground mb-4 tracking-tight">
+          <h2 className="text-card-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Запустите школу
-            <span className="block text-primary">за 3 простых шага</span>
+            <span className="text-primary block">за 3 простых шага</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground mx-auto max-w-xl text-lg">
             От регистрации до первых продаж — всего несколько часов. Без
             разработчиков и лишних затрат.
           </p>
         </div>
 
         {/* Steps */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
+        <div className="relative grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-6">
           {/* Desktop connector line */}
           <div
-            className="hidden lg:block absolute top-16 left-[calc(33%+2rem)] right-[calc(33%+2rem)] h-px"
+            className="absolute top-16 right-[calc(33%+2rem)] left-[calc(33%+2rem)] hidden h-px lg:block"
             style={{
               background:
                 "linear-gradient(90deg, color-mix(in oklch, var(--primary) 50%, transparent), color-mix(in oklch, var(--primary) 30%, transparent))",
@@ -98,37 +98,43 @@ export function HowItWorks() {
                 <div className="relative mb-6 flex flex-col items-center lg:items-start">
                   {/* Large decorative number */}
                   <div
-                    className="text-6xl font-black text-primary/10 absolute -top-4 -left-2 select-none leading-none"
+                    className="text-primary/10 absolute -top-4 -left-2 text-6xl leading-none font-black select-none"
                     aria-hidden="true"
                   >
                     {step.number}
                   </div>
 
                   {/* Icon circle */}
-                  <div className="relative z-10 w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shadow-lg mb-4">
-                    <Icon className="w-6 h-6 text-primary" aria-hidden="true" />
+                  <div className="bg-primary/10 border-primary/20 relative z-10 mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border shadow-lg">
+                    <Icon className="text-primary h-6 w-6" aria-hidden="true" />
                   </div>
 
                   {/* Mobile arrow */}
                   {index < STEPS.length - 1 && (
-                    <div className="lg:hidden absolute -bottom-12 left-1/2 -translate-x-1/2 text-muted-foreground">
-                      <ArrowRight className="w-4 h-4 rotate-90" aria-hidden="true" />
+                    <div className="text-muted-foreground absolute -bottom-12 left-1/2 -translate-x-1/2 lg:hidden">
+                      <ArrowRight
+                        className="h-4 w-4 rotate-90"
+                        aria-hidden="true"
+                      />
                     </div>
                   )}
                 </div>
 
-                <h3 className="text-card-foreground text-xl font-semibold mb-3">
+                <h3 className="text-card-foreground mb-3 text-xl font-semibold">
                   {step.title}
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+                <p className="text-muted-foreground mb-5 text-sm leading-relaxed">
                   {step.description}
                 </p>
 
-                <ul className="flex flex-col gap-2 w-full" role="list">
+                <ul className="flex w-full flex-col gap-2" role="list">
                   {step.details.map((detail) => (
-                    <li key={detail} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <li
+                      key={detail}
+                      className="text-muted-foreground flex items-center gap-2 text-sm"
+                    >
                       <div
-                        className="w-1.5 h-1.5 rounded-full shrink-0 bg-primary"
+                        className="bg-primary h-1.5 w-1.5 shrink-0 rounded-full"
                         aria-hidden="true"
                       />
                       {detail}

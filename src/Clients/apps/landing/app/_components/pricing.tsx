@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import Link from "next/link";
+
 import { Check, Sparkles, Zap } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
@@ -91,43 +92,46 @@ export function Pricing() {
     <section
       id="pricing"
       aria-label="Тарифные планы"
-      className="relative py-24 sm:py-32 bg-background"
+      className="bg-background relative py-24 sm:py-32"
     >
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
           background:
             "radial-gradient(ellipse 70% 50% at 50% 0%, color-mix(in oklch, var(--primary) 6%, transparent) 0%, transparent 60%)",
         }}
       />
-      <div className="absolute inset-0 dot-pattern opacity-30" aria-hidden="true" />
+      <div
+        className="dot-pattern absolute inset-0 opacity-30"
+        aria-hidden="true"
+      />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-medium mb-4">
-            <Sparkles className="w-3 h-3" aria-hidden="true" />
+        <div className="mb-12 text-center">
+          <div className="border-primary/20 bg-primary/5 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium">
+            <Sparkles className="h-3 w-3" aria-hidden="true" />
             Тарифы
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-card-foreground mb-4 tracking-tight">
+          <h2 className="text-card-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Прозрачные цены
-            <span className="block text-primary">без скрытых платежей</span>
+            <span className="text-primary block">без скрытых платежей</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
+          <p className="text-muted-foreground mx-auto mb-8 max-w-xl text-lg">
             Начните бесплатно и масштабируйтесь вместе с ростом вашей школы.
           </p>
 
           {/* Billing toggle */}
           <div
-            className="inline-flex items-center gap-3 p-1 rounded-full bg-muted/40 border border-border"
+            className="bg-muted/40 border-border inline-flex items-center gap-3 rounded-full border p-1"
             role="group"
             aria-label="Период оплаты"
           >
             <button
               type="button"
               onClick={() => setAnnual(false)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+              className={`focus-visible:ring-ring rounded-full px-5 py-2 text-sm font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none ${
                 !annual
                   ? "bg-card text-card-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
@@ -139,7 +143,7 @@ export function Pricing() {
             <button
               type="button"
               onClick={() => setAnnual(true)}
-              className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+              className={`focus-visible:ring-ring flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none ${
                 annual
                   ? "bg-card text-card-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
@@ -147,7 +151,7 @@ export function Pricing() {
               aria-pressed={annual}
             >
               Ежегодно
-              <span className="px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/15 text-emerald-500 font-semibold">
+              <span className="rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-500">
                 −20%
               </span>
             </button>
@@ -155,7 +159,7 @@ export function Pricing() {
         </div>
 
         {/* Plans grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
           {PLANS.map((plan) => {
             const price = annual ? plan.annualPrice : plan.monthlyPrice;
 
@@ -164,45 +168,54 @@ export function Pricing() {
                 key={plan.name}
                 className={`relative rounded-2xl border p-7 transition-all duration-300 ${
                   plan.featured
-                    ? "border-primary/30 bg-card shadow-2xl shadow-primary/10"
+                    ? "border-primary/30 bg-card shadow-primary/10 shadow-2xl"
                     : "border-border bg-card/50 hover:bg-card"
                 }`}
               >
                 {/* Popular badge */}
                 {plan.badge && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary text-primary-foreground">
-                    <Zap className="w-3 h-3" aria-hidden="true" />
+                  <div className="bg-primary text-primary-foreground absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold">
+                    <Zap className="h-3 w-3" aria-hidden="true" />
                     {plan.badge}
                   </div>
                 )}
 
                 {/* Plan name */}
                 <div className="mb-6">
-                  <div className="inline-flex p-2 rounded-xl bg-primary/10 mb-3" aria-hidden="true">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                  <div
+                    className="bg-primary/10 mb-3 inline-flex rounded-xl p-2"
+                    aria-hidden="true"
+                  >
+                    <Sparkles className="text-primary h-4 w-4" />
                   </div>
-                  <h3 className="text-card-foreground font-bold text-xl mb-1">{plan.name}</h3>
-                  <p className="text-muted-foreground text-sm">{plan.tagline}</p>
+                  <h3 className="text-card-foreground mb-1 text-xl font-bold">
+                    {plan.name}
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    {plan.tagline}
+                  </p>
                 </div>
 
                 {/* Price */}
-                <div className="mb-7 pb-7 border-b border-border">
+                <div className="border-border mb-7 border-b pb-7">
                   {plan.priceLabel ? (
-                    <div className="text-3xl font-extrabold text-card-foreground">
+                    <div className="text-card-foreground text-3xl font-extrabold">
                       {plan.priceLabel}
                     </div>
                   ) : (
                     <div className="flex items-end gap-1">
-                      <span className="text-4xl font-extrabold text-card-foreground">
+                      <span className="text-card-foreground text-4xl font-extrabold">
                         {price === 0 ? "Бесплатно" : `₽${formatPrice(price!)}`}
                       </span>
                       {price !== 0 && (
-                        <span className="text-muted-foreground text-sm mb-1.5">/мес</span>
+                        <span className="text-muted-foreground mb-1.5 text-sm">
+                          /мес
+                        </span>
                       )}
                     </div>
                   )}
                   {annual && plan.monthlyPrice !== 0 && !plan.priceLabel && (
-                    <p className="text-muted-foreground text-xs mt-1">
+                    <p className="text-muted-foreground mt-1 text-xs">
                       Вместо ₽{formatPrice(plan.monthlyPrice!)}/мес
                     </p>
                   )}
@@ -211,10 +224,10 @@ export function Pricing() {
                 {/* CTA */}
                 <Button
                   asChild
-                  className={`w-full mb-7 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                  className={`focus-visible:ring-ring focus-visible:ring-offset-background mb-7 w-full transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 ${
                     plan.featured
-                      ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
-                      : "bg-muted hover:bg-muted/80 text-foreground border border-border"
+                      ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20 shadow-lg"
+                      : "bg-muted hover:bg-muted/80 text-foreground border-border border"
                   }`}
                 >
                   <Link href={plan.ctaHref}>{plan.cta}</Link>
@@ -223,9 +236,12 @@ export function Pricing() {
                 {/* Features */}
                 <ul className="flex flex-col gap-3" role="list">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2.5 text-sm">
+                    <li
+                      key={feature}
+                      className="flex items-center gap-2.5 text-sm"
+                    >
                       <Check
-                        className={`w-4 h-4 shrink-0 ${plan.featured ? "text-primary" : "text-muted-foreground"}`}
+                        className={`h-4 w-4 shrink-0 ${plan.featured ? "text-primary" : "text-muted-foreground"}`}
                         aria-hidden="true"
                       />
                       <span className="text-foreground">{feature}</span>
@@ -237,7 +253,7 @@ export function Pricing() {
           })}
         </div>
 
-        <p className="mt-10 text-center text-muted-foreground text-sm">
+        <p className="text-muted-foreground mt-10 text-center text-sm">
           Все тарифы включают SSL, резервное копирование и базовую техническую
           поддержку. Цены указаны без НДС.
         </p>

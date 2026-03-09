@@ -5,7 +5,6 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Island } from "@workspace/ui/components/island";
 import {
   Tooltip,
   TooltipContent,
@@ -31,12 +30,7 @@ export function VerticalNavIsland() {
   const pathname = usePathname();
 
   return (
-    <Island
-      variant="default"
-      padding="none"
-      rounded="lg"
-      className="sticky top-0 hidden h-full flex-col items-center justify-center p-2 lg:flex"
-    >
+    <div className="bg-card text-card-foreground sticky top-0 hidden h-full flex-col items-center justify-center rounded-lg border p-2 shadow-xs lg:flex">
       <div
         className="text-muted-foreground/50 absolute top-4 left-1/2 -translate-x-1/2 text-xs font-medium"
         style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
@@ -78,6 +72,6 @@ export function VerticalNavIsland() {
           );
         })}
       </nav>
-    </Island>
+    </div>
   );
 }

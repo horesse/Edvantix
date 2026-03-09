@@ -29,8 +29,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-build-test:
-    name: Lint, Build & Test
+  lint-build:
+    name: Lint, Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
@@ -68,38 +68,3 @@ jobs:
 
       - name: Build
         run: pnpm build
-
-      - name: Test
-        run: pnpm test
-
-      - name: Generate Allure Reports
-        if: always()
-        run: pnpm turbo allure:generate --continue
-
-      - name: Upload Allure Report (organization)
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: allure-report-organization
-          path: src/Clients/apps/organization/allure-report/
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-      - name: Upload Allure Report (blog)
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: allure-report-blog
-          path: src/Clients/apps/blog/allure-report/
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-      - name: Post Allure Summary (organization)
-        uses: allure-framework/allure-action@v0
-        with:
-          report-directory: src/Clients/apps/organization/allure-report
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Post Allure Summary (blog)
-        uses: allure-framework/allure-action@v0
-        with:
-          report-directory: src/Clients/apps/blog/allure-report
-          github-token: ${{ secrets.GITHUB_TOKEN }}

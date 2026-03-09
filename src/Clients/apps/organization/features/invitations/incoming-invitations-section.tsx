@@ -8,19 +8,17 @@ import useDeclineInvitation from "@workspace/api-hooks/company/useDeclineInvitat
 import useMyInvitations from "@workspace/api-hooks/company/useMyInvitations";
 import type { InvitationModel } from "@workspace/types/company";
 import { InvitationStatus } from "@workspace/types/company";
-import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
-  Island,
-  IslandContent,
-  IslandDescription,
-  IslandHeader,
-  IslandTitle,
-} from "@workspace/ui/components/island";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
 import {
-  invitationStatusLabels,
   organizationRoleLabels,
   parseOrganizationRole,
 } from "@/lib/company-options";
@@ -34,34 +32,34 @@ export function IncomingInvitationsSection() {
 
   if (isLoading) {
     return (
-      <Island>
-        <IslandHeader>
-          <IslandTitle>Входящие приглашения</IslandTitle>
-        </IslandHeader>
-        <IslandContent className="space-y-3">
+      <Card>
+        <CardHeader>
+          <CardTitle>Входящие приглашения</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
           <Skeleton className="h-16 w-full" />
           <Skeleton className="h-16 w-full" />
-        </IslandContent>
-      </Island>
+        </CardContent>
+      </Card>
     );
   }
 
   if (pending.length === 0) return null;
 
   return (
-    <Island>
-      <IslandHeader>
-        <IslandTitle>Входящие приглашения</IslandTitle>
-        <IslandDescription>
+    <Card>
+      <CardHeader>
+        <CardTitle>Входящие приглашения</CardTitle>
+        <CardDescription>
           Приглашения в организации, ожидающие вашего ответа
-        </IslandDescription>
-      </IslandHeader>
-      <IslandContent className="space-y-3">
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
         {pending.map((invitation) => (
           <IncomingInvitationCard key={invitation.id} invitation={invitation} />
         ))}
-      </IslandContent>
-    </Island>
+      </CardContent>
+    </Card>
   );
 }
 

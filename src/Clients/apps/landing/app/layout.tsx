@@ -8,8 +8,8 @@ import "@workspace/ui/globals.css";
 import "./landing.css";
 
 /* Initialize Geist so Next.js optimizes it — same pattern as organization */
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+Geist({ subsets: ["latin"] });
+Geist_Mono({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
   width: "device-width",

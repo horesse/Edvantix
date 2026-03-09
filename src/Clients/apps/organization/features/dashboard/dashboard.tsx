@@ -27,8 +27,8 @@ import {
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { cn } from "@workspace/ui/lib/utils";
 
-import { PageHeader } from "@/components/page-header";
 import { useOrganization as useOrgContext } from "@/components/organization-provider";
+import { PageHeader } from "@/components/page-header";
 
 import { IncomingInvitationsSection } from "../invitations/incoming-invitations-section";
 

@@ -52,8 +52,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { FilterTable } from "@/components/filter-table";
-import { PageHeader } from "@/components/page-header";
 import {
   Form,
   FormControl,
@@ -79,7 +77,9 @@ import {
   updateGroupSchema,
 } from "@workspace/validations/company";
 
+import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
+import { PageHeader } from "@/components/page-header";
 import { groupRoleLabels } from "@/lib/company-options";
 
 type GroupDetailPageProps = {

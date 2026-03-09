@@ -31,7 +31,8 @@ type StatusBarProps = Readonly<{
 
 export function StatusBar({ status, count, total }: StatusBarProps) {
   const cfg = STATUS_CONFIG[status];
-  const pct = total > 0 && count !== null ? Math.round((count / total) * 100) : 0;
+  const pct =
+    total > 0 && count !== null ? Math.round((count / total) * 100) : 0;
 
   return (
     <div className="flex items-center gap-3">

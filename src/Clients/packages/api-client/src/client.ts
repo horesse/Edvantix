@@ -142,7 +142,10 @@ export default class ApiClient {
               return instance(originalRequest);
             }
           } catch (refreshError) {
-            console.error("[api-client] Token refresh after PROFILE_NOT_REGISTERED failed:", refreshError);
+            console.error(
+              "[api-client] Token refresh after PROFILE_NOT_REGISTERED failed:",
+              refreshError,
+            );
           }
 
           // Token refreshed but profile_id still missing — user hasn't registered a profile.

@@ -9,7 +9,11 @@ import useCreateTag from "@workspace/api-hooks/blog/useCreateTag";
 import useDeleteTag from "@workspace/api-hooks/blog/useDeleteTag";
 import useGetTags from "@workspace/api-hooks/blog/useGetTags";
 import useUpdateTag from "@workspace/api-hooks/blog/useUpdateTag";
-import type { CreateTagRequest, TagModel, UpdateTagRequest } from "@workspace/types/blog";
+import type {
+  CreateTagRequest,
+  TagModel,
+  UpdateTagRequest,
+} from "@workspace/types/blog";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
@@ -171,7 +175,9 @@ export function AdminTagsSection() {
           <DialogHeader>
             <DialogTitle>Delete tag</DialogTitle>
             <DialogDescription>
-              Delete tag <span className="font-medium">#{deleteTarget?.name}</span>? This cannot be undone.
+              Delete tag{" "}
+              <span className="font-medium">#{deleteTarget?.name}</span>? This
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

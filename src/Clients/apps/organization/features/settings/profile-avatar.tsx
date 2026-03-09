@@ -67,9 +67,9 @@ export function AvatarBlock({ profile }: { profile: OwnProfileDetails }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
       <div className="relative shrink-0">
-        <Avatar className="size-16 ring-2 ring-background">
+        <Avatar className="ring-background size-16 ring-2">
           <AvatarImage src={displayUrl ?? undefined} alt={profile.firstName} />
-          <AvatarFallback className="bg-muted text-base font-medium text-foreground">
+          <AvatarFallback className="bg-muted text-foreground text-base font-medium">
             {fullName ? (
               getInitials(fullName)
             ) : (
@@ -82,11 +82,11 @@ export function AvatarBlock({ profile }: { profile: OwnProfileDetails }) {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploadMutation.isPending}
-          className="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full border border-border/60 bg-background shadow-sm transition-all hover:scale-110 active:scale-95 disabled:opacity-50"
+          className="border-border/60 bg-background absolute -right-1 -bottom-1 flex size-6 items-center justify-center rounded-full border shadow-sm transition-all hover:scale-110 active:scale-95 disabled:opacity-50"
           aria-label="Изменить фото"
         >
           {uploadMutation.isPending ? (
-            <Loader2 className="size-3 animate-spin text-muted-foreground" />
+            <Loader2 className="text-muted-foreground size-3 animate-spin" />
           ) : (
             <Camera className="size-3" />
           )}
@@ -95,12 +95,12 @@ export function AvatarBlock({ profile }: { profile: OwnProfileDetails }) {
 
       <div className="min-w-0">
         <p className="truncate text-sm font-semibold">{fullName || "—"}</p>
-        <p className="text-xs text-muted-foreground">{profile.login}</p>
+        <p className="text-muted-foreground text-xs">{profile.login}</p>
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploadMutation.isPending}
-          className="mt-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
+          className="text-muted-foreground hover:text-foreground mt-1.5 text-xs transition-colors disabled:opacity-50"
         >
           {uploadMutation.isPending ? "Загружаю…" : "Изменить фото"}
         </button>

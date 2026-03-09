@@ -112,7 +112,7 @@ export function CoursesListFeature() {
       {/* ── Courses list ──────────────────────────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Toolbar */}
-        <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+        <div className="border-border flex items-center justify-between border-b px-4 py-2.5">
           <p className="text-muted-foreground text-sm">
             {MOCK_COURSES.length} курсов
           </p>
@@ -173,10 +173,8 @@ function CourseRow({
         type="button"
         onClick={onClick}
         className={cn(
-          "flex w-full items-center gap-3 border-b border-border px-4 py-3 text-left transition-colors",
-          isSelected
-            ? "bg-accent"
-            : "hover:bg-muted/40",
+          "border-border flex w-full items-center gap-3 border-b px-4 py-3 text-left transition-colors",
+          isSelected ? "bg-accent" : "hover:bg-muted/40",
         )}
       >
         {/* Title */}

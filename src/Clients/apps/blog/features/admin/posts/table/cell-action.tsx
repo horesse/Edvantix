@@ -42,13 +42,20 @@ export function PostCellAction({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <Link href={`/${post.slug}`} target="_blank" className="flex items-center gap-2">
+          <Link
+            href={`/${post.slug}`}
+            target="_blank"
+            className="flex items-center gap-2"
+          >
             <Eye className="h-4 w-4" />
             View
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={`/admin/posts/${post.id}/edit`} className="flex items-center gap-2">
+          <Link
+            href={`/admin/posts/${post.id}/edit`}
+            className="flex items-center gap-2"
+          >
             <Edit className="h-4 w-4" />
             Edit
           </Link>
@@ -59,7 +66,11 @@ export function PostCellAction({
           disabled={isPublishing || post.status === PostStatus.Published}
           className="flex items-center gap-2"
         >
-          {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          {isPublishing ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Send className="h-4 w-4" />
+          )}
           Publish now
         </DropdownMenuItem>
         <DropdownMenuItem

@@ -52,7 +52,7 @@ export function CourseContextPanel({
   return (
     <div
       className={cn(
-        "flex w-80 shrink-0 flex-col border-l border-border",
+        "border-border flex w-80 shrink-0 flex-col border-l",
         className,
       )}
     >
@@ -139,7 +139,7 @@ function Section({
 }) {
   return (
     <div className="space-y-1.5">
-      <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+      <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
         {label}
       </p>
       {children}
@@ -149,7 +149,7 @@ function Section({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border px-3 py-2">
+    <div className="border-border rounded-md border px-3 py-2">
       <p className="text-muted-foreground text-xs">{label}</p>
       <p className="text-sm font-semibold">{value}</p>
     </div>

@@ -71,32 +71,32 @@ export function EducationCard({
     <div className="group relative flex gap-3">
       {/* Timeline line + dot */}
       <div className="flex flex-col items-center pt-1.5">
-        <div className="size-2 shrink-0 rounded-full bg-primary/70 ring-2 ring-background" />
-        {!isLast && <div className="mt-1 w-px flex-1 bg-border/60" />}
+        <div className="bg-primary/70 ring-background size-2 shrink-0 rounded-full ring-2" />
+        {!isLast && <div className="bg-border/60 mt-1 w-px flex-1" />}
       </div>
 
       {/* Content */}
       <div className="flex-1 pb-6">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className="text-sm font-medium leading-tight">
+            <p className="text-sm leading-tight font-medium">
               {field.institution}
             </p>
             <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              <span className="text-xs font-medium text-primary/80">
+              <span className="text-primary/80 text-xs font-medium">
                 {levelLabel}
               </span>
               {field.specialty && (
                 <>
                   <span className="text-muted-foreground/30">·</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     {field.specialty}
                   </span>
                 </>
               )}
             </div>
             {field.dateStart && (
-              <p className="mt-1 text-xs text-muted-foreground/60">
+              <p className="text-muted-foreground/60 mt-1 text-xs">
                 {formatDateRange(field.dateStart, field.dateEnd || null)}
               </p>
             )}
@@ -106,7 +106,7 @@ export function EducationCard({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/50 opacity-0 transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100"
+                className="text-muted-foreground/50 hover:bg-muted hover:text-foreground flex size-7 shrink-0 items-center justify-center rounded-md opacity-0 transition-all group-hover:opacity-100"
                 aria-label="Действия"
               >
                 <MoreVertical className="size-3.5" />
@@ -191,7 +191,7 @@ export function EducationDialog({
                 <FormItem>
                   <FormLabel>
                     Специальность{" "}
-                    <span className="font-normal text-muted-foreground">
+                    <span className="text-muted-foreground font-normal">
                       (необязательно)
                     </span>
                   </FormLabel>
@@ -252,7 +252,7 @@ export function EducationDialog({
                   <FormItem>
                     <FormLabel>
                       Дата окончания{" "}
-                      <span className="font-normal text-muted-foreground">
+                      <span className="text-muted-foreground font-normal">
                         (пусто = учусь)
                       </span>
                     </FormLabel>

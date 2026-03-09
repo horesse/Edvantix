@@ -1,7 +1,5 @@
 "use client";
 
-import { PageHeader } from "@/components/page-header";
-
 import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,6 +55,7 @@ import {
 } from "@workspace/validations/company";
 
 import { useOrganization } from "@/components/organization-provider";
+import { PageHeader } from "@/components/page-header";
 import { contactTypeLabels } from "@/lib/company-options";
 
 const contactTypeIcons: Record<ContactType, React.ReactNode> = {

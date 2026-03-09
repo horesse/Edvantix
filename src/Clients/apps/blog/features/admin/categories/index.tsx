@@ -189,8 +189,11 @@ export function AdminCategoriesSection() {
           <DialogHeader>
             <DialogTitle>Delete category</DialogTitle>
             <DialogDescription>
-              Delete <span className="font-medium">&quot;{deleteTarget?.name}&quot;</span>?
-              This cannot be undone.
+              Delete{" "}
+              <span className="font-medium">
+                &quot;{deleteTarget?.name}&quot;
+              </span>
+              ? This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

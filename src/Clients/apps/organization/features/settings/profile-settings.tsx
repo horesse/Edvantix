@@ -1,7 +1,8 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Bell, Briefcase, GraduationCap, Mail, User } from "lucide-react";
 
@@ -118,17 +119,17 @@ export function ProfileSettings() {
         className="flex flex-col gap-6 md:flex-row md:gap-8"
       >
         {/* Vertical sidebar navigation */}
-        <TabsList className="flex h-auto w-full shrink-0 flex-row gap-0.5 overflow-x-auto rounded-none border-b border-border/40 bg-transparent p-0 md:sticky md:top-4 md:w-48 md:self-start md:flex-col md:items-stretch md:gap-0.5 md:overflow-x-visible md:rounded-lg md:border-0 md:bg-muted/30 md:p-1.5">
+        <TabsList className="border-border/40 md:bg-muted/30 flex h-auto w-full shrink-0 flex-row gap-0.5 overflow-x-auto rounded-none border-b bg-transparent p-0 md:sticky md:top-4 md:w-48 md:flex-col md:items-stretch md:gap-0.5 md:self-start md:overflow-x-visible md:rounded-lg md:border-0 md:p-1.5">
           {TABS.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
               className={cn(
-                "relative justify-start gap-2 rounded-none border-0 bg-transparent px-3 py-2 text-muted-foreground shadow-none transition-colors",
+                "text-muted-foreground relative justify-start gap-2 rounded-none border-0 bg-transparent px-3 py-2 shadow-none transition-colors",
                 "hover:text-foreground",
-                "data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none",
+                "data-[state=active]:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none",
                 // Mobile: underline style
-                "after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent data-[state=active]:after:bg-primary",
+                "data-[state=active]:after:bg-primary after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-transparent",
                 // Desktop: left border + background
                 "md:rounded-md md:after:inset-x-auto md:after:inset-y-0 md:after:bottom-auto md:after:left-0 md:after:h-full md:after:w-0.5",
                 "md:data-[state=active]:bg-background md:data-[state=active]:shadow-sm",

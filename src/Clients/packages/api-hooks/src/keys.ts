@@ -39,6 +39,7 @@ export const companyKeys = {
 
 export const notificationKeys = {
   all: ["notifications"] as const,
-  list: (params?: unknown) => [...notificationKeys.all, "list", params] as const,
+  list: (params?: unknown) =>
+    [...notificationKeys.all, "list", params] as const,
   unreadCount: () => [...notificationKeys.all, "unread-count"] as const,
 };

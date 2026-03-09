@@ -131,7 +131,9 @@ export default function ProfileRegisterPage() {
     <div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-linear-to-br p-4">
       <Card className="border-muted/50 w-full max-w-lg shadow-sm">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl font-semibold">Регистрация профиля</CardTitle>
+          <CardTitle className="text-xl font-semibold">
+            Регистрация профиля
+          </CardTitle>
           <CardDescription>
             Заполните информацию для создания вашего профиля
           </CardDescription>

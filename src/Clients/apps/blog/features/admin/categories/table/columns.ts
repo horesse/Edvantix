@@ -6,8 +6,16 @@ export const CATEGORY_COLUMNS: ReadonlyArray<{
   className?: string;
 }> = [
   { id: "name", label: "Name", className: "font-semibold" },
-  { id: "slug", label: "Slug", className: "hidden sm:table-cell font-semibold" },
-  { id: "description", label: "Description", className: "hidden md:table-cell font-semibold" },
+  {
+    id: "slug",
+    label: "Slug",
+    className: "hidden sm:table-cell font-semibold",
+  },
+  {
+    id: "description",
+    label: "Description",
+    className: "hidden md:table-cell font-semibold",
+  },
   { id: "actions", label: "", className: "w-24" },
 ] as const;
 

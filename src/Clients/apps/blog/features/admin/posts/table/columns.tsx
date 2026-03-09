@@ -30,7 +30,9 @@ export function renderPostTitle(post: PostSummaryModel) {
   return (
     <div className="flex flex-col">
       <span className="line-clamp-1 font-medium">{post.title}</span>
-      <span className="text-muted-foreground font-mono text-xs">/{post.slug}</span>
+      <span className="text-muted-foreground font-mono text-xs">
+        /{post.slug}
+      </span>
     </div>
   );
 }

@@ -18,16 +18,12 @@ import {
 import useOrganization from "@workspace/api-hooks/company/useOrganization";
 import { Button } from "@workspace/ui/components/button";
 import {
-  Island,
-  IslandContent,
-  IslandDescription,
-  IslandHeader,
-  IslandTitle,
-} from "@workspace/ui/components/island";
-import {
-  IslandColumn,
-  IslandLayout,
-} from "@workspace/ui/components/island-layout";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { cn } from "@workspace/ui/lib/utils";
 
@@ -52,24 +48,24 @@ export function Dashboard() {
       <KPICards orgId={currentOrg.id} />
 
       {/* Main Content Grid */}
-      <IslandLayout columns={2}>
-        <IslandColumn>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="flex flex-col gap-4">
           <GrowthChart />
           <ActivitySection />
-        </IslandColumn>
-        <IslandColumn>
+        </div>
+        <div className="flex flex-col gap-4">
           {canManage && <QuickActions />}
           <GroupsDistribution orgId={currentOrg.id} />
           <IncomingInvitationsSection />
-        </IslandColumn>
-      </IslandLayout>
+        </div>
+      </div>
     </div>
   );
 }
 
 function EmptyState() {
   return (
-    <Island className="flex min-h-100 flex-col items-center justify-center">
+    <div className="bg-card text-card-foreground flex min-h-100 flex-col items-center justify-center rounded-lg border p-5 shadow-xs">
       <Building className="text-muted-foreground/50 mb-4 size-16" />
       <h2 className="text-xl font-semibold">Нет организаций</h2>
       <p className="text-muted-foreground mt-1 text-sm">
@@ -81,7 +77,7 @@ function EmptyState() {
           Создать организацию
         </Link>
       </Button>
-    </Island>
+    </div>
   );
 }
 
@@ -198,12 +194,12 @@ function GrowthChart() {
   const maxValue = Math.max(...chartData.map((d) => d.value));
 
   return (
-    <Island variant="bordered">
-      <IslandHeader>
-        <IslandTitle>Рост участников</IslandTitle>
-        <IslandDescription>Динамика за последние 6 месяцев</IslandDescription>
-      </IslandHeader>
-      <IslandContent>
+    <Card>
+      <CardHeader>
+        <CardTitle>Рост участников</CardTitle>
+        <CardDescription>Динамика за последние 6 месяцев</CardDescription>
+      </CardHeader>
+      <CardContent>
         <div className="space-y-4">
           <div className="flex h-50 items-end justify-between gap-2">
             {chartData.map((data) => (
@@ -232,8 +228,8 @@ function GrowthChart() {
             </div>
           </div>
         </div>
-      </IslandContent>
-    </Island>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -253,12 +249,12 @@ function GroupsDistribution({ orgId }: { orgId: string }) {
   const total = groups.reduce((sum, g) => sum + g.count, 0);
 
   return (
-    <Island variant="bordered">
-      <IslandHeader>
-        <IslandTitle>Распределение по группам</IslandTitle>
-        <IslandDescription>Участники по категориям</IslandDescription>
-      </IslandHeader>
-      <IslandContent className="space-y-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>Распределение по группам</CardTitle>
+        <CardDescription>Участники по категориям</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
         {groups.map((group) => {
           const percentage = Math.round((group.count / total) * 100);
           return (
@@ -284,8 +280,8 @@ function GroupsDistribution({ orgId }: { orgId: string }) {
             </div>
           );
         })}
-      </IslandContent>
-    </Island>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -312,12 +308,12 @@ function ActivitySection() {
   ];
 
   return (
-    <Island variant="bordered">
-      <IslandHeader>
-        <IslandTitle>Последняя активность</IslandTitle>
-        <IslandDescription>События за последние 7 дней</IslandDescription>
-      </IslandHeader>
-      <IslandContent className="space-y-3">
+    <Card>
+      <CardHeader>
+        <CardTitle>Последняя активность</CardTitle>
+        <CardDescription>События за последние 7 дней</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
         {activities.map((activity) => (
           <div
             key={activity.id}
@@ -338,19 +334,19 @@ function ActivitySection() {
             </div>
           </div>
         ))}
-      </IslandContent>
-    </Island>
+      </CardContent>
+    </Card>
   );
 }
 
 function QuickActions() {
   return (
-    <Island variant="bordered">
-      <IslandHeader>
-        <IslandTitle>Быстрые действия</IslandTitle>
-        <IslandDescription>Часто используемые операции</IslandDescription>
-      </IslandHeader>
-      <IslandContent className="flex flex-col gap-1">
+    <Card>
+      <CardHeader>
+        <CardTitle>Быстрые действия</CardTitle>
+        <CardDescription>Часто используемые операции</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-1">
         <Button variant="ghost" size="sm" asChild className="justify-start">
           <Link href="/organization/invitations">
             <UserPlus className="size-4" />
@@ -363,7 +359,7 @@ function QuickActions() {
             Создать группу
           </Link>
         </Button>
-      </IslandContent>
-    </Island>
+      </CardContent>
+    </Card>
   );
 }

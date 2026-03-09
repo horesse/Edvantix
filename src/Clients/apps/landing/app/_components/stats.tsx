@@ -115,7 +115,7 @@ export function Stats() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setTriggered(true);
           observer.disconnect();
         }

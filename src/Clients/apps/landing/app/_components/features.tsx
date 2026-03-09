@@ -12,6 +12,8 @@ import {
   Zap,
 } from "lucide-react";
 
+import { SECTION_H2_CLASS, SectionBadge } from "./section-badge";
+
 interface Feature {
   icon: LucideIcon;
   title: string;
@@ -137,11 +139,8 @@ export function Features() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="mb-16 text-center">
-          <div className="border-primary/20 bg-primary/5 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium">
-            <Zap className="h-3 w-3" aria-hidden="true" />
-            Возможности
-          </div>
-          <h2 className="text-card-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <SectionBadge icon={Zap}>Возможности</SectionBadge>
+          <h2 className={SECTION_H2_CLASS}>
             Всё, что нужно для работы
             <span className="text-primary block">вашей школы</span>
           </h2>

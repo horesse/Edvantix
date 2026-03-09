@@ -4,6 +4,8 @@ import { useRef } from "react";
 
 import { Quote, Star } from "lucide-react";
 
+import { SECTION_H2_CLASS } from "./section-badge";
+
 interface Testimonial {
   text: string;
   author: string;
@@ -194,7 +196,7 @@ export function Testimonials() {
             />
             Отзывы клиентов
           </div>
-          <h2 className="text-card-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <h2 className={SECTION_H2_CLASS}>
             Их школы уже
             <span className="text-primary block">работают по-новому</span>
           </h2>

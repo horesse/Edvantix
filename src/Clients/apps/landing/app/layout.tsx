@@ -7,9 +7,11 @@ import "@workspace/ui/globals.css";
 
 import "./landing.css";
 
-/* Initialize Geist so Next.js optimizes it — same pattern as organization */
-Geist({ subsets: ["latin"] });
-Geist_Mono({ subsets: ["latin"] });
+/* Initialize Geist so Next.js optimizes it — font loaders must be assigned to a const */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _geist = Geist({ subsets: ["latin"] });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
   width: "device-width",

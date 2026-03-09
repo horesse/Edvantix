@@ -4,6 +4,8 @@ import { ArrowRight, Rocket } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
 
+import { OUTLINE_BTN_CLASS, PRIMARY_BTN_CLASS } from "./section-badge";
+
 export function Cta() {
   return (
     <section
@@ -65,20 +67,13 @@ export function Cta() {
 
         {/* CTA buttons */}
         <div className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button
-            asChild
-            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/25 hover:shadow-primary/40 focus-visible:ring-ring focus-visible:ring-offset-background h-12 px-8 text-base shadow-xl transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-offset-2"
-          >
+          <Button asChild className={PRIMARY_BTN_CLASS}>
             <Link href="/signup">
               Начать бесплатно сегодня
               <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="border-border bg-muted/30 hover:bg-muted/60 text-foreground hover:border-border focus-visible:ring-ring h-12 px-8 text-base transition-all duration-300 focus-visible:ring-2"
-          >
+          <Button asChild variant="outline" className={OUTLINE_BTN_CLASS}>
             <Link href="/demo">Запросить демонстрацию</Link>
           </Button>
         </div>

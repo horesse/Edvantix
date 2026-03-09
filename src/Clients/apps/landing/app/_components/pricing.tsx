@@ -6,6 +6,8 @@ import Link from "next/link";
 
 import { Check, Sparkles, Zap } from "lucide-react";
 
+import { SECTION_H2_CLASS, SectionBadge } from "./section-badge";
+
 import { Button } from "@workspace/ui/components/button";
 
 interface PricingPlan {
@@ -110,11 +112,8 @@ export function Pricing() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
-          <div className="border-primary/20 bg-primary/5 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium">
-            <Sparkles className="h-3 w-3" aria-hidden="true" />
-            Тарифы
-          </div>
-          <h2 className="text-card-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <SectionBadge icon={Sparkles}>Тарифы</SectionBadge>
+          <h2 className={SECTION_H2_CLASS}>
             Прозрачные цены
             <span className="text-primary block">без скрытых платежей</span>
           </h2>

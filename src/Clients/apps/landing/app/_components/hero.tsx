@@ -20,6 +20,8 @@ import {
 
 import { Button } from "@workspace/ui/components/button";
 
+import { OUTLINE_BTN_CLASS, PRIMARY_BTN_CLASS } from "./section-badge";
+
 /* Approximate hex of --primary in dark mode: oklch(0.67 0.13 38.92) ≈ warm orange */
 const PRIMARY_RGBA = (alpha: number) => `rgba(201, 107, 44, ${alpha})`;
 /*
@@ -146,20 +148,13 @@ export function Hero() {
           }`}
           style={{ transitionDelay: "400ms" }}
         >
-          <Button
-            asChild
-            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/25 hover:shadow-primary/40 focus-visible:ring-ring focus-visible:ring-offset-background h-12 px-8 text-base shadow-xl transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-offset-2"
-          >
+          <Button asChild className={PRIMARY_BTN_CLASS}>
             <Link href="/signup">
               Начать бесплатно
               <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="border-border bg-muted/30 hover:bg-muted/60 text-foreground hover:border-border focus-visible:ring-ring h-12 px-8 text-base transition-all duration-300 focus-visible:ring-2"
-          >
+          <Button asChild variant="outline" className={OUTLINE_BTN_CLASS}>
             <Link href="/demo">
               <Play className="text-primary mr-2 h-4 w-4" aria-hidden="true" />
               Смотреть демо

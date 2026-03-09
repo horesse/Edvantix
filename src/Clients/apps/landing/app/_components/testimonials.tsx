@@ -11,98 +11,88 @@ interface Testimonial {
   author: string;
   role: string;
   school: string;
-  initials: string;
   avatarColor: string;
-  rating: number;
 }
 
+/** All testimonials have 5-star rating — no need to store it per item. */
 const TESTIMONIALS: Testimonial[] = [
   {
     text: "Edvantix полностью изменил работу нашей школы. Раньше мы вели студентов в Excel, теперь всё автоматически. Сэкономили 20 часов в неделю.",
     author: "Алёна Морозова",
     role: "Основатель",
     school: "Digital Skills Academy",
-    initials: "АМ",
     avatarColor: "from-pink-500 to-rose-400",
-    rating: 5,
   },
   {
     text: "Лучшая платформа для онлайн-школы на рынке. Удобный интерфейс, быстрая поддержка и всё что нужно из коробки. Рекомендую всем коллегам.",
     author: "Сергей Кузнецов",
     role: "CEO",
     school: "ProSchool",
-    initials: "СК",
     avatarColor: "from-blue-500 to-cyan-400",
-    rating: 5,
   },
   {
     text: "Запустила свою школу за день. Всё интуитивно: курсы, оплата, уведомления. Студенты в восторге от качества платформы.",
     author: "Мария Соколова",
     role: "Директор",
     school: "BeautyPro Edu",
-    initials: "МС",
     avatarColor: "from-orange-500 to-amber-400",
-    rating: 5,
   },
   {
     text: "Аналитика в Edvantix помогла нам понять, где теряем студентов, и поднять конверсию на 35%. Данные, которые реально работают.",
     author: "Дмитрий Волков",
     role: "Продюсер",
     school: "Volkov Academy",
-    initials: "ДВ",
     avatarColor: "from-emerald-500 to-green-400",
-    rating: 5,
   },
   {
     text: "Перешли с другой платформы и не пожалели. Переезд занял 2 дня, а результаты видны уже с первого месяца. Выручка выросла на 40%.",
     author: "Наталья Иванова",
     role: "Владелец",
     school: "EduMaster",
-    initials: "НИ",
     avatarColor: "from-violet-500 to-purple-400",
-    rating: 5,
   },
   {
     text: "Модуль расписания и напоминаний — просто бомба. Студенты перестали пропускать вебинары, посещаемость выросла с 60% до 89%.",
     author: "Антон Петров",
     role: "Методист",
     school: "TechLearn",
-    initials: "АП",
     avatarColor: "from-teal-500 to-cyan-400",
-    rating: 5,
   },
   {
     text: "Финансовые отчёты экономят бухгалтеру несколько часов каждый месяц. Всё выгружается в нужном формате автоматически.",
     author: "Елена Захарова",
     role: "CFO",
     school: "SmartEd Group",
-    initials: "ЕЗ",
     avatarColor: "from-indigo-500 to-blue-400",
-    rating: 5,
   },
   {
     text: "Поддержка отвечает в течение 10 минут. За год работы ни одного критического сбоя. Стабильная платформа — это бесценно.",
     author: "Виктор Смирнов",
     role: "Технический директор",
     school: "CodeAcademy RU",
-    initials: "ВС",
     avatarColor: "from-rose-500 to-pink-400",
-    rating: 5,
   },
 ];
 
 const FIRST_ROW = [...TESTIMONIALS.slice(0, 4), ...TESTIMONIALS.slice(0, 4)];
 const SECOND_ROW = [...TESTIMONIALS.slice(4), ...TESTIMONIALS.slice(4)];
 
+const STAR_ROW = Array.from({ length: 5 });
+
+function initials(author: string) {
+  return author
+    .split(" ")
+    .map((w) => w[0] ?? "")
+    .join("")
+    .slice(0, 2);
+}
+
 function TestimonialCard({ item }: { item: Testimonial }) {
   return (
     <article className="border-border bg-card/60 mx-2 w-80 flex-shrink-0 rounded-2xl border p-6">
-      {/* Rating */}
-      <div
-        className="mb-4 flex gap-0.5"
-        aria-label={`Оценка: ${item.rating} из 5`}
-      >
-        {Array.from({ length: item.rating }).map((_, i) => (
+      {/* 5-star rating */}
+      <div className="mb-4 flex gap-0.5" aria-label="Оценка: 5 из 5">
+        {STAR_ROW.map((_, i) => (
           <Star
             key={i}
             className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400"
@@ -122,7 +112,9 @@ function TestimonialCard({ item }: { item: Testimonial }) {
           className={`h-9 w-9 rounded-full bg-gradient-to-br ${item.avatarColor} flex shrink-0 items-center justify-center`}
           aria-hidden="true"
         >
-          <span className="text-xs font-bold text-white">{item.initials}</span>
+          <span className="text-xs font-bold text-white">
+            {initials(item.author)}
+          </span>
         </div>
         <div className="min-w-0">
           <div className="text-card-foreground truncate text-sm font-semibold">

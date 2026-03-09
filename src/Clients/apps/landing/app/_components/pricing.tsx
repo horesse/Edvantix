@@ -6,9 +6,9 @@ import Link from "next/link";
 
 import { Check, Sparkles, Zap } from "lucide-react";
 
-import { SECTION_H2_CLASS, SectionBadge } from "./section-badge";
-
 import { Button } from "@workspace/ui/components/button";
+
+import { SECTION_H2_CLASS, SectionBadge } from "./section-badge";
 
 interface PricingPlan {
   name: string;

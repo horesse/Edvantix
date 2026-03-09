@@ -106,7 +106,7 @@ updates:
           - "@types/react*"
 
   - package-ecosystem: "npm"
-    directory: "/src/Aspire/BookWorm.AppHost/Container/k6"
+    directory: "/src/Aspire/Edvantix.AppHost/Container/k6"
     schedule:
       interval: weekly
       day: friday
@@ -127,7 +127,7 @@ updates:
           - "*-loader"
 
   - package-ecosystem: "npm"
-    directory: "/src/Aspire/BookWorm.AppHost/Container/keycloak/keycloakify"
+    directory: "/src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify"
     schedule:
       interval: weekly
       day: friday
@@ -150,10 +150,10 @@ updates:
         patterns:
           - "keycloakify"
           - "@keycloakify/*"
-      storybook:
+      organization:
         patterns:
-          - "@storybook/*"
-          - "storybook"
+          - "@organization/*"
+          - "organization"
 
   - package-ecosystem: "npm"
     directory: "/src/Clients"

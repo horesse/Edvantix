@@ -20,7 +20,7 @@ jobs:
   aspire_deploy:
     if: github.ref == 'refs/heads/main' || github.event.inputs.environment != ''
     runs-on: ubuntu-latest
-    name: Deploy BookWorm with Aspire
+    name: Deploy Edvantix with Aspire
     permissions:
       id-token: write
       contents: read

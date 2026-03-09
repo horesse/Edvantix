@@ -15,7 +15,13 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@workspace/ui/components/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import {
   Table,
@@ -203,7 +209,10 @@ export function FilterTable<TData>({
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   Данных нет
                 </TableCell>
               </TableRow>
@@ -222,7 +231,10 @@ export function FilterTable<TData>({
           </p>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <p className="text-muted-foreground text-xs" id="rows-per-page-label">
+              <p
+                className="text-muted-foreground text-xs"
+                id="rows-per-page-label"
+              >
                 Строк:
               </p>
               <Select

@@ -1,4 +1,7 @@
-import type { Notification, UnreadCountResponse } from "@workspace/types/notifications";
+import type {
+  Notification,
+  UnreadCountResponse,
+} from "@workspace/types/notifications";
 import type { PagedResult } from "@workspace/types/shared";
 
 import { apiClient } from "../client";
@@ -57,9 +60,7 @@ class NotificationApiClient {
 
   /** Помечает все уведомления пользователя как прочитанные. */
   public async markAllAsRead(): Promise<void> {
-    await this.client.post<void>(
-      `/notification/api/v1/notifications/read-all`,
-    );
+    await this.client.post<void>(`/notification/api/v1/notifications/read-all`);
   }
 }
 

@@ -91,7 +91,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   // Redirect unauthenticated users to Keycloak login.
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      signIn.social({ provider: AUTH.PROVIDER, callbackURL: AUTH.CALLBACK_URL });
+      signIn.social({
+        provider: AUTH.PROVIDER,
+        callbackURL: AUTH.CALLBACK_URL,
+      });
     }
   }, [isAuthenticated, isLoading]);
 

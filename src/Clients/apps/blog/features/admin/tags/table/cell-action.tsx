@@ -11,7 +11,12 @@ type TagCellActionProps = Readonly<{
   isSubmitting: boolean;
 }>;
 
-export function TagCellAction({ item, onEdit, onDelete, isSubmitting }: TagCellActionProps) {
+export function TagCellAction({
+  item,
+  onEdit,
+  onDelete,
+  isSubmitting,
+}: TagCellActionProps) {
   return (
     <div className="flex items-center justify-end gap-1">
       <Button

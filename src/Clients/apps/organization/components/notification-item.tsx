@@ -93,7 +93,8 @@ export function NotificationItem({
   onMarkAsRead,
   compact = false,
 }: NotificationItemProps) {
-  const config = typeConfig[notification.type] ?? typeConfig[NotificationType.Info];
+  const config =
+    typeConfig[notification.type] ?? typeConfig[NotificationType.Info];
   const Icon = config.icon;
 
   const handleClick = () => {
@@ -109,18 +110,11 @@ export function NotificationItem({
       className={cn(
         "group flex w-full items-start gap-3 px-4 text-left transition-colors",
         compact ? "py-2.5" : "py-3",
-        notification.isRead
-          ? "hover:bg-accent/50"
-          : "hover:bg-accent",
+        notification.isRead ? "hover:bg-accent/50" : "hover:bg-accent",
       )}
     >
       {/* Иконка типа */}
-      <span
-        className={cn(
-          "mt-0.5 shrink-0",
-          config.className,
-        )}
-      >
+      <span className={cn("mt-0.5 shrink-0", config.className)}>
         <Icon className="size-4" />
       </span>
 
@@ -137,7 +131,7 @@ export function NotificationItem({
           {notification.title}
         </span>
         {!compact && (
-          <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+          <span className="text-muted-foreground mt-0.5 block truncate text-xs">
             {notification.message}
           </span>
         )}
@@ -145,11 +139,11 @@ export function NotificationItem({
 
       {/* Правая часть: время + точка непрочитанного */}
       <span className="ml-auto flex shrink-0 flex-col items-end gap-1">
-        <span className="text-[11px] tabular-nums text-muted-foreground/70">
+        <span className="text-muted-foreground/70 text-[11px] tabular-nums">
           {formatRelativeTime(notification.createdAt)}
         </span>
         {!notification.isRead && (
-          <span className="size-1.5 rounded-full bg-primary" />
+          <span className="bg-primary size-1.5 rounded-full" />
         )}
       </span>
     </button>

@@ -77,12 +77,18 @@ export function CategoryDialog({
               placeholder="Brief description…"
               rows={3}
               value={form.description}
-              onChange={(e) => onChange({ ...form, description: e.target.value })}
+              onChange={(e) =>
+                onChange({ ...form, description: e.target.value })
+              }
             />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
           <Button

@@ -10,7 +10,10 @@ import { notificationKeys } from "../keys";
 
 export default function useNotifications(
   params: GetNotificationsParams = {},
-  options?: Omit<UseQueryOptions<PagedResult<Notification>>, "queryKey" | "queryFn">,
+  options?: Omit<
+    UseQueryOptions<PagedResult<Notification>>,
+    "queryKey" | "queryFn"
+  >,
 ) {
   return useQuery({
     queryKey: notificationKeys.list(params),

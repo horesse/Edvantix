@@ -15,10 +15,10 @@ export function EmptyState({
     <button
       type="button"
       onClick={onAdd}
-      className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border/50 py-5 transition-all hover:border-border hover:bg-muted/20"
+      className="border-border/50 hover:border-border hover:bg-muted/20 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-5 transition-all"
     >
       <span className="text-muted-foreground/30">{icon}</span>
-      <span className="text-xs text-muted-foreground">{text}</span>
+      <span className="text-muted-foreground text-xs">{text}</span>
     </button>
   );
 }

@@ -11,10 +11,7 @@ import { notificationKeys } from "../keys";
  * По умолчанию обновляется каждые 30 секунд для актуального бейджа.
  */
 export default function useUnreadCount(
-  options?: Omit<
-    UseQueryOptions<UnreadCountResponse>,
-    "queryKey" | "queryFn"
-  >,
+  options?: Omit<UseQueryOptions<UnreadCountResponse>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: notificationKeys.unreadCount(),

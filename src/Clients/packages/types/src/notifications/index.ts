@@ -9,7 +9,8 @@ export const NotificationType = {
   System: 6,
 } as const;
 
-export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+export type NotificationType =
+  (typeof NotificationType)[keyof typeof NotificationType];
 
 /** DTO одного уведомления с сервера. */
 export type Notification = {

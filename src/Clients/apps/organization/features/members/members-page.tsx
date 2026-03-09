@@ -7,8 +7,6 @@ import { Loader2, MoreHorizontal, Plus, Trash2, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import useAddMember from "@workspace/api-hooks/company/useAddMember";
-
-import { PageHeader } from "@/components/page-header";
 import useOrganizationMembers from "@workspace/api-hooks/company/useOrganizationMembers";
 import useRemoveMember from "@workspace/api-hooks/company/useRemoveMember";
 import useUpdateMemberRole from "@workspace/api-hooks/company/useUpdateMemberRole";
@@ -40,7 +38,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { FilterTable } from "@/components/filter-table";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import {
@@ -52,7 +49,9 @@ import {
 } from "@workspace/ui/components/select";
 import { usePaginatedTable } from "@workspace/ui/hooks/usePaginatedTable";
 
+import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
+import { PageHeader } from "@/components/page-header";
 import { organizationRoleLabels } from "@/lib/company-options";
 
 export function MembersPage() {

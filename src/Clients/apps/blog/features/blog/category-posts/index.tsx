@@ -55,8 +55,7 @@ export function CategoryPostsSection({ params }: Props) {
             )}
             {data && (
               <p className="text-muted-foreground mt-3 text-sm">
-                {data.totalCount} post{data.totalCount !== 1 ? "s" : ""} in
-                this
+                {data.totalCount} post{data.totalCount !== 1 ? "s" : ""} in this
                 category
               </p>
             )}

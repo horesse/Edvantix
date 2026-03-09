@@ -1,7 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Globe, Mail, MoreHorizontal, MoreVertical, Phone, Trash2 } from "lucide-react";
+import {
+  Globe,
+  Mail,
+  MoreHorizontal,
+  MoreVertical,
+  Phone,
+  Trash2,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { ContactType } from "@workspace/types/profile";
@@ -78,7 +85,7 @@ export function ContactRow({
   const Icon = meta.icon;
 
   return (
-    <div className="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/40">
+    <div className="group hover:bg-muted/40 flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors">
       <span
         className={cn(
           "flex size-8 shrink-0 items-center justify-center rounded-lg",
@@ -90,7 +97,7 @@ export function ContactRow({
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{field.value}</p>
-        <p className="truncate text-xs text-muted-foreground">
+        <p className="text-muted-foreground truncate text-xs">
           {meta.label}
           {field.description ? ` · ${field.description}` : ""}
         </p>
@@ -100,7 +107,7 @@ export function ContactRow({
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/50 opacity-0 transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100"
+            className="text-muted-foreground/50 hover:bg-muted hover:text-foreground flex size-7 shrink-0 items-center justify-center rounded-md opacity-0 transition-all group-hover:opacity-100"
             aria-label="Действия"
           >
             <MoreVertical className="size-3.5" />
@@ -171,7 +178,7 @@ export function ContactDialog({
                       {Object.entries(contactTypeMeta).map(([key, meta]) => (
                         <SelectItem key={key} value={key}>
                           <span className="flex items-center gap-2">
-                            <meta.icon className="size-3.5 text-muted-foreground" />
+                            <meta.icon className="text-muted-foreground size-3.5" />
                             {meta.label}
                           </span>
                         </SelectItem>
@@ -202,7 +209,7 @@ export function ContactDialog({
                 <FormItem>
                   <FormLabel>
                     Описание{" "}
-                    <span className="font-normal text-muted-foreground">
+                    <span className="text-muted-foreground font-normal">
                       (необязательно)
                     </span>
                   </FormLabel>

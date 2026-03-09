@@ -27,7 +27,9 @@ export function toDateString(value: string | null | undefined): string {
   return value.slice(0, 10);
 }
 
-export function getDefaultValues(profile: OwnProfileDetails): ProfileFormValues {
+export function getDefaultValues(
+  profile: OwnProfileDetails,
+): ProfileFormValues {
   return {
     lastName: profile.lastName,
     firstName: profile.firstName,
@@ -54,4 +56,3 @@ export function getDefaultValues(profile: OwnProfileDetails): ProfileFormValues 
     })),
   };
 }
-

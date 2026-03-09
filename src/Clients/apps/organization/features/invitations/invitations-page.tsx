@@ -23,8 +23,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
-import { FilterTable } from "@/components/filter-table";
-import { PageHeader } from "@/components/page-header";
 import {
   Form,
   FormControl,
@@ -52,7 +50,9 @@ import {
   createInvitationSchema,
 } from "@workspace/validations/company";
 
+import { FilterTable } from "@/components/filter-table";
 import { useOrganization } from "@/components/organization-provider";
+import { PageHeader } from "@/components/page-header";
 import { organizationRoleLabels } from "@/lib/company-options";
 
 import { IncomingInvitationsSection } from "./incoming-invitations-section";
@@ -170,7 +170,9 @@ function OutgoingInvitations({ orgId }: { orgId: string }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-muted-foreground">Отправленные</p>
+        <p className="text-muted-foreground text-sm font-medium">
+          Отправленные
+        </p>
         <Button size="sm" onClick={() => setCreateOpen(true)}>
           <Plus className="size-4" />
           Пригласить

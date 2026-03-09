@@ -7,9 +7,9 @@ import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import useLegalForms from "@workspace/api-hooks/company/useLegalForms";
 import useOrganization from "@workspace/api-hooks/company/useOrganization";
 import useUpdateOrganization from "@workspace/api-hooks/company/useUpdateOrganization";
-import useLegalForms from "@workspace/api-hooks/company/useLegalForms";
 import {
   ORGANIZATION_TYPE_LABELS,
   OrganizationType,
@@ -38,10 +38,11 @@ import {
   updateOrganizationSchema,
 } from "@workspace/validations/company";
 
-import { PageHeader } from "@/components/page-header";
 import { useOrganization as useOrgContext } from "@/components/organization-provider";
+import { PageHeader } from "@/components/page-header";
 
-const SECTION = "grid gap-8 border-t border-border/40 py-6 md:grid-cols-[240px_1fr]";
+const SECTION =
+  "grid gap-8 border-t border-border/40 py-6 md:grid-cols-[240px_1fr]";
 
 function SectionMeta({
   title,
@@ -53,7 +54,7 @@ function SectionMeta({
   return (
     <div>
       <p className="text-sm font-medium">{title}</p>
-      <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+      <p className="text-muted-foreground mt-1 text-xs">{description}</p>
     </div>
   );
 }
@@ -205,7 +206,6 @@ function OrganizationForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-
         {/* ── Названия ── */}
         <section className={SECTION}>
           <SectionMeta
@@ -306,9 +306,7 @@ function OrganizationForm({
                 <FormItem>
                   <FormLabel>Тип организации</FormLabel>
                   <Select
-                    value={
-                      field.value !== undefined ? String(field.value) : ""
-                    }
+                    value={field.value !== undefined ? String(field.value) : ""}
                     onValueChange={(v) =>
                       field.onChange(Number(v) as OrganizationType)
                     }
@@ -352,7 +350,9 @@ function OrganizationForm({
                 <FormItem>
                   <FormLabel>
                     Печатное название{" "}
-                    <span className="font-normal opacity-60">(необязательно)</span>
+                    <span className="font-normal opacity-60">
+                      (необязательно)
+                    </span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -368,7 +368,9 @@ function OrganizationForm({
                 <FormItem>
                   <FormLabel>
                     Описание{" "}
-                    <span className="font-normal opacity-60">(необязательно)</span>
+                    <span className="font-normal opacity-60">
+                      (необязательно)
+                    </span>
                   </FormLabel>
                   <FormControl>
                     <Textarea rows={3} {...field} />
@@ -381,9 +383,9 @@ function OrganizationForm({
         </section>
 
         {/* ── Save bar ── */}
-        <div className="flex items-center justify-between border-t border-border/40 pt-4">
+        <div className="border-border/40 flex items-center justify-between border-t pt-4">
           {isDirty && !isPending ? (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Есть несохранённые изменения
             </p>
           ) : (
@@ -394,7 +396,6 @@ function OrganizationForm({
             Сохранить изменения
           </Button>
         </div>
-
       </form>
     </Form>
   );

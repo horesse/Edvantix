@@ -9,4 +9,10 @@ public static class Clients
 
     public const string BlogFront = "blogfront";
     public const string BlogTurboApp = $"{Prefix}/{BlogFront}";
+
+    public const string LandingFront = "landingfront";
+    public const string LandingTurboApp = $"{Prefix}/{LandingFront}";
+
+    public const string AdminFront = "adminfront";
+    public const string AdminTurboApp = $"{Prefix}/{AdminFront}";
 }

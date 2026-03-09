@@ -7,9 +7,9 @@ import Link from "next/link";
 import { Bell } from "lucide-react";
 
 import useMarkAllAsRead from "@workspace/api-hooks/notifications/useMarkAllAsRead";
+import useMarkAsRead from "@workspace/api-hooks/notifications/useMarkAsRead";
 import useNotifications from "@workspace/api-hooks/notifications/useNotifications";
 import useUnreadCount from "@workspace/api-hooks/notifications/useUnreadCount";
-import useMarkAsRead from "@workspace/api-hooks/notifications/useMarkAsRead";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -35,10 +35,10 @@ export function NotificationBell() {
   const unreadCount = countData?.count ?? 0;
 
   // Загружаем 10 последних уведомлений при открытии попапа
-  const {
-    data: notificationsData,
-    isLoading,
-  } = useNotifications({ pageSize: 10 }, { enabled: open });
+  const { data: notificationsData, isLoading } = useNotifications(
+    { pageSize: 10 },
+    { enabled: open },
+  );
 
   const { mutate: markAsRead } = useMarkAsRead();
   const { mutate: markAllAsRead, isPending: isMarkingAll } = useMarkAllAsRead();
@@ -70,11 +70,7 @@ export function NotificationBell() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent
-        align="end"
-        sideOffset={8}
-        className="w-80 p-0"
-      >
+      <PopoverContent align="end" sideOffset={8} className="w-80 p-0">
         {/* Шапка панели */}
         <div className="flex items-center justify-between px-4 py-3">
           <span className="text-sm font-medium">Уведомления</span>
@@ -82,7 +78,7 @@ export function NotificationBell() {
             <Button
               variant="ghost"
               size="sm"
-              className="h-auto py-0.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground h-auto px-2 py-0.5 text-xs"
               disabled={isMarkingAll}
               onClick={handleMarkAllAsRead}
             >
@@ -121,7 +117,7 @@ export function NotificationBell() {
               <Link
                 href="/notifications"
                 onClick={() => setOpen(false)}
-                className="block text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground block text-center text-xs transition-colors"
               >
                 Все уведомления
               </Link>
@@ -152,8 +148,8 @@ function NotificationSkeleton() {
 function EmptyNotifications() {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
-      <Bell className="mb-2 size-8 text-muted-foreground/40" />
-      <p className="text-sm text-muted-foreground">Нет новых уведомлений</p>
+      <Bell className="text-muted-foreground/40 mb-2 size-8" />
+      <p className="text-muted-foreground text-sm">Нет новых уведомлений</p>
     </div>
   );
 }

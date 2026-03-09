@@ -53,7 +53,10 @@ export function CategoriesTable({
         <TableBody>
           {items.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={CATEGORY_COLUMNS.length} className="py-16 text-center">
+              <TableCell
+                colSpan={CATEGORY_COLUMNS.length}
+                className="py-16 text-center"
+              >
                 <div className="flex flex-col items-center gap-2">
                   <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-full">
                     <Hash className="text-muted-foreground h-5 w-5" />
@@ -66,7 +69,10 @@ export function CategoriesTable({
             </TableRow>
           ) : (
             items.map((item) => (
-              <TableRow key={item.id} className="hover:bg-muted/30 transition-colors">
+              <TableRow
+                key={item.id}
+                className="hover:bg-muted/30 transition-colors"
+              >
                 <TableCell>
                   <div className="flex items-center gap-2.5">
                     <div className="bg-primary/10 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg">
@@ -81,7 +87,9 @@ export function CategoriesTable({
                   </code>
                 </TableCell>
                 <TableCell className="text-muted-foreground hidden text-sm md:table-cell">
-                  <span className="line-clamp-1">{item.description ?? "—"}</span>
+                  <span className="line-clamp-1">
+                    {item.description ?? "—"}
+                  </span>
                 </TableCell>
                 <TableCell>
                   <CategoryCellAction

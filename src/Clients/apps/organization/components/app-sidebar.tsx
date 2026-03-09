@@ -26,22 +26,42 @@ import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { Separator } from "@workspace/ui/components/separator";
 import { cn } from "@workspace/ui/lib/utils";
 
-import { OrganizationSelector } from "./organization-selector";
 import { useOrganization } from "./organization-provider";
+import { OrganizationSelector } from "./organization-selector";
 import { getOrgNavItems } from "./school-nav-items";
 
 // ── Global navigation (workspace-level, all roles) ────────────────────────
 const globalNavItems = [
-  { id: "schedule", title: "Мое расписание", url: "/schedule", icon: CalendarDays },
+  {
+    id: "schedule",
+    title: "Мое расписание",
+    url: "/schedule",
+    icon: CalendarDays,
+  },
   { id: "my-courses", title: "Мои курсы", url: "/my-courses", icon: BookOpen },
   { id: "messages", title: "Сообщения", url: "/messages", icon: MessageSquare },
-  { id: "notifications", title: "Уведомления", url: "/notifications", icon: Bell },
+  {
+    id: "notifications",
+    title: "Уведомления",
+    url: "/notifications",
+    icon: Bell,
+  },
 ];
 
 // ── Footer actions ────────────────────────────────────────────────────────
 const footerItems = [
-  { id: "invite", title: "Пригласить", url: "/invitations/create", icon: UserPlus },
-  { id: "settings", title: "Настройки аккаунта", url: "/settings", icon: Settings },
+  {
+    id: "invite",
+    title: "Пригласить",
+    url: "/invitations/create",
+    icon: UserPlus,
+  },
+  {
+    id: "settings",
+    title: "Настройки аккаунта",
+    url: "/settings",
+    icon: Settings,
+  },
 ];
 
 // ── Primitives ────────────────────────────────────────────────────────────
@@ -78,7 +98,7 @@ function NavItem({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-muted-foreground/60 px-2 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-widest">
+    <p className="text-muted-foreground/60 px-2 pt-3 pb-1 text-[11px] font-semibold tracking-widest uppercase">
       {children}
     </p>
   );
@@ -97,10 +117,11 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { userRole, currentOrg } = useOrganization();
 
-  const [isOrgOpen, setIsOrgOpen] = React.useState(() =>
-    pathname === "/" ||
-    pathname.startsWith("/school") ||
-    pathname.startsWith("/organization"),
+  const [isOrgOpen, setIsOrgOpen] = React.useState(
+    () =>
+      pathname === "/" ||
+      pathname.startsWith("/school") ||
+      pathname.startsWith("/organization"),
   );
 
   const orgNavItems = React.useMemo(
@@ -114,16 +135,15 @@ export function AppSidebar() {
     pathname.startsWith("/organization");
 
   return (
-    <aside className="bg-sidebar text-sidebar-foreground hidden w-64 shrink-0 flex-col border-r border-border lg:flex">
+    <aside className="bg-sidebar text-sidebar-foreground border-border hidden w-64 shrink-0 flex-col border-r lg:flex">
       {/* ── Org switcher ─────────────────────────────────────────── */}
-      <div className="border-b border-border px-3 py-2">
+      <div className="border-border border-b px-3 py-2">
         <OrganizationSelector />
       </div>
 
       {/* ── Nav (scroll fix: flex-1 + min-h-0) ──────────────────── */}
       <ScrollArea className="min-h-0 flex-1">
         <div className="px-2 pb-3">
-
           {/* Global workspace nav */}
           <SectionLabel>Общее</SectionLabel>
           <div className="space-y-0.5">
@@ -185,12 +205,11 @@ export function AppSidebar() {
               })}
             </CollapsibleContent>
           </Collapsible>
-
         </div>
       </ScrollArea>
 
       {/* ── Footer ────────────────────────────────────────────────── */}
-      <div className="border-t border-border px-2 py-2">
+      <div className="border-border border-t px-2 py-2">
         <div className="space-y-0.5">
           {footerItems.map((item) => (
             <NavItem

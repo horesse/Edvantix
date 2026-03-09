@@ -4,12 +4,7 @@ import * as React from "react";
 
 import Link from "next/link";
 
-import {
-  LogOut,
-  Search,
-  Settings as SettingsIcon,
-  User,
-} from "lucide-react";
+import { LogOut, Search, Settings as SettingsIcon, User } from "lucide-react";
 
 import useOwnProfile from "@workspace/api-hooks/profiles/useOwnProfile";
 import {

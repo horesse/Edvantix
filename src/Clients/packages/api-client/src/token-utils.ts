@@ -2,14 +2,11 @@
  * Parses the expiry time from a JWT access token without external dependencies.
  * Returns expiry timestamp in milliseconds, or null if the token is invalid.
  */
-export function getTokenExpiry(token: string): number | null
-{
-  try
-  {
+export function getTokenExpiry(token: string): number | null {
+  try {
     const parts = token.split(".");
 
-    if (parts.length !== 3)
-    {
+    if (parts.length !== 3) {
       return null;
     }
 
@@ -18,9 +15,7 @@ export function getTokenExpiry(token: string): number | null
     const payload = JSON.parse(atob(base64)) as Record<string, unknown>;
 
     return typeof payload["exp"] === "number" ? payload["exp"] * 1000 : null;
-  }
-  catch
-  {
+  } catch {
     return null;
   }
 }
@@ -32,10 +27,8 @@ export function getTokenExpiry(token: string): number | null
 export function isTokenExpiringSoon(
   token: string | null,
   bufferMs = 60_000,
-): boolean
-{
-  if (!token)
-  {
+): boolean {
+  if (!token) {
     return true;
   }
 

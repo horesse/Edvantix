@@ -72,8 +72,7 @@ export function TabEmployment({
     });
   }
 
-  const isDirty =
-    JSON.stringify(employments) !== JSON.stringify(savedSnapshot);
+  const isDirty = JSON.stringify(employments) !== JSON.stringify(savedSnapshot);
   const isPending = mutation.isPending;
 
   useEffect(() => {
@@ -89,7 +88,7 @@ export function TabEmployment({
       className="space-y-4"
     >
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           История вашей трудовой деятельности
         </p>
         <Button
@@ -97,7 +96,7 @@ export function TabEmployment({
           variant="ghost"
           size="sm"
           onClick={() => setDialogOpen(true)}
-          className="h-7 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground h-7 gap-1.5 px-2.5 text-xs"
         >
           <Plus className="size-3" />
           Добавить
@@ -129,9 +128,9 @@ export function TabEmployment({
         onAppend={handleAppend}
       />
 
-      <div className="flex items-center justify-between border-t border-border/40 pt-4">
+      <div className="border-border/40 flex items-center justify-between border-t pt-4">
         {isDirty && !isPending ? (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             Есть несохранённые изменения
           </p>
         ) : (

@@ -175,9 +175,7 @@ export default function CreateOrganizationPage() {
                 <FormItem>
                   <FormLabel>Тип организации</FormLabel>
                   <Select
-                    value={
-                      field.value !== undefined ? String(field.value) : ""
-                    }
+                    value={field.value !== undefined ? String(field.value) : ""}
                     onValueChange={(v) =>
                       field.onChange(Number(v) as OrganizationType)
                     }
@@ -254,7 +252,11 @@ export default function CreateOrganizationPage() {
               >
                 Отмена
               </Button>
-              <Button type="submit" size="sm" disabled={createMutation.isPending}>
+              <Button
+                type="submit"
+                size="sm"
+                disabled={createMutation.isPending}
+              >
                 {createMutation.isPending && (
                   <Loader2 className="size-4 animate-spin" />
                 )}

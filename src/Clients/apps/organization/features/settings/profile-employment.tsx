@@ -47,27 +47,27 @@ export function EmploymentCard({
     <div className="group relative flex gap-3">
       {/* Timeline line + dot */}
       <div className="flex flex-col items-center pt-1.5">
-        <div className="size-2 shrink-0 rounded-full bg-primary/70 ring-2 ring-background" />
-        {!isLast && <div className="mt-1 w-px flex-1 bg-border/60" />}
+        <div className="bg-primary/70 ring-background size-2 shrink-0 rounded-full ring-2" />
+        {!isLast && <div className="bg-border/60 mt-1 w-px flex-1" />}
       </div>
 
       {/* Content */}
       <div className="flex-1 pb-6">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className="text-sm font-medium leading-tight">
+            <p className="text-sm leading-tight font-medium">
               {field.position}
             </p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
+            <p className="text-muted-foreground mt-0.5 text-xs">
               {field.workplace}
             </p>
             {field.startDate && (
-              <p className="mt-1 text-xs text-muted-foreground/60">
+              <p className="text-muted-foreground/60 mt-1 text-xs">
                 {formatDateRange(field.startDate, field.endDate || null)}
               </p>
             )}
             {field.description && (
-              <p className="mt-2 max-w-lg text-xs leading-relaxed text-muted-foreground/80">
+              <p className="text-muted-foreground/80 mt-2 max-w-lg text-xs leading-relaxed">
                 {field.description}
               </p>
             )}
@@ -77,7 +77,7 @@ export function EmploymentCard({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/50 opacity-0 transition-all hover:bg-muted hover:text-foreground group-hover:opacity-100"
+                className="text-muted-foreground/50 hover:bg-muted hover:text-foreground flex size-7 shrink-0 items-center justify-center rounded-md opacity-0 transition-all group-hover:opacity-100"
                 aria-label="Действия"
               >
                 <MoreVertical className="size-3.5" />
@@ -186,7 +186,7 @@ export function EmploymentDialog({
                   <FormItem>
                     <FormLabel>
                       Дата окончания{" "}
-                      <span className="font-normal text-muted-foreground">
+                      <span className="text-muted-foreground font-normal">
                         (пусто = по н.в.)
                       </span>
                     </FormLabel>
@@ -205,7 +205,7 @@ export function EmploymentDialog({
                 <FormItem>
                   <FormLabel>
                     Описание{" "}
-                    <span className="font-normal text-muted-foreground">
+                    <span className="text-muted-foreground font-normal">
                       (необязательно)
                     </span>
                   </FormLabel>

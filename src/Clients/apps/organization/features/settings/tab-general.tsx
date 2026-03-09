@@ -152,9 +152,9 @@ export function TabGeneral({
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-border/40 pt-4">
+        <div className="border-border/40 flex items-center justify-between border-t pt-4">
           {isDirty && !isPending ? (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Есть несохранённые изменения
             </p>
           ) : (

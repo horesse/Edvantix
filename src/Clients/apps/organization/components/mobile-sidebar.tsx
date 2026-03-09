@@ -33,15 +33,25 @@ import {
 } from "@workspace/ui/components/sheet";
 import { cn } from "@workspace/ui/lib/utils";
 
-import { OrganizationSelector } from "./organization-selector";
 import { useOrganization } from "./organization-provider";
+import { OrganizationSelector } from "./organization-selector";
 import { getOrgNavItems } from "./school-nav-items";
 
 const globalNavItems = [
-  { id: "schedule", title: "Мое расписание", url: "/schedule", icon: CalendarDays },
+  {
+    id: "schedule",
+    title: "Мое расписание",
+    url: "/schedule",
+    icon: CalendarDays,
+  },
   { id: "my-courses", title: "Мои курсы", url: "/my-courses", icon: BookOpen },
   { id: "messages", title: "Сообщения", url: "/messages", icon: MessageSquare },
-  { id: "notifications", title: "Уведомления", url: "/notifications", icon: Bell },
+  {
+    id: "notifications",
+    title: "Уведомления",
+    url: "/notifications",
+    icon: Bell,
+  },
 ];
 
 function MobileNavLink({
@@ -110,7 +120,7 @@ export function MobileSidebar() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex w-64 flex-col p-0">
-        <SheetHeader className="border-b border-border px-3 py-2">
+        <SheetHeader className="border-border border-b px-3 py-2">
           <SheetTitle className="sr-only">Меню навигации</SheetTitle>
           <OrganizationSelector />
         </SheetHeader>
@@ -119,7 +129,7 @@ export function MobileSidebar() {
         <ScrollArea className="min-h-0 flex-1">
           <nav className="px-2 pb-3">
             {/* Global */}
-            <p className="text-muted-foreground/60 px-2 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-widest">
+            <p className="text-muted-foreground/60 px-2 pt-3 pb-1 text-[11px] font-semibold tracking-widest uppercase">
               Общее
             </p>
             <div className="space-y-0.5">
@@ -186,7 +196,7 @@ export function MobileSidebar() {
           </nav>
         </ScrollArea>
 
-        <div className="border-t border-border px-3 py-2">
+        <div className="border-border border-t px-3 py-2">
           <OrganizationSelector />
         </div>
       </SheetContent>

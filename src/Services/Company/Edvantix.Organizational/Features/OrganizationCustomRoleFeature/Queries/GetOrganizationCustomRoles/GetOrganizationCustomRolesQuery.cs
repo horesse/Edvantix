@@ -4,26 +4,26 @@ using Edvantix.Organizational.Features.OrganizationCustomRoleFeature.Models;
 namespace Edvantix.Organizational.Features.OrganizationCustomRoleFeature.Queries.GetOrganizationCustomRoles;
 
 /// <summary>
-/// Запрос списка активных кастомных ролей организации.
+/// Запрос списка ролей организации: системные базовые + кастомные.
 /// </summary>
 public sealed record GetOrganizationCustomRolesQuery(Guid OrganizationId)
-    : IQuery<IReadOnlyList<OrganizationCustomRoleModel>>;
+    : IQuery<OrganizationRolesResponse>;
 
 /// <summary>
-/// Обработчик запроса списка кастомных ролей.
+/// Обработчик запроса. Возвращает объединённый ответ с базовыми и кастомными ролями.
 /// </summary>
 public sealed class GetOrganizationCustomRolesQueryHandler(IServiceProvider provider)
-    : IQueryHandler<GetOrganizationCustomRolesQuery, IReadOnlyList<OrganizationCustomRoleModel>>
+    : IQueryHandler<GetOrganizationCustomRolesQuery, OrganizationRolesResponse>
 {
-    public async ValueTask<IReadOnlyList<OrganizationCustomRoleModel>> Handle(
+    public async ValueTask<OrganizationRolesResponse> Handle(
         GetOrganizationCustomRolesQuery request,
         CancellationToken cancellationToken
     )
     {
         var service = provider.GetRequiredService<IOrganizationCustomRoleService>();
-        var roles = await service.ListAsync(request.OrganizationId, cancellationToken);
+        var customRoles = await service.ListAsync(request.OrganizationId, cancellationToken);
 
-        return roles
+        var customRoleModels = customRoles
             .Select(r => new OrganizationCustomRoleModel
             {
                 Id = r.Id,
@@ -33,5 +33,7 @@ public sealed class GetOrganizationCustomRolesQueryHandler(IServiceProvider prov
                 BaseRole = r.BaseRole,
             })
             .ToList();
+
+        return new OrganizationRolesResponse(BaseRoleModel.All, customRoleModels);
     }
 }

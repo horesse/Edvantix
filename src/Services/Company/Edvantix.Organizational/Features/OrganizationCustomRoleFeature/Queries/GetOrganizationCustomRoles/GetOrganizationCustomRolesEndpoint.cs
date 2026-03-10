@@ -3,38 +3,31 @@ using Edvantix.Organizational.Features.OrganizationCustomRoleFeature.Models;
 namespace Edvantix.Organizational.Features.OrganizationCustomRoleFeature.Queries.GetOrganizationCustomRoles;
 
 /// <summary>
-/// Эндпоинт получения списка кастомных ролей организации.
+/// Эндпоинт получения ролей организации (базовые + кастомные).
 /// </summary>
 public sealed class GetOrganizationCustomRolesEndpoint
-    : IEndpoint<
-        Ok<IReadOnlyList<OrganizationCustomRoleModel>>,
-        GetOrganizationCustomRolesQuery,
-        ISender
-    >
+    : IEndpoint<Ok<OrganizationRolesResponse>, GetOrganizationCustomRolesQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "/organizations/{organizationId:guid}/custom-roles",
+                "/organizations/{organizationId:guid}/roles",
                 async (Guid organizationId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(
-                        new GetOrganizationCustomRolesQuery(organizationId),
-                        sender,
-                        ct
-                    )
+                    await HandleAsync(new GetOrganizationCustomRolesQuery(organizationId), sender, ct)
             )
-            .WithName("GetOrganizationCustomRoles")
+            .WithName("GetOrganizationRoles")
             .WithTags("OrganizationCustomRoles")
-            .WithSummary("Список кастомных ролей организации")
+            .WithSummary("Роли организации")
             .WithDescription(
-                "Возвращает все активные кастомные роли организации. Доступно участникам организации."
+                "Возвращает системные базовые роли и кастомные роли организации. "
+                    + "Доступно участникам организации."
             )
-            .Produces<IReadOnlyList<OrganizationCustomRoleModel>>()
+            .Produces<OrganizationRolesResponse>()
             .Produces(StatusCodes.Status403Forbidden)
             .RequireAuthorization();
     }
 
-    public async Task<Ok<IReadOnlyList<OrganizationCustomRoleModel>>> HandleAsync(
+    public async Task<Ok<OrganizationRolesResponse>> HandleAsync(
         GetOrganizationCustomRolesQuery query,
         ISender sender,
         CancellationToken cancellationToken = default

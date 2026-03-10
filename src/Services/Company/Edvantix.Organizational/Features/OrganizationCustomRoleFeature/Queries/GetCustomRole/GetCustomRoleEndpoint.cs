@@ -11,11 +11,11 @@ public sealed class GetCustomRoleEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "/organizations/{organizationId:guid}/custom-roles/{roleId:guid}",
+                "/organizations/{organizationId:guid}/roles/{roleId:guid}",
                 async (Guid organizationId, Guid roleId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(new GetCustomRoleQuery(roleId, organizationId), sender, ct)
             )
-            .WithName("GetCustomRole")
+            .WithName("GetOrganizationRole")
             .WithTags("OrganizationCustomRoles")
             .WithSummary("Получить кастомную роль")
             .WithDescription(

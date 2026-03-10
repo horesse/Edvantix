@@ -51,6 +51,25 @@ public interface IOrganizationCustomRoleService
     );
 
     /// <summary>
+    /// Обновляет описание и базовую роль кастомной роли (частичное обновление).
+    /// Код роли остаётся неизменным.
+    /// </summary>
+    /// <param name="roleId">Идентификатор роли.</param>
+    /// <param name="organizationId">Идентификатор организации.</param>
+    /// <param name="baseRole">Новая базовая роль.</param>
+    /// <param name="description">Новое описание (null — очищает описание).</param>
+    /// <param name="ct">Токен отмены.</param>
+    /// <exception cref="ForbiddenException">Если инициатор не является Owner организации.</exception>
+    /// <exception cref="NotFoundException">Если роль не найдена.</exception>
+    Task PatchAsync(
+        Guid roleId,
+        Guid organizationId,
+        OrganizationBaseRole baseRole,
+        string? description,
+        CancellationToken ct = default
+    );
+
+    /// <summary>
     /// Мягко удаляет кастомную роль организации.
     /// </summary>
     /// <param name="roleId">Идентификатор роли.</param>

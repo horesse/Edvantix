@@ -9,7 +9,7 @@ public sealed class CreateCustomRoleEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "/organizations/{organizationId:guid}/custom-roles",
+                "/organizations/{organizationId:guid}/roles",
                 async (
                     Guid organizationId,
                     CreateCustomRoleRequest body,
@@ -27,7 +27,7 @@ public sealed class CreateCustomRoleEndpoint
                         ct
                     )
             )
-            .WithName("CreateCustomRole")
+            .WithName("CreateOrganizationRole")
             .WithTags("OrganizationCustomRoles")
             .WithSummary("Создать кастомную роль")
             .WithDescription(
@@ -47,10 +47,7 @@ public sealed class CreateCustomRoleEndpoint
     )
     {
         var id = await sender.Send(command, cancellationToken);
-        return TypedResults.Created(
-            $"/organizations/{command.OrganizationId}/custom-roles/{id}",
-            id
-        );
+        return TypedResults.Created($"/organizations/{command.OrganizationId}/roles/{id}", id);
     }
 }
 

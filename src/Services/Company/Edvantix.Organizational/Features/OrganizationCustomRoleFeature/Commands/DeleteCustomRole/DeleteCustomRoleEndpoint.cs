@@ -9,7 +9,7 @@ public sealed class DeleteCustomRoleEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/organizations/{organizationId:guid}/custom-roles/{roleId:guid}",
+                "/organizations/{organizationId:guid}/roles/{roleId:guid}",
                 async (Guid organizationId, Guid roleId, ISender sender, CancellationToken ct) =>
                     await HandleAsync(
                         new DeleteCustomRoleCommand(roleId, organizationId),
@@ -17,7 +17,7 @@ public sealed class DeleteCustomRoleEndpoint
                         ct
                     )
             )
-            .WithName("DeleteCustomRole")
+            .WithName("DeleteOrganizationRole")
             .WithTags("OrganizationCustomRoles")
             .WithSummary("Удалить кастомную роль")
             .WithDescription(

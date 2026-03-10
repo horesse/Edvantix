@@ -93,6 +93,31 @@ public sealed class OrganizationCustomRoleService(
     }
 
     /// <inheritdoc/>
+    public async Task PatchAsync(
+        Guid roleId,
+        Guid organizationId,
+        OrganizationBaseRole baseRole,
+        string? description,
+        CancellationToken ct = default
+    )
+    {
+        // Только Owner может изменять кастомные роли.
+        await authService.RequireOrgRoleAsync(organizationId, ct, OrganizationRole.Owner);
+
+        var role =
+            await roleRepo.FindByIdAsync(roleId, organizationId, ct)
+            ?? throw new NotFoundException(
+                $"Кастомная роль с ID {roleId} не найдена в организации."
+            );
+
+        // Код роли не изменяется — проверка назначений не требуется.
+        role.UpdateBaseRole(baseRole);
+        role.UpdateDescription(description);
+
+        await roleRepo.UnitOfWork.SaveEntitiesAsync(ct);
+    }
+
+    /// <inheritdoc/>
     public async Task DeleteAsync(Guid roleId, Guid organizationId, CancellationToken ct = default)
     {
         // Только Owner может удалять кастомные роли.

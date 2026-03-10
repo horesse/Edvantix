@@ -1,36 +1,35 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationCustomRoleAggregate;
 using Edvantix.Organizational.Features.OrganizationCustomRoleFeature;
 
-namespace Edvantix.Organizational.Features.OrganizationCustomRoleFeature.Commands.UpdateCustomRole;
+namespace Edvantix.Organizational.Features.OrganizationCustomRoleFeature.Commands.PatchCustomRole;
 
 /// <summary>
-/// Команда обновления кастомной роли организации.
+/// Команда частичного обновления кастомной роли.
+/// Изменяет только базовую роль и описание — код остаётся неизменным.
 /// </summary>
-public sealed record UpdateCustomRoleCommand(
+public sealed record PatchCustomRoleCommand(
     Guid RoleId,
     Guid OrganizationId,
-    string Code,
     OrganizationBaseRole BaseRole,
     string? Description
 ) : ICommand<Unit>;
 
 /// <summary>
-/// Обработчик команды обновления кастомной роли.
+/// Обработчик команды частичного обновления кастомной роли.
 /// Делегирует бизнес-логику в <see cref="IOrganizationCustomRoleService"/>.
 /// </summary>
-public sealed class UpdateCustomRoleCommandHandler(IServiceProvider provider)
-    : ICommandHandler<UpdateCustomRoleCommand, Unit>
+public sealed class PatchCustomRoleCommandHandler(IServiceProvider provider)
+    : ICommandHandler<PatchCustomRoleCommand, Unit>
 {
     public async ValueTask<Unit> Handle(
-        UpdateCustomRoleCommand request,
+        PatchCustomRoleCommand request,
         CancellationToken cancellationToken
     )
     {
         var service = provider.GetRequiredService<IOrganizationCustomRoleService>();
-        await service.UpdateAsync(
+        await service.PatchAsync(
             request.RoleId,
             request.OrganizationId,
-            request.Code,
             request.BaseRole,
             request.Description,
             cancellationToken

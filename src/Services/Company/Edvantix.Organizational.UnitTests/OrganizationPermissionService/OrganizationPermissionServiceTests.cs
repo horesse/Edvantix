@@ -40,25 +40,31 @@ public sealed class OrganizationPermissionServiceTests
         SetupMember(StudentId, OrganizationRole.Student);
 
         _memberRepoMock
-            .Setup(r => r.FindAsync(
-                It.Is<ISpecification<OrganizationMember>>(s => true),
-                It.IsAny<CancellationToken>()
-            ))
-            .Returns<ISpecification<OrganizationMember>, CancellationToken>((spec, _) =>
-            {
-                // Simulate member lookup based on the test setup
-                return Task.FromResult<OrganizationMember?>(null);
-            });
+            .Setup(r =>
+                r.FindAsync(
+                    It.Is<ISpecification<OrganizationMember>>(s => true),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .Returns<ISpecification<OrganizationMember>, CancellationToken>(
+                (spec, _) =>
+                {
+                    // Simulate member lookup based on the test setup
+                    return Task.FromResult<OrganizationMember?>(null);
+                }
+            );
     }
 
     private void SetupMember(Guid profileId, OrganizationRole role)
     {
         var member = new OrganizationMember(OrgId, profileId, role);
         _memberRepoMock
-            .Setup(r => r.FindAsync(
-                It.Is<OrganizationMemberSpecification>(s => true),
-                It.IsAny<CancellationToken>()
-            ))
+            .Setup(r =>
+                r.FindAsync(
+                    It.Is<OrganizationMemberSpecification>(s => true),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(member);
     }
 
@@ -69,7 +75,12 @@ public sealed class OrganizationPermissionServiceTests
     {
         var member = new OrganizationMember(OrgId, OwnerId, OrganizationRole.Owner);
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(member);
 
         var result = await _sut.GetEffectiveRoleAsync(OwnerId, OrgId);
@@ -82,7 +93,12 @@ public sealed class OrganizationPermissionServiceTests
     {
         var member = new OrganizationMember(OrgId, ManagerId, OrganizationRole.Manager);
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(member);
 
         var result = await _sut.GetEffectiveRoleAsync(ManagerId, OrgId);
@@ -94,7 +110,12 @@ public sealed class OrganizationPermissionServiceTests
     public async Task GivenNonMember_WhenGetEffectiveRole_ThenReturnsNull()
     {
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync((OrganizationMember?)null);
 
         var result = await _sut.GetEffectiveRoleAsync(NonMemberId, OrgId);
@@ -109,10 +130,19 @@ public sealed class OrganizationPermissionServiceTests
     {
         var member = new OrganizationMember(OrgId, OwnerId, OrganizationRole.Owner);
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(member);
 
-        var result = await _sut.HasPermissionAsync(OwnerId, OrgId, Permission.OrganizationManageCustomRoles);
+        var result = await _sut.HasPermissionAsync(
+            OwnerId,
+            OrgId,
+            Permission.OrganizationManageCustomRoles
+        );
 
         result.ShouldBeTrue();
     }
@@ -122,10 +152,19 @@ public sealed class OrganizationPermissionServiceTests
     {
         var member = new OrganizationMember(OrgId, ManagerId, OrganizationRole.Manager);
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(member);
 
-        var result = await _sut.HasPermissionAsync(ManagerId, OrgId, Permission.OrganizationManageCustomRoles);
+        var result = await _sut.HasPermissionAsync(
+            ManagerId,
+            OrgId,
+            Permission.OrganizationManageCustomRoles
+        );
 
         result.ShouldBeFalse();
     }
@@ -135,7 +174,12 @@ public sealed class OrganizationPermissionServiceTests
     {
         var member = new OrganizationMember(OrgId, StudentId, OrganizationRole.Student);
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(member);
 
         var result = await _sut.HasPermissionAsync(StudentId, OrgId, Permission.GroupView);
@@ -148,7 +192,12 @@ public sealed class OrganizationPermissionServiceTests
     {
         var member = new OrganizationMember(OrgId, StudentId, OrganizationRole.Student);
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(member);
 
         var result = await _sut.HasPermissionAsync(StudentId, OrgId, Permission.MemberManage);
@@ -160,7 +209,12 @@ public sealed class OrganizationPermissionServiceTests
     public async Task GivenNonMember_WhenCheckAnyPermission_ThenHasNoPermission()
     {
         _memberRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync((OrganizationMember?)null);
 
         var result = await _sut.HasPermissionAsync(NonMemberId, OrgId, Permission.GroupView);
@@ -177,7 +231,12 @@ public sealed class OrganizationPermissionServiceTests
         var managerMember = new OrganizationMember(OrgId, ManagerId, OrganizationRole.Manager);
 
         _memberRepoMock
-            .SetupSequence(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .SetupSequence(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(ownerMember)
             .ReturnsAsync(managerMember);
 
@@ -193,7 +252,12 @@ public sealed class OrganizationPermissionServiceTests
         var ownerMember = new OrganizationMember(OrgId, OwnerId, OrganizationRole.Owner);
 
         _memberRepoMock
-            .SetupSequence(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .SetupSequence(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(managerMember)
             .ReturnsAsync(ownerMember);
 
@@ -210,7 +274,12 @@ public sealed class OrganizationPermissionServiceTests
         var teacherMember = new OrganizationMember(OrgId, TeacherId, OrganizationRole.Teacher);
 
         _memberRepoMock
-            .SetupSequence(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .SetupSequence(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(managerMember)
             .ReturnsAsync(teacherMember);
 
@@ -227,7 +296,12 @@ public sealed class OrganizationPermissionServiceTests
         var studentMember = new OrganizationMember(OrgId, StudentId, OrganizationRole.Student);
 
         _memberRepoMock
-            .SetupSequence(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .SetupSequence(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(teacherMember)
             .ReturnsAsync(studentMember);
 
@@ -243,7 +317,12 @@ public sealed class OrganizationPermissionServiceTests
         var ownerMember2 = new OrganizationMember(OrgId, Guid.NewGuid(), OrganizationRole.Owner);
 
         _memberRepoMock
-            .SetupSequence(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .SetupSequence(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(ownerMember1)
             .ReturnsAsync(ownerMember2);
 
@@ -259,7 +338,12 @@ public sealed class OrganizationPermissionServiceTests
         var targetMember = new OrganizationMember(OrgId, ManagerId, OrganizationRole.Manager);
 
         _memberRepoMock
-            .SetupSequence(r => r.FindAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .SetupSequence(r =>
+                r.FindAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync((OrganizationMember?)null)
             .ReturnsAsync(targetMember);
 

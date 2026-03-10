@@ -6,14 +6,22 @@ namespace Edvantix.Organizational.Features.OrganizationCustomRoleFeature.Queries
 /// Эндпоинт получения списка кастомных ролей организации.
 /// </summary>
 public sealed class GetOrganizationCustomRolesEndpoint
-    : IEndpoint<Ok<IReadOnlyList<OrganizationCustomRoleModel>>, GetOrganizationCustomRolesQuery, ISender>
+    : IEndpoint<
+        Ok<IReadOnlyList<OrganizationCustomRoleModel>>,
+        GetOrganizationCustomRolesQuery,
+        ISender
+    >
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
                 "/organizations/{organizationId:guid}/custom-roles",
                 async (Guid organizationId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetOrganizationCustomRolesQuery(organizationId), sender, ct)
+                    await HandleAsync(
+                        new GetOrganizationCustomRolesQuery(organizationId),
+                        sender,
+                        ct
+                    )
             )
             .WithName("GetOrganizationCustomRoles")
             .WithTags("OrganizationCustomRoles")

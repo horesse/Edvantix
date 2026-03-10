@@ -10,12 +10,12 @@ public sealed class DeleteCustomRoleEndpoint
     {
         app.MapDelete(
                 "/organizations/{organizationId:guid}/custom-roles/{roleId:guid}",
-                async (
-                    Guid organizationId,
-                    Guid roleId,
-                    ISender sender,
-                    CancellationToken ct
-                ) => await HandleAsync(new DeleteCustomRoleCommand(roleId, organizationId), sender, ct)
+                async (Guid organizationId, Guid roleId, ISender sender, CancellationToken ct) =>
+                    await HandleAsync(
+                        new DeleteCustomRoleCommand(roleId, organizationId),
+                        sender,
+                        ct
+                    )
             )
             .WithName("DeleteCustomRole")
             .WithTags("OrganizationCustomRoles")

@@ -34,7 +34,10 @@ public interface IOrganizationCustomRoleRepository : IRepository<OrganizationCus
     /// <summary>
     /// Создаёт новую кастомную роль в хранилище.
     /// </summary>
-    Task<OrganizationCustomRole> AddAsync(OrganizationCustomRole role, CancellationToken ct = default);
+    Task<OrganizationCustomRole> AddAsync(
+        OrganizationCustomRole role,
+        CancellationToken ct = default
+    );
 
     /// <summary>
     /// Возвращает количество активных участников, которым назначена данная кастомная роль.

@@ -47,7 +47,10 @@ public sealed class CreateCustomRoleEndpoint
     )
     {
         var id = await sender.Send(command, cancellationToken);
-        return TypedResults.Created($"/organizations/{command.OrganizationId}/custom-roles/{id}", id);
+        return TypedResults.Created(
+            $"/organizations/{command.OrganizationId}/custom-roles/{id}",
+            id
+        );
     }
 }
 

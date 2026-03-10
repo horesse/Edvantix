@@ -21,7 +21,11 @@ public sealed class GetCustomRoleQueryHandler(IServiceProvider provider)
     )
     {
         var service = provider.GetRequiredService<IOrganizationCustomRoleService>();
-        var role = await service.GetByIdAsync(request.RoleId, request.OrganizationId, cancellationToken);
+        var role = await service.GetByIdAsync(
+            request.RoleId,
+            request.OrganizationId,
+            cancellationToken
+        );
 
         return new OrganizationCustomRoleModel
         {

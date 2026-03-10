@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationCustomRoleAggregate;
 using Edvantix.Organizational.Features.OrganizationCustomRoleFeature;
 using Edvantix.Organizational.Infrastructure.Services;
 
@@ -9,5 +10,9 @@ public static class Extensions
     {
         services.AddScoped<IOrganizationAuthorizationService, OrganizationAuthorizationService>();
         services.AddScoped<IOrganizationCustomRoleService, OrganizationCustomRoleService>();
+
+        // Матрица доступа — stateless singleton (использует frozen collections).
+        services.AddSingleton<IOrganizationPermissionMatrix, OrganizationPermissionMatrix>();
+        services.AddScoped<IOrganizationPermissionService, OrganizationPermissionService>();
     }
 }

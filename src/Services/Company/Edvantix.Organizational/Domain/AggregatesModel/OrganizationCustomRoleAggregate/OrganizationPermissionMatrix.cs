@@ -49,11 +49,7 @@ public sealed class OrganizationPermissionMatrix : IOrganizationPermissionMatrix
             Permission.ResultViewOwn,
         }.ToFrozenSet();
 
-        var teacher = Extend(
-            student,
-            Permission.StudentView,
-            Permission.GradeManage
-        );
+        var teacher = Extend(student, Permission.StudentView, Permission.GradeManage);
 
         var manager = Extend(
             teacher,

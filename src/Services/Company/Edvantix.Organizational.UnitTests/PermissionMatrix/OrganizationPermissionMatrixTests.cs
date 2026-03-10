@@ -25,9 +25,7 @@ public sealed class OrganizationPermissionMatrixTests
     [Test]
     public void GivenStudentRole_WhenCheckingGradeManage_ThenShouldNotHavePermission()
     {
-        _matrix
-            .HasPermission(OrganizationBaseRole.Student, Permission.GradeManage)
-            .ShouldBeFalse();
+        _matrix.HasPermission(OrganizationBaseRole.Student, Permission.GradeManage).ShouldBeFalse();
     }
 
     [Test]
@@ -56,15 +54,15 @@ public sealed class OrganizationPermissionMatrixTests
     public void GivenTeacherRole_WhenCheckingInheritedMaterialView_ThenShouldHavePermission()
     {
         // Teacher наследует права student.
-        _matrix.HasPermission(OrganizationBaseRole.Teacher, Permission.MaterialView).ShouldBeTrue();
+        _matrix
+            .HasPermission(OrganizationBaseRole.Teacher, Permission.MaterialView)
+            .ShouldBeTrue();
     }
 
     [Test]
     public void GivenTeacherRole_WhenCheckingGroupCreate_ThenShouldNotHavePermission()
     {
-        _matrix
-            .HasPermission(OrganizationBaseRole.Teacher, Permission.GroupCreate)
-            .ShouldBeFalse();
+        _matrix.HasPermission(OrganizationBaseRole.Teacher, Permission.GroupCreate).ShouldBeFalse();
     }
 
     // ─── HasPermission: manager ──────────────────────────────────────────────────
@@ -160,9 +158,7 @@ public sealed class OrganizationPermissionMatrixTests
     public void GivenOwnerRole_WhenCheckingInheritedMemberManage_ThenShouldHavePermission()
     {
         // Owner наследует все права admin.
-        _matrix
-            .HasPermission(OrganizationBaseRole.Owner, Permission.MemberManage)
-            .ShouldBeTrue();
+        _matrix.HasPermission(OrganizationBaseRole.Owner, Permission.MemberManage).ShouldBeTrue();
     }
 
     [Test]

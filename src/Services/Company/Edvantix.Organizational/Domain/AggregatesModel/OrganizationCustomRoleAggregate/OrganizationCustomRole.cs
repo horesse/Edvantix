@@ -47,6 +47,36 @@ public sealed class OrganizationCustomRole() : Entity<Guid>, IAggregateRoot, ISo
     public bool IsDeleted { get; set; }
 
     /// <summary>
+    /// Обновляет код кастомной роли.
+    /// </summary>
+    /// <param name="code">Новый уникальный код роли (до 50 символов).</param>
+    /// <exception cref="InvalidOperationException">Если роль уже удалена.</exception>
+    public void UpdateCode(string code)
+    {
+        if (IsDeleted)
+        {
+            throw new InvalidOperationException("Нельзя изменить код удалённой роли.");
+        }
+
+        Code = code;
+    }
+
+    /// <summary>
+    /// Обновляет базовую роль, определяющую уровень доступа.
+    /// </summary>
+    /// <param name="baseRole">Новая базовая роль.</param>
+    /// <exception cref="InvalidOperationException">Если роль уже удалена.</exception>
+    public void UpdateBaseRole(OrganizationBaseRole baseRole)
+    {
+        if (IsDeleted)
+        {
+            throw new InvalidOperationException("Нельзя изменить базовую роль удалённой роли.");
+        }
+
+        BaseRole = baseRole;
+    }
+
+    /// <summary>
     /// Обновляет описание кастомной роли.
     /// </summary>
     public void UpdateDescription(string? description)

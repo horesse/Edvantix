@@ -12,6 +12,7 @@ global using Edvantix.Constants.Aspire;
 global using Edvantix.Constants.Core;
 global using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationCustomRoleAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 global using Edvantix.Organizational.Features.OrganizationFeature;
 global using Edvantix.Organizational.Infrastructure;

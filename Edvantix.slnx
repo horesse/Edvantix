@@ -37,6 +37,7 @@
   </Folder>
   <Folder Name="/src/Services/Organizational/">
     <Project Path="src/Services/Company/Edvantix.Organizational/Edvantix.Organizational.csproj" />
+    <Project Path="src/Services/Company/Edvantix.Organizational.UnitTests/Edvantix.Organizational.UnitTests.csproj" />
   </Folder>
   <Folder Name="/src/Services/Persona/">
     <Project Path="src/Services/Persona/Edvantix.Persona/Edvantix.Persona.csproj" />

@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Infrastructure.Seeders;
+using Edvantix.Organizational.Infrastructure.Seeders;
 
 namespace Edvantix.Organizational.Infrastructure;
 

@@ -13,7 +13,11 @@ public sealed class GetOrganizationCustomRolesEndpoint
         app.MapGet(
                 "/organizations/{organizationId:guid}/roles",
                 async (Guid organizationId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetOrganizationCustomRolesQuery(organizationId), sender, ct)
+                    await HandleAsync(
+                        new GetOrganizationCustomRolesQuery(organizationId),
+                        sender,
+                        ct
+                    )
             )
             .WithName("GetOrganizationRoles")
             .WithTags("OrganizationCustomRoles")

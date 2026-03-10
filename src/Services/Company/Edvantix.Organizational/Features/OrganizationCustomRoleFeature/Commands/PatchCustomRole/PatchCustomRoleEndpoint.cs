@@ -20,7 +20,12 @@ public sealed class PatchCustomRoleEndpoint : IEndpoint<NoContent, PatchCustomRo
                     CancellationToken ct
                 ) =>
                     await HandleAsync(
-                        new PatchCustomRoleCommand(roleId, organizationId, body.BaseRole, body.Description),
+                        new PatchCustomRoleCommand(
+                            roleId,
+                            organizationId,
+                            body.BaseRole,
+                            body.Description
+                        ),
                         sender,
                         ct
                     )

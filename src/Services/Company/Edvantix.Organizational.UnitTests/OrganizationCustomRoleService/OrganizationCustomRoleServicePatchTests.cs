@@ -44,10 +44,11 @@ public sealed class OrganizationCustomRoleServicePatchTests
             )
             .ReturnsAsync(ownerMember);
 
-        _sut = new Edvantix.Organizational.Features.OrganizationCustomRoleFeature.OrganizationCustomRoleService(
-            _roleRepoMock.Object,
-            _authServiceMock.Object
-        );
+        _sut =
+            new Edvantix.Organizational.Features.OrganizationCustomRoleFeature.OrganizationCustomRoleService(
+                _roleRepoMock.Object,
+                _authServiceMock.Object
+            );
     }
 
     // ─── PatchAsync ───────────────────────────────────────────────────────────────
@@ -55,12 +56,23 @@ public sealed class OrganizationCustomRoleServicePatchTests
     [Test]
     public async Task GivenValidRole_WhenPatchAsync_ThenBaseRoleAndDescriptionAreUpdated()
     {
-        var role = new OrganizationCustomRole(OrgId, "teacher-advanced", OrganizationBaseRole.Teacher, "Old description");
+        var role = new OrganizationCustomRole(
+            OrgId,
+            "teacher-advanced",
+            OrganizationBaseRole.Teacher,
+            "Old description"
+        );
         _roleRepoMock
             .Setup(r => r.FindByIdAsync(RoleId, OrgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(role);
 
-        await _sut.PatchAsync(RoleId, OrgId, OrganizationBaseRole.Admin, "New description", CancellationToken.None);
+        await _sut.PatchAsync(
+            RoleId,
+            OrgId,
+            OrganizationBaseRole.Admin,
+            "New description",
+            CancellationToken.None
+        );
 
         role.BaseRole.ShouldBe(OrganizationBaseRole.Admin);
         role.Description.ShouldBe("New description");
@@ -72,12 +84,23 @@ public sealed class OrganizationCustomRoleServicePatchTests
     [Test]
     public async Task GivenValidRole_WhenPatchAsyncWithNullDescription_ThenDescriptionIsCleared()
     {
-        var role = new OrganizationCustomRole(OrgId, "teacher-advanced", OrganizationBaseRole.Teacher, "Old description");
+        var role = new OrganizationCustomRole(
+            OrgId,
+            "teacher-advanced",
+            OrganizationBaseRole.Teacher,
+            "Old description"
+        );
         _roleRepoMock
             .Setup(r => r.FindByIdAsync(RoleId, OrgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(role);
 
-        await _sut.PatchAsync(RoleId, OrgId, OrganizationBaseRole.Teacher, null, CancellationToken.None);
+        await _sut.PatchAsync(
+            RoleId,
+            OrgId,
+            OrganizationBaseRole.Teacher,
+            null,
+            CancellationToken.None
+        );
 
         role.Description.ShouldBeNull();
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -90,10 +113,20 @@ public sealed class OrganizationCustomRoleServicePatchTests
             .Setup(r => r.FindByIdAsync(RoleId, OrgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((OrganizationCustomRole?)null);
 
-        var act = () => _sut.PatchAsync(RoleId, OrgId, OrganizationBaseRole.Teacher, null, CancellationToken.None);
+        var act = () =>
+            _sut.PatchAsync(
+                RoleId,
+                OrgId,
+                OrganizationBaseRole.Teacher,
+                null,
+                CancellationToken.None
+            );
 
         await act.ShouldThrowAsync<NotFoundException>();
-        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _unitOfWorkMock.Verify(
+            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Never
+        );
     }
 
     [Test]
@@ -109,7 +142,14 @@ public sealed class OrganizationCustomRoleServicePatchTests
             )
             .ThrowsAsync(new ForbiddenException("Доступ запрещён."));
 
-        var act = () => _sut.PatchAsync(RoleId, OrgId, OrganizationBaseRole.Teacher, "desc", CancellationToken.None);
+        var act = () =>
+            _sut.PatchAsync(
+                RoleId,
+                OrgId,
+                OrganizationBaseRole.Teacher,
+                "desc",
+                CancellationToken.None
+            );
 
         await act.ShouldThrowAsync<ForbiddenException>();
     }
@@ -117,12 +157,23 @@ public sealed class OrganizationCustomRoleServicePatchTests
     [Test]
     public async Task GivenPatchAsync_WhenCalled_ThenAssignmentCheckIsNotPerformed()
     {
-        var role = new OrganizationCustomRole(OrgId, "teacher-advanced", OrganizationBaseRole.Teacher, null);
+        var role = new OrganizationCustomRole(
+            OrgId,
+            "teacher-advanced",
+            OrganizationBaseRole.Teacher,
+            null
+        );
         _roleRepoMock
             .Setup(r => r.FindByIdAsync(RoleId, OrgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(role);
 
-        await _sut.PatchAsync(RoleId, OrgId, OrganizationBaseRole.Admin, null, CancellationToken.None);
+        await _sut.PatchAsync(
+            RoleId,
+            OrgId,
+            OrganizationBaseRole.Admin,
+            null,
+            CancellationToken.None
+        );
 
         // PATCH не меняет код — проверка назначений не должна вызываться.
         _roleRepoMock.Verify(

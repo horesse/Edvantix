@@ -35,9 +35,6 @@
   <Folder Name="/src/Services/Notification/">
     <Project Path="src/Services/Notification/Edvantix.Notification/Edvantix.Notification.csproj" />
   </Folder>
-  <Folder Name="/src/Services/Organizational/">
-    <Project Path="src/Services/Company/Edvantix.Organizational/Edvantix.Organizational.csproj" />
-  </Folder>
   <Folder Name="/src/Services/Persona/">
     <Project Path="src/Services/Persona/Edvantix.Persona/Edvantix.Persona.csproj" />
   </Folder>
@@ -45,9 +42,6 @@
     <Project Path="src/Services/Scheduler/Edvantix.Scheduler.ContractTests/Edvantix.Scheduler.ContractTests.csproj" />
     <Project Path="src/Services/Scheduler/Edvantix.Scheduler.UnitTests/Edvantix.Scheduler.UnitTests.csproj" />
     <Project Path="src/Services/Scheduler/Edvantix.Scheduler/Edvantix.Scheduler.csproj" />
-  </Folder>
-  <Folder Name="/src/Services/Subscription/">
-    <Project Path="src/Services/Subscriptions/Edvantix.Subscriptions/Edvantix.Subscriptions.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Edvantix.ArchTests/Edvantix.ArchTests.csproj" />

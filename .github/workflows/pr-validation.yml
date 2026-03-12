@@ -15,8 +15,8 @@ on:
       - "Versions.props"
       - ".config/dotnet-tools.json"
       - "!**.md"
-      - "!src/Aspire/BookWorm.AppHost/Container/**"
-      - "BookWorm.slnx"
+      - "!src/Aspire/Edvantix.AppHost/Container/**"
+      - "Edvantix.slnx"
     types:
       - opened
       - synchronize

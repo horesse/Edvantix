@@ -96,22 +96,11 @@ var notificationApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
-var catalogApi = builder
-    .AddProject<Edvantix_Catalog>(Services.Catalog)
-    .WithReference(catalogDb)
-    .WaitFor(catalogDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithReference(redis)
-    .WaitFor(redis)
-    .WithFriendlyUrls();
-
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(personaApi, true)
     .WithService(blogApi, true)
     .WithService(notificationApi, true)
-    .WithService(catalogApi, true)
     .Build();
 
 var turbo = builder
@@ -191,8 +180,7 @@ if (builder.ExecutionContext.IsRunMode)
         .AddScalar(keycloak)
         .WithOpenAPI(personaApi)
         .WithOpenAPI(blogApi)
-        .WithOpenAPI(notificationApi)
-        .WithOpenAPI(catalogApi);
+        .WithOpenAPI(notificationApi);
 }
 
 await builder.Build().RunAsync();

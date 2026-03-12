@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup Label="Aspire Packages">
     <!-- Hosting -->
+    <PackageVersion Include="Aspire.Hosting" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Azure.AppContainers" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.Azure.Redis" Version="$(AspireVersion)" />
@@ -17,17 +18,20 @@
     <PackageVersion Include="Aspire.Azure.Npgsql" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="$(AspireVersion)" />
+    <PackageVersion Include="Aspire.Azure.AI.OpenAI" Version="$(AspireUnstableVersion)" />
     <PackageVersion Include="Aspire.Microsoft.Azure.StackExchangeRedis" Version="$(AspireUnstableVersion)" />
     <PackageVersion Include="Aspire.Keycloak.Authentication" Version="$(AspireUnstableVersion)" />
     <PackageVersion Include="Aspire.Qdrant.Client" Version="$(AspireVersion)" />
     <!-- Community Toolkit -->
+    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.k6" Version="$(ToolKitVersion)" />
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.MailPit" Version="$(ToolKitVersion)" />
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.McpInspector" Version="$(ToolKitVersion)" />
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.Azure.Extensions" Version="$(ToolKitVersion)" />
     <PackageVersion Include="CommunityToolkit.Aspire.Hosting.JavaScript.Extensions" Version="$(ToolKitVersion)" />
     <!-- Extra -->
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.72.0-preview" />
-    <PackageVersion Include="Scalar.Aspire" Version="0.9.2" />
+    <PackageVersion Include="Grpc.Core.Api" Version="2.76.0" />
+    <PackageVersion Include="TUnit.Aspire" Version="$(TUnitVersion)" />
+    <PackageVersion Include="Scalar.Aspire" Version="0.9.3" />
   </ItemGroup>
   <ItemGroup Label="Core Packages">
     <!-- Microsoft Extensions -->
@@ -51,21 +55,22 @@
     <!-- Miscellaneous -->
     <PackageVersion Include="AspNetCore.HealthChecks.Uris" Version="$(HealthChecksVersion)" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageVersion Include="Mediator.SourceGenerator" Version="3.0.1" PrivateAssets="All" />
     <PackageVersion Include="Refit.HttpClientFactory" Version="10.0.1" />
-    <PackageVersion Include="Scrutor" Version="7.0.0" />
-    <PackageVersion Include="DistributedLock.Redis" Version="1.1.1" />
     <PackageVersion Include="Mediator.Abstractions" Version="3.0.1" />
-    <PackageVersion Include="Mediator.SourceGenerator" Version="3.0.1" />
+    <PackageVersion Include="Marten.AspNetCore" Version="8.23.0" />
+    <PackageVersion Include="Scrutor" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup Label="Integration Packages">
     <!-- gRPC -->
     <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="$(GrpcVersion)" />
     <PackageVersion Include="Grpc.AspNetCore.Server.ClientFactory" Version="$(GrpcVersion)" />
     <PackageVersion Include="Grpc.Tools" Version="2.78.0" PrivateAssets="All" />
-    <PackageVersion Include="Grpc.Core.Api" Version="2.76.0" />
-    <!-- MassTransit -->
-    <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="$(MassTransitVersion)" />
-    <PackageVersion Include="MassTransit.RabbitMQ" Version="$(MassTransitVersion)" />
+    <!-- Wolverine -->
+    <PackageVersion Include="WolverineFx" Version="$(WolverineVersion)" />
+    <PackageVersion Include="WolverineFx.RabbitMQ" Version="$(WolverineVersion)" />
+    <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="$(WolverineVersion)" />
+    <PackageVersion Include="WolverineFx.Postgresql" Version="$(WolverineVersion)" />
     <!-- Quartz -->
     <PackageVersion Include="Quartz.Plugins" Version="$(QuartzVersion)" />
     <PackageVersion Include="Quartz.Dashboard" Version="$(QuartzVersion)" />
@@ -87,7 +92,7 @@
     <!-- Contract Testing -->
     <PackageVersion Include="Verify.TUnit" Version="31.13.2" />
     <PackageVersion Include="Verify.SendGrid" Version="1.0.0" />
-    <PackageVersion Include="Verify.MassTransit" Version="2.1.0" />
+    <PackageVersion Include="Verify.Wolverine" Version="3.0.0" />
     <!-- Microsoft Testing Platform -->
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.5.2" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CrashDump" Version="$(MsTestVersion)" />

@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.EF.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Wolverine.EntityFrameworkCore;
 
 namespace Edvantix.Notification.Infrastructure;
 
@@ -12,9 +13,7 @@ public sealed class NotificationDbContext(DbContextOptions options) : PostgresCo
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.AddInboxStateEntity();
-        modelBuilder.AddOutboxMessageEntity();
-        modelBuilder.AddOutboxStateEntity();
+        modelBuilder.MapWolverineEnvelopeStorage();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(NotificationDbContext).Assembly);
     }
 }

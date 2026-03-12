@@ -3,35 +3,34 @@ using Edvantix.Notification.Infrastructure.Senders.InApp;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-/// <summary>
-/// Обрабатывает событие <see cref="SendInAppNotificationIntegrationEvent"/>:
-/// создаёт in-app уведомление через <see cref="IInAppSender"/>.
-/// </summary>
-public sealed class SendInAppNotificationIntegrationEventHandler(
+internal sealed class SendInAppNotificationIntegrationEventHandler(
     ILogger<SendInAppNotificationIntegrationEventHandler> logger,
     GlobalLogBuffer logBuffer,
     IInAppSender sender
-) : IConsumer<SendInAppNotificationIntegrationEvent>
+)
 {
-    public async Task Consume(ConsumeContext<SendInAppNotificationIntegrationEvent> context)
+    public async Task Consume(
+        SendInAppNotificationIntegrationEvent @event,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
             var message = new InAppNotificationMessage
             {
-                AccountId = context.Message.AccountId,
-                Type = (NotificationType)context.Message.Type,
-                Title = context.Message.Title,
-                Message = context.Message.MessageText,
-                Metadata = context.Message.Metadata,
+                AccountId = @event.AccountId,
+                Type = (NotificationType)@event.Type,
+                Title = @event.Title,
+                Message = @event.MessageText,
+                Metadata = @event.Metadata,
             };
 
-            await sender.SendAsync(message, context.CancellationToken);
+            await sender.SendAsync(message, cancellationToken);
 
             logger.LogInformation(
                 "In-app notification created for account {AccountId} via event {EventId}",
-                context.Message.AccountId,
-                context.Message.Id
+                @event.AccountId,
+                @event.Id
             );
         }
         catch (Exception ex)
@@ -39,23 +38,11 @@ public sealed class SendInAppNotificationIntegrationEventHandler(
             logger.LogError(
                 ex,
                 "Failed to process SendInAppNotification event {EventId} for account {AccountId}",
-                context.Message.Id,
-                context.Message.AccountId
+                @event.Id,
+                @event.AccountId
             );
             logBuffer.Flush();
             throw;
         }
-    }
-}
-
-[ExcludeFromCodeCoverage]
-public sealed class SendInAppNotificationIntegrationEventHandlerDefinition
-    : ConsumerDefinition<SendInAppNotificationIntegrationEventHandler>
-{
-    public SendInAppNotificationIntegrationEventHandlerDefinition()
-    {
-        // Имя очереди — явное, по соглашению notification-*
-        Endpoint(x => x.Name = "notification-send-inapp");
-        ConcurrentMessageLimit = 10;
     }
 }

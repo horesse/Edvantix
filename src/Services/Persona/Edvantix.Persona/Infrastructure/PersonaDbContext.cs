@@ -1,4 +1,6 @@
-﻿namespace Edvantix.Persona.Infrastructure;
+﻿using Wolverine.EntityFrameworkCore;
+
+namespace Edvantix.Persona.Infrastructure;
 
 public sealed class PersonaDbContext(DbContextOptions<PersonaDbContext> options)
     : DbContext(options),
@@ -9,9 +11,7 @@ public sealed class PersonaDbContext(DbContextOptions<PersonaDbContext> options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.AddInboxStateEntity();
-        modelBuilder.AddOutboxMessageEntity();
-        modelBuilder.AddOutboxStateEntity();
+        modelBuilder.MapWolverineEnvelopeStorage();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonaDbContext).Assembly);
     }
 

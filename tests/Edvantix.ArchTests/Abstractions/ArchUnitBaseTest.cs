@@ -9,7 +9,6 @@ public abstract class ArchUnitBaseTest : BaseTest
     protected static readonly Architecture Architecture = new ArchLoader()
         .LoadAssemblies(
             BlogAssembly,
-            CatalogAssembly,
             PersonaAssembly,
             NotificationAssembly,
             SchedulerAssembly,
@@ -26,14 +25,6 @@ public abstract class ArchUnitBaseTest : BaseTest
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
         .As(nameof(Blog));
-
-    protected static readonly IObjectProvider<IType> CatalogServiceTypes = ArchRuleDefinition
-        .Types()
-        .That()
-        .ResideInAssembly(CatalogAssembly)
-        .And()
-        .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
-        .As(nameof(Catalog));
 
     protected static readonly IObjectProvider<IType> PersonaServiceTypes = ArchRuleDefinition
         .Types()
@@ -88,7 +79,6 @@ public abstract class ArchUnitBaseTest : BaseTest
         return serviceName switch
         {
             nameof(Blog) => BlogServiceTypes,
-            nameof(Catalog) => CatalogServiceTypes,
             nameof(Persona) => PersonaServiceTypes,
             nameof(Notification) => NotificationServiceTypes,
             nameof(Scheduler) => SchedulerServiceTypes,

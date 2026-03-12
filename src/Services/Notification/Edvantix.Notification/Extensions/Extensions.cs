@@ -17,6 +17,9 @@ using Edvantix.Notification.Infrastructure.Senders.SendGrid;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence;
+using Wolverine.Postgresql;
 
 namespace Edvantix.Notification.Extensions;
 
@@ -103,23 +106,17 @@ internal static class Extensions
 
         builder.AddEventBus(
             typeof(INotificationApiMarker),
-            cfg =>
+            options =>
             {
-                cfg.AddEntityFrameworkOutbox<NotificationDbContext>(o =>
-                {
-                    o.QueryDelay = TimeSpan.FromSeconds(1);
-
-                    o.DuplicateDetectionWindow = TimeSpan.FromMinutes(5);
-
-                    o.UsePostgres();
-
-                    o.UseBusOutbox();
-                });
-
-                cfg.AddConfigureEndpointsCallback(
-                    (context, _, configurator) =>
-                        configurator.UseEntityFrameworkOutbox<NotificationDbContext>(context)
+                var connectionString = builder.Configuration.GetRequiredConnectionString(
+                    Components.Database.Notification
                 );
+
+                options.PersistMessagesWithPostgresql(connectionString);
+
+                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
+
+                options.Policies.AutoApplyTransactions();
             }
         );
     }

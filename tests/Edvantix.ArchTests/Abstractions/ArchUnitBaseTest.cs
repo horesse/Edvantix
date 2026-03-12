@@ -10,11 +10,9 @@ public abstract class ArchUnitBaseTest : BaseTest
         .LoadAssemblies(
             BlogAssembly,
             CatalogAssembly,
-            OrganizationalAssembly,
             PersonaAssembly,
             NotificationAssembly,
             SchedulerAssembly,
-            SubscriptionsAssembly,
             ChassisAssembly,
             ConstantsAssembly,
             SharedKernelAssembly
@@ -36,14 +34,6 @@ public abstract class ArchUnitBaseTest : BaseTest
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
         .As(nameof(Catalog));
-
-    protected static readonly IObjectProvider<IType> OrganizationalServiceTypes = ArchRuleDefinition
-        .Types()
-        .That()
-        .ResideInAssembly(OrganizationalAssembly)
-        .And()
-        .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
-        .As(nameof(Organizational));
 
     protected static readonly IObjectProvider<IType> PersonaServiceTypes = ArchRuleDefinition
         .Types()
@@ -68,14 +58,6 @@ public abstract class ArchUnitBaseTest : BaseTest
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
         .As(nameof(Scheduler));
-
-    protected static readonly IObjectProvider<IType> SubscriptionsServiceTypes = ArchRuleDefinition
-        .Types()
-        .That()
-        .ResideInAssembly(SubscriptionsAssembly)
-        .And()
-        .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
-        .As(nameof(Subscriptions));
 
     protected static readonly IObjectProvider<IType> ChassisServiceTypes = ArchRuleDefinition
         .Types()
@@ -107,11 +89,9 @@ public abstract class ArchUnitBaseTest : BaseTest
         {
             nameof(Blog) => BlogServiceTypes,
             nameof(Catalog) => CatalogServiceTypes,
-            nameof(Organizational) => OrganizationalServiceTypes,
             nameof(Persona) => PersonaServiceTypes,
             nameof(Notification) => NotificationServiceTypes,
             nameof(Scheduler) => SchedulerServiceTypes,
-            nameof(Subscriptions) => SubscriptionsServiceTypes,
             nameof(Chassis) => ChassisServiceTypes,
             nameof(Constants) => ConstantsServiceTypes,
             nameof(SharedKernel) => SharedKernelServiceTypes,

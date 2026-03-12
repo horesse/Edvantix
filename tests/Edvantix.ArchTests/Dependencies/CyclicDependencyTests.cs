@@ -10,21 +10,17 @@ public sealed class CyclicDependencyTests : ArchUnitBaseTest
     [
         nameof(Blog),
         nameof(Catalog),
-        nameof(Organizational),
         nameof(Persona),
         nameof(Notification),
         nameof(Scheduler),
-        nameof(Subscriptions),
     ];
 
     [Test]
     [Arguments(nameof(Blog))]
     [Arguments(nameof(Catalog))]
-    [Arguments(nameof(Organizational))]
     [Arguments(nameof(Persona))]
     [Arguments(nameof(Notification))]
     [Arguments(nameof(Scheduler))]
-    [Arguments(nameof(Subscriptions))]
     public void GivenService_WhenCheckingDependencies_ThenShouldNotDependOnOtherServices(
         string serviceName
     )

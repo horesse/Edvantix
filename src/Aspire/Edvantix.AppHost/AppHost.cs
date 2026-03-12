@@ -73,24 +73,6 @@ var personaApi = builder
     )
     .WithFriendlyUrls();
 
-var organizationalApi = builder
-    .AddProject<Edvantix_Organizational>(Services.Organizational)
-    .WithReference(organizationDb)
-    .WaitFor(organizationDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithReference(personaApi)
-    .WaitFor(personaApi)
-    .WithFriendlyUrls();
-
-var subscriptionsApi = builder
-    .AddProject<Edvantix_Subscriptions>(Services.Subscriptions)
-    .WithReference(subscriptionDb)
-    .WaitFor(subscriptionDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
-
 var blogApi = builder
     .AddProject<Edvantix_Blog>(Services.Blog)
     .WithReference(blogDb)
@@ -126,9 +108,7 @@ var catalogApi = builder
 
 var gateway = builder
     .AddApiGatewayProxy()
-    .WithService(organizationalApi, true)
     .WithService(personaApi, true)
-    .WithService(subscriptionsApi, true)
     .WithService(blogApi, true)
     .WithService(notificationApi, true)
     .WithService(catalogApi, true)
@@ -209,9 +189,7 @@ if (builder.ExecutionContext.IsRunMode)
 {
     builder
         .AddScalar(keycloak)
-        .WithOpenAPI(organizationalApi)
         .WithOpenAPI(personaApi)
-        .WithOpenAPI(subscriptionsApi)
         .WithOpenAPI(blogApi)
         .WithOpenAPI(notificationApi)
         .WithOpenAPI(catalogApi);

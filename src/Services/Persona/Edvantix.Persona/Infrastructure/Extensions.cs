@@ -1,4 +1,5 @@
 ﻿using Edvantix.Persona.Infrastructure.Blob;
+using Edvantix.Persona.Infrastructure.Keycloak;
 
 namespace Edvantix.Persona.Infrastructure;
 
@@ -19,5 +20,10 @@ public static class Extensions
         );
 
         builder.AddAzureBlobStorage();
+        
+        services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
+
+        if (builder.Environment.IsDevelopment()) 
+            services.AddHostedService<KeycloakProfileSyncService>();
     }
 }

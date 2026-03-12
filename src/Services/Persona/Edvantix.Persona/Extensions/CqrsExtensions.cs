@@ -23,15 +23,13 @@ internal static class CqrsExtensions
             .AddScoped<UpdateProfileByAdminPostProcessor>();
 
         // Configure FluentValidation
-        services.AddValidatorsFromAssemblyContaining<IPersonaApiMarker>(
-            includeInternalTypes: true
-        );
+        services.AddValidatorsFromAssemblyContaining<IPersonaApiMarker>(includeInternalTypes: true);
 
         services.AddActivityScope().AddCommandHandlerMetrics().AddQueryHandlerMetrics();
 
         services.AddEventDispatcher();
         services.AddScoped<IEventMapper, EventMapper>();
-        
+
         // services.AddScoped<IRequestManager, RequestManager>();
     }
 }

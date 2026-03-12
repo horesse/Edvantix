@@ -9,9 +9,9 @@ internal static class AuthorizationExtensions
     public static void AddSecurityServices(this IHostApplicationBuilder builder)
     {
         var services = builder.Services;
-        
+
         builder.AddDefaultAuthentication().WithKeycloakClaimsTransformation();
-        
+
         services
             .AddAuthorizationBuilder()
             .AddPolicy(
@@ -33,11 +33,11 @@ internal static class AuthorizationExtensions
                     .RequireScope($"{Services.Persona}_{Authorization.Actions.Read}")
                     .Build()
             );
-        
+
         services.AddTransient(s =>
             s.GetRequiredService<IHttpContextAccessor>().HttpContext?.User ?? new ClaimsPrincipal()
         );
-        
+
         services.AddKeycloakTokenIntrospection();
     }
 }

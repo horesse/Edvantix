@@ -20,10 +20,10 @@ public static class Extensions
         );
 
         builder.AddAzureBlobStorage();
-        
+
         services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
 
-        if (builder.Environment.IsDevelopment()) 
+        if (builder.Environment.IsDevelopment())
             services.AddHostedService<KeycloakProfileSyncService>();
     }
 }

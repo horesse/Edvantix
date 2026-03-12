@@ -16,11 +16,11 @@ internal static class Extensions
         var services = builder.Services;
 
         builder.AddDefaultCors();
-        
+
         builder.AddAppSettings<PersonaAppSettings>();
 
         builder.AddSecurityServices();
-        
+
         // Add exception handlers
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -28,7 +28,7 @@ internal static class Extensions
         services.AddProblemDetails();
 
         services.AddCqrsInfrastructure();
-        
+
         builder.AddRateLimiting();
 
         services.AddGrpc(options =>
@@ -53,10 +53,10 @@ internal static class Extensions
         services.AddValidatorsFromAssemblyContaining<IPersonaApiMarker>(includeInternalTypes: true);
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
-        
+
         services.AddVersioning();
         services.AddEndpoints(typeof(IPersonaApiMarker));
-        
+
         services.AddDefaultOpenApi(options =>
             options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<PersonaAppSettings>>()
         );

@@ -1,4 +1,5 @@
-﻿using Edvantix.Common;
+﻿using Edvantix.Chassis.EventBus.Serialization;
+using Edvantix.Common;
 using Edvantix.Contracts;
 using MassTransit;
 using MassTransit.Testing;
@@ -16,7 +17,15 @@ public sealed class ResendErrorEmailEventPublisherTests
     {
         _provider = new ServiceCollection()
             .AddTelemetryListener()
-            .AddMassTransitTestHarness()
+            .AddMassTransitTestHarness(x =>
+                x.UsingInMemory(
+                    (context, cfg) =>
+                    {
+                        cfg.UseCloudEvents();
+                        cfg.ConfigureEndpoints(context);
+                    }
+                )
+            )
             .BuildServiceProvider(true);
 
         _harness = await _provider.StartTestHarness();

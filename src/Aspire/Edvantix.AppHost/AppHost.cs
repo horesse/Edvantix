@@ -44,12 +44,9 @@ var profileContainer = storage
     .AddBlobContainer(Components.Azure.Storage.BlobContainer(Services.Persona))
     .WithAzureStorageExplorer();
 
-var organizationDb = postgres.AddDatabase(Components.Database.Organizational);
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
-var subscriptionDb = postgres.AddDatabase(Components.Database.Subscription);
 var blogDb = postgres.AddDatabase(Components.Database.Blog);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
-var catalogDb = postgres.AddDatabase(Components.Database.Catalog);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -96,22 +93,11 @@ var notificationApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
-var catalogApi = builder
-    .AddProject<Edvantix_Catalog>(Services.Catalog)
-    .WithReference(catalogDb)
-    .WaitFor(catalogDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithReference(redis)
-    .WaitFor(redis)
-    .WithFriendlyUrls();
-
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(personaApi, true)
     .WithService(blogApi, true)
     .WithService(notificationApi, true)
-    .WithService(catalogApi, true)
     .Build();
 
 var turbo = builder
@@ -191,8 +177,7 @@ if (builder.ExecutionContext.IsRunMode)
         .AddScalar(keycloak)
         .WithOpenAPI(personaApi)
         .WithOpenAPI(blogApi)
-        .WithOpenAPI(notificationApi)
-        .WithOpenAPI(catalogApi);
+        .WithOpenAPI(notificationApi);
 }
 
 await builder.Build().RunAsync();

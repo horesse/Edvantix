@@ -29,7 +29,6 @@
     <ProjectReference Include="..\..\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
     <ProjectReference Include="..\..\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
     <ProjectReference Include="..\..\Services\Notification\Edvantix.Notification\Edvantix.Notification.csproj" />
-    <ProjectReference Include="..\..\Services\Catalog\Edvantix.Catalog\Edvantix.Catalog.csproj" />
     <ProjectReference Include="..\..\Services\Scheduler\Edvantix.Scheduler\Edvantix.Scheduler.csproj" />
   </ItemGroup>
   <ItemGroup Label="Integrations">

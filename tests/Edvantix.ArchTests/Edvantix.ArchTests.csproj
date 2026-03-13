@@ -8,7 +8,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
-    <ProjectReference Include="..\..\src\Services\Catalog\Edvantix.Catalog\Edvantix.Catalog.csproj" />
     <ProjectReference Include="..\..\src\Services\Notification\Edvantix.Notification\Edvantix.Notification.csproj" />
     <ProjectReference Include="..\..\src\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
     <ProjectReference Include="..\..\src\Services\Scheduler\Edvantix.Scheduler\Edvantix.Scheduler.csproj" />

@@ -78,7 +78,7 @@
     "cucumber-html-reporter": "^7.2.0",
     "eslint": "^10.0.3",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "happy-dom": "^20.8.3",
+    "happy-dom": "^20.8.4",
     "multiple-cucumber-html-reporter": "^3.10.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",

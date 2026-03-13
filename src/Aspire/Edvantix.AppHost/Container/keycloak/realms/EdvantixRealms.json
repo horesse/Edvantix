@@ -471,16 +471,6 @@
           "containerId": "d5e6f7a8-9b0c-4d1e-2f3a-4b5c6d7e8f9a",
           "attributes": {}
         }
-      ],
-      "${CLIENT_CATALOG_ID}": [
-        {
-          "id": "c2d3e4f5-6a7b-4c8d-9e0f-1a2b3c4d5e6f",
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "e4f5a6b7-8c9d-4e0f-1a2b-3c4d5e6f7a8b",
-          "attributes": {}
-        }
       ]
     }
   },
@@ -598,27 +588,6 @@
       ],
       "clientRoles": {
         "${CLIENT_NOTIFICATION_ID}": [
-          "uma_protection"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    },
-    {
-      "id": "d3e4f5a6-7b8c-4d9e-0f1a-2b3c4d5e6f7a",
-      "username": "service-account-${CLIENT_CATALOG_ID}",
-      "emailVerified": false,
-      "createdTimestamp": 1766700002000,
-      "enabled": true,
-      "totp": false,
-      "serviceAccountClientId": "${CLIENT_CATALOG_ID}",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-${REALM_NAME}"
-      ],
-      "clientRoles": {
-        "${CLIENT_CATALOG_ID}": [
           "uma_protection"
         ]
       },
@@ -1012,7 +981,6 @@
         "${CLIENT_PERSONA_ID}_write",
         "${CLIENT_NOTIFICATION_ID}_read",
         "${CLIENT_NOTIFICATION_ID}_write",
-        "${CLIENT_CATALOG_ID}_read",
         "address",
         "phone",
         "organization",
@@ -1393,84 +1361,6 @@
       "optionalClientScopes": [
         "${CLIENT_BLOG_ID}_read",
         "${CLIENT_BLOG_ID}_write",
-        "address",
-        "phone",
-        "organization",
-        "offline_access",
-        "microprofile-jwt"
-      ]
-    },
-    {
-      "id": "e4f5a6b7-8c9d-4e0f-1a2b-3c4d5e6f7a8b",
-      "clientId": "${CLIENT_CATALOG_ID}",
-      "name": "${CLIENT_CATALOG_NAME}",
-      "description": "",
-      "rootUrl": "${CLIENT_CATALOG_URL}",
-      "adminUrl": "${CLIENT_CATALOG_URL_CONTAINERHOST}",
-      "baseUrl": "/",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": true,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "${CLIENT_CATALOG_SECRET}",
-      "redirectUris": [
-        "*"
-      ],
-      "webOrigins": [
-        "*"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "request.object.signature.alg": "any",
-        "post.logout.redirect.uris": "*",
-        "frontchannel.logout.session.required": "true",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "backchannel.logout.revoke.offline.tokens": "false",
-        "use.refresh.tokens": "true",
-        "realm_client": "false",
-        "oidc.ciba.grant.enabled": "false",
-        "backchannel.logout.session.required": "true",
-        "client_credentials.use_refresh_token": "false",
-        "require.pushed.authorization.requests": "false",
-        "request.object.encryption.enc": "any",
-        "pkce.code.challenge.method": "S256",
-        "client.secret.creation.time": "1766700002",
-        "request.object.encryption.alg": "any",
-        "client.introspection.response.allow.jwt.claim.enabled": "false",
-        "standard.token.exchange.enabled": "true",
-        "login_theme": "${THEME_NAME}",
-        "client.use.lightweight.access.token.enabled": "false",
-        "request.object.required": "not required",
-        "access.token.header.type.rfc9068": "false",
-        "tls.client.certificate.bound.access.tokens": "false",
-        "acr.loa.map": "{}",
-        "display.on.consent.screen": "false",
-        "token.response.type.bearer.lower-case": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "defaultClientScopes": [
-        "service_account",
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "${CLIENT_CATALOG_ID}_read",
-        "${CLIENT_CATALOG_ID}_write",
         "address",
         "phone",
         "organization",
@@ -2213,30 +2103,6 @@
       "id": "b9c0d1e2-3f4a-4b5c-6d7e-8f9a0b1c2d3e",
       "name": "${CLIENT_NOTIFICATION_ID}_write",
       "description": "Write for ${CLIENT_NOTIFICATION_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "false",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
-      "id": "f5a6b7c8-9d0e-4f1a-2b3c-4d5e6f7a8b9c",
-      "name": "${CLIENT_CATALOG_ID}_read",
-      "description": "Read for ${CLIENT_CATALOG_NAME}",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true",
-        "display.on.consent.screen": "false",
-        "gui.order": "",
-        "consent.screen.text": ""
-      }
-    },
-    {
-      "id": "a6b7c8d9-0e1f-4a2b-3c4d-5e6f7a8b9c0d",
-      "name": "${CLIENT_CATALOG_ID}_write",
-      "description": "Write for ${CLIENT_CATALOG_NAME}",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",

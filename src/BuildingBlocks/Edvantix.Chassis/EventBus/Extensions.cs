@@ -115,7 +115,9 @@ namespace Edvantix.Chassis.EventBus
         {
             foreach (
                 var registrar in consumerEntries
-                    .Select(entry => typeof(ConsumerRegistrar<>).MakeGenericType(entry.ConsumerType))
+                    .Select(entry =>
+                        typeof(ConsumerRegistrar<>).MakeGenericType(entry.ConsumerType)
+                    )
                     .Select(registrarType =>
                         (IConsumerRegistrar)Activator.CreateInstance(registrarType)!
                     )
@@ -236,7 +238,8 @@ namespace Edvantix.Chassis.EventBus
             );
         }
 
-        private sealed class TopicEndpointConfigurator<TMessage, TConsumer> : ITopicEndpointConfigurator
+        private sealed class TopicEndpointConfigurator<TMessage, TConsumer>
+            : ITopicEndpointConfigurator
             where TMessage : class
             where TConsumer : class, IConsumer<TMessage>
         {

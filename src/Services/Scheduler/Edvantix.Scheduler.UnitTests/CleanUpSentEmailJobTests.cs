@@ -1,4 +1,5 @@
-﻿using Edvantix.Contracts;
+﻿using Edvantix.Chassis.EventBus.Serialization;
+using Edvantix.Contracts;
 using Edvantix.Scheduler.Jobs;
 using MassTransit;
 using MassTransit.Testing;
@@ -32,6 +33,7 @@ public sealed class CleanUpSentEmailJobTests
                 cfg.UsingInMemory(
                     (context, configurator) =>
                     {
+                        configurator.UseCloudEvents();
                         configurator.ConfigureEndpoints(context);
                     }
                 );

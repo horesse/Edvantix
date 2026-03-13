@@ -10,7 +10,7 @@
     <TUnitVersion>1.19.16</TUnitVersion>
     <QuartzVersion>3.16.1</QuartzVersion>
     <!-- Microsoft Packages -->
-    <MsExtVersion>10.3.0</MsExtVersion>
+    <MsExtVersion>10.4.0</MsExtVersion>
     <MsTestVersion>2.1.0</MsTestVersion>
     <ToolKitVersion>13.1.2-beta.518</ToolKitVersion>
     <AgentFrameworkVersion>1.0.0-preview.260304.1</AgentFrameworkVersion>

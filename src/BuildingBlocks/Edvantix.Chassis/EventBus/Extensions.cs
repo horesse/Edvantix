@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.EventBus.Dispatcher;
+using Edvantix.Chassis.EventBus.Serialization;
 using Edvantix.Constants.Aspire;
 using FluentValidation;
 using MassTransit;
@@ -38,6 +39,7 @@ public static class Extensions
             config.UsingRabbitMq(
                 (context, configurator) =>
                 {
+                    configurator.UseCloudEvents();
                     configurator.Host(new Uri(connectionString));
                     configurator.ConfigureEndpoints(context);
                     configurator.UseMessageRetry(AddRetryConfiguration);

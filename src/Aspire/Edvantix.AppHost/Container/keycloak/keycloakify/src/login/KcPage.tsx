@@ -1,10 +1,11 @@
 import "./index.css";
 import type { ClassKey } from "keycloakify/login";
 import DefaultPage from "keycloakify/login/DefaultPage";
+import DefaultTemplate from "keycloakify/login/Template";
 import { lazy, Suspense } from "react";
 import { useI18n } from "./i18n";
 import type { KcContext } from "./KcContext";
-import Template from "@/login/kcTemplate.tsx";
+import CustomTemplate from "./kcTemplate";
 
 const UserProfileFormFields = lazy(
   () => import("keycloakify/login/UserProfileFormFields"),
@@ -26,8 +27,8 @@ export default function KcPage(props: Readonly<{ kcContext: KcContext }>) {
           return (
             <Login
               {...{ kcContext, i18n, classes }}
-              Template={Template}
-              doUseDefaultCss={true}
+              Template={CustomTemplate}
+              doUseDefaultCss={false}
             />
           );
         }
@@ -36,18 +37,20 @@ export default function KcPage(props: Readonly<{ kcContext: KcContext }>) {
           return (
             <Register
               {...{ kcContext, i18n, classes }}
-              Template={Template}
-              doUseDefaultCss={true}
+              Template={CustomTemplate}
+              doUseDefaultCss={false}
             />
           );
         }
 
+        // Остальные страницы Keycloak (сброс пароля, ошибки и т.п.)
+        // используют дефолтный шаблон
         return (
           <DefaultPage
             kcContext={kcContext}
             i18n={i18n}
             classes={classes}
-            Template={Template}
+            Template={DefaultTemplate}
             doUseDefaultCss={true}
             UserProfileFormFields={UserProfileFormFields}
             doMakeUserConfirmPassword={doMakeUserConfirmPassword}
@@ -58,18 +61,4 @@ export default function KcPage(props: Readonly<{ kcContext: KcContext }>) {
   );
 }
 
-const classes = {
-  /*
-    This is commended out because the same rules are applied in the index.css file
-    and applying the tailwind utility classes in the CSS file is recommended over applying them here.
-    This is because here you're limited in how precisely you can target the DOM elements and manage the specificity.
-    As you can see here I need to use `!` witch is shorthand for `!important` and this should be avoided if possible.
-    In the index.css I can simply use `body.kcBodyClass` or `.kcBodyClass.kcBodyClass` instead of just `.kcBodyClass`
-    to increase the specificity and avoid using `!important`.
-    */
-  //kcBodyClass: twMerge(
-  //    "!bg-[url(./assets/img/background.jpg)] bg-no-repeat bg-center bg-fixed",
-  //    "font-geist"
-  //),
-  //kcHeaderWrapperClass: twMerge("text-3xl font-bold underline")
-} satisfies { [key in ClassKey]?: string };
+const classes = {} satisfies { [key in ClassKey]?: string };

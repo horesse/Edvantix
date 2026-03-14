@@ -20,13 +20,18 @@ export const auth = betterAuth({
   plugins: [
     genericOAuth({
       config: [
-        keycloak({
-          clientId: env.KEYCLOAK_CLIENT_ID!,
-          clientSecret: "",
-          issuer: `${env.KEYCLOAK_URL}/realms/${env.KEYCLOAK_REALM}`,
-          pkce: true,
-          scopes: ["openid", "profile", "email", "blog_read", "blog_write"],
-        }),
+        {
+          ...keycloak({
+            clientId: env.KEYCLOAK_CLIENT_ID!,
+            clientSecret: "",
+            issuer: `${env.KEYCLOAK_URL}/realms/${env.KEYCLOAK_REALM}`,
+            pkce: true,
+            scopes: ["openid", "profile", "email", "blog_read", "blog_write"],
+          }),
+          mapProfileToUser: (profile) => ({
+            name: profile.name || profile.preferred_username || profile.email,
+          }),
+        },
       ],
     }),
   ],

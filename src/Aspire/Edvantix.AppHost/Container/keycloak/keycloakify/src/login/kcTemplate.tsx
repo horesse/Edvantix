@@ -1,318 +1,288 @@
 import { useEffect } from "react";
-import { clsx } from "keycloakify/tools/clsx";
 import { kcSanitize } from "keycloakify/lib/kcSanitize";
 import type { TemplateProps } from "keycloakify/login/TemplateProps";
 import type { KcContext } from "./KcContext";
 import type { I18n } from "./i18n";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Globe,
-  AlertCircle,
-  CheckCircle2,
-  Info,
-  Check,
-  GraduationCap,
-  Shield,
-  Sparkles,
-  Users,
-} from "lucide-react";
 
+/** SVG-иконка стопки слоёв (логотип Edvantix) */
+function LayersIcon({
+  size = 24,
+  strokeWidth = 1.8,
+}: {
+  size?: number;
+  strokeWidth?: number;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+        stroke="white"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Иконка галочки для списка преимуществ на панели регистрации */
+function CheckIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="white"
+      strokeWidth={2.5}
+      aria-hidden="true"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+/** Нижний контент левой панели для страницы входа — статистика */
+function LoginPanelContent() {
+  return (
+    <>
+      <h2 className="text-white text-3xl font-bold leading-tight mb-3">
+        Управляйте обучением
+        <br />
+        эффективно
+      </h2>
+      <p
+        className="text-sm leading-relaxed mb-8"
+        style={{ color: "rgba(255,255,255,0.7)" }}
+      >
+        Единая платформа для преподавателей и организаций — посещаемость,
+        аналитика, участники.
+      </p>
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { value: "12k+", label: "Участников" },
+          { value: "98%", label: "Точность" },
+          { value: "350+", label: "Организаций" },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-xl p-3"
+            style={{
+              background: "rgba(255,255,255,0.1)",
+              backdropFilter: "blur(4px)",
+              border: "1px solid rgba(255,255,255,0.15)",
+            }}
+          >
+            <div className="text-white font-bold text-xl">{stat.value}</div>
+            <div
+              className="text-xs mt-0.5"
+              style={{ color: "rgba(255,255,255,0.6)" }}
+            >
+              {stat.label}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/** Нижний контент левой панели для страницы регистрации — преимущества */
+function RegisterPanelContent() {
+  const features = [
+    "Бесплатный доступ на 30 дней",
+    "Настройка за 5 минут",
+    "Карта не требуется",
+  ];
+
+  return (
+    <>
+      <h2 className="text-white text-3xl font-bold leading-tight mb-3">
+        Начните бесплатно
+        <br />
+        уже сегодня
+      </h2>
+      <p
+        className="text-sm leading-relaxed mb-8"
+        style={{ color: "rgba(255,255,255,0.7)" }}
+      >
+        Зарегистрируйтесь и получите полный доступ к инструментам управления
+        обучением.
+      </p>
+      <ul className="space-y-3">
+        {features.map((text) => (
+          <li key={text} className="flex items-center gap-3">
+            <div
+              className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: "rgba(255,255,255,0.2)" }}
+            >
+              <CheckIcon />
+            </div>
+            <span
+              className="text-sm"
+              style={{ color: "rgba(255,255,255,0.8)" }}
+            >
+              {text}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/**
+ * Кастомный шаблон страниц аутентификации Edvantix.
+ * Разделён на левую брендинговую панель и правую панель с формой.
+ * Левая панель адаптируется под тип страницы (login / register).
+ */
 export default function Template(props: TemplateProps<KcContext, I18n>) {
   const {
-    displayInfo = false,
     displayMessage = true,
-    displayRequiredFields = false,
-    socialProvidersNode = null,
-    infoNode = null,
     documentTitle,
-    bodyClassName,
     kcContext,
     i18n,
     children,
   } = props;
 
-  const { msg, msgStr, currentLanguage, enabledLanguages } = i18n;
-  const { realm, message, isAppInitiatedAction } = kcContext;
+  const { msgStr } = i18n;
+  const { message, realm } = kcContext;
+  const isRegisterPage = kcContext.pageId === "register.ftl";
 
   useEffect(() => {
-    document.title =
-      documentTitle ?? msgStr("loginTitle", kcContext.realm.displayName);
-  }, [documentTitle, i18n, kcContext.realm.displayName, msgStr]);
+    document.title = documentTitle ?? msgStr("loginTitle", realm.displayName);
+  }, [documentTitle, msgStr, realm.displayName]);
 
   return (
-    <div className={clsx("relative flex min-h-screen w-full", bodyClassName)}>
-      {/* Left Panel - Branding (hidden on mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 xl:w-[55%] relative overflow-hidden bg-gradient-to-br from-primary/90 via-primary to-primary/80">
-        {/* Decorative elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_rgba(255,255,255,0.15)_0%,_transparent_50%)]" />
-          <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,_rgba(0,0,0,0.1)_0%,_transparent_50%)]" />
-
-          {/* Animated circles */}
-          <div className="absolute top-20 left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-40 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse delay-1000" />
-          <div className="absolute top-1/2 left-1/3 w-48 h-48 bg-white/5 rounded-full blur-2xl animate-pulse delay-500" />
-
-          {/* Grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 flex flex-col justify-between w-full p-12 xl:p-16 text-white">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm">
-              <GraduationCap className="w-7 h-7" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight">Edvantix</span>
-          </div>
-
-          {/* Main content */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl xl:text-5xl font-bold leading-tight">
-                Управляйте онлайн-школой
-                <br />
-                <span className="text-white/80">эффективно</span>
-              </h1>
-              <p className="text-lg xl:text-xl text-white/70 max-w-md leading-relaxed">
-                Современная платформа для создания и управления образовательными
-                курсами
-              </p>
-            </div>
-
-            {/* Features */}
-            <div className="space-y-4">
-              <Feature
-                icon={<Sparkles className="w-5 h-5" />}
-                text="Интуитивный конструктор курсов"
-              />
-              <Feature
-                icon={<Users className="w-5 h-5" />}
-                text="Управление учениками и преподавателями"
-              />
-              <Feature
-                icon={<Shield className="w-5 h-5" />}
-                text="Безопасное хранение данных"
-              />
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-sm text-white/50">
-            © {new Date().getFullYear()} Edvantix. Все права защищены.
-          </div>
-        </div>
-      </div>
-
-      {/* Right Panel - Form */}
-      <div className="flex-1 flex flex-col min-h-screen bg-background">
-        {/* Mobile header */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b border-border/50">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary/10">
-              <GraduationCap className="w-5 h-5 text-primary" />
-            </div>
-            <span className="text-lg font-bold">Edvantix</span>
-          </div>
-
-          {realm.internationalizationEnabled && enabledLanguages.length > 1 && (
-            <LanguageSelector
-              currentLanguage={currentLanguage}
-              enabledLanguages={enabledLanguages}
-            />
-          )}
-        </div>
-
-        {/* Desktop language selector */}
-        {realm.internationalizationEnabled && enabledLanguages.length > 1 && (
-          <div className="hidden lg:flex justify-end p-6">
-            <LanguageSelector
-              currentLanguage={currentLanguage}
-              enabledLanguages={enabledLanguages}
-            />
-          </div>
-        )}
-
-        {/* Form container */}
-        <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-          <div className="w-full max-w-[420px] space-y-6">
-            {/* Messages */}
-            {displayMessage && message !== undefined && (
-              <MessageAlert message={message} />
-            )}
-
-            {/* Required fields notice */}
-            {displayRequiredFields && (
-              <div className="text-sm text-muted-foreground">
-                <span className="text-destructive" aria-hidden="true">
-                  *
-                </span>{" "}
-                {msg("requiredFields")}
-              </div>
-            )}
-
-            {/* Main content */}
-            <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
-              {children}
-            </div>
-
-            {/* Social providers */}
-            {socialProvidersNode && (
-              <div className="animate-in fade-in-0 duration-500 delay-100">
-                {socialProvidersNode}
-              </div>
-            )}
-
-            {/* Info section */}
-            {displayInfo && infoNode && (
-              <div className="animate-in fade-in-0 duration-500 delay-150">
-                {infoNode}
-              </div>
-            )}
-
-            {/* App initiated action */}
-            {isAppInitiatedAction && (
-              <div className="pt-4">
-                <form action={kcContext.url.loginAction} method="post">
-                  <input type="hidden" name="cancel-aia" value="true" />
-                  <Button type="submit" variant="outline" className="w-full">
-                    {msg("doCancel")}
-                  </Button>
-                </form>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile footer */}
-        <div className="lg:hidden text-center text-xs text-muted-foreground p-4 border-t border-border/50">
-          © {new Date().getFullYear()} Edvantix
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Feature({ icon, text }: { icon: React.ReactNode; text: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm">
-        {icon}
-      </div>
-      <span className="text-white/90">{text}</span>
-    </div>
-  );
-}
-
-function LanguageSelector({
-  currentLanguage,
-  enabledLanguages,
-}: {
-  currentLanguage: { languageTag: string };
-  enabledLanguages: Array<{ languageTag: string; label: string; href: string }>;
-}) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-2 text-muted-foreground hover:text-foreground"
-        >
-          <Globe className="h-4 w-4" />
-          <span className="text-sm">
-            {
-              enabledLanguages.find(
-                (lang) => lang.languageTag === currentLanguage.languageTag,
-              )?.label
-            }
-          </span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
-        {enabledLanguages.map((lang) => (
-          <DropdownMenuItem key={lang.languageTag} asChild>
-            <a
-              href={lang.href}
-              className={clsx(
-                "cursor-pointer flex items-center justify-between",
-                lang.languageTag === currentLanguage.languageTag &&
-                  "font-medium",
-              )}
-            >
-              <span>{lang.label}</span>
-              {lang.languageTag === currentLanguage.languageTag && (
-                <Check className="h-4 w-4 text-primary" />
-              )}
-            </a>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-function MessageAlert({
-  message,
-}: {
-  message: { type: string; summary: string };
-}) {
-  return (
-    <div
-      className={clsx(
-        "rounded-xl p-4 flex items-start gap-3",
-        "animate-in fade-in-0 slide-in-from-top-2 duration-300",
-        "border shadow-sm",
-        message.type === "success" &&
-          "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800/50 text-green-800 dark:text-green-300",
-        message.type === "warning" &&
-          "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/50 text-amber-800 dark:text-amber-300",
-        message.type === "error" &&
-          "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/50 text-red-800 dark:text-red-300",
-        message.type === "info" &&
-          "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/50 text-blue-800 dark:text-blue-300",
-      )}
-      role="alert"
-    >
-      {message.type === "success" && (
-        <CheckCircle2
-          className="h-5 w-5 mt-0.5 flex-shrink-0"
-          aria-hidden="true"
-        />
-      )}
-      {message.type === "warning" && (
-        <AlertCircle
-          className="h-5 w-5 mt-0.5 flex-shrink-0"
-          aria-hidden="true"
-        />
-      )}
-      {message.type === "error" && (
-        <AlertCircle
-          className="h-5 w-5 mt-0.5 flex-shrink-0"
-          aria-hidden="true"
-        />
-      )}
-      {message.type === "info" && (
-        <Info className="h-5 w-5 mt-0.5 flex-shrink-0" aria-hidden="true" />
-      )}
-      <span
-        className="text-sm font-medium flex-1"
-        dangerouslySetInnerHTML={{
-          __html: kcSanitize(message.summary),
+    <div className="flex min-h-screen" style={{ background: "#f8fafc" }}>
+      {/* ═══════════ ЛЕВАЯ ПАНЕЛЬ — БРЕНДИНГ ═══════════ */}
+      <div
+        className="hidden lg:flex lg:w-[480px] xl:w-[540px] relative overflow-hidden flex-col justify-between p-12 shrink-0"
+        style={{
+          background:
+            "linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #818cf8 100%)",
         }}
-      />
+      >
+        {/* Фон: сетка точек */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+            opacity: 0.4,
+          }}
+        />
+
+        {/* Декоративные концентрические кольца */}
+        <div
+          className="absolute"
+          style={{
+            top: "50%",
+            left: "50%",
+            width: 480,
+            height: 480,
+            marginLeft: -240,
+            marginTop: -240,
+          }}
+        >
+          {[200, 300, 400, 480].map((size, i) => (
+            <div
+              key={size}
+              className="absolute rounded-full"
+              style={{
+                width: size,
+                height: size,
+                top: "50%",
+                left: "50%",
+                border: "1px solid rgba(255,255,255,0.12)",
+                animation: "pulse-ring 5s ease-in-out infinite",
+                animationDelay: `${i * 0.8}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Парящая иконка по центру */}
+        <div
+          className="absolute"
+          style={{
+            top: "50%",
+            left: "50%",
+            animation: "float 6s ease-in-out infinite",
+          }}
+        >
+          <div
+            className="w-24 h-24 rounded-3xl flex items-center justify-center"
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              backdropFilter: "blur(8px)",
+              border: "1px solid rgba(255,255,255,0.25)",
+              boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)",
+            }}
+          >
+            <LayersIcon size={48} strokeWidth={1.8} />
+          </div>
+        </div>
+
+        {/* Логотип вверху */}
+        <div className="relative z-10 flex items-center gap-2.5">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center"
+            style={{
+              background: "rgba(255,255,255,0.2)",
+              border: "1px solid rgba(255,255,255,0.3)",
+            }}
+          >
+            <LayersIcon size={20} strokeWidth={2} />
+          </div>
+          <span className="text-white font-bold text-lg tracking-tight">
+            Edvantix
+          </span>
+        </div>
+
+        {/* Нижний блок — разный контент в зависимости от страницы */}
+        <div className="relative z-10">
+          {isRegisterPage ? <RegisterPanelContent /> : <LoginPanelContent />}
+        </div>
+      </div>
+
+      {/* ═══════════ ПРАВАЯ ПАНЕЛЬ — ФОРМА ═══════════ */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10">
+        <div className="w-full max-w-[400px]">
+          {/* Глобальное системное сообщение Keycloak (сессия истекла и т.п.) */}
+          {displayMessage && message !== undefined && (
+            <div
+              className={[
+                "mb-6 rounded-xl p-4 flex items-start gap-3 border text-sm",
+                message.type === "error"
+                  ? "bg-red-50 border-red-200 text-red-700"
+                  : message.type === "success"
+                    ? "bg-green-50 border-green-200 text-green-700"
+                    : message.type === "warning"
+                      ? "bg-amber-50 border-amber-200 text-amber-700"
+                      : "bg-blue-50 border-blue-200 text-blue-700",
+              ].join(" ")}
+              role="alert"
+              aria-live="polite"
+            >
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: kcSanitize(message.summary),
+                }}
+              />
+            </div>
+          )}
+
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

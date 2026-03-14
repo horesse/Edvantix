@@ -3,22 +3,95 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useState, useCallback, useMemo } from "react";
 import type { I18n } from "../i18n";
 import type { KcContext } from "../KcContext";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { FormInput, PasswordInput } from "@/components/ui/form-input";
-import { AlertCircle } from "lucide-react";
-import { SocialProvidersList, FormSubmitButton } from "@/login/components";
 
-type FormField = {
-  value: string;
-  touched: boolean;
-  error: string | null;
-};
+/** Иконка Google для кнопки социального входа */
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+      />
+    </svg>
+  );
+}
 
+/** Логотип Edvantix для мобильного header */
+function LayersIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+        stroke="white"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Иконка предупреждения для инлайн-ошибок */
+function WarningIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+      />
+    </svg>
+  );
+}
+
+/** Инлайн-сообщение об ошибке под полем */
+function FieldError({ message }: { message: string }) {
+  return (
+    <p
+      className="mt-1.5 flex items-center gap-1 text-xs"
+      style={{ color: "#ef4444" }}
+      aria-live="polite"
+    >
+      <WarningIcon />
+      <span dangerouslySetInnerHTML={{ __html: kcSanitize(message) }} />
+    </p>
+  );
+}
+
+type FieldState = { value: string; touched: boolean; error: string | null };
 type FormState = {
-  email: FormField;
-  username: FormField;
-  password: FormField;
-  passwordConfirm: FormField;
+  email: FieldState;
+  username: FieldState;
+  password: FieldState;
+  passwordConfirm: FieldState;
 };
 
 export default function Register(
@@ -29,7 +102,9 @@ export default function Register(
   const { kcContext, i18n, Template, classes } = props;
 
   const { url, messagesPerField, realm } = kcContext;
+  const { msgStr } = i18n;
 
+  // Расширенные поля контекста регистрации
   const {
     passwordRequired,
     recaptchaRequired,
@@ -56,16 +131,14 @@ export default function Register(
       };
     }
   ).social;
+
   const register = (
     kcContext as {
       register?: { formData: { email?: string; username?: string } };
     }
   ).register ?? { formData: {} };
 
-  const { msg, msgStr } = i18n;
-
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const [formState, setFormState] = useState<FormState>({
     email: {
@@ -78,61 +151,40 @@ export default function Register(
       touched: false,
       error: null,
     },
-    password: {
-      value: "",
-      touched: false,
-      error: null,
-    },
-    passwordConfirm: {
-      value: "",
-      touched: false,
-      error: null,
-    },
+    password: { value: "", touched: false, error: null },
+    passwordConfirm: { value: "", touched: false, error: null },
   });
 
+  // Валидаторы полей
   const validateEmail = useCallback((value: string): string | null => {
-    if (!value.trim()) {
-      return "Обязательное поле";
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    if (!value.trim()) return "Обязательное поле";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
       return "Некорректный формат email";
-    }
     return null;
   }, []);
 
   const validateUsername = useCallback((value: string): string | null => {
-    if (!value.trim()) {
-      return "Обязательное поле";
-    }
-    if (value.length < 3) {
-      return "Минимум 3 символа";
-    }
+    if (!value.trim()) return "Обязательное поле";
+    if (value.length < 3) return "Минимум 3 символа";
     return null;
   }, []);
 
   const validatePassword = useCallback((value: string): string | null => {
-    if (!value) {
-      return "Обязательное поле";
-    }
-    if (value.length < 8) {
-      return "Минимум 8 символов";
-    }
+    if (!value) return "Обязательное поле";
+    if (value.length < 8) return "Минимум 8 символов";
     return null;
   }, []);
 
   const validatePasswordConfirm = useCallback(
     (value: string, password: string): string | null => {
-      if (!value) {
-        return "Обязательное поле";
-      }
-      if (value !== password) {
-        return "Пароли не совпадают";
-      }
+      if (!value) return "Обязательное поле";
+      if (value !== password) return "Пароли не совпадают";
       return null;
     },
     [],
   );
 
+  // Обработчики изменений для простых полей
   const createFieldHandler = useCallback(
     <K extends keyof FormState>(
       fieldName: K,
@@ -176,31 +228,26 @@ export default function Register(
     [createFieldHandler, validateUsername],
   );
 
+  // Обработчик пароля обновляет и поле подтверждения при изменении
   const passwordHandlers = useMemo(
     () => ({
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setFormState((prev) => {
-          const passwordError = prev.password.touched
-            ? validatePassword(value)
-            : null;
-          const confirmError =
-            prev.passwordConfirm.touched && prev.passwordConfirm.value
-              ? validatePasswordConfirm(prev.passwordConfirm.value, value)
-              : null;
-          return {
-            ...prev,
-            password: {
-              value,
-              touched: prev.password.touched,
-              error: passwordError,
-            },
-            passwordConfirm: {
-              ...prev.passwordConfirm,
-              error: confirmError,
-            },
-          };
-        });
+        setFormState((prev) => ({
+          ...prev,
+          password: {
+            value,
+            touched: prev.password.touched,
+            error: prev.password.touched ? validatePassword(value) : null,
+          },
+          passwordConfirm: {
+            ...prev.passwordConfirm,
+            error:
+              prev.passwordConfirm.touched && prev.passwordConfirm.value
+                ? validatePasswordConfirm(prev.passwordConfirm.value, value)
+                : null,
+          },
+        }));
       },
       onBlur: () => {
         setFormState((prev) => ({
@@ -250,32 +297,57 @@ export default function Register(
 
   const hasGlobalError = messagesPerField.exists("global");
 
+  // Разделяем Google от прочих провайдеров
+  const googleProvider = social?.providers?.find(
+    (p) =>
+      p.alias === "google" || p.displayName?.toLowerCase().includes("google"),
+  );
+  const otherProviders =
+    social?.providers?.filter(
+      (p) =>
+        p.alias !== "google" &&
+        !p.displayName?.toLowerCase().includes("google"),
+    ) ?? [];
+
+  const hasSocialProviders =
+    social?.providers !== undefined && social.providers.length > 0;
+
   return (
     <Template
       kcContext={kcContext}
-      headerNode={""}
       i18n={i18n}
       doUseDefaultCss={false}
       classes={classes}
       displayMessage={hasGlobalError}
-      displayRequiredFields={false}
-      socialProvidersNode={
-        social?.providers !== undefined &&
-        social.providers.length !== 0 && (
-          <SocialProvidersList
-            providers={social.providers}
-            label={msgStr("identity-provider-login-label")}
-          />
-        )
-      }
+      headerNode={null}
+      displayInfo={false}
     >
-      {/* Header */}
-      <div className="space-y-2 mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          {msg("registerTitle")}
+      {/* Мобильный логотип */}
+      <div className="lg:hidden flex items-center gap-2 mb-8">
+        <div
+          className="w-8 h-8 rounded-lg flex items-center justify-center"
+          style={{ background: "#4f46e5" }}
+        >
+          <LayersIcon />
+        </div>
+        <span
+          className="font-bold text-base tracking-tight"
+          style={{ color: "#0f172a" }}
+        >
+          Edvantix
+        </span>
+      </div>
+
+      {/* Заголовок */}
+      <div>
+        <h1
+          className="text-2xl font-bold tracking-tight"
+          style={{ color: "#0f172a" }}
+        >
+          Создать аккаунт
         </h1>
-        <p className="text-muted-foreground">
-          Создайте аккаунт для начала работы
+        <p className="text-sm mt-1.5" style={{ color: "#64748b" }}>
+          Заполните данные для регистрации
         </p>
       </div>
 
@@ -283,13 +355,14 @@ export default function Register(
         id="kc-register-form"
         action={url.registrationAction}
         method="post"
+        className="mt-8 space-y-5"
+        noValidate
         onSubmit={() => {
           setIsFormSubmitting(true);
           return true;
         }}
-        className="space-y-5"
-        noValidate
       >
+        {/* Поле Email */}
         <FormInput
           label={msgStr("email")}
           name="email"
@@ -297,6 +370,7 @@ export default function Register(
           required
           autoComplete="email"
           autoFocus
+          placeholder="example@mail.ru"
           value={formState.email.value}
           onChange={emailHandlers.onChange}
           onBlur={emailHandlers.onBlur}
@@ -308,6 +382,7 @@ export default function Register(
           }
         />
 
+        {/* Поле Username (если email не используется как логин) */}
         {!realm.registrationEmailAsUsername && (
           <FormInput
             label={msgStr("username")}
@@ -327,6 +402,7 @@ export default function Register(
           />
         )}
 
+        {/* Поля пароля */}
         {passwordRequired && (
           <>
             <PasswordInput
@@ -334,6 +410,7 @@ export default function Register(
               name="password"
               required
               autoComplete="new-password"
+              placeholder="Минимум 8 символов"
               value={formState.password.value}
               onChange={passwordHandlers.onChange}
               onBlur={passwordHandlers.onBlur}
@@ -344,7 +421,6 @@ export default function Register(
                   : formState.password.error
               }
               showStrengthIndicator
-              showRequirements
               i18n={{
                 showPassword: msgStr("showPassword"),
                 hidePassword: msgStr("hidePassword"),
@@ -352,14 +428,7 @@ export default function Register(
                   weak: "Слабый",
                   fair: "Средний",
                   good: "Хороший",
-                  strong: "Надежный",
-                },
-                requirements: {
-                  minLength: "Минимум 8 символов",
-                  uppercase: "Одна заглавная буква",
-                  lowercase: "Одна строчная буква",
-                  number: "Одна цифра",
-                  special: "Один спецсимвол",
+                  strong: "Надёжный",
                 },
               }}
             />
@@ -369,6 +438,7 @@ export default function Register(
               name="password-confirm"
               required
               autoComplete="new-password"
+              placeholder="Повторите пароль"
               value={formState.passwordConfirm.value}
               onChange={passwordConfirmHandlers.onChange}
               onBlur={passwordConfirmHandlers.onBlur}
@@ -388,56 +458,52 @@ export default function Register(
           </>
         )}
 
+        {/* Чекбокс принятия условий.
+                    Используем нативный <input type="checkbox">, так как Radix Checkbox
+                    не передаёт значение в POST-форму Keycloak. */}
         {termsAcceptanceRequired && (
-          <div className="space-y-2">
-            <div className="flex items-start space-x-3">
-              <Checkbox
+          <div className="space-y-1.5">
+            <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <input
                 id="termsAccepted"
                 name="termsAccepted"
-                checked={termsAccepted}
-                onCheckedChange={(checked) =>
-                  setTermsAccepted(checked === true)
-                }
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 shrink-0 rounded cursor-pointer"
+                style={{ accentColor: "#4f46e5" }}
                 aria-invalid={messagesPerField.existsError("termsAccepted")}
-                className={
-                  messagesPerField.existsError("termsAccepted")
-                    ? "border-destructive"
-                    : ""
-                }
               />
-              <label
-                htmlFor="termsAccepted"
-                className="text-sm leading-relaxed cursor-pointer select-none text-muted-foreground"
+              <span
+                className="text-sm leading-relaxed"
+                style={{ color: "#4b5563" }}
               >
-                {msg("termsText")}{" "}
-                <span className="text-destructive" aria-hidden="true">
-                  *
-                </span>
-              </label>
-            </div>
+                Я принимаю{" "}
+                <a
+                  href={url.loginAction}
+                  className="font-medium"
+                  style={{ color: "#4f46e5" }}
+                >
+                  Условия использования
+                </a>{" "}
+                и{" "}
+                <a
+                  href={url.loginAction}
+                  className="font-medium"
+                  style={{ color: "#4f46e5" }}
+                >
+                  Политику конфиденциальности
+                </a>
+              </span>
+            </label>
             {messagesPerField.existsError("termsAccepted") && (
-              <div
-                role="alert"
-                className="flex items-start gap-2 text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200"
-              >
-                <AlertCircle
-                  className="h-4 w-4 mt-0.5 flex-shrink-0"
-                  aria-hidden="true"
-                />
-                <span
-                  className="text-sm"
-                  dangerouslySetInnerHTML={{
-                    __html: kcSanitize(
-                      messagesPerField.getFirstError("termsAccepted"),
-                    ),
-                  }}
-                />
-              </div>
+              <FieldError
+                message={messagesPerField.getFirstError("termsAccepted")}
+              />
             )}
           </div>
         )}
 
-        {recaptchaRequired && recaptchaSiteKey && (
+        {/* reCAPTCHA */}
+        {recaptchaRequired && recaptchaSiteKey !== undefined && (
           <div
             className="g-recaptcha flex justify-center"
             data-size="normal"
@@ -446,24 +512,87 @@ export default function Register(
           />
         )}
 
-        <FormSubmitButton
-          isLoading={isFormSubmitting}
-          label={msgStr("doRegister")}
-          id="kc-register"
-        />
-
-        <div className="text-center">
-          <p className="text-muted-foreground text-sm">
-            Уже есть аккаунт?{" "}
-            <a
-              href={url.loginUrl}
-              className="text-primary font-medium hover:underline focus:outline-none focus-visible:underline"
-            >
-              {msg("doLogIn")}
-            </a>
-          </p>
-        </div>
+        {/* Кнопка создания аккаунта */}
+        <Button type="submit" className="w-full" disabled={isFormSubmitting}>
+          {isFormSubmitting ? (
+            <span className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Создание аккаунта...
+            </span>
+          ) : (
+            "Создать аккаунт"
+          )}
+        </Button>
       </form>
+
+      {/* Социальные провайдеры */}
+      {hasSocialProviders && (
+        <div className="mt-5 space-y-3">
+          {/* Разделитель «или» */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div
+                className="w-full border-t"
+                style={{ borderColor: "#e2e8f0" }}
+              />
+            </div>
+            <div className="relative flex justify-center">
+              <span
+                className="px-3 text-xs font-medium"
+                style={{ background: "#f8fafc", color: "#94a3b8" }}
+              >
+                или
+              </span>
+            </div>
+          </div>
+
+          {/* Google */}
+          {googleProvider !== undefined && (
+            <a
+              id={`social-${googleProvider.alias}`}
+              href={googleProvider.loginUrl}
+              className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-lg border text-sm font-medium transition-all duration-150 bg-white hover:bg-slate-50"
+              style={{ borderColor: "#d1d5db", color: "#374151" }}
+            >
+              <GoogleIcon />
+              Зарегистрироваться через Google
+            </a>
+          )}
+
+          {/* Прочие провайдеры */}
+          {otherProviders.map((provider) => (
+            <a
+              key={provider.alias}
+              id={`social-${provider.alias}`}
+              href={provider.loginUrl}
+              className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-lg border text-sm font-medium transition-all duration-150 bg-white hover:bg-slate-50"
+              style={{ borderColor: "#d1d5db", color: "#374151" }}
+            >
+              {provider.iconClasses !== undefined &&
+                provider.iconClasses !== "" && (
+                  <i className={provider.iconClasses} aria-hidden="true" />
+                )}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: kcSanitize(provider.displayName),
+                }}
+              />
+            </a>
+          ))}
+        </div>
+      )}
+
+      {/* Ссылка на вход */}
+      <p className="mt-6 text-center text-sm" style={{ color: "#64748b" }}>
+        Уже есть аккаунт?{" "}
+        <a
+          href={url.loginUrl}
+          className="font-semibold transition-colors"
+          style={{ color: "#4f46e5" }}
+        >
+          Войти
+        </a>
+      </p>
     </Template>
   );
 }

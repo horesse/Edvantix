@@ -4,7 +4,10 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import { GraduationCap, Plus } from "lucide-react";
 
-import type { EducationRequest, OwnProfileDetails } from "@workspace/types/profile";
+import type {
+  EducationRequest,
+  OwnProfileDetails,
+} from "@workspace/types/profile";
 
 import { EducationDialog } from "../dialogs/education-dialog";
 import { EducationItem } from "../items/education-item";

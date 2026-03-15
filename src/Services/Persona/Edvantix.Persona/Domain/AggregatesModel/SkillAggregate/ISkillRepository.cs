@@ -9,7 +9,10 @@ public interface ISkillRepository : IRepository<Skill>
     Task<Skill?> FindAsync(ISpecification<Skill> spec, CancellationToken ct = default);
 
     /// <summary>Возвращает все навыки, соответствующие спецификации.</summary>
-    Task<IReadOnlyList<Skill>> FindAllAsync(ISpecification<Skill> spec, CancellationToken ct = default);
+    Task<IReadOnlyList<Skill>> FindAllAsync(
+        ISpecification<Skill> spec,
+        CancellationToken ct = default
+    );
 
     /// <summary>Ищет навык по точному имени без учёта регистра.</summary>
     Task<Skill?> FindByNameAsync(string name, CancellationToken ct = default);

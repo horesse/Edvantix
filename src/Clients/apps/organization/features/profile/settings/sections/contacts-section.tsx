@@ -4,7 +4,10 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import { Mail, Plus } from "lucide-react";
 
-import type { ContactRequest, OwnProfileDetails } from "@workspace/types/profile";
+import type {
+  ContactRequest,
+  OwnProfileDetails,
+} from "@workspace/types/profile";
 
 import { ContactDialog } from "../dialogs/contact-dialog";
 import { ContactItem } from "../items/contact-item";

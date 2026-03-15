@@ -181,10 +181,7 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
                 $"Профиль не может содержать более {MaxSkillsCount} навыков."
             );
 
-        var removedSkillIds = _skills
-            .Select(s => s.SkillId)
-            .Except(skillIds)
-            .ToList();
+        var removedSkillIds = _skills.Select(s => s.SkillId).Except(skillIds).ToList();
 
         foreach (var skillId in removedSkillIds)
             RegisterDomainEvent(new SkillRemovedFromProfileDomainEvent(Id, skillId));

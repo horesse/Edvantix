@@ -19,10 +19,6 @@ public sealed class SkillSearchSpec : Specification<Skill>
     /// <param name="limit">Максимальное количество результатов.</param>
     public SkillSearchSpec(string query, int limit)
     {
-        Query
-            .Search(s => s.Name, $"%{query}%")
-            .OrderBy(s => s.Name)
-            .Take(limit)
-            .AsNoTracking();
+        Query.Search(s => s.Name, $"%{query}%").OrderBy(s => s.Name).Take(limit).AsNoTracking();
     }
 }

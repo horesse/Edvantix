@@ -171,14 +171,14 @@ export const SubjectsCard = forwardRef<
               "placeholder:text-muted-foreground transition outline-none",
               "focus:border-brand-400 focus:ring-brand-100 focus:ring-2",
               "dark:bg-surface-850 dark:border-surface-700",
-              "disabled:opacity-50 disabled:cursor-not-allowed",
+              "disabled:cursor-not-allowed disabled:opacity-50",
             )}
           />
           <button
             type="button"
             onClick={() => addSkill(inputValue)}
             disabled={skills.length >= MAX_SKILLS}
-            className="bg-primary hover:bg-primary/90 flex size-8 shrink-0 items-center justify-center rounded-lg text-base font-bold text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="bg-primary hover:bg-primary/90 flex size-8 shrink-0 items-center justify-center rounded-lg text-base font-bold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
             aria-label="Добавить навык"
           >
             +

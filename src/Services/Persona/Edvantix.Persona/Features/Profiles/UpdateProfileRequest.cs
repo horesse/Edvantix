@@ -19,4 +19,3 @@ public sealed record EmploymentHistoryRequest(
     DateTime? EndDate = null,
     string? Description = null
 );
-

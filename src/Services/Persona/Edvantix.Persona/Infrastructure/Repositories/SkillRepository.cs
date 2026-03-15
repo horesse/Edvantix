@@ -16,8 +16,10 @@ public sealed class SkillRepository(PersonaDbContext context) : ISkillRepository
     public IUnitOfWork UnitOfWork => context;
 
     /// <inheritdoc/>
-    public async Task<Skill?> FindAsync(ISpecification<Skill> spec, CancellationToken ct = default)
-        => await Specification.GetQuery(context.Skills, spec).FirstOrDefaultAsync(ct);
+    public async Task<Skill?> FindAsync(
+        ISpecification<Skill> spec,
+        CancellationToken ct = default
+    ) => await Specification.GetQuery(context.Skills, spec).FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
     public async Task<IReadOnlyList<Skill>> FindAllAsync(
@@ -29,15 +31,12 @@ public sealed class SkillRepository(PersonaDbContext context) : ISkillRepository
     public async Task<Skill?> FindByNameAsync(string name, CancellationToken ct = default)
     {
         var normalized = name.Trim().ToLower();
-        return await context.Skills.FirstOrDefaultAsync(
-            s => s.Name.ToLower() == normalized,
-            ct
-        );
+        return await context.Skills.FirstOrDefaultAsync(s => s.Name.ToLower() == normalized, ct);
     }
 
     /// <inheritdoc/>
-    public async Task<bool> IsUsedByAnyProfileAsync(Guid skillId, CancellationToken ct = default)
-        => await context.Set<ProfileSkill>().AnyAsync(ps => ps.SkillId == skillId, ct);
+    public async Task<bool> IsUsedByAnyProfileAsync(Guid skillId, CancellationToken ct = default) =>
+        await context.Set<ProfileSkill>().AnyAsync(ps => ps.SkillId == skillId, ct);
 
     /// <inheritdoc/>
     public async Task<Skill> AddAsync(Skill skill, CancellationToken ct = default)

@@ -1,4 +1,8 @@
-import type { ContactRequest, EducationRequest, EmploymentHistoryRequest } from "@workspace/types/profile";
+import type {
+  ContactRequest,
+  EducationRequest,
+  EmploymentHistoryRequest,
+} from "@workspace/types/profile";
 
 /** Personal info payload returned by GeneralSection. */
 export type GeneralData = {

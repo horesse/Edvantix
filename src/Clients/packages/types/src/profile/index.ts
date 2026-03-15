@@ -63,6 +63,8 @@ export type OwnProfileDetails = {
   lastName: string;
   middleName?: string | null;
   avatarUrl?: string | null;
+  bio?: string | null;
+  updatedAt?: string | null;
   contacts: Contact[];
   employmentHistories: EmploymentHistory[];
   educations: Education[];
@@ -95,6 +97,7 @@ export type UpdatePersonalInfoRequest = {
   lastName: string;
   middleName?: string | null;
   birthDate: string;
+  gender: Gender;
 };
 
 export type UpdateContactsRequest = {
@@ -107,6 +110,22 @@ export type UpdateEducationRequest = {
 
 export type UpdateEmploymentRequest = {
   employmentHistories: EmploymentHistoryRequest[];
+};
+
+export type UpdateProfileRequest = {
+  firstName: string;
+  lastName: string;
+  middleName?: string | null;
+  birthDate: string;
+  gender: Gender;
+  bio?: string | null;
+  contacts: ContactRequest[];
+  educations: EducationRequest[];
+  employmentHistories: EmploymentHistoryRequest[];
+};
+
+export type UpdateBioRequest = {
+  bio: string | null;
 };
 
 export type RegisterProfileRequest = {

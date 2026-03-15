@@ -56,8 +56,8 @@ import {
 } from "@workspace/validations/company";
 
 import { FilterTable } from "@/components/filter-table";
-import { useOrganization } from "@/components/organization-provider";
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@/components/layout/page-header";
+import { useOrganization } from "@/components/organization/provider";
 
 export function GroupsPage() {
   const { currentOrg, canManage } = useOrganization();

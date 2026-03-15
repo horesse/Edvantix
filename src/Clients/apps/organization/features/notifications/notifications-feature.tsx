@@ -12,7 +12,7 @@ import { Separator } from "@workspace/ui/components/separator";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { cn } from "@workspace/ui/lib/utils";
 
-import { NotificationItem } from "@/components/notification-item";
+import { NotificationItem } from "@/components/layout/notification-item";
 
 const TABS = [
   { label: "Все", value: undefined },

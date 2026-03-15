@@ -7,45 +7,85 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-    --background: oklch(0.95 0.01 91.46);
-    --foreground: oklch(0.34 0.03 94.42);
-    --card: oklch(1.00 0 0);
-    --card-foreground: oklch(0.19 0 0);
-    --popover: oklch(1.00 0 0);
-    --popover-foreground: oklch(0.27 0.02 99.70);
-    --primary: oklch(0.62 0.14 39.15);
-    --primary-foreground: oklch(1.00 0 0);
-    --secondary: oklch(0.92 0.01 87.42);
-    --secondary-foreground: oklch(0.43 0.02 99.33);
-    --muted: oklch(0.95 0.01 91.46);
-    --muted-foreground: oklch(0.61 0.01 91.49);
-    --accent: oklch(0.92 0.01 87.42);
-    --accent-foreground: oklch(0.27 0.02 99.70);
-    --destructive: oklch(0.19 0 0);
-    --border: oklch(0.91 0.01 106.47);
-    --input: oklch(0.76 0.02 96.91);
-    --ring: oklch(0.59 0.17 252.92);
-    --chart-1: oklch(0.56 0.13 42.95);
-    --chart-2: oklch(0.69 0.16 290.29);
-    --chart-3: oklch(0.88 0.03 91.64);
-    --chart-4: oklch(0.88 0.04 298.21);
-    --chart-5: oklch(0.56 0.13 41.94);
-    --sidebar: oklch(0.97 0.01 93.49);
-    --sidebar-foreground: oklch(0.36 0.01 106.85);
-    --sidebar-primary: oklch(0.62 0.14 39.15);
-    --sidebar-primary-foreground: oklch(0.99 0 0);
-    --sidebar-accent: oklch(0.92 0.01 87.42);
-    --sidebar-accent-foreground: oklch(0.33 0 0);
-    --sidebar-border: oklch(0.94 0 0);
-    --sidebar-ring: oklch(0.77 0 0);
+/* ════════════════════════════════════════════
+   PRIMITIVE TOKENS — brand, surface, z-index
+   Static values, generate Tailwind utilities:
+   bg-brand-600, bg-surface-800, etc.
+════════════════════════════════════════════ */
+@theme {
+  /* Brand (Indigo) */
+  --color-brand-50:  #f0f4ff;
+  --color-brand-100: #e0eaff;
+  --color-brand-200: #c7d6fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
 
-    --font-sans: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-serif: "Geist", "Geist Fallback", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* Surface (dark UI scale) */
+  --color-surface-900: #0f1117;
+  --color-surface-850: #161b27;
+  --color-surface-810: #1a2030;
+  --color-surface-800: #1e2536;
+  --color-surface-750: #232c3d;
+  --color-surface-700: #2a3347;
+  --color-surface-600: #374159;
+  --color-surface-500: #4a5568;
+
+  /* Z-index scale */
+  --z-topbar:  10;
+  --z-sidebar: 20;
+  --z-modal:   50;
+}
+
+/* ════════════════════════════════════════════
+   SHADCN + SEMANTIC ALIASES — light theme
+════════════════════════════════════════════ */
+:root {
+    /* Shadcn component tokens — hex values, no oklch conversion errors */
+    --background: #f8fafc;   /* slate-50 */
+    --foreground: #0f172a;   /* slate-900 */
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #1e293b;   /* slate-800 */
+    --primary: #4f46e5;      /* brand-600 — primary button */
+    --primary-foreground: #ffffff;
+    --secondary: #f1f5f9;    /* slate-100 */
+    --secondary-foreground: #334155; /* slate-700 */
+    --muted: #f1f5f9;        /* slate-100 */
+    --muted-foreground: #64748b;     /* slate-500 */
+    --accent: #f0f4ff;       /* brand-50 */
+    --accent-foreground: #4338ca;    /* brand-700 */
+    --destructive: #ef4444;  /* red-500 */
+    --border: #e2e8f0;       /* slate-200 */
+    --input: #e2e8f0;        /* slate-200 */
+    --ring: #6366f1;         /* brand-500 — focus ring */
+    --chart-1: #6366f1;      /* brand-500 */
+    --chart-2: #10b981;      /* emerald-500 */
+    --chart-3: #f59e0b;      /* amber-500 */
+    --chart-4: #8b5cf6;      /* violet-500 */
+    --chart-5: #f43f5e;      /* rose-500 */
+
+    /* Sidebar tokens — unique values only; rest delegate to main tokens */
+    --sidebar: var(--card);                    /* same as card (#ffffff) */
+    --sidebar-foreground: #475569;             /* slate-600 — distinct from main foreground */
+    --sidebar-primary: var(--primary);         /* brand-600 */
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: #f8fafc;                 /* slate-50 — neutral hover (NOT accent brand-50) */
+    --sidebar-accent-foreground: var(--accent-foreground); /* brand-700 — active nav */
+    --sidebar-border: var(--border);           /* slate-200 */
+    --sidebar-ring: var(--ring);               /* brand-500 */
+
+    /* Typography — Inter as primary font */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-serif: 'Inter', ui-serif, Georgia, Cambria, serif;
+    --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
     --radius: 0.5rem;
 
+    /* Shadows */
     --shadow-2xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
     --shadow-xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
     --shadow-sm: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
@@ -53,43 +93,69 @@
     --shadow-md: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 2px 4px -1px oklch(0.00 0 0 / 0.10);
     --shadow-lg: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 4px 6px -1px oklch(0.00 0 0 / 0.10);
     --shadow-xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 8px 10px -1px oklch(0.00 0 0 / 0.10);
-    --shadow-2xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.25);
+    --shadow-2xl: 0 25px 50px -12px oklch(0.00 0 0 / 0.25);
+    /* Named semantic shadows */
+    --shadow-card:  0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-modal: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
+    /* ── Semantic bg/border/text aliases — light ── */
+    --color-bg-base:          #f8fafc;  /* body background */
+    --color-bg-panel:         #ffffff;  /* cards, panels */
+    --color-bg-sidebar:       #ffffff;  /* sidebar */
+    --color-bg-input:         #ffffff;  /* input fields */
+    --color-bg-nested:        #f8fafc;  /* nested sections inside cards */
+    --color-bg-dropdown:      #ffffff;  /* dropdowns */
+    --color-bg-hover:         #f1f5f9;  /* hover states */
+
+    --color-border-default:   #e2e8f0;  /* main borders */
+    --color-border-subtle:    #f1f5f9;  /* subtle dividers */
+
+    --color-text-primary:     #0f172a;  /* headings, values */
+    --color-text-secondary:   #475569;  /* secondary labels */
+    --color-text-muted:       #94a3b8;  /* muted / metadata */
+    --color-text-placeholder: #94a3b8;  /* input placeholders */
 }
 
+/* ════════════════════════════════════════════
+   SHADCN + SEMANTIC ALIASES — dark theme
+════════════════════════════════════════════ */
 .dark {
-    --background: oklch(0.20 0 0);
-    --foreground: oklch(0.81 0.01 93.53);
-    --card: oklch(0.27 0 0);
-    --card-foreground: oklch(0.98 0.01 93.48);
-    --popover: oklch(0.31 0 0);
-    --popover-foreground: oklch(0.92 0 0);
-    --primary: oklch(0.67 0.13 38.92);
-    --primary-foreground: oklch(1.00 0 0);
-    --secondary: oklch(0.98 0.01 93.48);
-    --secondary-foreground: oklch(0.31 0 0);
-    --muted: oklch(0.22 0 0);
-    --muted-foreground: oklch(0.77 0.02 100.64);
-    --accent: oklch(0.21 0.01 88.79);
-    --accent-foreground: oklch(0.97 0.01 93.49);
-    --destructive: oklch(0.64 0.21 25.39);
-    --border: oklch(0.36 0.01 106.85);
-    --input: oklch(0.43 0.01 99.03);
-    --ring: oklch(0.59 0.17 252.92);
-    --chart-1: oklch(0.56 0.13 42.95);
-    --chart-2: oklch(0.69 0.16 290.29);
-    --chart-3: oklch(0.21 0.01 88.79);
-    --chart-4: oklch(0.31 0.05 289.74);
-    --chart-5: oklch(0.56 0.13 41.94);
-    --sidebar: oklch(0.24 0 0);
-    --sidebar-foreground: oklch(0.81 0.01 93.53);
-    --sidebar-primary: oklch(0.33 0 0);
-    --sidebar-primary-foreground: oklch(0.99 0 0);
-    --sidebar-accent: oklch(0.17 0 0);
-    --sidebar-accent-foreground: oklch(0.81 0.01 93.53);
-    --sidebar-border: oklch(0.94 0 0);
-    --sidebar-ring: oklch(0.77 0 0);
+    /* Shadcn component tokens — hex values, no oklch conversion errors */
+    --background: #0f1117;   /* surface-900 — body bg */
+    --foreground: #e2e8f0;   /* slate-200 */
+    --card: #1e2536;         /* surface-800 — card bg */
+    --card-foreground: #e2e8f0;
+    --popover: #232c3d;      /* surface-750 */
+    --popover-foreground: #e2e8f0;
+    --primary: #818cf8;      /* brand-400 — dark primary */
+    --primary-foreground: #ffffff;
+    --secondary: #232c3d;    /* surface-750 */
+    --secondary-foreground: #94a3b8; /* slate-400 */
+    --muted: #232c3d;        /* surface-750 */
+    --muted-foreground: #64748b;     /* slate-500 — muted text */
+    --accent: #232c3d;       /* surface-750 */
+    --accent-foreground: #818cf8;    /* brand-400 */
+    --destructive: #f43f5e;  /* rose-500 */
+    --border: #2a3347;       /* surface-700 — borders */
+    --input: #161b27;        /* surface-850 — input bg */
+    --ring: #6366f1;         /* brand-500 — focus ring */
+    --chart-1: #818cf8;      /* brand-400 */
+    --chart-2: #10b981;      /* emerald-500 */
+    --chart-3: #fbbf24;      /* amber-400 */
+    --chart-4: #8b5cf6;      /* violet-500 */
+    --chart-5: #f43f5e;      /* rose-500 */
 
+    /* Sidebar tokens — dark (sidebar darker than card) */
+    --sidebar: #161b27;                        /* surface-850 — distinct from card (#1e2536) */
+    --sidebar-foreground: #94a3b8;             /* slate-400 — distinct from foreground */
+    --sidebar-primary: var(--primary);         /* brand-400 in dark */
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);           /* surface-750 in dark */
+    --sidebar-accent-foreground: var(--primary); /* brand-400 — active nav */
+    --sidebar-border: var(--border);           /* surface-700 */
+    --sidebar-ring: var(--ring);               /* brand-500 */
+
+    /* Shadows — dark mode drops shadows, borders handle separation */
     --shadow-2xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
     --shadow-xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
     --shadow-sm: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
@@ -97,10 +163,32 @@
     --shadow-md: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 2px 4px -1px oklch(0.00 0 0 / 0.10);
     --shadow-lg: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 4px 6px -1px oklch(0.00 0 0 / 0.10);
     --shadow-xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 8px 10px -1px oklch(0.00 0 0 / 0.10);
-    --shadow-2xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.25);
+    --shadow-2xl: 0 25px 50px -12px oklch(0.00 0 0 / 0.25);
+
+    /* ── Semantic bg/border/text aliases — dark ── */
+    --color-bg-base:          #0f1117;  /* surface-900 — body bg */
+    --color-bg-panel:         #1e2536;  /* surface-800 — cards */
+    --color-bg-sidebar:       #161b27;  /* surface-850 — sidebar */
+    --color-bg-input:         #161b27;  /* surface-850 — inputs */
+    --color-bg-nested:        #1a2030;  /* surface-810 — nested inside cards */
+    --color-bg-dropdown:      #232c3d;  /* surface-750 — dropdowns */
+    --color-bg-hover:         #232c3d;  /* surface-750 — hover */
+
+    --color-border-default:   #2a3347;  /* surface-700 — main borders */
+    --color-border-subtle:    #1e2536;  /* surface-800 — subtle dividers */
+
+    --color-text-primary:     #f1f5f9;  /* slate-100 — headings */
+    --color-text-secondary:   #94a3b8;  /* slate-400 — secondary */
+    --color-text-muted:       #64748b;  /* slate-500 — muted */
+    --color-text-placeholder: #4a5568;  /* surface-500 — placeholders */
 }
 
+/* ════════════════════════════════════════════
+   TAILWIND UTILITY REGISTRATION
+   Maps CSS vars → Tailwind utility classes
+════════════════════════════════════════════ */
 @theme inline {
+    /* Shadcn tokens */
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -133,15 +221,19 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
+    /* Typography */
     --font-sans: var(--font-sans);
     --font-mono: var(--font-mono);
     --font-serif: var(--font-serif);
 
-    --radius-sm: calc(var(--radius) - 4px);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) + 4px);
+    /* Border radius — maps to rounded-sm/md/lg/xl/2xl Tailwind classes */
+    --radius-sm: calc(var(--radius) - 4px);   /* 4px  — checkbox */
+    --radius-md: calc(var(--radius) - 2px);   /* 6px  — icon containers xs */
+    --radius-lg: var(--radius);               /* 8px  — nav links, icon buttons */
+    --radius-xl: calc(var(--radius) + 4px);   /* 12px — inputs, modal buttons */
+    --radius-2xl: calc(var(--radius) + 8px);  /* 16px — cards, modals, profile photo */
 
+    /* Shadows */
     --shadow-2xs: var(--shadow-2xs);
     --shadow-xs: var(--shadow-xs);
     --shadow-sm: var(--shadow-sm);
@@ -150,16 +242,34 @@
     --shadow-lg: var(--shadow-lg);
     --shadow-xl: var(--shadow-xl);
     --shadow-2xl: var(--shadow-2xl);
+    /* Semantic shadow aliases */
+    --shadow-card: var(--shadow-card);
+    --shadow-modal: var(--shadow-modal);
+
+    /* ── Semantic bg/border/text aliases ──
+       Generates: bg-bg-base, text-text-primary, border-border-default, etc. */
+    --color-bg-base:          var(--color-bg-base);
+    --color-bg-panel:         var(--color-bg-panel);
+    --color-bg-sidebar:       var(--color-bg-sidebar);
+    --color-bg-input:         var(--color-bg-input);
+    --color-bg-nested:        var(--color-bg-nested);
+    --color-bg-dropdown:      var(--color-bg-dropdown);
+    --color-bg-hover:         var(--color-bg-hover);
+
+    --color-border-default:   var(--color-border-default);
+    --color-border-subtle:    var(--color-border-subtle);
+
+    --color-text-primary:     var(--color-text-primary);
+    --color-text-secondary:   var(--color-text-secondary);
+    --color-text-muted:       var(--color-text-muted);
+    --color-text-placeholder: var(--color-text-placeholder);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-
-    }
+  }
   body {
     @apply bg-background text-foreground;
-
-    }
-
+  }
 }

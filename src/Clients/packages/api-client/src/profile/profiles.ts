@@ -2,10 +2,12 @@
   OwnProfile,
   OwnProfileDetails,
   RegisterProfileRequest,
+  UpdateBioRequest,
   UpdateContactsRequest,
   UpdateEducationRequest,
   UpdateEmploymentRequest,
   UpdatePersonalInfoRequest,
+  UpdateProfileRequest,
 } from "@workspace/types/profile";
 
 import { apiClient } from "../client";
@@ -79,6 +81,26 @@ class ProfileApiClient {
   ): Promise<OwnProfileDetails> {
     const response = await this.client.patch<OwnProfileDetails>(
       `/persona/api/v1/profile/employment`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateBio(
+    request: UpdateBioRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile/bio`,
+      request,
+    );
+    return response.data;
+  }
+
+  public async updateProfile(
+    request: UpdateProfileRequest,
+  ): Promise<OwnProfileDetails> {
+    const response = await this.client.patch<OwnProfileDetails>(
+      `/persona/api/v1/profile`,
       request,
     );
     return response.data;

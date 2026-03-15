@@ -16,8 +16,10 @@ import {
   Pencil,
   User,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import useProfileDetails from "@workspace/api-hooks/profiles/useProfileDetails";
+import useUpdateProfile from "@workspace/api-hooks/profiles/useUpdateProfile";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
 import { AvatarCard } from "./cards/avatar-card";
@@ -32,7 +34,14 @@ import { ContactsSection } from "./sections/contacts-section";
 import { EducationSection } from "./sections/education-section";
 import { EmploymentSection } from "./sections/employment-section";
 import { GeneralSection } from "./sections/general-section";
-import type { SectionHandle } from "./types";
+import type {
+  BioSectionHandle,
+  ContactsSectionHandle,
+  EducationSectionHandle,
+  EmploymentSectionHandle,
+  GeneralSectionHandle,
+  SkillsSectionHandle,
+} from "./types";
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
@@ -86,11 +95,12 @@ export function ProfileSettings() {
   const { data: profile, isLoading } = useProfileDetails();
   const router = useRouter();
 
-  const generalRef = useRef<SectionHandle>(null);
-  const contactsRef = useRef<SectionHandle>(null);
-  const educationRef = useRef<SectionHandle>(null);
-  const employmentRef = useRef<SectionHandle>(null);
-  const bioRef = useRef<SectionHandle>(null);
+  const generalRef = useRef<GeneralSectionHandle>(null);
+  const contactsRef = useRef<ContactsSectionHandle>(null);
+  const educationRef = useRef<EducationSectionHandle>(null);
+  const employmentRef = useRef<EmploymentSectionHandle>(null);
+  const bioRef = useRef<BioSectionHandle>(null);
+  const skillsRef = useRef<SkillsSectionHandle>(null);
 
   const [dirtyMap, setDirtyMap] = useState({
     general: false,
@@ -98,13 +108,12 @@ export function ProfileSettings() {
     education: false,
     employment: false,
     bio: false,
+    skills: false,
   });
 
   const hasUnsaved = Object.values(dirtyMap).some(Boolean);
 
   // Stable per-key handlers — each created once, no new references on re-render.
-  // Using a factory here would create a new function every render, causing
-  // infinite loops in child useEffect([isDirty, onDirtyChange]).
   const onGeneralDirty = useCallback(
     (d: boolean) => setDirtyMap((p) => ({ ...p, general: d })),
     [],
@@ -125,13 +134,43 @@ export function ProfileSettings() {
     (d: boolean) => setDirtyMap((p) => ({ ...p, bio: d })),
     [],
   );
+  const onSkillsDirty = useCallback(
+    (d: boolean) => setDirtyMap((p) => ({ ...p, skills: d })),
+    [],
+  );
 
-  function handleSaveAll() {
-    generalRef.current?.submit();
-    contactsRef.current?.submit();
-    educationRef.current?.submit();
-    employmentRef.current?.submit();
-    bioRef.current?.submit();
+  const mutation = useUpdateProfile({
+    onSuccess: () => {
+      toast.success("Профиль сохранён");
+      // Let all sections know the current state is now "saved"
+      generalRef.current?.acknowledgeServerState();
+      contactsRef.current?.acknowledgeServerState();
+      educationRef.current?.acknowledgeServerState();
+      employmentRef.current?.acknowledgeServerState();
+      bioRef.current?.acknowledgeServerState();
+      skillsRef.current?.acknowledgeServerState();
+    },
+    onError: () => toast.error("Не удалось сохранить профиль"),
+  });
+
+  async function handleSaveAll() {
+    const generalData = await generalRef.current?.getPayload();
+    if (!generalData) {
+      // Validation failed — form will show errors
+      return;
+    }
+
+    mutation.mutate({
+      firstName: generalData.firstName,
+      lastName: generalData.lastName,
+      middleName: generalData.middleName,
+      birthDate: generalData.birthDate,
+      bio: bioRef.current?.getPayload() ?? null,
+      contacts: contactsRef.current?.getPayload() ?? [],
+      employmentHistories: employmentRef.current?.getPayload() ?? [],
+      educations: educationRef.current?.getPayload() ?? [],
+      skills: skillsRef.current?.getPayload() ?? [],
+    });
   }
 
   const fullName = profile
@@ -207,8 +246,8 @@ export function ProfileSettings() {
           </button>
           <button
             type="button"
-            onClick={handleSaveAll}
-            disabled={!hasUnsaved}
+            onClick={() => void handleSaveAll()}
+            disabled={!hasUnsaved || mutation.isPending}
             className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition-colors disabled:opacity-40"
           >
             <Check className="size-4" />
@@ -223,7 +262,11 @@ export function ProfileSettings() {
           {/* ── Left panel ── */}
           <div className="flex w-full shrink-0 flex-col gap-4 lg:w-72">
             <AvatarCard profile={profile} />
-            <SubjectsCard />
+            <SubjectsCard
+              ref={skillsRef}
+              profile={profile}
+              onDirtyChange={onSkillsDirty}
+            />
             <CompletenessCard percent={completeness} />
           </div>
 
@@ -315,9 +358,7 @@ export function ProfileSettings() {
             <div className="border-border bg-card flex items-center justify-between rounded-2xl border px-5 py-4 shadow-sm">
               <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
                 <Clock className="size-3.5" />
-                {profile.updatedAt
-                  ? `Последнее обновление: ${new Date(profile.updatedAt).toLocaleString("ru-RU", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}`
-                  : "Профиль ещё не обновлялся"}
+                Изменения применяются ко всему профилю
               </p>
               <div className="flex gap-2">
                 <button
@@ -329,8 +370,8 @@ export function ProfileSettings() {
                 </button>
                 <button
                   type="button"
-                  onClick={handleSaveAll}
-                  disabled={!hasUnsaved}
+                  onClick={() => void handleSaveAll()}
+                  disabled={!hasUnsaved || mutation.isPending}
                   className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm transition-colors disabled:opacity-40"
                 >
                   <Check className="size-4" />

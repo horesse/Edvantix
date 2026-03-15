@@ -3,16 +3,17 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import { Briefcase, Plus } from "lucide-react";
-import { toast } from "sonner";
 
-import useUpdateEmployment from "@workspace/api-hooks/profiles/useUpdateEmployment";
-import type { OwnProfileDetails } from "@workspace/types/profile";
+import type {
+  EmploymentHistoryRequest,
+  OwnProfileDetails,
+} from "@workspace/types/profile";
 
 import { EmploymentDialog } from "../dialogs/employment-dialog";
 import { EmploymentItem } from "../items/employment-item";
 import type { EmploymentInput } from "../schema";
 import { toDateString } from "../schema";
-import type { SectionHandle } from "../types";
+import type { EmploymentSectionHandle } from "../types";
 
 /** Empty state shown when no employment history has been added. */
 function EmploymentEmptyState({ onAdd }: { onAdd: () => void }) {
@@ -49,7 +50,7 @@ function EmploymentEmptyState({ onAdd }: { onAdd: () => void }) {
 }
 
 export const EmploymentSection = forwardRef<
-  SectionHandle,
+  EmploymentSectionHandle,
   {
     profile: OwnProfileDetails;
     onDirtyChange?: (dirty: boolean) => void;
@@ -67,39 +68,12 @@ export const EmploymentSection = forwardRef<
   );
   const [savedSnapshot, setSavedSnapshot] = useState(employments);
 
-  const mutation = useUpdateEmployment({
-    onSuccess: (data) => {
-      toast.success("Опыт работы сохранён");
-      const server = data.employmentHistories.map((e) => ({
-        workplace: e.workplace,
-        position: e.position,
-        startDate: toDateString(e.startDate),
-        endDate: toDateString(e.endDate),
-        description: e.description ?? "",
-      }));
-      setSavedSnapshot(server);
-    },
-    onError: () => toast.error("Не удалось сохранить опыт работы"),
-  });
-
   function handleAppend(data: EmploymentInput) {
     setEmployments((prev) => [...prev, data]);
   }
 
   function handleRemove(index: number) {
     setEmployments((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function handleSubmit() {
-    mutation.mutate({
-      employmentHistories: employments.map((e) => ({
-        workplace: e.workplace,
-        position: e.position,
-        startDate: e.startDate,
-        endDate: e.endDate || null,
-        description: e.description || null,
-      })),
-    });
   }
 
   const isDirty = JSON.stringify(employments) !== JSON.stringify(savedSnapshot);
@@ -109,8 +83,17 @@ export const EmploymentSection = forwardRef<
   }, [isDirty, onDirtyChange]);
 
   useImperativeHandle(ref, () => ({
-    submit: () => {
-      if (isDirty) handleSubmit();
+    getPayload(): EmploymentHistoryRequest[] {
+      return employments.map((e) => ({
+        workplace: e.workplace,
+        position: e.position,
+        startDate: e.startDate,
+        endDate: e.endDate || null,
+        description: e.description || null,
+      }));
+    },
+    acknowledgeServerState() {
+      setSavedSnapshot(employments);
     },
   }));
 

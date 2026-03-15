@@ -1,12 +1,8 @@
-﻿import type {
+import type {
   OwnProfile,
   OwnProfileDetails,
   RegisterProfileRequest,
-  UpdateBioRequest,
-  UpdateContactsRequest,
-  UpdateEducationRequest,
-  UpdateEmploymentRequest,
-  UpdatePersonalInfoRequest,
+  SkillSearchResult,
   UpdateProfileRequest,
 } from "@workspace/types/profile";
 
@@ -46,56 +42,7 @@ class ProfileApiClient {
     return response.data;
   }
 
-  public async updatePersonalInfo(
-    request: UpdatePersonalInfoRequest,
-  ): Promise<OwnProfileDetails> {
-    const response = await this.client.patch<OwnProfileDetails>(
-      `/persona/api/v1/profile/personal-info`,
-      request,
-    );
-    return response.data;
-  }
-
-  public async updateContacts(
-    request: UpdateContactsRequest,
-  ): Promise<OwnProfileDetails> {
-    const response = await this.client.patch<OwnProfileDetails>(
-      `/persona/api/v1/profile/contacts`,
-      request,
-    );
-    return response.data;
-  }
-
-  public async updateEducation(
-    request: UpdateEducationRequest,
-  ): Promise<OwnProfileDetails> {
-    const response = await this.client.patch<OwnProfileDetails>(
-      `/persona/api/v1/profile/education`,
-      request,
-    );
-    return response.data;
-  }
-
-  public async updateEmployment(
-    request: UpdateEmploymentRequest,
-  ): Promise<OwnProfileDetails> {
-    const response = await this.client.patch<OwnProfileDetails>(
-      `/persona/api/v1/profile/employment`,
-      request,
-    );
-    return response.data;
-  }
-
-  public async updateBio(
-    request: UpdateBioRequest,
-  ): Promise<OwnProfileDetails> {
-    const response = await this.client.patch<OwnProfileDetails>(
-      `/persona/api/v1/profile/bio`,
-      request,
-    );
-    return response.data;
-  }
-
+  /** Единый метод обновления профиля: личные данные, контакты, опыт, образование, навыки, bio. */
   public async updateProfile(
     request: UpdateProfileRequest,
   ): Promise<OwnProfileDetails> {
@@ -127,6 +74,22 @@ class ProfileApiClient {
       `/persona/api/v1/profile/registration`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } },
+    );
+    return response.data;
+  }
+
+  /**
+   * Поиск навыков для автодополнения.
+   * @param query Подстрока для поиска (минимум 1 символ).
+   * @param limit Максимальное количество результатов (по умолчанию 20, макс. 50).
+   */
+  public async searchSkills(
+    query: string,
+    limit = 20,
+  ): Promise<SkillSearchResult[]> {
+    const response = await this.client.get<SkillSearchResult[]>(
+      `/persona/api/v1/skills`,
+      { params: { query, limit } },
     );
     return response.data;
   }

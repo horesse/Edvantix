@@ -1,3 +1,4 @@
+using Edvantix.Constants.Core;
 using Edvantix.Constants.Other;
 using Edvantix.Persona.Domain.Events;
 
@@ -9,10 +10,14 @@ namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 /// </summary>
 public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
 {
+    /// <summary>Максимальное количество навыков на один профиль.</summary>
+    public const int MaxSkillsCount = 20;
+
     // Backing fields — EF Core обращается к ним напрямую через PropertyAccessMode.Field
     private readonly List<ProfileContact> _contacts = [];
     private readonly List<EmploymentHistory> _employmentHistories = [];
     private readonly List<Education> _educations = [];
+    private readonly List<ProfileSkill> _skills = [];
 
     /// <summary>Создаёт новый профиль при регистрации пользователя.</summary>
     public Profile(
@@ -57,10 +62,14 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
     /// <summary>URN файла аватара в Azure Blob Storage. Null, если аватар не загружен.</summary>
     public string? AvatarUrl { get; private set; }
 
+    /// <summary>Краткое описание "О себе". Максимум 600 символов.</summary>
+    public string? Bio { get; private set; }
+
     public IReadOnlyCollection<ProfileContact> Contacts => _contacts.AsReadOnly();
     public IReadOnlyCollection<EmploymentHistory> EmploymentHistories =>
         _employmentHistories.AsReadOnly();
     public IReadOnlyCollection<Education> Educations => _educations.AsReadOnly();
+    public IReadOnlyCollection<ProfileSkill> Skills => _skills.AsReadOnly();
 
     public bool IsDeleted { get; set; }
 
@@ -78,6 +87,9 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
 
     /// <summary>Устанавливает URN аватара (null — удалить аватар).</summary>
     public void UploadAvatar(string? avatarUrl) => AvatarUrl = avatarUrl;
+
+    /// <summary>Обновляет описание "О себе". Максимум <see cref="DataSchemaLength.SuperLarge"/> символов.</summary>
+    public void UpdateBio(string? bio) => Bio = bio;
 
     // ─── Contact management ───────────────────────────────────────────────────
 
@@ -147,6 +159,38 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
     {
         _educations.Clear();
         _educations.AddRange(educations);
+    }
+
+    // ─── Skills management ────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Создаёт запись о связи профиля с навыком. Не добавляет её в коллекцию —
+    /// используйте <see cref="ReplaceSkills"/> для сохранения.
+    /// </summary>
+    public ProfileSkill CreateSkill(Guid skillId) => new(skillId);
+
+    /// <summary>
+    /// Заменяет все навыки профиля новым набором (максимум <see cref="MaxSkillsCount"/>).
+    /// Для каждого удалённого навыка публикует <see cref="SkillRemovedFromProfileDomainEvent"/>,
+    /// чтобы после сохранения очистить неиспользуемые записи в глобальном каталоге.
+    /// </summary>
+    public void ReplaceSkills(IReadOnlyList<Guid> skillIds)
+    {
+        if (skillIds.Count > MaxSkillsCount)
+            throw new InvalidOperationException(
+                $"Профиль не может содержать более {MaxSkillsCount} навыков."
+            );
+
+        var removedSkillIds = _skills
+            .Select(s => s.SkillId)
+            .Except(skillIds)
+            .ToList();
+
+        foreach (var skillId in removedSkillIds)
+            RegisterDomainEvent(new SkillRemovedFromProfileDomainEvent(Id, skillId));
+
+        _skills.Clear();
+        _skills.AddRange(skillIds.Select(id => new ProfileSkill(id)));
     }
 
     // ─── Lifecycle ────────────────────────────────────────────────────────────

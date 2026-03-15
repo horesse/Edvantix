@@ -4,10 +4,8 @@ import { forwardRef, useEffect, useImperativeHandle } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
-import useUpdatePersonalInfo from "@workspace/api-hooks/profiles/useUpdatePersonalInfo";
 import { Gender, type OwnProfileDetails } from "@workspace/types/profile";
 import {
   Form,
@@ -26,7 +24,7 @@ import {
 } from "@workspace/validations/profile";
 
 import { toDateString } from "../schema";
-import type { SectionHandle } from "../types";
+import type { GeneralData, GeneralSectionHandle } from "../types";
 
 const schema = z.object({
   lastName: nameField("Фамилия"),
@@ -44,7 +42,7 @@ const GENDER_OPTIONS = [
 ] as const;
 
 export const GeneralSection = forwardRef<
-  SectionHandle,
+  GeneralSectionHandle,
   {
     profile: OwnProfileDetails;
     onDirtyChange?: (dirty: boolean) => void;
@@ -61,30 +59,6 @@ export const GeneralSection = forwardRef<
     },
   });
 
-  const mutation = useUpdatePersonalInfo({
-    onSuccess: (data) => {
-      toast.success("Личная информация сохранена");
-      form.reset({
-        lastName: data.lastName,
-        firstName: data.firstName,
-        middleName: data.middleName ?? "",
-        birthDate: toDateString(data.birthDate),
-        gender: data.gender ?? Gender.None,
-      });
-    },
-    onError: () => toast.error("Не удалось сохранить"),
-  });
-
-  function onSubmit(data: FormValues) {
-    mutation.mutate({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      middleName: data.middleName || null,
-      birthDate: data.birthDate,
-      gender: data.gender,
-    });
-  }
-
   const isDirty = form.formState.isDirty;
 
   useEffect(() => {
@@ -92,12 +66,27 @@ export const GeneralSection = forwardRef<
   }, [isDirty, onDirtyChange]);
 
   useImperativeHandle(ref, () => ({
-    submit: () => void form.handleSubmit(onSubmit)(),
+    async getPayload(): Promise<GeneralData | null> {
+      const valid = await form.trigger();
+      if (!valid) return null;
+      const values = form.getValues();
+      return {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        middleName: values.middleName || null,
+        birthDate: values.birthDate,
+      };
+    },
+    acknowledgeServerState() {
+      // form.reset preserves current values as the new baseline,
+      // clearing isDirty without fetching from the server again.
+      form.reset(form.getValues());
+    },
   }));
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form className="space-y-4">
         {/* Name row: Last / First / Middle */}
         <div className="grid gap-4 sm:grid-cols-3">
           <FormField

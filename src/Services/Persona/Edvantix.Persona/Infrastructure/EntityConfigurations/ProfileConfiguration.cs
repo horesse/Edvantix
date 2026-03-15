@@ -20,6 +20,9 @@ internal sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 
         builder.Property(p => p.AvatarUrl).IsRequired(false);
 
+        // "О себе" — до 600 символов, соответствует требованиям домена
+        builder.Property(p => p.Bio).HasMaxLength(600).IsRequired(false);
+
         builder.HasQueryFilter(p => !p.IsDeleted);
 
         builder
@@ -46,7 +49,13 @@ internal sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
             .HasForeignKey(e => e.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Все три коллекции хранятся через backing fields (_contacts, _employmentHistories, _educations)
+        builder
+            .HasMany(p => p.Skills)
+            .WithOne(s => s.Profile)
+            .HasForeignKey(s => s.ProfileId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Все коллекции хранятся через backing fields
         builder
             .Metadata.FindNavigation(nameof(Profile.Contacts))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
@@ -57,6 +66,10 @@ internal sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 
         builder
             .Metadata.FindNavigation(nameof(Profile.Educations))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder
+            .Metadata.FindNavigation(nameof(Profile.Skills))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

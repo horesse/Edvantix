@@ -3,16 +3,14 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import { GraduationCap, Plus } from "lucide-react";
-import { toast } from "sonner";
 
-import useUpdateEducation from "@workspace/api-hooks/profiles/useUpdateEducation";
-import type { OwnProfileDetails } from "@workspace/types/profile";
+import type { EducationRequest, OwnProfileDetails } from "@workspace/types/profile";
 
 import { EducationDialog } from "../dialogs/education-dialog";
 import { EducationItem } from "../items/education-item";
 import type { EducationInput } from "../schema";
 import { toDateString } from "../schema";
-import type { SectionHandle } from "../types";
+import type { EducationSectionHandle } from "../types";
 
 /** Empty state shown when no education entries have been added. */
 function EducationEmptyState({ onAdd }: { onAdd: () => void }) {
@@ -74,7 +72,7 @@ function EducationEmptyState({ onAdd }: { onAdd: () => void }) {
 }
 
 export const EducationSection = forwardRef<
-  SectionHandle,
+  EducationSectionHandle,
   {
     profile: OwnProfileDetails;
     onDirtyChange?: (dirty: boolean) => void;
@@ -92,39 +90,12 @@ export const EducationSection = forwardRef<
   );
   const [savedSnapshot, setSavedSnapshot] = useState(educations);
 
-  const mutation = useUpdateEducation({
-    onSuccess: (data) => {
-      toast.success("Образование сохранено");
-      const server = data.educations.map((e) => ({
-        institution: e.institution,
-        specialty: e.specialty ?? "",
-        dateStart: toDateString(e.dateStart),
-        dateEnd: toDateString(e.dateEnd),
-        level: e.educationLevel,
-      }));
-      setSavedSnapshot(server);
-    },
-    onError: () => toast.error("Не удалось сохранить образование"),
-  });
-
   function handleAppend(data: EducationInput) {
     setEducations((prev) => [...prev, data]);
   }
 
   function handleRemove(index: number) {
     setEducations((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function handleSubmit() {
-    mutation.mutate({
-      educations: educations.map((e) => ({
-        institution: e.institution,
-        specialty: e.specialty || null,
-        dateStart: e.dateStart,
-        dateEnd: e.dateEnd || null,
-        level: e.level,
-      })),
-    });
   }
 
   const isDirty = JSON.stringify(educations) !== JSON.stringify(savedSnapshot);
@@ -134,8 +105,17 @@ export const EducationSection = forwardRef<
   }, [isDirty, onDirtyChange]);
 
   useImperativeHandle(ref, () => ({
-    submit: () => {
-      if (isDirty) handleSubmit();
+    getPayload(): EducationRequest[] {
+      return educations.map((e) => ({
+        institution: e.institution,
+        specialty: e.specialty || null,
+        dateStart: e.dateStart,
+        dateEnd: e.dateEnd || null,
+        level: e.level,
+      }));
+    },
+    acknowledgeServerState() {
+      setSavedSnapshot(educations);
     },
   }));
 

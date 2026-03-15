@@ -2,18 +2,15 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
-import { toast } from "sonner";
-
-import useUpdateBio from "@workspace/api-hooks/profiles/useUpdateBio";
 import type { OwnProfileDetails } from "@workspace/types/profile";
 import { Textarea } from "@workspace/ui/components/textarea";
 
-import type { SectionHandle } from "../types";
+import type { BioSectionHandle } from "../types";
 
 const MAX_BIO = 600;
 
 export const BioSection = forwardRef<
-  SectionHandle,
+  BioSectionHandle,
   {
     profile: OwnProfileDetails;
     onDirtyChange?: (dirty: boolean) => void;
@@ -22,14 +19,6 @@ export const BioSection = forwardRef<
   const [bio, setBio] = useState(profile.bio ?? "");
   const [savedBio, setSavedBio] = useState(profile.bio ?? "");
 
-  const mutation = useUpdateBio({
-    onSuccess: (data) => {
-      toast.success("О себе сохранено");
-      setSavedBio(data.bio ?? "");
-    },
-    onError: () => toast.error("Не удалось сохранить"),
-  });
-
   const isDirty = bio !== savedBio;
 
   useEffect(() => {
@@ -37,8 +26,11 @@ export const BioSection = forwardRef<
   }, [isDirty, onDirtyChange]);
 
   useImperativeHandle(ref, () => ({
-    submit: () => {
-      if (isDirty) mutation.mutate({ bio: bio || null });
+    getPayload(): string | null {
+      return bio || null;
+    },
+    acknowledgeServerState() {
+      setSavedBio(bio);
     },
   }));
 

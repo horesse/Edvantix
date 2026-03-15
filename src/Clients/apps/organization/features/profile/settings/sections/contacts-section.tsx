@@ -3,15 +3,13 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import { Mail, Plus } from "lucide-react";
-import { toast } from "sonner";
 
-import useUpdateContacts from "@workspace/api-hooks/profiles/useUpdateContacts";
-import type { OwnProfileDetails } from "@workspace/types/profile";
+import type { ContactRequest, OwnProfileDetails } from "@workspace/types/profile";
 
 import { ContactDialog } from "../dialogs/contact-dialog";
 import { ContactItem } from "../items/contact-item";
 import type { ContactInput } from "../schema";
-import type { SectionHandle } from "../types";
+import type { ContactsSectionHandle } from "../types";
 
 /** Empty state shown when no contacts have been added. */
 function ContactsEmptyState({ onAdd }: { onAdd: () => void }) {
@@ -48,7 +46,7 @@ function ContactsEmptyState({ onAdd }: { onAdd: () => void }) {
 }
 
 export const ContactsSection = forwardRef<
-  SectionHandle,
+  ContactsSectionHandle,
   {
     profile: OwnProfileDetails;
     onDirtyChange?: (dirty: boolean) => void;
@@ -64,35 +62,12 @@ export const ContactsSection = forwardRef<
   );
   const [savedSnapshot, setSavedSnapshot] = useState(contacts);
 
-  const mutation = useUpdateContacts({
-    onSuccess: (data) => {
-      toast.success("Контакты сохранены");
-      const server = data.contacts.map((c) => ({
-        type: c.type,
-        value: c.value,
-        description: c.description ?? "",
-      }));
-      setSavedSnapshot(server);
-    },
-    onError: () => toast.error("Не удалось сохранить контакты"),
-  });
-
   function handleAppend(data: ContactInput) {
     setContacts((prev) => [...prev, data]);
   }
 
   function handleRemove(index: number) {
     setContacts((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function handleSubmit() {
-    mutation.mutate({
-      contacts: contacts.map((c) => ({
-        type: c.type,
-        value: c.value,
-        description: c.description || null,
-      })),
-    });
   }
 
   const isDirty = JSON.stringify(contacts) !== JSON.stringify(savedSnapshot);
@@ -102,8 +77,15 @@ export const ContactsSection = forwardRef<
   }, [isDirty, onDirtyChange]);
 
   useImperativeHandle(ref, () => ({
-    submit: () => {
-      if (isDirty) handleSubmit();
+    getPayload(): ContactRequest[] {
+      return contacts.map((c) => ({
+        type: c.type,
+        value: c.value,
+        description: c.description || null,
+      }));
+    },
+    acknowledgeServerState() {
+      setSavedSnapshot(contacts);
     },
   }));
 

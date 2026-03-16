@@ -49,7 +49,10 @@ function today(): string {
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 
-function KpiCard({ kpi, isLoading }: Readonly<{ kpi: KpiConfig; isLoading: boolean }>) {
+function KpiCard({
+  kpi,
+  isLoading,
+}: Readonly<{ kpi: KpiConfig; isLoading: boolean }>) {
   return (
     <div className="bg-card border-border rounded-2xl border p-5 shadow-sm">
       <div className="mb-3 flex items-center justify-between">

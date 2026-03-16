@@ -7,5 +7,9 @@ public interface IKeycloakAdminService
     /// Сохраняет <paramref name="profileId"/> как пользовательский атрибут
     /// в учётной записи Keycloak с идентификатором <paramref name="accountId"/>.
     /// </summary>
-    Task SetProfileIdAsync(Guid accountId, Guid profileId, CancellationToken ct = default);
+    Task SetProfileIdAsync(
+        Guid accountId,
+        Guid profileId,
+        CancellationToken cancellationToken = default
+    );
 }

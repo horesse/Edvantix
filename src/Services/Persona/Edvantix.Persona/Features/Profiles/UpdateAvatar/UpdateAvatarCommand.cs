@@ -15,7 +15,7 @@ public sealed class UpdateAvatarCommandHandler(IServiceProvider provider)
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         UpdateAvatarCommand command,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         var accountId = provider.GetUserId();
@@ -24,24 +24,24 @@ public sealed class UpdateAvatarCommandHandler(IServiceProvider provider)
 
         var spec = new ProfileByAccountIdSpec(accountId, withDetails: true);
         var profile =
-            await profileRepo.FindAsync(spec, ct)
+            await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");
 
         // Загружаем новый файл в хранилище до сохранения профиля.
-        var newAvatarUrn = await blobService.UploadFileAsync(command.Avatar, ct);
+        var newAvatarUrn = await blobService.UploadFileAsync(command.Avatar, cancellationToken);
 
         try
         {
             // UploadAvatar регистрирует AvatarDeletedDomainEvent для старого блоба, если он был.
             profile.UploadAvatar(newAvatarUrn);
 
-            await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
+            await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
         catch
         {
             // Если сохранение не удалось — удаляем только что загруженный блоб,
             // чтобы не оставлять осиротевших файлов в хранилище.
-            await blobService.DeleteFileAsync(newAvatarUrn, ct);
+            await blobService.DeleteFileAsync(newAvatarUrn, cancellationToken);
             throw;
         }
 

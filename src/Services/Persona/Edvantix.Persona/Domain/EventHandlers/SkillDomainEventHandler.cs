@@ -14,15 +14,21 @@ public sealed class SkillDomainEventHandler(
 {
     public async ValueTask Handle(
         SkillRemovedFromProfileDomainEvent notification,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
-        var isUsed = await skillRepository.IsUsedByAnyProfileAsync(notification.SkillId, ct);
+        var isUsed = await skillRepository.IsUsedByAnyProfileAsync(
+            notification.SkillId,
+            cancellationToken
+        );
 
         if (isUsed)
             return;
 
-        var skill = await skillRepository.FindAsync(new SkillByIdSpec(notification.SkillId), ct);
+        var skill = await skillRepository.FindAsync(
+            new SkillByIdSpec(notification.SkillId),
+            cancellationToken
+        );
 
         if (skill is null)
             return;
@@ -34,6 +40,6 @@ public sealed class SkillDomainEventHandler(
         );
 
         skillRepository.Remove(skill);
-        await skillRepository.UnitOfWork.SaveEntitiesAsync(ct);
+        await skillRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

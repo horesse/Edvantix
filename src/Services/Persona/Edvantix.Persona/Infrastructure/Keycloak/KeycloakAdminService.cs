@@ -20,11 +20,11 @@ public sealed class KeycloakAdminService(
     public async Task SetProfileIdAsync(
         Guid accountId,
         Guid profileId,
-        CancellationToken ct = default
+        CancellationToken cancellationToken = default
     )
     {
-        var token = await GetServiceAccountTokenAsync(ct);
-        await UpdateUserAttributesAsync(accountId, profileId, token, ct);
+        var token = await GetServiceAccountTokenAsync(cancellationToken);
+        await UpdateUserAttributesAsync(accountId, profileId, token, cancellationToken);
 
         logger.LogInformation(
             "ProfileId {ProfileId} успешно сохранён в Keycloak для аккаунта {AccountId}",
@@ -37,7 +37,7 @@ public sealed class KeycloakAdminService(
     /// Получает токен сервисного аккаунта через client_credentials.
     /// Persona client должен иметь роль manage-users в realm-management.
     /// </summary>
-    private async Task<string> GetServiceAccountTokenAsync(CancellationToken ct)
+    private async Task<string> GetServiceAccountTokenAsync(CancellationToken cancellationToken)
     {
         using var client = httpClientFactory.CreateClient(Components.KeyCloak);
 
@@ -49,10 +49,10 @@ public sealed class KeycloakAdminService(
             new("client_secret", identityOptions.ClientSecret),
         ]);
 
-        var response = await client.PostAsync(tokenEndpoint, content, ct);
+        var response = await client.PostAsync(tokenEndpoint, content, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var json = await response.Content.ReadAsStringAsync(ct);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken);
         using var doc = JsonDocument.Parse(json);
 
         return doc.RootElement.GetProperty("access_token").GetString()
@@ -69,7 +69,7 @@ public sealed class KeycloakAdminService(
         Guid accountId,
         Guid profileId,
         string token,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         using var client = httpClientFactory.CreateClient(Components.KeyCloak);
@@ -93,7 +93,7 @@ public sealed class KeycloakAdminService(
             Content = new StringContent(payload, Encoding.UTF8, "application/json"),
         };
 
-        var response = await client.SendAsync(request, ct);
+        var response = await client.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
     }
 }

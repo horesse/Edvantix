@@ -20,7 +20,7 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         UpdateProfileCommand command,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         var accountId = provider.GetUserId();
@@ -29,7 +29,7 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
 
         var spec = new ProfileByAccountIdSpec(accountId, withDetails: true);
         var profile =
-            await profileRepo.FindAsync(spec, ct)
+            await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");
 
         // Обновляем личные данные
@@ -59,10 +59,10 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
         );
 
         // Разрешаем имена навыков в ID каталога (find-or-create), затем заменяем список
-        var skillIds = await ResolveSkillIdsAsync(command.Skills, skillRepo, ct);
+        var skillIds = await ResolveSkillIdsAsync(command.Skills, skillRepo, cancellationToken);
         profile.ReplaceSkills(skillIds);
 
-        await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
+        await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         var mapper = provider.GetRequiredService<IMapper<Profile, ProfileDetailsModel>>();
         return mapper.Map(profile);
@@ -76,7 +76,7 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
     private static async Task<List<Guid>> ResolveSkillIdsAsync(
         List<string> names,
         ISkillRepository skillRepo,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         var skillIds = new List<Guid>(names.Count);
@@ -91,8 +91,8 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
         foreach (var name in uniqueNames)
         {
             var skill =
-                await skillRepo.FindByNameAsync(name, ct)
-                ?? await skillRepo.AddAsync(new Skill(name), ct);
+                await skillRepo.FindByNameAsync(name, cancellationToken)
+                ?? await skillRepo.AddAsync(new Skill(name), cancellationToken);
 
             skillIds.Add(skill.Id);
         }

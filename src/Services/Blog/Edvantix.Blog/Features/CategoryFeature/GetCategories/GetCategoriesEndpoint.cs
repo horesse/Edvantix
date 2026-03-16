@@ -10,8 +10,8 @@ public sealed class GetCategoriesEndpoint
     {
         app.MapGet(
                 "/categories",
-                async (ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetCategoriesQuery(), sender, ct)
+                async (ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(new GetCategoriesQuery(), sender, cancellationToken)
             )
             .WithName("GetCategories")
             .WithTags("Categories")

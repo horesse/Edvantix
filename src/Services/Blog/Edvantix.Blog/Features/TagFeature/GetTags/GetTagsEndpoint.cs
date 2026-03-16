@@ -9,8 +9,8 @@ public sealed class GetTagsEndpoint : IEndpoint<Ok<IReadOnlyList<TagModel>>, Get
     {
         app.MapGet(
                 "/tags",
-                async (ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetTagsQuery(), sender, ct)
+                async (ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(new GetTagsQuery(), sender, cancellationToken)
             )
             .WithName("GetTags")
             .WithTags("Tags")

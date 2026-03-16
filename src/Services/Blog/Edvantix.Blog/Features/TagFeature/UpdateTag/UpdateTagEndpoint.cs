@@ -18,12 +18,12 @@ public sealed class UpdateTagEndpoint : IEndpoint<NoContent, UpdateTagCommand, I
                     Guid tagId,
                     UpdateTagRequest request,
                     ISender sender,
-                    CancellationToken ct
+                    CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
                         new UpdateTagCommand(tagId, request.Name, request.Slug),
                         sender,
-                        ct
+                        cancellationToken
                     )
             )
             .WithName("UpdateTag")

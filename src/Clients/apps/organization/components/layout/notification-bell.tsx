@@ -65,9 +65,7 @@ export function NotificationBell() {
       return (
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <Bell className="text-muted-foreground/40 mb-2 size-8" />
-          <p className="text-muted-foreground text-sm">
-            Нет новых уведомлений
-          </p>
+          <p className="text-muted-foreground text-sm">Нет новых уведомлений</p>
         </div>
       );
     }

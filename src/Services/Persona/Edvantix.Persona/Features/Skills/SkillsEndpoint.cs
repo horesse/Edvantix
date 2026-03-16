@@ -7,8 +7,11 @@ public sealed class SkillsEndpoint : IEndpoint<Ok<IReadOnlyList<SkillDto>>, GetS
     {
         app.MapGet(
                 "/skills",
-                async ([AsParameters] GetSkillsQuery query, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(query, sender, ct)
+                async (
+                    [AsParameters] GetSkillsQuery query,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(query, sender, cancellationToken)
             )
             .WithName("SearchSkills")
             .WithTags("Skills")

@@ -7,7 +7,8 @@ public sealed class DeleteAvatarEndpoint : IEndpoint<Ok<ProfileDetailsModel>, IS
     {
         app.MapDelete(
                 "/profile/avatar",
-                async (ISender sender, CancellationToken ct) => await HandleAsync(sender, ct)
+                async (ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(sender, cancellationToken)
             )
             .WithName("DeleteAvatar")
             .WithTags("Profile")

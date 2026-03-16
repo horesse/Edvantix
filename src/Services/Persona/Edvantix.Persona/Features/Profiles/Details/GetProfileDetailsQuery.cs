@@ -19,7 +19,7 @@ public sealed class GetProfileDetailsQueryHandler(IServiceProvider provider)
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         GetProfileDetailsQuery request,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
@@ -33,7 +33,7 @@ public sealed class GetProfileDetailsQueryHandler(IServiceProvider provider)
             : new ProfileByAccountIdSpec(provider.GetUserId(), withDetails: true);
 
         var profile =
-            await profileRepo.FindAsync(spec, ct)
+            await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");
 
         return mapper.Map(profile);

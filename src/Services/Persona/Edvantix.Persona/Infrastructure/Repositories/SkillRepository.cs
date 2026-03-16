@@ -16,30 +16,38 @@ public sealed class SkillRepository(PersonaDbContext context) : ISkillRepository
     /// <inheritdoc/>
     public async Task<Skill?> FindAsync(
         ISpecification<Skill> spec,
-        CancellationToken ct = default
-    ) => await Specification.GetQuery(context.Skills, spec).FirstOrDefaultAsync(ct);
+        CancellationToken cancellationToken = default
+    ) => await Specification.GetQuery(context.Skills, spec).FirstOrDefaultAsync(cancellationToken);
 
     /// <inheritdoc/>
     public async Task<IReadOnlyList<Skill>> FindAllAsync(
         ISpecification<Skill> spec,
-        CancellationToken ct = default
-    ) => await Specification.GetQuery(context.Skills, spec).ToListAsync(ct);
+        CancellationToken cancellationToken = default
+    ) => await Specification.GetQuery(context.Skills, spec).ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<Skill?> FindByNameAsync(string name, CancellationToken ct = default)
+    public async Task<Skill?> FindByNameAsync(
+        string name,
+        CancellationToken cancellationToken = default
+    )
     {
         var normalized = name.Trim().ToLower();
-        return await context.Skills.FirstOrDefaultAsync(s => s.Name.ToLower() == normalized, ct);
+        return await context.Skills.FirstOrDefaultAsync(
+            s => s.Name.Equals(normalized, StringComparison.CurrentCultureIgnoreCase),
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
-    public async Task<bool> IsUsedByAnyProfileAsync(Guid skillId, CancellationToken ct = default) =>
-        await context.Set<ProfileSkill>().AnyAsync(ps => ps.SkillId == skillId, ct);
+    public async Task<bool> IsUsedByAnyProfileAsync(
+        Guid skillId,
+        CancellationToken cancellationToken = default
+    ) => await context.Set<ProfileSkill>().AnyAsync(ps => ps.SkillId == skillId, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<Skill> AddAsync(Skill skill, CancellationToken ct = default)
+    public async Task<Skill> AddAsync(Skill skill, CancellationToken cancellationToken = default)
     {
-        var entry = await context.Skills.AddAsync(skill, ct);
+        var entry = await context.Skills.AddAsync(skill, cancellationToken);
         return entry.Entity;
     }
 

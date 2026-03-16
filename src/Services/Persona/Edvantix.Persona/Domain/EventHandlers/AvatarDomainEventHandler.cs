@@ -13,10 +13,13 @@ public sealed class AvatarDomainEventHandler(
     ILogger<AvatarDomainEventHandler> logger
 ) : INotificationHandler<AvatarDeletedDomainEvent>
 {
-    public async ValueTask Handle(AvatarDeletedDomainEvent notification, CancellationToken ct)
+    public async ValueTask Handle(
+        AvatarDeletedDomainEvent notification,
+        CancellationToken cancellationToken
+    )
     {
         logger.LogInformation("Удаление аватара из хранилища: {AvatarUrn}", notification.AvatarUrn);
 
-        await blobService.DeleteFileAsync(notification.AvatarUrn, ct);
+        await blobService.DeleteFileAsync(notification.AvatarUrn, cancellationToken);
     }
 }

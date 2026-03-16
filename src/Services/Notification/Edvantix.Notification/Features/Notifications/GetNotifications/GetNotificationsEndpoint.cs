@@ -25,7 +25,7 @@ public sealed class GetNotificationsEndpoint
                     ClaimsPrincipal user,
                     [AsParameters] GetNotificationsRequest request,
                     ISender sender,
-                    CancellationToken ct
+                    CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
                         new GetNotificationsQuery(
@@ -35,7 +35,7 @@ public sealed class GetNotificationsEndpoint
                             request.IsRead
                         ),
                         sender,
-                        ct
+                        cancellationToken
                     )
             )
             .WithName("GetNotifications")

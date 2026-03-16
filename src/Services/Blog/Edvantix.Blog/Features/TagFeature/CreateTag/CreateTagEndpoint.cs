@@ -14,8 +14,16 @@ public sealed class CreateTagEndpoint : IEndpoint<Created<Guid>, CreateTagComman
     {
         app.MapPost(
                 "/admin/tags",
-                async (CreateTagRequest request, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new CreateTagCommand(request.Name, request.Slug), sender, ct)
+                async (
+                    CreateTagRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) =>
+                    await HandleAsync(
+                        new CreateTagCommand(request.Name, request.Slug),
+                        sender,
+                        cancellationToken
+                    )
             )
             .WithName("CreateTag")
             .WithTags("Admin.Tags")

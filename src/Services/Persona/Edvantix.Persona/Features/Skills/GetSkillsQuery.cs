@@ -11,14 +11,14 @@ public sealed class GetSkillsQueryHandler(IServiceProvider provider)
 {
     public async ValueTask<IReadOnlyList<SkillDto>> Handle(
         GetSkillsQuery query,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         var skillRepo = provider.GetRequiredService<ISkillRepository>();
 
         var limit = Math.Clamp(query.Limit, 1, 50);
         var spec = new SkillSearchSpec(query.Query, limit);
-        var skills = await skillRepo.FindAllAsync(spec, ct);
+        var skills = await skillRepo.FindAllAsync(spec, cancellationToken);
 
         return [.. skills.Select(s => new SkillDto(s.Id, s.Name))];
     }

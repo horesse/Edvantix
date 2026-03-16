@@ -11,11 +11,11 @@ public sealed class GetUnreadCountEndpoint
     {
         app.MapGet(
                 "/notifications/unread-count",
-                async (ClaimsPrincipal user, ISender sender, CancellationToken ct) =>
+                async (ClaimsPrincipal user, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(
                         new GetUnreadCountQuery(NotificationHelpers.GetAccountId(user)),
                         sender,
-                        ct
+                        cancellationToken
                     )
             )
             .WithName("GetUnreadNotificationsCount")

@@ -7,8 +7,8 @@ using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Persona.Configurations;
+using Edvantix.Persona.Features.Profiles.DeleteAvatar;
 using Edvantix.Persona.Features.Profiles.UpdateAvatar;
-using Edvantix.Persona.Features.Profiles.UpdateProfileByAdmin;
 using Edvantix.Persona.Infrastructure.EventServices;
 using Edvantix.Persona.Infrastructure.Keycloak;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
@@ -67,8 +67,7 @@ internal static class Extensions
             .ApplyValidationBehavior()
             .AddScoped<UpdateAvatarPreProcessor>()
             .AddScoped<UpdateAvatarPostProcessor>()
-            .AddScoped<UpdateProfileByAdminPreProcessor>()
-            .AddScoped<UpdateProfileByAdminPostProcessor>();
+            .AddScoped<DeleteAvatarPostProcessor>();
 
         builder.AddAppSettings<PersonaAppSettings>();
 

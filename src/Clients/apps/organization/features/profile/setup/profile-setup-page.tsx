@@ -98,9 +98,10 @@ interface ProfileSetupPageProps {
   /**
    * Called when the user completes step 2 and clicks "Сохранить и войти".
    * Receives the full form values including avatar data and personal info.
+   * `avatarFile` is the raw File selected by the user, or null if a preset was chosen.
    * Should return a Promise that resolves on success or rejects with an error message.
    */
-  onSubmit?: (values: ProfileSetupValues) => Promise<void>;
+  onSubmit?: (values: ProfileSetupValues, avatarFile: File | null) => Promise<void>;
 }
 
 /**
@@ -118,6 +119,7 @@ export function ProfileSetupPage({ onSubmit }: ProfileSetupPageProps) {
   const [avatarValues, setAvatarValues] =
     useState<AvatarStepValues>(defaultAvatarValues);
   const [uploadedDataUrl, setUploadedDataUrl] = useState<string | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [personalValues, setPersonalValues] = useState<PersonalStepValues>(
     defaultPersonalValues,
   );
@@ -151,7 +153,7 @@ export function ProfileSetupPage({ onSubmit }: ProfileSetupPageProps) {
       };
 
       if (onSubmit) {
-        await onSubmit(payload);
+        await onSubmit(payload, uploadedFile);
       } else {
         // Default: just navigate to dashboard (useful for Storybook / tests)
         router.push("/");
@@ -218,7 +220,10 @@ export function ProfileSetupPage({ onSubmit }: ProfileSetupPageProps) {
                 values={avatarValues}
                 uploadedDataUrl={uploadedDataUrl}
                 onChange={setAvatarValues}
-                onUploadChange={setUploadedDataUrl}
+                onUploadChange={(file, dataUrl) => {
+                  setUploadedFile(file);
+                  setUploadedDataUrl(dataUrl);
+                }}
                 onNext={() => setStep(2)}
               />
             )}

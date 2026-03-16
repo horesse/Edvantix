@@ -30,6 +30,13 @@ class ProfileApiClient {
     return response.data;
   }
 
+  public async deleteAvatar(): Promise<OwnProfileDetails> {
+    const response = await this.client.delete<OwnProfileDetails>(
+      `/persona/api/v1/profile/avatar`,
+    );
+    return response.data;
+  }
+
   public async uploadAvatar(avatar: File): Promise<OwnProfileDetails> {
     const formData = new FormData();
     formData.append("avatar", avatar);
@@ -37,7 +44,6 @@ class ProfileApiClient {
     const response = await this.client.patch<OwnProfileDetails>(
       `/persona/api/v1/profile/avatar`,
       formData,
-      { headers: { "Content-Type": "multipart/form-data" } },
     );
     return response.data;
   }
@@ -73,7 +79,6 @@ class ProfileApiClient {
     const response = await this.client.post<string>(
       `/persona/api/v1/profile/registration`,
       formData,
-      { headers: { "Content-Type": "multipart/form-data" } },
     );
     return response.data;
   }

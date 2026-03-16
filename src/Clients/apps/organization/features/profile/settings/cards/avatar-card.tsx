@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Camera, Loader2, Upload, User } from "lucide-react";
 import { toast } from "sonner";
 
+import useDeleteAvatar from "@workspace/api-hooks/profiles/useDeleteAvatar";
 import useUploadAvatar from "@workspace/api-hooks/profiles/useUploadAvatar";
 import type { OwnProfileDetails } from "@workspace/types/profile";
 import { Input } from "@workspace/ui/components/input";
@@ -37,6 +38,19 @@ export function AvatarCard({ profile }: { profile: OwnProfileDetails }) {
     },
   });
 
+  const deleteMutation = useDeleteAvatar({
+    onSuccess: () => {
+      toast.success("Аватар удалён");
+      if (preview) {
+        URL.revokeObjectURL(preview);
+        setPreview(null);
+      }
+    },
+    onError: () => {
+      toast.error("Не удалось удалить аватар");
+    },
+  });
+
   function handleFile(file: File | null) {
     if (!file) return;
 
@@ -66,7 +80,7 @@ export function AvatarCard({ profile }: { profile: OwnProfileDetails }) {
     .filter(Boolean)
     .join(" ");
   const initials = fullName ? getInitials(fullName) : null;
-  const isPending = uploadMutation.isPending;
+  const isPending = uploadMutation.isPending || deleteMutation.isPending;
 
   return (
     <div className="bg-card border-border rounded-2xl border p-5 shadow-sm">
@@ -145,12 +159,7 @@ export function AvatarCard({ profile }: { profile: OwnProfileDetails }) {
             type="button"
             className="text-destructive hover:text-destructive/80 text-xs font-medium transition-colors disabled:opacity-50"
             disabled={isPending}
-            onClick={() => {
-              // TODO: call delete avatar API when available
-              toast.info(
-                "Удаление аватара будет доступно после обновления API",
-              );
-            }}
+            onClick={() => deleteMutation.mutate()}
           >
             Удалить фото
           </button>

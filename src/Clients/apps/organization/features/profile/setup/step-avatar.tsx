@@ -12,7 +12,7 @@ interface StepAvatarProps {
   values: AvatarStepValues;
   uploadedDataUrl: string | null;
   onChange: (values: AvatarStepValues) => void;
-  onUploadChange: (dataUrl: string | null) => void;
+  onUploadChange: (file: File | null, dataUrl: string | null) => void;
   onNext: () => void;
 }
 
@@ -27,12 +27,12 @@ export function StepAvatar({
   onNext,
 }: StepAvatarProps) {
   function handlePresetSelect(presetValue: string) {
-    onUploadChange(null);
+    onUploadChange(null, null);
     onChange({ avatarType: "preset", presetValue, uploadedDataUrl: undefined });
   }
 
-  function handleFileSelect(dataUrl: string) {
-    onUploadChange(dataUrl);
+  function handleFileSelect(file: File, dataUrl: string) {
+    onUploadChange(file, dataUrl);
     onChange({
       avatarType: "upload",
       presetValue: undefined,

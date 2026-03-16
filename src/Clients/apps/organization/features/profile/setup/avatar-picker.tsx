@@ -12,7 +12,7 @@ interface AvatarPickerProps {
   value: string | null;
   uploadedDataUrl: string | null;
   onPresetSelect: (value: string) => void;
-  onFileSelect: (dataUrl: string) => void;
+  onFileSelect: (file: File, dataUrl: string) => void;
 }
 
 /**
@@ -35,7 +35,7 @@ export function AvatarPicker({
     reader.onload = (e) => {
       const result = e.target?.result;
       if (typeof result === "string") {
-        onFileSelect(result);
+        onFileSelect(file, result);
       }
     };
     reader.readAsDataURL(file);

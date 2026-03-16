@@ -38,17 +38,17 @@ export default function ProfileRegisterPage() {
 
   const { mutateAsync } = useRegisterProfile();
 
-  async function handleSubmit(values: ProfileSetupValues) {
+  async function handleSubmit(
+    values: ProfileSetupValues,
+    avatarFile: File | null,
+  ) {
     await mutateAsync({
       lastName: values.lastName,
       firstName: values.firstName,
       middleName: values.patronymic ?? null,
       birthDate: values.birthDate,
       gender: mapGender(values.gender),
-      // Emoji avatar presets are handled client-side only for now.
-      // Photo uploads (base64 data URLs) are not yet supported by the backend.
-      // See backend-requirements.md for the required endpoint.
-      avatar: null,
+      avatar: avatarFile,
     });
 
     // After profile creation Keycloak updates the user's claims.

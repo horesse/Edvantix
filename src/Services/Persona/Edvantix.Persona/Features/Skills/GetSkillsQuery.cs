@@ -4,14 +4,14 @@ namespace Edvantix.Persona.Features.Skills;
 public sealed record SkillDto(Guid Id, string Name);
 
 /// <summary>GET /v1/skills — поиск навыков для автодополнения.</summary>
-public sealed record SearchSkillsQuery(string Query, int Limit = 20)
+public sealed record GetSkillsQuery(string Query, int Limit = 20)
     : IQuery<IReadOnlyList<SkillDto>>;
 
-public sealed class SearchSkillsQueryHandler(IServiceProvider provider)
-    : IQueryHandler<SearchSkillsQuery, IReadOnlyList<SkillDto>>
+public sealed class GetSkillsQueryHandler(IServiceProvider provider)
+    : IQueryHandler<GetSkillsQuery, IReadOnlyList<SkillDto>>
 {
     public async ValueTask<IReadOnlyList<SkillDto>> Handle(
-        SearchSkillsQuery query,
+        GetSkillsQuery query,
         CancellationToken ct
     )
     {

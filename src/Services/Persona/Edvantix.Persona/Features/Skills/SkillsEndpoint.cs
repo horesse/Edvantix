@@ -2,14 +2,14 @@ namespace Edvantix.Persona.Features.Skills;
 
 /// <summary>GET /v1/skills — поиск навыков для автодополнения.</summary>
 public sealed class SkillsEndpoint
-    : IEndpoint<Ok<IReadOnlyList<SkillDto>>, SearchSkillsQuery, ISender>
+    : IEndpoint<Ok<IReadOnlyList<SkillDto>>, GetSkillsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
                 "/skills",
                 async (
-                    [AsParameters] SearchSkillsQuery query,
+                    [AsParameters] GetSkillsQuery query,
                     ISender sender,
                     CancellationToken ct
                 ) => await HandleAsync(query, sender, ct)
@@ -27,7 +27,7 @@ public sealed class SkillsEndpoint
     }
 
     public async Task<Ok<IReadOnlyList<SkillDto>>> HandleAsync(
-        SearchSkillsQuery query,
+        GetSkillsQuery query,
         ISender sender,
         CancellationToken cancellationToken = default
     )

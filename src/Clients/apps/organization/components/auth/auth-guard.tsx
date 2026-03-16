@@ -42,7 +42,7 @@ async function fetchFreshToken(): Promise<string | null> {
     const token = result.data?.accessToken ?? null;
 
     if (token) {
-      window.localStorage.setItem("access_token", token);
+      globalThis.localStorage.setItem("access_token", token);
     }
 
     return token;
@@ -60,7 +60,9 @@ async function fetchFreshToken(): Promise<string | null> {
  * - Proactively refreshes the access token before it expires.
  * - Registers a refresher for the Axios 401 interceptor.
  */
-export function AuthGuard({ children }: { children: React.ReactNode }) {
+export function AuthGuard({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const { isAuthenticated, isLoading } = useUserContext();
   /**
    * Tracks whether the initial token fetch has completed.
@@ -87,7 +89,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     fetchFreshToken().then(() => setTokenReady(true));
 
     const interval = setInterval(async () => {
-      const currentToken = window.localStorage.getItem("access_token");
+      const currentToken = globalThis.localStorage.getItem("access_token");
 
       if (!isTokenExpiringSoon(currentToken, TOKEN_REFRESH_BUFFER_MS)) return;
 

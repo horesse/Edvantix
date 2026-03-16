@@ -14,9 +14,11 @@ type AxiosLikeError = { response?: { status?: number } };
  * Guards routes that require a completed profile.
  * Redirects to /profile/register when the API returns 404 (profile not found).
  */
-export function ProfileGuard({ children }: { children: React.ReactNode }) {
+export function ProfileGuard({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const router = useRouter();
-  const { data, isLoading, error } = useOwnProfile({ retry: false });
+  const { isLoading, error } = useOwnProfile({ retry: false });
 
   useEffect(() => {
     if (!isLoading && error) {

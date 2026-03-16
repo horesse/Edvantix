@@ -101,7 +101,10 @@ interface ProfileSetupPageProps {
    * `avatarFile` is the raw File selected by the user, or null if a preset was chosen.
    * Should return a Promise that resolves on success or rejects with an error message.
    */
-  onSubmit?: (values: ProfileSetupValues, avatarFile: File | null) => Promise<void>;
+  onSubmit?: (
+    values: ProfileSetupValues,
+    avatarFile: File | null,
+  ) => Promise<void>;
 }
 
 /**

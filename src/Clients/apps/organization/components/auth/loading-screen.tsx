@@ -10,8 +10,10 @@ import { cn } from "@workspace/ui/lib/utils";
 
 export type LoadingStage = "auth" | "session" | "profile";
 
+type StepId = 1 | 2 | 3;
+
 interface StepDef {
-  id: 1 | 2 | 3;
+  id: StepId;
   label: string;
   activeSubtitle: string;
   doneSubtitle: string;
@@ -25,9 +27,9 @@ interface StageConfig {
   /** Progress bar animates toward this value while in the stage. */
   progressTo: number;
   /** Which step card is currently spinning. */
-  activeStep: 1 | 2 | 3;
+  activeStep: StepId;
   /** Steps rendered as "done" (green checkmark). */
-  doneSteps: Array<1 | 2 | 3>;
+  doneSteps: Array<StepId>;
 }
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -182,7 +184,13 @@ interface StepCardProps {
   mounted: boolean;
 }
 
-function StepCard({ step, status, delay, mounted }: StepCardProps) {
+function getStepSubtitle(step: StepDef, status: StepStatus): string {
+  if (status === "done") return step.doneSubtitle;
+  if (status === "active") return step.activeSubtitle;
+  return "Ожидание…";
+}
+
+function StepCard({ step, status, delay, mounted }: Readonly<StepCardProps>) {
   return (
     <div
       className={cn(
@@ -230,11 +238,7 @@ function StepCard({ step, status, delay, mounted }: StepCardProps) {
               status === "pending" && "text-muted-foreground/30",
             )}
           >
-            {status === "done"
-              ? step.doneSubtitle
-              : status === "active"
-                ? step.activeSubtitle
-                : "Ожидание…"}
+            {getStepSubtitle(step, status)}
           </p>
         </div>
       </div>
@@ -258,7 +262,7 @@ interface LoadingScreenProps {
  *
  * Progress animates smoothly within each stage's range via requestAnimationFrame.
  */
-export function LoadingScreen({ stage }: LoadingScreenProps) {
+export function LoadingScreen({ stage }: Readonly<LoadingScreenProps>) {
   const config = STAGE_CONFIG[stage];
   const [progress, setProgress] = useState(config.progressFrom);
   const [subtitle, setSubtitle] = useState(config.subtitle);
@@ -300,13 +304,13 @@ export function LoadingScreen({ stage }: LoadingScreenProps) {
       current += increment;
       if (current >= progressTo) {
         current = progressTo;
-        clearInterval(rafRef.current!);
+        if (rafRef.current !== null) clearInterval(rafRef.current);
       }
       setProgress(Math.round(current));
     }, INTERVAL_MS);
 
     return () => {
-      clearInterval(rafRef.current!);
+      if (rafRef.current !== null) clearInterval(rafRef.current);
       clearTimeout(subtitleTimer);
     };
   }, [stage]);
@@ -357,11 +361,12 @@ export function LoadingScreen({ stage }: LoadingScreenProps) {
           {/* Step cards */}
           <div className="space-y-3" role="status" aria-live="polite">
             {STEPS.map((step, idx) => {
-              const status: StepStatus = config.doneSteps.includes(step.id)
-                ? "done"
-                : config.activeStep === step.id
-                  ? "active"
-                  : "pending";
+              const getStatus = (): StepStatus => {
+                if (config.doneSteps.includes(step.id)) return "done";
+                if (config.activeStep === step.id) return "active";
+                return "pending";
+              };
+              const status = getStatus();
 
               return (
                 <StepCard

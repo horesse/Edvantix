@@ -9,8 +9,12 @@ public sealed class DeleteCategoryEndpoint : IEndpoint<NoContent, DeleteCategory
     {
         app.MapDelete(
                 "/admin/categories/{categoryId:guid}",
-                async (Guid categoryId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new DeleteCategoryCommand(categoryId), sender, ct)
+                async (Guid categoryId, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(
+                        new DeleteCategoryCommand(categoryId),
+                        sender,
+                        cancellationToken
+                    )
             )
             .WithName("DeleteCategory")
             .WithTags("Admin.Categories")

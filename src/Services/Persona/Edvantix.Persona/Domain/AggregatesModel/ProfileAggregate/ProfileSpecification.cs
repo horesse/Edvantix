@@ -24,6 +24,8 @@ public sealed class ProfileByIdSpec : Specification<Profile>
         Query.Include(p => p.Contacts);
         Query.Include(p => p.Educations);
         Query.Include(p => p.EmploymentHistories);
+        // Загружаем навыки вместе с данными из каталога для маппинга в SkillModel
+        Query.Include(p => p.Skills).ThenInclude(s => s.Skill);
     }
 }
 
@@ -32,7 +34,7 @@ public sealed class ProfileByAccountIdSpec : Specification<Profile>
 {
     /// <param name="accountId">GUID аккаунта пользователя в Keycloak.</param>
     /// <param name="withDetails">
-    /// Загружать контакты, историю занятости и образование.
+    /// Загружать контакты, историю занятости, образование и навыки.
     /// По умолчанию загружается только <see cref="Profile.FullName"/>.
     /// </param>
     public ProfileByAccountIdSpec(Guid accountId, bool withDetails = false)
@@ -51,5 +53,7 @@ public sealed class ProfileByAccountIdSpec : Specification<Profile>
         Query.Include(p => p.Contacts);
         Query.Include(p => p.Educations);
         Query.Include(p => p.EmploymentHistories);
+        // Загружаем навыки вместе с данными из каталога для маппинга в SkillModel
+        Query.Include(p => p.Skills).ThenInclude(s => s.Skill);
     }
 }

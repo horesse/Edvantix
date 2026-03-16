@@ -12,8 +12,8 @@ public sealed class GetAdminPostEndpoint : IEndpoint<Ok<PostModel>, GetAdminPost
     {
         app.MapGet(
                 "/admin/posts/{postId:guid}",
-                async (Guid postId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetAdminPostQuery(postId), sender, ct)
+                async (Guid postId, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(new GetAdminPostQuery(postId), sender, cancellationToken)
             )
             .WithName("GetAdminPost")
             .WithTags("Admin.Posts")

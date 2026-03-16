@@ -9,8 +9,8 @@ public sealed class GetPostLikesEndpoint : IEndpoint<Ok<PostLikesModel>, GetPost
     {
         app.MapGet(
                 "/posts/{postId:guid}/likes",
-                async (Guid postId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetPostLikesQuery(postId), sender, ct)
+                async (Guid postId, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(new GetPostLikesQuery(postId), sender, cancellationToken)
             )
             .WithName("GetPostLikes")
             .WithTags("Posts")

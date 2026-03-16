@@ -11,31 +11,35 @@ public interface IActivityScope
 
     Activity? Start(string name, StartActivityOptions options);
 
-    Task Run(string name, Func<Activity?, CancellationToken, Task> run, CancellationToken ct)
+    Task Run(
+        string name,
+        Func<Activity?, CancellationToken, Task> run,
+        CancellationToken cancellationToken
+    )
     {
-        return Run(name, run, new(), ct);
+        return Run(name, run, new(), cancellationToken);
     }
 
     Task Run(
         string name,
         Func<Activity?, CancellationToken, Task> run,
         StartActivityOptions options,
-        CancellationToken ct
+        CancellationToken cancellationToken
     );
 
     Task<TResult> Run<TResult>(
         string name,
         Func<Activity?, CancellationToken, Task<TResult>> run,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
-        return Run(name, run, new(), ct);
+        return Run(name, run, new(), cancellationToken);
     }
 
     Task<TResult> Run<TResult>(
         string name,
         Func<Activity?, CancellationToken, Task<TResult>> run,
         StartActivityOptions options,
-        CancellationToken ct
+        CancellationToken cancellationToken
     );
 }

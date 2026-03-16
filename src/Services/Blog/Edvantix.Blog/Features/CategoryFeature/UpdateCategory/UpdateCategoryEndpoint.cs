@@ -18,7 +18,7 @@ public sealed class UpdateCategoryEndpoint : IEndpoint<NoContent, UpdateCategory
                     Guid categoryId,
                     UpdateCategoryRequest request,
                     ISender sender,
-                    CancellationToken ct
+                    CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
                         new UpdateCategoryCommand(
@@ -28,7 +28,7 @@ public sealed class UpdateCategoryEndpoint : IEndpoint<NoContent, UpdateCategory
                             request.Description
                         ),
                         sender,
-                        ct
+                        cancellationToken
                     )
             )
             .WithName("UpdateCategory")

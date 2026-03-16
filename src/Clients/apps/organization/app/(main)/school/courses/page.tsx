@@ -1,9 +1,9 @@
-import { CoursesListFeature } from "@/features/school/courses/courses-list-feature";
+import { CoursesPage } from "@/features/school/courses/courses-page";
 
 /**
  * Страница управления курсами онлайн-школы.
  * Разделённый вид: список курсов + контекстная панель.
  */
-export default function CoursesPage() {
-  return <CoursesListFeature />;
+export default function CoursesPageRoute() {
+  return <CoursesPage />;
 }

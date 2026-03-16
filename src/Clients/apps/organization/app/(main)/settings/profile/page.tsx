@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ProfileSettings } from "@/features/settings/profile-settings";
+import { ProfileSettings } from "@/features/profile/settings/profile-settings";
 
 export const metadata: Metadata = {
   title: "Профиль",

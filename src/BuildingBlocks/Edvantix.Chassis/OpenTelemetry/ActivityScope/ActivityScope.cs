@@ -33,14 +33,14 @@ public sealed class ActivityScope : IActivityScope
         string name,
         Func<Activity?, CancellationToken, Task> run,
         StartActivityOptions options,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         using var activity = Start(name, options) ?? Activity.Current;
 
         try
         {
-            await run(activity, ct).ConfigureAwait(false);
+            await run(activity, cancellationToken).ConfigureAwait(false);
 
             activity?.SetStatus(ActivityStatusCode.Ok);
         }
@@ -56,14 +56,14 @@ public sealed class ActivityScope : IActivityScope
         string name,
         Func<Activity?, CancellationToken, Task<TResult>> run,
         StartActivityOptions options,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         using var activity = Start(name, options) ?? Activity.Current;
 
         try
         {
-            var result = await run(activity, ct).ConfigureAwait(false);
+            var result = await run(activity, cancellationToken).ConfigureAwait(false);
 
             activity?.SetStatus(ActivityStatusCode.Ok);
 

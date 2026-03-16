@@ -17,7 +17,7 @@ namespace Edvantix.Persona.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -183,6 +183,11 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("avatar_url");
 
+                    b.Property<string>("Bio")
+                        .HasMaxLength(600)
+                        .HasColumnType("character varying(600)")
+                        .HasColumnName("bio");
+
                     b.Property<DateOnly>("BirthDate")
                         .HasColumnType("date")
                         .HasColumnName("birth_date");
@@ -249,6 +254,60 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasDatabaseName("ix_profile_contact_profile_id_type_value");
 
                     b.ToTable("profile_contact", (string)null);
+                });
+
+            modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.ProfileSkill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("uuidv7()");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
+                    b.Property<Guid>("SkillId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("skill_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_profile_skill");
+
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_profile_skill_profile_id");
+
+                    b.HasIndex("SkillId")
+                        .HasDatabaseName("ix_profile_skill_skill_id");
+
+                    b.HasIndex("ProfileId", "SkillId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_profile_skill_profile_id_skill_id");
+
+                    b.ToTable("profile_skill", (string)null);
+                });
+
+            modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.SkillAggregate.Skill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_skills");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("ix_skills_name");
+
+                    b.ToTable("skills", (string)null);
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
@@ -517,6 +576,27 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.ProfileSkill", b =>
+                {
+                    b.HasOne("Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate.Profile", "Profile")
+                        .WithMany("Skills")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_profile_skill_profiles_profile_id");
+
+                    b.HasOne("Edvantix.Persona.Domain.AggregatesModel.SkillAggregate.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_profile_skill_skills_skill_id");
+
+                    b.Navigation("Profile");
+
+                    b.Navigation("Skill");
+                });
+
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
                 {
                     b.HasOne("MassTransit.EntityFrameworkCoreIntegration.OutboxState", null)
@@ -541,6 +621,8 @@ namespace Edvantix.Persona.Infrastructure.Migrations
 
                     b.Navigation("FullName")
                         .IsRequired();
+
+                    b.Navigation("Skills");
                 });
 #pragma warning restore 612, 618
         }

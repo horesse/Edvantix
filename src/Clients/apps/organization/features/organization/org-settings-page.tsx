@@ -38,8 +38,8 @@ import {
   updateOrganizationSchema,
 } from "@workspace/validations/company";
 
-import { useOrganization as useOrgContext } from "@/components/organization-provider";
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@/components/layout/page-header";
+import { useOrganization as useOrgContext } from "@/components/organization/provider";
 
 const SECTION =
   "grid gap-8 border-t border-border/40 py-6 md:grid-cols-[240px_1fr]";

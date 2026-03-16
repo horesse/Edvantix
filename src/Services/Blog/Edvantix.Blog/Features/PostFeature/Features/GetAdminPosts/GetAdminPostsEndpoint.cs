@@ -17,8 +17,8 @@ public sealed class GetAdminPostsEndpoint
                 async (
                     [AsParameters] GetAdminPostsQuery query,
                     ISender sender,
-                    CancellationToken ct
-                ) => await HandleAsync(query, sender, ct)
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(query, sender, cancellationToken)
             )
             .WithName("GetAdminPosts")
             .WithTags("Admin.Posts")

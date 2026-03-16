@@ -11,14 +11,20 @@ public interface IProfileRepository : IRepository<Profile>
     /// Используйте <see cref="ProfileByIdSpec"/> или <see cref="ProfileByAccountIdSpec"/>
     /// для построения запросов с нужными включениями.
     /// </summary>
-    Task<Profile?> FindAsync(ISpecification<Profile> spec, CancellationToken ct = default);
+    Task<Profile?> FindAsync(
+        ISpecification<Profile> spec,
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>Проверяет, существует ли профиль с указанным AccountId.</summary>
-    Task<bool> ExistsByAccountIdAsync(Guid accountId, CancellationToken ct = default);
+    Task<bool> ExistsByAccountIdAsync(
+        Guid accountId,
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Добавляет новый профиль в контекст. Для сохранения вызовите
     /// <see cref="IUnitOfWork.SaveEntitiesAsync"/>.
     /// </summary>
-    Task<Profile> AddAsync(Profile profile, CancellationToken ct = default);
+    Task<Profile> AddAsync(Profile profile, CancellationToken cancellationToken = default);
 }

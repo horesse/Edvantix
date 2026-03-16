@@ -11,8 +11,8 @@ public sealed class GetPostBySlugEndpoint : IEndpoint<Ok<PostModel>, GetPostBySl
     {
         app.MapGet(
                 "/posts/{slug}",
-                async (string slug, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetPostBySlugQuery(slug), sender, ct)
+                async (string slug, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(new GetPostBySlugQuery(slug), sender, cancellationToken)
             )
             .WithName("GetPostBySlug")
             .WithTags("Posts")

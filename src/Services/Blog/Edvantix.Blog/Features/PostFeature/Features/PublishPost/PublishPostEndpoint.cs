@@ -18,12 +18,12 @@ public sealed class PublishPostEndpoint : IEndpoint<NoContent, PublishPostComman
                     Guid postId,
                     PublishPostRequest request,
                     ISender sender,
-                    CancellationToken ct
+                    CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
                         new PublishPostCommand(postId, request.ScheduledAt),
                         sender,
-                        ct
+                        cancellationToken
                     )
             )
             .WithName("PublishPost")

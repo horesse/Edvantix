@@ -3,7 +3,7 @@ using Edvantix.Constants.Other;
 namespace Edvantix.Persona.Features.Profiles;
 
 /// <summary>
-/// Полное представление профиля, включая контакты, образование и опыт работы.
+/// Полное представление профиля, включая контакты, образование, опыт работы и навыки.
 /// Возвращается эндпоинтами /profile/details и /profiles/{id}/details.
 /// </summary>
 public sealed record ProfileDetailsModel(
@@ -16,9 +16,11 @@ public sealed record ProfileDetailsModel(
     string LastName,
     string? MiddleName,
     string? AvatarUrl,
+    string? Bio,
     IReadOnlyList<ContactModel> Contacts,
     IReadOnlyList<EmploymentHistoryModel> EmploymentHistories,
-    IReadOnlyList<EducationModel> Educations
+    IReadOnlyList<EducationModel> Educations,
+    IReadOnlyList<SkillModel> Skills
 );
 
 /// <summary>Контактные данные пользователя (телефон, email, соц. сети и т.д.).</summary>
@@ -41,3 +43,6 @@ public sealed record EducationModel(
     string? Specialty,
     EducationLevel EducationLevel
 );
+
+/// <summary>Навык из глобального каталога, связанный с профилем.</summary>
+public sealed record SkillModel(Guid Id, string Name);

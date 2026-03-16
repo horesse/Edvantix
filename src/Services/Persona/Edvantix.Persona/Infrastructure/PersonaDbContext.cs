@@ -5,6 +5,7 @@ public sealed class PersonaDbContext(DbContextOptions<PersonaDbContext> options)
         IUnitOfWork
 {
     public DbSet<Profile> Profiles => Set<Profile>();
+    public DbSet<Skill> Skills => Set<Skill>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

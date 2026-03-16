@@ -15,8 +15,8 @@ public sealed class RegistrationEndpoint
                     [FromForm] RegistrationCommand command,
                     ISender sender,
                     LinkGenerator linker,
-                    CancellationToken ct
-                ) => await HandleAsync(command, sender, linker, ct)
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(command, sender, linker, cancellationToken)
             )
             .Accepts<RegistrationCommand>(MediaTypeNames.Multipart.FormData)
             .Produces<Guid>(StatusCodes.Status201Created)

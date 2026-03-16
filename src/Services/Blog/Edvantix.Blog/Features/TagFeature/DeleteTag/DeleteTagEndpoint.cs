@@ -9,8 +9,8 @@ public sealed class DeleteTagEndpoint : IEndpoint<NoContent, DeleteTagCommand, I
     {
         app.MapDelete(
                 "/admin/tags/{tagId:guid}",
-                async (Guid tagId, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new DeleteTagCommand(tagId), sender, ct)
+                async (Guid tagId, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(new DeleteTagCommand(tagId), sender, cancellationToken)
             )
             .WithName("DeleteTag")
             .WithTags("Admin.Tags")

@@ -7,7 +7,8 @@ public sealed class GetProfileEndpoint : IEndpoint<Ok<ProfileViewModel>, ISender
     {
         app.MapGet(
                 "/profile",
-                async (ISender sender, CancellationToken ct) => await HandleAsync(sender, ct)
+                async (ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(sender, cancellationToken)
             )
             .WithName("GetProfile")
             .WithTags("Profile")

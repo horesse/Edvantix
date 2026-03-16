@@ -24,7 +24,9 @@ public sealed class DeleteAvatarCommandHandlerTests
         var handler = CreateHandler(accountId);
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
@@ -47,7 +49,9 @@ public sealed class DeleteAvatarCommandHandlerTests
         var handler = CreateHandler(accountId);
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
@@ -66,14 +70,19 @@ public sealed class DeleteAvatarCommandHandlerTests
         var handler = CreateHandler(Guid.CreateVersion7());
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Profile?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             handler.Handle(new DeleteAvatarCommand(), CancellationToken.None).AsTask()
         );
 
-        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _unitOfWorkMock.Verify(
+            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Never
+        );
     }
 
     private DeleteAvatarCommandHandler CreateHandler(Guid accountId)
@@ -89,7 +98,12 @@ public sealed class DeleteAvatarCommandHandlerTests
     private static Profile CreateProfile(Guid accountId, string? avatarUrn)
     {
         var profile = new Profile(
-            accountId, "testuser", Gender.Male, new DateOnly(1990, 1, 1), "Иван", "Иванов"
+            accountId,
+            "testuser",
+            Gender.Male,
+            new DateOnly(1990, 1, 1),
+            "Иван",
+            "Иванов"
         );
         profile.Id = Guid.CreateVersion7();
 
@@ -100,6 +114,20 @@ public sealed class DeleteAvatarCommandHandlerTests
     }
 
     private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
-        new(id, accountId, "testuser", Gender.Male, new DateOnly(1990, 1, 1),
-            "Иван", "Иванов", null, null, null, [], [], [], []);
+        new(
+            id,
+            accountId,
+            "testuser",
+            Gender.Male,
+            new DateOnly(1990, 1, 1),
+            "Иван",
+            "Иванов",
+            null,
+            null,
+            null,
+            [],
+            [],
+            [],
+            []
+        );
 }

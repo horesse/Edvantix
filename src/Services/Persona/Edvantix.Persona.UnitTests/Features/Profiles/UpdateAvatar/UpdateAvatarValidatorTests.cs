@@ -9,7 +9,10 @@ public sealed class UpdateAvatarValidatorTests
     [Test]
     public void GivenValidJpegAvatar_WhenValidating_ThenShouldNotHaveAnyValidationErrors()
     {
-        var command = new UpdateAvatarCommand { Avatar = CreateAvatarFile("image/jpeg", 512 * 1024) };
+        var command = new UpdateAvatarCommand
+        {
+            Avatar = CreateAvatarFile("image/jpeg", 512 * 1024),
+        };
 
         var result = _validator.TestValidate(command);
 
@@ -19,7 +22,10 @@ public sealed class UpdateAvatarValidatorTests
     [Test]
     public void GivenValidPngAvatar_WhenValidating_ThenShouldNotHaveAnyValidationErrors()
     {
-        var command = new UpdateAvatarCommand { Avatar = CreateAvatarFile("image/png", 256 * 1024) };
+        var command = new UpdateAvatarCommand
+        {
+            Avatar = CreateAvatarFile("image/png", 256 * 1024),
+        };
 
         var result = _validator.TestValidate(command);
 
@@ -43,7 +49,9 @@ public sealed class UpdateAvatarValidatorTests
     [Arguments("image/gif")]
     [Arguments("image/webp")]
     [Arguments("application/octet-stream")]
-    public void GivenUnsupportedContentType_WhenValidating_ThenShouldHaveValidationError(string contentType)
+    public void GivenUnsupportedContentType_WhenValidating_ThenShouldHaveValidationError(
+        string contentType
+    )
     {
         var command = new UpdateAvatarCommand
         {
@@ -59,7 +67,10 @@ public sealed class UpdateAvatarValidatorTests
     public void GivenAvatarAtMaxFileSize_WhenValidating_ThenShouldNotHaveValidationError()
     {
         const int maxFileSize = 1048576; // 1 MB
-        var command = new UpdateAvatarCommand { Avatar = CreateAvatarFile("image/png", maxFileSize) };
+        var command = new UpdateAvatarCommand
+        {
+            Avatar = CreateAvatarFile("image/png", maxFileSize),
+        };
 
         var result = _validator.TestValidate(command);
 

@@ -27,7 +27,9 @@ public sealed class RegistrationValidatorTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("  ")]
-    public void GivenEmptyOrNullFirstName_WhenValidating_ThenShouldHaveValidationError(string? firstName)
+    public void GivenEmptyOrNullFirstName_WhenValidating_ThenShouldHaveValidationError(
+        string? firstName
+    )
     {
         var command = new RegistrationCommand
         {
@@ -62,7 +64,9 @@ public sealed class RegistrationValidatorTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("  ")]
-    public void GivenEmptyOrNullLastName_WhenValidating_ThenShouldHaveValidationError(string? lastName)
+    public void GivenEmptyOrNullLastName_WhenValidating_ThenShouldHaveValidationError(
+        string? lastName
+    )
     {
         var command = new RegistrationCommand
         {

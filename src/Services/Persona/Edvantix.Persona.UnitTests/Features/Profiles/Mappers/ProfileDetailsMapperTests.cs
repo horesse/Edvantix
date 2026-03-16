@@ -6,7 +6,9 @@ public sealed class ProfileDetailsMapperTests
 {
     private readonly Mock<IBlobService> _blobServiceMock = new();
     private readonly Mock<IMapper<ProfileContact, ContactModel>> _contactMapperMock = new();
-    private readonly Mock<IMapper<EmploymentHistory, EmploymentHistoryModel>> _employmentMapperMock = new();
+    private readonly Mock<
+        IMapper<EmploymentHistory, EmploymentHistoryModel>
+    > _employmentMapperMock = new();
     private readonly Mock<IMapper<Education, EducationModel>> _educationMapperMock = new();
     private readonly Mock<IMapper<ProfileSkill, SkillModel>> _skillMapperMock = new();
     private readonly ProfileDetailsMapper _mapper;
@@ -28,8 +30,16 @@ public sealed class ProfileDetailsMapperTests
         var profileId = Guid.CreateVersion7();
         var accountId = Guid.CreateVersion7();
         var birthDate = new DateOnly(1990, 6, 15);
-        var profile = CreateProfile(profileId, accountId, "john.doe", Gender.Female, birthDate,
-            "Анна", "Петрова", "Ивановна");
+        var profile = CreateProfile(
+            profileId,
+            accountId,
+            "john.doe",
+            Gender.Female,
+            birthDate,
+            "Анна",
+            "Петрова",
+            "Ивановна"
+        );
 
         var result = _mapper.Map(profile);
 
@@ -102,7 +112,8 @@ public sealed class ProfileDetailsMapperTests
         DateOnly? birthDate = null,
         string firstName = "Иван",
         string lastName = "Иванов",
-        string? middleName = null)
+        string? middleName = null
+    )
     {
         var profile = new Profile(
             accountId ?? Guid.CreateVersion7(),

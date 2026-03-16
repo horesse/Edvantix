@@ -19,12 +19,22 @@ public sealed class ProfileServiceTests
     {
         var profileId = Guid.CreateVersion7();
         var accountId = Guid.CreateVersion7();
-        var profile = CreateProfile(profileId, accountId, "john.doe", Gender.Male,
-            new DateOnly(1990, 5, 20), "Иван", "Иванов", "Петрович");
+        var profile = CreateProfile(
+            profileId,
+            accountId,
+            "john.doe",
+            Gender.Male,
+            new DateOnly(1990, 5, 20),
+            "Иван",
+            "Иванов",
+            "Петрович"
+        );
         var context = new TestServerCallContext();
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
 
         var result = await _service.GetProfile(
@@ -48,12 +58,21 @@ public sealed class ProfileServiceTests
     public async Task GivenProfileWithNoMiddleName_WhenGetProfileCalled_ThenMiddleNameShouldBeEmpty()
     {
         var profileId = Guid.CreateVersion7();
-        var profile = CreateProfile(profileId, Guid.CreateVersion7(), "jane.doe", Gender.Female,
-            new DateOnly(1995, 8, 12), "Анна", "Смирнова");
+        var profile = CreateProfile(
+            profileId,
+            Guid.CreateVersion7(),
+            "jane.doe",
+            Gender.Female,
+            new DateOnly(1995, 8, 12),
+            "Анна",
+            "Смирнова"
+        );
         var context = new TestServerCallContext();
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
 
         var result = await _service.GetProfile(
@@ -72,7 +91,9 @@ public sealed class ProfileServiceTests
         var context = new TestServerCallContext();
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Profile?)null);
 
         var exception = await Should.ThrowAsync<RpcException>(async () =>
@@ -106,7 +127,9 @@ public sealed class ProfileServiceTests
         var context = new TestServerCallContext();
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ThrowsAsync(new InvalidOperationException("Database connection lost"));
 
         var exception = await Should.ThrowAsync<RpcException>(async () =>
@@ -128,9 +151,18 @@ public sealed class ProfileServiceTests
         DateOnly birthDate,
         string firstName,
         string lastName,
-        string? middleName = null)
+        string? middleName = null
+    )
     {
-        var profile = new Profile(accountId, login, gender, birthDate, firstName, lastName, middleName);
+        var profile = new Profile(
+            accountId,
+            login,
+            gender,
+            birthDate,
+            firstName,
+            lastName,
+            middleName
+        );
         profile.Id = profileId;
 
         return profile;

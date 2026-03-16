@@ -76,7 +76,8 @@ public sealed class ProfileViewModelMapperTests
         string firstName = "Иван",
         string lastName = "Иванов",
         string? middleName = null,
-        string? avatarUrn = null)
+        string? avatarUrn = null
+    )
     {
         var profile = new Profile(
             Guid.CreateVersion7(),

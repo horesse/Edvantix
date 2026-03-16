@@ -27,7 +27,9 @@ public sealed class GetSkillsQueryHandlerTests
             CreateSkill(Guid.CreateVersion7(), "C++ Builder"),
         };
         _skillRepoMock
-            .Setup(r => r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(skills);
 
         var result = await _handler.Handle(new GetSkillsQuery("C", 10), CancellationToken.None);
@@ -41,10 +43,15 @@ public sealed class GetSkillsQueryHandlerTests
     public async Task GivenNoMatchingSkills_WhenHandlingQuery_ThenShouldReturnEmptyList()
     {
         _skillRepoMock
-            .Setup(r => r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([]);
 
-        var result = await _handler.Handle(new GetSkillsQuery("xyz_nonexistent", 10), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetSkillsQuery("xyz_nonexistent", 10),
+            CancellationToken.None
+        );
 
         result.ShouldBeEmpty();
     }
@@ -55,10 +62,14 @@ public sealed class GetSkillsQueryHandlerTests
     [Arguments(51, 50)]
     [Arguments(100, 50)]
     public async Task GivenOutOfRangeLimit_WhenHandlingQuery_ThenShouldClampLimitBeforeQuerying(
-        int requestedLimit, int expectedClampedLimit)
+        int requestedLimit,
+        int expectedClampedLimit
+    )
     {
         _skillRepoMock
-            .Setup(r => r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([]);
 
         await _handler.Handle(new GetSkillsQuery("test", requestedLimit), CancellationToken.None);
@@ -77,7 +88,9 @@ public sealed class GetSkillsQueryHandlerTests
         var skillId = Guid.CreateVersion7();
         var skill = CreateSkill(skillId, "TypeScript");
         _skillRepoMock
-            .Setup(r => r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAllAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([skill]);
 
         var result = await _handler.Handle(new GetSkillsQuery("Type", 20), CancellationToken.None);

@@ -20,14 +20,21 @@ public sealed class SkillDomainEventHandlerTests
     {
         var skillId = Guid.CreateVersion7();
         var @event = new SkillRemovedFromProfileDomainEvent(Guid.CreateVersion7(), skillId);
-        _skillRepoMock.Setup(r => r.IsUsedByAnyProfileAsync(skillId, It.IsAny<CancellationToken>()))
+        _skillRepoMock
+            .Setup(r => r.IsUsedByAnyProfileAsync(skillId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         await _handler.Handle(@event, CancellationToken.None);
 
-        _skillRepoMock.Verify(r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()), Times.Never);
+        _skillRepoMock.Verify(
+            r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
         _skillRepoMock.Verify(r => r.Remove(It.IsAny<Skill>()), Times.Never);
-        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _unitOfWorkMock.Verify(
+            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Never
+        );
     }
 
     [Test]
@@ -35,15 +42,22 @@ public sealed class SkillDomainEventHandlerTests
     {
         var skillId = Guid.CreateVersion7();
         var @event = new SkillRemovedFromProfileDomainEvent(Guid.CreateVersion7(), skillId);
-        _skillRepoMock.Setup(r => r.IsUsedByAnyProfileAsync(skillId, It.IsAny<CancellationToken>()))
+        _skillRepoMock
+            .Setup(r => r.IsUsedByAnyProfileAsync(skillId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
-        _skillRepoMock.Setup(r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+        _skillRepoMock
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Skill?)null);
 
         await _handler.Handle(@event, CancellationToken.None);
 
         _skillRepoMock.Verify(r => r.Remove(It.IsAny<Skill>()), Times.Never);
-        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _unitOfWorkMock.Verify(
+            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Never
+        );
     }
 
     [Test]
@@ -52,11 +66,16 @@ public sealed class SkillDomainEventHandlerTests
         var skillId = Guid.CreateVersion7();
         var @event = new SkillRemovedFromProfileDomainEvent(Guid.CreateVersion7(), skillId);
         var skill = CreateSkill(skillId, "C#");
-        _skillRepoMock.Setup(r => r.IsUsedByAnyProfileAsync(skillId, It.IsAny<CancellationToken>()))
+        _skillRepoMock
+            .Setup(r => r.IsUsedByAnyProfileAsync(skillId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
-        _skillRepoMock.Setup(r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+        _skillRepoMock
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(skill);
-        _unitOfWorkMock.Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
+        _unitOfWorkMock
+            .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         await _handler.Handle(@event, CancellationToken.None);

@@ -80,14 +80,19 @@ public sealed class UpdateProfileCommandHandlerTests
         var handler = CreateHandler(Guid.CreateVersion7());
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Profile?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             handler.Handle(BuildCommand(), CancellationToken.None).AsTask()
         );
 
-        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _unitOfWorkMock.Verify(
+            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Never
+        );
     }
 
     [Test]
@@ -113,8 +118,14 @@ public sealed class UpdateProfileCommandHandlerTests
 
         await handler.Handle(command, CancellationToken.None);
 
-        _skillRepoMock.Verify(r => r.FindByNameAsync("C#", It.IsAny<CancellationToken>()), Times.Once);
-        _skillRepoMock.Verify(r => r.AddAsync(It.IsAny<Skill>(), It.IsAny<CancellationToken>()), Times.Never);
+        _skillRepoMock.Verify(
+            r => r.FindByNameAsync("C#", It.IsAny<CancellationToken>()),
+            Times.Once
+        );
+        _skillRepoMock.Verify(
+            r => r.AddAsync(It.IsAny<Skill>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
         profile.Skills.ShouldHaveSingleItem();
         profile.Skills.First().SkillId.ShouldBe(existingSkill.Id);
     }
@@ -145,7 +156,10 @@ public sealed class UpdateProfileCommandHandlerTests
 
         await handler.Handle(command, CancellationToken.None);
 
-        _skillRepoMock.Verify(r => r.AddAsync(It.IsAny<Skill>(), It.IsAny<CancellationToken>()), Times.Once);
+        _skillRepoMock.Verify(
+            r => r.AddAsync(It.IsAny<Skill>(), It.IsAny<CancellationToken>()),
+            Times.Once
+        );
         profile.Skills.ShouldHaveSingleItem();
         profile.Skills.First().SkillId.ShouldBe(newSkill.Id);
     }
@@ -184,7 +198,9 @@ public sealed class UpdateProfileCommandHandlerTests
     private void SetupProfileFound(Profile profile)
     {
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
     }
 
@@ -215,19 +231,23 @@ public sealed class UpdateProfileCommandHandlerTests
     }
 
     private static UpdateProfileCommand BuildCommand(List<string>? skills = null) =>
+        new("Иван", "Иванов", null, new DateOnly(1990, 1, 1), null, [], [], [], skills ?? []);
+
+    private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
         new(
+            id,
+            accountId,
+            "testuser",
+            Gender.Male,
+            new DateOnly(1990, 1, 1),
             "Иван",
             "Иванов",
             null,
-            new DateOnly(1990, 1, 1),
+            null,
             null,
             [],
             [],
             [],
-            skills ?? []
+            []
         );
-
-    private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
-        new(id, accountId, "testuser", Gender.Male, new DateOnly(1990, 1, 1),
-            "Иван", "Иванов", null, null, null, [], [], [], []);
 }

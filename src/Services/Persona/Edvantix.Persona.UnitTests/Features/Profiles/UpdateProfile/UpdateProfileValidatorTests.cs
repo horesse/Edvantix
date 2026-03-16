@@ -18,7 +18,9 @@ public sealed class UpdateProfileValidatorTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenEmptyOrNullFirstName_WhenValidating_ThenShouldHaveValidationError(string? firstName)
+    public void GivenEmptyOrNullFirstName_WhenValidating_ThenShouldHaveValidationError(
+        string? firstName
+    )
     {
         var command = BuildValidCommand() with { FirstName = firstName! };
 
@@ -30,7 +32,10 @@ public sealed class UpdateProfileValidatorTests
     [Test]
     public void GivenFirstNameExceedingMaxLength_WhenValidating_ThenShouldHaveValidationError()
     {
-        var command = BuildValidCommand() with { FirstName = new string('А', DataSchemaLength.Large + 1) };
+        var command = BuildValidCommand() with
+        {
+            FirstName = new string('А', DataSchemaLength.Large + 1),
+        };
 
         var result = _validator.TestValidate(command);
 
@@ -41,7 +46,9 @@ public sealed class UpdateProfileValidatorTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenEmptyOrNullLastName_WhenValidating_ThenShouldHaveValidationError(string? lastName)
+    public void GivenEmptyOrNullLastName_WhenValidating_ThenShouldHaveValidationError(
+        string? lastName
+    )
     {
         var command = BuildValidCommand() with { LastName = lastName! };
 
@@ -53,7 +60,10 @@ public sealed class UpdateProfileValidatorTests
     [Test]
     public void GivenMiddleNameExceedingMaxLength_WhenValidating_ThenShouldHaveValidationError()
     {
-        var command = BuildValidCommand() with { MiddleName = new string('А', DataSchemaLength.Large + 1) };
+        var command = BuildValidCommand() with
+        {
+            MiddleName = new string('А', DataSchemaLength.Large + 1),
+        };
 
         var result = _validator.TestValidate(command);
 

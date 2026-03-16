@@ -18,7 +18,9 @@ public sealed class GetProfileDetailsQueryHandlerTests
         var handler = CreateHandler(Guid.CreateVersion7());
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
         _mapperMock.Setup(m => m.Map(profile)).Returns(expectedModel);
 
@@ -39,7 +41,9 @@ public sealed class GetProfileDetailsQueryHandlerTests
         var handler = CreateHandler(Guid.CreateVersion7());
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
         _mapperMock.Setup(m => m.Map(profile)).Returns(expectedModel);
 
@@ -60,7 +64,9 @@ public sealed class GetProfileDetailsQueryHandlerTests
         var handler = CreateHandler(currentUserAccountId);
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
         _mapperMock.Setup(m => m.Map(profile)).Returns(expectedModel);
 
@@ -75,14 +81,18 @@ public sealed class GetProfileDetailsQueryHandlerTests
         var handler = CreateHandler(Guid.CreateVersion7());
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Profile?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            handler.Handle(
-                new GetProfileDetailsQuery(ProfileId: Guid.CreateVersion7()),
-                CancellationToken.None
-            ).AsTask()
+            handler
+                .Handle(
+                    new GetProfileDetailsQuery(ProfileId: Guid.CreateVersion7()),
+                    CancellationToken.None
+                )
+                .AsTask()
         );
     }
 

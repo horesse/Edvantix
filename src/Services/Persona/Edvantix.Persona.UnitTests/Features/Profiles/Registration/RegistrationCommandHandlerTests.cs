@@ -28,11 +28,13 @@ public sealed class RegistrationCommandHandlerTests
             .ReturnsAsync(false);
         _profileRepoMock
             .Setup(r => r.AddAsync(It.IsAny<Profile>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Profile p, CancellationToken _) =>
-            {
-                p.Id = Guid.CreateVersion7(); // имитируем присваивание Id базой данных
-                return p;
-            });
+            .ReturnsAsync(
+                (Profile p, CancellationToken _) =>
+                {
+                    p.Id = Guid.CreateVersion7(); // имитируем присваивание Id базой данных
+                    return p;
+                }
+            );
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
@@ -41,13 +43,16 @@ public sealed class RegistrationCommandHandlerTests
 
         result.ShouldNotBe(Guid.Empty);
         _profileRepoMock.Verify(
-            r => r.AddAsync(
-                It.Is<Profile>(p =>
-                    p.FullName.FirstName == command.FirstName
-                    && p.FullName.LastName == command.LastName
-                    && p.Gender == command.Gender
-                    && p.AccountId == accountId),
-                It.IsAny<CancellationToken>()),
+            r =>
+                r.AddAsync(
+                    It.Is<Profile>(p =>
+                        p.FullName.FirstName == command.FirstName
+                        && p.FullName.LastName == command.LastName
+                        && p.Gender == command.Gender
+                        && p.AccountId == accountId
+                    ),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -107,9 +112,11 @@ public sealed class RegistrationCommandHandlerTests
             Times.Once
         );
         _profileRepoMock.Verify(
-            r => r.AddAsync(
-                It.Is<Profile>(p => p.AvatarUrl == avatarUrn),
-                It.IsAny<CancellationToken>()),
+            r =>
+                r.AddAsync(
+                    It.Is<Profile>(p => p.AvatarUrl == avatarUrn),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -137,7 +144,9 @@ public sealed class RegistrationCommandHandlerTests
 
         var command = BuildCommand(avatar: avatarMock.Object);
 
-        await Should.ThrowAsync<Exception>(() => handler.Handle(command, CancellationToken.None).AsTask());
+        await Should.ThrowAsync<Exception>(() =>
+            handler.Handle(command, CancellationToken.None).AsTask()
+        );
 
         _blobServiceMock.Verify(
             b => b.DeleteFileAsync(avatarUrn, It.IsAny<CancellationToken>()),

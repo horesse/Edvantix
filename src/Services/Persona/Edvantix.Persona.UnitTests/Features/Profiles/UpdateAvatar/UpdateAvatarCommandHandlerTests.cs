@@ -27,7 +27,9 @@ public sealed class UpdateAvatarCommandHandlerTests
         var avatarMock = new Mock<IFormFile>();
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
         _blobServiceMock
             .Setup(b => b.UploadFileAsync(avatarMock.Object, It.IsAny<CancellationToken>()))
@@ -43,7 +45,10 @@ public sealed class UpdateAvatarCommandHandlerTests
 
         result.ShouldBe(expectedModel);
         profile.AvatarUrl.ShouldBe(avatarUrn);
-        _blobServiceMock.Verify(b => b.UploadFileAsync(avatarMock.Object, It.IsAny<CancellationToken>()), Times.Once);
+        _blobServiceMock.Verify(
+            b => b.UploadFileAsync(avatarMock.Object, It.IsAny<CancellationToken>()),
+            Times.Once
+        );
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -53,14 +58,18 @@ public sealed class UpdateAvatarCommandHandlerTests
         var handler = CreateHandler(Guid.CreateVersion7());
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Profile?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            handler.Handle(
-                new UpdateAvatarCommand { Avatar = new Mock<IFormFile>().Object },
-                CancellationToken.None
-            ).AsTask()
+            handler
+                .Handle(
+                    new UpdateAvatarCommand { Avatar = new Mock<IFormFile>().Object },
+                    CancellationToken.None
+                )
+                .AsTask()
         );
 
         _blobServiceMock.Verify(
@@ -79,7 +88,9 @@ public sealed class UpdateAvatarCommandHandlerTests
         var avatarMock = new Mock<IFormFile>();
 
         _profileRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profile);
         _blobServiceMock
             .Setup(b => b.UploadFileAsync(avatarMock.Object, It.IsAny<CancellationToken>()))
@@ -89,10 +100,12 @@ public sealed class UpdateAvatarCommandHandlerTests
             .ThrowsAsync(new Exception("DB error"));
 
         await Should.ThrowAsync<Exception>(() =>
-            handler.Handle(
-                new UpdateAvatarCommand { Avatar = avatarMock.Object },
-                CancellationToken.None
-            ).AsTask()
+            handler
+                .Handle(
+                    new UpdateAvatarCommand { Avatar = avatarMock.Object },
+                    CancellationToken.None
+                )
+                .AsTask()
         );
 
         _blobServiceMock.Verify(
@@ -115,7 +128,12 @@ public sealed class UpdateAvatarCommandHandlerTests
     private static Profile CreateProfile(Guid accountId)
     {
         var profile = new Profile(
-            accountId, "testuser", Gender.Male, new DateOnly(1990, 1, 1), "Иван", "Иванов"
+            accountId,
+            "testuser",
+            Gender.Male,
+            new DateOnly(1990, 1, 1),
+            "Иван",
+            "Иванов"
         );
         profile.Id = Guid.CreateVersion7();
 
@@ -123,6 +141,20 @@ public sealed class UpdateAvatarCommandHandlerTests
     }
 
     private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
-        new(id, accountId, "testuser", Gender.Male, new DateOnly(1990, 1, 1),
-            "Иван", "Иванов", null, null, null, [], [], [], []);
+        new(
+            id,
+            accountId,
+            "testuser",
+            Gender.Male,
+            new DateOnly(1990, 1, 1),
+            "Иван",
+            "Иванов",
+            null,
+            null,
+            null,
+            [],
+            [],
+            [],
+            []
+        );
 }

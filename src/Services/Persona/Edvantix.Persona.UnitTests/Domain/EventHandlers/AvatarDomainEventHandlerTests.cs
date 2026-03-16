@@ -33,7 +33,11 @@ public sealed class AvatarDomainEventHandlerTests
         await _handler.Handle(@event, CancellationToken.None);
 
         _blobServiceMock.Verify(
-            x => x.DeleteFileAsync("urn:blob:avatars/profile/user-12345.png", It.IsAny<CancellationToken>()),
+            x =>
+                x.DeleteFileAsync(
+                    "urn:blob:avatars/profile/user-12345.png",
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -47,9 +51,6 @@ public sealed class AvatarDomainEventHandlerTests
 
         await _handler.Handle(@event, token);
 
-        _blobServiceMock.Verify(
-            x => x.DeleteFileAsync(It.IsAny<string>(), token),
-            Times.Once
-        );
+        _blobServiceMock.Verify(x => x.DeleteFileAsync(It.IsAny<string>(), token), Times.Once);
     }
 }

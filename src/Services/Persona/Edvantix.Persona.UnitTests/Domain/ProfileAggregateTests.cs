@@ -19,7 +19,15 @@ public sealed class ProfileAggregateTests
         const string login = "testuser";
         var birthDate = new DateOnly(1990, 6, 15);
 
-        var profile = new Profile(accountId, login, Gender.Female, birthDate, "Анна", "Петрова", "Ивановна");
+        var profile = new Profile(
+            accountId,
+            login,
+            Gender.Female,
+            birthDate,
+            "Анна",
+            "Петрова",
+            "Ивановна"
+        );
 
         profile.AccountId.ShouldBe(accountId);
         profile.Login.ShouldBe(login);
@@ -43,7 +51,14 @@ public sealed class ProfileAggregateTests
         var accountId = Guid.CreateVersion7();
         const string login = "john.doe";
 
-        var profile = new Profile(accountId, login, Gender.Male, new DateOnly(1990, 1, 1), "Иван", "Иванов");
+        var profile = new Profile(
+            accountId,
+            login,
+            Gender.Male,
+            new DateOnly(1990, 1, 1),
+            "Иван",
+            "Иванов"
+        );
 
         profile.DomainEvents.ShouldHaveSingleItem();
         var @event = profile.DomainEvents.Single().ShouldBeOfType<ProfileRegisteredEvent>();
@@ -54,7 +69,15 @@ public sealed class ProfileAggregateTests
     [Test]
     public void GivenEmptyAccountId_WhenCreatingProfile_ThenShouldThrowArgumentException()
     {
-        var act = () => new Profile(Guid.Empty, "testuser", Gender.Male, new DateOnly(1990, 1, 1), "Иван", "Иванов");
+        var act = () =>
+            new Profile(
+                Guid.Empty,
+                "testuser",
+                Gender.Male,
+                new DateOnly(1990, 1, 1),
+                "Иван",
+                "Иванов"
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -63,9 +86,19 @@ public sealed class ProfileAggregateTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenEmptyOrNullLogin_WhenCreatingProfile_ThenShouldThrowArgumentException(string? login)
+    public void GivenEmptyOrNullLogin_WhenCreatingProfile_ThenShouldThrowArgumentException(
+        string? login
+    )
     {
-        var act = () => new Profile(Guid.CreateVersion7(), login!, Gender.Male, new DateOnly(1990, 1, 1), "Иван", "Иванов");
+        var act = () =>
+            new Profile(
+                Guid.CreateVersion7(),
+                login!,
+                Gender.Male,
+                new DateOnly(1990, 1, 1),
+                "Иван",
+                "Иванов"
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -97,8 +130,14 @@ public sealed class ProfileAggregateTests
     public void GivenNullMiddleName_WhenUpdatingFullName_ThenShouldClearMiddleName()
     {
         var profile = new Profile(
-            Guid.CreateVersion7(), "testuser", Gender.Male,
-            new DateOnly(1990, 1, 1), "Иван", "Иванов", "Петрович");
+            Guid.CreateVersion7(),
+            "testuser",
+            Gender.Male,
+            new DateOnly(1990, 1, 1),
+            "Иван",
+            "Иванов",
+            "Петрович"
+        );
 
         profile.UpdateFullName("Иван", "Иванов");
 
@@ -250,11 +289,13 @@ public sealed class ProfileAggregateTests
 
         profile.ReplaceSkills([keepSkillId]);
 
-        var removedEvents = profile.DomainEvents
-            .OfType<SkillRemovedFromProfileDomainEvent>()
+        var removedEvents = profile
+            .DomainEvents.OfType<SkillRemovedFromProfileDomainEvent>()
             .ToList();
         removedEvents.Count.ShouldBe(2);
-        removedEvents.Select(e => e.SkillId).ShouldBe([removeSkillId1, removeSkillId2], ignoreOrder: true);
+        removedEvents
+            .Select(e => e.SkillId)
+            .ShouldBe([removeSkillId1, removeSkillId2], ignoreOrder: true);
         removedEvents.ShouldAllBe(e => e.ProfileId == profile.Id);
     }
 

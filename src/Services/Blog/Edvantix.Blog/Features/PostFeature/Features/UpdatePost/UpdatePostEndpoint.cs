@@ -28,7 +28,7 @@ public sealed class UpdatePostEndpoint : IEndpoint<NoContent, UpdatePostCommand,
                     Guid postId,
                     UpdatePostRequest request,
                     ISender sender,
-                    CancellationToken ct
+                    CancellationToken cancellationToken
                 ) =>
                 {
                     var command = new UpdatePostCommand(
@@ -44,7 +44,7 @@ public sealed class UpdatePostEndpoint : IEndpoint<NoContent, UpdatePostCommand,
                         request.TagIds
                     );
 
-                    return await HandleAsync(command, sender, ct);
+                    return await HandleAsync(command, sender, cancellationToken);
                 }
             )
             .WithName("UpdatePost")

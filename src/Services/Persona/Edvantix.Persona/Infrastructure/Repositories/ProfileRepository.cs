@@ -16,19 +16,23 @@ public sealed class ProfileRepository(PersonaDbContext context) : IProfileReposi
     /// <inheritdoc/>
     public async Task<Profile?> FindAsync(
         ISpecification<Profile> spec,
-        CancellationToken ct = default
-    ) => await Specification.GetQuery(context.Profiles, spec).FirstOrDefaultAsync(ct);
+        CancellationToken cancellationToken = default
+    ) =>
+        await Specification.GetQuery(context.Profiles, spec).FirstOrDefaultAsync(cancellationToken);
 
     /// <inheritdoc/>
     public async Task<bool> ExistsByAccountIdAsync(
         Guid accountId,
-        CancellationToken ct = default
-    ) => await context.Profiles.AnyAsync(p => p.AccountId == accountId, ct);
+        CancellationToken cancellationToken = default
+    ) => await context.Profiles.AnyAsync(p => p.AccountId == accountId, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<Profile> AddAsync(Profile profile, CancellationToken ct = default)
+    public async Task<Profile> AddAsync(
+        Profile profile,
+        CancellationToken cancellationToken = default
+    )
     {
-        var entry = await context.Profiles.AddAsync(profile, ct);
+        var entry = await context.Profiles.AddAsync(profile, cancellationToken);
         return entry.Entity;
     }
 }

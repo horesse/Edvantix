@@ -14,8 +14,11 @@ public sealed class GetPostsEndpoint
     {
         app.MapGet(
                 "/posts",
-                async ([AsParameters] GetPostsQuery query, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(query, sender, ct)
+                async (
+                    [AsParameters] GetPostsQuery query,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(query, sender, cancellationToken)
             )
             .WithName("GetPosts")
             .WithTags("Posts")

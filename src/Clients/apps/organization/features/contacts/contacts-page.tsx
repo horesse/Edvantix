@@ -54,8 +54,8 @@ import {
   organizationContactSchema,
 } from "@workspace/validations/company";
 
-import { useOrganization } from "@/components/organization-provider";
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@/components/layout/page-header";
+import { useOrganization } from "@/components/organization/provider";
 import { contactTypeLabels } from "@/lib/company-options";
 
 const contactTypeIcons: Record<ContactType, React.ReactNode> = {

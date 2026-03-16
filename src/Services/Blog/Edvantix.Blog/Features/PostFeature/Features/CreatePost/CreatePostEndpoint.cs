@@ -25,7 +25,11 @@ public sealed class CreatePostEndpoint : IEndpoint<Created<Guid>, CreatePostComm
     {
         app.MapPost(
                 "/admin/posts",
-                async (CreatePostRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    CreatePostRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) =>
                 {
                     var command = new CreatePostCommand(
                         request.Title,
@@ -39,7 +43,7 @@ public sealed class CreatePostEndpoint : IEndpoint<Created<Guid>, CreatePostComm
                         request.TagIds
                     );
 
-                    return await HandleAsync(command, sender, ct);
+                    return await HandleAsync(command, sender, cancellationToken);
                 }
             )
             .WithName("CreatePost")

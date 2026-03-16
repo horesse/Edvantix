@@ -1,0 +1,59 @@
+import { z } from "zod";
+
+import type { OwnProfileDetails } from "@workspace/types/profile";
+import {
+  type ContactInput,
+  type EducationInput,
+  type EmploymentInput,
+  contactSchema,
+  educationSchema,
+  employmentSchema,
+  profileSettingsSchema,
+} from "@workspace/validations/profile";
+
+export { contactSchema, educationSchema, employmentSchema };
+export type { ContactInput, EducationInput, EmploymentInput };
+
+export const profileFormSchema = profileSettingsSchema.extend({
+  contacts: z.array(contactSchema),
+  employmentHistories: z.array(employmentSchema),
+  educations: z.array(educationSchema),
+});
+
+export type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+/** Extracts YYYY-MM-DD from ISO datetime or date string. */
+export function toDateString(value: string | null | undefined): string {
+  if (!value) return "";
+  return value.slice(0, 10);
+}
+
+export function getDefaultValues(
+  profile: OwnProfileDetails,
+): ProfileFormValues {
+  return {
+    lastName: profile.lastName,
+    firstName: profile.firstName,
+    middleName: profile.middleName ?? "",
+    birthDate: profile.birthDate,
+    contacts: profile.contacts.map((c) => ({
+      type: c.type,
+      value: c.value,
+      description: c.description ?? "",
+    })),
+    employmentHistories: profile.employmentHistories.map((e) => ({
+      workplace: e.workplace,
+      position: e.position,
+      startDate: toDateString(e.startDate),
+      endDate: toDateString(e.endDate),
+      description: e.description ?? "",
+    })),
+    educations: profile.educations.map((e) => ({
+      institution: e.institution,
+      specialty: e.specialty ?? "",
+      dateStart: toDateString(e.dateStart),
+      dateEnd: toDateString(e.dateEnd),
+      level: e.educationLevel,
+    })),
+  };
+}

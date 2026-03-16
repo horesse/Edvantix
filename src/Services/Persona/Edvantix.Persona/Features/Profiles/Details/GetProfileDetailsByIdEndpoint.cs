@@ -8,8 +8,8 @@ public sealed class GetProfileDetailsByIdEndpoint
     {
         app.MapGet(
                 "/profiles/{id:long}/details",
-                async (Guid id, ISender sender, CancellationToken ct) =>
-                    await HandleAsync(new GetProfileDetailsQuery(id), sender, ct)
+                async (Guid id, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(new GetProfileDetailsQuery(id), sender, cancellationToken)
             )
             .WithName("GetProfileDetailsByAdmin")
             .WithTags("Profile")

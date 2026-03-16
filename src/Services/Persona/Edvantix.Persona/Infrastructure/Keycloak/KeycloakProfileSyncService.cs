@@ -23,7 +23,7 @@ internal sealed class KeycloakProfileSyncService(
         await SyncProfilesAsync(stoppingToken);
     }
 
-    private async Task WaitForDatabaseAsync(CancellationToken ct)
+    private async Task WaitForDatabaseAsync(CancellationToken cancellationToken)
     {
         for (var attempt = 1; attempt <= MaxDbAttempts; attempt++)
         {
@@ -32,7 +32,7 @@ internal sealed class KeycloakProfileSyncService(
                 await using var scope = scopeFactory.CreateAsyncScope();
                 var db = scope.ServiceProvider.GetRequiredService<PersonaDbContext>();
 
-                await db.Database.CanConnectAsync(ct);
+                await db.Database.CanConnectAsync(cancellationToken);
                 return;
             }
             catch (Exception ex) when (attempt < MaxDbAttempts)
@@ -44,12 +44,12 @@ internal sealed class KeycloakProfileSyncService(
                     ex.Message
                 );
 
-                await Task.Delay(DbRetryDelay, ct);
+                await Task.Delay(DbRetryDelay, cancellationToken);
             }
         }
     }
 
-    private async Task SyncProfilesAsync(CancellationToken ct)
+    private async Task SyncProfilesAsync(CancellationToken cancellationToken)
     {
         await using var scope = scopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<PersonaDbContext>();
@@ -59,7 +59,7 @@ internal sealed class KeycloakProfileSyncService(
         var profiles = await db.Set<Profile>()
             .AsNoTracking()
             .Select(p => new { p.Id, p.AccountId })
-            .ToListAsync(ct);
+            .ToListAsync(cancellationToken);
 
         logger.LogInformation("Найдено {Count} профилей для синхронизации.", profiles.Count);
 
@@ -70,7 +70,7 @@ internal sealed class KeycloakProfileSyncService(
         {
             try
             {
-                await keycloak.SetProfileIdAsync(profile.AccountId, profile.Id, ct);
+                await keycloak.SetProfileIdAsync(profile.AccountId, profile.Id, cancellationToken);
                 synced++;
             }
             catch (Exception ex)

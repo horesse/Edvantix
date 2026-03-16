@@ -53,6 +53,11 @@ export type Education = {
   educationLevel: EducationLevel;
 };
 
+export type Skill = {
+  id: string;
+  name: string;
+};
+
 export type OwnProfileDetails = {
   id: string;
   accountId: string;
@@ -63,9 +68,11 @@ export type OwnProfileDetails = {
   lastName: string;
   middleName?: string | null;
   avatarUrl?: string | null;
+  bio?: string | null;
   contacts: Contact[];
   employmentHistories: EmploymentHistory[];
   educations: Education[];
+  skills: Skill[];
 };
 
 export type ContactRequest = {
@@ -90,23 +97,17 @@ export type EducationRequest = {
   dateEnd?: string | null;
 };
 
-export type UpdatePersonalInfoRequest = {
+export type UpdateProfileRequest = {
   firstName: string;
   lastName: string;
   middleName?: string | null;
   birthDate: string;
-};
-
-export type UpdateContactsRequest = {
+  bio?: string | null;
   contacts: ContactRequest[];
-};
-
-export type UpdateEducationRequest = {
   educations: EducationRequest[];
-};
-
-export type UpdateEmploymentRequest = {
   employmentHistories: EmploymentHistoryRequest[];
+  /** Названия навыков. Дубликаты и регистр обрабатываются на бэкенде. */
+  skills: string[];
 };
 
 export type RegisterProfileRequest = {
@@ -116,4 +117,9 @@ export type RegisterProfileRequest = {
   middleName?: string | null;
   gender: Gender;
   avatar?: File | null;
+};
+
+export type SkillSearchResult = {
+  id: string;
+  name: string;
 };

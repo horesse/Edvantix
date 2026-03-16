@@ -15,11 +15,15 @@ public sealed class CreateCategoryEndpoint
     {
         app.MapPost(
                 "/admin/categories",
-                async (CreateCategoryRequest request, ISender sender, CancellationToken ct) =>
+                async (
+                    CreateCategoryRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) =>
                     await HandleAsync(
                         new CreateCategoryCommand(request.Name, request.Slug, request.Description),
                         sender,
-                        ct
+                        cancellationToken
                     )
             )
             .WithName("CreateCategory")

@@ -16,6 +16,7 @@ global using Edvantix.Constants.Aspire;
 global using Edvantix.Constants.Core;
 global using Edvantix.Persona.Domain.Abstractions;
 global using Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
+global using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
 global using Edvantix.Persona.Features.Profiles;
 global using Edvantix.Persona.Grpc;
 global using Edvantix.Persona.Infrastructure;

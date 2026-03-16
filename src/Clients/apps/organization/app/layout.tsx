@@ -1,7 +1,7 @@
 import type React from "react";
 
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 
 import "@workspace/ui/globals.css";
 
@@ -88,8 +88,12 @@ export const metadata: Metadata = {
   },
 };
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+/* Inter with Cyrillic subset — required for Russian UI text */
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export default async function RootLayout({
   children,
@@ -97,8 +101,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans antialiased`}>
+    <html lang="ru" className={inter.variable} suppressHydrationWarning>
+      <body className="font-sans antialiased">
         <div id="main-content">
           <Providers>{children}</Providers>
         </div>

@@ -11,13 +11,13 @@ public sealed class MarkAllNotificationsAsReadEndpoint
     {
         app.MapPost(
                 "/notifications/read-all",
-                async (ClaimsPrincipal user, ISender sender, CancellationToken ct) =>
+                async (ClaimsPrincipal user, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(
                         new MarkAllNotificationsAsReadCommand(
                             NotificationHelpers.GetAccountId(user)
                         ),
                         sender,
-                        ct
+                        cancellationToken
                     )
             )
             .WithName("MarkAllNotificationsAsRead")

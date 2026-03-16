@@ -2,7 +2,7 @@
 
 import type { OrganizationRole } from "@workspace/types/company";
 
-import { useOrganization } from "./organization-provider";
+import { useOrganization } from "@/components/organization/provider";
 
 type RoleGateProps = {
   allowedRoles: OrganizationRole[];

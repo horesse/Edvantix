@@ -14,8 +14,8 @@ public sealed class UpdateAvatarEndpoint
                 async (
                     [FromForm] UpdateAvatarCommand command,
                     ISender sender,
-                    CancellationToken ct
-                ) => await HandleAsync(command, sender, ct)
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(command, sender, cancellationToken)
             )
             .Accepts<UpdateAvatarCommand>(MediaTypeNames.Multipart.FormData)
             .WithName("UpdateAvatar")

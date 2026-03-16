@@ -16,7 +16,10 @@ public sealed record GetProfileQuery(Guid? ProfileId = null, Guid? AccountId = n
 public sealed class GetProfileQueryHandler(IServiceProvider provider)
     : IQueryHandler<GetProfileQuery, ProfileViewModel>
 {
-    public async ValueTask<ProfileViewModel> Handle(GetProfileQuery request, CancellationToken ct)
+    public async ValueTask<ProfileViewModel> Handle(
+        GetProfileQuery request,
+        CancellationToken cancellationToken
+    )
     {
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
         var mapper = provider.GetRequiredService<IMapper<Profile, ProfileViewModel>>();
@@ -27,7 +30,7 @@ public sealed class GetProfileQueryHandler(IServiceProvider provider)
             : new ProfileByAccountIdSpec(provider.GetUserId());
 
         var profile =
-            await profileRepo.FindAsync(spec, ct)
+            await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");
 
         return mapper.Map(profile);

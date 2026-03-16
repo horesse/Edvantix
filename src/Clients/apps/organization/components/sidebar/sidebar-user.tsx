@@ -62,10 +62,19 @@ export function SidebarUser() {
           type="button"
           className="hover:bg-sidebar-accent flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left transition-colors"
         >
-          <div className="from-brand-400 to-brand-600 flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br">
-            <span className="text-primary-foreground text-xs font-semibold">
-              {initials}
-            </span>
+          <div className="from-brand-400 to-brand-600 flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br">
+            {profile.avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={profile.avatarUrl}
+                alt={profile.name}
+                className="size-full object-cover"
+              />
+            ) : (
+              <span className="text-primary-foreground text-xs font-semibold">
+                {initials}
+              </span>
+            )}
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-foreground truncate text-sm font-medium">

@@ -38,8 +38,8 @@ export const SubjectsCard = forwardRef<
   const { data: suggestions } = useSearchSkills(inputValue);
 
   const isDirty =
-    JSON.stringify([...skills].sort()) !==
-    JSON.stringify([...savedSnapshot].sort());
+    JSON.stringify([...skills].sort((a, b) => a.localeCompare(b))) !==
+    JSON.stringify([...savedSnapshot].sort((a, b) => a.localeCompare(b)));
 
   useEffect(() => {
     onDirtyChange?.(isDirty);

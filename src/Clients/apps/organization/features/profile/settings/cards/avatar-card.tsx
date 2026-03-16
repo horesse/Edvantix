@@ -98,7 +98,14 @@ export function AvatarCard({ profile }: { profile: OwnProfileDetails }) {
         {/* Avatar with hover overlay */}
         <div
           className="group relative cursor-pointer"
+          role="button"
+          tabIndex={0}
           onClick={() => !isPending && fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if ((e.key === "Enter" || e.key === " ") && !isPending) {
+              fileInputRef.current?.click();
+            }
+          }}
         >
           <div className="to-primary flex size-28 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-violet-400 shadow-md">
             {displayUrl ? (
@@ -138,7 +145,14 @@ export function AvatarCard({ profile }: { profile: OwnProfileDetails }) {
               ? "border-primary bg-primary/5"
               : "border-border hover:border-primary hover:bg-primary/5",
           )}
+          role="button"
+          tabIndex={0}
           onClick={() => !isPending && fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if ((e.key === "Enter" || e.key === " ") && !isPending) {
+              fileInputRef.current?.click();
+            }
+          }}
           onDragOver={(e) => {
             e.preventDefault();
             setIsDragging(true);

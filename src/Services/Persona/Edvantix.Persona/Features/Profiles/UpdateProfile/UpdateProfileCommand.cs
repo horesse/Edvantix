@@ -1,5 +1,4 @@
 using Edvantix.Chassis.Utilities;
-using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
 
 namespace Edvantix.Persona.Features.Profiles.UpdateProfile;
 

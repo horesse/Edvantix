@@ -1,5 +1,4 @@
 using Edvantix.Chassis.EF.Configurations;
-using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
 
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 

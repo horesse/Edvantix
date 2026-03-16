@@ -1,5 +1,3 @@
-using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
-
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 
 internal sealed class SkillConfiguration : IEntityTypeConfiguration<Skill>

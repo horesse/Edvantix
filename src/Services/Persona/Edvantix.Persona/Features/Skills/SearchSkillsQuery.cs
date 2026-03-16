@@ -1,5 +1,3 @@
-using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
-
 namespace Edvantix.Persona.Features.Skills;
 
 /// <summary>Модель навыка для ответа API.</summary>

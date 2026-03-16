@@ -1,6 +1,4 @@
-﻿using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
-
-namespace Edvantix.Persona.Infrastructure;
+﻿namespace Edvantix.Persona.Infrastructure;
 
 public sealed class PersonaDbContext(DbContextOptions<PersonaDbContext> options)
     : DbContext(options),

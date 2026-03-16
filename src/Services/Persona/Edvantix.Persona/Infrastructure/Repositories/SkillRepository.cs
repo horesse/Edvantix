@@ -1,6 +1,4 @@
 using Edvantix.Chassis.Specification.Evaluators;
-using Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
-using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
 
 namespace Edvantix.Persona.Infrastructure.Repositories;
 

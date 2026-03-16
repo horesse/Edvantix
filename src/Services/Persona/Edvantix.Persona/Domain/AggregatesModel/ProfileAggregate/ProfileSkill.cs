@@ -1,5 +1,3 @@
-using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
-
 namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
 /// <summary>

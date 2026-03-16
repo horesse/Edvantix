@@ -1,4 +1,3 @@
-using Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
 using Edvantix.Persona.Domain.Events;
 
 namespace Edvantix.Persona.Domain.EventHandlers;

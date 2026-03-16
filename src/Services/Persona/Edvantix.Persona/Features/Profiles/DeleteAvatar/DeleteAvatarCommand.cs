@@ -3,11 +3,7 @@ using Edvantix.Chassis.Utilities;
 namespace Edvantix.Persona.Features.Profiles.DeleteAvatar;
 
 /// <summary>DELETE /v1/profile/avatar — удалить аватар профиля.</summary>
-public sealed class DeleteAvatarCommand : ICommand<ProfileDetailsModel>
-{
-    /// <summary>URN текущего аватара. Устанавливается обработчиком для удаления PostProcessor'ом.</summary>
-    public string? AvatarUrn { get; set; }
-}
+public sealed class DeleteAvatarCommand : ICommand<ProfileDetailsModel>;
 
 public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
     : ICommandHandler<DeleteAvatarCommand, ProfileDetailsModel>
@@ -25,10 +21,8 @@ public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
             await profileRepo.FindAsync(spec, ct)
             ?? throw new NotFoundException("Профиль не найден.");
 
-        // Сохраняем URN для удаления из хранилища в PostProcessor'е.
-        command.AvatarUrn = profile.AvatarUrl;
-
-        profile.UploadAvatar(null);
+        // Регистрирует AvatarDeletedDomainEvent и зануляет AvatarUrl.
+        profile.DeleteAvatar();
 
         await profileRepo.UnitOfWork.SaveEntitiesAsync(ct);
 

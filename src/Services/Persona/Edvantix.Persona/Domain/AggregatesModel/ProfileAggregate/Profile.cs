@@ -84,8 +84,32 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
     public void UpdateFullName(string firstName, string lastName, string? middleName = null) =>
         FullName.Update(firstName, lastName, middleName);
 
-    /// <summary>Устанавливает URN аватара (null — удалить аватар).</summary>
-    public void UploadAvatar(string? avatarUrl) => AvatarUrl = avatarUrl;
+    /// <summary>
+    /// Устанавливает URN аватара при загрузке или замене.
+    /// Если аватар уже был установлен, публикует <see cref="AvatarDeletedDomainEvent"/>
+    /// для удаления старого файла из хранилища после сохранения.
+    /// </summary>
+    public void UploadAvatar(string avatarUrl)
+    {
+        if (AvatarUrl is not null)
+            RegisterDomainEvent(new AvatarDeletedDomainEvent(AvatarUrl));
+
+        AvatarUrl = avatarUrl;
+    }
+
+    /// <summary>
+    /// Удаляет аватар профиля и публикует <see cref="AvatarDeletedDomainEvent"/>
+    /// для последующего удаления файла из хранилища.
+    /// Не выполняет никаких действий, если аватар не был установлен.
+    /// </summary>
+    public void DeleteAvatar()
+    {
+        if (AvatarUrl is null)
+            return;
+
+        RegisterDomainEvent(new AvatarDeletedDomainEvent(AvatarUrl));
+        AvatarUrl = null;
+    }
 
     /// <summary>Обновляет описание "О себе". Максимум <see cref="DataSchemaLength.SuperLarge"/> символов.</summary>
     public void UpdateBio(string? bio) => Bio = bio;

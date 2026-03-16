@@ -39,6 +39,53 @@ export function NotificationBell() {
 
   const notifications = notificationsData?.items ?? [];
 
+  const ariaLabel =
+    unreadCount > 0
+      ? `Уведомления: ${unreadCount} непрочитанных`
+      : "Уведомления";
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="space-y-0">
+          {["skeleton-1", "skeleton-2", "skeleton-3"].map((id) => (
+            <div key={id} className="flex items-start gap-3 px-4 py-2.5">
+              <Skeleton className="mt-0.5 size-4 shrink-0 rounded" />
+              <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-3.5 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (notifications.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <Bell className="text-muted-foreground/40 mb-2 size-8" />
+          <p className="text-muted-foreground text-sm">
+            Нет новых уведомлений
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {notifications.map((n) => (
+          <NotificationItem
+            key={n.id}
+            notification={n}
+            onMarkAsRead={markAsRead}
+            compact
+          />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -46,7 +93,7 @@ export function NotificationBell() {
           variant="ghost"
           size="icon"
           className="relative size-8 rounded-full"
-          aria-label={`Уведомления${unreadCount > 0 ? `: ${unreadCount} непрочитанных` : ""}`}
+          aria-label={ariaLabel}
         >
           <Bell className="size-4" />
           {unreadCount > 0 && (
@@ -78,39 +125,7 @@ export function NotificationBell() {
 
         <Separator />
 
-        <ScrollArea className="max-h-80">
-          {isLoading ? (
-            <div className="space-y-0">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex items-start gap-3 px-4 py-2.5">
-                  <Skeleton className="mt-0.5 size-4 shrink-0 rounded" />
-                  <div className="flex-1 space-y-1.5">
-                    <Skeleton className="h-3.5 w-3/4" />
-                    <Skeleton className="h-3 w-1/2" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <Bell className="text-muted-foreground/40 mb-2 size-8" />
-              <p className="text-muted-foreground text-sm">
-                Нет новых уведомлений
-              </p>
-            </div>
-          ) : (
-            <div>
-              {notifications.map((n) => (
-                <NotificationItem
-                  key={n.id}
-                  notification={n}
-                  onMarkAsRead={markAsRead}
-                  compact
-                />
-              ))}
-            </div>
-          )}
-        </ScrollArea>
+        <ScrollArea className="max-h-80">{renderContent()}</ScrollArea>
 
         {notifications.length > 0 && (
           <>

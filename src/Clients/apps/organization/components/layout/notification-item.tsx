@@ -65,7 +65,7 @@ export function NotificationItem({
   notification,
   onMarkAsRead,
   compact = false,
-}: NotificationItemProps) {
+}: Readonly<NotificationItemProps>) {
   const config =
     typeConfig[notification.type] ?? typeConfig[NotificationType.Info];
   const Icon = config.icon;

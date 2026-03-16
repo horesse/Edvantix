@@ -49,7 +49,7 @@ function today(): string {
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 
-function KpiCard({ kpi, isLoading }: { kpi: KpiConfig; isLoading: boolean }) {
+function KpiCard({ kpi, isLoading }: Readonly<{ kpi: KpiConfig; isLoading: boolean }>) {
   return (
     <div className="bg-card border-border rounded-2xl border p-5 shadow-sm">
       <div className="mb-3 flex items-center justify-between">
@@ -95,7 +95,7 @@ function KpiCard({ kpi, isLoading }: { kpi: KpiConfig; isLoading: boolean }) {
 }
 
 /** Inline donut SVG for attendance rate. */
-function AttendanceDonut({ pct }: { pct: number }) {
+function AttendanceDonut({ pct }: Readonly<{ pct: number }>) {
   const r = 36;
   const circ = 2 * Math.PI * r;
   const late = 7;
@@ -257,8 +257,8 @@ function AlertsCard() {
         </p>
       </div>
       <div className="space-y-3">
-        {alerts.map((a, i) => (
-          <div key={i} className="flex items-start gap-3">
+        {alerts.map((a) => (
+          <div key={a.title} className="flex items-start gap-3">
             <div
               className={cn(
                 "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg",
@@ -330,7 +330,7 @@ function GrowthCard() {
 }
 
 /** Groups summary table. */
-function GroupsCard({ orgId }: { orgId: string }) {
+function GroupsCard({ orgId }: Readonly<{ orgId: string }>) {
   const { data: org } = useOrganization(orgId);
 
   const groups = [
@@ -597,10 +597,10 @@ export function Dashboard() {
 function DashboardContent({
   orgId,
   canManage,
-}: {
+}: Readonly<{
   orgId: string;
   canManage: boolean;
-}) {
+}>) {
   const { data: org, isLoading } = useOrganization(orgId);
 
   const kpis: KpiConfig[] = [

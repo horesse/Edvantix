@@ -7,7 +7,7 @@ interface SidebarLogoProps {
 }
 
 /** Edvantix brand logo with icon + wordmark. */
-export function SidebarLogo({ className }: SidebarLogoProps) {
+export function SidebarLogo({ className }: Readonly<SidebarLogoProps>) {
   return (
     <Link href="/" className={cn("flex items-center gap-2.5", className)}>
       <div className="bg-primary flex size-8 shrink-0 items-center justify-center rounded-lg">

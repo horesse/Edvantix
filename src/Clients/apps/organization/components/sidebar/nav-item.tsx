@@ -30,7 +30,7 @@ export function NavItem({
   badge,
   indent = false,
   onClick,
-}: NavItemProps) {
+}: Readonly<NavItemProps>) {
   return (
     <Link
       href={href}

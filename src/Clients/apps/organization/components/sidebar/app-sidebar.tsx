@@ -16,7 +16,7 @@ import { NavItem } from "./nav-item";
 import { SidebarLogo } from "./sidebar-logo";
 import { SidebarUser } from "./sidebar-user";
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <p className="text-sidebar-foreground/50 px-3 pt-1 pb-2 text-[10px] font-semibold tracking-wider uppercase">
       {children}

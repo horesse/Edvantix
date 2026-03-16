@@ -32,9 +32,9 @@ const OrganizationContext = createContext<OrganizationContextValue | null>(
 
 export function OrganizationProvider({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const { data: organizations = [], isLoading } = useMyOrganizations();
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
 

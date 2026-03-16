@@ -53,7 +53,7 @@ export function PageLayout({
   header,
   children,
   className,
-}: PageLayoutProps) {
+}: Readonly<PageLayoutProps>) {
   const resolvedHeader =
     header ??
     (title ? (

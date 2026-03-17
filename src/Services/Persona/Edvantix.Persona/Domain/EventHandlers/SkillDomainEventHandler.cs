@@ -8,7 +8,7 @@ namespace Edvantix.Persona.Domain.EventHandlers;
 /// Событие срабатывает ПОСЛЕ сохранения профиля, поэтому проверка корректна.
 /// </summary>
 public sealed class SkillDomainEventHandler(
-    ISkillRepository skillRepository,
+    IServiceProvider globalProvider,
     ILogger<SkillDomainEventHandler> logger
 ) : INotificationHandler<SkillRemovedFromProfileDomainEvent>
 {
@@ -17,6 +17,10 @@ public sealed class SkillDomainEventHandler(
         CancellationToken cancellationToken
     )
     {
+        using var scope = globalProvider.CreateScope();
+        var provider = scope.ServiceProvider;
+        var skillRepository = provider.GetRequiredService<ISkillRepository>();
+
         var isUsed = await skillRepository.IsUsedByAnyProfileAsync(
             notification.SkillId,
             cancellationToken

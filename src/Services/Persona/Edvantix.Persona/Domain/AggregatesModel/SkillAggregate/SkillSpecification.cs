@@ -11,4 +11,9 @@ public sealed class SkillSpecification : Specification<Skill>
     {
         Query.Search(s => s.Name, $"%{query}%").OrderBy(s => s.Name).Take(limit).AsNoTracking();
     }
+
+    public SkillSpecification(string name)
+    {
+        Query.Where(s => s.Name.ToLower() == name);
+    }
 }

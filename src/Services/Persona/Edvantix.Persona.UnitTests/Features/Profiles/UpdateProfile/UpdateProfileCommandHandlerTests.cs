@@ -111,7 +111,9 @@ public sealed class UpdateProfileCommandHandlerTests
             .Setup(m => m.Map(It.IsAny<Profile>()))
             .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(existingSkill);
 
         var command = BuildCommand(skills: ["C#"]);
@@ -146,7 +148,9 @@ public sealed class UpdateProfileCommandHandlerTests
             .Setup(m => m.Map(It.IsAny<Profile>()))
             .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
-            .Setup(r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Skill?)null);
         _skillRepoMock
             .Setup(r => r.AddAsync(It.IsAny<Skill>(), It.IsAny<CancellationToken>()))
@@ -181,10 +185,7 @@ public sealed class UpdateProfileCommandHandlerTests
             .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
             .Setup(r =>
-                r.FindAsync(
-                    It.IsAny<ISpecification<Skill>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(existingSkill);
 
@@ -194,11 +195,7 @@ public sealed class UpdateProfileCommandHandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         _skillRepoMock.Verify(
-            r =>
-                r.FindAsync(
-                    It.IsAny<ISpecification<Skill>>(),
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
         profile.Skills.ShouldHaveSingleItem();

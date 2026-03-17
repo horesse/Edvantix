@@ -18,7 +18,7 @@ internal static class ServiceProviderHelper
                 [
                     new Claim(ClaimTypes.NameIdentifier, accountId.ToString()),
                     new Claim(KeycloakClaimTypes.PreferredUsername, login),
-                    new Claim(KeycloakClaimTypes.Profile, accountId.ToString())
+                    new Claim(KeycloakClaimTypes.Profile, accountId.ToString()),
                 ],
                 "Bearer"
             )

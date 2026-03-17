@@ -16,12 +16,11 @@ public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
         var profileId = provider.GetProfileIdOrError();
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        var spec = new ProfileSpecification(profileId, withDetails: true, asTracking: true);
+        var spec = ProfileSpecification.ForWrite(profileId);
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");
 
-        // Регистрирует AvatarDeletedDomainEvent и зануляет AvatarUrl.
         profile.DeleteAvatar();
 
         await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);

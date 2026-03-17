@@ -25,7 +25,7 @@ public sealed class GetProfileDetailsQueryHandler(IServiceProvider provider)
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
         var mapper = provider.GetRequiredService<IMapper<Profile, ProfileDetailsModel>>();
 
-        ISpecification<Profile> spec = new ProfileSpecification(profileId, withDetails: true);
+        var spec = ProfileSpecification.ForRead(profileId);
 
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)

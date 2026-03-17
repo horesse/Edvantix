@@ -71,5 +71,7 @@ internal sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder
             .Metadata.FindNavigation(nameof(Profile.Skills))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Navigation(x => x.FullName).AutoInclude();
     }
 }

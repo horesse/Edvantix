@@ -27,7 +27,7 @@ public sealed class GetProfileQueryHandler(IServiceProvider provider)
         if (!profileId.HasValue || profileId == Guid.Empty)
             throw new NotFoundException("Профиль не найден.");
 
-        var spec = new ProfileSpecification(profileId);
+        var spec = ProfileSpecification.Minimal(profileId.Value);
 
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)

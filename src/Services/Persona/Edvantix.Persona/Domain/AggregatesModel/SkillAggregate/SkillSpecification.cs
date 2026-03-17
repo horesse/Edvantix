@@ -4,7 +4,7 @@ public sealed class SkillSpecification : Specification<Skill>
 {
     public SkillSpecification(Guid id)
     {
-        Query.Where(s => s.Id == id);
+        Query.Where(s => s.Id == id).AsTracking();
     }
 
     public SkillSpecification(string query, int limit)
@@ -14,6 +14,7 @@ public sealed class SkillSpecification : Specification<Skill>
 
     public SkillSpecification(string name)
     {
-        Query.Where(s => s.Name.ToLower() == name);
+        var normalized = name.ToLower();
+        Query.Where(s => s.Name.ToLower() == normalized);
     }
 }

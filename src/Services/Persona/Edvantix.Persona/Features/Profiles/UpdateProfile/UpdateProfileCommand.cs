@@ -27,7 +27,7 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
         var skillRepo = provider.GetRequiredService<ISkillRepository>();
 
-        var spec = new ProfileSpecification(profileId, withDetails: true, asTracking: true);
+        var spec = ProfileSpecification.ForWrite(profileId);
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");

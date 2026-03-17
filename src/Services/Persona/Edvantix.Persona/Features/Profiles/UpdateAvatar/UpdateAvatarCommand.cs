@@ -22,7 +22,7 @@ public sealed class UpdateAvatarCommandHandler(IServiceProvider provider)
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
         var blobService = provider.GetRequiredService<IBlobService>();
 
-        var spec = new ProfileSpecification(profileId, withDetails: true, asTracking: true);
+        var spec = ProfileSpecification.ForWrite(profileId);
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");

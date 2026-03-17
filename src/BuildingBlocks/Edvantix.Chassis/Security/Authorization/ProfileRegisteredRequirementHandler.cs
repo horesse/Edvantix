@@ -16,7 +16,7 @@ internal sealed class ProfileRegisteredRequirementHandler
         ProfileRegisteredRequirement requirement
     )
     {
-        var profileIdClaim = context.User.FindFirst(KeycloakClaimTypes.ProfileId);
+        var profileIdClaim = context.User.FindFirst(KeycloakClaimTypes.Profile);
 
         if (profileIdClaim is not null && Guid.TryParse(profileIdClaim.Value, out _))
         {

@@ -12,9 +12,7 @@ public sealed class ProfileSpecification : Specification<Profile>
 {
     private ProfileSpecification(Guid profileId)
     {
-        Query
-            .OrderBy(x => x.FullName.LastName)
-            .Where(p => p.Id == profileId);
+        Query.OrderBy(x => x.FullName.LastName).Where(p => p.Id == profileId);
     }
 
     /// <summary>Read-only, все навигации — для запросов, возвращающих <c>ProfileDetailsModel</c>.</summary>
@@ -22,8 +20,7 @@ public sealed class ProfileSpecification : Specification<Profile>
     {
         var spec = new ProfileSpecification(profileId);
 
-        IncludeCollections(spec.Query)
-            .Include(p => p.Skills).ThenInclude(s => s.Skill);
+        IncludeCollections(spec.Query).Include(p => p.Skills).ThenInclude(s => s.Skill);
 
         return spec;
     }
@@ -36,9 +33,7 @@ public sealed class ProfileSpecification : Specification<Profile>
     {
         var spec = new ProfileSpecification(profileId);
 
-        IncludeCollections(spec.Query)
-            .AsTracking()
-            .Include(p => p.Skills);
+        IncludeCollections(spec.Query).AsTracking().Include(p => p.Skills);
 
         return spec;
     }
@@ -47,8 +42,9 @@ public sealed class ProfileSpecification : Specification<Profile>
     public static ProfileSpecification Minimal(Guid profileId) => new(profileId);
 
     private static ISpecificationBuilder<Profile> IncludeCollections(
-        ISpecificationBuilder<Profile> query)
-        => query
+        ISpecificationBuilder<Profile> query
+    ) =>
+        query
             .Include(p => p.Contacts)
             .Include(p => p.Educations)
             .Include(p => p.EmploymentHistories);

@@ -1,17 +1,14 @@
 namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
-/// <summary>Спецификация поиска профиля по внутреннему ID.</summary>
-public sealed class ProfileByIdSpec : Specification<Profile>
+public sealed class ProfileSpecification : Specification<Profile>
 {
-    /// <param name="id">Внутренний ID профиля.</param>
-    /// <param name="withDetails">
-    /// Загружать контакты, историю занятости и образование.
-    /// По умолчанию загружается только <see cref="Profile.FullName"/>.
-    /// </param>
-    public ProfileByIdSpec(Guid id, bool withDetails = false)
+    public ProfileSpecification(Guid? profileId,  bool withDetails = false, bool asTracking = true)
     {
-        Query.Where(p => p.Id == id);
+        Query.Where(p => p.Id == profileId);
         ApplyIncludes(withDetails);
+
+        if (asTracking)
+            Query.AsTracking();
     }
 
     private void ApplyIncludes(bool withDetails)
@@ -24,36 +21,6 @@ public sealed class ProfileByIdSpec : Specification<Profile>
         Query.Include(p => p.Contacts);
         Query.Include(p => p.Educations);
         Query.Include(p => p.EmploymentHistories);
-        // Загружаем навыки вместе с данными из каталога для маппинга в SkillModel
-        Query.Include(p => p.Skills).ThenInclude(s => s.Skill);
-    }
-}
-
-/// <summary>Спецификация поиска профиля по AccountId (GUID аккаунта Keycloak).</summary>
-public sealed class ProfileByAccountIdSpec : Specification<Profile>
-{
-    /// <param name="accountId">GUID аккаунта пользователя в Keycloak.</param>
-    /// <param name="withDetails">
-    /// Загружать контакты, историю занятости, образование и навыки.
-    /// По умолчанию загружается только <see cref="Profile.FullName"/>.
-    /// </param>
-    public ProfileByAccountIdSpec(Guid accountId, bool withDetails = false)
-    {
-        Query.Where(p => p.AccountId == accountId);
-        ApplyIncludes(withDetails);
-    }
-
-    private void ApplyIncludes(bool withDetails)
-    {
-        Query.Include(p => p.FullName);
-
-        if (!withDetails)
-            return;
-
-        Query.Include(p => p.Contacts);
-        Query.Include(p => p.Educations);
-        Query.Include(p => p.EmploymentHistories);
-        // Загружаем навыки вместе с данными из каталога для маппинга в SkillModel
         Query.Include(p => p.Skills).ThenInclude(s => s.Skill);
     }
 }

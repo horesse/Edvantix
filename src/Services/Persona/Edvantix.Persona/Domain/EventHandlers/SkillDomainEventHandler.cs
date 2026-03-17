@@ -26,7 +26,7 @@ public sealed class SkillDomainEventHandler(
             return;
 
         var skill = await skillRepository.FindAsync(
-            new SkillByIdSpec(notification.SkillId),
+            new SkillSpecification(notification.SkillId),
             cancellationToken
         );
 

@@ -13,10 +13,10 @@ public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var accountId = provider.GetUserId();
+        var profileId = provider.GetProfileIdOrError();
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
 
-        var spec = new ProfileByAccountIdSpec(accountId, withDetails: true);
+        var spec = new ProfileSpecification(profileId, withDetails: true, asTracking: true);
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");

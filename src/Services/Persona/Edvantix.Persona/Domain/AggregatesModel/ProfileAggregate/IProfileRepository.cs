@@ -8,7 +8,7 @@ public interface IProfileRepository : IRepository<Profile>
 {
     /// <summary>
     /// Поиск профиля по спецификации.
-    /// Используйте <see cref="ProfileByIdSpec"/> или <see cref="ProfileByAccountIdSpec"/>
+    /// Используйте <see cref="ProfileSpecification"/> или <see cref="ProfileByAccountIdSpec"/>
     /// для построения запросов с нужными включениями.
     /// </summary>
     Task<Profile?> FindAsync(

@@ -123,8 +123,7 @@ public sealed class ProfileDetailsMapperTests
             firstName,
             lastName,
             middleName
-        );
-        profile.Id = profileId ?? Guid.CreateVersion7();
+        ) { Id = profileId ?? Guid.CreateVersion7() };
 
         return profile;
     }

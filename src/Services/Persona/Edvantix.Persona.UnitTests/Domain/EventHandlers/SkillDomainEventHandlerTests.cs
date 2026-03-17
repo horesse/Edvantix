@@ -6,14 +6,13 @@ namespace Edvantix.Persona.UnitTests.Domain.EventHandlers;
 public sealed class SkillDomainEventHandlerTests
 {
     private readonly Mock<ISkillRepository> _skillRepoMock = new();
-    private readonly Mock<IServiceProvider> _serviceProviderMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly SkillDomainEventHandler _handler;
 
     public SkillDomainEventHandlerTests()
     {
         _skillRepoMock.Setup(r => r.UnitOfWork).Returns(_unitOfWorkMock.Object);
-        _handler = new(_serviceProviderMock.Object, Mock.Of<ILogger<SkillDomainEventHandler>>());
+        _handler = new SkillDomainEventHandler(_skillRepoMock.Object, Mock.Of<ILogger<SkillDomainEventHandler>>());
     }
 
     [Test]

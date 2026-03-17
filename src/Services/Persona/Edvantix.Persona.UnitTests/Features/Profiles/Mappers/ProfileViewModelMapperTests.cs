@@ -87,8 +87,7 @@ public sealed class ProfileViewModelMapperTests
             firstName,
             lastName,
             middleName
-        );
-        profile.Id = profileId ?? Guid.CreateVersion7();
+        ) { Id = profileId ?? Guid.CreateVersion7() };
 
         if (avatarUrn is not null)
             profile.UploadAvatar(avatarUrn);

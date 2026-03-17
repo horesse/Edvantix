@@ -217,9 +217,9 @@ public sealed class UpdateProfileCommandHandlerTests
     {
         var providerMock = new Mock<IServiceProvider>();
         providerMock.SetupUser(accountId);
-        providerMock.SetupService<IProfileRepository>(_profileRepoMock.Object);
-        providerMock.SetupService<ISkillRepository>(_skillRepoMock.Object);
-        providerMock.SetupService<IMapper<Profile, ProfileDetailsModel>>(_mapperMock.Object);
+        providerMock.SetupService(_profileRepoMock.Object);
+        providerMock.SetupService(_skillRepoMock.Object);
+        providerMock.SetupService(_mapperMock.Object);
 
         return new UpdateProfileCommandHandler(providerMock.Object);
     }

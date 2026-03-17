@@ -6,7 +6,7 @@ public sealed class SkillSpecification : Specification<Skill>
     {
         Query.Where(s => s.Id == id);
     }
-    
+
     public SkillSpecification(string query, int limit)
     {
         Query.Search(s => s.Name, $"%{query}%").OrderBy(s => s.Name).Take(limit).AsNoTracking();

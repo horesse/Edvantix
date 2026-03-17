@@ -10,8 +10,7 @@ namespace Edvantix.Persona.Features.Profiles.Details;
 ///   <item>AccountId текущего аутентифицированного пользователя — иначе.</item>
 /// </list>
 /// </summary>
-public sealed record GetProfileDetailsQuery(Guid? ProfileId = null)
-    : IQuery<ProfileDetailsModel>;
+public sealed record GetProfileDetailsQuery(Guid? ProfileId = null) : IQuery<ProfileDetailsModel>;
 
 public sealed class GetProfileDetailsQueryHandler(IServiceProvider provider)
     : IQueryHandler<GetProfileDetailsQuery, ProfileDetailsModel>
@@ -22,7 +21,7 @@ public sealed class GetProfileDetailsQueryHandler(IServiceProvider provider)
     )
     {
         var profileId = request.ProfileId ?? provider.GetProfileIdOrError();
-        
+
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
         var mapper = provider.GetRequiredService<IMapper<Profile, ProfileDetailsModel>>();
 

@@ -2,7 +2,7 @@ namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
 public sealed class ProfileSpecification : Specification<Profile>
 {
-    public ProfileSpecification(Guid? profileId,  bool withDetails = false, bool asTracking = true)
+    public ProfileSpecification(Guid? profileId, bool withDetails = false, bool asTracking = true)
     {
         Query.Where(p => p.Id == profileId);
         ApplyIncludes(withDetails);

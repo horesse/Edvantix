@@ -80,26 +80,26 @@
 | ORG-04 | Phase 1 | Pending |
 | ORG-05 | Phase 1 | Pending |
 | ORG-06 | Phase 1 | Pending |
-| ORG-07 | Phase 1 | Pending |
-| ORG-08 | Phase 1 | Pending |
-| ORG-09 | Phase 1 | Pending |
 | ORG-10 | Phase 1 | Pending |
-| SCH-01 | Phase 2 | Pending |
-| SCH-02 | Phase 2 | Pending |
-| SCH-03 | Phase 2 | Pending |
-| SCH-04 | Phase 2 | Pending |
-| SCH-05 | Phase 2 | Pending |
-| SCH-06 | Phase 2 | Pending |
-| SCH-07 | Phase 2 | Pending |
-| SCH-08 | Phase 2 | Pending |
-| SCH-09 | Phase 2 | Pending |
-| SCH-10 | Phase 2 | Pending |
-| PAY-01 | Phase 3 | Pending |
-| PAY-02 | Phase 3 | Pending |
-| PAY-03 | Phase 3 | Pending |
-| PAY-04 | Phase 3 | Pending |
-| PAY-05 | Phase 3 | Pending |
-| PAY-06 | Phase 3 | Pending |
+| ORG-07 | Phase 2 | Pending |
+| ORG-08 | Phase 2 | Pending |
+| ORG-09 | Phase 2 | Pending |
+| SCH-01 | Phase 3 | Pending |
+| SCH-02 | Phase 3 | Pending |
+| SCH-03 | Phase 3 | Pending |
+| SCH-04 | Phase 3 | Pending |
+| SCH-05 | Phase 3 | Pending |
+| SCH-06 | Phase 3 | Pending |
+| SCH-07 | Phase 3 | Pending |
+| SCH-10 | Phase 3 | Pending |
+| SCH-08 | Phase 4 | Pending |
+| SCH-09 | Phase 4 | Pending |
+| PAY-01 | Phase 5 | Pending |
+| PAY-02 | Phase 5 | Pending |
+| PAY-03 | Phase 5 | Pending |
+| PAY-04 | Phase 5 | Pending |
+| PAY-05 | Phase 5 | Pending |
+| PAY-06 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 26 total
@@ -108,4 +108,4 @@
 
 ---
 *Requirements defined: 2026-03-18*
-*Last updated: 2026-03-18 after initial definition*
+*Last updated: 2026-03-18 after roadmap creation — 5-phase structure finalized*

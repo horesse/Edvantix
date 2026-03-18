@@ -4,18 +4,14 @@ namespace Edvantix.Organizations.Features.UserRoleAssignments.GetUserRoles;
 /// GET /v1/user-role-assignments/{profileId:guid} — returns all roles for a user in the current tenant.
 /// Returns an empty list if the profile has no assignments.
 /// </summary>
-public sealed class GetUserRolesEndpoint
-    : IEndpoint<Ok<List<UserRoleItem>>, Guid, ISender>
+public sealed class GetUserRolesEndpoint : IEndpoint<Ok<List<UserRoleItem>>, Guid, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
                 "/user-role-assignments/{profileId:guid}",
-                async (
-                    Guid profileId,
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) => await HandleAsync(profileId, sender, cancellationToken)
+                async (Guid profileId, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(profileId, sender, cancellationToken)
             )
             .Produces<List<UserRoleItem>>(StatusCodes.Status200OK)
             .WithName("GetUserRoles")

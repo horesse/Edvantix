@@ -27,7 +27,7 @@ public sealed class AssignRoleEndpoint
             .WithSummary("Assign a role to a user")
             .WithDescription(
                 "Assigns a role to a user profile within the current tenant. "
-                + "Validates role existence and profile existence via Persona gRPC before creating the assignment."
+                    + "Validates role existence and profile existence via Persona gRPC before creating the assignment."
             )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();

@@ -71,13 +71,15 @@ public sealed class AssignRoleCommandHandlerTests
 
         result.ShouldNotBe(Guid.Empty);
         _assignmentRepositoryMock.Verify(
-            r => r.AddAsync(
-                It.Is<UserRoleAssignment>(a =>
-                    a.ProfileId == _profileId
-                    && a.RoleId == _roleId
-                    && a.SchoolId == _schoolId),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
+            r =>
+                r.AddAsync(
+                    It.Is<UserRoleAssignment>(a =>
+                        a.ProfileId == _profileId && a.RoleId == _roleId && a.SchoolId == _schoolId
+                    ),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
     }
 
     [Test]

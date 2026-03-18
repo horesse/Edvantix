@@ -18,7 +18,8 @@ internal sealed class PermissionSeeder(
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         using var scope = serviceProvider.CreateScope();
-        var permissionRepository = scope.ServiceProvider.GetRequiredService<IPermissionRepository>();
+        var permissionRepository =
+            scope.ServiceProvider.GetRequiredService<IPermissionRepository>();
 
         logger.LogInformation("Seeding Organizations permission strings...");
 

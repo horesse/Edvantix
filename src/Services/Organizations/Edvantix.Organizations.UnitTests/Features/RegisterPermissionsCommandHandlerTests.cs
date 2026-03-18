@@ -31,13 +31,14 @@ public sealed class RegisterPermissionsCommandHandlerTests
         await _handler.Handle(command, CancellationToken.None);
 
         _permissionRepositoryMock.Verify(
-            r => r.UpsertAsync(
-                It.Is<IEnumerable<string>>(list => list.SequenceEqual(names)),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
-        _unitOfWorkMock.Verify(
-            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
-            Times.Once);
+            r =>
+                r.UpsertAsync(
+                    It.Is<IEnumerable<string>>(list => list.SequenceEqual(names)),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
+        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
@@ -56,9 +57,12 @@ public sealed class RegisterPermissionsCommandHandlerTests
 
         // UpsertAsync must be called exactly once with the full list (no pre-filtering)
         _permissionRepositoryMock.Verify(
-            r => r.UpsertAsync(
-                It.Is<IEnumerable<string>>(list => list.SequenceEqual(names)),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
+            r =>
+                r.UpsertAsync(
+                    It.Is<IEnumerable<string>>(list => list.SequenceEqual(names)),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Once
+        );
     }
 }

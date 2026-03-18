@@ -15,13 +15,7 @@ public sealed class RevokeRoleEndpoint : IEndpoint<NoContent, Guid, Guid, ISende
                     Guid roleId,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) =>
-                    await HandleAsync(
-                        profileId,
-                        roleId,
-                        sender,
-                        cancellationToken
-                    )
+                ) => await HandleAsync(profileId, roleId, sender, cancellationToken)
             )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)

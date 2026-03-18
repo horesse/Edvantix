@@ -12,9 +12,8 @@ public sealed class RegisterPermissionsCommand : ICommand
 }
 
 /// <summary>Handles permission registration by upserting the provided names into the catalogue.</summary>
-public sealed class RegisterPermissionsCommandHandler(
-    IPermissionRepository permissionRepository
-) : ICommandHandler<RegisterPermissionsCommand>
+public sealed class RegisterPermissionsCommandHandler(IPermissionRepository permissionRepository)
+    : ICommandHandler<RegisterPermissionsCommand>
 {
     /// <inheritdoc/>
     public async ValueTask<Unit> Handle(

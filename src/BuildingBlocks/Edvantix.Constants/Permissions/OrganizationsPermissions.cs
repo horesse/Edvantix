@@ -26,12 +26,5 @@ public static class OrganizationsPermissions
 
     /// <summary>Returns all Organizations permission strings for seeding into the permission catalogue.</summary>
     public static IReadOnlyList<string> All =>
-    [
-        CreateRole,
-        UpdateRole,
-        DeleteRole,
-        AssignRole,
-        RevokeRole,
-        AssignPermissions,
-    ];
+        [CreateRole, UpdateRole, DeleteRole, AssignRole, RevokeRole, AssignPermissions];
 }

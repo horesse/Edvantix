@@ -6,7 +6,8 @@ namespace Edvantix.Organizations.Features.Permissions.RegisterPermissions;
 /// This endpoint is allowed anonymous access because it is called by service identities, not end users.
 /// TODO: In production, secure this endpoint with a shared secret or service-to-service mTLS policy.
 /// </summary>
-public sealed class RegisterPermissionsEndpoint : IEndpoint<NoContent, RegisterPermissionsCommand, ISender>
+public sealed class RegisterPermissionsEndpoint
+    : IEndpoint<NoContent, RegisterPermissionsCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -25,7 +26,7 @@ public sealed class RegisterPermissionsEndpoint : IEndpoint<NoContent, RegisterP
             .WithSummary("Register permission strings")
             .WithDescription(
                 "Upserts permission strings into the global catalogue. Idempotent — existing names are skipped. "
-                + "Called by other services during startup to register their own permission catalogues."
+                    + "Called by other services during startup to register their own permission catalogues."
             )
             .MapToApiVersion(ApiVersions.V1)
             .AllowAnonymous();

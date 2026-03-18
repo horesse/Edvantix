@@ -41,9 +41,7 @@ public sealed class RevokeRoleCommandHandlerTests
         await _handler.Handle(command, CancellationToken.None);
 
         _assignmentRepositoryMock.Verify(r => r.Remove(assignment), Times.Once);
-        _unitOfWorkMock.Verify(
-            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
-            Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]

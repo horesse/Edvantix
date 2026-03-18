@@ -14,9 +14,8 @@ public sealed class RevokeRoleCommand : ICommand
 /// Handles role revocation by hard-deleting the <see cref="UserRoleAssignment"/>.
 /// Throws <see cref="NotFoundException"/> if the assignment does not exist.
 /// </summary>
-public sealed class RevokeRoleCommandHandler(
-    IUserRoleAssignmentRepository assignmentRepository
-) : ICommandHandler<RevokeRoleCommand>
+public sealed class RevokeRoleCommandHandler(IUserRoleAssignmentRepository assignmentRepository)
+    : ICommandHandler<RevokeRoleCommand>
 {
     /// <inheritdoc/>
     public async ValueTask<Unit> Handle(

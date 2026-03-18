@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-03-18T21:36:34.245Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-03-18T21:44:00Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 4
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -24,15 +24,15 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 01 (organizations-rbac-core) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 1
-- Average duration: 15 min
-- Total execution time: 0.25 hours
+- Total plans completed: 2
+- Average duration: 10 min
+- Total execution time: 0.42 hours
 
 **By Phase:**
 
@@ -47,6 +47,7 @@ Plan: 2 of 4
 
 *Updated after each plan completion*
 | Phase 01-organizations-rbac-core P01 | 15 | 2 tasks | 38 files |
+| Phase 01-organizations-rbac-core P02 | 5 | 2 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,10 @@ Recent decisions affecting current work:
 - [01-01]: Role HasQueryFilter combines tenant AND soft-delete in single expression — EF Core only allows one HasQueryFilter per entity.
 - [01-01]: ITenanted lives in Organizations domain (not Chassis) — moved to SharedKernel if Scheduling needs it.
 - [01-01]: TenantMiddleware called BEFORE UseAuthorization in pipeline so tenant context is available in authorization handlers.
+- [01-02]: Guard.Against.NullOrWhiteSpace and Guard.Against.Default added to Chassis (not Ardalis) — consistent with project's custom Guard pattern using C# 13 extension blocks.
+- [01-02]: RoleRepository.FindByIdAsync eagerly loads Permissions navigation — required for AssignPermission/RemovePermission operations without extra roundtrips.
+- [01-02]: PermissionRepository.UpsertAsync materialises names to List before Except to avoid multiple enumeration.
+- [01-02]: Permission validation via IPermissionRepository.UpsertAsync/GetByNamesAsync provides the registry validation mechanism for AssignPermissionsToRole (resolves research flag).
 
 ### Pending Todos
 
@@ -74,6 +79,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T21:36:34.242Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-03-18T21:44:00Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None

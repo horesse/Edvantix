@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Services register their permission strings in the catalogue on startup, making them available for role assignment
   4. Owner can assign a role to a user within their school and revoke it; assignment and revocation are reflected immediately
   5. An architecture test fails the build if any ITenanted entity in any service has no EF Core global query filter registered for schoolId
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
 - [ ] 01-01: ITenantContext abstraction, EF Core query filter convention, and architecture test

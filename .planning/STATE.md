@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-03-18T22:02:12.117Z"
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-03-18T22:15:37.970Z"
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # Project State
@@ -49,6 +49,7 @@ Plan: 4 of 4
 | Phase 01-organizations-rbac-core P01 | 15 | 2 tasks | 38 files |
 | Phase 01-organizations-rbac-core P02 | 5 | 2 tasks | 15 files |
 | Phase 01-organizations-rbac-core P03 | 12 | 2 tasks | 21 files |
+| Phase 01-organizations-rbac-core P04 | 9 | 2 tasks | 21 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 01-03]: ICommand<Unit>/ICommandHandler<TCommand, Unit> used for void commands — Mediator library only provides ICommand<T>
 - [Phase 01-03]: GetRolePermissions fetches all permissions and filters in-memory — acceptable for v1 given small Permission catalogue size
 - [Phase 01-03]: Domain aggregate namespaces added to GlobalUsings.cs for project-wide availability without per-file usings
+- [Phase 01-04]: PermissionSeeder uses IHostedService with direct repository access (not HTTP) to avoid self-calling race condition on startup
+- [Phase 01-04]: RegisterPermissionsEndpoint uses AllowAnonymous for service-to-service startup calls; TODO secured via mTLS in production
+- [Phase 01-04]: gRPC client pattern: copy proto, wrap in IPersonaProfileService interface; AssignRoleCommand validates role (local DB) before profile (gRPC) to fail fast
 
 ### Pending Todos
 
@@ -83,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T22:02:12.113Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-03-18T22:15:37.967Z
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None

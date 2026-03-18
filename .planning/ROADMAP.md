@@ -12,7 +12,7 @@ Three new microservices are added to the existing .NET 10 / Aspire stack in stri
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Organizations — RBAC Core** - Custom roles, permissions, user-role assignments, and tenant isolation foundation for all services
+- [x] **Phase 1: Organizations — RBAC Core** - Custom roles, permissions, user-role assignments, and tenant isolation foundation for all services (completed 2026-03-18)
 - [ ] **Phase 2: Organizations — Permission Cache** - gRPC CheckPermission endpoint, HybridCache, and role-change invalidation events
 - [ ] **Phase 3: Scheduling — Slots and Views** - Groups, lesson slots with conflict detection, and manager/teacher/student calendar views
 - [ ] **Phase 4: Scheduling — Attendance and Outbox** - Attendance marking with unique constraint and AttendanceRecordedIntegrationEvent via transactional outbox
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Organizations — RBAC Core | 3/4 | In Progress|  |
+| 1. Organizations — RBAC Core | 4/4 | Complete   | 2026-03-18 |
 | 2. Organizations — Permission Cache | 0/3 | Not started | - |
 | 3. Scheduling — Slots and Views | 0/4 | Not started | - |
 | 4. Scheduling — Attendance and Outbox | 0/2 | Not started | - |

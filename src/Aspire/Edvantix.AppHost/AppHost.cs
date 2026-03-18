@@ -45,6 +45,7 @@ var profileContainer = storage
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var blogDb = postgres.AddDatabase(Components.Database.Blog);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
+var organizationsDb = postgres.AddDatabase(Components.Database.Organizations);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -66,6 +67,19 @@ var personaApi = builder
         StorageBuiltInRole.StorageBlobDataContributor,
         StorageBuiltInRole.StorageBlobDataOwner
     )
+    .WithFriendlyUrls();
+
+var organizationsApi = builder
+    .AddProject<Edvantix_Organizations>(Services.Organizations)
+    .WithReference(organizationsDb)
+    .WaitFor(organizationsDb)
+    .WithKeycloak(keycloak)
+    .WaitFor(keycloak)
+    .WithReference(personaApi)
+    .WaitFor(personaApi)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
 var blogApi = builder
@@ -96,6 +110,7 @@ var gateway = builder
     .WithService(personaApi, true)
     .WithService(blogApi, true)
     .WithService(notificationApi, true)
+    .WithService(organizationsApi, true)
     .Build();
 
 var turbo = builder
@@ -175,7 +190,8 @@ if (builder.ExecutionContext.IsRunMode)
         .AddScalar(keycloak)
         .WithOpenAPI(personaApi)
         .WithOpenAPI(blogApi)
-        .WithOpenAPI(notificationApi);
+        .WithOpenAPI(notificationApi)
+        .WithOpenAPI(organizationsApi);
 }
 
 await builder.Build().RunAsync();

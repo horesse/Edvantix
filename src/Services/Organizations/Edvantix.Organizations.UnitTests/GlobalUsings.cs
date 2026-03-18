@@ -1,0 +1,15 @@
+global using System.Security.Claims;
+global using Edvantix.Chassis.Exceptions;
+global using Edvantix.Chassis.Mapper;
+global using Edvantix.Chassis.Repository;
+global using Edvantix.Chassis.Security.Tenant;
+global using Edvantix.Constants.Core;
+global using Edvantix.Organizations.Domain.Abstractions;
+global using Edvantix.Organizations.Domain.AggregatesModel.PermissionAggregate;
+global using Edvantix.Organizations.Domain.AggregatesModel.RoleAggregate;
+global using Edvantix.Organizations.Domain.AggregatesModel.UserRoleAssignmentAggregate;
+global using Edvantix.SharedKernel.SeedWork;
+global using FluentValidation.TestHelper;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;

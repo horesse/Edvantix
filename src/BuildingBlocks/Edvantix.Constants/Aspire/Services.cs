@@ -10,6 +10,7 @@ public static class Services
     public static readonly string Notification = nameof(Notification).ToLowerInvariant();
     public static readonly string Catalog = nameof(Catalog).ToLowerInvariant();
     public static readonly string Scheduler = nameof(Scheduler).ToLowerInvariant();
+    public static readonly string Organizations = nameof(Organizations).ToLowerInvariant();
 
     public static string ToClientName(string application, string? suffix = null)
     {

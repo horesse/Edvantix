@@ -31,5 +31,10 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
             .WithOne()
             .HasForeignKey(rp => rp.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Use backing field for Permissions collection so EF Core tracks changes made
+        // via AssignPermission/RemovePermission/SetPermissions without exposing a setter.
+        builder.Metadata.FindNavigation(nameof(Role.Permissions))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

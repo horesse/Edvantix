@@ -14,8 +14,11 @@ public sealed class Permission : Entity, IAggregateRoot
     private Permission() { }
 
     /// <summary>Initializes a new global <see cref="Permission"/>.</summary>
+    /// <param name="name">The permission name. Must not be null or whitespace.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null or whitespace.</exception>
     public Permission(string name)
     {
-        Name = name;
+        Guard.Against.NullOrWhiteSpace(name, nameof(name));
+        Name = name.Trim();
     }
 }

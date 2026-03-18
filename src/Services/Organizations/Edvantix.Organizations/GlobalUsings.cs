@@ -8,6 +8,7 @@ global using Edvantix.Chassis.Endpoints;
 global using Edvantix.Chassis.EventBus;
 global using Edvantix.Chassis.Exceptions;
 global using Edvantix.Chassis.Logging;
+global using Edvantix.Chassis.Utilities.Guards;
 global using Edvantix.Chassis.Mapper;
 global using Edvantix.Chassis.Repository;
 global using Edvantix.Chassis.Security.Tenant;

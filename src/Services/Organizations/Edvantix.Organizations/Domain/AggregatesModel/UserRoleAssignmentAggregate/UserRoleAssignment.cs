@@ -21,8 +21,16 @@ public sealed class UserRoleAssignment : Entity, IAggregateRoot, ITenanted
     private UserRoleAssignment() { }
 
     /// <summary>Initializes a new role assignment.</summary>
+    /// <param name="profileId">The user profile identifier. Must not be empty.</param>
+    /// <param name="schoolId">The school identifier. Must not be empty.</param>
+    /// <param name="roleId">The role identifier. Must not be empty.</param>
+    /// <exception cref="ArgumentException">Thrown when any of the identifiers are empty.</exception>
     public UserRoleAssignment(Guid profileId, Guid schoolId, Guid roleId)
     {
+        Guard.Against.Default(profileId, nameof(profileId));
+        Guard.Against.Default(schoolId, nameof(schoolId));
+        Guard.Against.Default(roleId, nameof(roleId));
+
         ProfileId = profileId;
         SchoolId = schoolId;
         RoleId = roleId;

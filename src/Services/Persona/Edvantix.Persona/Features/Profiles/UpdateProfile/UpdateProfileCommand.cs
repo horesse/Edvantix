@@ -23,11 +23,11 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var accountId = provider.GetUserId();
+        var profileId = provider.GetProfileIdOrError();
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
         var skillRepo = provider.GetRequiredService<ISkillRepository>();
 
-        var spec = new ProfileByAccountIdSpec(accountId, withDetails: true);
+        var spec = ProfileSpecification.ForWrite(profileId);
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");
@@ -90,8 +90,10 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
 
         foreach (var name in uniqueNames)
         {
+            var spec = new SkillSpecification(name);
+
             var skill =
-                await skillRepo.FindByNameAsync(name, cancellationToken)
+                await skillRepo.FindAsync(spec, cancellationToken)
                 ?? await skillRepo.AddAsync(new Skill(name), cancellationToken);
 
             skillIds.Add(skill.Id);

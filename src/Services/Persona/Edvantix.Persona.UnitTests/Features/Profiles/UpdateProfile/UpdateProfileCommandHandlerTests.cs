@@ -111,7 +111,9 @@ public sealed class UpdateProfileCommandHandlerTests
             .Setup(m => m.Map(It.IsAny<Profile>()))
             .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
-            .Setup(r => r.FindByNameAsync("C#", It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(existingSkill);
 
         var command = BuildCommand(skills: ["C#"]);
@@ -119,7 +121,7 @@ public sealed class UpdateProfileCommandHandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         _skillRepoMock.Verify(
-            r => r.FindByNameAsync("C#", It.IsAny<CancellationToken>()),
+            r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
         _skillRepoMock.Verify(
@@ -146,7 +148,9 @@ public sealed class UpdateProfileCommandHandlerTests
             .Setup(m => m.Map(It.IsAny<Profile>()))
             .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
-            .Setup(r => r.FindByNameAsync("Rust", It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((Skill?)null);
         _skillRepoMock
             .Setup(r => r.AddAsync(It.IsAny<Skill>(), It.IsAny<CancellationToken>()))
@@ -180,7 +184,9 @@ public sealed class UpdateProfileCommandHandlerTests
             .Setup(m => m.Map(It.IsAny<Profile>()))
             .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
-            .Setup(r => r.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(existingSkill);
 
         // "golang", "GoLang", "GOLANG" — три дубликата
@@ -189,7 +195,7 @@ public sealed class UpdateProfileCommandHandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         _skillRepoMock.Verify(
-            r => r.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
+            r => r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
         profile.Skills.ShouldHaveSingleItem();
@@ -208,9 +214,9 @@ public sealed class UpdateProfileCommandHandlerTests
     {
         var providerMock = new Mock<IServiceProvider>();
         providerMock.SetupUser(accountId);
-        providerMock.SetupService<IProfileRepository>(_profileRepoMock.Object);
-        providerMock.SetupService<ISkillRepository>(_skillRepoMock.Object);
-        providerMock.SetupService<IMapper<Profile, ProfileDetailsModel>>(_mapperMock.Object);
+        providerMock.SetupService(_profileRepoMock.Object);
+        providerMock.SetupService(_skillRepoMock.Object);
+        providerMock.SetupService(_mapperMock.Object);
 
         return new UpdateProfileCommandHandler(providerMock.Object);
     }

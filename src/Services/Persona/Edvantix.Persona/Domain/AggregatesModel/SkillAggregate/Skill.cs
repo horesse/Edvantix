@@ -12,7 +12,7 @@ public sealed class Skill() : Entity
     internal Skill(string name)
         : this()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
         Name = name.Trim();
     }
 

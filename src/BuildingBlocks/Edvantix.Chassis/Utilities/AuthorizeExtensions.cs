@@ -46,7 +46,7 @@ public static class AuthorizeExtensions
         public Guid? TryGetProfileId()
         {
             var claimsPrincipal = provider.GetService<ClaimsPrincipal>();
-            var value = claimsPrincipal?.GetClaimValue(KeycloakClaimTypes.ProfileId);
+            var value = claimsPrincipal?.GetClaimValue(KeycloakClaimTypes.Profile);
 
             return Guid.TryParse(value, out var id) ? id : null;
         }

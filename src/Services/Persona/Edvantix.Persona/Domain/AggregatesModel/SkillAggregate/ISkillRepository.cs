@@ -17,9 +17,6 @@ public interface ISkillRepository : IRepository<Skill>
         CancellationToken cancellationToken = default
     );
 
-    /// <summary>Ищет навык по точному имени без учёта регистра.</summary>
-    Task<Skill?> FindByNameAsync(string name, CancellationToken cancellationToken = default);
-
     /// <summary>Проверяет, используется ли навык хотя бы одним профилем.</summary>
     Task<bool> IsUsedByAnyProfileAsync(Guid skillId, CancellationToken cancellationToken = default);
 

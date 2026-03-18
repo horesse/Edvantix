@@ -6,12 +6,10 @@ namespace Edvantix.Persona.Features.Profiles.GetProfile;
 /// Запрос краткого профиля. Приоритет идентификаторов:
 /// <list type="number">
 ///   <item><see cref="ProfileId"/> — если задан.</item>
-///   <item><see cref="AccountId"/> — если задан.</item>
 ///   <item>AccountId текущего аутентифицированного пользователя — иначе.</item>
 /// </list>
 /// </summary>
-public sealed record GetProfileQuery(Guid? ProfileId = null, Guid? AccountId = null)
-    : IQuery<ProfileViewModel>;
+public sealed record GetProfileQuery(Guid? ProfileId = null) : IQuery<ProfileViewModel>;
 
 public sealed class GetProfileQueryHandler(IServiceProvider provider)
     : IQueryHandler<GetProfileQuery, ProfileViewModel>
@@ -24,10 +22,12 @@ public sealed class GetProfileQueryHandler(IServiceProvider provider)
         var profileRepo = provider.GetRequiredService<IProfileRepository>();
         var mapper = provider.GetRequiredService<IMapper<Profile, ProfileViewModel>>();
 
-        ISpecification<Profile> spec =
-            request.ProfileId.HasValue ? new ProfileByIdSpec(request.ProfileId.Value)
-            : request.AccountId.HasValue ? new ProfileByAccountIdSpec(request.AccountId.Value)
-            : new ProfileByAccountIdSpec(provider.GetUserId());
+        var profileId = request.ProfileId ?? provider.TryGetProfileId();
+
+        if (!profileId.HasValue || profileId == Guid.Empty)
+            throw new NotFoundException("Профиль не найден.");
+
+        var spec = ProfileSpecification.Minimal(profileId.Value);
 
         var profile =
             await profileRepo.FindAsync(spec, cancellationToken)

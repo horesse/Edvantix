@@ -5,8 +5,10 @@ using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Organizations.Configurations;
+using Edvantix.Organizations.Grpc;
 using Edvantix.Organizations.Infrastructure;
 using Edvantix.Organizations.Infrastructure.EventServices;
+using Edvantix.Organizations.Infrastructure.Seeding;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -102,5 +104,12 @@ internal static class Extensions
         );
 
         services.AddKeycloakTokenIntrospection();
+
+        // Wire Persona gRPC client for profileId validation in role assignments
+        builder.AddGrpcServices();
+
+        // Seed Organizations' own permissions directly into the DB on startup.
+        // Using IHostedService (not the HTTP endpoint) avoids the self-calling race condition.
+        services.AddHostedService<PermissionSeeder>();
     }
 }

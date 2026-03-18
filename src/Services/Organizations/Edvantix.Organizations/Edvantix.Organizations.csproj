@@ -3,11 +3,16 @@
     <SuppressCheckGrpcNetClientFactoryVersion>true</SuppressCheckGrpcNetClientFactoryVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
+    <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="Mediator.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="Grpc\Protos\persona\v1\profile.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

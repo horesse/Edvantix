@@ -12,11 +12,21 @@ public abstract class ArchUnitBaseTest : BaseTest
             PersonaAssembly,
             NotificationAssembly,
             SchedulerAssembly,
+            OrganizationsAssembly,
             ChassisAssembly,
             ConstantsAssembly,
             SharedKernelAssembly
         )
         .Build();
+
+    protected static readonly IObjectProvider<IType> OrganizationsServiceTypes =
+        ArchRuleDefinition
+            .Types()
+            .That()
+            .ResideInAssembly(OrganizationsAssembly)
+            .And()
+            .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+            .As(nameof(Organizations));
 
     protected static readonly IObjectProvider<IType> BlogServiceTypes = ArchRuleDefinition
         .Types()
@@ -82,6 +92,7 @@ public abstract class ArchUnitBaseTest : BaseTest
             nameof(Persona) => PersonaServiceTypes,
             nameof(Notification) => NotificationServiceTypes,
             nameof(Scheduler) => SchedulerServiceTypes,
+            nameof(Organizations) => OrganizationsServiceTypes,
             nameof(Chassis) => ChassisServiceTypes,
             nameof(Constants) => ConstantsServiceTypes,
             nameof(SharedKernel) => SharedKernelServiceTypes,

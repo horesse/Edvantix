@@ -3,6 +3,7 @@ using Edvantix.Blog;
 using Edvantix.Chassis;
 using Edvantix.Constants;
 using Edvantix.Notification;
+using Edvantix.Organizations;
 using Edvantix.Persona;
 using Edvantix.Scheduler;
 using Edvantix.SharedKernel;
@@ -16,6 +17,8 @@ public abstract class BaseTest
     protected static readonly Assembly NotificationAssembly =
         typeof(INotificationApiMarker).Assembly;
     protected static readonly Assembly SchedulerAssembly = typeof(ISchedulerApiMarker).Assembly;
+    protected static readonly Assembly OrganizationsAssembly =
+        typeof(IOrganizationsApiMarker).Assembly;
     protected static readonly Assembly ChassisAssembly = typeof(IChassisMarker).Assembly;
     protected static readonly Assembly ConstantsAssembly = typeof(IConstantsMarker).Assembly;
     protected static readonly Assembly SharedKernelAssembly = typeof(ISharedKernelMarker).Assembly;

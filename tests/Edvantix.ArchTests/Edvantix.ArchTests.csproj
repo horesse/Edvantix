@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup Label="Architecture Test">
     <PackageReference Include="TngTech.ArchUnitNET.TUnit" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
@@ -14,5 +15,6 @@
     <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.Chassis\Edvantix.Chassis.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.SharedKernel\Edvantix.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\src\Services\Organizations\Edvantix.Organizations\Edvantix.Organizations.csproj" />
   </ItemGroup>
 </Project>

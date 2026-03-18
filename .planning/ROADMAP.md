@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Organizations — RBAC Core | 2/4 | In Progress|  |
+| 1. Organizations — RBAC Core | 3/4 | In Progress|  |
 | 2. Organizations — Permission Cache | 0/3 | Not started | - |
 | 3. Scheduling — Slots and Views | 0/4 | Not started | - |
 | 4. Scheduling — Attendance and Outbox | 0/2 | Not started | - |

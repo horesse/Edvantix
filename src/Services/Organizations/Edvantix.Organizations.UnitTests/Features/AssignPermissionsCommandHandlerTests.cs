@@ -38,8 +38,7 @@ public sealed class AssignPermissionsCommandHandlerTests
 
         var permId1 = Guid.CreateVersion7();
         var permId2 = Guid.CreateVersion7();
-        var permissions = new List<Permission>(
-        [
+        var permissions = new List<Permission>([
             CreatePermission("scheduling:read", permId1),
             CreatePermission("scheduling:write", permId2),
         ]);
@@ -48,7 +47,9 @@ public sealed class AssignPermissionsCommandHandlerTests
             .Setup(r => r.FindByIdAsync(roleId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(role);
         _permissionRepositoryMock
-            .Setup(p => p.GetByNamesAsync(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
+            .Setup(p =>
+                p.GetByNamesAsync(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(permissions);
 
         var command = new AssignPermissionsCommand
@@ -60,7 +61,8 @@ public sealed class AssignPermissionsCommandHandlerTests
         await _handler.Handle(command, CancellationToken.None);
 
         role.Permissions.Count.ShouldBe(2);
-        role.Permissions.Select(p => p.PermissionId).ShouldBe([permId1, permId2], ignoreOrder: true);
+        role.Permissions.Select(p => p.PermissionId)
+            .ShouldBe([permId1, permId2], ignoreOrder: true);
     }
 
     [Test]
@@ -78,7 +80,9 @@ public sealed class AssignPermissionsCommandHandlerTests
             .Setup(r => r.FindByIdAsync(roleId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(role);
         _permissionRepositoryMock
-            .Setup(p => p.GetByNamesAsync(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>()))
+            .Setup(p =>
+                p.GetByNamesAsync(It.IsAny<IEnumerable<string>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(permissions);
 
         var command = new AssignPermissionsCommand

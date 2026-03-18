@@ -15,7 +15,11 @@ public sealed class AssignPermissionsEndpoint
                     CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
-                        new AssignPermissionsCommand { RoleId = id, PermissionNames = body.PermissionNames },
+                        new AssignPermissionsCommand
+                        {
+                            RoleId = id,
+                            PermissionNames = body.PermissionNames,
+                        },
                         sender,
                         cancellationToken
                     )

@@ -21,7 +21,9 @@ public sealed class GetRolePermissionsEndpoint
             .WithName("GetRolePermissions")
             .WithTags("Roles")
             .WithSummary("Get role permissions")
-            .WithDescription("Returns all permissions currently assigned to the role, ordered by name.")
+            .WithDescription(
+                "Returns all permissions currently assigned to the role, ordered by name."
+            )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

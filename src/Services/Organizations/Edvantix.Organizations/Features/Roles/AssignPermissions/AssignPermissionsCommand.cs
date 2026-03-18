@@ -48,10 +48,10 @@ public sealed class AssignPermissionsCommandHandler(
             cancellationToken
         );
 
-        var foundNames = permissions.Select(p => p.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var missingNames = request.PermissionNames
-            .Where(n => !foundNames.Contains(n))
-            .ToList();
+        var foundNames = permissions
+            .Select(p => p.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var missingNames = request.PermissionNames.Where(n => !foundNames.Contains(n)).ToList();
 
         if (missingNames.Count > 0)
         {

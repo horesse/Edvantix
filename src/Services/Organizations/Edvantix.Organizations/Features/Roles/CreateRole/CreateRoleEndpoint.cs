@@ -21,7 +21,9 @@ public sealed class CreateRoleEndpoint
             .WithName("CreateRole")
             .WithTags("Roles")
             .WithSummary("Create a role")
-            .WithDescription("Creates a new named role scoped to the tenant from the X-School-Id header.")
+            .WithDescription(
+                "Creates a new named role scoped to the tenant from the X-School-Id header."
+            )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

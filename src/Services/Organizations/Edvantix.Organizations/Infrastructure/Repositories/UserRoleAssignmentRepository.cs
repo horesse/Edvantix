@@ -29,8 +29,8 @@ public sealed class UserRoleAssignmentRepository(OrganizationsDbContext context)
         Guid profileId,
         CancellationToken cancellationToken = default
     ) =>
-        await context.UserRoleAssignments
-            .Where(a => a.ProfileId == profileId)
+        await context
+            .UserRoleAssignments.Where(a => a.ProfileId == profileId)
             .ToListAsync(cancellationToken);
 
     /// <inheritdoc/>

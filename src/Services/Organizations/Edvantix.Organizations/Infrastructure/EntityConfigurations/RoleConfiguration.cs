@@ -34,7 +34,8 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         // Use backing field for Permissions collection so EF Core tracks changes made
         // via AssignPermission/RemovePermission/SetPermissions without exposing a setter.
-        builder.Metadata.FindNavigation(nameof(Role.Permissions))!
+        builder
+            .Metadata.FindNavigation(nameof(Role.Permissions))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

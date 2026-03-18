@@ -1,4 +1,3 @@
-
 namespace Edvantix.Organizations.Features.Roles.UpdateRole;
 
 /// <summary>Command to rename an existing role.</summary>
@@ -13,9 +12,13 @@ public sealed class UpdateRoleCommandHandler(IRoleRepository roleRepository)
     : ICommandHandler<UpdateRoleCommand, Unit>
 {
     /// <inheritdoc/>
-    public async ValueTask<Unit> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(
+        UpdateRoleCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        var role = await roleRepository.FindByIdAsync(request.Id, cancellationToken)
+        var role =
+            await roleRepository.FindByIdAsync(request.Id, cancellationToken)
             ?? throw NotFoundException.For<Role>(request.Id);
 
         role.UpdateName(request.Name);

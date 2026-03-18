@@ -25,7 +25,9 @@ public sealed class UpdateRoleEndpoint : IEndpoint<NoContent, UpdateRoleCommand,
             .WithName("UpdateRole")
             .WithTags("Roles")
             .WithSummary("Update role name")
-            .WithDescription("Renames an existing role. The role must belong to the current tenant.")
+            .WithDescription(
+                "Renames an existing role. The role must belong to the current tenant."
+            )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

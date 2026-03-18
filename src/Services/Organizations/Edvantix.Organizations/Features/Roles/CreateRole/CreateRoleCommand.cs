@@ -13,7 +13,10 @@ public sealed class CreateRoleCommandHandler(
 ) : ICommandHandler<CreateRoleCommand, Guid>
 {
     /// <inheritdoc/>
-    public async ValueTask<Guid> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Guid> Handle(
+        CreateRoleCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var role = new Role(request.Name, tenantContext.SchoolId);
         await roleRepository.AddAsync(role, cancellationToken);

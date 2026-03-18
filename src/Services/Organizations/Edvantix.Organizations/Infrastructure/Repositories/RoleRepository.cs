@@ -13,9 +13,12 @@ public sealed class RoleRepository(OrganizationsDbContext context) : IRoleReposi
     public IUnitOfWork UnitOfWork => context;
 
     /// <inheritdoc/>
-    public async Task<Role?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
-        await context.Roles
-            .Include(r => r.Permissions)
+    public async Task<Role?> FindByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context
+            .Roles.Include(r => r.Permissions)
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
     /// <inheritdoc/>

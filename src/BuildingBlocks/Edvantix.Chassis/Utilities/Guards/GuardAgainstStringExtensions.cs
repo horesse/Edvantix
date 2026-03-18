@@ -35,7 +35,10 @@ public static class GuardAgainstStringExtensions
         {
             if (value.Equals(default(T)))
             {
-                throw new ArgumentException($"Parameter [{parameterName}] is default value for type {typeof(T).Name}.", parameterName);
+                throw new ArgumentException(
+                    $"Parameter [{parameterName}] is default value for type {typeof(T).Name}.",
+                    parameterName
+                );
             }
 
             return value;

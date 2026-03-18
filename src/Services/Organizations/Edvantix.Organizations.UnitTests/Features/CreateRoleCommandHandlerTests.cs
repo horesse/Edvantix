@@ -22,17 +22,22 @@ public sealed class CreateRoleCommandHandlerTests
         _roleRepositoryMock.SetupGet(r => r.UnitOfWork).Returns(_unitOfWorkMock.Object);
         _roleRepositoryMock
             .Setup(r => r.AddAsync(It.IsAny<Role>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Role r, CancellationToken _) =>
-            {
-                // Simulate EF Core key generation that occurs before SaveChanges in the real repository
-                r.Id = Guid.CreateVersion7();
-                return r;
-            });
+            .ReturnsAsync(
+                (Role r, CancellationToken _) =>
+                {
+                    // Simulate EF Core key generation that occurs before SaveChanges in the real repository
+                    r.Id = Guid.CreateVersion7();
+                    return r;
+                }
+            );
 
         _tenantContextMock = new Mock<ITenantContext>();
         _tenantContextMock.SetupGet(t => t.SchoolId).Returns(_schoolId);
 
-        _handler = new CreateRoleCommandHandler(_roleRepositoryMock.Object, _tenantContextMock.Object);
+        _handler = new CreateRoleCommandHandler(
+            _roleRepositoryMock.Object,
+            _tenantContextMock.Object
+        );
     }
 
     [Test]
@@ -43,7 +48,11 @@ public sealed class CreateRoleCommandHandlerTests
         await _handler.Handle(command, CancellationToken.None);
 
         _roleRepositoryMock.Verify(
-            r => r.AddAsync(It.Is<Role>(role => role.SchoolId == _schoolId), It.IsAny<CancellationToken>()),
+            r =>
+                r.AddAsync(
+                    It.Is<Role>(role => role.SchoolId == _schoolId),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

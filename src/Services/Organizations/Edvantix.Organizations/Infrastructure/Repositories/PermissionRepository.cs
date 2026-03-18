@@ -16,13 +16,12 @@ public sealed class PermissionRepository(OrganizationsDbContext context) : IPerm
         IEnumerable<string> names,
         CancellationToken cancellationToken = default
     ) =>
-        await context.Permissions
-            .Where(p => names.Contains(p.Name))
-            .ToListAsync(cancellationToken);
+        await context.Permissions.Where(p => names.Contains(p.Name)).ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<List<Permission>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        await context.Permissions.OrderBy(p => p.Name).ToListAsync(cancellationToken);
+    public async Task<List<Permission>> GetAllAsync(
+        CancellationToken cancellationToken = default
+    ) => await context.Permissions.OrderBy(p => p.Name).ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
     public async Task UpsertAsync(
@@ -33,8 +32,8 @@ public sealed class PermissionRepository(OrganizationsDbContext context) : IPerm
         // Materialise names to avoid multiple enumerations across the two operations.
         var nameList = names.ToList();
 
-        var existingNames = await context.Permissions
-            .Where(p => nameList.Contains(p.Name))
+        var existingNames = await context
+            .Permissions.Where(p => nameList.Contains(p.Name))
             .Select(p => p.Name)
             .ToListAsync(cancellationToken);
 

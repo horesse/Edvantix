@@ -17,9 +17,13 @@ public sealed class DeleteRoleCommandHandler(
 ) : ICommandHandler<DeleteRoleCommand, Unit>
 {
     /// <inheritdoc/>
-    public async ValueTask<Unit> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(
+        DeleteRoleCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        var role = await roleRepository.FindByIdAsync(request.Id, cancellationToken)
+        var role =
+            await roleRepository.FindByIdAsync(request.Id, cancellationToken)
             ?? throw NotFoundException.For<Role>(request.Id);
 
         // Per locked decision: 409 Conflict if role has active assignments.

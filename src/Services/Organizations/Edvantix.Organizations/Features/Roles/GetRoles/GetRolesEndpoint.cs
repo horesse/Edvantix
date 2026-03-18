@@ -15,7 +15,9 @@ public sealed class GetRolesEndpoint : IEndpoint<Ok<List<RoleListItem>>, ISender
             .WithName("GetRoles")
             .WithTags("Roles")
             .WithSummary("List roles")
-            .WithDescription("Returns all roles for the current tenant. Does not include permissions.")
+            .WithDescription(
+                "Returns all roles for the current tenant. Does not include permissions."
+            )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

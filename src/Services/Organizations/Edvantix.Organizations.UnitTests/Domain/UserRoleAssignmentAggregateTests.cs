@@ -19,7 +19,8 @@ public sealed class UserRoleAssignmentAggregateTests
     [Test]
     public void GivenEmptyProfileId_WhenCreatingAssignment_ThenThrowsArgumentException()
     {
-        var act = () => new UserRoleAssignment(Guid.Empty, Guid.CreateVersion7(), Guid.CreateVersion7());
+        var act = () =>
+            new UserRoleAssignment(Guid.Empty, Guid.CreateVersion7(), Guid.CreateVersion7());
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -27,7 +28,8 @@ public sealed class UserRoleAssignmentAggregateTests
     [Test]
     public void GivenEmptySchoolId_WhenCreatingAssignment_ThenThrowsArgumentException()
     {
-        var act = () => new UserRoleAssignment(Guid.CreateVersion7(), Guid.Empty, Guid.CreateVersion7());
+        var act = () =>
+            new UserRoleAssignment(Guid.CreateVersion7(), Guid.Empty, Guid.CreateVersion7());
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -35,7 +37,8 @@ public sealed class UserRoleAssignmentAggregateTests
     [Test]
     public void GivenEmptyRoleId_WhenCreatingAssignment_ThenThrowsArgumentException()
     {
-        var act = () => new UserRoleAssignment(Guid.CreateVersion7(), Guid.CreateVersion7(), Guid.Empty);
+        var act = () =>
+            new UserRoleAssignment(Guid.CreateVersion7(), Guid.CreateVersion7(), Guid.Empty);
 
         act.ShouldThrow<ArgumentException>();
     }

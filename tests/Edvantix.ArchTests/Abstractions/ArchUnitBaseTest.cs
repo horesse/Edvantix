@@ -19,14 +19,13 @@ public abstract class ArchUnitBaseTest : BaseTest
         )
         .Build();
 
-    protected static readonly IObjectProvider<IType> OrganizationsServiceTypes =
-        ArchRuleDefinition
-            .Types()
-            .That()
-            .ResideInAssembly(OrganizationsAssembly)
-            .And()
-            .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
-            .As(nameof(Organizations));
+    protected static readonly IObjectProvider<IType> OrganizationsServiceTypes = ArchRuleDefinition
+        .Types()
+        .That()
+        .ResideInAssembly(OrganizationsAssembly)
+        .And()
+        .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .As(nameof(Organizations));
 
     protected static readonly IObjectProvider<IType> BlogServiceTypes = ArchRuleDefinition
         .Types()

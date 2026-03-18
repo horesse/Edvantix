@@ -37,11 +37,10 @@ public sealed class TenantIsolationTests : BaseTest
             .ToList();
 
         // Assert: at least one ITenanted entity must exist (sanity check for future regressions)
-        tenantedEntityTypes
-            .Count.ShouldBeGreaterThan(
-                0,
-                "Expected at least one ITenanted entity in OrganizationsDbContext"
-            );
+        tenantedEntityTypes.Count.ShouldBeGreaterThan(
+            0,
+            "Expected at least one ITenanted entity in OrganizationsDbContext"
+        );
 
         foreach (var entityType in tenantedEntityTypes)
         {

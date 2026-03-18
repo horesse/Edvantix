@@ -1,59 +1,51 @@
 namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
-/// <summary>Спецификация поиска профиля по внутреннему ID.</summary>
-public sealed class ProfileByIdSpec : Specification<Profile>
+/// <summary>
+/// Спецификация профиля. Используй фабричные методы вместо прямого конструктора:
+/// <list type="bullet">
+///   <item><see cref="ForRead"/> — read-only, все навигации включая <c>Skills → Skill</c> (для запросов → <c>ProfileDetailsModel</c>).</item>
+///   <item><see cref="ForWrite"/> — с трекингом, коллекции без <c>ThenInclude</c> (команды работают только с ID).</item>
+///   <item><see cref="Minimal"/> — read-only, только <c>FullName</c> (для запросов → <c>ProfileViewModel</c>).</item>
+/// </list>
+/// </summary>
+public sealed class ProfileSpecification : Specification<Profile>
 {
-    /// <param name="id">Внутренний ID профиля.</param>
-    /// <param name="withDetails">
-    /// Загружать контакты, историю занятости и образование.
-    /// По умолчанию загружается только <see cref="Profile.FullName"/>.
-    /// </param>
-    public ProfileByIdSpec(Guid id, bool withDetails = false)
+    private ProfileSpecification(Guid profileId)
     {
-        Query.Where(p => p.Id == id);
-        ApplyIncludes(withDetails);
+        Query.OrderBy(x => x.FullName.LastName).Where(p => p.Id == profileId);
     }
 
-    private void ApplyIncludes(bool withDetails)
+    /// <summary>Read-only, все навигации — для запросов, возвращающих <c>ProfileDetailsModel</c>.</summary>
+    public static ProfileSpecification ForRead(Guid profileId)
     {
-        Query.Include(p => p.FullName);
+        var spec = new ProfileSpecification(profileId);
 
-        if (!withDetails)
-            return;
+        IncludeCollections(spec.Query).Include(p => p.Skills).ThenInclude(s => s.Skill);
 
-        Query.Include(p => p.Contacts);
-        Query.Include(p => p.Educations);
-        Query.Include(p => p.EmploymentHistories);
-        // Загружаем навыки вместе с данными из каталога для маппинга в SkillModel
-        Query.Include(p => p.Skills).ThenInclude(s => s.Skill);
-    }
-}
-
-/// <summary>Спецификация поиска профиля по AccountId (GUID аккаунта Keycloak).</summary>
-public sealed class ProfileByAccountIdSpec : Specification<Profile>
-{
-    /// <param name="accountId">GUID аккаунта пользователя в Keycloak.</param>
-    /// <param name="withDetails">
-    /// Загружать контакты, историю занятости, образование и навыки.
-    /// По умолчанию загружается только <see cref="Profile.FullName"/>.
-    /// </param>
-    public ProfileByAccountIdSpec(Guid accountId, bool withDetails = false)
-    {
-        Query.Where(p => p.AccountId == accountId);
-        ApplyIncludes(withDetails);
+        return spec;
     }
 
-    private void ApplyIncludes(bool withDetails)
+    /// <summary>
+    /// С трекингом и коллекциями — для команд, изменяющих вложенные сущности.
+    /// <c>Skills → Skill</c> не загружается: команды работают только с <c>SkillId</c>.
+    /// </summary>
+    public static ProfileSpecification ForWrite(Guid profileId)
     {
-        Query.Include(p => p.FullName);
+        var spec = new ProfileSpecification(profileId);
 
-        if (!withDetails)
-            return;
+        IncludeCollections(spec.Query).AsTracking().Include(p => p.Skills);
 
-        Query.Include(p => p.Contacts);
-        Query.Include(p => p.Educations);
-        Query.Include(p => p.EmploymentHistories);
-        // Загружаем навыки вместе с данными из каталога для маппинга в SkillModel
-        Query.Include(p => p.Skills).ThenInclude(s => s.Skill);
+        return spec;
     }
+
+    /// <summary>Read-only, только <c>FullName</c> — для запросов, возвращающих <c>ProfileViewModel</c>.</summary>
+    public static ProfileSpecification Minimal(Guid profileId) => new(profileId);
+
+    private static ISpecificationBuilder<Profile> IncludeCollections(
+        ISpecificationBuilder<Profile> query
+    ) =>
+        query
+            .Include(p => p.Contacts)
+            .Include(p => p.Educations)
+            .Include(p => p.EmploymentHistories);
 }

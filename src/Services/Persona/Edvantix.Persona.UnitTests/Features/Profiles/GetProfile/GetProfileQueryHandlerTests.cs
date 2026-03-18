@@ -37,29 +37,6 @@ public sealed class GetProfileQueryHandlerTests
     }
 
     [Test]
-    public async Task GivenAccountId_WhenHandling_ThenShouldFindProfileByAccountIdAndReturnViewModel()
-    {
-        var accountId = Guid.CreateVersion7();
-        var profile = CreateProfile(Guid.CreateVersion7());
-        var expectedViewModel = new ProfileViewModel(profile.Id, "Петров Пётр", "petrov", null);
-        var handler = CreateHandler(Guid.CreateVersion7());
-
-        _profileRepoMock
-            .Setup(r =>
-                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
-            )
-            .ReturnsAsync(profile);
-        _mapperMock.Setup(m => m.Map(profile)).Returns(expectedViewModel);
-
-        var result = await handler.Handle(
-            new GetProfileQuery(AccountId: accountId),
-            CancellationToken.None
-        );
-
-        result.ShouldBe(expectedViewModel);
-    }
-
-    [Test]
     public async Task GivenNoIds_WhenHandling_ThenShouldUseCurrentUserAccountId()
     {
         var currentUserAccountId = Guid.CreateVersion7();

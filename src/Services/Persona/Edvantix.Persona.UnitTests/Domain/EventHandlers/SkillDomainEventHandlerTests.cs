@@ -12,7 +12,10 @@ public sealed class SkillDomainEventHandlerTests
     public SkillDomainEventHandlerTests()
     {
         _skillRepoMock.Setup(r => r.UnitOfWork).Returns(_unitOfWorkMock.Object);
-        _handler = new(_skillRepoMock.Object, Mock.Of<ILogger<SkillDomainEventHandler>>());
+        _handler = new SkillDomainEventHandler(
+            _skillRepoMock.Object,
+            Mock.Of<ILogger<SkillDomainEventHandler>>()
+        );
     }
 
     [Test]

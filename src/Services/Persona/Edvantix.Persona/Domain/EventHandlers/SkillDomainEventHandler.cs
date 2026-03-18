@@ -2,11 +2,6 @@ using Edvantix.Persona.Domain.Events;
 
 namespace Edvantix.Persona.Domain.EventHandlers;
 
-/// <summary>
-/// Обрабатывает доменное событие удаления навыка из профиля.
-/// Удаляет навык из глобального каталога, если он больше не используется ни одним профилем.
-/// Событие срабатывает ПОСЛЕ сохранения профиля, поэтому проверка корректна.
-/// </summary>
 public sealed class SkillDomainEventHandler(
     ISkillRepository skillRepository,
     ILogger<SkillDomainEventHandler> logger
@@ -26,7 +21,7 @@ public sealed class SkillDomainEventHandler(
             return;
 
         var skill = await skillRepository.FindAsync(
-            new SkillByIdSpec(notification.SkillId),
+            new SkillSpecification(notification.SkillId),
             cancellationToken
         );
 

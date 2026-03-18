@@ -5,12 +5,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace Edvantix.Chassis.Security.Keycloak;
 
-public static class KeycloakClaimsTransformationExtensions
+public static class Extensions
 {
-    /// <summary>
-    ///     Adds an <see cref="IClaimsTransformation" /> that transforms Keycloak resource access roles claims into regular
-    ///     role claims.
-    /// </summary>
     public static IHostApplicationBuilder WithKeycloakClaimsTransformation(
         this IHostApplicationBuilder builder
     )

@@ -1,3 +1,5 @@
+using Edvantix.Chassis.Security.Keycloak;
+
 namespace Edvantix.Persona.UnitTests.Helpers;
 
 /// <summary>
@@ -15,7 +17,8 @@ internal static class ServiceProviderHelper
             new ClaimsIdentity(
                 [
                     new Claim(ClaimTypes.NameIdentifier, accountId.ToString()),
-                    new Claim("preferred_username", login),
+                    new Claim(KeycloakClaimTypes.PreferredUsername, login),
+                    new Claim(KeycloakClaimTypes.Profile, accountId.ToString()),
                 ],
                 "Bearer"
             )

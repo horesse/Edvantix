@@ -33,7 +33,7 @@ public sealed class SkillRepository(PersonaDbContext context) : ISkillRepository
     {
         var normalized = name.Trim().ToLower();
         return await context.Skills.FirstOrDefaultAsync(
-            s => s.Name.Equals(normalized, StringComparison.CurrentCultureIgnoreCase),
+            s => s.Name.ToLower() == normalized,
             cancellationToken
         );
     }

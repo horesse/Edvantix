@@ -22,7 +22,9 @@ public sealed class ProfileService(IProfileRepository profileRepo, ILogger<Profi
     {
         try
         {
-            ISpecification<Profile> spec = new ProfileByIdSpec(Guid.Parse(request.ProfileId));
+            ISpecification<Profile> spec = ProfileSpecification.Minimal(
+                Guid.Parse(request.ProfileId)
+            );
 
             var profile = await profileRepo.FindAsync(spec, context.CancellationToken);
 

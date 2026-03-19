@@ -33,10 +33,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: ITenantContext abstraction, EF Core query filter convention, and architecture test
-- [ ] 01-02: Role and Permission domain model (aggregates, value objects, EF Core configuration)
-- [ ] 01-03: Manage roles — create, read, update, delete (commands, queries, API endpoints)
-- [ ] 01-04: User-role assignment — assign and revoke roles; permission string registration on startup
+- [x] 01-01: ITenantContext abstraction, EF Core query filter convention, and architecture test
+- [x] 01-02: Role and Permission domain model (aggregates, value objects, EF Core configuration)
+- [x] 01-03: Manage roles — create, read, update, delete (commands, queries, API endpoints)
+- [x] 01-04: User-role assignment — assign and revoke roles; permission string registration on startup
 
 ### Phase 2: Organizations — Permission Cache
 **Goal**: Downstream services can resolve a user's permissions for a school in a single cached call, and the cache is evicted within seconds when a role or assignment changes
@@ -46,12 +46,12 @@ Plans:
   1. Any service can call CheckPermission(userId, schoolId, permission) via gRPC and receive a correct bool response
   2. A permission check for a user/school combination that was already fetched does not issue a second database query within the cache TTL
   3. When an owner revokes a role from a user, a downstream service's cached permission for that user is invalidated and reflects the change on the next check (within the TTL fallback, maximum 60 seconds)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: gRPC CheckPermission service and GET /permissions endpoint for cache priming
-- [ ] 02-02: HybridCache layer (L1 in-memory + L2 Redis) with tag-based eviction
-- [ ] 02-03: RoleAssignmentChanged and PermissionRevoked integration events via MassTransit outbox; downstream cache invalidation handler
+- [ ] 02-01-PLAN.md — gRPC CheckPermission server + GET /permissions endpoint + HybridCache wiring with Redis
+- [ ] 02-02-PLAN.md — Domain events on mutations + EventMapper + UserPermissionsInvalidated integration event + cache invalidation in command handlers
+- [ ] 02-03-PLAN.md — Chassis PermissionRequirement + PermissionRequirementHandler + AddPermissionAuthorization extension for downstream services
 
 ### Phase 3: Scheduling — Slots and Views
 **Goal**: Managers can build and manage lesson schedules, teachers see their own sessions, and students see their group lessons — all enforcing permissions via Organizations
@@ -105,7 +105,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|

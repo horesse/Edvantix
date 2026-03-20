@@ -1,4 +1,4 @@
-﻿name: Edvantix CI (.NET)
+name: Edvantix CI (.NET)
 run-name: .NET CI - ${{ github.event_name }} by ${{ github.actor }}
 
 on:
@@ -184,7 +184,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Azure Login
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}

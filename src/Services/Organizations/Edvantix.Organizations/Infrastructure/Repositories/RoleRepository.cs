@@ -33,5 +33,19 @@ public sealed class RoleRepository(OrganizationsDbContext context) : IRoleReposi
     }
 
     /// <inheritdoc/>
+    public async Task<List<Role>> GetBySchoolAsync(
+        Guid schoolId,
+        CancellationToken cancellationToken = default
+    ) =>
+        // IgnoreQueryFilters bypasses the combined tenant+soft-delete filter on Role.
+        // We re-apply the non-deleted and schoolId conditions explicitly to preserve
+        // data integrity for this gRPC-only query path.
+        await context
+            .Roles.IgnoreQueryFilters()
+            .Include(r => r.Permissions)
+            .Where(r => r.SchoolId == schoolId && !r.IsDeleted)
+            .ToListAsync(cancellationToken);
+
+    /// <inheritdoc/>
     public void Remove(Role role) => context.Roles.Remove(role);
 }

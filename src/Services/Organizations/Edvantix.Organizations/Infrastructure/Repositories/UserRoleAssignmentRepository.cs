@@ -50,6 +50,20 @@ public sealed class UserRoleAssignmentRepository(OrganizationsDbContext context)
     }
 
     /// <inheritdoc/>
+    public async Task<List<UserRoleAssignment>> GetByProfileAndSchoolAsync(
+        Guid profileId,
+        Guid schoolId,
+        CancellationToken cancellationToken = default
+    ) =>
+        // IgnoreQueryFilters bypasses the tenant HasQueryFilter on UserRoleAssignment.
+        // The schoolId is filtered explicitly so isolation guarantees are maintained —
+        // this method is only called from gRPC paths that receive schoolId directly.
+        await context
+            .UserRoleAssignments.IgnoreQueryFilters()
+            .Where(a => a.ProfileId == profileId && a.SchoolId == schoolId)
+            .ToListAsync(cancellationToken);
+
+    /// <inheritdoc/>
     public void Remove(UserRoleAssignment assignment) =>
         context.UserRoleAssignments.Remove(assignment);
 }

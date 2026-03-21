@@ -19,6 +19,17 @@ public interface IUserRoleAssignmentRepository : IRepository<UserRoleAssignment>
         CancellationToken cancellationToken = default
     );
 
+    /// <summary>
+    /// Returns all role assignments for the given profile in the specified school,
+    /// bypassing the tenant query filter. Used for gRPC calls that do not pass through
+    /// TenantMiddleware and therefore have no ambient tenant context.
+    /// </summary>
+    Task<List<UserRoleAssignment>> GetByProfileAndSchoolAsync(
+        Guid profileId,
+        Guid schoolId,
+        CancellationToken cancellationToken = default
+    );
+
     /// <summary>Returns true if any assignment references the given role — used before role deletion.</summary>
     Task<bool> ExistsByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default);
 

@@ -14,5 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="Grpc\Protos\persona\v1\profile.proto" GrpcServices="Client" />
+    <Protobuf Include="Grpc\Protos\organizations\v1\permissions.proto" GrpcServices="Server" />
   </ItemGroup>
 </Project>

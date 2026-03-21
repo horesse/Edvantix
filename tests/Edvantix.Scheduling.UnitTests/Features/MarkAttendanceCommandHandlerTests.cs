@@ -1,64 +1,106 @@
+using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Security.Tenant;
 using Edvantix.Scheduling.Domain.AggregatesModel.AttendanceAggregate;
+using Edvantix.Scheduling.Features.Attendance.MarkAttendance;
+using Shouldly;
 
 namespace Edvantix.Scheduling.UnitTests.Features;
 
 /// <summary>
-/// Wave 0 test stubs for MarkAttendanceCommandHandler.
-/// The handler does not exist yet — it is created in Plan 02.
-/// These stubs document the expected behavior and are skipped until the handler is implemented.
+/// Unit tests for <see cref="MarkAttendanceCommandHandler"/>.
+/// Verifies upsert logic: new record is added, existing record has status updated (not re-added).
 /// </summary>
 public sealed class MarkAttendanceCommandHandlerTests
 {
     private readonly Mock<IAttendanceRecordRepository> _repositoryMock = new();
     private readonly Mock<ITenantContext> _tenantContextMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+
+    public MarkAttendanceCommandHandlerTests()
+    {
+        _tenantContextMock.Setup(t => t.SchoolId).Returns(Guid.NewGuid());
+        _repositoryMock.Setup(r => r.UnitOfWork).Returns(_unitOfWorkMock.Object);
+        _unitOfWorkMock
+            .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+    }
 
     [Test]
-    [Skip("Plan 02 — handler not yet implemented")]
     public async Task GivenNoExistingRecord_WhenMarkingAttendance_ThenNewRecordIsAdded()
     {
-        // Stub: when no existing record, the handler should create a new AttendanceRecord
-        // and call repository.Add(record) followed by UnitOfWork.SaveEntitiesAsync.
+        var slotId = Guid.NewGuid();
+        var studentId = Guid.NewGuid();
+
         _repositoryMock
             .Setup(r =>
                 r.FindBySlotAndStudentAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<Guid>(),
+                    slotId,
+                    studentId,
                     It.IsAny<CancellationToken>()
                 )
             )
             .ReturnsAsync((AttendanceRecord?)null);
 
-        await Task.CompletedTask;
+        var command = new MarkAttendanceCommand(slotId, studentId, AttendanceStatus.Present);
+        var handler = new MarkAttendanceCommandHandler(_repositoryMock.Object, _tenantContextMock.Object);
 
-        // Will be completed in Plan 02 when handler is created.
+        await handler.Handle(command, CancellationToken.None);
+
+        // A new record must be added exactly once
+        _repositoryMock.Verify(
+            r => r.Add(It.Is<AttendanceRecord>(rec =>
+                rec.LessonSlotId == slotId &&
+                rec.StudentId == studentId &&
+                rec.Status == AttendanceStatus.Present)),
+            Times.Once
+        );
+
+        // SaveEntitiesAsync must be called exactly once
+        _unitOfWorkMock.Verify(
+            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Once
+        );
     }
 
     [Test]
-    [Skip("Plan 02 — handler not yet implemented")]
     public async Task GivenExistingRecord_WhenMarkingAttendance_ThenStatusIsUpdatedNotReAdded()
     {
-        // Stub: when an existing record is found, the handler should call record.UpdateStatus(newStatus)
-        // and NOT call repository.Add again. Only SaveEntitiesAsync is called.
+        var slotId = Guid.NewGuid();
+        var studentId = Guid.NewGuid();
+        var schoolId = _tenantContextMock.Object.SchoolId;
+
         var existingRecord = new AttendanceRecord(
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            schoolId,
+            slotId,
+            studentId,
             AttendanceStatus.Present
         );
 
         _repositoryMock
             .Setup(r =>
                 r.FindBySlotAndStudentAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<Guid>(),
+                    slotId,
+                    studentId,
                     It.IsAny<CancellationToken>()
                 )
             )
             .ReturnsAsync(existingRecord);
 
-        await Task.CompletedTask;
+        var command = new MarkAttendanceCommand(slotId, studentId, AttendanceStatus.Absent);
+        var handler = new MarkAttendanceCommandHandler(_repositoryMock.Object, _tenantContextMock.Object);
 
-        // Will be completed in Plan 02 when handler is created.
+        await handler.Handle(command, CancellationToken.None);
+
+        // Add must NOT be called — the existing record is updated via EF change tracking
+        _repositoryMock.Verify(r => r.Add(It.IsAny<AttendanceRecord>()), Times.Never);
+
+        // SaveEntitiesAsync must be called exactly once
+        _unitOfWorkMock.Verify(
+            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Once
+        );
+
+        // The record's status should reflect the new value
+        existingRecord.Status.ShouldBe(AttendanceStatus.Absent);
     }
 }

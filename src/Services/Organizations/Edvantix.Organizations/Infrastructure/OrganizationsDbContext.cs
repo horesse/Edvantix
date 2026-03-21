@@ -1,3 +1,4 @@
+using Edvantix.Organizations.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizations.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizations.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizations.Domain.AggregatesModel.RoleAggregate;
@@ -22,6 +23,9 @@ public sealed class OrganizationsDbContext(
 
     /// <summary>Gets the roles data set.</summary>
     public DbSet<Role> Roles => Set<Role>();
+
+    /// <summary>Gets the groups data set (tenant-scoped, soft-deletable).</summary>
+    public DbSet<Group> Groups => Set<Group>();
 
     /// <summary>Gets the permissions data set (global catalogue).</summary>
     public DbSet<Permission> Permissions => Set<Permission>();
@@ -51,6 +55,11 @@ public sealed class OrganizationsDbContext(
         modelBuilder
             .Entity<UserRoleAssignment>()
             .HasQueryFilter(a => a.SchoolId == tenantContext.SchoolId);
+
+        // Group: combine tenant + soft-delete in single expression (EF Core limit).
+        modelBuilder
+            .Entity<Group>()
+            .HasQueryFilter(g => g.SchoolId == tenantContext.SchoolId && !g.IsDeleted);
 
         // Permission: NO query filter — global catalogue, not tenant-scoped.
     }

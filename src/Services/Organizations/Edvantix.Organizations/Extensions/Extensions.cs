@@ -5,6 +5,7 @@ using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
+using Edvantix.Constants.Permissions;
 using Edvantix.Organizations.Configurations;
 using Edvantix.Organizations.Grpc;
 using Edvantix.Organizations.Infrastructure;
@@ -40,6 +41,25 @@ internal static class Extensions
                     .RequireAuthenticatedUser()
                     .RequireScope($"{Services.Organizations}_{Authorization.Actions.Read}")
                     .Build()
+            )
+            // Authorization policies for each Groups permission.
+            // Organizations checks permissions against itself via the gRPC endpoint (self-call)
+            // so that group management operations are guarded by the same RBAC system.
+            .AddPolicy(
+                GroupsPermissions.CreateGroup,
+                p => p.RequirePermission(GroupsPermissions.CreateGroup)
+            )
+            .AddPolicy(
+                GroupsPermissions.UpdateGroup,
+                p => p.RequirePermission(GroupsPermissions.UpdateGroup)
+            )
+            .AddPolicy(
+                GroupsPermissions.DeleteGroup,
+                p => p.RequirePermission(GroupsPermissions.DeleteGroup)
+            )
+            .AddPolicy(
+                GroupsPermissions.ManageGroupMembership,
+                p => p.RequirePermission(GroupsPermissions.ManageGroupMembership)
             );
 
         // Tenant context — scoped per request, populated by TenantMiddleware
@@ -120,6 +140,11 @@ internal static class Extensions
 
         // Wire Persona gRPC client for profileId validation in role assignments
         builder.AddGrpcServices();
+
+        // Organizations checks group permissions against itself via gRPC (self-call pattern).
+        // The PermissionRequirementHandler is wired here so that GroupsPermissions policies
+        // resolve correctly at runtime using the RBAC system.
+        builder.AddPermissionAuthorization($"https+http://{Services.Organizations}");
 
         // Seed Organizations' own permissions directly into the DB on startup.
         // Using IHostedService (not the HTTP endpoint) avoids the self-calling race condition.

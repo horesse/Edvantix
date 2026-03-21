@@ -1,3 +1,4 @@
+using Edvantix.Organizations.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizations.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizations.Domain.AggregatesModel.RoleAggregate;
 using Edvantix.Organizations.Domain.AggregatesModel.UserRoleAssignmentAggregate;
@@ -16,6 +17,9 @@ public sealed class OrganizationsDbContext(
     ITenantContext tenantContext
 ) : DbContext(options), IUnitOfWork
 {
+    /// <summary>Gets the organizations data set (tenant roots).</summary>
+    public DbSet<Organization> Organizations => Set<Organization>();
+
     /// <summary>Gets the roles data set.</summary>
     public DbSet<Role> Roles => Set<Role>();
 

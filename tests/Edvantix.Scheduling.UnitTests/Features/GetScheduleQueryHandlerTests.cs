@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Chassis.Security.Tenant;
 using Edvantix.Constants.Permissions;
 using Edvantix.Organizations.Grpc.Generated;
 using Edvantix.Scheduling.Features.Schedule.GetSchedule;

@@ -18,8 +18,21 @@
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Label="gRPC">
+    <!-- Grpc.Core.Api: base gRPC types (RpcException, etc.) -->
     <PackageReference Include="Grpc.Core.Api" />
+    <!-- Grpc.AspNetCore.Server.ClientFactory: AddGrpcClient extension for IServiceCollection -->
+    <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" />
+    <!-- Grpc.Tools: protoc code generation (client stubs) -->
+    <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
+    <!-- Google.Protobuf: required for proto-generated message types (not transitively available without ServiceDefaults) -->
+    <PackageReference Include="Google.Protobuf" />
+  </ItemGroup>
+  <ItemGroup Label="Protos">
+    <!-- Generates both Server base class (for Organizations) and Client stub (for downstream services).
+         Organizations removes its own Protobuf entry and uses these Chassis-generated types to avoid
+         duplicate type conflicts in the same namespace. -->
+    <Protobuf Include="Security\Protos\organizations\v1\permissions.proto" GrpcServices="Both" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Edvantix.Constants\Edvantix.Constants.csproj" />

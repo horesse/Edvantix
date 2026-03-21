@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-03-21T06:55:08.350Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-03-21T06:58:48.754Z"
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -52,6 +52,7 @@ Plan: 3 of 3
 | Phase 01-organizations-rbac-core P04 | 9 | 2 tasks | 21 files |
 | Phase 02-organizations-permission-cache P01 | 9 | 2 tasks | 19 files |
 | Phase 02-organizations-permission-cache P03 | 6 | 1 tasks | 7 files |
+| Phase 02-organizations-permission-cache P02 | 8 | 2 tasks | 17 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,11 @@ Recent decisions affecting current work:
 - [Phase 02-01]: GetUserPermissionGrantQuery (not CheckPermissionQuery) to comply with arch rule requiring Get/List/Visualize/Summarize prefix on IQuery types
 - [Phase 02-03]: Proto-in-Chassis to avoid CS0436: permissions.proto lives in Chassis with GrpcServices=Both; Organizations removes its own Protobuf entry to prevent duplicate type conflicts in same csharp_namespace
 - [Phase 02-03]: PermissionRequirementHandler singleton uses IHttpContextAccessor to bridge to scoped ITenantContext — canonical pattern for singleton-to-scoped access in ASP.NET Core
+- [Phase 02-02]: Domain events placed in Infrastructure/EventServices/Events/ per plan spec; they pass arch tests because they contain only Guid fields with no infrastructure imports
+- [Phase 02-02]: Mediator source generator MSG0005 requires all INotification types to have handlers — added domain event handlers in Domain/EventHandlers/ following Persona pattern
+- [Phase 02-02]: InternalsVisibleTo added to Edvantix.Organizations.csproj for EventMapper unit test access — follows Blog/Scheduler pattern
+- [Phase 02-02]: GetAllByRoleIdAsync uses IgnoreQueryFilters() for cross-tenant role enumeration in AssignPermissionsCommand cache invalidation
+- [Phase 02-02]: Null UserId in UserPermissionsInvalidatedIntegrationEvent signals school-wide invalidation for RolePermissionsChangedEvent mapping
 
 ### Pending Todos
 
@@ -94,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T06:55:08.347Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-03-21T06:58:48.750Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None

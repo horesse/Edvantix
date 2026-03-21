@@ -1,29 +1,29 @@
-using System.Net.Http.Json;
+using Edvantix.Organizations.Grpc.Generated;
 
 namespace Edvantix.Scheduling.Grpc.Services;
 
 /// <summary>
-/// HTTP-based implementation of <see cref="IOrganizationsGroupService"/>.
-/// Uses the named "organizations" <see cref="IHttpClientFactory"/> client registered in
-/// <c>Extensions/Extensions.cs</c> with Aspire service discovery and standard resilience handler.
+/// gRPC-based implementation of <see cref="IOrganizationsGroupService"/>.
+/// Calls the Organizations service via gRPC to validate groups and resolve student memberships.
 ///
-/// NOTE: This is a temporary HTTP fallback for v1.
-/// Plan 03-09 will replace this with gRPC methods on the Organizations service.
-/// The interface contract remains unchanged — only the implementation will be swapped.
+/// Replaces the HTTP fallback from Plan 03-04 now that Organizations exposes the GetGroup
+/// and GetGroupsForStudent RPCs (Plan 03-09).
 /// </summary>
 [ExcludeFromCodeCoverage]
-public sealed class OrganizationsGroupService(IHttpClientFactory httpClientFactory)
-    : IOrganizationsGroupService
+public sealed class OrganizationsGroupService(
+    GroupsGrpcService.GroupsGrpcServiceClient grpcClient
+) : IOrganizationsGroupService
 {
     /// <inheritdoc/>
     public async Task<bool> GroupExistsAsync(Guid groupId, CancellationToken ct)
     {
-        // Named client is registered as "organizations" in Extensions/Extensions.cs
-        // with base address pointing to the Organizations service via Aspire service discovery.
-        var client = httpClientFactory.CreateClient("organizations");
-        var response = await client.GetAsync($"/v1/groups/{groupId}", ct);
+        // Use GetGroup RPC — returns Found=false when group is missing or soft-deleted.
+        var reply = await grpcClient.GetGroupAsync(
+            new GetGroupRequest { GroupId = groupId.ToString() },
+            cancellationToken: ct
+        );
 
-        return response.IsSuccessStatusCode;
+        return reply.Found;
     }
 
     /// <inheritdoc/>
@@ -33,60 +33,31 @@ public sealed class OrganizationsGroupService(IHttpClientFactory httpClientFacto
         CancellationToken ct
     )
     {
-        // Calls GET /v1/groups/student/{profileId}?schoolId={schoolId} on the Organizations service.
-        // Plan 03-09 will replace this endpoint call with a proper gRPC method.
-        // Returns an empty list on failure to avoid blocking the schedule query.
-        var client = httpClientFactory.CreateClient("organizations");
-
-        try
-        {
-            var response = await client.GetAsync(
-                $"/v1/groups/student/{profileId}?schoolId={schoolId}",
-                ct
-            );
-
-            if (!response.IsSuccessStatusCode)
+        var reply = await grpcClient.GetGroupsForStudentAsync(
+            new GetGroupsForStudentRequest
             {
-                return [];
-            }
+                SchoolId = schoolId.ToString(),
+                ProfileId = profileId.ToString()
+            },
+            cancellationToken: ct
+        );
 
-            var groupIds = await response.Content.ReadFromJsonAsync<List<Guid>>(ct);
-
-            return groupIds ?? [];
-        }
-        catch
-        {
-            return [];
-        }
+        return reply.GroupIds.Select(Guid.Parse).ToList();
     }
 
     /// <inheritdoc/>
     public async Task<GroupInfoDto?> GetGroupAsync(Guid groupId, CancellationToken ct)
     {
-        // Calls GET /v1/groups/{groupId} on the Organizations service.
-        // Plan 03-09 will replace this with a gRPC GetGroupAsync call.
-        var client = httpClientFactory.CreateClient("organizations");
+        var reply = await grpcClient.GetGroupAsync(
+            new GetGroupRequest { GroupId = groupId.ToString() },
+            cancellationToken: ct
+        );
 
-        try
-        {
-            var response = await client.GetAsync($"/v1/groups/{groupId}", ct);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            // Deserialize only the fields needed for ScheduleSlotDto — Name and Color.
-            var dto = await response.Content.ReadFromJsonAsync<GroupResponseDto>(ct);
-
-            return dto is null ? null : new GroupInfoDto(dto.Name, dto.Color);
-        }
-        catch
+        if (!reply.Found)
         {
             return null;
         }
-    }
 
-    // Internal response shape matching the Organizations GET /v1/groups/{id} endpoint.
-    private sealed record GroupResponseDto(Guid Id, string Name, int MaxCapacity, string Color);
+        return new GroupInfoDto(reply.Name, reply.Color);
+    }
 }

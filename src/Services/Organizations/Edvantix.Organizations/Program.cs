@@ -42,6 +42,10 @@ app.MapEndpoints(apiVersionSet);
 // CRITICAL: Without this mapping all gRPC calls return 404/Unimplemented.
 app.MapGrpcService<PermissionsGrpcService>();
 
+// Register the Organizations gRPC groups service.
+// Used by Scheduling to resolve group memberships and validate group existence.
+app.MapGrpcService<GroupsGrpcService>();
+
 app.MapDefaultEndpoints();
 
 app.UseDefaultOpenApi();

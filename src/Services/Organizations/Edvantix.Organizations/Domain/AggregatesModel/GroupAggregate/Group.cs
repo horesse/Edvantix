@@ -23,6 +23,12 @@ public sealed class Group : Entity, IAggregateRoot, ISoftDelete, ITenanted
     /// <inheritdoc/>
     public bool IsDeleted { get; set; }
 
+    // Backing field used by EF Core property access mode to populate Members without exposing Add/Remove
+    private readonly List<GroupMembership> _members = [];
+
+    /// <summary>Gets the current members enrolled in this group.</summary>
+    public IReadOnlyCollection<GroupMembership> Members => _members.AsReadOnly();
+
     // EF Core constructor
     private Group() { }
 
@@ -61,4 +67,38 @@ public sealed class Group : Entity, IAggregateRoot, ISoftDelete, ITenanted
 
     /// <inheritdoc/>
     public void Delete() => IsDeleted = true;
+
+    /// <summary>
+    /// Adds a student to this group. Idempotent — if the student is already a member, this is a no-op.
+    /// Per SCH-06, duplicate membership must be silently ignored without error or duplicate rows.
+    /// </summary>
+    /// <param name="profileId">The Persona profile identifier of the student to add. Must not be empty.</param>
+    /// <param name="addedAt">The timestamp of membership creation (typically UTC now).</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="profileId"/> is empty.</exception>
+    public void AddMember(Guid profileId, DateTimeOffset addedAt)
+    {
+        Guard.Against.Default(profileId, nameof(profileId));
+
+        // Idempotent: silently ignore if the student is already a member.
+        if (_members.Any(m => m.ProfileId == profileId))
+        {
+            return;
+        }
+
+        _members.Add(new GroupMembership(Id, profileId, SchoolId, addedAt));
+    }
+
+    /// <summary>
+    /// Removes a student from this group. No-op if the student is not a member.
+    /// </summary>
+    /// <param name="profileId">The Persona profile identifier of the student to remove.</param>
+    public void RemoveMember(Guid profileId)
+    {
+        var existing = _members.FirstOrDefault(m => m.ProfileId == profileId);
+
+        if (existing is not null)
+        {
+            _members.Remove(existing);
+        }
+    }
 }

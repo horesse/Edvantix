@@ -4,7 +4,7 @@ namespace Edvantix.Organizations.UnitTests.Domain;
 
 /// <summary>
 /// Unit tests for the <see cref="Group"/> domain aggregate.
-/// Covers constructor validation, Update, and Delete behaviors.
+/// Covers constructor validation, Update, Delete, and GroupMembership behaviors.
 /// </summary>
 public sealed class GroupAggregateTests
 {
@@ -74,5 +74,74 @@ public sealed class GroupAggregateTests
         group.Delete();
 
         group.IsDeleted.ShouldBeTrue();
+    }
+
+    // GroupMembership tests
+
+    [Test]
+    public void GivenNewProfileId_WhenAddingMember_ThenMemberIsAdded()
+    {
+        var group = new Group(ValidName, ValidSchoolId, ValidMaxCapacity, ValidColor);
+        group.Id = Guid.CreateVersion7();
+        var profileId = Guid.CreateVersion7();
+
+        group.AddMember(profileId, DateTimeOffset.UtcNow);
+
+        group.Members.Count.ShouldBe(1);
+        group.Members.First().ProfileId.ShouldBe(profileId);
+    }
+
+    [Test]
+    public void GivenExistingProfileId_WhenAddingMemberAgain_ThenMemberCountRemainsOne()
+    {
+        var group = new Group(ValidName, ValidSchoolId, ValidMaxCapacity, ValidColor);
+        group.Id = Guid.CreateVersion7();
+        var profileId = Guid.CreateVersion7();
+        var addedAt = DateTimeOffset.UtcNow;
+
+        group.AddMember(profileId, addedAt);
+        group.AddMember(profileId, addedAt.AddMinutes(1)); // duplicate — should be a no-op per SCH-06
+
+        group.Members.Count.ShouldBe(1);
+    }
+
+    [Test]
+    public void GivenExistingMember_WhenRemovingMember_ThenMemberIsRemoved()
+    {
+        var group = new Group(ValidName, ValidSchoolId, ValidMaxCapacity, ValidColor);
+        group.Id = Guid.CreateVersion7();
+        var profileId = Guid.CreateVersion7();
+        group.AddMember(profileId, DateTimeOffset.UtcNow);
+
+        group.RemoveMember(profileId);
+
+        group.Members.Count.ShouldBe(0);
+    }
+
+    [Test]
+    public void GivenNonExistingMember_WhenRemovingMember_ThenMemberCountRemainsZero()
+    {
+        var group = new Group(ValidName, ValidSchoolId, ValidMaxCapacity, ValidColor);
+        group.Id = Guid.CreateVersion7();
+
+        group.RemoveMember(Guid.CreateVersion7()); // no-op — should not throw
+
+        group.Members.Count.ShouldBe(0);
+    }
+
+    [Test]
+    public void GivenNewMember_WhenAdded_ThenMembershipHasCorrectSchoolAndGroupIds()
+    {
+        var group = new Group(ValidName, ValidSchoolId, ValidMaxCapacity, ValidColor);
+        group.Id = Guid.CreateVersion7();
+        var profileId = Guid.CreateVersion7();
+        var addedAt = DateTimeOffset.UtcNow;
+
+        group.AddMember(profileId, addedAt);
+
+        var membership = group.Members.First();
+        membership.GroupId.ShouldBe(group.Id);
+        membership.SchoolId.ShouldBe(ValidSchoolId);
+        membership.AddedAt.ShouldBe(addedAt);
     }
 }

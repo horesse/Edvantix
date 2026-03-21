@@ -23,6 +23,15 @@ public sealed class GroupRepository(OrganizationsDbContext context) : IGroupRepo
         await context.Groups.OrderBy(g => g.Name).ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
+    public async Task<Group?> FindByIdWithMembersAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context.Groups
+            .Include(g => g.Members)
+            .FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
+
+    /// <inheritdoc/>
     public void Add(Group group) => context.Groups.Add(group);
 
     /// <inheritdoc/>

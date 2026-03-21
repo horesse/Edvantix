@@ -27,6 +27,9 @@ public sealed class OrganizationsDbContext(
     /// <summary>Gets the groups data set (tenant-scoped, soft-deletable).</summary>
     public DbSet<Group> Groups => Set<Group>();
 
+    /// <summary>Gets the group memberships data set (tenant-scoped).</summary>
+    public DbSet<GroupMembership> GroupMemberships => Set<GroupMembership>();
+
     /// <summary>Gets the permissions data set (global catalogue).</summary>
     public DbSet<Permission> Permissions => Set<Permission>();
 
@@ -60,6 +63,11 @@ public sealed class OrganizationsDbContext(
         modelBuilder
             .Entity<Group>()
             .HasQueryFilter(g => g.SchoolId == tenantContext.SchoolId && !g.IsDeleted);
+
+        // GroupMembership: tenant filter only (no soft-delete — memberships are hard-deleted).
+        modelBuilder
+            .Entity<GroupMembership>()
+            .HasQueryFilter(m => m.SchoolId == tenantContext.SchoolId);
 
         // Permission: NO query filter — global catalogue, not tenant-scoped.
     }

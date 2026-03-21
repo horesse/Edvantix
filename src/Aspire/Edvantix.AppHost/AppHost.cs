@@ -46,6 +46,7 @@ var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var blogDb = postgres.AddDatabase(Components.Database.Blog);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
 var organizationsDb = postgres.AddDatabase(Components.Database.Organizations);
+var schedulingDb = postgres.AddDatabase(Components.Database.Scheduling);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -84,6 +85,21 @@ var organizationsApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+var schedulingApi = builder
+    .AddProject<Edvantix_Scheduling>(Services.Scheduling)
+    .WithReference(schedulingDb)
+    .WaitFor(schedulingDb)
+    .WithKeycloak(keycloak)
+    .WaitFor(keycloak)
+    .WithReference(personaApi)
+    .WaitFor(personaApi)
+    .WithReference(organizationsApi)
+    .WaitFor(organizationsApi)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls();
+
 var blogApi = builder
     .AddProject<Edvantix_Blog>(Services.Blog)
     .WithReference(blogDb)
@@ -113,6 +129,7 @@ var gateway = builder
     .WithService(blogApi, true)
     .WithService(notificationApi, true)
     .WithService(organizationsApi, true)
+    .WithService(schedulingApi, true)
     .Build();
 
 var turbo = builder
@@ -193,7 +210,8 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(personaApi)
         .WithOpenAPI(blogApi)
         .WithOpenAPI(notificationApi)
-        .WithOpenAPI(organizationsApi);
+        .WithOpenAPI(organizationsApi)
+        .WithOpenAPI(schedulingApi);
 }
 
 await builder.Build().RunAsync();

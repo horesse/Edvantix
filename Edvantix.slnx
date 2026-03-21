@@ -30,6 +30,9 @@
     <Project Path="src/Services/Organizations/Edvantix.Organizations/Edvantix.Organizations.csproj" />
     <Project Path="src/Services/Organizations/Edvantix.Organizations.UnitTests/Edvantix.Organizations.UnitTests.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Scheduling/">
+    <Project Path="src/Services/Scheduling/Edvantix.Scheduling/Edvantix.Scheduling.csproj" />
+  </Folder>
   <Folder Name="/src/Services/Blog/">
     <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />
   </Folder>

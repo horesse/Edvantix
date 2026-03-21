@@ -8,6 +8,8 @@
 
 Managers build and manage lesson schedules (groups + lesson slots with conflict detection). Teachers see only their own slots. Students see slots for their groups. All three views enforced via Organizations permission checks. Group membership management (add/remove students) is included. Attendance marking and outbox events are Phase 4.
 
+Groups and GroupMembership live in the Organizations service, not the Scheduling service. The Scheduling service only stores LessonSlots, which reference a GroupId as a plain Guid value (no EF navigation property, no cross-service FK).
+
 </domain>
 
 <decisions>
@@ -36,20 +38,18 @@ Managers build and manage lesson schedules (groups + lesson slots with conflict 
 - **D-10:** New `Edvantix.Scheduling` service created from scratch following Organizations service structure (feature folders, EF Core, DDD aggregates, `ITenanted`, permission seeder)
 - **D-11:** `Services.Scheduling` and `Components.Database.Scheduling` constants added to `Edvantix.Constants.Aspire`
 - **D-12:** `SchedulingPermissions` class added to `Edvantix.Constants.Permissions` following `OrganizationsPermissions` pattern; permissions registered:
-  - `scheduling.create-group`
-  - `scheduling.update-group`
-  - `scheduling.delete-group`
   - `scheduling.create-lesson-slot`
   - `scheduling.edit-lesson-slot`
   - `scheduling.delete-lesson-slot`
   - `scheduling.view-schedule`
-  - `scheduling.manage-group-membership`
 - **D-13:** Service added to `AppHost.cs` with: `schedulingDb` (same PostgreSQL instance, separate database), Keycloak, Kafka queue, reference to `personaApi` (gRPC profile validation), reference to `organizationsApi` (gRPC CheckPermission); added to Scalar OpenAPI dashboard
 - **D-14:** Scheduling Keycloak client (`${CLIENT_SCHEDULING_ID}`) added to `EdvantixRealms.json` following the same pattern as Persona/Blog/Notification clients (clientType `API`)
+- **D-15:** Groups and GroupMembership live in Organizations service, not Scheduling. Scheduling references GroupId as a plain Guid value.
+- **D-16:** Group/membership permissions use `groups.*` namespace (GroupsPermissions class). Seeded by Organizations PermissionSeeder.
+- **D-17:** Organization aggregate added to Organizations service with only Id in v1. It is the tenant root — not ITenanted itself.
 
 ### Claude's Discretion
 - Exact EF Core index strategy for conflict detection query (partial index on teacher + time range vs. application-level query)
-- Whether `GroupMembership` is a separate aggregate or a value object/entity within `Group`
 - Permission seeder startup pattern (same `IHostedService` approach as Organizations)
 - Gateway routing entry for Scheduling
 
@@ -70,7 +70,7 @@ Managers build and manage lesson schedules (groups + lesson slots with conflict 
 **Downstream agents MUST read these before planning or implementing.**
 
 ### Scheduling requirements
-- `.planning/REQUIREMENTS.md` §Scheduling — SCH-01–SCH-07, SCH-10: full requirement matrix for groups, slots, conflict detection, and views
+- `.planning/REQUIREMENTS.md` S Scheduling — SCH-01-SCH-07, SCH-10: full requirement matrix for groups, slots, conflict detection, and views
 
 ### Domain patterns (reuse from Organizations)
 - `src/Services/Organizations/Edvantix.Organizations/Domain/AggregatesModel/RoleAggregate/Role.cs` — soft-delete + ITenanted aggregate pattern
@@ -81,11 +81,11 @@ Managers build and manage lesson schedules (groups + lesson slots with conflict 
 ### Constants (must extend)
 - `src/BuildingBlocks/Edvantix.Constants/Aspire/Services.cs` — add `Scheduling` entry
 - `src/BuildingBlocks/Edvantix.Constants/Aspire/Components.cs` — add `Database.Scheduling` entry
-- `src/BuildingBlocks/Edvantix.Constants/Permissions/OrganizationsPermissions.cs` — template for new `SchedulingPermissions` class
+- `src/BuildingBlocks/Edvantix.Constants/Permissions/OrganizationsPermissions.cs` — template for new `SchedulingPermissions` and `GroupsPermissions` classes
 
 ### Aspire integration
 - `src/Aspire/Edvantix.AppHost/AppHost.cs` — add `schedulingDb` + `schedulingApi` following `organizationsApi` pattern
-- `src/Aspire/Edvantix.AppHost/Container/keycloak/realms/EdvantixRealms.json` — add `${CLIENT_SCHEDULING_ID}` client entry following Persona client pattern (lines ~1135–1290)
+- `src/Aspire/Edvantix.AppHost/Container/keycloak/realms/EdvantixRealms.json` — add `${CLIENT_SCHEDULING_ID}` client entry following Persona client pattern (lines ~1135-1290)
 - `src/Aspire/Edvantix.AppHost/Extensions/Security/KeycloakExtensions.cs` — `.WithKeycloak()` extension for project resources
 
 ### Organizations gRPC (for permission checks in Scheduling)

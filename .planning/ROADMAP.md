@@ -54,7 +54,7 @@ Plans:
 - [x] 02-03-PLAN.md — Chassis PermissionRequirement + PermissionRequirementHandler + AddPermissionAuthorization extension for downstream services
 
 ### Phase 3: Scheduling — Slots and Views
-**Goal**: Managers can build and manage lesson schedules, teachers see their own sessions, and students see their group lessons — all enforcing permissions via Organizations
+**Goal**: Managers can build and manage lesson schedules, teachers see their own sessions, and students see their group lessons — all enforcing permissions via Organizations. Groups and GroupMembership live in the Organizations service; Scheduling references GroupId as a plain Guid.
 **Depends on**: Phase 2
 **Requirements**: SCH-01, SCH-02, SCH-03, SCH-04, SCH-05, SCH-06, SCH-07, SCH-10
 **Success Criteria** (what must be TRUE):
@@ -63,15 +63,16 @@ Plans:
   3. Manager sees a calendar view showing all groups' slots for their school; teacher sees only their own slots; student sees only slots for groups they belong to
   4. Manager can add a student to a group and remove a student from a group; group membership changes are reflected in the student's schedule view immediately
   5. All date/time values in the API and database are stored as DateTimeOffset; no DateTime.Now usage exists in the service
-**Plans**: 4 plans
+**Plans**: 7 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Scheduling service bootstrap: project, constants, PermissionSeeder (HTTP), Aspire wiring, Keycloak client (Wave 1)
-- [ ] 03-02-PLAN.md — Domain model + EF Core + repos + arch tests + unit test project (Wave 2)
-- [ ] 03-03-PLAN.md — Group CRUD commands and endpoints (Wave 3)
-- [ ] 03-04-PLAN.md — LessonSlot create/edit/delete with global teacher conflict detection (Wave 3)
-- [ ] 03-05-PLAN.md — GET /schedule with permission-filtered manager/teacher/student views (Wave 4)
-- [ ] 03-06-PLAN.md — Group membership management — add/remove student, list members (Wave 3)
+- [ ] 03-01-PLAN.md — Scheduling service bootstrap: project, constants (4 scheduling permissions), PermissionSeeder (HTTP), Aspire wiring, Keycloak client (Wave 1)
+- [ ] 03-02-PLAN.md — LessonSlot domain model + EF Core + repos + arch tests + unit test project (Wave 2)
+- [ ] 03-04-PLAN.md — LessonSlot create/edit/delete with global teacher conflict detection + Organizations gRPC group validation (Wave 3)
+- [ ] 03-05-PLAN.md — GET /schedule with permission-filtered manager/teacher/student views, student groups via Organizations gRPC (Wave 4)
+- [ ] 03-07-PLAN.md — Organization entity (Id only) + GroupsPermissions class in Organizations service (Wave 1)
+- [ ] 03-08-PLAN.md — Group aggregate + CRUD in Organizations service, protected by groups.* permissions (Wave 3)
+- [ ] 03-09-PLAN.md — GroupMembership in Organizations + GetGroupsForStudent gRPC + Scheduling gRPC client (Wave 4)
 
 ### Phase 4: Scheduling — Attendance and Outbox
 **Goal**: Attendance is recorded for each student on each lesson slot and the AttendanceRecordedIntegrationEvent is reliably published to Kafka, providing Payments with a durable event stream to consume
@@ -113,6 +114,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Organizations — RBAC Core | 4/4 | Complete   | 2026-03-18 |
 | 2. Organizations — Permission Cache | 3/3 | Complete   | 2026-03-21 |
-| 3. Scheduling — Slots and Views | 0/4 | Not started | - |
+| 3. Scheduling — Slots and Views | 0/7 | Not started | - |
 | 4. Scheduling — Attendance and Outbox | 0/2 | Not started | - |
 | 5. Payments — Ledger and Balance | 0/3 | Not started | - |

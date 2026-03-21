@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-03-21T06:46:20.640Z"
+stopped_at: Completed 02-03-PLAN.md
+last_updated: "2026-03-21T06:55:08.350Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 02 (organizations-permission-cache) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Plan: 2 of 3
 | Phase 01-organizations-rbac-core P03 | 12 | 2 tasks | 21 files |
 | Phase 01-organizations-rbac-core P04 | 9 | 2 tasks | 21 files |
 | Phase 02-organizations-permission-cache P01 | 9 | 2 tasks | 19 files |
+| Phase 02-organizations-permission-cache P03 | 6 | 1 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,8 @@ Recent decisions affecting current work:
 - [Phase 02-01]: gRPC csharp_namespace set to Edvantix.Organizations.Grpc.Generated to avoid class name conflict with concrete implementation
 - [Phase 02-01]: GetBySchoolAsync added to IRoleRepository using IgnoreQueryFilters() + explicit schoolId — gRPC paths lack ITenantContext ambient value
 - [Phase 02-01]: GetUserPermissionGrantQuery (not CheckPermissionQuery) to comply with arch rule requiring Get/List/Visualize/Summarize prefix on IQuery types
+- [Phase 02-03]: Proto-in-Chassis to avoid CS0436: permissions.proto lives in Chassis with GrpcServices=Both; Organizations removes its own Protobuf entry to prevent duplicate type conflicts in same csharp_namespace
+- [Phase 02-03]: PermissionRequirementHandler singleton uses IHttpContextAccessor to bridge to scoped ITenantContext — canonical pattern for singleton-to-scoped access in ASP.NET Core
 
 ### Pending Todos
 
@@ -91,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T06:46:20.637Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-03-21T06:55:08.347Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None

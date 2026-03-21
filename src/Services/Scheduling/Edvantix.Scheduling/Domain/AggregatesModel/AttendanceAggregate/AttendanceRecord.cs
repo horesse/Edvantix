@@ -1,3 +1,5 @@
+using Edvantix.Scheduling.Infrastructure.EventServices.Events;
+
 namespace Edvantix.Scheduling.Domain.AggregatesModel.AttendanceAggregate;
 
 /// <summary>
@@ -65,7 +67,9 @@ public sealed class AttendanceRecord : Entity, IAggregateRoot, ITenanted
         CorrelationId = Guid.CreateVersion7();
         MarkedAt = DateTimeOffset.UtcNow;
 
-        // TODO: Plan 02 — RegisterDomainEvent(new AttendanceRecordedEvent(Id, SchoolId, LessonSlotId, StudentId, Status, CorrelationId))
+        // Raise domain event so EventDispatchInterceptor can capture it after SaveChanges.
+        // Status.ToString() converts enum to string per D-12 — decouples event contract from internal enum.
+        RegisterDomainEvent(new AttendanceRecordedEvent(CorrelationId, StudentId, LessonSlotId, SchoolId, Status.ToString(), MarkedAt));
     }
 
     /// <summary>
@@ -78,6 +82,8 @@ public sealed class AttendanceRecord : Entity, IAggregateRoot, ITenanted
         Status = newStatus;
         MarkedAt = DateTimeOffset.UtcNow;
 
-        // TODO: Plan 02 — RegisterDomainEvent(new AttendanceStatusUpdatedEvent(Id, SchoolId, LessonSlotId, StudentId, newStatus, CorrelationId))
+        // Raise domain event so EventDispatchInterceptor can capture it after SaveChanges.
+        // CorrelationId is preserved from original creation per D-04 — event chain identity stays consistent.
+        RegisterDomainEvent(new AttendanceRecordedEvent(CorrelationId, StudentId, LessonSlotId, SchoolId, Status.ToString(), MarkedAt));
     }
 }

@@ -1,4 +1,5 @@
 using Edvantix.Chassis.CQRS;
+using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
@@ -7,6 +8,7 @@ using Edvantix.Constants.Permissions;
 using Edvantix.Scheduling.Configurations;
 using Edvantix.Scheduling.Grpc;
 using Edvantix.Scheduling.Infrastructure;
+using Edvantix.Scheduling.Infrastructure.EventServices;
 using Edvantix.Scheduling.Infrastructure.Seeding;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
@@ -90,6 +92,12 @@ internal static class Extensions
         builder.AddRateLimiting();
 
         builder.AddPersistenceServices();
+
+        // Register domain event → integration event pipeline.
+        // Without these two registrations, EventDispatcher throws NullReferenceException —
+        // domain events fire but never reach the outbox.
+        services.AddScoped<IEventMapper, EventMapper>();
+        services.AddEventDispatcher();
 
         services.AddValidatorsFromAssemblyContaining<ISchedulingApiMarker>(
             includeInternalTypes: true

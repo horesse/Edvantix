@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-21T18:40:41.858Z"
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-03-21T18:44:58.148Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 19
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 04 (scheduling-attendance-outbox) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -61,6 +61,7 @@ Plan: 2 of 3
 | Phase 03-scheduling-slots-and-views PP05 | 8 | 2 tasks | 10 files |
 | Phase 03-scheduling-slots-and-views P09 | 10 | 2 tasks | 24 files |
 | Phase 04-scheduling-attendance-outbox P01 | 10 | 2 tasks | 11 files |
+| Phase 04-scheduling-attendance-outbox P03 | 2 | 1 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,8 @@ Recent decisions affecting current work:
 - [Phase 04-01]: AttendanceRecord is a separate aggregate from LessonSlot (D-01) — own repository, own lifecycle, plain Guid cross-reference to LessonSlotId
 - [Phase 04-01]: CorrelationId uses Guid.CreateVersion7() at construction, never changed on UpdateStatus — preserves event chain identity per D-04
 - [Phase 04-01]: HasQueryFilter for AttendanceRecord registered in SchedulingDbContext.OnModelCreating (not entity config) to use injected ITenantContext — same pattern as LessonSlot
+- [Phase 04-03]: ViewSchedule permission reused for GET attendance endpoint (D-09) — no separate view-attendance permission needed in v1
+- [Phase 04-03]: AttendanceRecordDto uses string Status (not enum) per D-07 response shape — avoids enum numeric leakage to API consumers
 
 ### Pending Todos
 
@@ -127,6 +130,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T18:40:41.855Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-21T18:44:58.145Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None

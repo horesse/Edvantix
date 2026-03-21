@@ -58,8 +58,8 @@ public static class PolicyBuilderExtensions
     )
     {
         // Register the gRPC client pointing at the Organizations service.
-        builder.Services.AddGrpcClient<PermissionsGrpcService.PermissionsGrpcServiceClient>(
-            o => o.Address = new Uri(organizationsGrpcBaseUrl)
+        builder.Services.AddGrpcClient<PermissionsGrpcService.PermissionsGrpcServiceClient>(o =>
+            o.Address = new Uri(organizationsGrpcBaseUrl)
         );
 
         // IHttpContextAccessor is required by PermissionRequirementHandler to resolve

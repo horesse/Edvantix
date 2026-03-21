@@ -35,8 +35,9 @@ internal sealed class PermissionRequirementHandler(
         }
 
         // Resolve the school from ITenantContext (populated by TenantMiddleware from X-School-Id).
-        var tenantContext = httpContextAccessor.HttpContext?.RequestServices
-            .GetService(typeof(ITenantContext)) as ITenantContext;
+        var tenantContext =
+            httpContextAccessor.HttpContext?.RequestServices.GetService(typeof(ITenantContext))
+            as ITenantContext;
 
         if (tenantContext is null || !tenantContext.IsResolved)
         {

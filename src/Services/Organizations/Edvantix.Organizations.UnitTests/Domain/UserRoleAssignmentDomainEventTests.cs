@@ -14,9 +14,7 @@ public sealed class UserRoleAssignmentDomainEventTests
 
         var assignment = new UserRoleAssignment(profileId, schoolId, roleId);
 
-        var domainEvent = assignment.DomainEvents
-            .OfType<UserRoleAssignedEvent>()
-            .SingleOrDefault();
+        var domainEvent = assignment.DomainEvents.OfType<UserRoleAssignedEvent>().SingleOrDefault();
         domainEvent.ShouldNotBeNull();
         domainEvent.ProfileId.ShouldBe(profileId);
         domainEvent.SchoolId.ShouldBe(schoolId);
@@ -34,9 +32,7 @@ public sealed class UserRoleAssignmentDomainEventTests
 
         assignment.Revoke();
 
-        var domainEvent = assignment.DomainEvents
-            .OfType<UserRoleRevokedEvent>()
-            .SingleOrDefault();
+        var domainEvent = assignment.DomainEvents.OfType<UserRoleRevokedEvent>().SingleOrDefault();
         domainEvent.ShouldNotBeNull();
         domainEvent.ProfileId.ShouldBe(profileId);
         domainEvent.SchoolId.ShouldBe(schoolId);
@@ -53,9 +49,7 @@ public sealed class UserRoleAssignmentDomainEventTests
 
         role.SetPermissions(permissionIds);
 
-        var domainEvent = role.DomainEvents
-            .OfType<RolePermissionsChangedEvent>()
-            .SingleOrDefault();
+        var domainEvent = role.DomainEvents.OfType<RolePermissionsChangedEvent>().SingleOrDefault();
         domainEvent.ShouldNotBeNull();
         domainEvent.RoleId.ShouldBe(role.Id);
         domainEvent.SchoolId.ShouldBe(schoolId);

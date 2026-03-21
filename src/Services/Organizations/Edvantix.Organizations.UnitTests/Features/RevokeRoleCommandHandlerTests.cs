@@ -30,7 +30,10 @@ public sealed class RevokeRoleCommandHandlerTests
             .Setup(c => c.RemoveByTagAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(ValueTask.CompletedTask);
 
-        _handler = new RevokeRoleCommandHandler(_assignmentRepositoryMock.Object, _cacheMock.Object);
+        _handler = new RevokeRoleCommandHandler(
+            _assignmentRepositoryMock.Object,
+            _cacheMock.Object
+        );
     }
 
     [Test]
@@ -104,7 +107,8 @@ public sealed class RevokeRoleCommandHandlerTests
         await _handler.Handle(command, CancellationToken.None);
 
         // Verify that Revoke() was called — the domain event should be registered
-        assignment.DomainEvents.OfType<Edvantix.Organizations.Infrastructure.EventServices.Events.UserRoleRevokedEvent>()
+        assignment
+            .DomainEvents.OfType<Edvantix.Organizations.Infrastructure.EventServices.Events.UserRoleRevokedEvent>()
             .ShouldHaveSingleItem();
     }
 }

@@ -193,11 +193,13 @@ public sealed class AssignPermissionsCommandHandlerTests
 
         // Both affected users should have their cache invalidated
         _cacheMock.Verify(
-            c => c.RemoveByTagAsync($"user:{profileId1}:{_schoolId}", It.IsAny<CancellationToken>()),
+            c =>
+                c.RemoveByTagAsync($"user:{profileId1}:{_schoolId}", It.IsAny<CancellationToken>()),
             Times.Once
         );
         _cacheMock.Verify(
-            c => c.RemoveByTagAsync($"user:{profileId2}:{_schoolId}", It.IsAny<CancellationToken>()),
+            c =>
+                c.RemoveByTagAsync($"user:{profileId2}:{_schoolId}", It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

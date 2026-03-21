@@ -66,10 +66,7 @@ public sealed class PermissionsGrpcServiceTests
 
         _mediatorMock
             .Setup(m =>
-                m.Send(
-                    It.IsAny<GetUserPermissionGrantQuery>(),
-                    It.IsAny<CancellationToken>()
-                )
+                m.Send(It.IsAny<GetUserPermissionGrantQuery>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(false);
 

@@ -9,9 +9,8 @@ namespace Edvantix.Organizations.Domain.EventHandlers;
 /// <see cref="Edvantix.Contracts.UserPermissionsInvalidatedIntegrationEvent"/> and publishes
 /// it via the MassTransit transactional outbox.
 /// </summary>
-public sealed class UserRoleAssignedEventHandler(
-    IEventDispatcher dispatcher
-) : INotificationHandler<UserRoleAssignedEvent>
+public sealed class UserRoleAssignedEventHandler(IEventDispatcher dispatcher)
+    : INotificationHandler<UserRoleAssignedEvent>
 {
     /// <inheritdoc/>
     public async ValueTask Handle(
@@ -24,9 +23,8 @@ public sealed class UserRoleAssignedEventHandler(
 /// Handles the domain event raised when a role assignment is revoked from a user.
 /// Publishes <see cref="Edvantix.Contracts.UserPermissionsInvalidatedIntegrationEvent"/> via outbox.
 /// </summary>
-public sealed class UserRoleRevokedEventHandler(
-    IEventDispatcher dispatcher
-) : INotificationHandler<UserRoleRevokedEvent>
+public sealed class UserRoleRevokedEventHandler(IEventDispatcher dispatcher)
+    : INotificationHandler<UserRoleRevokedEvent>
 {
     /// <inheritdoc/>
     public async ValueTask Handle(
@@ -40,9 +38,8 @@ public sealed class UserRoleRevokedEventHandler(
 /// Publishes <see cref="Edvantix.Contracts.UserPermissionsInvalidatedIntegrationEvent"/> with
 /// UserId = null to signal school-scoped cache invalidation across all consumers.
 /// </summary>
-public sealed class RolePermissionsChangedEventHandler(
-    IEventDispatcher dispatcher
-) : INotificationHandler<RolePermissionsChangedEvent>
+public sealed class RolePermissionsChangedEventHandler(IEventDispatcher dispatcher)
+    : INotificationHandler<RolePermissionsChangedEvent>
 {
     /// <inheritdoc/>
     public async ValueTask Handle(

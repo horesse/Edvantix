@@ -175,6 +175,10 @@ None - no external service configuration required.
 - `UserPermissionsInvalidatedIntegrationEvent` is available in `Edvantix.Contracts` for Phase 02-03 consumer subscription
 - `GetAllByRoleIdAsync` provides the enumeration needed by AssignPermissionsCommand for cross-user invalidation
 
+## Self-Check: PASSED
+
+All created files verified present on disk. Both task commits (70e4156, 4d21217) confirmed in git log.
+
 ---
 *Phase: 02-organizations-permission-cache*
 *Completed: 2026-03-21*

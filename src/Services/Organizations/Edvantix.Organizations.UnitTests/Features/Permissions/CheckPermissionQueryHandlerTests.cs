@@ -142,9 +142,7 @@ public sealed class CheckPermissionQueryHandlerTests
                 c.GetOrCreateAsync(
                     expectedKey,
                     It.IsAny<Func<CancellationToken, ValueTask<bool>>>(),
-                    It.Is<IEnumerable<string>?>(tags =>
-                        tags != null && tags.Contains(expectedTag)
-                    ),
+                    It.Is<IEnumerable<string>?>(tags => tags != null && tags.Contains(expectedTag)),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -162,9 +160,7 @@ public sealed class CheckPermissionQueryHandlerTests
                 c.GetOrCreateAsync(
                     expectedKey,
                     It.IsAny<Func<CancellationToken, ValueTask<bool>>>(),
-                    It.Is<IEnumerable<string>?>(tags =>
-                        tags != null && tags.Contains(expectedTag)
-                    ),
+                    It.Is<IEnumerable<string>?>(tags => tags != null && tags.Contains(expectedTag)),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once

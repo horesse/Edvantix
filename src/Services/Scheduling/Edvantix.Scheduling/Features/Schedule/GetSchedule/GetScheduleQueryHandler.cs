@@ -150,7 +150,16 @@ public sealed class GetScheduleQueryHandler(
 
         // Step 5: Shape results based on permission level.
         return slots
-            .Select(s => mapper.Map(new ScheduleSlotMappingContext(s, groupInfoLookup[s.GroupId], isManager, isTeacher)))
+            .Select(s =>
+                mapper.Map(
+                    new ScheduleSlotMappingContext(
+                        s,
+                        groupInfoLookup[s.GroupId],
+                        isManager,
+                        isTeacher
+                    )
+                )
+            )
             .ToList();
     }
 }

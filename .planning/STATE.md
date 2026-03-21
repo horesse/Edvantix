@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-03-21T07:05:05.011Z"
+stopped_at: Completed 03-07-PLAN.md
+last_updated: "2026-03-21T11:33:35.890Z"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 16
+  completed_plans: 8
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Менеджер школы может создать расписание группы, студент видит свои уроки и баланс, учитель видит свои занятия — всё в рамках одной школы с изолированными данными.
-**Current focus:** Phase 02 — organizations-permission-cache
+**Current focus:** Phase 03 — scheduling-slots-and-views
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
+Phase: 03 (scheduling-slots-and-views) — EXECUTING
+Plan: 2 of 9
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Plan: Not started
 | Phase 02-organizations-permission-cache P01 | 9 | 2 tasks | 19 files |
 | Phase 02-organizations-permission-cache P03 | 6 | 1 tasks | 7 files |
 | Phase 02-organizations-permission-cache P02 | 8 | 2 tasks | 17 files |
+| Phase 03-scheduling-slots-and-views P07 | 2 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,9 @@ Recent decisions affecting current work:
 - [Phase 02-02]: InternalsVisibleTo added to Edvantix.Organizations.csproj for EventMapper unit test access — follows Blog/Scheduler pattern
 - [Phase 02-02]: GetAllByRoleIdAsync uses IgnoreQueryFilters() for cross-tenant role enumeration in AssignPermissionsCommand cache invalidation
 - [Phase 02-02]: Null UserId in UserPermissionsInvalidatedIntegrationEvent signals school-wide invalidation for RolePermissionsChangedEvent mapping
+- [Phase 03-07]: Organization does NOT implement ITenanted — it IS the tenant root per D-17. No HasQueryFilter needed.
+- [Phase 03-07]: Organization IDs use ValueGeneratedNever — IDs come from external provisioning, not DB auto-generation.
+- [Phase 03-07]: GroupsPermissions uses groups.* namespace (not organizations.*) to distinguish group-management from RBAC-management permissions.
 
 ### Pending Todos
 
@@ -100,6 +104,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T06:58:48.750Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-03-21T11:33:35.887Z
+Stopped at: Completed 03-07-PLAN.md
 Resume file: None

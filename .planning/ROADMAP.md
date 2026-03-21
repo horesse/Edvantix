@@ -63,13 +63,13 @@ Plans:
   3. Manager sees a calendar view showing all groups' slots for their school; teacher sees only their own slots; student sees only slots for groups they belong to
   4. Manager can add a student to a group and remove a student from a group; group membership changes are reflected in the student's schedule view immediately
   5. All date/time values in the API and database are stored as DateTimeOffset; no DateTime.Now usage exists in the service
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 03-01: Group and GroupMembership domain model, EF Core configuration, and tenant isolation
-- [ ] 03-02: LessonSlot aggregate with teacher conflict detection; create, edit, delete commands
-- [ ] 03-03: Schedule query endpoints — manager all-groups view, teacher filtered view, student filtered view
-- [ ] 03-04: Group membership management — add student, remove student commands and queries
+- [ ] 03-01-PLAN.md — Scheduling service bootstrap, Group/LessonSlot domain model, EF Core config, Aspire wiring, arch tests
+- [ ] 03-02-PLAN.md — Group CRUD and LessonSlot create/edit/delete with teacher conflict detection
+- [ ] 03-03-PLAN.md — GET /schedule endpoint with permission-filtered manager/teacher/student views
+- [ ] 03-04-PLAN.md — Group membership management — add student, remove student, list members
 
 ### Phase 4: Scheduling — Attendance and Outbox
 **Goal**: Attendance is recorded for each student on each lesson slot and the AttendanceRecordedIntegrationEvent is reliably published to Kafka, providing Payments with a durable event stream to consume

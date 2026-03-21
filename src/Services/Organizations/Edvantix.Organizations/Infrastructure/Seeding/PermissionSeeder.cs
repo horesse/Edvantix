@@ -22,13 +22,17 @@ internal sealed class PermissionSeeder(
             scope.ServiceProvider.GetRequiredService<IPermissionRepository>();
 
         logger.LogInformation("Seeding Organizations permission strings...");
-
         await permissionRepository.UpsertAsync(OrganizationsPermissions.All, cancellationToken);
+
+        logger.LogInformation("Seeding Groups permission strings...");
+        await permissionRepository.UpsertAsync(GroupsPermissions.All, cancellationToken);
+
         await permissionRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         logger.LogInformation(
-            "Organizations permissions seeded: {Count} strings",
-            OrganizationsPermissions.All.Count
+            "Permissions seeded: {OrgCount} organizations + {GroupCount} groups",
+            OrganizationsPermissions.All.Count,
+            GroupsPermissions.All.Count
         );
     }
 

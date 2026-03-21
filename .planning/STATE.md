@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-03-21T11:38:57.437Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-03-21T12:00:17.447Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 16
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 03 (scheduling-slots-and-views) — EXECUTING
-Plan: 3 of 9
+Plan: 4 of 9
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Plan: 3 of 9
 | Phase 02-organizations-permission-cache P02 | 8 | 2 tasks | 17 files |
 | Phase 03-scheduling-slots-and-views P07 | 2 | 2 tasks | 5 files |
 | Phase 03-scheduling-slots-and-views P01 | 18 | 2 tasks | 21 files |
+| Phase 03-scheduling-slots-and-views P02 | 13 | 2 tasks | 19 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,8 @@ Recent decisions affecting current work:
 - [Phase 03-07]: GroupsPermissions uses groups.* namespace (not organizations.*) to distinguish group-management from RBAC-management permissions.
 - [Phase 03-01]: PermissionSeeder uses IHttpClientFactory HTTP POST to Organizations with AddStandardResilienceHandler — Scheduling does not own Permission aggregate
 - [Phase 03-01]: SchedulingDbContext shell has no DbSets — domain entities and HasQueryFilter deferred to Plan 02 when LessonSlot entity is created
+- [Phase 03-02]: ITenanted promoted to Edvantix.SharedKernel.SeedWork (from Organizations.Domain.Abstractions) — Scheduling needs tenant isolation without Organizations dependency. Organizations keeps backward-compat via global using alias.
+- [Phase 03-02]: LessonSlotRepository.HasConflictAsync uses IgnoreQueryFilters for cross-tenant teacher conflict check (D-04) — teacher cannot be double-booked even across schools
 
 ### Pending Todos
 
@@ -107,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T11:38:57.434Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-03-21T12:00:17.443Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None

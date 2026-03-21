@@ -4,6 +4,8 @@
     <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Grpc.Core.Api" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
     <PackageReference Include="Moq" />
   </ItemGroup>
   <ItemGroup>

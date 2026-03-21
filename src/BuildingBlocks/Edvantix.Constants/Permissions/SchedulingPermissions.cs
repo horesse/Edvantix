@@ -20,7 +20,16 @@ public static class SchedulingPermissions
     /// <summary>Permission to view the schedule.</summary>
     public const string ViewSchedule = "scheduling.view-schedule";
 
+    /// <summary>
+    /// Permission to view a teacher's own schedule.
+    /// Used as a permission-based marker to distinguish teachers from students
+    /// inside <c>GetScheduleQueryHandler</c> without data-driven slot inspection.
+    /// Rationale: a teacher with no slots in the current date range would otherwise
+    /// be misidentified as a student if detection were data-driven.
+    /// </summary>
+    public const string ViewOwnSchedule = "scheduling.view-own-schedule";
+
     /// <summary>Returns all Scheduling permission strings for seeding into the permission catalogue.</summary>
     public static IReadOnlyList<string> All =>
-        [CreateLessonSlot, EditLessonSlot, DeleteLessonSlot, ViewSchedule];
+        [CreateLessonSlot, EditLessonSlot, DeleteLessonSlot, ViewSchedule, ViewOwnSchedule];
 }

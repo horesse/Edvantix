@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-08-PLAN.md
-last_updated: "2026-03-21T12:12:19.460Z"
+stopped_at: Completed 03-05-PLAN.md
+last_updated: "2026-03-21T12:22:01.969Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 16
-  completed_plans: 12
+  completed_plans: 13
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 03 (scheduling-slots-and-views) — EXECUTING
-Plan: 6 of 9
+Plan: 7 of 9
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Plan: 6 of 9
 | Phase 03-scheduling-slots-and-views P02 | 13 | 2 tasks | 19 files |
 | Phase 03-scheduling-slots-and-views P04 | 2 | 2 tasks | 13 files |
 | Phase 03-scheduling-slots-and-views P08 | 8 | 2 tasks | 23 files |
+| Phase 03-scheduling-slots-and-views PP05 | 8 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,8 @@ Recent decisions affecting current work:
 - [Phase 03-04]: EditLessonSlotCommandHandler calls ChangeTeacher/Reschedule only when values differ — avoids spurious domain events in Phase 4
 - [Phase 03-08]: Organizations uses AddPermissionAuthorization self-call so GroupsPermissions policies enforce RBAC via gRPC without duplicating authorization logic
 - [Phase 03-08]: IGroupRepository.Add is synchronous (void) — Group has no navigation properties at creation, simpler than IRoleRepository.AddAsync
+- [Phase 03-05]: ViewOwnSchedule permission used as teacher marker (not data-driven slot query) to avoid misidentifying teachers with zero slots in queried range as students
+- [Phase 03-05]: StudentCount=0 in v1 (not null) for manager/teacher views — actual attendance count deferred to Phase 4
 
 ### Pending Todos
 
@@ -116,6 +119,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T12:12:19.458Z
-Stopped at: Completed 03-08-PLAN.md
+Last session: 2026-03-21T12:22:01.965Z
+Stopped at: Completed 03-05-PLAN.md
 Resume file: None

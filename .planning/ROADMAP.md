@@ -69,7 +69,7 @@ Plans:
 - [x] 03-01-PLAN.md — Scheduling service bootstrap: project, constants (4 scheduling permissions), PermissionSeeder (HTTP), Aspire wiring, Keycloak client (Wave 1)
 - [x] 03-02-PLAN.md — LessonSlot domain model + EF Core + repos + arch tests + unit test project (Wave 2)
 - [x] 03-04-PLAN.md — LessonSlot create/edit/delete with global teacher conflict detection + Organizations gRPC group validation (Wave 3)
-- [ ] 03-05-PLAN.md — GET /schedule with permission-filtered manager/teacher/student views, student groups via Organizations gRPC (Wave 4)
+- [x] 03-05-PLAN.md — GET /schedule with permission-filtered manager/teacher/student views, student groups via Organizations gRPC (Wave 4)
 - [x] 03-07-PLAN.md — Organization entity (Id only) + GroupsPermissions class in Organizations service (Wave 1)
 - [x] 03-08-PLAN.md — Group aggregate + CRUD in Organizations service, protected by groups.* permissions (Wave 3)
 - [ ] 03-09-PLAN.md — GroupMembership in Organizations + GetGroupsForStudent gRPC + Scheduling gRPC client (Wave 4)
@@ -114,6 +114,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Organizations — RBAC Core | 4/4 | Complete   | 2026-03-18 |
 | 2. Organizations — Permission Cache | 3/3 | Complete   | 2026-03-21 |
-| 3. Scheduling — Slots and Views | 5/9 | In Progress|  |
+| 3. Scheduling — Slots and Views | 6/9 | In Progress|  |
 | 4. Scheduling — Attendance and Outbox | 0/2 | Not started | - |
 | 5. Payments — Ledger and Balance | 0/3 | Not started | - |

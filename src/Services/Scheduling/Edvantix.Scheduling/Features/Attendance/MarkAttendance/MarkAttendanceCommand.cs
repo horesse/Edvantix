@@ -13,8 +13,5 @@ namespace Edvantix.Scheduling.Features.Attendance.MarkAttendance;
 /// <param name="SlotId">The lesson slot to mark attendance for.</param>
 /// <param name="StudentId">The student whose attendance is being marked.</param>
 /// <param name="Status">The attendance status to record.</param>
-public sealed record MarkAttendanceCommand(
-    Guid SlotId,
-    Guid StudentId,
-    AttendanceStatus Status
-) : ICommand<Unit>;
+public sealed record MarkAttendanceCommand(Guid SlotId, Guid StudentId, AttendanceStatus Status)
+    : ICommand<Unit>;

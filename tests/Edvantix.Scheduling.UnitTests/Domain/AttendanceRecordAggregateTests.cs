@@ -18,7 +18,12 @@ public sealed class AttendanceRecordAggregateTests
     {
         var before = DateTimeOffset.UtcNow;
 
-        var record = new AttendanceRecord(SchoolId, LessonSlotId, StudentId, AttendanceStatus.Present);
+        var record = new AttendanceRecord(
+            SchoolId,
+            LessonSlotId,
+            StudentId,
+            AttendanceStatus.Present
+        );
 
         record.SchoolId.ShouldBe(SchoolId);
         record.LessonSlotId.ShouldBe(LessonSlotId);
@@ -56,7 +61,12 @@ public sealed class AttendanceRecordAggregateTests
     [Test]
     public void GivenExistingRecord_WhenUpdatingStatus_ThenStatusAndMarkedAtChange()
     {
-        var record = new AttendanceRecord(SchoolId, LessonSlotId, StudentId, AttendanceStatus.Present);
+        var record = new AttendanceRecord(
+            SchoolId,
+            LessonSlotId,
+            StudentId,
+            AttendanceStatus.Present
+        );
         var markedAtBefore = record.MarkedAt;
 
         record.UpdateStatus(AttendanceStatus.Absent);
@@ -68,7 +78,12 @@ public sealed class AttendanceRecordAggregateTests
     [Test]
     public void GivenExistingRecord_WhenUpdatingStatus_ThenCorrelationIdIsPreserved()
     {
-        var record = new AttendanceRecord(SchoolId, LessonSlotId, StudentId, AttendanceStatus.Present);
+        var record = new AttendanceRecord(
+            SchoolId,
+            LessonSlotId,
+            StudentId,
+            AttendanceStatus.Present
+        );
         var originalCorrelationId = record.CorrelationId;
 
         record.UpdateStatus(AttendanceStatus.Absent);

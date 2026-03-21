@@ -8,4 +8,5 @@ namespace Edvantix.Scheduling.Features.Attendance.GetSlotAttendance;
 /// </para>
 /// </summary>
 /// <param name="SlotId">The identifier of the lesson slot whose attendance records are requested.</param>
-public sealed record GetSlotAttendanceQuery(Guid SlotId) : IQuery<IReadOnlyList<AttendanceRecordDto>>;
+public sealed record GetSlotAttendanceQuery(Guid SlotId)
+    : IQuery<IReadOnlyList<AttendanceRecordDto>>;

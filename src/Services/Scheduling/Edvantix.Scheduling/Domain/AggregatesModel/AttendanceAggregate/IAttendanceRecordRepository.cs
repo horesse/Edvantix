@@ -15,7 +15,11 @@ public interface IAttendanceRecordRepository : IRepository<AttendanceRecord>
     /// <param name="slotId">The lesson slot identifier.</param>
     /// <param name="studentId">The student identifier.</param>
     /// <param name="ct">Cancellation token.</param>
-    Task<AttendanceRecord?> FindBySlotAndStudentAsync(Guid slotId, Guid studentId, CancellationToken ct);
+    Task<AttendanceRecord?> FindBySlotAndStudentAsync(
+        Guid slotId,
+        Guid studentId,
+        CancellationToken ct
+    );
 
     /// <summary>
     /// Returns all attendance records for a given lesson slot.

@@ -33,33 +33,33 @@ public sealed class MarkAttendanceCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindBySlotAndStudentAsync(
-                    slotId,
-                    studentId,
-                    It.IsAny<CancellationToken>()
-                )
+                r.FindBySlotAndStudentAsync(slotId, studentId, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync((AttendanceRecord?)null);
 
         var command = new MarkAttendanceCommand(slotId, studentId, AttendanceStatus.Present);
-        var handler = new MarkAttendanceCommandHandler(_repositoryMock.Object, _tenantContextMock.Object);
+        var handler = new MarkAttendanceCommandHandler(
+            _repositoryMock.Object,
+            _tenantContextMock.Object
+        );
 
         await handler.Handle(command, CancellationToken.None);
 
         // A new record must be added exactly once
         _repositoryMock.Verify(
-            r => r.Add(It.Is<AttendanceRecord>(rec =>
-                rec.LessonSlotId == slotId &&
-                rec.StudentId == studentId &&
-                rec.Status == AttendanceStatus.Present)),
+            r =>
+                r.Add(
+                    It.Is<AttendanceRecord>(rec =>
+                        rec.LessonSlotId == slotId
+                        && rec.StudentId == studentId
+                        && rec.Status == AttendanceStatus.Present
+                    )
+                ),
             Times.Once
         );
 
         // SaveEntitiesAsync must be called exactly once
-        _unitOfWorkMock.Verify(
-            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
@@ -78,16 +78,15 @@ public sealed class MarkAttendanceCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindBySlotAndStudentAsync(
-                    slotId,
-                    studentId,
-                    It.IsAny<CancellationToken>()
-                )
+                r.FindBySlotAndStudentAsync(slotId, studentId, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(existingRecord);
 
         var command = new MarkAttendanceCommand(slotId, studentId, AttendanceStatus.Absent);
-        var handler = new MarkAttendanceCommandHandler(_repositoryMock.Object, _tenantContextMock.Object);
+        var handler = new MarkAttendanceCommandHandler(
+            _repositoryMock.Object,
+            _tenantContextMock.Object
+        );
 
         await handler.Handle(command, CancellationToken.None);
 
@@ -95,10 +94,7 @@ public sealed class MarkAttendanceCommandHandlerTests
         _repositoryMock.Verify(r => r.Add(It.IsAny<AttendanceRecord>()), Times.Never);
 
         // SaveEntitiesAsync must be called exactly once
-        _unitOfWorkMock.Verify(
-            u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
 
         // The record's status should reflect the new value
         existingRecord.Status.ShouldBe(AttendanceStatus.Absent);

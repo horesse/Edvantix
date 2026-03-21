@@ -12,6 +12,8 @@ internal sealed class MarkAttendanceCommandValidator : AbstractValidator<MarkAtt
         RuleFor(x => x.StudentId).NotEmpty().WithMessage("StudentId must not be empty.");
 
         // Validates the enum value is defined — prevents invalid int values from being accepted
-        RuleFor(x => x.Status).IsInEnum().WithMessage("Status must be a valid AttendanceStatus value.");
+        RuleFor(x => x.Status)
+            .IsInEnum()
+            .WithMessage("Status must be a valid AttendanceStatus value.");
     }
 }

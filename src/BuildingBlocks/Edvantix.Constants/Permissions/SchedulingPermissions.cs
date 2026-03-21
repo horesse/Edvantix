@@ -37,5 +37,12 @@ public static class SchedulingPermissions
 
     /// <summary>Returns all Scheduling permission strings for seeding into the permission catalogue.</summary>
     public static IReadOnlyList<string> All =>
-        [CreateLessonSlot, EditLessonSlot, DeleteLessonSlot, ViewSchedule, ViewOwnSchedule, MarkAttendance];
+        [
+            CreateLessonSlot,
+            EditLessonSlot,
+            DeleteLessonSlot,
+            ViewSchedule,
+            ViewOwnSchedule,
+            MarkAttendance,
+        ];
 }

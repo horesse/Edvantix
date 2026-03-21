@@ -84,7 +84,9 @@ public sealed class EventMapperTests
     {
         var unknownEvent = new UnknownDomainEventStub();
 
-        Should.Throw<ArgumentOutOfRangeException>(() => _mapper.MapToIntegrationEvent(unknownEvent));
+        Should.Throw<ArgumentOutOfRangeException>(() =>
+            _mapper.MapToIntegrationEvent(unknownEvent)
+        );
     }
 
     /// <summary>Stub domain event used to verify the default throw case in EventMapper.</summary>

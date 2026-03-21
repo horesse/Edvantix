@@ -29,10 +29,7 @@ public sealed class AttendanceRecordRepository(SchedulingDbContext context)
     public async Task<IReadOnlyList<AttendanceRecord>> GetBySlotAsync(
         Guid slotId,
         CancellationToken ct
-    ) =>
-        await context.AttendanceRecords
-            .Where(a => a.LessonSlotId == slotId)
-            .ToListAsync(ct);
+    ) => await context.AttendanceRecords.Where(a => a.LessonSlotId == slotId).ToListAsync(ct);
 
     /// <inheritdoc/>
     public void Add(AttendanceRecord record) => context.AttendanceRecords.Add(record);

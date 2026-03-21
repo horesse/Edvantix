@@ -69,7 +69,16 @@ public sealed class AttendanceRecord : Entity, IAggregateRoot, ITenanted
 
         // Raise domain event so EventDispatchInterceptor can capture it after SaveChanges.
         // Status.ToString() converts enum to string per D-12 — decouples event contract from internal enum.
-        RegisterDomainEvent(new AttendanceRecordedEvent(CorrelationId, StudentId, LessonSlotId, SchoolId, Status.ToString(), MarkedAt));
+        RegisterDomainEvent(
+            new AttendanceRecordedEvent(
+                CorrelationId,
+                StudentId,
+                LessonSlotId,
+                SchoolId,
+                Status.ToString(),
+                MarkedAt
+            )
+        );
     }
 
     /// <summary>
@@ -84,6 +93,15 @@ public sealed class AttendanceRecord : Entity, IAggregateRoot, ITenanted
 
         // Raise domain event so EventDispatchInterceptor can capture it after SaveChanges.
         // CorrelationId is preserved from original creation per D-04 — event chain identity stays consistent.
-        RegisterDomainEvent(new AttendanceRecordedEvent(CorrelationId, StudentId, LessonSlotId, SchoolId, Status.ToString(), MarkedAt));
+        RegisterDomainEvent(
+            new AttendanceRecordedEvent(
+                CorrelationId,
+                StudentId,
+                LessonSlotId,
+                SchoolId,
+                Status.ToString(),
+                MarkedAt
+            )
+        );
     }
 }

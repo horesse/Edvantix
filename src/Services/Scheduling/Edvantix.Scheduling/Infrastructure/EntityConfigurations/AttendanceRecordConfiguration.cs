@@ -27,8 +27,6 @@ internal sealed class AttendanceRecordConfiguration : IEntityTypeConfiguration<A
 
         // Unique composite index: one attendance record per student per slot (D-02).
         // If a student is re-marked, UpdateStatus is called on the existing record.
-        builder
-            .HasIndex(a => new { a.LessonSlotId, a.StudentId })
-            .IsUnique();
+        builder.HasIndex(a => new { a.LessonSlotId, a.StudentId }).IsUnique();
     }
 }

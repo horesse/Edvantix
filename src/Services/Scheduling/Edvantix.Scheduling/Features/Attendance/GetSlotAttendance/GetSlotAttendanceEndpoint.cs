@@ -18,11 +18,8 @@ public sealed class GetSlotAttendanceEndpoint
     {
         app.MapGet(
                 "/slots/{slotId:guid}/attendance",
-                async (
-                    Guid slotId,
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) => await HandleAsync(slotId, sender, cancellationToken)
+                async (Guid slotId, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(slotId, sender, cancellationToken)
             )
             .Produces<IReadOnlyList<AttendanceRecordDto>>(StatusCodes.Status200OK)
             .WithName("GetSlotAttendance")

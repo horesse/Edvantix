@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Organizations — RBAC Core** - Custom roles, permissions, user-role assignments, and tenant isolation foundation for all services (completed 2026-03-18)
 - [x] **Phase 2: Organizations — Permission Cache** - gRPC CheckPermission endpoint, HybridCache, and role-change invalidation events (completed 2026-03-21)
 - [ ] **Phase 3: Scheduling — Slots and Views** - Groups, lesson slots with conflict detection, and manager/teacher/student calendar views
-- [ ] **Phase 4: Scheduling — Attendance and Outbox** - Attendance marking with unique constraint and AttendanceRecordedIntegrationEvent via transactional outbox
+- [x] **Phase 4: Scheduling — Attendance and Outbox** - Attendance marking with unique constraint and AttendanceRecordedIntegrationEvent via transactional outbox (completed 2026-03-21)
 - [ ] **Phase 5: Payments — Ledger and Balance** - Lesson package management, append-only ledger, idempotent event consumer, and balance display
 
 ## Phase Details
@@ -86,7 +86,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md — AttendanceRecord aggregate, EF config with unique index, HasQueryFilter, permissions, Wave 0 test stubs (Wave 1)
-- [ ] 04-02-PLAN.md — Domain event pipeline (EventMapper + outbox wiring), MarkAttendance PUT endpoint, handler tests (Wave 2)
+- [x] 04-02-PLAN.md — Domain event pipeline (EventMapper + outbox wiring), MarkAttendance PUT endpoint, handler tests (Wave 2)
 - [x] 04-03-PLAN.md — GetSlotAttendance GET endpoint with AttendanceRecordDto (Wave 2)
 
 ### Phase 5: Payments — Ledger and Balance
@@ -116,5 +116,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Organizations — RBAC Core | 4/4 | Complete   | 2026-03-18 |
 | 2. Organizations — Permission Cache | 3/3 | Complete   | 2026-03-21 |
 | 3. Scheduling — Slots and Views | 7/9 | In Progress|  |
-| 4. Scheduling — Attendance and Outbox | 2/3 | In Progress|  |
+| 4. Scheduling — Attendance and Outbox | 3/3 | Complete   | 2026-03-21 |
 | 5. Payments — Ledger and Balance | 0/3 | Not started | - |

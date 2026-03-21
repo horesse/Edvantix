@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-03-PLAN.md
-last_updated: "2026-03-21T18:44:58.148Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-03-21T18:49:10.708Z"
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 19
-  completed_plans: 16
+  completed_plans: 17
 ---
 
 # Project State
@@ -62,6 +62,7 @@ Plan: 3 of 3
 | Phase 03-scheduling-slots-and-views P09 | 10 | 2 tasks | 24 files |
 | Phase 04-scheduling-attendance-outbox P01 | 10 | 2 tasks | 11 files |
 | Phase 04-scheduling-attendance-outbox P03 | 2 | 1 tasks | 4 files |
+| Phase 04 P02 | 12 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -119,6 +120,9 @@ Recent decisions affecting current work:
 - [Phase 04-01]: HasQueryFilter for AttendanceRecord registered in SchedulingDbContext.OnModelCreating (not entity config) to use injected ITenantContext — same pattern as LessonSlot
 - [Phase 04-03]: ViewSchedule permission reused for GET attendance endpoint (D-09) — no separate view-attendance permission needed in v1
 - [Phase 04-03]: AttendanceRecordDto uses string Status (not enum) per D-07 response shape — avoids enum numeric leakage to API consumers
+- [Phase 04]: AttendanceRecordedEvent.Status is string (not enum) per D-12 — decouples integration event contract from internal enum; aggregate uses Status.ToString()
+- [Phase 04]: Kafka topic attendance-recorded-integration-event confirmed per D-11 — Phase 5 Payments must subscribe to this exact topic name
+- [Phase 04]: Upsert uses EF change tracking not ExecuteUpdate so EventDispatchInterceptor captures domain events during SaveEntitiesAsync
 
 ### Pending Todos
 
@@ -130,6 +134,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T18:44:58.145Z
-Stopped at: Completed 04-03-PLAN.md
+Last session: 2026-03-21T18:49:10.705Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None

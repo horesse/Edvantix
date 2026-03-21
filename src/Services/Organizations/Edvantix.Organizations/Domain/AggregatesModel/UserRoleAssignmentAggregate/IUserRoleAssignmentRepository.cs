@@ -30,6 +30,16 @@ public interface IUserRoleAssignmentRepository : IRepository<UserRoleAssignment>
         CancellationToken cancellationToken = default
     );
 
+    /// <summary>
+    /// Returns all role assignments for the given role across any school,
+    /// bypassing the tenant query filter. Used to enumerate affected users when
+    /// a role's permissions change, so their caches can be invalidated.
+    /// </summary>
+    Task<List<UserRoleAssignment>> GetAllByRoleIdAsync(
+        Guid roleId,
+        CancellationToken cancellationToken = default
+    );
+
     /// <summary>Returns true if any assignment references the given role — used before role deletion.</summary>
     Task<bool> ExistsByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default);
 

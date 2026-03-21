@@ -64,6 +64,19 @@ public sealed class UserRoleAssignmentRepository(OrganizationsDbContext context)
             .ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
+    public async Task<List<UserRoleAssignment>> GetAllByRoleIdAsync(
+        Guid roleId,
+        CancellationToken cancellationToken = default
+    ) =>
+        // IgnoreQueryFilters bypasses the tenant HasQueryFilter so we get all users with
+        // this role across all schools — required to enumerate affected cache entries when
+        // a role's permission set changes.
+        await context
+            .UserRoleAssignments.IgnoreQueryFilters()
+            .Where(a => a.RoleId == roleId)
+            .ToListAsync(cancellationToken);
+
+    /// <inheritdoc/>
     public void Remove(UserRoleAssignment assignment) =>
         context.UserRoleAssignments.Remove(assignment);
 }

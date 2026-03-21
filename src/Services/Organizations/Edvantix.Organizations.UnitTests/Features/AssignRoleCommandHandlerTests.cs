@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Caching;
 using Edvantix.Organizations.Features.UserRoleAssignments.AssignRole;
 using Edvantix.Organizations.Grpc.Services;
 
@@ -10,6 +11,7 @@ public sealed class AssignRoleCommandHandlerTests
     private readonly Mock<IRoleRepository> _roleRepositoryMock;
     private readonly Mock<IPersonaProfileService> _personaProfileServiceMock;
     private readonly Mock<ITenantContext> _tenantContextMock;
+    private readonly Mock<IHybridCache> _cacheMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly AssignRoleCommandHandler _handler;
 
@@ -42,11 +44,17 @@ public sealed class AssignRoleCommandHandlerTests
         _tenantContextMock = new Mock<ITenantContext>();
         _tenantContextMock.SetupGet(t => t.SchoolId).Returns(_schoolId);
 
+        _cacheMock = new Mock<IHybridCache>();
+        _cacheMock
+            .Setup(c => c.RemoveByTagAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Returns(ValueTask.CompletedTask);
+
         _handler = new AssignRoleCommandHandler(
             _assignmentRepositoryMock.Object,
             _roleRepositoryMock.Object,
             _personaProfileServiceMock.Object,
-            _tenantContextMock.Object
+            _tenantContextMock.Object,
+            _cacheMock.Object
         );
     }
 
@@ -137,6 +145,32 @@ public sealed class AssignRoleCommandHandlerTests
         var act = () => _handler.Handle(command, CancellationToken.None).AsTask();
 
         await act.ShouldThrowAsync<InvalidOperationException>();
+    }
+
+    [Test]
+    public async Task GivenRoleAssigned_WhenHandled_ThenCacheInvalidated()
+    {
+        var role = CreateRole(_roleId, "Teacher");
+
+        _roleRepositoryMock
+            .Setup(r => r.FindByIdAsync(_roleId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(role);
+        _personaProfileServiceMock
+            .Setup(s => s.ValidateProfileExistsAsync(_profileId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+        _assignmentRepositoryMock
+            .Setup(r => r.FindAsync(_profileId, _roleId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((UserRoleAssignment?)null);
+
+        var command = new AssignRoleCommand { ProfileId = _profileId, RoleId = _roleId };
+
+        await _handler.Handle(command, CancellationToken.None);
+
+        var expectedTag = $"user:{_profileId}:{_schoolId}";
+        _cacheMock.Verify(
+            c => c.RemoveByTagAsync(expectedTag, It.IsAny<CancellationToken>()),
+            Times.Once
+        );
     }
 
     /// <summary>Creates a <see cref="Role"/> instance with a preset Id for test usage.</summary>

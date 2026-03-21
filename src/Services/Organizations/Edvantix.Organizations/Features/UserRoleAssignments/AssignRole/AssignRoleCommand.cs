@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Caching;
 using Edvantix.Organizations.Grpc.Services;
 
 namespace Edvantix.Organizations.Features.UserRoleAssignments.AssignRole;
@@ -16,12 +17,17 @@ public sealed class AssignRoleCommand : ICommand<Guid>
 /// Handles role assignment with gRPC-based profile validation.
 /// Validates the role exists in the current tenant, the profile exists in Persona,
 /// and that the assignment does not already exist before creating it.
+/// The <see cref="UserRoleAssignment"/> constructor raises a domain event on creation,
+/// which is dispatched via <c>SaveEntitiesAsync</c> to publish the outbox integration event.
+/// Belt-and-suspenders: also calls <see cref="IHybridCache.RemoveByTagAsync"/> to evict the
+/// local hybrid cache immediately.
 /// </summary>
 public sealed class AssignRoleCommandHandler(
     IUserRoleAssignmentRepository assignmentRepository,
     IRoleRepository roleRepository,
     IPersonaProfileService personaProfileService,
-    ITenantContext tenantContext
+    ITenantContext tenantContext,
+    IHybridCache cache
 ) : ICommandHandler<AssignRoleCommand, Guid>
 {
     /// <inheritdoc/>
@@ -58,7 +64,7 @@ public sealed class AssignRoleCommandHandler(
             );
         }
 
-        // 4. Create and persist the assignment
+        // 4. Create and persist the assignment (constructor raises UserRoleAssignedEvent)
         var assignment = new UserRoleAssignment(
             request.ProfileId,
             tenantContext.SchoolId,
@@ -66,6 +72,10 @@ public sealed class AssignRoleCommandHandler(
         );
         await assignmentRepository.AddAsync(assignment, cancellationToken);
         await assignmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        // Belt-and-suspenders: immediately evict local hybrid cache for this user's school.
+        var tag = $"user:{request.ProfileId}:{tenantContext.SchoolId}";
+        await cache.RemoveByTagAsync(tag, cancellationToken);
 
         return assignment.Id;
     }

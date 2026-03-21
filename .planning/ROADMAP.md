@@ -66,10 +66,12 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Scheduling service bootstrap, Group/LessonSlot domain model, EF Core config, Aspire wiring, arch tests
-- [ ] 03-02-PLAN.md — Group CRUD and LessonSlot create/edit/delete with teacher conflict detection
-- [ ] 03-03-PLAN.md — GET /schedule endpoint with permission-filtered manager/teacher/student views
-- [ ] 03-04-PLAN.md — Group membership management — add student, remove student, list members
+- [ ] 03-01-PLAN.md — Scheduling service bootstrap: project, constants, PermissionSeeder (HTTP), Aspire wiring, Keycloak client (Wave 1)
+- [ ] 03-02-PLAN.md — Domain model + EF Core + repos + arch tests + unit test project (Wave 2)
+- [ ] 03-03-PLAN.md — Group CRUD commands and endpoints (Wave 3)
+- [ ] 03-04-PLAN.md — LessonSlot create/edit/delete with global teacher conflict detection (Wave 3)
+- [ ] 03-05-PLAN.md — GET /schedule with permission-filtered manager/teacher/student views (Wave 4)
+- [ ] 03-06-PLAN.md — Group membership management — add/remove student, list members (Wave 3)
 
 ### Phase 4: Scheduling — Attendance and Outbox
 **Goal**: Attendance is recorded for each student on each lesson slot and the AttendanceRecordedIntegrationEvent is reliably published to Kafka, providing Payments with a durable event stream to consume

@@ -29,7 +29,13 @@ public static class SchedulingPermissions
     /// </summary>
     public const string ViewOwnSchedule = "scheduling.view-own-schedule";
 
+    /// <summary>
+    /// Permission to mark or update a student's attendance for a lesson slot.
+    /// Assigned to teachers and managers who are responsible for recording attendance (D-08).
+    /// </summary>
+    public const string MarkAttendance = "scheduling.mark-attendance";
+
     /// <summary>Returns all Scheduling permission strings for seeding into the permission catalogue.</summary>
     public static IReadOnlyList<string> All =>
-        [CreateLessonSlot, EditLessonSlot, DeleteLessonSlot, ViewSchedule, ViewOwnSchedule];
+        [CreateLessonSlot, EditLessonSlot, DeleteLessonSlot, ViewSchedule, ViewOwnSchedule, MarkAttendance];
 }

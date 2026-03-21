@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Edvantix.Chassis.Mapper;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Security.Tenant;
 using Edvantix.Constants.Permissions;
@@ -29,6 +30,7 @@ public sealed class GetScheduleQueryHandlerTests : IDisposable
     private readonly Mock<PermissionsGrpcService.PermissionsGrpcServiceClient> _grpcClientMock;
     private readonly Mock<IOrganizationsGroupService> _groupServiceMock;
     private readonly Mock<ITenantContext> _tenantContextMock;
+    private readonly Mock<IMapper<ScheduleSlotMappingContext, ScheduleSlotDto>> _mapperMock;
 
     public GetScheduleQueryHandlerTests()
     {
@@ -50,6 +52,13 @@ public sealed class GetScheduleQueryHandlerTests : IDisposable
         _groupServiceMock
             .Setup(s => s.GetGroupAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GroupInfoDto("Test Group", "#FF0000"));
+
+        // Default: mapper delegates to the real ScheduleSlotMapper for accurate assertions.
+        _mapperMock = new Mock<IMapper<ScheduleSlotMappingContext, ScheduleSlotDto>>();
+        var realMapper = new ScheduleSlotMapper();
+        _mapperMock
+            .Setup(m => m.Map(It.IsAny<ScheduleSlotMappingContext>()))
+            .Returns((ScheduleSlotMappingContext ctx) => realMapper.Map(ctx));
     }
 
     public void Dispose() => _dbContext.Dispose();
@@ -108,7 +117,8 @@ public sealed class GetScheduleQueryHandlerTests : IDisposable
             _tenantContextMock.Object,
             principal,
             _grpcClientMock.Object,
-            _groupServiceMock.Object
+            _groupServiceMock.Object,
+            _mapperMock.Object
         );
 
     // -------------------------------------------------------------------------

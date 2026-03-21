@@ -1,3 +1,4 @@
+using Edvantix.Scheduling.Domain.AggregatesModel.AttendanceAggregate;
 using Edvantix.Scheduling.Domain.AggregatesModel.LessonSlotAggregate;
 
 namespace Edvantix.Scheduling.Infrastructure;
@@ -17,6 +18,9 @@ public sealed class SchedulingDbContext(
     /// <summary>Gets the lesson slots data set.</summary>
     public DbSet<LessonSlot> LessonSlots => Set<LessonSlot>();
 
+    /// <summary>Gets the attendance records data set.</summary>
+    public DbSet<AttendanceRecord> AttendanceRecords => Set<AttendanceRecord>();
+
     /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +36,12 @@ public sealed class SchedulingDbContext(
         modelBuilder
             .Entity<LessonSlot>()
             .HasQueryFilter(s => s.SchoolId == tenantContext.SchoolId);
+
+        // Tenant isolation query filter for AttendanceRecord.
+        // CRITICAL: Without this, SchedulingTenantIsolationTests arch test will fail.
+        modelBuilder
+            .Entity<AttendanceRecord>()
+            .HasQueryFilter(a => a.SchoolId == tenantContext.SchoolId);
     }
 
     /// <inheritdoc/>

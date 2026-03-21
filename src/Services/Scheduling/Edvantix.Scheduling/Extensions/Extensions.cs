@@ -59,6 +59,10 @@ internal static class Extensions
             .AddPolicy(
                 SchedulingPermissions.ViewOwnSchedule,
                 p => p.RequirePermission(SchedulingPermissions.ViewOwnSchedule)
+            )
+            .AddPolicy(
+                SchedulingPermissions.MarkAttendance,
+                p => p.RequirePermission(SchedulingPermissions.MarkAttendance)
             );
 
         // Wire Organizations gRPC client for permission checking at authorization layer.

@@ -56,7 +56,10 @@ public sealed class LessonSlot : Entity, IAggregateRoot, ITenanted
 
         if (endTime <= startTime)
         {
-            throw new ArgumentException("EndTime must be strictly after StartTime.", nameof(endTime));
+            throw new ArgumentException(
+                "EndTime must be strictly after StartTime.",
+                nameof(endTime)
+            );
         }
 
         SchoolId = schoolId;
@@ -76,7 +79,10 @@ public sealed class LessonSlot : Entity, IAggregateRoot, ITenanted
     {
         if (newEnd <= newStart)
         {
-            throw new ArgumentException("EndTime must be strictly after StartTime.", nameof(newEnd));
+            throw new ArgumentException(
+                "EndTime must be strictly after StartTime.",
+                nameof(newEnd)
+            );
         }
 
         StartTime = newStart;

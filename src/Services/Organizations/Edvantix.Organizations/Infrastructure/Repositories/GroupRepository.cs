@@ -15,8 +15,7 @@ public sealed class GroupRepository(OrganizationsDbContext context) : IGroupRepo
     public async Task<Group?> FindByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default
-    ) =>
-        await context.Groups.FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
+    ) => await context.Groups.FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
 
     /// <inheritdoc/>
     public async Task<List<Group>> GetAllAsync(CancellationToken cancellationToken = default) =>
@@ -27,8 +26,8 @@ public sealed class GroupRepository(OrganizationsDbContext context) : IGroupRepo
         Guid id,
         CancellationToken cancellationToken = default
     ) =>
-        await context.Groups
-            .Include(g => g.Members)
+        await context
+            .Groups.Include(g => g.Members)
             .FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
 
     /// <inheritdoc/>

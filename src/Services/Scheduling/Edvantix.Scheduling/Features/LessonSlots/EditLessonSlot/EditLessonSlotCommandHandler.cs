@@ -41,9 +41,12 @@ public sealed class EditLessonSlotCommandHandler(
 
         if (hasConflict)
         {
-            throw new ValidationException(
-                [new ValidationFailure(nameof(command.TeacherId), "Teacher is already booked at the requested time")]
-            );
+            throw new ValidationException([
+                new ValidationFailure(
+                    nameof(command.TeacherId),
+                    "Teacher is already booked at the requested time"
+                ),
+            ]);
         }
 
         // Step 3: Apply aggregate changes — only call domain methods when the value differs

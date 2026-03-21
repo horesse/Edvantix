@@ -21,5 +21,6 @@ public static class GroupsPermissions
     public const string ManageGroupMembership = "groups.manage-group-membership";
 
     /// <summary>Returns all Groups permission strings for seeding into the permission catalogue.</summary>
-    public static IReadOnlyList<string> All => [CreateGroup, UpdateGroup, DeleteGroup, ManageGroupMembership];
+    public static IReadOnlyList<string> All =>
+        [CreateGroup, UpdateGroup, DeleteGroup, ManageGroupMembership];
 }

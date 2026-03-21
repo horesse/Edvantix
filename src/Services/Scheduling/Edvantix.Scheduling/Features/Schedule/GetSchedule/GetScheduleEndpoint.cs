@@ -31,9 +31,9 @@ public sealed class GetScheduleEndpoint
             .WithSummary("Get schedule")
             .WithDescription(
                 "Returns lesson slots for the current school within the requested date range. "
-                + "Managers see all groups' slots with teacher identity and student counts. "
-                + "Teachers see only their own slots with student counts. "
-                + "Students see only slots for groups they belong to, resolved via Organizations service."
+                    + "Managers see all groups' slots with teacher identity and student counts. "
+                    + "Teachers see only their own slots with student counts. "
+                    + "Students see only slots for groups they belong to, resolved via Organizations service."
             )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization(SchedulingPermissions.ViewSchedule);

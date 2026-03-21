@@ -25,8 +25,8 @@ public sealed class CreateLessonSlotEndpoint
             .WithSummary("Create a lesson slot")
             .WithDescription(
                 "Creates a new lesson slot binding a group, teacher, and time range within the current school. "
-                + "Returns 404 if the group does not exist in the Organizations service. "
-                + "Returns 422 if the teacher is already booked at the requested time."
+                    + "Returns 404 if the group does not exist in the Organizations service. "
+                    + "Returns 422 if the teacher is already booked at the requested time."
             )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization(SchedulingPermissions.CreateLessonSlot);

@@ -220,10 +220,7 @@ public sealed class GetScheduleQueryHandlerTests : IDisposable
 
         var handler = CreateHandler(MakePrincipal(managerId));
         // Query covers only the first day.
-        var query = new GetScheduleQuery(
-            inRangeStart.AddHours(-1),
-            inRangeStart.AddHours(2)
-        );
+        var query = new GetScheduleQuery(inRangeStart.AddHours(-1), inRangeStart.AddHours(2));
 
         var result = await handler.Handle(query, CancellationToken.None);
 

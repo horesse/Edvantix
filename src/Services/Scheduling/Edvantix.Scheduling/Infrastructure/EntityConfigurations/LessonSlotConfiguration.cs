@@ -22,17 +22,16 @@ internal sealed class LessonSlotConfiguration : IEntityTypeConfiguration<LessonS
         builder.Property(s => s.TeacherId).IsRequired();
 
         // DateTimeOffset must be stored as timestamp with time zone in PostgreSQL (SCH-10)
-        builder
-            .Property(s => s.StartTime)
-            .IsRequired()
-            .HasColumnType("timestamp with time zone");
+        builder.Property(s => s.StartTime).IsRequired().HasColumnType("timestamp with time zone");
 
-        builder
-            .Property(s => s.EndTime)
-            .IsRequired()
-            .HasColumnType("timestamp with time zone");
+        builder.Property(s => s.EndTime).IsRequired().HasColumnType("timestamp with time zone");
 
         // Composite index for efficient teacher conflict queries (HasConflictAsync)
-        builder.HasIndex(s => new { s.TeacherId, s.StartTime, s.EndTime });
+        builder.HasIndex(s => new
+        {
+            s.TeacherId,
+            s.StartTime,
+            s.EndTime,
+        });
     }
 }

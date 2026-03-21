@@ -35,8 +35,8 @@ public sealed class EditLessonSlotEndpoint : IEndpoint<NoContent, EditLessonSlot
             .WithSummary("Edit a lesson slot")
             .WithDescription(
                 "Updates the teacher or time range of a lesson slot. "
-                + "Returns 422 if the teacher is already booked at the new time. "
-                + "The current slot is excluded from the conflict check (self-exclusion per D-06)."
+                    + "Returns 422 if the teacher is already booked at the new time. "
+                    + "The current slot is excluded from the conflict check (self-exclusion per D-06)."
             )
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization(SchedulingPermissions.EditLessonSlot);

@@ -5,13 +5,9 @@ internal sealed class EditLessonSlotCommandValidator : AbstractValidator<EditLes
 {
     public EditLessonSlotCommandValidator()
     {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("Id must not be empty.");
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Id must not be empty.");
 
-        RuleFor(x => x.TeacherId)
-            .NotEmpty()
-            .WithMessage("TeacherId must not be empty.");
+        RuleFor(x => x.TeacherId).NotEmpty().WithMessage("TeacherId must not be empty.");
 
         RuleFor(x => x.StartTime)
             .NotEqual(default(DateTimeOffset))

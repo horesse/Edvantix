@@ -15,8 +15,7 @@ public sealed class SchedulingAppSettings : AppSettings
         {
             Title = "Scheduling Service API",
             Summary = "Сервис расписания уроков",
-            Description =
-                "Управление слотами расписания, группами учеников и учителей.",
+            Description = "Управление слотами расписания, группами учеников и учителей.",
             Contact = new()
             {
                 Name = "horesse",

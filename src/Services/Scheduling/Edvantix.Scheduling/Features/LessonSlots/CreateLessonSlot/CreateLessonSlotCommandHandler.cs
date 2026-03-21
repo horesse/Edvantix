@@ -46,9 +46,12 @@ public sealed class CreateLessonSlotCommandHandler(
 
         if (hasConflict)
         {
-            throw new ValidationException(
-                [new ValidationFailure(nameof(command.TeacherId), "Teacher is already booked at the requested time")]
-            );
+            throw new ValidationException([
+                new ValidationFailure(
+                    nameof(command.TeacherId),
+                    "Teacher is already booked at the requested time"
+                ),
+            ]);
         }
 
         // Step 3: Create and persist the lesson slot.

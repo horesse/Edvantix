@@ -10,9 +10,8 @@ namespace Edvantix.Scheduling.Grpc.Services;
 /// and GetGroupsForStudent RPCs (Plan 03-09).
 /// </summary>
 [ExcludeFromCodeCoverage]
-public sealed class OrganizationsGroupService(
-    GroupsGrpcService.GroupsGrpcServiceClient grpcClient
-) : IOrganizationsGroupService
+public sealed class OrganizationsGroupService(GroupsGrpcService.GroupsGrpcServiceClient grpcClient)
+    : IOrganizationsGroupService
 {
     /// <inheritdoc/>
     public async Task<bool> GroupExistsAsync(Guid groupId, CancellationToken ct)
@@ -37,7 +36,7 @@ public sealed class OrganizationsGroupService(
             new GetGroupsForStudentRequest
             {
                 SchoolId = schoolId.ToString(),
-                ProfileId = profileId.ToString()
+                ProfileId = profileId.ToString(),
             },
             cancellationToken: ct
         );

@@ -133,8 +133,9 @@ internal static class Extensions
         // StandardResilienceHandler applies retry + circuit breaker for transient failures
         // when Organizations has not yet fully started.
         services
-            .AddHttpClient("organizations", c =>
-                c.BaseAddress = new Uri($"http://{Services.Organizations}")
+            .AddHttpClient(
+                "organizations",
+                c => c.BaseAddress = new Uri($"http://{Services.Organizations}")
             )
             .AddStandardResilienceHandler();
 

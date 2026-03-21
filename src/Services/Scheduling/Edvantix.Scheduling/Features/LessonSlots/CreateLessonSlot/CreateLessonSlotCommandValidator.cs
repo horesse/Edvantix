@@ -5,13 +5,9 @@ internal sealed class CreateLessonSlotCommandValidator : AbstractValidator<Creat
 {
     public CreateLessonSlotCommandValidator()
     {
-        RuleFor(x => x.GroupId)
-            .NotEmpty()
-            .WithMessage("GroupId must not be empty.");
+        RuleFor(x => x.GroupId).NotEmpty().WithMessage("GroupId must not be empty.");
 
-        RuleFor(x => x.TeacherId)
-            .NotEmpty()
-            .WithMessage("TeacherId must not be empty.");
+        RuleFor(x => x.TeacherId).NotEmpty().WithMessage("TeacherId must not be empty.");
 
         RuleFor(x => x.StartTime)
             .NotEqual(default(DateTimeOffset))

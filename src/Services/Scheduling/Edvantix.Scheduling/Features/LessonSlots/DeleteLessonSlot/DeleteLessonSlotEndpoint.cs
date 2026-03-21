@@ -3,7 +3,8 @@ using Edvantix.Constants.Permissions;
 namespace Edvantix.Scheduling.Features.LessonSlots.DeleteLessonSlot;
 
 /// <summary>DELETE /v1/lesson-slots/{id} — hard-deletes a lesson slot.</summary>
-public sealed class DeleteLessonSlotEndpoint : IEndpoint<NoContent, DeleteLessonSlotCommand, ISender>
+public sealed class DeleteLessonSlotEndpoint
+    : IEndpoint<NoContent, DeleteLessonSlotCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

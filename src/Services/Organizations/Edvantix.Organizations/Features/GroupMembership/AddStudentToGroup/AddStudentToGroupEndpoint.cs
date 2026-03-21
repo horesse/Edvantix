@@ -3,7 +3,8 @@ using Edvantix.Constants.Permissions;
 namespace Edvantix.Organizations.Features.GroupMembership.AddStudentToGroup;
 
 /// <summary>POST /v1/groups/{groupId}/members — adds a student to a group.</summary>
-public sealed class AddStudentToGroupEndpoint : IEndpoint<NoContent, Guid, AddStudentToGroupBody, ISender>
+public sealed class AddStudentToGroupEndpoint
+    : IEndpoint<NoContent, Guid, AddStudentToGroupBody, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

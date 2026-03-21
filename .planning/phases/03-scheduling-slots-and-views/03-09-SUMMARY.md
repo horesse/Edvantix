@@ -165,3 +165,13 @@ None — no external service configuration required.
 ---
 *Phase: 03-scheduling-slots-and-views*
 *Completed: 2026-03-21*
+
+## Self-Check: PASSED
+
+- GroupMembership.cs: FOUND
+- GroupsGrpcService.cs: FOUND
+- groups.proto (Chassis): FOUND
+- groups.proto (Scheduling): FOUND
+- SUMMARY.md: FOUND
+- Commit 4f135f5: FOUND
+- Commit 1c23116: FOUND

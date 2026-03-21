@@ -9,11 +9,8 @@ public sealed class GetGroupMembersEndpoint : IEndpoint<Ok<List<GroupMemberDto>>
     {
         app.MapGet(
                 "/groups/{groupId:guid}/members",
-                async (
-                    Guid groupId,
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) => await HandleAsync(groupId, sender, cancellationToken)
+                async (Guid groupId, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(groupId, sender, cancellationToken)
             )
             .Produces<List<GroupMemberDto>>()
             .Produces(StatusCodes.Status404NotFound)

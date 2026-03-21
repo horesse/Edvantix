@@ -30,7 +30,9 @@ public sealed class LessonSlotAggregateTests
     public void GivenEndTimeBeforeStartTime_WhenCreatingLessonSlot_ThenThrowsArgumentException()
     {
         Should
-            .Throw<ArgumentException>(() => new LessonSlot(SchoolId, GroupId, TeacherId, End, Start))
+            .Throw<ArgumentException>(() =>
+                new LessonSlot(SchoolId, GroupId, TeacherId, End, Start)
+            )
             .Message.ShouldContain("EndTime must be strictly after StartTime");
     }
 
@@ -38,8 +40,8 @@ public sealed class LessonSlotAggregateTests
     public void GivenEndTimeEqualToStartTime_WhenCreatingLessonSlot_ThenThrowsArgumentException()
     {
         Should
-            .Throw<ArgumentException>(
-                () => new LessonSlot(SchoolId, GroupId, TeacherId, Start, Start)
+            .Throw<ArgumentException>(() =>
+                new LessonSlot(SchoolId, GroupId, TeacherId, Start, Start)
             )
             .Message.ShouldContain("EndTime must be strictly after StartTime");
     }

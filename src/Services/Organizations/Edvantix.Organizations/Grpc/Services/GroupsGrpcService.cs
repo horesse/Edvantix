@@ -72,7 +72,7 @@ public sealed class GroupsGrpcService(OrganizationsDbContext dbContext)
             Name = group.Name,
             Color = group.Color,
             MaxCapacity = group.MaxCapacity,
-            Found = true
+            Found = true,
         };
     }
 }

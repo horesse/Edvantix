@@ -10,11 +10,7 @@ public sealed class DeleteGroupEndpoint : IEndpoint<NoContent, DeleteGroupComman
         app.MapDelete(
                 "/groups/{id:guid}",
                 async (Guid id, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(
-                        new DeleteGroupCommand { Id = id },
-                        sender,
-                        cancellationToken
-                    )
+                    await HandleAsync(new DeleteGroupCommand { Id = id }, sender, cancellationToken)
             )
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)

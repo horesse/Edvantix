@@ -102,7 +102,9 @@ public sealed class GetScheduleQueryHandler(
         else if (isTeacher)
         {
             // Teacher sees only their own slots, identified by permission (not data-driven).
-            slots = await baseQuery.Where(s => s.TeacherId == profileId).ToListAsync(cancellationToken);
+            slots = await baseQuery
+                .Where(s => s.TeacherId == profileId)
+                .ToListAsync(cancellationToken);
         }
         else
         {
@@ -132,7 +134,9 @@ public sealed class GetScheduleQueryHandler(
         // To avoid N+1, collect distinct group IDs and resolve in parallel.
         // Group info caching (Plan 03-09 gRPC swap) will make this efficient in production.
         var distinctGroupIds = slots.Select(s => s.GroupId).Distinct().ToList();
-        var groupInfoTasks = distinctGroupIds.Select(gid => groupService.GetGroupAsync(gid, cancellationToken));
+        var groupInfoTasks = distinctGroupIds.Select(gid =>
+            groupService.GetGroupAsync(gid, cancellationToken)
+        );
         var groupInfoArray = await Task.WhenAll(groupInfoTasks);
 
         // Build lookup: groupId → GroupInfoDto (or placeholder if Organizations returned null).
@@ -150,20 +154,20 @@ public sealed class GetScheduleQueryHandler(
                 var groupInfo = groupInfoLookup[s.GroupId];
 
                 return isManager
-                    ? new ScheduleSlotDto(
-                        Id: s.Id,
-                        StartTime: s.StartTime,
-                        EndTime: s.EndTime,
-                        GroupId: s.GroupId,
-                        GroupName: groupInfo.Name,
-                        GroupColor: groupInfo.Color,
-                        // Manager sees teacher identity and headcount.
-                        TeacherId: s.TeacherId,
-                        // v1 placeholder — full name resolution via Persona gRPC deferred to later plan.
-                        TeacherName: s.TeacherId.ToString(),
-                        // v1 placeholder — actual student count requires attendance data (Phase 4).
-                        StudentCount: 0
-                    )
+                        ? new ScheduleSlotDto(
+                            Id: s.Id,
+                            StartTime: s.StartTime,
+                            EndTime: s.EndTime,
+                            GroupId: s.GroupId,
+                            GroupName: groupInfo.Name,
+                            GroupColor: groupInfo.Color,
+                            // Manager sees teacher identity and headcount.
+                            TeacherId: s.TeacherId,
+                            // v1 placeholder — full name resolution via Persona gRPC deferred to later plan.
+                            TeacherName: s.TeacherId.ToString(),
+                            // v1 placeholder — actual student count requires attendance data (Phase 4).
+                            StudentCount: 0
+                        )
                     : isTeacher
                         ? new ScheduleSlotDto(
                             Id: s.Id,
@@ -178,19 +182,19 @@ public sealed class GetScheduleQueryHandler(
                             // v1 placeholder for student count.
                             StudentCount: 0
                         )
-                        : new ScheduleSlotDto(
-                            Id: s.Id,
-                            StartTime: s.StartTime,
-                            EndTime: s.EndTime,
-                            GroupId: s.GroupId,
-                            GroupName: groupInfo.Name,
-                            GroupColor: groupInfo.Color,
-                            // Student sees teacher identity (to know who is teaching).
-                            TeacherId: s.TeacherId,
-                            TeacherName: s.TeacherId.ToString(),
-                            // Student does not need group headcount.
-                            StudentCount: null
-                        );
+                    : new ScheduleSlotDto(
+                        Id: s.Id,
+                        StartTime: s.StartTime,
+                        EndTime: s.EndTime,
+                        GroupId: s.GroupId,
+                        GroupName: groupInfo.Name,
+                        GroupColor: groupInfo.Color,
+                        // Student sees teacher identity (to know who is teaching).
+                        TeacherId: s.TeacherId,
+                        TeacherName: s.TeacherId.ToString(),
+                        // Student does not need group headcount.
+                        StudentCount: null
+                    );
             })
             .ToList();
     }

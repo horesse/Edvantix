@@ -29,15 +29,21 @@ public sealed class GroupAggregateTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenNullOrWhitespaceName_WhenCreatingGroup_ThenThrowsArgumentException(string? name)
+    public void GivenNullOrWhitespaceName_WhenCreatingGroup_ThenThrowsArgumentException(
+        string? name
+    )
     {
-        Should.Throw<ArgumentException>(() => new Group(name!, ValidSchoolId, ValidMaxCapacity, ValidColor));
+        Should.Throw<ArgumentException>(() =>
+            new Group(name!, ValidSchoolId, ValidMaxCapacity, ValidColor)
+        );
     }
 
     [Test]
     public void GivenDefaultSchoolId_WhenCreatingGroup_ThenThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => new Group(ValidName, Guid.Empty, ValidMaxCapacity, ValidColor));
+        Should.Throw<ArgumentException>(() =>
+            new Group(ValidName, Guid.Empty, ValidMaxCapacity, ValidColor)
+        );
     }
 
     [Test]
@@ -59,7 +65,9 @@ public sealed class GroupAggregateTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenNullOrWhitespaceName_WhenUpdatingGroup_ThenThrowsArgumentException(string? name)
+    public void GivenNullOrWhitespaceName_WhenUpdatingGroup_ThenThrowsArgumentException(
+        string? name
+    )
     {
         var group = new Group(ValidName, ValidSchoolId, ValidMaxCapacity, ValidColor);
 

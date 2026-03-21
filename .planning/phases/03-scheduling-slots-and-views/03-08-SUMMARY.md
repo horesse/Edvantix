@@ -159,6 +159,13 @@ None - no external service configuration required.
 - EF migration for `groups` table should be added in Plan 03-09 alongside GroupMembership table migration
 - GroupsPermissions.All are seeded into the DB by PermissionSeeder (from Plan 03-07)
 
+## Self-Check: PASSED
+
+- FOUND: Group.cs, GroupConfiguration.cs, CreateGroupEndpoint.cs, 03-08-SUMMARY.md
+- Commits verified: 28afbe5 (TDD RED), 5bd9ffc (GREEN), c9a8982 (Task 2), 3d82782 (docs)
+- Architecture tests: 65/65 passed
+- Unit tests: 10/10 passed
+
 ---
 *Phase: 03-scheduling-slots-and-views*
 *Completed: 2026-03-21*

@@ -24,6 +24,9 @@
          and message types from the Chassis-generated assembly. -->
     <!-- groups.proto is consumed from Chassis (same csharp_namespace as permissions.proto) to avoid
          duplicate type conflicts. GrpcServices=Both generates the server base class for GroupsGrpcService. -->
-    <Protobuf Include="..\..\..\BuildingBlocks\Edvantix.Chassis\Security\Protos\organizations\v1\groups.proto" GrpcServices="Server" />
+    <Protobuf
+      Include="..\..\..\BuildingBlocks\Edvantix.Chassis\Security\Protos\organizations\v1\groups.proto"
+      GrpcServices="Server"
+    />
   </ItemGroup>
 </Project>

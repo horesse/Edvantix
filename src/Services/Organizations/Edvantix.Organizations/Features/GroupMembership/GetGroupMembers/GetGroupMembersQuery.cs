@@ -26,8 +26,6 @@ public sealed class GetGroupMembersQueryHandler(IGroupRepository groupRepository
             await groupRepository.FindByIdWithMembersAsync(request.GroupId, cancellationToken)
             ?? throw NotFoundException.For<Group>(request.GroupId);
 
-        return group.Members
-            .Select(m => new GroupMemberDto(m.ProfileId, m.AddedAt))
-            .ToList();
+        return group.Members.Select(m => new GroupMemberDto(m.ProfileId, m.AddedAt)).ToList();
     }
 }

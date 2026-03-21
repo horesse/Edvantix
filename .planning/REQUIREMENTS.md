@@ -29,7 +29,7 @@
 - [ ] **SCH-07**: Менеджер может удалить студента из группы
 - [ ] **SCH-08**: На уроке можно отметить присутствие/отсутствие каждого студента
 - [ ] **SCH-09**: При фиксации посещаемости публикуется событие AttendanceRecorded через Kafka (с outbox)
-- [ ] **SCH-10**: Все даты/время хранятся как DateTimeOffset
+- [x] **SCH-10**: Все даты/время хранятся как DateTimeOffset
 
 ### Payments
 
@@ -93,7 +93,7 @@
 | SCH-07 | Phase 2 | Pending |
 | SCH-08 | Phase 2 | Pending |
 | SCH-09 | Phase 2 | Pending |
-| SCH-10 | Phase 2 | Pending |
+| SCH-10 | Phase 2 | Complete |
 | PAY-01 | Phase 3 | Pending |
 | PAY-02 | Phase 3 | Pending |
 | PAY-03 | Phase 3 | Pending |

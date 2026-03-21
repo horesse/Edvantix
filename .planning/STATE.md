@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-07-PLAN.md
-last_updated: "2026-03-21T11:33:35.890Z"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-03-21T11:38:57.437Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 16
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 03 (scheduling-slots-and-views) — EXECUTING
-Plan: 2 of 9
+Plan: 3 of 9
 
 ## Performance Metrics
 
@@ -54,6 +54,7 @@ Plan: 2 of 9
 | Phase 02-organizations-permission-cache P03 | 6 | 1 tasks | 7 files |
 | Phase 02-organizations-permission-cache P02 | 8 | 2 tasks | 17 files |
 | Phase 03-scheduling-slots-and-views P07 | 2 | 2 tasks | 5 files |
+| Phase 03-scheduling-slots-and-views P01 | 18 | 2 tasks | 21 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,8 @@ Recent decisions affecting current work:
 - [Phase 03-07]: Organization does NOT implement ITenanted — it IS the tenant root per D-17. No HasQueryFilter needed.
 - [Phase 03-07]: Organization IDs use ValueGeneratedNever — IDs come from external provisioning, not DB auto-generation.
 - [Phase 03-07]: GroupsPermissions uses groups.* namespace (not organizations.*) to distinguish group-management from RBAC-management permissions.
+- [Phase 03-01]: PermissionSeeder uses IHttpClientFactory HTTP POST to Organizations with AddStandardResilienceHandler — Scheduling does not own Permission aggregate
+- [Phase 03-01]: SchedulingDbContext shell has no DbSets — domain entities and HasQueryFilter deferred to Plan 02 when LessonSlot entity is created
 
 ### Pending Todos
 
@@ -104,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T11:33:35.887Z
-Stopped at: Completed 03-07-PLAN.md
+Last session: 2026-03-21T11:38:57.434Z
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None

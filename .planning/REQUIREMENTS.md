@@ -15,7 +15,7 @@
 - [x] **ORG-06**: Владелец может отозвать роль у пользователя
 - [x] **ORG-07**: Organizations service предоставляет gRPC-эндпоинт CheckPermission(userId, schoolId, permission) → bool
 - [x] **ORG-08**: Результат CheckPermission кешируется в HybridCache с инвалидацией по событию смены роли
-- [ ] **ORG-09**: При изменении роли/назначения публикуется интеграционное событие для инвалидации кеша в других сервисах
+- [x] **ORG-09**: При изменении роли/назначения публикуется интеграционное событие для инвалидации кеша в других сервисах
 - [x] **ORG-10**: EF Core global query filter по schoolId во всех агрегатах (tenant isolation)
 
 ### Scheduling
@@ -82,7 +82,7 @@
 | ORG-06 | Phase 1 | Complete |
 | ORG-07 | Phase 1 | Complete |
 | ORG-08 | Phase 1 | Complete |
-| ORG-09 | Phase 1 | Pending |
+| ORG-09 | Phase 1 | Complete |
 | ORG-10 | Phase 1 | Complete |
 | SCH-01 | Phase 2 | Pending |
 | SCH-02 | Phase 2 | Pending |

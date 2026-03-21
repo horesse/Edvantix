@@ -15,6 +15,7 @@ global using Edvantix.Chassis.Specification.Builders;
 global using Edvantix.Chassis.Utilities.Guards;
 global using Edvantix.Constants.Aspire;
 global using Edvantix.Constants.Core;
+global using Edvantix.Scheduling.Domain.AggregatesModel.LessonSlotAggregate;
 global using Edvantix.ServiceDefaults;
 global using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 global using Edvantix.ServiceDefaults.Kestrel;

@@ -1,3 +1,5 @@
+using Edvantix.Scheduling.Domain.AggregatesModel.LessonSlotAggregate;
+
 namespace Edvantix.Scheduling.Infrastructure;
 
 /// <summary>
@@ -6,14 +8,14 @@ namespace Edvantix.Scheduling.Infrastructure;
 /// in individual entity configurations, because filter expressions require access to the
 /// injected <see cref="ITenantContext"/> which is not available inside
 /// <c>ApplyConfigurationsFromAssembly</c>.
-/// Domain entity DbSets and HasQueryFilter calls will be added in Plan 02 when LessonSlot is created.
 /// </summary>
 public sealed class SchedulingDbContext(
     DbContextOptions<SchedulingDbContext> options,
     ITenantContext tenantContext
 ) : DbContext(options), IUnitOfWork
 {
-    // DbSets for domain entities (LessonSlot etc.) will be added in Plan 02.
+    /// <summary>Gets the lesson slots data set.</summary>
+    public DbSet<LessonSlot> LessonSlots => Set<LessonSlot>();
 
     /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,9 +26,12 @@ public sealed class SchedulingDbContext(
         modelBuilder.AddOutboxStateEntity();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SchedulingDbContext).Assembly);
 
-        // Tenant isolation query filters for domain entities will be added in Plan 02.
-        // CRITICAL: EF Core supports only one HasQueryFilter per entity.
-        _ = tenantContext; // Referenced here to satisfy primary constructor — filters added in Plan 02.
+        // Tenant isolation query filter for LessonSlot.
+        // CRITICAL: EF Core supports only one query filter per entity.
+        // LessonSlot has no soft-delete, so the filter is tenant-only.
+        modelBuilder
+            .Entity<LessonSlot>()
+            .HasQueryFilter(s => s.SchoolId == tenantContext.SchoolId);
     }
 
     /// <inheritdoc/>

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-19T20:14:05.558Z"
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-03-21T06:46:20.640Z"
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 7
+  completed_plans: 5
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Менеджер школы может создать расписание группы, студент видит свои уроки и баланс, учитель видит свои занятия — всё в рамках одной школы с изолированными данными.
-**Current focus:** Phase 01 — organizations-rbac-core
+**Current focus:** Phase 02 — organizations-permission-cache
 
 ## Current Position
 
-Phase: 01 (organizations-rbac-core) — EXECUTING
-Plan: 4 of 4
+Phase: 02 (organizations-permission-cache) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Plan: 4 of 4
 | Phase 01-organizations-rbac-core P02 | 5 | 2 tasks | 15 files |
 | Phase 01-organizations-rbac-core P03 | 12 | 2 tasks | 21 files |
 | Phase 01-organizations-rbac-core P04 | 9 | 2 tasks | 21 files |
+| Phase 02-organizations-permission-cache P01 | 9 | 2 tasks | 19 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Recent decisions affecting current work:
 - [Phase 01-04]: PermissionSeeder uses IHostedService with direct repository access (not HTTP) to avoid self-calling race condition on startup
 - [Phase 01-04]: RegisterPermissionsEndpoint uses AllowAnonymous for service-to-service startup calls; TODO secured via mTLS in production
 - [Phase 01-04]: gRPC client pattern: copy proto, wrap in IPersonaProfileService interface; AssignRoleCommand validates role (local DB) before profile (gRPC) to fail fast
+- [Phase 02-01]: gRPC csharp_namespace set to Edvantix.Organizations.Grpc.Generated to avoid class name conflict with concrete implementation
+- [Phase 02-01]: GetBySchoolAsync added to IRoleRepository using IgnoreQueryFilters() + explicit schoolId — gRPC paths lack ITenantContext ambient value
+- [Phase 02-01]: GetUserPermissionGrantQuery (not CheckPermissionQuery) to comply with arch rule requiring Get/List/Visualize/Summarize prefix on IQuery types
 
 ### Pending Todos
 
@@ -87,6 +91,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-19T20:14:05.555Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-organizations-permission-cache/02-CONTEXT.md
+Last session: 2026-03-21T06:46:20.637Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None

@@ -13,8 +13,8 @@
 - [x] **ORG-04**: Сервисы автоматически регистрируют свои permission-строки в каталоге при старте
 - [x] **ORG-05**: Владелец может назначить роль пользователю в рамках своей школы
 - [x] **ORG-06**: Владелец может отозвать роль у пользователя
-- [ ] **ORG-07**: Organizations service предоставляет gRPC-эндпоинт CheckPermission(userId, schoolId, permission) → bool
-- [ ] **ORG-08**: Результат CheckPermission кешируется в HybridCache с инвалидацией по событию смены роли
+- [x] **ORG-07**: Organizations service предоставляет gRPC-эндпоинт CheckPermission(userId, schoolId, permission) → bool
+- [x] **ORG-08**: Результат CheckPermission кешируется в HybridCache с инвалидацией по событию смены роли
 - [ ] **ORG-09**: При изменении роли/назначения публикуется интеграционное событие для инвалидации кеша в других сервисах
 - [x] **ORG-10**: EF Core global query filter по schoolId во всех агрегатах (tenant isolation)
 
@@ -80,8 +80,8 @@
 | ORG-04 | Phase 1 | Complete |
 | ORG-05 | Phase 1 | Complete |
 | ORG-06 | Phase 1 | Complete |
-| ORG-07 | Phase 1 | Pending |
-| ORG-08 | Phase 1 | Pending |
+| ORG-07 | Phase 1 | Complete |
+| ORG-08 | Phase 1 | Complete |
 | ORG-09 | Phase 1 | Pending |
 | ORG-10 | Phase 1 | Complete |
 | SCH-01 | Phase 2 | Pending |

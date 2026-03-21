@@ -30,5 +30,10 @@ internal static class Extensions
         );
 
         services.AddSingleton<IPersonaProfileService, PersonaProfileService>();
+
+        // Register Organizations group validator — HTTP-based in v1.
+        // Uses the named "organizations" HttpClient configured in Extensions/Extensions.cs.
+        // Plan 03-09 will replace with a proper gRPC implementation once GetGroupAsync is available.
+        services.AddSingleton<IOrganizationsGroupService, OrganizationsGroupService>();
     }
 }

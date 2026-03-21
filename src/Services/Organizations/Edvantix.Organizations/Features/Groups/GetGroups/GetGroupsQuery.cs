@@ -16,7 +16,7 @@ public sealed class GetGroupsQueryHandler(IGroupRepository groupRepository)
         CancellationToken cancellationToken
     )
     {
-        var groups = await groupRepository.GetAllAsync(cancellationToken);
+        var groups = await groupRepository.ListAsync(new GroupSpecification(), cancellationToken);
 
         return groups.Select(g => new GroupDto(g.Id, g.Name, g.MaxCapacity, g.Color)).ToList();
     }

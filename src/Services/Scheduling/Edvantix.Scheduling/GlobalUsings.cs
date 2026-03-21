@@ -4,6 +4,7 @@ global using System.Diagnostics.CodeAnalysis;
 global using System.Security.Claims;
 global using System.Text.Json.Serialization;
 global using Edvantix.Chassis.EF;
+global using Edvantix.Chassis.Mapper;
 global using Edvantix.Chassis.Endpoints;
 global using Edvantix.Chassis.EventBus;
 global using Edvantix.Chassis.Exceptions;

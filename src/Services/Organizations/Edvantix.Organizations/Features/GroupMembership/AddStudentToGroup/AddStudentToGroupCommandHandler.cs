@@ -33,8 +33,10 @@ public sealed class AddStudentToGroupCommandHandler(
         }
 
         var group =
-            await groupRepository.FindByIdWithMembersAsync(request.GroupId, cancellationToken)
-            ?? throw NotFoundException.For<Group>(request.GroupId);
+            await groupRepository.FindAsync(
+                new GroupByIdSpecification(request.GroupId, includeMembers: true),
+                cancellationToken
+            ) ?? throw NotFoundException.For<Group>(request.GroupId);
 
         // AddMember is idempotent — no-op if already a member (SCH-06).
         group.AddMember(request.ProfileId, DateTimeOffset.UtcNow);

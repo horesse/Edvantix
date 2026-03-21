@@ -9,14 +9,11 @@ public interface IGroupRepository : IRepository<Group>
     /// <summary>Finds a group by its identifier.</summary>
     Task<Group?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    /// <summary>Returns all active (non-deleted) groups for the current tenant. Tenant filter is applied by DbContext.</summary>
-    Task<List<Group>> GetAllAsync(CancellationToken cancellationToken = default);
+    /// <summary>Returns groups matching the given specification. Use <see cref="GroupSpecification"/> for ordered list of all active groups.</summary>
+    Task<List<Group>> ListAsync(Specification<Group> spec, CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Finds a group by its identifier and eagerly loads the <see cref="Group.Members"/> collection.
-    /// Required for operations that mutate membership (AddMember/RemoveMember).
-    /// </summary>
-    Task<Group?> FindByIdWithMembersAsync(Guid id, CancellationToken cancellationToken = default);
+    /// <summary>Returns the first group matching the specification, or null. Use <see cref="GroupByIdSpecification"/> to load with optional eager includes.</summary>
+    Task<Group?> FindAsync(Specification<Group> spec, CancellationToken cancellationToken = default);
 
     /// <summary>Adds a new group to the context. Call <see cref="IUnitOfWork.SaveEntitiesAsync"/> to persist.</summary>
     void Add(Group group);

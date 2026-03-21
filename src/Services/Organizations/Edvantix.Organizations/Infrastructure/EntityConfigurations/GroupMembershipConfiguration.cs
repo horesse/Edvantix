@@ -14,8 +14,6 @@ internal sealed class GroupMembershipConfiguration : IEntityTypeConfiguration<Gr
     {
         builder.UseDefaultConfiguration();
 
-        builder.ToTable("group_memberships");
-
         builder.Property(m => m.GroupId).IsRequired();
         builder.Property(m => m.ProfileId).IsRequired();
         builder.Property(m => m.SchoolId).IsRequired();

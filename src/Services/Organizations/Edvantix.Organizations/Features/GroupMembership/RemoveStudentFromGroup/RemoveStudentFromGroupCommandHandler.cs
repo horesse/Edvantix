@@ -14,8 +14,10 @@ public sealed class RemoveStudentFromGroupCommandHandler(IGroupRepository groupR
     )
     {
         var group =
-            await groupRepository.FindByIdWithMembersAsync(request.GroupId, cancellationToken)
-            ?? throw NotFoundException.For<Group>(request.GroupId);
+            await groupRepository.FindAsync(
+                new GroupByIdSpecification(request.GroupId, includeMembers: true),
+                cancellationToken
+            ) ?? throw NotFoundException.For<Group>(request.GroupId);
 
         // RemoveMember is a no-op if the student is not a member.
         group.RemoveMember(request.ProfileId);

@@ -16,8 +16,6 @@ internal sealed class GroupConfiguration : IEntityTypeConfiguration<Group>
         // Sets HasKey(Id) and UUIDv7 default value
         builder.UseDefaultConfiguration();
 
-        builder.ToTable("groups");
-
         builder.Property(g => g.IsDeleted).HasComment("Soft-delete flag");
         builder.Property(g => g.SchoolId).IsRequired();
         builder.Property(g => g.Name).IsRequired().HasMaxLength(150);

@@ -23,8 +23,10 @@ public sealed class GetGroupMembersQueryHandler(IGroupRepository groupRepository
     )
     {
         var group =
-            await groupRepository.FindByIdWithMembersAsync(request.GroupId, cancellationToken)
-            ?? throw NotFoundException.For<Group>(request.GroupId);
+            await groupRepository.FindAsync(
+                new GroupByIdSpecification(request.GroupId, includeMembers: true),
+                cancellationToken
+            ) ?? throw NotFoundException.For<Group>(request.GroupId);
 
         return group.Members.Select(m => new GroupMemberDto(m.ProfileId, m.AddedAt)).ToList();
     }

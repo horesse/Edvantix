@@ -15,8 +15,6 @@ internal sealed class LessonSlotConfiguration : IEntityTypeConfiguration<LessonS
         // Sets HasKey(Id) and UUIDv7 default value
         builder.UseDefaultConfiguration();
 
-        builder.ToTable("lesson_slots");
-
         builder.Property(s => s.SchoolId).IsRequired();
         builder.Property(s => s.GroupId).IsRequired();
         builder.Property(s => s.TeacherId).IsRequired();

@@ -34,7 +34,8 @@ public sealed class GetScheduleQueryHandler(
     ITenantContext tenantContext,
     ClaimsPrincipal user,
     PermissionsGrpcService.PermissionsGrpcServiceClient grpcClient,
-    IOrganizationsGroupService groupService
+    IOrganizationsGroupService groupService,
+    IMapper<ScheduleSlotMappingContext, ScheduleSlotDto> mapper
 ) : IQueryHandler<GetScheduleQuery, List<ScheduleSlotDto>>
 {
     /// <inheritdoc/>
@@ -149,53 +150,7 @@ public sealed class GetScheduleQueryHandler(
 
         // Step 5: Shape results based on permission level.
         return slots
-            .Select(s =>
-            {
-                var groupInfo = groupInfoLookup[s.GroupId];
-
-                return isManager
-                        ? new ScheduleSlotDto(
-                            Id: s.Id,
-                            StartTime: s.StartTime,
-                            EndTime: s.EndTime,
-                            GroupId: s.GroupId,
-                            GroupName: groupInfo.Name,
-                            GroupColor: groupInfo.Color,
-                            // Manager sees teacher identity and headcount.
-                            TeacherId: s.TeacherId,
-                            // v1 placeholder — full name resolution via Persona gRPC deferred to later plan.
-                            TeacherName: s.TeacherId.ToString(),
-                            // v1 placeholder — actual student count requires attendance data (Phase 4).
-                            StudentCount: 0
-                        )
-                    : isTeacher
-                        ? new ScheduleSlotDto(
-                            Id: s.Id,
-                            StartTime: s.StartTime,
-                            EndTime: s.EndTime,
-                            GroupId: s.GroupId,
-                            GroupName: groupInfo.Name,
-                            GroupColor: groupInfo.Color,
-                            // Teacher does not need their own ID echoed back.
-                            TeacherId: null,
-                            TeacherName: null,
-                            // v1 placeholder for student count.
-                            StudentCount: 0
-                        )
-                    : new ScheduleSlotDto(
-                        Id: s.Id,
-                        StartTime: s.StartTime,
-                        EndTime: s.EndTime,
-                        GroupId: s.GroupId,
-                        GroupName: groupInfo.Name,
-                        GroupColor: groupInfo.Color,
-                        // Student sees teacher identity (to know who is teaching).
-                        TeacherId: s.TeacherId,
-                        TeacherName: s.TeacherId.ToString(),
-                        // Student does not need group headcount.
-                        StudentCount: null
-                    );
-            })
+            .Select(s => mapper.Map(new ScheduleSlotMappingContext(s, groupInfoLookup[s.GroupId], isManager, isTeacher)))
             .ToList();
     }
 }

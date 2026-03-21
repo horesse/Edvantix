@@ -91,6 +91,8 @@ internal static class Extensions
             includeInternalTypes: true
         );
 
+        services.AddMapper(typeof(ISchedulingApiMarker));
+
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 
         services.AddActivityScope().AddCommandHandlerMetrics().AddQueryHandlerMetrics();

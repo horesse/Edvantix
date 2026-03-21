@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.Organizations.Domain.AggregatesModel.GroupAggregate;
 
 namespace Edvantix.Organizations.Infrastructure.Repositories;
@@ -8,6 +9,8 @@ namespace Edvantix.Organizations.Infrastructure.Repositories;
 /// </summary>
 public sealed class GroupRepository(OrganizationsDbContext context) : IGroupRepository
 {
+    private static SpecificationEvaluator Spec => SpecificationEvaluator.Instance;
+
     /// <inheritdoc/>
     public IUnitOfWork UnitOfWork => context;
 
@@ -18,17 +21,16 @@ public sealed class GroupRepository(OrganizationsDbContext context) : IGroupRepo
     ) => await context.Groups.FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<List<Group>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        await context.Groups.OrderBy(g => g.Name).ToListAsync(cancellationToken);
+    public async Task<List<Group>> ListAsync(
+        Specification<Group> spec,
+        CancellationToken cancellationToken = default
+    ) => await Spec.GetQuery(context.Groups, spec).ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<Group?> FindByIdWithMembersAsync(
-        Guid id,
+    public async Task<Group?> FindAsync(
+        Specification<Group> spec,
         CancellationToken cancellationToken = default
-    ) =>
-        await context
-            .Groups.Include(g => g.Members)
-            .FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
+    ) => await Spec.GetQuery(context.Groups, spec).FirstOrDefaultAsync(cancellationToken);
 
     /// <inheritdoc/>
     public void Add(Group group) => context.Groups.Add(group);

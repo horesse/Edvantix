@@ -72,7 +72,7 @@ Plans:
 - [x] 03-05-PLAN.md — GET /schedule with permission-filtered manager/teacher/student views, student groups via Organizations gRPC (Wave 4)
 - [x] 03-07-PLAN.md — Organization entity (Id only) + GroupsPermissions class in Organizations service (Wave 1)
 - [x] 03-08-PLAN.md — Group aggregate + CRUD in Organizations service, protected by groups.* permissions (Wave 3)
-- [ ] 03-09-PLAN.md — GroupMembership in Organizations + GetGroupsForStudent gRPC + Scheduling gRPC client (Wave 4)
+- [x] 03-09-PLAN.md — GroupMembership in Organizations + GetGroupsForStudent gRPC + Scheduling gRPC client (Wave 4)
 
 ### Phase 4: Scheduling — Attendance and Outbox
 **Goal**: Attendance is recorded for each student on each lesson slot and the AttendanceRecordedIntegrationEvent is reliably published to Kafka, providing Payments with a durable event stream to consume
@@ -114,6 +114,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Organizations — RBAC Core | 4/4 | Complete   | 2026-03-18 |
 | 2. Organizations — Permission Cache | 3/3 | Complete   | 2026-03-21 |
-| 3. Scheduling — Slots and Views | 6/9 | In Progress|  |
+| 3. Scheduling — Slots and Views | 7/9 | In Progress|  |
 | 4. Scheduling — Attendance and Outbox | 0/2 | Not started | - |
 | 5. Payments — Ledger and Balance | 0/3 | Not started | - |

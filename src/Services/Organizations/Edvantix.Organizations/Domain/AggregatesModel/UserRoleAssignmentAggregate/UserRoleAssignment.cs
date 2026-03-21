@@ -1,3 +1,5 @@
+using Edvantix.Organizations.Infrastructure.EventServices.Events;
+
 namespace Edvantix.Organizations.Domain.AggregatesModel.UserRoleAssignmentAggregate;
 
 /// <summary>
@@ -20,7 +22,7 @@ public sealed class UserRoleAssignment : Entity, IAggregateRoot, ITenanted
     // EF Core constructor
     private UserRoleAssignment() { }
 
-    /// <summary>Initializes a new role assignment.</summary>
+    /// <summary>Initializes a new role assignment and raises <see cref="UserRoleAssignedEvent"/>.</summary>
     /// <param name="profileId">The user profile identifier. Must not be empty.</param>
     /// <param name="schoolId">The school identifier. Must not be empty.</param>
     /// <param name="roleId">The role identifier. Must not be empty.</param>
@@ -34,5 +36,17 @@ public sealed class UserRoleAssignment : Entity, IAggregateRoot, ITenanted
         ProfileId = profileId;
         SchoolId = schoolId;
         RoleId = roleId;
+
+        // Notify interested parties (cache invalidation, outbox) that a role was assigned.
+        RegisterDomainEvent(new UserRoleAssignedEvent(profileId, schoolId, roleId));
+    }
+
+    /// <summary>
+    /// Marks this assignment as revoked by raising <see cref="UserRoleRevokedEvent"/>.
+    /// Must be called before <c>Remove</c> so the event dispatcher can pick it up during SaveEntitiesAsync.
+    /// </summary>
+    public void Revoke()
+    {
+        RegisterDomainEvent(new UserRoleRevokedEvent(ProfileId, SchoolId, RoleId));
     }
 }

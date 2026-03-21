@@ -1,3 +1,5 @@
+using Edvantix.Organizations.Infrastructure.EventServices.Events;
+
 namespace Edvantix.Organizations.Domain.AggregatesModel.RoleAggregate;
 
 /// <summary>
@@ -79,7 +81,7 @@ public sealed class Role : Entity, IAggregateRoot, ISoftDelete, ITenanted
     }
 
     /// <summary>
-    /// Replaces all assigned permissions with the given set.
+    /// Replaces all assigned permissions with the given set and raises <see cref="RolePermissionsChangedEvent"/>.
     /// Duplicate IDs in the input are de-duplicated automatically.
     /// </summary>
     /// <param name="permissionIds">The new set of permission IDs.</param>
@@ -91,5 +93,8 @@ public sealed class Role : Entity, IAggregateRoot, ISoftDelete, ITenanted
         {
             _permissions.Add(new RolePermission(Id, permissionId));
         }
+
+        // Notify that this role's permissions changed so affected users' caches can be invalidated.
+        RegisterDomainEvent(new RolePermissionsChangedEvent(Id, SchoolId));
     }
 }

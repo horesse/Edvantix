@@ -85,7 +85,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — AttendanceRecord aggregate, EF config with unique index, HasQueryFilter, permissions, Wave 0 test stubs (Wave 1)
+- [x] 04-01-PLAN.md — AttendanceRecord aggregate, EF config with unique index, HasQueryFilter, permissions, Wave 0 test stubs (Wave 1)
 - [ ] 04-02-PLAN.md — Domain event pipeline (EventMapper + outbox wiring), MarkAttendance PUT endpoint, handler tests (Wave 2)
 - [ ] 04-03-PLAN.md — GetSlotAttendance GET endpoint with AttendanceRecordDto (Wave 2)
 
@@ -116,5 +116,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Organizations — RBAC Core | 4/4 | Complete   | 2026-03-18 |
 | 2. Organizations — Permission Cache | 3/3 | Complete   | 2026-03-21 |
 | 3. Scheduling — Slots and Views | 7/9 | In Progress|  |
-| 4. Scheduling — Attendance and Outbox | 0/3 | Not started | - |
+| 4. Scheduling — Attendance and Outbox | 1/3 | In Progress|  |
 | 5. Payments — Ledger and Balance | 0/3 | Not started | - |

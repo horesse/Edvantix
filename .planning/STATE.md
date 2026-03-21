@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-09-PLAN.md
-last_updated: "2026-03-21T16:52:56.832Z"
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-03-21T18:40:41.858Z"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 16
-  completed_plans: 14
+  total_plans: 19
+  completed_plans: 15
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Менеджер школы может создать расписание группы, студент видит свои уроки и баланс, учитель видит свои занятия — всё в рамках одной школы с изолированными данными.
-**Current focus:** Phase 03 — scheduling-slots-and-views
+**Current focus:** Phase 04 — scheduling-attendance-outbox
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
+Phase: 04 (scheduling-attendance-outbox) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Plan: Not started
 | Phase 03-scheduling-slots-and-views P08 | 8 | 2 tasks | 23 files |
 | Phase 03-scheduling-slots-and-views PP05 | 8 | 2 tasks | 10 files |
 | Phase 03-scheduling-slots-and-views P09 | 10 | 2 tasks | 24 files |
+| Phase 04-scheduling-attendance-outbox P01 | 10 | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -112,6 +113,9 @@ Recent decisions affecting current work:
 - [Phase 03-09]: GroupMembership uses WithMany(nameof(Group.Members)) not WithMany('_members') in EF config — EF auto-discovers backing field from property, explicit string causes CS0430 duplicate field mapping error
 - [Phase 03-09]: GroupsGrpcService uses IgnoreQueryFilters — gRPC context has no X-School-Id header. GetGroupsForStudent applies explicit schoolId; GetGroup filters by \!IsDeleted (safe since GroupId is not guessable)
 - [Phase 03-09]: IOrganizationsGroupService registration changed from Singleton to Scoped — gRPC client injected, may carry per-request metadata in future
+- [Phase 04-01]: AttendanceRecord is a separate aggregate from LessonSlot (D-01) — own repository, own lifecycle, plain Guid cross-reference to LessonSlotId
+- [Phase 04-01]: CorrelationId uses Guid.CreateVersion7() at construction, never changed on UpdateStatus — preserves event chain identity per D-04
+- [Phase 04-01]: HasQueryFilter for AttendanceRecord registered in SchedulingDbContext.OnModelCreating (not entity config) to use injected ITenantContext — same pattern as LessonSlot
 
 ### Pending Todos
 
@@ -123,6 +127,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T12:24:28.985Z
-Stopped at: Completed 03-09-PLAN.md
+Last session: 2026-03-21T18:40:41.855Z
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None

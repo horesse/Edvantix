@@ -80,13 +80,14 @@ Plans:
 **Requirements**: SCH-08, SCH-09
 **Success Criteria** (what must be TRUE):
   1. Manager can mark each student on a slot as Present, Absent, or Excused; attempting to mark the same student on the same slot twice updates the existing record rather than creating a duplicate
-  2. After attendance is recorded, an AttendanceRecordedIntegrationEvent appears on the edvantix.scheduling.attendance-recorded Kafka topic via the transactional outbox, even if the application restarts between the DB commit and the send
+  2. After attendance is recorded, an AttendanceRecordedIntegrationEvent appears on the `attendance-recorded-integration-event` Kafka topic via the transactional outbox, even if the application restarts between the DB commit and the send
   3. The event payload includes StudentId, LessonSlotId, SchoolId, Timestamp (DateTimeOffset), and a CorrelationId suitable for use as an idempotency key in Payments
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
 - [ ] 04-01-PLAN.md — AttendanceRecord aggregate, EF config with unique index, HasQueryFilter, permissions, Wave 0 test stubs (Wave 1)
-- [ ] 04-02-PLAN.md — Domain event pipeline (EventMapper + outbox wiring), MarkAttendance PUT endpoint, GetSlotAttendance GET endpoint, handler tests (Wave 2)
+- [ ] 04-02-PLAN.md — Domain event pipeline (EventMapper + outbox wiring), MarkAttendance PUT endpoint, handler tests (Wave 2)
+- [ ] 04-03-PLAN.md — GetSlotAttendance GET endpoint with AttendanceRecordDto (Wave 2)
 
 ### Phase 5: Payments — Ledger and Balance
 **Goal**: Students have a lesson balance that managers can top up, decrements automatically when attendance is confirmed by Scheduling, and is visible to both student and manager with per-slot payment status
@@ -115,5 +116,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Organizations — RBAC Core | 4/4 | Complete   | 2026-03-18 |
 | 2. Organizations — Permission Cache | 3/3 | Complete   | 2026-03-21 |
 | 3. Scheduling — Slots and Views | 7/9 | In Progress|  |
-| 4. Scheduling — Attendance and Outbox | 0/2 | Not started | - |
+| 4. Scheduling — Attendance and Outbox | 0/3 | Not started | - |
 | 5. Payments — Ledger and Balance | 0/3 | Not started | - |

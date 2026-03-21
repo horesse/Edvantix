@@ -16,5 +16,6 @@
     <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Edvantix.SharedKernel\Edvantix.SharedKernel.csproj" />
     <ProjectReference Include="..\..\src\Services\Organizations\Edvantix.Organizations\Edvantix.Organizations.csproj" />
+    <ProjectReference Include="..\..\src\Services\Scheduling\Edvantix.Scheduling\Edvantix.Scheduling.csproj" />
   </ItemGroup>
 </Project>

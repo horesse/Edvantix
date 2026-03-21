@@ -4,7 +4,6 @@ global using Edvantix.Chassis.Mapper;
 global using Edvantix.Chassis.Repository;
 global using Edvantix.Chassis.Security.Tenant;
 global using Edvantix.Constants.Core;
-global using Edvantix.Organizations.Domain.Abstractions;
 global using Edvantix.Organizations.Domain.AggregatesModel.PermissionAggregate;
 global using Edvantix.Organizations.Domain.AggregatesModel.RoleAggregate;
 global using Edvantix.Organizations.Domain.AggregatesModel.UserRoleAssignmentAggregate;

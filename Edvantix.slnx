@@ -51,5 +51,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Edvantix.ArchTests/Edvantix.ArchTests.csproj" />
+    <Project Path="tests/Edvantix.Scheduling.UnitTests/Edvantix.Scheduling.UnitTests.csproj" />
   </Folder>
 </Solution>

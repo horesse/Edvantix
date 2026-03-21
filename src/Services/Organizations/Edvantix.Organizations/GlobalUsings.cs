@@ -16,7 +16,6 @@ global using Edvantix.Chassis.Specification.Builders;
 global using Edvantix.Chassis.Utilities.Guards;
 global using Edvantix.Constants.Aspire;
 global using Edvantix.Constants.Core;
-global using Edvantix.Organizations.Domain.Abstractions;
 global using Edvantix.Organizations.Domain.AggregatesModel.PermissionAggregate;
 global using Edvantix.Organizations.Domain.AggregatesModel.RoleAggregate;
 global using Edvantix.Organizations.Domain.AggregatesModel.UserRoleAssignmentAggregate;

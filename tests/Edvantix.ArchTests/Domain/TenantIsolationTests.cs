@@ -1,8 +1,8 @@
 using Edvantix.ArchTests.Abstractions;
 using Edvantix.Chassis.Security.Tenant;
-using Edvantix.Organizations.Domain.Abstractions;
 using Edvantix.Organizations.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizations.Infrastructure;
+using Edvantix.SharedKernel.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 

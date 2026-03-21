@@ -6,6 +6,7 @@ using Edvantix.Notification;
 using Edvantix.Organizations;
 using Edvantix.Persona;
 using Edvantix.Scheduler;
+using Edvantix.Scheduling;
 using Edvantix.SharedKernel;
 
 namespace Edvantix.ArchTests.Abstractions;
@@ -19,6 +20,7 @@ public abstract class BaseTest
     protected static readonly Assembly SchedulerAssembly = typeof(ISchedulerApiMarker).Assembly;
     protected static readonly Assembly OrganizationsAssembly =
         typeof(IOrganizationsApiMarker).Assembly;
+    protected static readonly Assembly SchedulingAssembly = typeof(ISchedulingApiMarker).Assembly;
     protected static readonly Assembly ChassisAssembly = typeof(IChassisMarker).Assembly;
     protected static readonly Assembly ConstantsAssembly = typeof(IConstantsMarker).Assembly;
     protected static readonly Assembly SharedKernelAssembly = typeof(ISharedKernelMarker).Assembly;

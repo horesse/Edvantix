@@ -13,6 +13,7 @@ public abstract class ArchUnitBaseTest : BaseTest
             NotificationAssembly,
             SchedulerAssembly,
             OrganizationsAssembly,
+            SchedulingAssembly,
             ChassisAssembly,
             ConstantsAssembly,
             SharedKernelAssembly
@@ -59,6 +60,14 @@ public abstract class ArchUnitBaseTest : BaseTest
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
         .As(nameof(Scheduler));
 
+    protected static readonly IObjectProvider<IType> SchedulingServiceTypes = ArchRuleDefinition
+        .Types()
+        .That()
+        .ResideInAssembly(SchedulingAssembly)
+        .And()
+        .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .As(nameof(Scheduling));
+
     protected static readonly IObjectProvider<IType> ChassisServiceTypes = ArchRuleDefinition
         .Types()
         .That()
@@ -91,6 +100,7 @@ public abstract class ArchUnitBaseTest : BaseTest
             nameof(Persona) => PersonaServiceTypes,
             nameof(Notification) => NotificationServiceTypes,
             nameof(Scheduler) => SchedulerServiceTypes,
+            nameof(Scheduling) => SchedulingServiceTypes,
             nameof(Organizations) => OrganizationsServiceTypes,
             nameof(Chassis) => ChassisServiceTypes,
             nameof(Constants) => ConstantsServiceTypes,

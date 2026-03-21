@@ -33,7 +33,10 @@ public sealed class MarkAttendanceCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindBySlotAndStudentAsync(slotId, studentId, It.IsAny<CancellationToken>())
+                r.FirstOrDefaultAsync(
+                    It.IsAny<Specification<AttendanceRecord>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync((AttendanceRecord?)null);
 
@@ -78,7 +81,10 @@ public sealed class MarkAttendanceCommandHandlerTests
 
         _repositoryMock
             .Setup(r =>
-                r.FindBySlotAndStudentAsync(slotId, studentId, It.IsAny<CancellationToken>())
+                r.FirstOrDefaultAsync(
+                    It.IsAny<Specification<AttendanceRecord>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(existingRecord);
 

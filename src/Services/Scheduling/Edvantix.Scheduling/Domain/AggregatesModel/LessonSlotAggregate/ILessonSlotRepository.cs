@@ -6,10 +6,13 @@ namespace Edvantix.Scheduling.Domain.AggregatesModel.LessonSlotAggregate;
 /// </summary>
 public interface ILessonSlotRepository : IRepository<LessonSlot>
 {
-    /// <summary>Finds a lesson slot by its identifier. Returns null if not found.</summary>
-    /// <param name="slotId">The lesson slot ID to look up.</param>
+    /// <summary>
+    /// Returns the first lesson slot that satisfies <paramref name="spec"/>,
+    /// or <see langword="null"/> if none exists.
+    /// </summary>
+    /// <param name="spec">The specification to apply.</param>
     /// <param name="ct">Cancellation token.</param>
-    Task<LessonSlot?> FindByIdAsync(Guid slotId, CancellationToken ct);
+    Task<LessonSlot?> FirstOrDefaultAsync(Specification<LessonSlot> spec, CancellationToken ct);
 
     /// <summary>Adds a new lesson slot to the context. Call <see cref="IUnitOfWork.SaveEntitiesAsync"/> to persist.</summary>
     void Add(LessonSlot slot);

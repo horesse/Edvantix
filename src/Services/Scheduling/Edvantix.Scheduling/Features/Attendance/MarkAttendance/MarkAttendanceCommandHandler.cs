@@ -23,9 +23,8 @@ public sealed class MarkAttendanceCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var existing = await repository.FindBySlotAndStudentAsync(
-            command.SlotId,
-            command.StudentId,
+        var existing = await repository.FirstOrDefaultAsync(
+            new AttendanceBySlotAndStudentSpecification(command.SlotId, command.StudentId),
             cancellationToken
         );
 

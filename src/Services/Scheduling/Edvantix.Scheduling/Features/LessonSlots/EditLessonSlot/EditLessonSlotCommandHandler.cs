@@ -25,8 +25,10 @@ public sealed class EditLessonSlotCommandHandler(
     {
         // Step 1: Load the aggregate — tenant query filter is applied by DbContext automatically.
         var slot =
-            await slotRepository.FindByIdAsync(command.Id, cancellationToken)
-            ?? throw NotFoundException.For<LessonSlot>(command.Id);
+            await slotRepository.FirstOrDefaultAsync(
+                new LessonSlotByIdSpecification(command.Id),
+                cancellationToken
+            ) ?? throw NotFoundException.For<LessonSlot>(command.Id);
 
         // Step 2: Global teacher conflict check with self-exclusion (D-06).
         // Passing command.Id excludes the slot being edited from the overlap query so

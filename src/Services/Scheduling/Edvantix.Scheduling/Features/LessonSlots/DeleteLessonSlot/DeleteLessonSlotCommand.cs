@@ -29,8 +29,10 @@ public sealed class DeleteLessonSlotCommandHandler(
     )
     {
         var slot =
-            await slotRepository.FindByIdAsync(command.Id, cancellationToken)
-            ?? throw NotFoundException.For<LessonSlot>(command.Id);
+            await slotRepository.FirstOrDefaultAsync(
+                new LessonSlotByIdSpecification(command.Id),
+                cancellationToken
+            ) ?? throw NotFoundException.For<LessonSlot>(command.Id);
 
         // Hard delete — LessonSlot does not implement ISoftDelete (per plan spec).
         // The tenant query filter on DbContext ensures only slots belonging to

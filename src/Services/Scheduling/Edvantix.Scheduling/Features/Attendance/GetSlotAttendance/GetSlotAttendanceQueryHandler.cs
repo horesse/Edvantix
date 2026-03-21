@@ -20,7 +20,10 @@ public sealed class GetSlotAttendanceQueryHandler(IAttendanceRecordRepository re
         CancellationToken cancellationToken
     )
     {
-        var records = await repository.GetBySlotAsync(query.SlotId, cancellationToken);
+        var records = await repository.ListAsync(
+            new AttendanceBySlotSpecification(query.SlotId),
+            cancellationToken
+        );
 
         // Map each domain entity to DTO. Status is converted to string per D-07 response shape.
         return records

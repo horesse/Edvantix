@@ -82,11 +82,11 @@ Plans:
   1. Manager can mark each student on a slot as Present, Absent, or Excused; attempting to mark the same student on the same slot twice updates the existing record rather than creating a duplicate
   2. After attendance is recorded, an AttendanceRecordedIntegrationEvent appears on the edvantix.scheduling.attendance-recorded Kafka topic via the transactional outbox, even if the application restarts between the DB commit and the send
   3. The event payload includes StudentId, LessonSlotId, SchoolId, Timestamp (DateTimeOffset), and a CorrelationId suitable for use as an idempotency key in Payments
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: AttendanceRecord aggregate with unique constraint on (LessonSlotId, StudentId); mark attendance command
-- [ ] 04-02: AttendanceRecordedIntegrationEvent schema and MassTransit transactional outbox wiring; Kafka topic configuration
+- [ ] 04-01-PLAN.md — AttendanceRecord aggregate, EF config with unique index, HasQueryFilter, permissions, Wave 0 test stubs (Wave 1)
+- [ ] 04-02-PLAN.md — Domain event pipeline (EventMapper + outbox wiring), MarkAttendance PUT endpoint, GetSlotAttendance GET endpoint, handler tests (Wave 2)
 
 ### Phase 5: Payments — Ledger and Balance
 **Goal**: Students have a lesson balance that managers can top up, decrements automatically when attendance is confirmed by Scheduling, and is visible to both student and manager with per-slot payment status

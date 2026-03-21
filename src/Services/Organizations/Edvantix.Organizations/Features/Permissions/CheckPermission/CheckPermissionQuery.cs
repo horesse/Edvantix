@@ -2,16 +2,20 @@ using Edvantix.Chassis.Caching;
 
 namespace Edvantix.Organizations.Features.Permissions.CheckPermission;
 
-/// <summary>Query that checks whether a user holds a specific permission within a school.</summary>
+/// <summary>
+/// Query that returns whether a user holds a specific permission within a school.
+/// Named with "Get" prefix to comply with the architecture rule that queries must
+/// start with Get/List/Visualize/Summarize.
+/// </summary>
 /// <param name="UserId">The user profile identifier.</param>
 /// <param name="SchoolId">The school (tenant) identifier.</param>
 /// <param name="Permission">The permission string to check (e.g., "scheduling:create-slot").</param>
-public sealed record CheckPermissionQuery(Guid UserId, Guid SchoolId, string Permission)
+public sealed record GetUserPermissionGrantQuery(Guid UserId, Guid SchoolId, string Permission)
     : IQuery<bool>;
 
 /// <summary>
-/// Resolves the user's effective permissions for a school using a two-level cache
-/// (L1 in-memory, L2 Redis) via <see cref="IHybridCache"/>.
+/// Resolves whether a user holds a specific permission within a school using a two-level
+/// cache (L1 in-memory, L2 Redis) via <see cref="IHybridCache"/>.
 ///
 /// Cache key: <c>perm:{userId}:{schoolId}:{permission}</c>
 /// Cache tag:  <c>user:{userId}:{schoolId}</c> — used for bulk invalidation when
@@ -22,16 +26,16 @@ public sealed record CheckPermissionQuery(Guid UserId, Guid SchoolId, string Per
 /// Repository methods that ignore query filters are used, with explicit schoolId filtering
 /// to preserve data isolation guarantees.
 /// </summary>
-public sealed class CheckPermissionQueryHandler(
+public sealed class GetUserPermissionGrantQueryHandler(
     IHybridCache cache,
     IUserRoleAssignmentRepository assignmentRepository,
     IRoleRepository roleRepository,
     IPermissionRepository permissionRepository
-) : IQueryHandler<CheckPermissionQuery, bool>
+) : IQueryHandler<GetUserPermissionGrantQuery, bool>
 {
     /// <inheritdoc/>
     public ValueTask<bool> Handle(
-        CheckPermissionQuery request,
+        GetUserPermissionGrantQuery request,
         CancellationToken cancellationToken
     )
     {
@@ -51,7 +55,7 @@ public sealed class CheckPermissionQueryHandler(
     /// permission is present in any of the user's roles for the given school.
     /// </summary>
     private async ValueTask<bool> ResolvePermissionAsync(
-        CheckPermissionQuery request,
+        GetUserPermissionGrantQuery request,
         CancellationToken cancellationToken
     )
     {

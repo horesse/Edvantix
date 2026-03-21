@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Organizations.Extensions;
+using Edvantix.Organizations.Grpc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,10 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
+
+// Register the Organizations gRPC permission check service.
+// CRITICAL: Without this mapping all gRPC calls return 404/Unimplemented.
+app.MapGrpcService<PermissionsGrpcService>();
 
 app.MapDefaultEndpoints();
 

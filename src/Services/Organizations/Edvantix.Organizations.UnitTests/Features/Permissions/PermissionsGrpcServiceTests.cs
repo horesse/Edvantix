@@ -27,7 +27,7 @@ public sealed class PermissionsGrpcServiceTests
         _mediatorMock
             .Setup(m =>
                 m.Send(
-                    It.Is<CheckPermissionQuery>(q =>
+                    It.Is<GetUserPermissionGrantQuery>(q =>
                         q.UserId == userId && q.SchoolId == schoolId && q.Permission == permission
                     ),
                     It.IsAny<CancellationToken>()
@@ -48,7 +48,7 @@ public sealed class PermissionsGrpcServiceTests
         _mediatorMock.Verify(
             m =>
                 m.Send(
-                    It.Is<CheckPermissionQuery>(q =>
+                    It.Is<GetUserPermissionGrantQuery>(q =>
                         q.UserId == userId && q.SchoolId == schoolId && q.Permission == permission
                     ),
                     It.IsAny<CancellationToken>()
@@ -65,7 +65,12 @@ public sealed class PermissionsGrpcServiceTests
         const string permission = "scheduling:create-slot";
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<CheckPermissionQuery>(), It.IsAny<CancellationToken>()))
+            .Setup(m =>
+                m.Send(
+                    It.IsAny<GetUserPermissionGrantQuery>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(false);
 
         var request = new CheckPermissionRequest

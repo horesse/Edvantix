@@ -79,6 +79,8 @@ var organizationsApi = builder
     .WaitFor(personaApi)
     .WithReference(queue)
     .WaitFor(queue)
+    .WithReference(redis) // L2 cache backend for HybridCache permission checks
+    .WaitFor(redis)
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 

@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Caching;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Chassis.OpenTelemetry;
@@ -11,6 +12,7 @@ using Edvantix.Organizations.Infrastructure.EventServices;
 using Edvantix.Organizations.Infrastructure.Seeding;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Hybrid;
 
 namespace Edvantix.Organizations.Extensions;
 
@@ -62,6 +64,17 @@ internal static class Extensions
         builder.AddRateLimiting();
 
         builder.AddPersistenceServices();
+
+        // HybridCache — L1 in-memory (30s) + L2 Redis (5min) for permission checks.
+        // The configure callback overrides DefaultEntryOptions after the Caching section is applied.
+        builder.AddCaching(options =>
+        {
+            options.DefaultEntryOptions = new HybridCacheEntryOptions
+            {
+                Expiration = TimeSpan.FromMinutes(5), // L2 Redis TTL
+                LocalCacheExpiration = TimeSpan.FromSeconds(30), // L1 in-memory TTL
+            };
+        });
 
         services.AddValidatorsFromAssemblyContaining<IOrganizationsApiMarker>(
             includeInternalTypes: true

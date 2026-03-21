@@ -28,7 +28,7 @@ public sealed class PermissionsGrpcService(IMediator mediator)
         var schoolId = Guid.Parse(request.SchoolId);
 
         var result = await mediator.Send(
-            new CheckPermissionQuery(userId, schoolId, request.Permission),
+            new GetUserPermissionGrantQuery(userId, schoolId, request.Permission),
             context?.CancellationToken ?? CancellationToken.None
         );
 

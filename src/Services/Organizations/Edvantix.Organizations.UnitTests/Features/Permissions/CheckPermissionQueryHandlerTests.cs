@@ -3,14 +3,14 @@ using Edvantix.Organizations.Features.Permissions.CheckPermission;
 
 namespace Edvantix.Organizations.UnitTests.Features.Permissions;
 
-/// <summary>Unit tests for <see cref="CheckPermissionQueryHandler"/>.</summary>
+/// <summary>Unit tests for <see cref="GetUserPermissionGrantQueryHandler"/>.</summary>
 public sealed class CheckPermissionQueryHandlerTests
 {
     private readonly Mock<IHybridCache> _cacheMock;
     private readonly Mock<IUserRoleAssignmentRepository> _assignmentRepositoryMock;
     private readonly Mock<IRoleRepository> _roleRepositoryMock;
     private readonly Mock<IPermissionRepository> _permissionRepositoryMock;
-    private readonly CheckPermissionQueryHandler _handler;
+    private readonly GetUserPermissionGrantQueryHandler _handler;
 
     private readonly Guid _userId = Guid.CreateVersion7();
     private readonly Guid _schoolId = Guid.CreateVersion7();
@@ -22,7 +22,7 @@ public sealed class CheckPermissionQueryHandlerTests
         _roleRepositoryMock = new Mock<IRoleRepository>();
         _permissionRepositoryMock = new Mock<IPermissionRepository>();
 
-        _handler = new CheckPermissionQueryHandler(
+        _handler = new GetUserPermissionGrantQueryHandler(
             _cacheMock.Object,
             _assignmentRepositoryMock.Object,
             _roleRepositoryMock.Object,
@@ -72,7 +72,7 @@ public sealed class CheckPermissionQueryHandlerTests
                 CancellationToken
             >((_, factory, _, ct) => factory(ct));
 
-        var query = new CheckPermissionQuery(_userId, _schoolId, permission);
+        var query = new GetUserPermissionGrantQuery(_userId, _schoolId, permission);
 
         var result = await _handler.Handle(query, CancellationToken.None);
 
@@ -122,7 +122,7 @@ public sealed class CheckPermissionQueryHandlerTests
                 CancellationToken
             >((_, factory, _, ct) => factory(ct));
 
-        var query = new CheckPermissionQuery(_userId, _schoolId, permission);
+        var query = new GetUserPermissionGrantQuery(_userId, _schoolId, permission);
 
         var result = await _handler.Handle(query, CancellationToken.None);
 
@@ -150,7 +150,7 @@ public sealed class CheckPermissionQueryHandlerTests
             )
             .ReturnsAsync(true);
 
-        var query = new CheckPermissionQuery(_userId, _schoolId, permission);
+        var query = new GetUserPermissionGrantQuery(_userId, _schoolId, permission);
 
         var result = await _handler.Handle(query, CancellationToken.None);
 
@@ -199,7 +199,7 @@ public sealed class CheckPermissionQueryHandlerTests
                 CancellationToken
             >((_, factory, _, ct) => factory(ct));
 
-        var query = new CheckPermissionQuery(_userId, _schoolId, permission);
+        var query = new GetUserPermissionGrantQuery(_userId, _schoolId, permission);
 
         var result = await _handler.Handle(query, CancellationToken.None);
 

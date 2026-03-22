@@ -12,7 +12,7 @@ public sealed class NotFoundException(string message) : Exception(message)
         return For<T>(id.ToString());
     }
 
-    public static NotFoundException For<T>(string? id)
+    public static NotFoundException For<T>(string id)
     {
         return new($"{typeof(T).Name} with id {id} not found.");
     }
@@ -36,7 +36,7 @@ public sealed class NotFoundExceptionHandler(
 
         logger.LogWarning(
             exception,
-            "[{Handler}] Not found exception occurred: {Message}",
+            "[{Handler}] Not found: {Message}",
             nameof(NotFoundExceptionHandler),
             notFoundException.Message
         );
@@ -44,7 +44,7 @@ public sealed class NotFoundExceptionHandler(
         logBuffer.Flush();
 
         await TypedResults
-            .NotFound(new { Detail = notFoundException.Message })
+            .NotFound(new { Detail = "The requested resource was not found." })
             .ExecuteAsync(httpContext);
 
         return true;

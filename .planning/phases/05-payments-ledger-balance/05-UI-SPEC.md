@@ -1,7 +1,8 @@
 ---
 phase: 5
 slug: payments-ledger-balance
-status: draft
+status: approved
+reviewed_at: 2026-03-22
 shadcn_initialized: true
 preset: new-york / neutral / cssVariables
 created: 2026-03-22

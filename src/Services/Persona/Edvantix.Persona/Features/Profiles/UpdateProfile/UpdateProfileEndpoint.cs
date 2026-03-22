@@ -1,8 +1,7 @@
 namespace Edvantix.Persona.Features.Profiles.UpdateProfile;
 
 /// <summary>PATCH /v1/profile — единый метод обновления профиля.</summary>
-public sealed class UpdateProfileEndpoint
-    : IEndpoint<Ok<Guid>, UpdateProfileCommand, ISender>
+public sealed class UpdateProfileEndpoint : IEndpoint<Ok<Guid>, UpdateProfileCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

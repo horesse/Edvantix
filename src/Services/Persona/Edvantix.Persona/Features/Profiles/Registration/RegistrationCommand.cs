@@ -64,7 +64,7 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
 
             throw;
         }
-        
+
         var keycloakAdmin = provider.GetRequiredService<IKeycloakAdminService>();
         await keycloakAdmin.SetProfileIdAsync(accountId, profile.Id, cancellationToken);
 

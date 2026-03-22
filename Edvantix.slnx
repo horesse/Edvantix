@@ -25,9 +25,6 @@
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/src/Services/" />
-  <Folder Name="/src/Services/Blog/">
-    <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />
-  </Folder>
   <Folder Name="/src/Services/Notification/">
     <Project Path="src/Services/Notification/Edvantix.Notification/Edvantix.Notification.csproj" />
   </Folder>

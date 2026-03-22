@@ -36,7 +36,6 @@ var profileContainer = storage
     .WithAzureStorageExplorer();
 
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
-var blogDb = postgres.AddDatabase(Components.Database.Blog);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
@@ -61,19 +60,6 @@ var personaApi = builder
     )
     .WithFriendlyUrls();
 
-var blogApi = builder
-    .AddProject<Edvantix_Blog>(Services.Blog)
-    .WithReference(blogDb)
-    .WaitFor(blogDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithReference(personaApi)
-    .WaitFor(personaApi)
-    .WithReference(redis)
-    .WaitFor(redis)
-    .WithFriendlyUrls()
-    .WithExplicitStart();
-
 var notificationApi = builder
     .AddProject<Edvantix_Notification>(Services.Notification)
     .WithEmailProvider()
@@ -88,7 +74,6 @@ var notificationApi = builder
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(personaApi, true)
-    .WithService(blogApi, true)
     .WithService(notificationApi, true)
     .Build();
 
@@ -171,7 +156,6 @@ if (builder.ExecutionContext.IsRunMode)
     builder
         .AddScalar(keycloak)
         .WithOpenAPI(personaApi)
-        .WithOpenAPI(blogApi)
         .WithOpenAPI(notificationApi);
 }
 

@@ -40,7 +40,7 @@ public static class Extensions
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             return services;
         }
-        
+
         public IServiceCollection ApplyTransactionBehavior<TDbContext>()
             where TDbContext : DbContext
         {

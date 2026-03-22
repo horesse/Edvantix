@@ -18,7 +18,7 @@ public static class Components
         private const string Suffix = "db";
 
         public static readonly string Persona = $"{nameof(Persona).ToLowerInvariant()}{Suffix}";
-        
+
         public static readonly string Notification =
             $"{nameof(Notification).ToLowerInvariant()}{Suffix}";
     }

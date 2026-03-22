@@ -153,10 +153,7 @@ adminFront.WithEnvironment("NEXT_PUBLIC_APP_URL", adminFront.GetEndpoint(Http.Sc
 
 if (builder.ExecutionContext.IsRunMode)
 {
-    builder
-        .AddScalar(keycloak)
-        .WithOpenAPI(personaApi)
-        .WithOpenAPI(notificationApi);
+    builder.AddScalar(keycloak).WithOpenAPI(personaApi).WithOpenAPI(notificationApi);
 }
 
 await builder.Build().RunAsync();

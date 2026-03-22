@@ -14,7 +14,7 @@ public static class ServiceDiscoveryUtilities
     public static string? GetServiceEndpoint(string serviceName, int index = 0)
     {
         return GetServiceEndpoint(serviceName, Http.Schemes.Https, index)
-               ?? GetServiceEndpoint(serviceName, Http.Schemes.Http, index);
+            ?? GetServiceEndpoint(serviceName, Http.Schemes.Http, index);
     }
 
     public static string GetRequiredServiceEndpoint(string serviceName, int index = 0)

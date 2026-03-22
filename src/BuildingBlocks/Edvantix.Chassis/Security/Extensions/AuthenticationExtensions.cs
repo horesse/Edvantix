@@ -20,7 +20,7 @@ public static class AuthenticationExtensions
         builder.Configure<IdentityOptions>(IdentityOptions.ConfigurationSection);
 
         var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
-        
+
         var keycloakUrl = HttpUtilities
             .AsUrlBuilder()
             .WithScheme(Http.Schemes.HttpOrHttps)

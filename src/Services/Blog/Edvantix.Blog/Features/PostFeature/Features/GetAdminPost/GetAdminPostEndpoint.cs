@@ -2,10 +2,6 @@ using Edvantix.Blog.Features.PostFeature.Models;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPost;
 
-/// <summary>
-/// Административный эндпоинт для получения полного содержимого поста по ID.
-/// Возвращает пост любого статуса (Draft, Scheduled, Published, Archived).
-/// </summary>
 public sealed class GetAdminPostEndpoint : IEndpoint<Ok<PostModel>, GetAdminPostQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

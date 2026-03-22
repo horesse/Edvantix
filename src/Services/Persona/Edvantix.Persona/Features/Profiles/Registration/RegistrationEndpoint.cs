@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.Persona.Features.Profiles.Registration;
 
-/// <summary>POST /v1/profile/registration — первичная регистрация профиля.</summary>
 public sealed class RegistrationEndpoint
     : IEndpoint<Created<Guid>, RegistrationCommand, ISender, LinkGenerator>
 {
@@ -22,8 +21,8 @@ public sealed class RegistrationEndpoint
             .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status409Conflict)
             .Produces(StatusCodes.Status422UnprocessableEntity)
-            .WithName("Registration")
-            .WithTags("Profile")
+            .WithName("Регистрация профиля")
+            .WithTags("Профиль")
             .WithSummary("Регистрация пользователя")
             .WithDescription("Создаёт новый профиль для аутентифицированного пользователя.")
             .WithFormOptions(true)

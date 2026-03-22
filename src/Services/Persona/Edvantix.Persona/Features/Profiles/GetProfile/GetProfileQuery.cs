@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Utilities;
+using Edvantix.Chassis.Utilities.Guards;
 
 namespace Edvantix.Persona.Features.Profiles.GetProfile;
 
@@ -9,9 +9,9 @@ namespace Edvantix.Persona.Features.Profiles.GetProfile;
 ///   <item>AccountId текущего аутентифицированного пользователя — иначе.</item>
 /// </list>
 /// </summary>
-public sealed record GetProfileQuery(Guid? ProfileId = null) : IQuery<ProfileViewModel>;
+public sealed record GetProfileQuery : IQuery<ProfileViewModel>;
 
-public sealed class GetProfileQueryHandler(IServiceProvider provider)
+public sealed class GetProfileQueryHandler(IProfileRepository repository, ClaimsPrincipal claims, IMapper<Profile, ProfileViewModel> mapper)
     : IQueryHandler<GetProfileQuery, ProfileViewModel>
 {
     public async ValueTask<ProfileViewModel> Handle(
@@ -19,19 +19,16 @@ public sealed class GetProfileQueryHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileRepo = provider.GetRequiredService<IProfileRepository>();
-        var mapper = provider.GetRequiredService<IMapper<Profile, ProfileViewModel>>();
-
-        var profileId = request.ProfileId ?? provider.TryGetProfileId();
+        var profileId = claims.TryGetProfileId();
 
         if (!profileId.HasValue || profileId == Guid.Empty)
             throw new NotFoundException("Профиль не найден.");
 
         var spec = ProfileSpecification.Minimal(profileId.Value);
 
-        var profile =
-            await profileRepo.FindAsync(spec, cancellationToken)
-            ?? throw new NotFoundException("Профиль не найден.");
+        var profile = await repository.FindAsync(spec, cancellationToken);
+        
+        Guard.Against.NotFound(profile, profileId.Value);
 
         return mapper.Map(profile);
     }

@@ -1,6 +1,5 @@
 namespace Edvantix.Persona.Features.Profiles.DeleteAvatar;
 
-/// <summary>DELETE /v1/profile/avatar — удалить аватар профиля.</summary>
 public sealed class DeleteAvatarEndpoint : IEndpoint<Ok<Guid>, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -10,8 +9,8 @@ public sealed class DeleteAvatarEndpoint : IEndpoint<Ok<Guid>, ISender>
                 async (ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(sender, cancellationToken)
             )
-            .WithName("DeleteAvatar")
-            .WithTags("Profile")
+            .WithName("Удаление аватара")
+            .WithTags("Профиль")
             .WithSummary("Удалить аватар")
             .WithDescription(
                 "Удаляет текущий аватар профиля из хранилища и очищает поле аватара в профиле."

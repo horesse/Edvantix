@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Utilities;
 using Edvantix.Constants.Other;
 using Edvantix.Persona.Infrastructure.Blob;
 using Edvantix.Persona.Infrastructure.Keycloak;
@@ -15,7 +14,7 @@ public sealed class RegistrationCommand : ICommand<Guid>
     public IFormFile? Avatar { get; init; }
 }
 
-public sealed class RegistrationCommandHandler(IServiceProvider provider)
+public sealed class RegistrationCommandHandler(ClaimsPrincipal claims, IProfileRepository repository, IBlobService blobService, IKeycloakAdminService keycloakService)
     : ICommandHandler<RegistrationCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
@@ -23,11 +22,10 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var accountId = provider.GetUserId();
-        var login = provider.GetUserLogin();
-        var profileRepo = provider.GetRequiredService<IProfileRepository>();
+        var accountId = claims.GetUserId();
+        var login = claims.GetUserLogin();
 
-        if (await profileRepo.ExistsByAccountIdAsync(accountId, cancellationToken))
+        if (await repository.ExistsByAccountIdAsync(accountId, cancellationToken))
             throw new InvalidOperationException("Профиль для данного аккаунта уже существует.");
 
         var profile = new Profile(
@@ -44,29 +42,26 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
 
         if (request.Avatar is not null)
         {
-            var blobService = provider.GetRequiredService<IBlobService>();
             avatarUrn = await blobService.UploadFileAsync(request.Avatar, cancellationToken);
             profile.UploadAvatar(avatarUrn);
         }
 
         try
         {
-            await profileRepo.AddAsync(profile, cancellationToken);
-            await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            await repository.AddAsync(profile, cancellationToken);
+            await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
         catch
         {
             if (avatarUrn is not null)
             {
-                var blobService = provider.GetRequiredService<IBlobService>();
                 await blobService.DeleteFileAsync(avatarUrn, cancellationToken);
             }
 
             throw;
         }
 
-        var keycloakAdmin = provider.GetRequiredService<IKeycloakAdminService>();
-        await keycloakAdmin.SetProfileIdAsync(accountId, profile.Id, cancellationToken);
+        await keycloakService.SetProfileIdAsync(accountId, profile.Id, cancellationToken);
 
         return profile.Id;
     }

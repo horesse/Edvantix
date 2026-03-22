@@ -1,6 +1,5 @@
 namespace Edvantix.Persona.Features.Profiles.GetProfile;
 
-/// <summary>GET /v1/profile — краткий профиль текущего пользователя.</summary>
 public sealed class GetProfileEndpoint : IEndpoint<Ok<ProfileViewModel>, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -10,8 +9,8 @@ public sealed class GetProfileEndpoint : IEndpoint<Ok<ProfileViewModel>, ISender
                 async (ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(sender, cancellationToken)
             )
-            .WithName("GetProfile")
-            .WithTags("Profile")
+            .WithName("Получить профиль")
+            .WithTags("Профиль")
             .WithSummary("Получить собственный профиль")
             .WithDescription("Возвращает краткую информацию о профиле текущего пользователя")
             .Produces<ProfileViewModel>()

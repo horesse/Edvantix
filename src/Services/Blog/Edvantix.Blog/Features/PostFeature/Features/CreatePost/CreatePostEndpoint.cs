@@ -1,24 +1,6 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.CreatePost;
 
-/// <summary>
-/// Запрос на создание нового поста от клиента.
-/// </summary>
-public sealed record CreatePostRequest(
-    string Title,
-    string Slug,
-    string Content,
-    string? Summary,
-    PostType Type,
-    bool IsPremium,
-    string? CoverImageUrl,
-    IReadOnlyList<Guid> CategoryIds,
-    IReadOnlyList<Guid> TagIds
-);
 
-/// <summary>
-/// Административный эндпоинт для создания нового поста блога.
-/// Доступен только пользователям с ролью администратора.
-/// </summary>
 public sealed class CreatePostEndpoint : IEndpoint<Created<Guid>, CreatePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -26,28 +8,12 @@ public sealed class CreatePostEndpoint : IEndpoint<Created<Guid>, CreatePostComm
         app.MapPost(
                 "/admin/posts",
                 async (
-                    CreatePostRequest request,
+                    CreatePostCommand request,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) =>
-                {
-                    var command = new CreatePostCommand(
-                        request.Title,
-                        request.Slug,
-                        request.Content,
-                        request.Summary,
-                        request.Type,
-                        request.IsPremium,
-                        request.CoverImageUrl,
-                        request.CategoryIds,
-                        request.TagIds
-                    );
-
-                    return await HandleAsync(command, sender, cancellationToken);
-                }
-            )
-            .WithName("CreatePost")
-            .WithTags("Admin.Posts")
+                ) => await HandleAsync(request, sender, cancellationToken))
+            .WithName("Создать пост")
+            .WithTags("Администрирование")
             .WithSummary("Создать пост")
             .WithDescription(
                 "Создаёт новый черновик поста блога. Доступно только администраторам платформы."

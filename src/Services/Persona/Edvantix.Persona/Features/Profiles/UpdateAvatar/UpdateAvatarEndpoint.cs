@@ -17,8 +17,8 @@ public sealed class UpdateAvatarEndpoint : IEndpoint<Ok<Guid>, UpdateAvatarComma
                 ) => await HandleAsync(command, sender, cancellationToken)
             )
             .Accepts<UpdateAvatarCommand>(MediaTypeNames.Multipart.FormData)
-            .WithName("UpdateAvatar")
-            .WithTags("Profile")
+            .WithName("Обновить аватар")
+            .WithTags("Профиль")
             .WithSummary("Загрузить или заменить аватар")
             .WithDescription(
                 "Загружает новый аватар профиля (JPEG/PNG, до 1 МБ). "

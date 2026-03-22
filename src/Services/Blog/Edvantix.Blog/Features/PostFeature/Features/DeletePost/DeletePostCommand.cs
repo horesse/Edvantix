@@ -1,17 +1,10 @@
+using Edvantix.Chassis.Utilities.Guards;
+
 namespace Edvantix.Blog.Features.PostFeature.Features.DeletePost;
 
-using Mediator;
-
-/// <summary>
-/// Команда для архивирования поста (мягкое удаление через перевод в статус Archived).
-/// </summary>
 public sealed record DeletePostCommand(Guid PostId) : ICommand;
 
-/// <summary>
-/// Обработчик команды удаления/архивирования поста.
-/// Переводит пост в статус Archived вместо физического удаления.
-/// </summary>
-public sealed class DeletePostCommandHandler(IServiceProvider provider)
+public sealed class DeletePostCommandHandler(IPostRepository postRepository)
     : ICommandHandler<DeletePostCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -19,15 +12,14 @@ public sealed class DeletePostCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var postRepo = provider.GetRequiredService<IPostRepository>();
-
         var post =
-            await postRepo.GetByIdAsync(request.PostId, cancellationToken)
-            ?? throw new NotFoundException($"Пост с ID {request.PostId} не найден.");
+            await postRepository.GetByIdAsync(request.PostId, cancellationToken);
+
+        Guard.Against.NotFound(post, request.PostId);
 
         post.Archive();
 
-        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await postRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

@@ -1,11 +1,8 @@
-using Edvantix.Blog.Grpc.Services;
+using Edvantix.Chassis.Utilities;
+using Edvantix.Chassis.Utilities.Guards;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.CreatePost;
 
-/// <summary>
-/// Команда для создания нового черновика поста.
-/// Доступна только администраторам платформы.
-/// </summary>
 public sealed record CreatePostCommand(
     string Title,
     string Slug,
@@ -18,11 +15,7 @@ public sealed record CreatePostCommand(
     IReadOnlyList<Guid> TagIds
 ) : ICommand<Guid>;
 
-/// <summary>
-/// Обработчик команды создания поста.
-/// Создаёт черновик поста с указанными категориями и тегами.
-/// </summary>
-public sealed class CreatePostCommandHandler(IServiceProvider provider)
+public sealed class CreatePostCommandHandler(ClaimsPrincipal claims, ICategoryRepository categoryRepository, ITagRepository tagRepository, IPostRepository postRepository)
     : ICommandHandler<CreatePostCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
@@ -30,31 +23,27 @@ public sealed class CreatePostCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var authorId = await provider.GetProfileId(cancellationToken);
+        var authorId = claims.GetProfileIdOrError();
 
-        // Проверяем существование категорий
-        var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
         var categories = new List<Category>(request.CategoryIds.Count);
 
         foreach (var categoryId in request.CategoryIds)
         {
             var category =
-                await categoryRepo.GetByIdAsync(categoryId, cancellationToken)
-                ?? throw new NotFoundException($"Категория с ID {categoryId} не найдена.");
+                await categoryRepository.GetByIdAsync(categoryId, cancellationToken);
 
+            Guard.Against.NotFound(category, categoryId);
             categories.Add(category);
         }
 
-        // Проверяем существование тегов
-        var tagRepo = provider.GetRequiredService<ITagRepository>();
         var tags = new List<Tag>(request.TagIds.Count);
 
         foreach (var tagId in request.TagIds)
         {
             var tag =
-                await tagRepo.GetByIdAsync(tagId, cancellationToken)
-                ?? throw new NotFoundException($"Тег с ID {tagId} не найден.");
-
+                await tagRepository.GetByIdAsync(tagId, cancellationToken);
+            
+            Guard.Against.NotFound(tag, tagId);
             tags.Add(tag);
         }
 
@@ -72,9 +61,8 @@ public sealed class CreatePostCommandHandler(IServiceProvider provider)
         post.SetCategories(categories);
         post.SetTags(tags);
 
-        var postRepo = provider.GetRequiredService<IPostRepository>();
-        await postRepo.AddAsync(post, cancellationToken);
-        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await postRepository.AddAsync(post, cancellationToken);
+        await postRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return post.Id;
     }

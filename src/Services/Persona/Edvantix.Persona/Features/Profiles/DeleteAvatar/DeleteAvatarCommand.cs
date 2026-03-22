@@ -1,11 +1,8 @@
-using Edvantix.Chassis.Utilities;
-
 namespace Edvantix.Persona.Features.Profiles.DeleteAvatar;
 
-/// <summary>DELETE /v1/profile/avatar — удалить аватар профиля.</summary>
 public sealed class DeleteAvatarCommand : ICommand<Guid>;
 
-public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
+public sealed class DeleteAvatarCommandHandler(IProfileRepository repository, ClaimsPrincipal claims)
     : ICommandHandler<DeleteAvatarCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
@@ -13,17 +10,16 @@ public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileId = provider.GetProfileIdOrError();
-        var profileRepo = provider.GetRequiredService<IProfileRepository>();
+        var profileId = claims.GetProfileIdOrError();
 
         var spec = ProfileSpecification.ForWrite(profileId);
         var profile =
-            await profileRepo.FindAsync(spec, cancellationToken)
+            await repository.FindAsync(spec, cancellationToken)
             ?? throw new NotFoundException("Профиль не найден.");
 
         profile.DeleteAvatar();
 
-        await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return profileId;
     }

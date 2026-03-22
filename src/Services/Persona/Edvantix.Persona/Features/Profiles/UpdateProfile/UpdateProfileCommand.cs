@@ -1,8 +1,7 @@
-using Edvantix.Chassis.Utilities;
+using Edvantix.Chassis.Utilities.Guards;
 
 namespace Edvantix.Persona.Features.Profiles.UpdateProfile;
 
-/// <summary>PATCH /v1/profile — единый метод обновления профиля.</summary>
 public sealed record UpdateProfileCommand(
     string FirstName,
     string LastName,
@@ -15,7 +14,7 @@ public sealed record UpdateProfileCommand(
     List<string> Skills
 ) : ICommand<Guid>;
 
-public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
+public sealed class UpdateProfileCommandHandler(ClaimsPrincipal claims, IProfileRepository repository, ISkillRepository skillRepository)
     : ICommandHandler<UpdateProfileCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
@@ -23,14 +22,13 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var profileId = provider.GetProfileIdOrError();
-        var profileRepo = provider.GetRequiredService<IProfileRepository>();
-        var skillRepo = provider.GetRequiredService<ISkillRepository>();
+        var profileId = claims.GetProfileIdOrError();
 
         var spec = ProfileSpecification.ForWrite(profileId);
         var profile =
-            await profileRepo.FindAsync(spec, cancellationToken)
-            ?? throw new NotFoundException("Профиль не найден.");
+            await repository.FindAsync(spec, cancellationToken);
+        
+        Guard.Against.NotFound(profile, profileId);
 
         // Обновляем личные данные
         profile.UpdatePersonalInfo(command.BirthDate);
@@ -59,10 +57,10 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
         );
 
         // Разрешаем имена навыков в ID каталога (find-or-create), затем заменяем список
-        var skillIds = await ResolveSkillIdsAsync(command.Skills, skillRepo, cancellationToken);
+        var skillIds = await ResolveSkillIdsAsync(command.Skills, skillRepository, cancellationToken);
         profile.ReplaceSkills(skillIds);
 
-        await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return profileId;
     }

@@ -1,9 +1,5 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.DeletePost;
 
-/// <summary>
-/// Административный эндпоинт для архивирования поста.
-/// Пост переводится в статус Archived и скрывается из публичного списка.
-/// </summary>
 public sealed class DeletePostEndpoint : IEndpoint<NoContent, DeletePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -13,8 +9,8 @@ public sealed class DeletePostEndpoint : IEndpoint<NoContent, DeletePostCommand,
                 async (Guid postId, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new DeletePostCommand(postId), sender, cancellationToken)
             )
-            .WithName("DeletePost")
-            .WithTags("Admin.Posts")
+            .WithName("Удаление поста")
+            .WithTags("Администрирование")
             .WithSummary("Архивировать пост")
             .WithDescription(
                 "Переводит пост в архив. Пост скрывается из публичного списка, но данные сохраняются."

@@ -1,6 +1,5 @@
 namespace Edvantix.Persona.Features.Profiles.UpdateProfile;
 
-/// <summary>PATCH /v1/profile — единый метод обновления профиля.</summary>
 public sealed class UpdateProfileEndpoint : IEndpoint<Ok<Guid>, UpdateProfileCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -13,8 +12,8 @@ public sealed class UpdateProfileEndpoint : IEndpoint<Ok<Guid>, UpdateProfileCom
                     CancellationToken cancellationToken
                 ) => await HandleAsync(command, sender, cancellationToken)
             )
-            .WithName("UpdateProfile")
-            .WithTags("Profile")
+            .WithName("Обновление профиля")
+            .WithTags("Профиль")
             .WithSummary("Обновить профиль")
             .WithDescription(
                 "Заменяет все редактируемые данные профиля: личные данные, контакты, опыт работы, образование и навыки."

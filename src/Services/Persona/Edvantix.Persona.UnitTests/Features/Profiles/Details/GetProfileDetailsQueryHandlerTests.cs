@@ -7,7 +7,7 @@ namespace Edvantix.Persona.UnitTests.Features.Profiles.Details;
 public sealed class GetProfileDetailsQueryHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
-    private readonly Mock<IMapper<Profile, ProfileDetailsModel>> _mapperMock = new();
+    private readonly Mock<IMapper<Profile, ProfileDetailsDto>> _mapperMock = new();
 
     [Test]
     public async Task GivenClaimsWithProfileId_WhenHandling_ThenShouldFindProfileAndReturnDetailsModel()
@@ -71,7 +71,7 @@ public sealed class GetProfileDetailsQueryHandlerTests
         return profile;
     }
 
-    private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
+    private static ProfileDetailsDto BuildDetailsModel(Guid id, Guid accountId) =>
         new(
             id,
             accountId,

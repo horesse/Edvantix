@@ -1,4 +1,5 @@
 using Edvantix.Chassis.Specification;
+using Edvantix.Persona.Features.Skills.List;
 
 namespace Edvantix.Persona.UnitTests.Features.Skills;
 

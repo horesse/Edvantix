@@ -1,17 +1,19 @@
-using Edvantix.Persona.Features.Profiles.Mappers;
+using Edvantix.Persona.Features.Contacts;
+using Edvantix.Persona.Features.Educations;
+using Edvantix.Persona.Features.EmploymentHistories;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.Mappers;
 
 public sealed class ProfileDetailsMapperTests
 {
     private readonly Mock<IBlobService> _blobServiceMock = new();
-    private readonly Mock<IMapper<ProfileContact, ContactModel>> _contactMapperMock = new();
+    private readonly Mock<IMapper<ProfileContact, ContactDto>> _contactMapperMock = new();
     private readonly Mock<
-        IMapper<EmploymentHistory, EmploymentHistoryModel>
+        IMapper<EmploymentHistory, EmploymentHistoryDto>
     > _employmentMapperMock = new();
-    private readonly Mock<IMapper<Education, EducationModel>> _educationMapperMock = new();
-    private readonly Mock<IMapper<ProfileSkill, SkillModel>> _skillMapperMock = new();
-    private readonly ProfileDetailsMapper _mapper;
+    private readonly Mock<IMapper<Education, EducationDto>> _educationMapperMock = new();
+    private readonly Mock<IMapper<ProfileSkill, SkillDto>> _skillMapperMock = new();
+    private readonly DetailedDomainToDtoMapper _mapper;
 
     public ProfileDetailsMapperTests()
     {

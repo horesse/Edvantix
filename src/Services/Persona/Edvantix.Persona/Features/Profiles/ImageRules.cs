@@ -6,7 +6,7 @@ namespace Edvantix.Persona.Features.Profiles;
 internal static class ImageRules
 {
     private const int MaxFileSize = 1048576;
-    
+
     private static readonly FrozenDictionary<string, FrozenSet<string>> AllowedTypes =
         new Dictionary<string, FrozenSet<string>>
         {
@@ -20,7 +20,7 @@ internal static class ImageRules
                 StringComparer.OrdinalIgnoreCase
             ),
         }.ToFrozenDictionary();
-    
+
     public static void ApplyImageRules<T>(this IRuleBuilderInitial<T, IFormFile?> ruleBuilder)
     {
         ruleBuilder
@@ -37,7 +37,7 @@ internal static class ImageRules
                 var ext = Path.GetExtension(x!.FileName);
 
                 return AllowedTypes.TryGetValue(x.ContentType!, out var extensions)
-                       && extensions.Contains(ext);
+                    && extensions.Contains(ext);
             })
             .WithMessage("Расширение файла не соответствует его типу содержимого.");
     }

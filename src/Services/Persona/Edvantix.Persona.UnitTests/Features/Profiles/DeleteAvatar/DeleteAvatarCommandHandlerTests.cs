@@ -1,5 +1,5 @@
 using Edvantix.Chassis.Specification;
-using Edvantix.Persona.Features.Profiles.DeleteAvatar;
+using Edvantix.Persona.Features.Profiles.Avatar.DeleteAvatar;
 using Edvantix.Persona.UnitTests.Helpers;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.DeleteAvatar;

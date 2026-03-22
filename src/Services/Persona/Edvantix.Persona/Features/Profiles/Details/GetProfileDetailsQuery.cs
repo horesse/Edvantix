@@ -1,14 +1,14 @@
 namespace Edvantix.Persona.Features.Profiles.Details;
 
-public sealed record GetProfileDetailsQuery() : IQuery<ProfileDetailsModel>;
+public sealed record GetProfileDetailsQuery() : IQuery<ProfileDetailsDto>;
 
 public sealed class GetProfileDetailsQueryHandler(
     IProfileRepository repository,
     ClaimsPrincipal claims,
-    IMapper<Profile, ProfileDetailsModel> mapper
-) : IQueryHandler<GetProfileDetailsQuery, ProfileDetailsModel>
+    IMapper<Profile, ProfileDetailsDto> mapper
+) : IQueryHandler<GetProfileDetailsQuery, ProfileDetailsDto>
 {
-    public async ValueTask<ProfileDetailsModel> Handle(
+    public async ValueTask<ProfileDetailsDto> Handle(
         GetProfileDetailsQuery request,
         CancellationToken cancellationToken
     )

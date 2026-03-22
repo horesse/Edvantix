@@ -1,5 +1,5 @@
 using Edvantix.Chassis.Specification;
-using Edvantix.Persona.Features.Profiles.UpdateAvatar;
+using Edvantix.Persona.Features.Profiles.Avatar.UpdateAvatar;
 using Edvantix.Persona.UnitTests.Helpers;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.UpdateAvatar;

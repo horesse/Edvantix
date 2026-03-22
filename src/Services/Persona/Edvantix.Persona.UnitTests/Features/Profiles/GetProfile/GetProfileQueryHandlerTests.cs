@@ -1,5 +1,5 @@
 using Edvantix.Chassis.Specification;
-using Edvantix.Persona.Features.Profiles.GetProfile;
+using Edvantix.Persona.Features.Profiles.Get;
 using Edvantix.Persona.UnitTests.Helpers;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.GetProfile;
@@ -7,14 +7,14 @@ namespace Edvantix.Persona.UnitTests.Features.Profiles.GetProfile;
 public sealed class GetProfileQueryHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
-    private readonly Mock<IMapper<Profile, ProfileViewModel>> _mapperMock = new();
+    private readonly Mock<IMapper<Profile, ProfileDto>> _mapperMock = new();
 
     [Test]
     public async Task GivenClaimsWithProfileId_WhenHandling_ThenShouldFindProfileAndReturnViewModel()
     {
         var accountId = Guid.CreateVersion7();
         var profile = CreateProfile(Guid.CreateVersion7(), accountId);
-        var expectedViewModel = new ProfileViewModel(profile.Id, "Иванов Иван", "testuser", null);
+        var expectedViewModel = new ProfileDto(profile.Id, "Иванов Иван", "testuser", null);
         var handler = CreateHandler(accountId);
 
         _profileRepoMock

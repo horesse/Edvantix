@@ -1,5 +1,5 @@
 using Edvantix.Chassis.Specification;
-using Edvantix.Persona.Features.Profiles.UpdateProfile;
+using Edvantix.Persona.Features.Profiles.Update;
 using Edvantix.Persona.UnitTests.Fakers;
 using Edvantix.Persona.UnitTests.Helpers;
 

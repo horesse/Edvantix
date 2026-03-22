@@ -78,7 +78,8 @@ var blogApi = builder
     .WaitFor(personaApi)
     .WithReference(redis)
     .WaitFor(redis)
-    .WithFriendlyUrls();
+    .WithFriendlyUrls()
+    .WithExplicitStart();
 
 var notificationApi = builder
     .AddProject<Edvantix_Notification>(Services.Notification)
@@ -130,7 +131,8 @@ var blogFront = turbo
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
     .WithKeycloak(keycloak)
-    .WaitFor(gateway);
+    .WaitFor(gateway)
+    .WithExplicitStart();
 
 builder
     .AddProject<Edvantix_Scheduler>(Services.Scheduler)
@@ -151,7 +153,8 @@ var landingFront = turbo
     .WithExternalHttpEndpoints()
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
-    .WaitFor(gateway);
+    .WaitFor(gateway)
+    .WithExplicitStart();
 
 landingFront.WithEnvironment("NEXT_PUBLIC_APP_URL", landingFront.GetEndpoint(Http.Schemes.Http));
 
@@ -165,7 +168,8 @@ var adminFront = turbo
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
     .WithKeycloak(keycloak)
-    .WaitFor(gateway);
+    .WaitFor(gateway)
+    .WithExplicitStart();
 
 adminFront.WithEnvironment("NEXT_PUBLIC_APP_URL", adminFront.GetEndpoint(Http.Schemes.Http));
 

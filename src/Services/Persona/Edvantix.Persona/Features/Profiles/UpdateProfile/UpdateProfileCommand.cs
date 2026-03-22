@@ -13,12 +13,12 @@ public sealed record UpdateProfileCommand(
     List<EmploymentHistoryRequest> EmploymentHistories,
     List<EducationRequest> Educations,
     List<string> Skills
-) : ICommand<ProfileDetailsModel>;
+) : ICommand<Guid>;
 
 public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
-    : ICommandHandler<UpdateProfileCommand, ProfileDetailsModel>
+    : ICommandHandler<UpdateProfileCommand, Guid>
 {
-    public async ValueTask<ProfileDetailsModel> Handle(
+    public async ValueTask<Guid> Handle(
         UpdateProfileCommand command,
         CancellationToken cancellationToken
     )
@@ -64,8 +64,7 @@ public sealed class UpdateProfileCommandHandler(IServiceProvider provider)
 
         await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        var mapper = provider.GetRequiredService<IMapper<Profile, ProfileDetailsModel>>();
-        return mapper.Map(profile);
+        return profileId;
     }
 
     /// <summary>

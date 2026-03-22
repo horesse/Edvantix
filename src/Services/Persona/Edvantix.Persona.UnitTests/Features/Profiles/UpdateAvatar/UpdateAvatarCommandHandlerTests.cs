@@ -43,7 +43,7 @@ public sealed class UpdateAvatarCommandHandlerTests
 
         var result = await handler.Handle(command, CancellationToken.None);
 
-        result.ShouldBe(expectedModel);
+        result.ShouldBe(expectedModel.Id);
         profile.AvatarUrl.ShouldBe(avatarUrn);
         _blobServiceMock.Verify(
             b => b.UploadFileAsync(avatarMock.Object, It.IsAny<CancellationToken>()),

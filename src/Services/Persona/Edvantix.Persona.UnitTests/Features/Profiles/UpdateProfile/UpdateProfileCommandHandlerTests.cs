@@ -33,7 +33,7 @@ public sealed class UpdateProfileCommandHandlerTests
 
         var result = await handler.Handle(BuildCommand(), CancellationToken.None);
 
-        result.ShouldBe(expectedModel);
+        result.ShouldBe(expectedModel.Id);
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 

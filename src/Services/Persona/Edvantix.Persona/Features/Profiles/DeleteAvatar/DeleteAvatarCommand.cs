@@ -3,12 +3,12 @@ using Edvantix.Chassis.Utilities;
 namespace Edvantix.Persona.Features.Profiles.DeleteAvatar;
 
 /// <summary>DELETE /v1/profile/avatar — удалить аватар профиля.</summary>
-public sealed class DeleteAvatarCommand : ICommand<ProfileDetailsModel>;
+public sealed class DeleteAvatarCommand : ICommand<Guid>;
 
 public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
-    : ICommandHandler<DeleteAvatarCommand, ProfileDetailsModel>
+    : ICommandHandler<DeleteAvatarCommand, Guid>
 {
-    public async ValueTask<ProfileDetailsModel> Handle(
+    public async ValueTask<Guid> Handle(
         DeleteAvatarCommand command,
         CancellationToken cancellationToken
     )
@@ -25,7 +25,6 @@ public sealed class DeleteAvatarCommandHandler(IServiceProvider provider)
 
         await profileRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        var mapper = provider.GetRequiredService<IMapper<Profile, ProfileDetailsModel>>();
-        return mapper.Map(profile);
+        return profileId;
     }
 }

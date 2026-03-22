@@ -2,7 +2,7 @@ namespace Edvantix.Persona.Features.Profiles.UpdateProfile;
 
 /// <summary>PATCH /v1/profile — единый метод обновления профиля.</summary>
 public sealed class UpdateProfileEndpoint
-    : IEndpoint<Ok<ProfileDetailsModel>, UpdateProfileCommand, ISender>
+    : IEndpoint<Ok<Guid>, UpdateProfileCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -28,7 +28,7 @@ public sealed class UpdateProfileEndpoint
             .RequireAuthorization();
     }
 
-    public async Task<Ok<ProfileDetailsModel>> HandleAsync(
+    public async Task<Ok<Guid>> HandleAsync(
         UpdateProfileCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

@@ -35,7 +35,7 @@ public sealed class DeleteAvatarCommandHandlerTests
 
         var result = await handler.Handle(new DeleteAvatarCommand(), CancellationToken.None);
 
-        result.ShouldBe(expectedModel);
+        result.ShouldBe(expectedModel.Id);
         profile.AvatarUrl.ShouldBeNull();
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -60,7 +60,7 @@ public sealed class DeleteAvatarCommandHandlerTests
 
         var result = await handler.Handle(new DeleteAvatarCommand(), CancellationToken.None);
 
-        result.ShouldBe(expectedModel);
+        result.ShouldBe(expectedModel.Id);
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 

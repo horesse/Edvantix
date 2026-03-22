@@ -1,7 +1,7 @@
 namespace Edvantix.Persona.Features.Profiles.DeleteAvatar;
 
 /// <summary>DELETE /v1/profile/avatar — удалить аватар профиля.</summary>
-public sealed class DeleteAvatarEndpoint : IEndpoint<Ok<ProfileDetailsModel>, ISender>
+public sealed class DeleteAvatarEndpoint : IEndpoint<Ok<Guid>, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -23,7 +23,7 @@ public sealed class DeleteAvatarEndpoint : IEndpoint<Ok<ProfileDetailsModel>, IS
             .RequireAuthorization();
     }
 
-    public async Task<Ok<ProfileDetailsModel>> HandleAsync(
+    public async Task<Ok<Guid>> HandleAsync(
         ISender sender,
         CancellationToken cancellationToken = default
     )

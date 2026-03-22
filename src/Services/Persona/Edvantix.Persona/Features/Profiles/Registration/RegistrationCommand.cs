@@ -5,7 +5,6 @@ using Edvantix.Persona.Infrastructure.Keycloak;
 
 namespace Edvantix.Persona.Features.Profiles.Registration;
 
-/// <summary>Команда первичной регистрации профиля пользователя. Возвращает внутренний ID профиля.</summary>
 public sealed class RegistrationCommand : ICommand<Guid>
 {
     public required string FirstName { get; init; }
@@ -57,7 +56,6 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
         }
         catch
         {
-            // Если сохранение в БД не удалось — удаляем загруженный аватар из хранилища
             if (avatarUrn is not null)
             {
                 var blobService = provider.GetRequiredService<IBlobService>();
@@ -66,10 +64,7 @@ public sealed class RegistrationCommandHandler(IServiceProvider provider)
 
             throw;
         }
-
-        // Сохраняем profileId в Keycloak как пользовательский атрибут.
-        // Это позволяет связать Keycloak-аккаунт с профилем в Persona-сервисе
-        // без дополнительного запроса к БД при каждом обращении.
+        
         var keycloakAdmin = provider.GetRequiredService<IKeycloakAdminService>();
         await keycloakAdmin.SetProfileIdAsync(accountId, profile.Id, cancellationToken);
 

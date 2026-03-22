@@ -5,7 +5,7 @@ namespace Edvantix.Persona.Features.Profiles.UpdateAvatar;
 
 /// <summary>PATCH /v1/profile/avatar — загрузить или заменить аватар профиля.</summary>
 public sealed class UpdateAvatarEndpoint
-    : IEndpoint<Ok<ProfileDetailsModel>, UpdateAvatarCommand, ISender>
+    : IEndpoint<Ok<Guid>, UpdateAvatarCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -34,7 +34,7 @@ public sealed class UpdateAvatarEndpoint
             .RequireAuthorization();
     }
 
-    public async Task<Ok<ProfileDetailsModel>> HandleAsync(
+    public async Task<Ok<Guid>> HandleAsync(
         UpdateAvatarCommand command,
         ISender sender,
         CancellationToken cancellationToken = default

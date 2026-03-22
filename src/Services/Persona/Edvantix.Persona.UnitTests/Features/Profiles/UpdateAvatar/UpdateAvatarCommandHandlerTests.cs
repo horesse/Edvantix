@@ -115,7 +115,11 @@ public sealed class UpdateAvatarCommandHandlerTests
     {
         var claims = ServiceProviderHelper.CreateClaimsPrincipal(accountId);
 
-        return new UpdateAvatarCommandHandler(_profileRepoMock.Object, _blobServiceMock.Object, claims);
+        return new UpdateAvatarCommandHandler(
+            _profileRepoMock.Object,
+            _blobServiceMock.Object,
+            claims
+        );
     }
 
     private static Profile CreateProfile(Guid accountId)
@@ -132,5 +136,4 @@ public sealed class UpdateAvatarCommandHandlerTests
 
         return profile;
     }
-
 }

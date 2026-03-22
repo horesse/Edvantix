@@ -199,7 +199,11 @@ public sealed class UpdateProfileCommandHandlerTests
     {
         var claims = ServiceProviderHelper.CreateClaimsPrincipal(accountId);
 
-        return new UpdateProfileCommandHandler(claims, _profileRepoMock.Object, _skillRepoMock.Object);
+        return new UpdateProfileCommandHandler(
+            claims,
+            _profileRepoMock.Object,
+            _skillRepoMock.Object
+        );
     }
 
     private static Profile CreateProfile(Guid accountId)

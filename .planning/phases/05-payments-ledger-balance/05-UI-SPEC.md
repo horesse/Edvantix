@@ -40,18 +40,22 @@ Declared values (multiples of 4 only):
 | 2xl | 48px | Major section breaks |
 | 3xl | 64px | Page-level vertical spacing |
 
-Exceptions: Touch targets for action buttons (Add Credit, Add Adjustment) minimum 44px height per WCAG 2.5.8. KPI stat cards use 16px padding (`p-4`) matching attendance page pattern.
+Touch-target exception: Action buttons (Add Credit, Add Adjustment) must meet a minimum interactive element height of 44px per WCAG 2.5.8. This is a minimum height constraint on interactive elements — it is NOT a spacing scale token and must not be used as a `gap` or `padding` value in layouts.
 
 ---
 
 ## Typography
 
+Exactly 4 sizes and 2 weights are declared. No other values may be used.
+
 | Role | Size | Weight | Line Height | Usage |
 |------|------|--------|-------------|-------|
 | Body | 14px | 400 (regular) | 1.5 | Table cell text, form labels, descriptions |
-| Label | 12px | 600 (semibold) | 1.4 | Table column headers (uppercase, tracking-wider), metadata, `text-[11px]` for micro-labels |
+| Label | 12px | 700 (bold) | 1.4 | Table column headers (uppercase, tracking-wider), metadata, micro-labels |
 | Heading | 18px | 700 (bold) | 1.2 | Page heading (matches `text-lg font-bold tracking-tight` from attendance page) |
 | Display | 20px | 700 (bold) | 1.1 | KPI stat values (balance remaining, total credits) — uses `text-xl font-bold` |
+
+Declared weights: **400 (regular)** and **700 (bold)** only. The Label role achieves visual distinction from body text through `uppercase` + `tracking-wider` at weight 700 rather than through a third weight value.
 
 Font: `Inter` via `--font-sans`. Numeric values (balance figures, lesson counts) use `tabular-nums` class for alignment in tables and KPI cards.
 
@@ -111,6 +115,8 @@ Three distinct UI surfaces for this phase:
 
 Manager-facing page. Shows balance summary KPI cards and the ledger transaction table.
 
+**Primary visual anchor:** The "Остаток" KPI card is the focal point of this surface. It is the only element that changes color based on data state (emerald when positive, rose when zero or negative). All other KPI cards are static in appearance. The executor must render "Остаток" as the third card in the KPI row so it draws the eye before the debt status card.
+
 **Layout:** Vertical stack matching attendance page pattern.
 
 ```
@@ -119,7 +125,7 @@ Page Header (student name + "Баланс студента" subtitle)
 KPI Row (4 cards, 2×2 on mobile → 4 columns on sm+)
   ├── KpiCard: Всего куплено / {N} уроков
   ├── KpiCard: Использовано / {N} уроков
-  ├── KpiCard: Остаток / {N} уроков  ← accent color when positive, rose when negative
+  ├── KpiCard: Остаток / {N} уроков  ← PRIMARY ANCHOR: emerald when positive, rose when ≤ 0
   └── KpiCard: Статус долга / Есть долг | Нет долга
 Ledger Table Card
   └── Table: Date | Type | Amount | Description | Running Balance

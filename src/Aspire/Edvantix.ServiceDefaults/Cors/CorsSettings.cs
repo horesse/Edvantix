@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Edvantix.ServiceDefaults.Kestrel;
+namespace Edvantix.ServiceDefaults.Cors;
 
 [OptionsValidator]
 internal sealed partial class CorsSettings : IValidateOptions<CorsSettings>

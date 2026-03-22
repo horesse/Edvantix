@@ -8,6 +8,7 @@ using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
+using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
 using AspireServices = Edvantix.Constants.Aspire.Services;
 

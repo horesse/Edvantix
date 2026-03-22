@@ -1,5 +1,6 @@
 using Edvantix.Blog.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.ServiceDefaults.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 

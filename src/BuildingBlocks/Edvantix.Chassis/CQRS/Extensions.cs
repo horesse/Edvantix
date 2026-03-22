@@ -2,6 +2,7 @@
 using Edvantix.Chassis.CQRS.Pipelines;
 using Edvantix.Chassis.CQRS.Query;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Edvantix.Chassis.CQRS;
@@ -37,6 +38,14 @@ public static class Extensions
         public IServiceCollection ApplyValidationBehavior()
         {
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            return services;
+        }
+        
+        public IServiceCollection ApplyTransactionBehavior<TDbContext>()
+            where TDbContext : DbContext
+        {
+            services.AddScoped<DbContext>(sp => sp.GetRequiredService<TDbContext>());
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
             return services;
         }
     }

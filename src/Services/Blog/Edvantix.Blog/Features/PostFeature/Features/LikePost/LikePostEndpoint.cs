@@ -1,9 +1,5 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.LikePost;
 
-/// <summary>
-/// Эндпоинт для постановки лайка на пост.
-/// Требует авторизации — только зарегистрированные пользователи могут ставить лайки.
-/// </summary>
 public sealed class LikePostEndpoint : IEndpoint<NoContent, LikePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -13,8 +9,8 @@ public sealed class LikePostEndpoint : IEndpoint<NoContent, LikePostCommand, ISe
                 async (Guid postId, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new LikePostCommand(postId), sender, cancellationToken)
             )
-            .WithName("LikePost")
-            .WithTags("Posts")
+            .WithName("Поставить лайк")
+            .WithTags("Посты")
             .WithSummary("Поставить лайк")
             .WithDescription("Ставит лайк на пост. Один пользователь — один лайк.")
             .Produces(StatusCodes.Status204NoContent)

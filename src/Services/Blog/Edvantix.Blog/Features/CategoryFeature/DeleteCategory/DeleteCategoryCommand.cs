@@ -1,16 +1,10 @@
+using Edvantix.Chassis.Utilities.Guards;
+
 namespace Edvantix.Blog.Features.CategoryFeature.DeleteCategory;
 
-using Mediator;
-
-/// <summary>
-/// Команда для физического удаления категории блога.
-/// </summary>
 public sealed record DeleteCategoryCommand(Guid CategoryId) : ICommand;
 
-/// <summary>
-/// Обработчик команды удаления категории.
-/// </summary>
-internal sealed class DeleteCategoryCommandHandler(IServiceProvider provider)
+internal sealed class DeleteCategoryCommandHandler(ICategoryRepository categoryRepository)
     : ICommandHandler<DeleteCategoryCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -18,14 +12,12 @@ internal sealed class DeleteCategoryCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
+        var category = await categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
 
-        var category =
-            await categoryRepo.GetByIdAsync(request.CategoryId, cancellationToken)
-            ?? throw new NotFoundException($"Категория с ID {request.CategoryId} не найдена.");
+        Guard.Against.NotFound(category, request.CategoryId);
 
-        await categoryRepo.DeleteAsync(category, cancellationToken);
-        await categoryRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await categoryRepository.DeleteAsync(category, cancellationToken);
+        await categoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

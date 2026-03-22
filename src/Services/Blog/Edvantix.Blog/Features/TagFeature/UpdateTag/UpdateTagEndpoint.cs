@@ -1,13 +1,7 @@
 namespace Edvantix.Blog.Features.TagFeature.UpdateTag;
 
-/// <summary>
-/// Запрос на обновление тега от клиента.
-/// </summary>
 public sealed record UpdateTagRequest(string Name, string Slug);
 
-/// <summary>
-/// Административный эндпоинт для обновления тега блога.
-/// </summary>
 public sealed class UpdateTagEndpoint : IEndpoint<NoContent, UpdateTagCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -26,8 +20,8 @@ public sealed class UpdateTagEndpoint : IEndpoint<NoContent, UpdateTagCommand, I
                         cancellationToken
                     )
             )
-            .WithName("UpdateTag")
-            .WithTags("Admin.Tags")
+            .WithName("Обновить тег")
+            .WithTags("Администрирование")
             .WithSummary("Обновить тег")
             .WithDescription("Обновляет данные тега блога. Доступно только администраторам.")
             .Produces(StatusCodes.Status204NoContent)

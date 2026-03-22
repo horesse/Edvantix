@@ -1,13 +1,5 @@
 namespace Edvantix.Blog.Features.TagFeature.CreateTag;
 
-/// <summary>
-/// Запрос на создание тега от клиента.
-/// </summary>
-public sealed record CreateTagRequest(string Name, string Slug);
-
-/// <summary>
-/// Административный эндпоинт для создания тега блога.
-/// </summary>
 public sealed class CreateTagEndpoint : IEndpoint<Created<Guid>, CreateTagCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -15,18 +7,13 @@ public sealed class CreateTagEndpoint : IEndpoint<Created<Guid>, CreateTagComman
         app.MapPost(
                 "/admin/tags",
                 async (
-                    CreateTagRequest request,
+                    CreateTagCommand request,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) =>
-                    await HandleAsync(
-                        new CreateTagCommand(request.Name, request.Slug),
-                        sender,
-                        cancellationToken
-                    )
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
-            .WithName("CreateTag")
-            .WithTags("Admin.Tags")
+            .WithName("Создать тег")
+            .WithTags("Администрирование")
             .WithSummary("Создать тег")
             .WithDescription("Создаёт новый тег блога. Доступно только администраторам.")
             .Produces<Guid>(StatusCodes.Status201Created)

@@ -1,18 +1,10 @@
+using Edvantix.Chassis.Utilities.Guards;
+
 namespace Edvantix.Blog.Features.PostFeature.Features.PublishPost;
 
-using Mediator;
-
-/// <summary>
-/// Команда для публикации или планирования поста.
-/// При указании ScheduledAt пост переходит в статус Scheduled,
-/// иначе — немедленно в статус Published.
-/// </summary>
 public sealed record PublishPostCommand(Guid PostId, DateTime? ScheduledAt = null) : ICommand;
 
-/// <summary>
-/// Обработчик команды публикации поста.
-/// </summary>
-public sealed class PublishPostCommandHandler(IServiceProvider provider)
+public sealed class PublishPostCommandHandler(IPostRepository postRepository)
     : ICommandHandler<PublishPostCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -20,11 +12,9 @@ public sealed class PublishPostCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var postRepo = provider.GetRequiredService<IPostRepository>();
+        var post = await postRepository.GetByIdAsync(request.PostId, cancellationToken);
 
-        var post =
-            await postRepo.GetByIdAsync(request.PostId, cancellationToken)
-            ?? throw new NotFoundException($"Пост с ID {request.PostId} не найден.");
+        Guard.Against.NotFound(post, request.PostId);
 
         if (request.ScheduledAt.HasValue)
         {
@@ -35,7 +25,7 @@ public sealed class PublishPostCommandHandler(IServiceProvider provider)
             post.Publish();
         }
 
-        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await postRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

@@ -3,10 +3,6 @@ using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 
-/// <summary>
-/// Административный эндпоинт для получения всех постов блога, включая черновики и архивные.
-/// Доступен только администраторам платформы.
-/// </summary>
 public sealed class GetAdminPostsEndpoint
     : IEndpoint<Ok<PagedResult<PostSummaryModel>>, GetAdminPostsQuery, ISender>
 {
@@ -20,8 +16,8 @@ public sealed class GetAdminPostsEndpoint
                     CancellationToken cancellationToken
                 ) => await HandleAsync(query, sender, cancellationToken)
             )
-            .WithName("GetAdminPosts")
-            .WithTags("Admin.Posts")
+            .WithName("Список постов (Admin)")
+            .WithTags("Администрирование")
             .WithSummary("Список постов (Admin)")
             .WithDescription(
                 "Возвращает пагинированный список всех постов блога любого статуса. Доступно только администраторам."

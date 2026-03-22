@@ -1,13 +1,10 @@
+using Edvantix.Chassis.Utilities.Guards;
+
 namespace Edvantix.Blog.Features.TagFeature.UpdateTag;
 
-using Mediator;
-
-/// <summary>
-/// Команда для обновления тега блога.
-/// </summary>
 public sealed record UpdateTagCommand(Guid TagId, string Name, string Slug) : ICommand;
 
-public sealed class UpdateTagCommandHandler(IServiceProvider provider)
+public sealed class UpdateTagCommandHandler(ITagRepository tagRepository)
     : ICommandHandler<UpdateTagCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -15,15 +12,13 @@ public sealed class UpdateTagCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var tagRepo = provider.GetRequiredService<ITagRepository>();
+        var tag = await tagRepository.GetByIdAsync(request.TagId, cancellationToken);
 
-        var tag =
-            await tagRepo.GetByIdAsync(request.TagId, cancellationToken)
-            ?? throw new NotFoundException($"Тег с ID {request.TagId} не найден.");
+        Guard.Against.NotFound(tag, request.TagId);
 
         tag.Update(request.Name, request.Slug);
 
-        await tagRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await tagRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

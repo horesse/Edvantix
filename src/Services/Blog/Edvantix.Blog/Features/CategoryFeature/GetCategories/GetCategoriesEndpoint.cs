@@ -1,8 +1,5 @@
 namespace Edvantix.Blog.Features.CategoryFeature.GetCategories;
 
-/// <summary>
-/// Публичный эндпоинт для получения списка категорий блога.
-/// </summary>
 public sealed class GetCategoriesEndpoint
     : IEndpoint<Ok<IReadOnlyList<CategoryModel>>, GetCategoriesQuery, ISender>
 {
@@ -13,8 +10,8 @@ public sealed class GetCategoriesEndpoint
                 async (ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new GetCategoriesQuery(), sender, cancellationToken)
             )
-            .WithName("GetCategories")
-            .WithTags("Categories")
+            .WithName("Список категорий")
+            .WithTags("Категории")
             .WithSummary("Список категорий")
             .WithDescription("Возвращает все категории блога.")
             .Produces<IReadOnlyList<CategoryModel>>()

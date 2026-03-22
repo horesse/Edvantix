@@ -3,10 +3,6 @@ using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPosts;
 
-/// <summary>
-/// Эндпоинт для получения пагинированного списка опубликованных постов.
-/// Поддерживает фильтрацию по типу, категории, тегу и текстовый поиск.
-/// </summary>
 public sealed class GetPostsEndpoint
     : IEndpoint<Ok<PagedResult<PostSummaryModel>>, GetPostsQuery, ISender>
 {
@@ -20,8 +16,8 @@ public sealed class GetPostsEndpoint
                     CancellationToken cancellationToken
                 ) => await HandleAsync(query, sender, cancellationToken)
             )
-            .WithName("GetPosts")
-            .WithTags("Posts")
+            .WithName("Список постов")
+            .WithTags("Посты")
             .WithSummary("Список постов")
             .WithDescription(
                 "Возвращает пагинированный список опубликованных постов блога с поддержкой фильтрации по типу, категории и тегам."

@@ -1,8 +1,5 @@
 namespace Edvantix.Blog.Features.TagFeature.GetTags;
 
-/// <summary>
-/// Публичный эндпоинт для получения списка тегов блога.
-/// </summary>
 public sealed class GetTagsEndpoint : IEndpoint<Ok<IReadOnlyList<TagModel>>, GetTagsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -12,8 +9,8 @@ public sealed class GetTagsEndpoint : IEndpoint<Ok<IReadOnlyList<TagModel>>, Get
                 async (ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new GetTagsQuery(), sender, cancellationToken)
             )
-            .WithName("GetTags")
-            .WithTags("Tags")
+            .WithName("Список тегов")
+            .WithTags("Теги")
             .WithSummary("Список тегов")
             .WithDescription("Возвращает все теги блога.")
             .Produces<IReadOnlyList<TagModel>>()

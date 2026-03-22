@@ -1,8 +1,5 @@
 namespace Edvantix.Blog.Features.TagFeature.DeleteTag;
 
-/// <summary>
-/// Административный эндпоинт для удаления тега блога.
-/// </summary>
 public sealed class DeleteTagEndpoint : IEndpoint<NoContent, DeleteTagCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -12,8 +9,8 @@ public sealed class DeleteTagEndpoint : IEndpoint<NoContent, DeleteTagCommand, I
                 async (Guid tagId, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new DeleteTagCommand(tagId), sender, cancellationToken)
             )
-            .WithName("DeleteTag")
-            .WithTags("Admin.Tags")
+            .WithName("Удалить тег")
+            .WithTags("Администрирование")
             .WithSummary("Удалить тег")
             .WithDescription("Удаляет тег блога. Доступно только администраторам.")
             .Produces(StatusCodes.Status204NoContent)

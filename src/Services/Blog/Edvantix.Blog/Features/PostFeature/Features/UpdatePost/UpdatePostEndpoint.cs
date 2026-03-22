@@ -1,8 +1,5 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.UpdatePost;
 
-/// <summary>
-/// Запрос на обновление поста от клиента.
-/// </summary>
 public sealed record UpdatePostRequest(
     string Title,
     string Slug,
@@ -15,9 +12,6 @@ public sealed record UpdatePostRequest(
     IReadOnlyList<Guid> TagIds
 );
 
-/// <summary>
-/// Административный эндпоинт для обновления поста блога.
-/// </summary>
 public sealed class UpdatePostEndpoint : IEndpoint<NoContent, UpdatePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -47,8 +41,8 @@ public sealed class UpdatePostEndpoint : IEndpoint<NoContent, UpdatePostCommand,
                     return await HandleAsync(command, sender, cancellationToken);
                 }
             )
-            .WithName("UpdatePost")
-            .WithTags("Admin.Posts")
+            .WithName("Обновить пост")
+            .WithTags("Администрирование")
             .WithSummary("Обновить пост")
             .WithDescription("Обновляет содержимое поста. Доступно только администраторам.")
             .Produces(StatusCodes.Status204NoContent)

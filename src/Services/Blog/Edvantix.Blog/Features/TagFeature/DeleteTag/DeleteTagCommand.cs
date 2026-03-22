@@ -1,13 +1,10 @@
+using Edvantix.Chassis.Utilities.Guards;
+
 namespace Edvantix.Blog.Features.TagFeature.DeleteTag;
 
-using Mediator;
-
-/// <summary>
-/// Команда для удаления тега блога.
-/// </summary>
 public sealed record DeleteTagCommand(Guid TagId) : ICommand;
 
-public sealed class DeleteTagCommandHandler(IServiceProvider provider)
+public sealed class DeleteTagCommandHandler(ITagRepository tagRepository)
     : ICommandHandler<DeleteTagCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -15,14 +12,12 @@ public sealed class DeleteTagCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var tagRepo = provider.GetRequiredService<ITagRepository>();
+        var tag = await tagRepository.GetByIdAsync(request.TagId, cancellationToken);
 
-        var tag =
-            await tagRepo.GetByIdAsync(request.TagId, cancellationToken)
-            ?? throw new NotFoundException($"Тег с ID {request.TagId} не найден.");
+        Guard.Against.NotFound(tag, request.TagId);
 
-        await tagRepo.DeleteAsync(tag, cancellationToken);
-        await tagRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await tagRepository.DeleteAsync(tag, cancellationToken);
+        await tagRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

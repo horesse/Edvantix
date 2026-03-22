@@ -1,8 +1,5 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.UnlikePost;
 
-/// <summary>
-/// Эндпоинт для снятия лайка с поста.
-/// </summary>
 public sealed class UnlikePostEndpoint : IEndpoint<NoContent, UnlikePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -12,8 +9,8 @@ public sealed class UnlikePostEndpoint : IEndpoint<NoContent, UnlikePostCommand,
                 async (Guid postId, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new UnlikePostCommand(postId), sender, cancellationToken)
             )
-            .WithName("UnlikePost")
-            .WithTags("Posts")
+            .WithName("Убрать лайк")
+            .WithTags("Посты")
             .WithSummary("Убрать лайк")
             .WithDescription("Снимает лайк пользователя с поста.")
             .Produces(StatusCodes.Status204NoContent)

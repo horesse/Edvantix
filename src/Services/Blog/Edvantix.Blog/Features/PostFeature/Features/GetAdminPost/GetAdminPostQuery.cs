@@ -1,35 +1,34 @@
 using Edvantix.Blog.Features.PostFeature.Models;
+using Edvantix.Blog.Grpc.Services;
+using Edvantix.Chassis.Utilities;
+using Edvantix.Chassis.Utilities.Guards;
+using Edvantix.Persona.Grpc.Services;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPost;
 
-/// <summary>
-/// Административный запрос для получения полного содержимого поста по ID.
-/// В отличие от публичного GetPostBySlugQuery возвращает пост любого статуса.
-/// </summary>
 public sealed record GetAdminPostQuery(Guid PostId) : IQuery<PostModel>;
 
-/// <summary>
-/// Обработчик административного запроса на получение поста.
-/// </summary>
-public sealed class GetAdminPostQueryHandler(IServiceProvider provider)
-    : IQueryHandler<GetAdminPostQuery, PostModel>
+public sealed class GetAdminPostQueryHandler(
+    IPostRepository postRepository,
+    IMapper<Post, PostModel> postMapper,
+    IProfileService profileService,
+    IMapper<ProfileReply, AuthorModel> authorMapper,
+    ClaimsPrincipal claims,
+    IPostLikeRepository postLikeRepository
+) : IQueryHandler<GetAdminPostQuery, PostModel>
 {
     public async ValueTask<PostModel> Handle(
         GetAdminPostQuery request,
         CancellationToken cancellationToken
     )
     {
-        var postRepo = provider.GetRequiredService<IPostRepository>();
+        var post = await postRepository.GetByIdAsync(request.PostId, cancellationToken);
 
-        var post =
-            await postRepo.GetByIdAsync(request.PostId, cancellationToken)
-            ?? throw new NotFoundException($"Пост с ID {request.PostId} не найден.");
+        Guard.Against.NotFound(post, request.PostId);
 
-        var mapper = provider.GetRequiredService<IMapper<Post, PostModel>>();
-
-        var result = mapper.Map(post);
-        await result.EnrichIsLikeByMe(provider, cancellationToken);
-        await result.EnrichAuthor(post.AuthorId, provider, cancellationToken);
+        var result = postMapper.Map(post);
+        await result.EnrichIsLikeByMe(claims, postLikeRepository, cancellationToken);
+        await result.EnrichAuthor(post.AuthorId, profileService, authorMapper, cancellationToken);
 
         return result;
     }

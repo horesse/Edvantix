@@ -1,8 +1,5 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPostLikes;
 
-/// <summary>
-/// Эндпоинт для получения количества лайков поста.
-/// </summary>
 public sealed class GetPostLikesEndpoint : IEndpoint<Ok<PostLikesModel>, GetPostLikesQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -12,8 +9,8 @@ public sealed class GetPostLikesEndpoint : IEndpoint<Ok<PostLikesModel>, GetPost
                 async (Guid postId, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new GetPostLikesQuery(postId), sender, cancellationToken)
             )
-            .WithName("GetPostLikes")
-            .WithTags("Posts")
+            .WithName("Количество лайков")
+            .WithTags("Посты")
             .WithSummary("Количество лайков")
             .WithDescription("Возвращает количество лайков у указанного поста.")
             .Produces<PostLikesModel>()

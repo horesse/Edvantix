@@ -1,8 +1,5 @@
 namespace Edvantix.Blog.Features.CategoryFeature.DeleteCategory;
 
-/// <summary>
-/// Административный эндпоинт для удаления категории блога.
-/// </summary>
 public sealed class DeleteCategoryEndpoint : IEndpoint<NoContent, DeleteCategoryCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -16,8 +13,8 @@ public sealed class DeleteCategoryEndpoint : IEndpoint<NoContent, DeleteCategory
                         cancellationToken
                     )
             )
-            .WithName("DeleteCategory")
-            .WithTags("Admin.Categories")
+            .WithName("Удалить категорию")
+            .WithTags("Администрирование")
             .WithSummary("Удалить категорию")
             .WithDescription("Удаляет категорию блога. Доступно только администраторам.")
             .Produces(StatusCodes.Status204NoContent)

@@ -2,9 +2,6 @@ using Edvantix.Blog.Features.PostFeature.Models;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetPostBySlug;
 
-/// <summary>
-/// Эндпоинт для получения полного содержимого поста по slug.
-/// </summary>
 public sealed class GetPostBySlugEndpoint : IEndpoint<Ok<PostModel>, GetPostBySlugQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -14,8 +11,8 @@ public sealed class GetPostBySlugEndpoint : IEndpoint<Ok<PostModel>, GetPostBySl
                 async (string slug, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new GetPostBySlugQuery(slug), sender, cancellationToken)
             )
-            .WithName("GetPostBySlug")
-            .WithTags("Posts")
+            .WithName("Получить пост")
+            .WithTags("Посты")
             .WithSummary("Получить пост")
             .WithDescription("Возвращает полное содержимое опубликованного поста по его slug.")
             .Produces<PostModel>()

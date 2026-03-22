@@ -1,13 +1,5 @@
 namespace Edvantix.Blog.Features.CategoryFeature.CreateCategory;
 
-/// <summary>
-/// Запрос на создание категории от клиента.
-/// </summary>
-public sealed record CreateCategoryRequest(string Name, string Slug, string? Description);
-
-/// <summary>
-/// Административный эндпоинт для создания категории блога.
-/// </summary>
 public sealed class CreateCategoryEndpoint
     : IEndpoint<Created<Guid>, CreateCategoryCommand, ISender>
 {
@@ -16,18 +8,13 @@ public sealed class CreateCategoryEndpoint
         app.MapPost(
                 "/admin/categories",
                 async (
-                    CreateCategoryRequest request,
+                    CreateCategoryCommand request,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) =>
-                    await HandleAsync(
-                        new CreateCategoryCommand(request.Name, request.Slug, request.Description),
-                        sender,
-                        cancellationToken
-                    )
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
-            .WithName("CreateCategory")
-            .WithTags("Admin.Categories")
+            .WithName("Создать категорию")
+            .WithTags("Администрирование")
             .WithSummary("Создать категорию")
             .WithDescription("Создаёт новую категорию блога. Доступно только администраторам.")
             .Produces<Guid>(StatusCodes.Status201Created)

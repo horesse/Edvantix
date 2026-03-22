@@ -1,12 +1,10 @@
 using Edvantix.Blog.Features.PostFeature.Models;
+using Edvantix.Blog.Grpc.Services;
+using Edvantix.Persona.Grpc.Services;
 using Edvantix.SharedKernel.Results;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.GetAdminPosts;
 
-/// <summary>
-/// Административный запрос для получения всех постов с любым статусом.
-/// В отличие от публичного GetPostsQuery не ограничивает выборку по статусу Published.
-/// </summary>
 public sealed record GetAdminPostsQuery(
     [property: Description("Фильтр по статусу поста")] PostStatus? Status = null,
     [property: Description("Фильтр по типу контента")] PostType? Type = null,
@@ -21,12 +19,12 @@ public sealed record GetAdminPostsQuery(
         int PageSize = Pagination.DefaultPageSize
 ) : IQuery<PagedResult<PostSummaryModel>>;
 
-/// <summary>
-/// Обработчик административного запроса на получение постов.
-/// Возвращает посты любого статуса, обогащённые данными автора из Profile.
-/// </summary>
-public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
-    : IQueryHandler<GetAdminPostsQuery, PagedResult<PostSummaryModel>>
+public sealed class GetAdminPostsQueryHandler(
+    IPostRepository postRepository,
+    IMapper<Post, PostSummaryModel> postSummaryMapper,
+    IProfileService profileService,
+    IMapper<ProfileReply, AuthorModel> authorMapper
+) : IQueryHandler<GetAdminPostsQuery, PagedResult<PostSummaryModel>>
 {
     public async ValueTask<PagedResult<PostSummaryModel>> Handle(
         GetAdminPostsQuery request,
@@ -41,9 +39,7 @@ public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
             searchText: request.Search
         );
 
-        var postRepo = provider.GetRequiredService<IPostRepository>();
-
-        var count = await postRepo.CountAsync(countSpec, cancellationToken);
+        var count = await postRepository.CountAsync(countSpec, cancellationToken);
 
         var listSpec = new PostSpecification(
             status: request.Status,
@@ -57,15 +53,13 @@ public sealed class GetAdminPostsQueryHandler(IServiceProvider provider)
         listSpec.Skip = (request.PageIndex - 1) * request.PageSize;
         listSpec.Take = request.PageSize;
 
-        var posts = await postRepo.ListAsync(listSpec, cancellationToken);
-        var mapper = provider.GetRequiredService<IMapper<Post, PostSummaryModel>>();
-
+        var posts = await postRepository.ListAsync(listSpec, cancellationToken);
         var items = new List<PostSummaryModel>(posts.Count);
 
         foreach (var post in posts)
         {
-            var item = mapper.Map(post);
-            await item.EnrichAuthor(post.AuthorId, provider, cancellationToken);
+            var item = postSummaryMapper.Map(post);
+            await item.EnrichAuthor(post.AuthorId, profileService, authorMapper, cancellationToken);
             items.Add(item);
         }
 

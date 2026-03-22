@@ -1,10 +1,7 @@
+using Edvantix.Chassis.Utilities.Guards;
+
 namespace Edvantix.Blog.Features.CategoryFeature.UpdateCategory;
 
-using Mediator;
-
-/// <summary>
-/// Команда для обновления категории блога.
-/// </summary>
 public sealed record UpdateCategoryCommand(
     Guid CategoryId,
     string Name,
@@ -12,10 +9,7 @@ public sealed record UpdateCategoryCommand(
     string? Description
 ) : ICommand;
 
-/// <summary>
-/// Обработчик команды обновления категории.
-/// </summary>
-public sealed class UpdateCategoryCommandHandler(IServiceProvider provider)
+public sealed class UpdateCategoryCommandHandler(ICategoryRepository categoryRepository)
     : ICommandHandler<UpdateCategoryCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -23,15 +17,13 @@ public sealed class UpdateCategoryCommandHandler(IServiceProvider provider)
         CancellationToken cancellationToken
     )
     {
-        var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
+        var category = await categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
 
-        var category =
-            await categoryRepo.GetByIdAsync(request.CategoryId, cancellationToken)
-            ?? throw new NotFoundException($"Категория с ID {request.CategoryId} не найдена.");
+        Guard.Against.NotFound(category, request.CategoryId);
 
         category.Update(request.Name, request.Slug, request.Description);
 
-        await categoryRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await categoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

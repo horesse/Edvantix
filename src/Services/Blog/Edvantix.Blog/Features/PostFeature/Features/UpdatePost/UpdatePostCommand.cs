@@ -1,11 +1,7 @@
+using Edvantix.Chassis.Utilities.Guards;
+
 namespace Edvantix.Blog.Features.PostFeature.Features.UpdatePost;
 
-using Mediator;
-
-/// <summary>
-/// Команда для обновления содержимого поста.
-/// Доступна только администраторам платформы.
-/// </summary>
 public sealed record UpdatePostCommand(
     Guid PostId,
     string Title,
@@ -19,46 +15,38 @@ public sealed record UpdatePostCommand(
     IReadOnlyList<Guid> TagIds
 ) : ICommand;
 
-/// <summary>
-/// Обработчик команды обновления поста.
-/// </summary>
-public sealed class UpdatePostCommandHandler(IServiceProvider provider)
-    : ICommandHandler<UpdatePostCommand>
+public sealed class UpdatePostCommandHandler(
+    IPostRepository postRepository,
+    ICategoryRepository categoryRepository,
+    ITagRepository tagRepository
+) : ICommandHandler<UpdatePostCommand>
 {
     public async ValueTask<Unit> Handle(
         UpdatePostCommand request,
         CancellationToken cancellationToken
     )
     {
-        var postRepo = provider.GetRequiredService<IPostRepository>();
+        var post = await postRepository.GetByIdAsync(request.PostId, cancellationToken);
 
-        var post =
-            await postRepo.GetByIdAsync(request.PostId, cancellationToken)
-            ?? throw new NotFoundException($"Пост с ID {request.PostId} не найден.");
+        Guard.Against.NotFound(post, request.PostId);
 
-        // Проверяем существование категорий
-        var categoryRepo = provider.GetRequiredService<ICategoryRepository>();
         var categories = new List<Category>(request.CategoryIds.Count);
 
         foreach (var categoryId in request.CategoryIds)
         {
-            var category =
-                await categoryRepo.GetByIdAsync(categoryId, cancellationToken)
-                ?? throw new NotFoundException($"Категория с ID {categoryId} не найдена.");
+            var category = await categoryRepository.GetByIdAsync(categoryId, cancellationToken);
 
+            Guard.Against.NotFound(category, categoryId);
             categories.Add(category);
         }
 
-        // Проверяем существование тегов
-        var tagRepo = provider.GetRequiredService<ITagRepository>();
         var tags = new List<Tag>(request.TagIds.Count);
 
         foreach (var tagId in request.TagIds)
         {
-            var tag =
-                await tagRepo.GetByIdAsync(tagId, cancellationToken)
-                ?? throw new NotFoundException($"Тег с ID {tagId} не найден.");
+            var tag = await tagRepository.GetByIdAsync(tagId, cancellationToken);
 
+            Guard.Against.NotFound(tag, tagId);
             tags.Add(tag);
         }
 
@@ -75,7 +63,7 @@ public sealed class UpdatePostCommandHandler(IServiceProvider provider)
         post.SetCategories(categories);
         post.SetTags(tags);
 
-        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await postRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

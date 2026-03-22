@@ -11,8 +11,8 @@ public sealed class GetAdminPostEndpoint : IEndpoint<Ok<PostModel>, GetAdminPost
                 async (Guid postId, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(new GetAdminPostQuery(postId), sender, cancellationToken)
             )
-            .WithName("GetAdminPost")
-            .WithTags("Admin.Posts")
+            .WithName("Получить пост (Admin)")
+            .WithTags("Администрирование")
             .WithSummary("Получить пост (Admin)")
             .WithDescription(
                 "Возвращает полное содержимое поста по ID для административного интерфейса. "

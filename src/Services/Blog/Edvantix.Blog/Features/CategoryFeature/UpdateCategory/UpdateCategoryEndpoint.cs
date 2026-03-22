@@ -1,13 +1,7 @@
 namespace Edvantix.Blog.Features.CategoryFeature.UpdateCategory;
 
-/// <summary>
-/// Запрос на обновление категории от клиента.
-/// </summary>
 public sealed record UpdateCategoryRequest(string Name, string Slug, string? Description);
 
-/// <summary>
-/// Административный эндпоинт для обновления категории блога.
-/// </summary>
 public sealed class UpdateCategoryEndpoint : IEndpoint<NoContent, UpdateCategoryCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -31,8 +25,8 @@ public sealed class UpdateCategoryEndpoint : IEndpoint<NoContent, UpdateCategory
                         cancellationToken
                     )
             )
-            .WithName("UpdateCategory")
-            .WithTags("Admin.Categories")
+            .WithName("Обновить категорию")
+            .WithTags("Администрирование")
             .WithSummary("Обновить категорию")
             .WithDescription("Обновляет данные категории блога. Доступно только администраторам.")
             .Produces(StatusCodes.Status204NoContent)

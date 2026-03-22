@@ -1,50 +1,41 @@
-using Edvantix.Blog.Grpc.Services;
+using Edvantix.Chassis.Utilities;
+using Edvantix.Chassis.Utilities.Guards;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.LikePost;
 
-/// <summary>
-/// Команда для постановки лайка на пост авторизованным пользователем.
-/// </summary>
 public sealed record LikePostCommand(Guid PostId) : ICommand;
 
-/// <summary>
-/// Обработчик команды постановки лайка.
-/// Проверяет уникальность через репозиторий PostLike и атомарно обновляет счётчик на посте.
-/// </summary>
-public sealed class LikePostCommandHandler(IServiceProvider provider)
-    : ICommandHandler<LikePostCommand>
+public sealed class LikePostCommandHandler(
+    ClaimsPrincipal claims,
+    IPostRepository postRepository,
+    IPostLikeRepository postLikeRepository
+) : ICommandHandler<LikePostCommand>
 {
     public async ValueTask<Unit> Handle(
         LikePostCommand request,
         CancellationToken cancellationToken
     )
     {
-        var userId = await provider.GetProfileId(cancellationToken);
+        var userId = claims.GetProfileIdOrError();
 
-        var postRepo = provider.GetRequiredService<IPostRepository>();
+        var post = await postRepository.GetByIdAsync(request.PostId, cancellationToken);
 
-        var post =
-            await postRepo.GetByIdAsync(request.PostId, cancellationToken)
-            ?? throw new NotFoundException($"Пост с ID {request.PostId} не найден.");
+        Guard.Against.NotFound(post, request.PostId);
 
         if (post.Status != PostStatus.Published)
             throw new InvalidOperationException("Нельзя поставить лайк на неопубликованный пост.");
 
-        var likeRepo = provider.GetRequiredService<IPostLikeRepository>();
-
         var existingLikeSpec = new PostLikeSpecification(postId: request.PostId, userId: userId);
-
-        var existingLike = await likeRepo.Get(existingLikeSpec, cancellationToken);
+        var existingLike = await postLikeRepository.Get(existingLikeSpec, cancellationToken);
 
         if (existingLike is not null)
             throw new InvalidOperationException("Пользователь уже поставил лайк на этот пост.");
 
         var like = new PostLike(request.PostId, userId);
-        await likeRepo.AddAsync(like, cancellationToken);
+        await postLikeRepository.AddAsync(like, cancellationToken);
 
-        // Обновляем денормализованный счётчик на посте
         post.IncrementLikesCount();
-        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await postRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

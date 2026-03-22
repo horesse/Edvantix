@@ -1,44 +1,34 @@
-using Edvantix.Blog.Grpc.Services;
+using Edvantix.Chassis.Utilities;
+using Edvantix.Chassis.Utilities.Guards;
 
 namespace Edvantix.Blog.Features.PostFeature.Features.UnlikePost;
 
-/// <summary>
-/// Команда для снятия лайка с поста.
-/// </summary>
 public sealed record UnlikePostCommand(Guid PostId) : ICommand;
 
-/// <summary>
-/// Обработчик команды снятия лайка.
-/// Находит лайк через репозиторий, удаляет его и уменьшает счётчик на посте.
-/// </summary>
-public sealed class UnlikePostCommandHandler(IServiceProvider provider)
-    : ICommandHandler<UnlikePostCommand>
+public sealed class UnlikePostCommandHandler(
+    ClaimsPrincipal claims,
+    IPostRepository postRepository,
+    IPostLikeRepository postLikeRepository
+) : ICommandHandler<UnlikePostCommand>
 {
     public async ValueTask<Unit> Handle(
         UnlikePostCommand request,
         CancellationToken cancellationToken
     )
     {
-        var userId = await provider.GetProfileId(cancellationToken);
-
-        var likeRepo = provider.GetRequiredService<IPostLikeRepository>();
+        var userId = claims.GetProfileIdOrError();
 
         var spec = new PostLikeSpecification(postId: request.PostId, userId: userId);
+        var like = await postLikeRepository.Get(spec, cancellationToken);
 
-        var like =
-            await likeRepo.Get(spec, cancellationToken)
-            ?? throw new NotFoundException("Лайк не найден.");
+        Guard.Against.NotFound(like, request.PostId);
 
-        await likeRepo.DeleteAsync(like, cancellationToken);
+        await postLikeRepository.DeleteAsync(like, cancellationToken);
 
-        // Уменьшаем денормализованный счётчик лайков на посте
-        var postRepo = provider.GetRequiredService<IPostRepository>();
-
-        var post = await postRepo.GetByIdAsync(request.PostId, cancellationToken);
-
+        var post = await postRepository.GetByIdAsync(request.PostId, cancellationToken);
         post?.DecrementLikesCount();
 
-        await postRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await postRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;
     }

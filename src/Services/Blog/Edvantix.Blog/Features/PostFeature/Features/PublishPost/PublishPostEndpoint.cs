@@ -1,13 +1,7 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.PublishPost;
 
-/// <summary>
-/// Запрос на публикацию/планирование поста от клиента.
-/// </summary>
 public sealed record PublishPostRequest(DateTime? ScheduledAt = null);
 
-/// <summary>
-/// Административный эндпоинт для публикации или планирования поста.
-/// </summary>
 public sealed class PublishPostEndpoint : IEndpoint<NoContent, PublishPostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -26,8 +20,8 @@ public sealed class PublishPostEndpoint : IEndpoint<NoContent, PublishPostComman
                         cancellationToken
                     )
             )
-            .WithName("PublishPost")
-            .WithTags("Admin.Posts")
+            .WithName("Опубликовать пост")
+            .WithTags("Администрирование")
             .WithSummary("Опубликовать пост")
             .WithDescription(
                 "Публикует пост немедленно или планирует его публикацию на указанное время."

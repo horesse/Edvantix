@@ -18,13 +18,6 @@ var redis = builder
     .RunAsLocalContainer()
     .ProvisionAsService();
 
-var qdrant = builder
-    .AddQdrant(Components.VectorDb)
-    .WithIconName("DatabaseSearch")
-    .WithDataVolume()
-    .WithImagePullPolicy(ImagePullPolicy.Always)
-    .WithLifetime(ContainerLifetime.Persistent);
-
 var queue = builder
     .AddKafka(Components.Broker)
     .WithIconName("Pipeline")

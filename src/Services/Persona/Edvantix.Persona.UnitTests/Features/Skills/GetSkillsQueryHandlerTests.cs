@@ -1,5 +1,4 @@
 using Edvantix.Chassis.Specification;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Edvantix.Persona.UnitTests.Features.Skills;
 
@@ -10,12 +9,7 @@ public sealed class GetSkillsQueryHandlerTests
 
     public GetSkillsQueryHandlerTests()
     {
-        var providerMock = new Mock<IServiceProvider>();
-        providerMock
-            .Setup(p => p.GetService(typeof(ISkillRepository)))
-            .Returns(_skillRepoMock.Object);
-
-        _handler = new(providerMock.Object);
+        _handler = new(_skillRepoMock.Object);
     }
 
     [Test]

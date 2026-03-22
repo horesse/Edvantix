@@ -9,7 +9,6 @@ public sealed class UpdateProfileCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
     private readonly Mock<ISkillRepository> _skillRepoMock = new();
-    private readonly Mock<IMapper<Profile, ProfileDetailsModel>> _mapperMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
 
     public UpdateProfileCommandHandlerTests()
@@ -18,22 +17,20 @@ public sealed class UpdateProfileCommandHandlerTests
     }
 
     [Test]
-    public async Task GivenValidCommand_WhenHandling_ThenShouldUpdateProfileAndReturnDetailsModel()
+    public async Task GivenValidCommand_WhenHandling_ThenShouldUpdateProfileAndReturnProfileId()
     {
         var accountId = Guid.CreateVersion7();
         var profile = CreateProfile(accountId);
-        var expectedModel = BuildDetailsModel(profile.Id, accountId);
         var handler = CreateHandler(accountId);
 
         SetupProfileFound(profile);
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock.Setup(m => m.Map(profile)).Returns(expectedModel);
 
         var result = await handler.Handle(BuildCommand(), CancellationToken.None);
 
-        result.ShouldBe(expectedModel.Id);
+        result.ShouldBe(accountId);
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -49,9 +46,6 @@ public sealed class UpdateProfileCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock
-            .Setup(m => m.Map(It.IsAny<Profile>()))
-            .Returns(BuildDetailsModel(profile.Id, accountId));
 
         var command = new UpdateProfileCommand(
             "Пётр",
@@ -107,9 +101,6 @@ public sealed class UpdateProfileCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock
-            .Setup(m => m.Map(It.IsAny<Profile>()))
-            .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
             .Setup(r =>
                 r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
@@ -144,9 +135,6 @@ public sealed class UpdateProfileCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock
-            .Setup(m => m.Map(It.IsAny<Profile>()))
-            .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
             .Setup(r =>
                 r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
@@ -180,9 +168,6 @@ public sealed class UpdateProfileCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock
-            .Setup(m => m.Map(It.IsAny<Profile>()))
-            .Returns(BuildDetailsModel(profile.Id, accountId));
         _skillRepoMock
             .Setup(r =>
                 r.FindAsync(It.IsAny<ISpecification<Skill>>(), It.IsAny<CancellationToken>())
@@ -212,13 +197,9 @@ public sealed class UpdateProfileCommandHandlerTests
 
     private UpdateProfileCommandHandler CreateHandler(Guid accountId)
     {
-        var providerMock = new Mock<IServiceProvider>();
-        providerMock.SetupUser(accountId);
-        providerMock.SetupService(_profileRepoMock.Object);
-        providerMock.SetupService(_skillRepoMock.Object);
-        providerMock.SetupService(_mapperMock.Object);
+        var claims = ServiceProviderHelper.CreateClaimsPrincipal(accountId);
 
-        return new UpdateProfileCommandHandler(providerMock.Object);
+        return new UpdateProfileCommandHandler(claims, _profileRepoMock.Object, _skillRepoMock.Object);
     }
 
     private static Profile CreateProfile(Guid accountId)
@@ -238,22 +219,4 @@ public sealed class UpdateProfileCommandHandlerTests
 
     private static UpdateProfileCommand BuildCommand(List<string>? skills = null) =>
         new("Иван", "Иванов", null, new DateOnly(1990, 1, 1), null, [], [], [], skills ?? []);
-
-    private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
-        new(
-            id,
-            accountId,
-            "testuser",
-            Gender.Male,
-            new DateOnly(1990, 1, 1),
-            "Иван",
-            "Иванов",
-            null,
-            null,
-            null,
-            [],
-            [],
-            [],
-            []
-        );
 }

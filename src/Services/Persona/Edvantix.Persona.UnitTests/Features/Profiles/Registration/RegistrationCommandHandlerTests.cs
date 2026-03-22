@@ -182,13 +182,14 @@ public sealed class RegistrationCommandHandlerTests
 
     private RegistrationCommandHandler CreateHandler(Guid accountId, string login = "testuser")
     {
-        var providerMock = new Mock<IServiceProvider>();
-        providerMock.SetupUser(accountId, login);
-        providerMock.SetupService<IProfileRepository>(_profileRepoMock.Object);
-        providerMock.SetupService<IBlobService>(_blobServiceMock.Object);
-        providerMock.SetupService<IKeycloakAdminService>(_keycloakMock.Object);
+        var claims = ServiceProviderHelper.CreateClaimsPrincipal(accountId, login);
 
-        return new RegistrationCommandHandler(providerMock.Object);
+        return new RegistrationCommandHandler(
+            claims,
+            _profileRepoMock.Object,
+            _blobServiceMock.Object,
+            _keycloakMock.Object
+        );
     }
 
     private static RegistrationCommand BuildCommand(IFormFile? avatar = null) =>

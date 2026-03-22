@@ -10,44 +10,12 @@ public sealed class GetProfileQueryHandlerTests
     private readonly Mock<IMapper<Profile, ProfileViewModel>> _mapperMock = new();
 
     [Test]
-    public async Task GivenProfileId_WhenHandling_ThenShouldFindProfileAndReturnViewModel()
+    public async Task GivenClaimsWithProfileId_WhenHandling_ThenShouldFindProfileAndReturnViewModel()
     {
-        var profileId = Guid.CreateVersion7();
-        var profile = CreateProfile(profileId);
-        var expectedViewModel = new ProfileViewModel(profileId, "Иванов Иван", "testuser", null);
-        var handler = CreateHandler(Guid.CreateVersion7());
-
-        _profileRepoMock
-            .Setup(r =>
-                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
-            )
-            .ReturnsAsync(profile);
-        _mapperMock.Setup(m => m.Map(profile)).Returns(expectedViewModel);
-
-        var result = await handler.Handle(
-            new GetProfileQuery(ProfileId: profileId),
-            CancellationToken.None
-        );
-
-        result.ShouldBe(expectedViewModel);
-        _profileRepoMock.Verify(
-            r => r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>()),
-            Times.Once
-        );
-    }
-
-    [Test]
-    public async Task GivenNoIds_WhenHandling_ThenShouldUseCurrentUserAccountId()
-    {
-        var currentUserAccountId = Guid.CreateVersion7();
-        var profile = CreateProfile(Guid.CreateVersion7(), currentUserAccountId);
-        var expectedViewModel = new ProfileViewModel(
-            profile.Id,
-            "Смирнов Алексей",
-            "smirnov",
-            null
-        );
-        var handler = CreateHandler(currentUserAccountId);
+        var accountId = Guid.CreateVersion7();
+        var profile = CreateProfile(Guid.CreateVersion7(), accountId);
+        var expectedViewModel = new ProfileViewModel(profile.Id, "Иванов Иван", "testuser", null);
+        var handler = CreateHandler(accountId);
 
         _profileRepoMock
             .Setup(r =>
@@ -77,23 +45,15 @@ public sealed class GetProfileQueryHandlerTests
             .ReturnsAsync((Profile?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            handler
-                .Handle(
-                    new GetProfileQuery(ProfileId: Guid.CreateVersion7()),
-                    CancellationToken.None
-                )
-                .AsTask()
+            handler.Handle(new GetProfileQuery(), CancellationToken.None).AsTask()
         );
     }
 
     private GetProfileQueryHandler CreateHandler(Guid currentUserAccountId)
     {
-        var providerMock = new Mock<IServiceProvider>();
-        providerMock.SetupUser(currentUserAccountId);
-        providerMock.SetupService<IProfileRepository>(_profileRepoMock.Object);
-        providerMock.SetupService<IMapper<Profile, ProfileViewModel>>(_mapperMock.Object);
+        var claims = ServiceProviderHelper.CreateClaimsPrincipal(currentUserAccountId);
 
-        return new GetProfileQueryHandler(providerMock.Object);
+        return new GetProfileQueryHandler(_profileRepoMock.Object, claims, _mapperMock.Object);
     }
 
     private static Profile CreateProfile(Guid profileId, Guid? accountId = null)

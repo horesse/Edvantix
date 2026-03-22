@@ -99,12 +99,12 @@ Plans:
   3. Student and manager can view the student's balance showing total purchased, total used, and remaining lessons
   4. On a specific lesson slot, the payment status for each student is visible (paid / unpaid / in debt) derived from the ledger state
   5. Manager can manually apply a credit or debit adjustment to a student's balance; all transactions are preserved as immutable append-only ledger entries
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: LessonPackage aggregate and LessonTransaction ledger (append-only); EF Core configuration and tenant isolation
-- [ ] 05-02: Manual credit and adjustment commands; balance query (purchased / used / remaining)
-- [ ] 05-03: AttendanceRecordedIntegrationEvent consumer with MassTransit inbox idempotency; per-slot payment status query
+- [ ] 05-01-PLAN.md — Payments service bootstrap: project, domain model (StudentBalance + LessonTransaction), EF Core, Aspire wiring, permissions, proto, test project, arch test (Wave 1)
+- [ ] 05-02-PLAN.md — AddCredit + AddAdjustment commands, GetBalance query with purchased/used/remaining, API endpoints (Wave 2)
+- [ ] 05-03-PLAN.md — AttendanceRecordedIntegrationEvent consumer with inbox + ProcessedAttendanceEvents state machine, GetSlotPaymentStatus gRPC, Scheduling enrichment (Wave 3)
 
 ## Progress
 

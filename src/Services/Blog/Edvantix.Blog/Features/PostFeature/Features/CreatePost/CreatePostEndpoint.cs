@@ -1,6 +1,5 @@
 namespace Edvantix.Blog.Features.PostFeature.Features.CreatePost;
 
-
 public sealed class CreatePostEndpoint : IEndpoint<Created<Guid>, CreatePostCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -11,7 +10,8 @@ public sealed class CreatePostEndpoint : IEndpoint<Created<Guid>, CreatePostComm
                     CreatePostCommand request,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) => await HandleAsync(request, sender, cancellationToken))
+                ) => await HandleAsync(request, sender, cancellationToken)
+            )
             .WithName("Создать пост")
             .WithTags("Администрирование")
             .WithSummary("Создать пост")

@@ -15,8 +15,12 @@ public sealed record CreatePostCommand(
     IReadOnlyList<Guid> TagIds
 ) : ICommand<Guid>;
 
-public sealed class CreatePostCommandHandler(ClaimsPrincipal claims, ICategoryRepository categoryRepository, ITagRepository tagRepository, IPostRepository postRepository)
-    : ICommandHandler<CreatePostCommand, Guid>
+public sealed class CreatePostCommandHandler(
+    ClaimsPrincipal claims,
+    ICategoryRepository categoryRepository,
+    ITagRepository tagRepository,
+    IPostRepository postRepository
+) : ICommandHandler<CreatePostCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         CreatePostCommand request,
@@ -29,8 +33,7 @@ public sealed class CreatePostCommandHandler(ClaimsPrincipal claims, ICategoryRe
 
         foreach (var categoryId in request.CategoryIds)
         {
-            var category =
-                await categoryRepository.GetByIdAsync(categoryId, cancellationToken);
+            var category = await categoryRepository.GetByIdAsync(categoryId, cancellationToken);
 
             Guard.Against.NotFound(category, categoryId);
             categories.Add(category);
@@ -40,9 +43,8 @@ public sealed class CreatePostCommandHandler(ClaimsPrincipal claims, ICategoryRe
 
         foreach (var tagId in request.TagIds)
         {
-            var tag =
-                await tagRepository.GetByIdAsync(tagId, cancellationToken);
-            
+            var tag = await tagRepository.GetByIdAsync(tagId, cancellationToken);
+
             Guard.Against.NotFound(tag, tagId);
             tags.Add(tag);
         }

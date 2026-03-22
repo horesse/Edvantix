@@ -11,8 +11,11 @@ namespace Edvantix.Persona.Features.Profiles.GetProfile;
 /// </summary>
 public sealed record GetProfileQuery : IQuery<ProfileViewModel>;
 
-public sealed class GetProfileQueryHandler(IProfileRepository repository, ClaimsPrincipal claims, IMapper<Profile, ProfileViewModel> mapper)
-    : IQueryHandler<GetProfileQuery, ProfileViewModel>
+public sealed class GetProfileQueryHandler(
+    IProfileRepository repository,
+    ClaimsPrincipal claims,
+    IMapper<Profile, ProfileViewModel> mapper
+) : IQueryHandler<GetProfileQuery, ProfileViewModel>
 {
     public async ValueTask<ProfileViewModel> Handle(
         GetProfileQuery request,
@@ -27,7 +30,7 @@ public sealed class GetProfileQueryHandler(IProfileRepository repository, Claims
         var spec = ProfileSpecification.Minimal(profileId.Value);
 
         var profile = await repository.FindAsync(spec, cancellationToken);
-        
+
         Guard.Against.NotFound(profile, profileId.Value);
 
         return mapper.Map(profile);

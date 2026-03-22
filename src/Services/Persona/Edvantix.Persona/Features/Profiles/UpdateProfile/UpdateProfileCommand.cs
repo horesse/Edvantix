@@ -14,8 +14,11 @@ public sealed record UpdateProfileCommand(
     List<string> Skills
 ) : ICommand<Guid>;
 
-public sealed class UpdateProfileCommandHandler(ClaimsPrincipal claims, IProfileRepository repository, ISkillRepository skillRepository)
-    : ICommandHandler<UpdateProfileCommand, Guid>
+public sealed class UpdateProfileCommandHandler(
+    ClaimsPrincipal claims,
+    IProfileRepository repository,
+    ISkillRepository skillRepository
+) : ICommandHandler<UpdateProfileCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         UpdateProfileCommand command,
@@ -25,9 +28,8 @@ public sealed class UpdateProfileCommandHandler(ClaimsPrincipal claims, IProfile
         var profileId = claims.GetProfileIdOrError();
 
         var spec = ProfileSpecification.ForWrite(profileId);
-        var profile =
-            await repository.FindAsync(spec, cancellationToken);
-        
+        var profile = await repository.FindAsync(spec, cancellationToken);
+
         Guard.Against.NotFound(profile, profileId);
 
         // Обновляем личные данные
@@ -57,7 +59,11 @@ public sealed class UpdateProfileCommandHandler(ClaimsPrincipal claims, IProfile
         );
 
         // Разрешаем имена навыков в ID каталога (find-or-create), затем заменяем список
-        var skillIds = await ResolveSkillIdsAsync(command.Skills, skillRepository, cancellationToken);
+        var skillIds = await ResolveSkillIdsAsync(
+            command.Skills,
+            skillRepository,
+            cancellationToken
+        );
         profile.ReplaceSkills(skillIds);
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

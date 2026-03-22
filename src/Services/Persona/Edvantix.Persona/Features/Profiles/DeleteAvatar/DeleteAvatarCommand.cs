@@ -2,8 +2,10 @@ namespace Edvantix.Persona.Features.Profiles.DeleteAvatar;
 
 public sealed class DeleteAvatarCommand : ICommand<Guid>;
 
-public sealed class DeleteAvatarCommandHandler(IProfileRepository repository, ClaimsPrincipal claims)
-    : ICommandHandler<DeleteAvatarCommand, Guid>
+public sealed class DeleteAvatarCommandHandler(
+    IProfileRepository repository,
+    ClaimsPrincipal claims
+) : ICommandHandler<DeleteAvatarCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         DeleteAvatarCommand command,

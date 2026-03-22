@@ -14,8 +14,12 @@ public sealed class RegistrationCommand : ICommand<Guid>
     public IFormFile? Avatar { get; init; }
 }
 
-public sealed class RegistrationCommandHandler(ClaimsPrincipal claims, IProfileRepository repository, IBlobService blobService, IKeycloakAdminService keycloakService)
-    : ICommandHandler<RegistrationCommand, Guid>
+public sealed class RegistrationCommandHandler(
+    ClaimsPrincipal claims,
+    IProfileRepository repository,
+    IBlobService blobService,
+    IKeycloakAdminService keycloakService
+) : ICommandHandler<RegistrationCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         RegistrationCommand request,

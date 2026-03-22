@@ -7,8 +7,8 @@ public sealed record GetProfileDetailsQuery() : IQuery<ProfileDetailsModel>;
 public sealed class GetProfileDetailsQueryHandler(
     IProfileRepository repository,
     ClaimsPrincipal claims,
-    IMapper<Profile, ProfileDetailsModel> mapper)
-    : IQueryHandler<GetProfileDetailsQuery, ProfileDetailsModel>
+    IMapper<Profile, ProfileDetailsModel> mapper
+) : IQueryHandler<GetProfileDetailsQuery, ProfileDetailsModel>
 {
     public async ValueTask<ProfileDetailsModel> Handle(
         GetProfileDetailsQuery request,

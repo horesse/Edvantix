@@ -23,7 +23,7 @@ public static class AuthorizeExtensions
         {
             var sub = claims.GetClaimValue(ClaimTypes.NameIdentifier);
             var userId = Guard.Against.NotAuthenticated(sub);
-        
+
             return Guid.Parse(userId);
         }
 
@@ -38,7 +38,7 @@ public static class AuthorizeExtensions
         {
             var userName = claims.GetClaimValue(KeycloakClaimTypes.PreferredUsername);
             var login = Guard.Against.NotAuthenticated(userName);
-        
+
             return login;
         }
 
@@ -51,10 +51,10 @@ public static class AuthorizeExtensions
         public Guid? TryGetProfileId()
         {
             var value = claims?.GetClaimValue(KeycloakClaimTypes.Profile);
-            
+
             return Guid.TryParse(value, out var id) ? id : null;
         }
-        
+
         public Guid GetProfileIdOrError()
         {
             return claims.TryGetProfileId() ?? throw new ForbiddenException("У Вас нет профиля.");

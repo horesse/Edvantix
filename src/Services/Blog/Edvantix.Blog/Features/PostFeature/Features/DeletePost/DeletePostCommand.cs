@@ -12,8 +12,7 @@ public sealed class DeletePostCommandHandler(IPostRepository postRepository)
         CancellationToken cancellationToken
     )
     {
-        var post =
-            await postRepository.GetByIdAsync(request.PostId, cancellationToken);
+        var post = await postRepository.GetByIdAsync(request.PostId, cancellationToken);
 
         Guard.Against.NotFound(post, request.PostId);
 

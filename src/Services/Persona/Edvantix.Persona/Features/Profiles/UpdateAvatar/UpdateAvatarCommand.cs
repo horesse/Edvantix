@@ -7,8 +7,11 @@ public sealed class UpdateAvatarCommand : ICommand<Guid>
     public required IFormFile Avatar { get; init; }
 }
 
-public sealed class UpdateAvatarCommandHandler(IProfileRepository repository, IBlobService blobService, ClaimsPrincipal claims)
-    : ICommandHandler<UpdateAvatarCommand, Guid>
+public sealed class UpdateAvatarCommandHandler(
+    IProfileRepository repository,
+    IBlobService blobService,
+    ClaimsPrincipal claims
+) : ICommandHandler<UpdateAvatarCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         UpdateAvatarCommand command,

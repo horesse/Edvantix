@@ -18,13 +18,6 @@ var redis = builder
     .RunAsLocalContainer()
     .ProvisionAsService();
 
-var qdrant = builder
-    .AddQdrant(Components.VectorDb)
-    .WithIconName("DatabaseSearch")
-    .WithDataVolume()
-    .WithImagePullPolicy(ImagePullPolicy.Always)
-    .WithLifetime(ContainerLifetime.Persistent);
-
 var queue = builder
     .AddKafka(Components.Broker)
     .WithIconName("Pipeline")
@@ -43,7 +36,6 @@ var profileContainer = storage
     .WithAzureStorageExplorer();
 
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
-var blogDb = postgres.AddDatabase(Components.Database.Blog);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
@@ -68,18 +60,6 @@ var personaApi = builder
     )
     .WithFriendlyUrls();
 
-var blogApi = builder
-    .AddProject<Edvantix_Blog>(Services.Blog)
-    .WithReference(blogDb)
-    .WaitFor(blogDb)
-    .WithKeycloak(keycloak)
-    .WithContainerRegistry(registry)
-    .WithReference(personaApi)
-    .WaitFor(personaApi)
-    .WithReference(redis)
-    .WaitFor(redis)
-    .WithFriendlyUrls();
-
 var notificationApi = builder
     .AddProject<Edvantix_Notification>(Services.Notification)
     .WithEmailProvider()
@@ -94,7 +74,6 @@ var notificationApi = builder
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(personaApi, true)
-    .WithService(blogApi, true)
     .WithService(notificationApi, true)
     .Build();
 
@@ -130,7 +109,8 @@ var blogFront = turbo
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
     .WithKeycloak(keycloak)
-    .WaitFor(gateway);
+    .WaitFor(gateway)
+    .WithExplicitStart();
 
 builder
     .AddProject<Edvantix_Scheduler>(Services.Scheduler)
@@ -151,7 +131,8 @@ var landingFront = turbo
     .WithExternalHttpEndpoints()
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
-    .WaitFor(gateway);
+    .WaitFor(gateway)
+    .WithExplicitStart();
 
 landingFront.WithEnvironment("NEXT_PUBLIC_APP_URL", landingFront.GetEndpoint(Http.Schemes.Http));
 
@@ -165,17 +146,14 @@ var adminFront = turbo
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
     .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
     .WithKeycloak(keycloak)
-    .WaitFor(gateway);
+    .WaitFor(gateway)
+    .WithExplicitStart();
 
 adminFront.WithEnvironment("NEXT_PUBLIC_APP_URL", adminFront.GetEndpoint(Http.Schemes.Http));
 
 if (builder.ExecutionContext.IsRunMode)
 {
-    builder
-        .AddScalar(keycloak)
-        .WithOpenAPI(personaApi)
-        .WithOpenAPI(blogApi)
-        .WithOpenAPI(notificationApi);
+    builder.AddScalar(keycloak).WithOpenAPI(personaApi).WithOpenAPI(notificationApi);
 }
 
 await builder.Build().RunAsync();

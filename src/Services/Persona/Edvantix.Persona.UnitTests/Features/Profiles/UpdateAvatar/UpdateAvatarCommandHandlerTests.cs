@@ -1,5 +1,5 @@
 using Edvantix.Chassis.Specification;
-using Edvantix.Persona.Features.Profiles.UpdateAvatar;
+using Edvantix.Persona.Features.Profiles.Avatar.UpdateAvatar;
 using Edvantix.Persona.UnitTests.Helpers;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.UpdateAvatar;
@@ -8,7 +8,6 @@ public sealed class UpdateAvatarCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
     private readonly Mock<IBlobService> _blobServiceMock = new();
-    private readonly Mock<IMapper<Profile, ProfileDetailsModel>> _mapperMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
 
     public UpdateAvatarCommandHandlerTests()
@@ -17,12 +16,11 @@ public sealed class UpdateAvatarCommandHandlerTests
     }
 
     [Test]
-    public async Task GivenValidCommand_WhenHandling_ThenShouldUploadAvatarAndReturnDetailsModel()
+    public async Task GivenValidCommand_WhenHandling_ThenShouldUploadAvatarAndReturnProfileId()
     {
         var accountId = Guid.CreateVersion7();
         const string avatarUrn = "urn:blob:avatars/new.jpg";
         var profile = CreateProfile(accountId);
-        var expectedModel = BuildDetailsModel(profile.Id, accountId);
         var handler = CreateHandler(accountId);
         var avatarMock = new Mock<IFormFile>();
 
@@ -37,13 +35,12 @@ public sealed class UpdateAvatarCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock.Setup(m => m.Map(profile)).Returns(expectedModel);
 
         var command = new UpdateAvatarCommand { Avatar = avatarMock.Object };
 
         var result = await handler.Handle(command, CancellationToken.None);
 
-        result.ShouldBe(expectedModel);
+        result.ShouldBe(profile.Id);
         profile.AvatarUrl.ShouldBe(avatarUrn);
         _blobServiceMock.Verify(
             b => b.UploadFileAsync(avatarMock.Object, It.IsAny<CancellationToken>()),
@@ -116,13 +113,13 @@ public sealed class UpdateAvatarCommandHandlerTests
 
     private UpdateAvatarCommandHandler CreateHandler(Guid accountId)
     {
-        var providerMock = new Mock<IServiceProvider>();
-        providerMock.SetupUser(accountId);
-        providerMock.SetupService<IProfileRepository>(_profileRepoMock.Object);
-        providerMock.SetupService<IBlobService>(_blobServiceMock.Object);
-        providerMock.SetupService<IMapper<Profile, ProfileDetailsModel>>(_mapperMock.Object);
+        var claims = ServiceProviderHelper.CreateClaimsPrincipal(accountId);
 
-        return new UpdateAvatarCommandHandler(providerMock.Object);
+        return new UpdateAvatarCommandHandler(
+            _profileRepoMock.Object,
+            _blobServiceMock.Object,
+            claims
+        );
     }
 
     private static Profile CreateProfile(Guid accountId)
@@ -139,22 +136,4 @@ public sealed class UpdateAvatarCommandHandlerTests
 
         return profile;
     }
-
-    private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
-        new(
-            id,
-            accountId,
-            "testuser",
-            Gender.Male,
-            new DateOnly(1990, 1, 1),
-            "Иван",
-            "Иванов",
-            null,
-            null,
-            null,
-            [],
-            [],
-            [],
-            []
-        );
 }

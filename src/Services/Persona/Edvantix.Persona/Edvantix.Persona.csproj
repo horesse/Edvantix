@@ -16,4 +16,7 @@
   <ItemGroup>
     <Protobuf Include="Grpc\Protos\profile\v1\profile.proto" GrpcService="Server" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Profiles\Avatar\" />
+  </ItemGroup>
 </Project>

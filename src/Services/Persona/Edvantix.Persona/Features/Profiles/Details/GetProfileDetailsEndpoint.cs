@@ -1,7 +1,6 @@
 namespace Edvantix.Persona.Features.Profiles.Details;
 
-/// <summary>GET /v1/profile/details — полный профиль текущего пользователя.</summary>
-public sealed class GetProfileDetailsEndpoint : IEndpoint<Ok<ProfileDetailsModel>, ISender>
+public sealed class GetProfileDetailsEndpoint : IEndpoint<Ok<ProfileDetailsDto>, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -10,21 +9,21 @@ public sealed class GetProfileDetailsEndpoint : IEndpoint<Ok<ProfileDetailsModel
                 async (ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(sender, cancellationToken)
             )
-            .WithName("GetProfileDetails")
-            .WithTags("Profile")
+            .WithName("Получение полного профиля")
+            .WithTags("Профиль")
             .WithSummary("Получить полный профиль")
             .WithDescription(
                 "Возвращает полную информацию о профиле текущего пользователя, "
                     + "включая контакты, образование и опыт работы"
             )
-            .Produces<ProfileDetailsModel>()
+            .Produces<ProfileDetailsDto>()
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }
 
-    public async Task<Ok<ProfileDetailsModel>> HandleAsync(
+    public async Task<Ok<ProfileDetailsDto>> HandleAsync(
         ISender sender,
         CancellationToken cancellationToken = default
     )

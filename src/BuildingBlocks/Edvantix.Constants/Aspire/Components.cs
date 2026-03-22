@@ -17,19 +17,7 @@ public static class Components
     {
         private const string Suffix = "db";
 
-        public static readonly string EntityHub = $"{nameof(EntityHub).ToLowerInvariant()}{Suffix}";
-
-        public static readonly string Organizational =
-            $"{nameof(Organizational).ToLowerInvariant()}{Suffix}";
-        public static readonly string System = $"{nameof(System).ToLowerInvariant()}{Suffix}";
-
         public static readonly string Persona = $"{nameof(Persona).ToLowerInvariant()}{Suffix}";
-        public static readonly string Subscription =
-            $"{nameof(Subscription).ToLowerInvariant()}{Suffix}";
-
-        public static readonly string Blog = $"{nameof(Blog).ToLowerInvariant()}{Suffix}";
-
-        public static readonly string Catalog = $"{nameof(Catalog).ToLowerInvariant()}{Suffix}";
 
         public static readonly string Notification =
             $"{nameof(Notification).ToLowerInvariant()}{Suffix}";

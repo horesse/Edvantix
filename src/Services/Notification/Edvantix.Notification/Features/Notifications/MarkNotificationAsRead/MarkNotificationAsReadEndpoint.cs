@@ -1,12 +1,8 @@
 namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
 
-/// <summary>
-/// POST /notifications/{id}/read — пометить одно уведомление как прочитанное.
-/// </summary>
 public sealed class MarkNotificationAsReadEndpoint
     : IEndpoint<Results<NoContent, NotFound>, MarkNotificationAsReadCommand, ISender>
 {
-    /// <inheritdoc />
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
@@ -26,8 +22,8 @@ public sealed class MarkNotificationAsReadEndpoint
                         cancellationToken
                     )
             )
-            .WithName("MarkNotificationAsRead")
-            .WithTags("Notifications")
+            .WithName("Пометить уведомление прочитанным")
+            .WithTags("Уведомления")
             .WithSummary("Пометить как прочитанное")
             .WithDescription(
                 "Помечает уведомление как прочитанное. Проверяет принадлежность уведомления текущему пользователю."
@@ -39,7 +35,6 @@ public sealed class MarkNotificationAsReadEndpoint
             .RequireAuthorization();
     }
 
-    /// <inheritdoc />
     public async Task<Results<NoContent, NotFound>> HandleAsync(
         MarkNotificationAsReadCommand command,
         ISender sender,

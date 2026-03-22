@@ -1,5 +1,5 @@
 using Edvantix.Chassis.Specification;
-using Edvantix.Persona.Features.Profiles.DeleteAvatar;
+using Edvantix.Persona.Features.Profiles.Avatar.DeleteAvatar;
 using Edvantix.Persona.UnitTests.Helpers;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.DeleteAvatar;
@@ -7,7 +7,6 @@ namespace Edvantix.Persona.UnitTests.Features.Profiles.DeleteAvatar;
 public sealed class DeleteAvatarCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
-    private readonly Mock<IMapper<Profile, ProfileDetailsModel>> _mapperMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
 
     public DeleteAvatarCommandHandlerTests()
@@ -16,11 +15,10 @@ public sealed class DeleteAvatarCommandHandlerTests
     }
 
     [Test]
-    public async Task GivenProfileWithAvatar_WhenHandling_ThenShouldDeleteAvatarAndReturnDetailsModel()
+    public async Task GivenProfileWithAvatar_WhenHandling_ThenShouldDeleteAvatarAndReturnProfileId()
     {
         var accountId = Guid.CreateVersion7();
         var profile = CreateProfile(accountId, avatarUrn: "urn:blob:avatars/photo.jpg");
-        var expectedModel = BuildDetailsModel(profile.Id, accountId);
         var handler = CreateHandler(accountId);
 
         _profileRepoMock
@@ -31,21 +29,19 @@ public sealed class DeleteAvatarCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock.Setup(m => m.Map(profile)).Returns(expectedModel);
 
         var result = await handler.Handle(new DeleteAvatarCommand(), CancellationToken.None);
 
-        result.ShouldBe(expectedModel);
+        result.ShouldBe(accountId);
         profile.AvatarUrl.ShouldBeNull();
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
-    public async Task GivenProfileWithoutAvatar_WhenHandling_ThenShouldSaveAndReturnDetailsModel()
+    public async Task GivenProfileWithoutAvatar_WhenHandling_ThenShouldSaveAndReturnProfileId()
     {
         var accountId = Guid.CreateVersion7();
         var profile = CreateProfile(accountId, avatarUrn: null);
-        var expectedModel = BuildDetailsModel(profile.Id, accountId);
         var handler = CreateHandler(accountId);
 
         _profileRepoMock
@@ -56,11 +52,10 @@ public sealed class DeleteAvatarCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _mapperMock.Setup(m => m.Map(profile)).Returns(expectedModel);
 
         var result = await handler.Handle(new DeleteAvatarCommand(), CancellationToken.None);
 
-        result.ShouldBe(expectedModel);
+        result.ShouldBe(accountId);
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -87,12 +82,9 @@ public sealed class DeleteAvatarCommandHandlerTests
 
     private DeleteAvatarCommandHandler CreateHandler(Guid accountId)
     {
-        var providerMock = new Mock<IServiceProvider>();
-        providerMock.SetupUser(accountId);
-        providerMock.SetupService<IProfileRepository>(_profileRepoMock.Object);
-        providerMock.SetupService<IMapper<Profile, ProfileDetailsModel>>(_mapperMock.Object);
+        var claims = ServiceProviderHelper.CreateClaimsPrincipal(accountId);
 
-        return new DeleteAvatarCommandHandler(providerMock.Object);
+        return new DeleteAvatarCommandHandler(_profileRepoMock.Object, claims);
     }
 
     private static Profile CreateProfile(Guid accountId, string? avatarUrn)
@@ -112,22 +104,4 @@ public sealed class DeleteAvatarCommandHandlerTests
 
         return profile;
     }
-
-    private static ProfileDetailsModel BuildDetailsModel(Guid id, Guid accountId) =>
-        new(
-            id,
-            accountId,
-            "testuser",
-            Gender.Male,
-            new DateOnly(1990, 1, 1),
-            "Иван",
-            "Иванов",
-            null,
-            null,
-            null,
-            [],
-            [],
-            [],
-            []
-        );
 }

@@ -78,6 +78,24 @@ public sealed class HandlerConventionTests : ArchUnitBaseTest
     }
 
     [Test]
+    public void GivenHandlers_WhenCheckingDependencies_ThenShouldNotUseServiceLocator()
+    {
+        Classes()
+            .That()
+            .ResideInNamespaceMatching(FeatureNamespace)
+            .And()
+            .HaveNameEndingWith("Handler")
+            .Should()
+            .FollowCustomCondition(
+                cls =>
+                    !cls.Dependencies.Select(d => d.Target).Any(t => t.Name == "IServiceProvider"),
+                "should not depend on IServiceProvider",
+                "Handlers should use explicit dependency injection instead of the service locator pattern."
+            )
+            .Check(Architecture);
+    }
+
+    [Test]
     public void GivenHandlers_WhenCheckingDependencies_ThenShouldNotDependOnOtherHandlers()
     {
         Classes()

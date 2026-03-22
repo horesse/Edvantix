@@ -11,7 +11,6 @@
   <ItemGroup Label="Aspire">
     <PackageReference Include="Scalar.Aspire" />
     <PackageReference Include="Aspire.Hosting.Yarp" />
-    <PackageReference Include="Aspire.Hosting.Qdrant" />
     <PackageReference Include="Aspire.Hosting.Keycloak" />
     <PackageReference Include="Aspire.Hosting.Kafka" />
   </ItemGroup>
@@ -27,7 +26,6 @@
   </ItemGroup>
   <ItemGroup Label="Services">
     <ProjectReference Include="..\..\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
-    <ProjectReference Include="..\..\Services\Blog\Edvantix.Blog\Edvantix.Blog.csproj" />
     <ProjectReference Include="..\..\Services\Notification\Edvantix.Notification\Edvantix.Notification.csproj" />
     <ProjectReference Include="..\..\Services\Scheduler\Edvantix.Scheduler\Edvantix.Scheduler.csproj" />
   </ItemGroup>

@@ -1,12 +1,8 @@
 namespace Edvantix.Notification.Features.Notifications.GetUnreadCount;
 
-/// <summary>
-/// GET /notifications/unread-count — количество непрочитанных уведомлений (для бейджа в шапке).
-/// </summary>
 public sealed class GetUnreadCountEndpoint
     : IEndpoint<Ok<UnreadCountViewModel>, GetUnreadCountQuery, ISender>
 {
-    /// <inheritdoc />
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
@@ -18,8 +14,8 @@ public sealed class GetUnreadCountEndpoint
                         cancellationToken
                     )
             )
-            .WithName("GetUnreadNotificationsCount")
-            .WithTags("Notifications")
+            .WithName("Количество непрочитанных уведомлений")
+            .WithTags("Уведомления")
             .WithSummary("Количество непрочитанных")
             .WithDescription(
                 "Возвращает количество непрочитанных уведомлений текущего пользователя."
@@ -30,7 +26,6 @@ public sealed class GetUnreadCountEndpoint
             .RequireAuthorization();
     }
 
-    /// <inheritdoc />
     public async Task<Ok<UnreadCountViewModel>> HandleAsync(
         GetUnreadCountQuery query,
         ISender sender,

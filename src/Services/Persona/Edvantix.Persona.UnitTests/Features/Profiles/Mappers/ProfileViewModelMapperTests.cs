@@ -1,11 +1,11 @@
-using Edvantix.Persona.Features.Profiles.Mappers;
+using DomainToDtoMapper = Edvantix.Persona.Features.Profiles.DomainToDtoMapper;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.Mappers;
 
 public sealed class ProfileViewModelMapperTests
 {
     private readonly Mock<IBlobService> _blobServiceMock = new();
-    private readonly ProfileViewModelMapper _mapper;
+    private readonly DomainToDtoMapper _mapper;
 
     public ProfileViewModelMapperTests()
     {

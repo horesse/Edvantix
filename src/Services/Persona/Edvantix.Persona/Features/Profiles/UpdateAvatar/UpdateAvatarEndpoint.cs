@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.Persona.Features.Profiles.UpdateAvatar;
 
-/// <summary>PATCH /v1/profile/avatar — загрузить или заменить аватар профиля.</summary>
 public sealed class UpdateAvatarEndpoint : IEndpoint<Ok<Guid>, UpdateAvatarCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)

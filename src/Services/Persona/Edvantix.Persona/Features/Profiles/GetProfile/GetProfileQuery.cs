@@ -1,5 +1,3 @@
-using Edvantix.Chassis.Utilities.Guards;
-
 namespace Edvantix.Persona.Features.Profiles.GetProfile;
 
 /// <summary>

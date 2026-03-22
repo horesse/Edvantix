@@ -1,5 +1,3 @@
-using Edvantix.Chassis.Utilities.Guards;
-
 namespace Edvantix.Persona.Features.Profiles.Details;
 
 public sealed record GetProfileDetailsQuery() : IQuery<ProfileDetailsModel>;

@@ -24,7 +24,6 @@ public sealed class Validator : AbstractValidator<RegistrationCommand>
 
         When(
             x => x.Avatar is not null,
-            () => RuleFor(x => x.Avatar!).SetValidator(new ImageValidator())
-        );
+            () => RuleFor(x => x.Avatar!).ApplyImageRules());
     }
 }

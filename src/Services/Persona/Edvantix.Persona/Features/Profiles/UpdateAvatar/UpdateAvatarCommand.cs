@@ -22,8 +22,9 @@ public sealed class UpdateAvatarCommandHandler(
 
         var spec = ProfileSpecification.ForWrite(profileId);
         var profile =
-            await repository.FindAsync(spec, cancellationToken)
-            ?? throw new NotFoundException("Профиль не найден.");
+            await repository.FindAsync(spec, cancellationToken);
+        
+        Guard.Against.NotFound(profile, profileId);
 
         var newAvatarUrn = await blobService.UploadFileAsync(command.Avatar, cancellationToken);
 

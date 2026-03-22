@@ -1,6 +1,7 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Notification.Extensions;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
+using Edvantix.ServiceDefaults.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 

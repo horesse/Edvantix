@@ -70,11 +70,14 @@ public sealed class UrlBuilder
             return this;
         }
 
-        var segment = path.Trim('/');
+        var segments = path.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries);
 
-        if (segment.Length > 0)
+        foreach (var segment in segments)
         {
-            _pathSegments.Add(segment);
+            if (segment.Length > 0)
+            {
+                _pathSegments.Add(segment);
+            }
         }
 
         return this;

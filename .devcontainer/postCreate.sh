@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Setting up BookWorm development environment..."
+echo "🚀 Setting up Edvantix development environment..."
 
 sudo apt-get update && \
     sudo apt upgrade -y &&
@@ -18,4 +18,4 @@ bun install -g rust-just
 echo "Installing Buf CLI"
 bun install -g @bufbuild/buf
 
-echo "✅ BookWorm development environment setup complete!"
+echo "✅ Edvantix development environment setup complete!"

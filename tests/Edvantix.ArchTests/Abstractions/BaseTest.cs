@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Edvantix.Blog;
 using Edvantix.Chassis;
 using Edvantix.Constants;
 using Edvantix.Notification;
@@ -11,7 +10,6 @@ namespace Edvantix.ArchTests.Abstractions;
 
 public abstract class BaseTest
 {
-    protected static readonly Assembly BlogAssembly = typeof(IBlogApiMarker).Assembly;
     protected static readonly Assembly PersonaAssembly = typeof(IPersonaApiMarker).Assembly;
     protected static readonly Assembly NotificationAssembly =
         typeof(INotificationApiMarker).Assembly;

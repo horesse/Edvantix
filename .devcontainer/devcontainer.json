@@ -1,5 +1,5 @@
 {
-  "name": "BookWorm",
+  "name": "Edvantix",
   "image": "mcr.microsoft.com/devcontainers/dotnet:dev-10.0-noble",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},

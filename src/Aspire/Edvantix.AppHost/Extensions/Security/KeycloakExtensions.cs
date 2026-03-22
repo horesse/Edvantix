@@ -35,9 +35,9 @@ internal static class KeycloakExtensions
                     keycloakContainer,
                     builder,
                     clientId,
-                    clientType: "APP",
-                    clientSecret: null,
-                    includeContainerHostUrl: false
+                    "APP",
+                    null,
+                    false
                 );
 
                 builder
@@ -98,11 +98,6 @@ internal static class KeycloakExtensions
                 builder
                     .WithReference(keycloakContainer)
                     .WaitForStart(keycloakContainer)
-                    // TODO: Фронт локально запускается в http, из-за этого отличается issuer и токен не проходит валидацию
-                    .WithEnvironment(
-                        "KEYCLOAK_URL",
-                        keycloakContainer.GetEndpoint(Http.Schemes.Http)
-                    )
                     .WithEnvironment("Identity__Realm", _defaultLocalKeycloakName)
                     .WithEnvironment("Identity__ClientId", clientId)
                     .WithEnvironment("Identity__ClientSecret", clientSecret)
@@ -242,6 +237,7 @@ internal static class KeycloakExtensions
         {
             var keycloak = builder
                 .AddKeycloak(name)
+                .WithDataVolume()
                 .WithOtlpExporter()
                 .WithIconName("LockClosedRibbon")
                 .WithCustomTheme(_defaultLocalKeycloakName)

@@ -8,14 +8,12 @@ public sealed class CyclicDependencyTests : ArchUnitBaseTest
 {
     private static readonly string[] ServiceNames =
     [
-        nameof(Blog),
         nameof(Persona),
         nameof(Notification),
         nameof(Scheduler),
     ];
 
     [Test]
-    [Arguments(nameof(Blog))]
     [Arguments(nameof(Persona))]
     [Arguments(nameof(Notification))]
     [Arguments(nameof(Scheduler))]

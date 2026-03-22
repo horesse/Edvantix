@@ -1,35 +1,24 @@
-using Edvantix.Chassis.Utilities;
-
 namespace Edvantix.Persona.Features.Profiles.Details;
 
-/// <summary>
-/// Запрос полного профиля с контактами, образованием и историей занятости.
-/// Приоритет идентификаторов:
-/// <list type="number">
-///   <item><see cref="ProfileId"/> — если задан.</item>
-///   <item>AccountId текущего аутентифицированного пользователя — иначе.</item>
-/// </list>
-/// </summary>
-public sealed record GetProfileDetailsQuery(Guid? ProfileId = null) : IQuery<ProfileDetailsModel>;
+public sealed record GetProfileDetailsQuery() : IQuery<ProfileDetailsDto>;
 
-public sealed class GetProfileDetailsQueryHandler(IServiceProvider provider)
-    : IQueryHandler<GetProfileDetailsQuery, ProfileDetailsModel>
+public sealed class GetProfileDetailsQueryHandler(
+    IProfileRepository repository,
+    ClaimsPrincipal claims,
+    IMapper<Profile, ProfileDetailsDto> mapper
+) : IQueryHandler<GetProfileDetailsQuery, ProfileDetailsDto>
 {
-    public async ValueTask<ProfileDetailsModel> Handle(
+    public async ValueTask<ProfileDetailsDto> Handle(
         GetProfileDetailsQuery request,
         CancellationToken cancellationToken
     )
     {
-        var profileId = request.ProfileId ?? provider.GetProfileIdOrError();
-
-        var profileRepo = provider.GetRequiredService<IProfileRepository>();
-        var mapper = provider.GetRequiredService<IMapper<Profile, ProfileDetailsModel>>();
+        var profileId = claims.GetProfileIdOrError();
 
         var spec = ProfileSpecification.ForRead(profileId);
 
-        var profile =
-            await profileRepo.FindAsync(spec, cancellationToken)
-            ?? throw new NotFoundException("Профиль не найден.");
+        var profile = await repository.FindAsync(spec, cancellationToken);
+        Guard.Against.NotFound(profile, profileId);
 
         return mapper.Map(profile);
     }

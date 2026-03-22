@@ -3,9 +3,9 @@ namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 /// <summary>
 /// Спецификация профиля. Используй фабричные методы вместо прямого конструктора:
 /// <list type="bullet">
-///   <item><see cref="ForRead"/> — read-only, все навигации включая <c>Skills → Skill</c> (для запросов → <c>ProfileDetailsModel</c>).</item>
+///   <item><see cref="ForRead"/> — read-only, все навигации включая <c>Skills → Skill</c> (для запросов → <c>ProfileDetailsDto</c>).</item>
 ///   <item><see cref="ForWrite"/> — с трекингом, коллекции без <c>ThenInclude</c> (команды работают только с ID).</item>
-///   <item><see cref="Minimal"/> — read-only, только <c>FullName</c> (для запросов → <c>ProfileViewModel</c>).</item>
+///   <item><see cref="Minimal"/> — read-only, только <c>FullName</c> (для запросов → <c>ProfileDto</c>).</item>
 /// </list>
 /// </summary>
 public sealed class ProfileSpecification : Specification<Profile>
@@ -15,7 +15,7 @@ public sealed class ProfileSpecification : Specification<Profile>
         Query.OrderBy(x => x.FullName.LastName).Where(p => p.Id == profileId);
     }
 
-    /// <summary>Read-only, все навигации — для запросов, возвращающих <c>ProfileDetailsModel</c>.</summary>
+    /// <summary>Read-only, все навигации — для запросов, возвращающих <c>ProfileDetailsDto</c>.</summary>
     public static ProfileSpecification ForRead(Guid profileId)
     {
         var spec = new ProfileSpecification(profileId);
@@ -38,7 +38,7 @@ public sealed class ProfileSpecification : Specification<Profile>
         return spec;
     }
 
-    /// <summary>Read-only, только <c>FullName</c> — для запросов, возвращающих <c>ProfileViewModel</c>.</summary>
+    /// <summary>Read-only, только <c>FullName</c> — для запросов, возвращающих <c>ProfileDto</c>.</summary>
     public static ProfileSpecification Minimal(Guid profileId) => new(profileId);
 
     private static ISpecificationBuilder<Profile> IncludeCollections(

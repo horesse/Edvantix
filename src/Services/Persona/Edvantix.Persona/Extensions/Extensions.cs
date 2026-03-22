@@ -10,6 +10,7 @@ using Edvantix.Persona.Configurations;
 using Edvantix.Persona.Infrastructure.EventServices;
 using Edvantix.Persona.Infrastructure.Keycloak;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
+using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Persona.Extensions;

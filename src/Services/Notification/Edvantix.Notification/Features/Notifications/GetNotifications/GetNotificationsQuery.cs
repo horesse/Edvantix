@@ -1,10 +1,5 @@
 namespace Edvantix.Notification.Features.Notifications.GetNotifications;
 
-using Mediator;
-
-/// <summary>
-/// Запрос на получение страницы in-app уведомлений пользователя.
-/// </summary>
 public sealed record GetNotificationsQuery(
     [property: Description("Идентификатор аккаунта Keycloak")] Guid AccountId,
     [property: Description("Индекс страницы")]
@@ -16,13 +11,9 @@ public sealed record GetNotificationsQuery(
     [property: Description("Фильтр по статусу прочтения")] bool? IsRead = null
 ) : IQuery<PagedResult<NotificationViewModel>>;
 
-/// <summary>
-/// Обработчик запроса: возвращает пагинированный список уведомлений.
-/// </summary>
-public sealed class GetNotificationsQueryHandler(IServiceProvider provider)
+public sealed class GetNotificationsQueryHandler(IInAppNotificationRepository repository)
     : IQueryHandler<GetNotificationsQuery, PagedResult<NotificationViewModel>>
 {
-    /// <inheritdoc />
     public async ValueTask<PagedResult<NotificationViewModel>> Handle(
         GetNotificationsQuery request,
         CancellationToken cancellationToken
@@ -33,8 +24,6 @@ public sealed class GetNotificationsQueryHandler(IServiceProvider provider)
             PageSize: Math.Clamp(request.PageSize, 1, 100)
         );
 
-        var repo = provider.GetRequiredService<IInAppNotificationRepository>();
-
         var listSpec = new InAppNotificationsByAccountSpec(
             request.AccountId,
             clamped.PageIndex,
@@ -44,7 +33,11 @@ public sealed class GetNotificationsQueryHandler(IServiceProvider provider)
 
         var countSpec = new InAppNotificationsCountSpec(request.AccountId, request.IsRead);
 
-        var (items, totalCount) = await repo.ListPagedAsync(listSpec, countSpec, cancellationToken);
+        var (items, totalCount) = await repository.ListPagedAsync(
+            listSpec,
+            countSpec,
+            cancellationToken
+        );
 
         var viewModels = items.Select(NotificationViewModel.FromDomain).ToList();
 

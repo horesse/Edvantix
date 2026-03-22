@@ -1,8 +1,5 @@
 namespace Edvantix.Notification.Features.Notifications.GetNotifications;
 
-/// <summary>
-/// Запрос с параметрами пагинации и фильтрации (без AccountId — он приходит из JWT).
-/// </summary>
 public sealed record GetNotificationsRequest(
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,
@@ -10,13 +7,9 @@ public sealed record GetNotificationsRequest(
     bool? IsRead = null
 );
 
-/// <summary>
-/// GET /notifications — пагинированный список in-app уведомлений текущего пользователя.
-/// </summary>
 public sealed class GetNotificationsEndpoint
     : IEndpoint<Ok<PagedResult<NotificationViewModel>>, GetNotificationsQuery, ISender>
 {
-    /// <inheritdoc />
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
@@ -38,8 +31,8 @@ public sealed class GetNotificationsEndpoint
                         cancellationToken
                     )
             )
-            .WithName("GetNotifications")
-            .WithTags("Notifications")
+            .WithName("Список уведомлений")
+            .WithTags("Уведомления")
             .WithSummary("Список уведомлений")
             .WithDescription(
                 "Возвращает пагинированный список in-app уведомлений текущего пользователя."
@@ -51,7 +44,6 @@ public sealed class GetNotificationsEndpoint
             .RequireAuthorization();
     }
 
-    /// <inheritdoc />
     public async Task<Ok<PagedResult<NotificationViewModel>>> HandleAsync(
         GetNotificationsQuery query,
         ISender sender,

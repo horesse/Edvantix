@@ -16,6 +16,7 @@ using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
+using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Notification.Extensions;

@@ -4,7 +4,6 @@
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
-    <File Path="edvantix.png" />
     <File Path="global.json" />
     <File Path="NuGet.config" />
     <File Path="Versions.props" />
@@ -26,9 +25,6 @@
     <Project Path="src/BuildingBlocks/Edvantix.SharedKernel/Edvantix.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/src/Services/" />
-  <Folder Name="/src/Services/Blog/">
-    <Project Path="src/Services/Blog/Edvantix.Blog/Edvantix.Blog.csproj" />
-  </Folder>
   <Folder Name="/src/Services/Notification/">
     <Project Path="src/Services/Notification/Edvantix.Notification/Edvantix.Notification.csproj" />
   </Folder>

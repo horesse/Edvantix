@@ -1,6 +1,5 @@
 namespace Edvantix.Persona.Features.Skills;
 
-/// <summary>GET /v1/skills — поиск навыков для автодополнения.</summary>
 public sealed class SkillsEndpoint : IEndpoint<Ok<IReadOnlyList<SkillDto>>, GetSkillsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -13,8 +12,8 @@ public sealed class SkillsEndpoint : IEndpoint<Ok<IReadOnlyList<SkillDto>>, GetS
                     CancellationToken cancellationToken
                 ) => await HandleAsync(query, sender, cancellationToken)
             )
-            .WithName("SearchSkills")
-            .WithTags("Skills")
+            .WithName("Список навыков")
+            .WithTags("Навыки")
             .WithSummary("Поиск навыков")
             .WithDescription(
                 "Возвращает список навыков из глобального каталога по подстроке. Используется для автодополнения."

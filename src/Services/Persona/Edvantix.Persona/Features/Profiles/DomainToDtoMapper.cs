@@ -2,8 +2,7 @@ using Edvantix.Persona.Infrastructure.Blob;
 
 namespace Edvantix.Persona.Features.Profiles;
 
-public sealed class DomainToDtoMapper(IBlobService blobService)
-    : Mapper<Profile, ProfileDto>
+public sealed class DomainToDtoMapper(IBlobService blobService) : Mapper<Profile, ProfileDto>
 {
     public override ProfileDto Map(Profile source)
     {
@@ -11,11 +10,6 @@ public sealed class DomainToDtoMapper(IBlobService blobService)
             ? blobService.GetFileSasUrl(source.AvatarUrl)
             : null;
 
-        return new ProfileDto(
-            source.Id,
-            source.FullName.GetFullName(),
-            source.Login,
-            avatarUrl
-        );
+        return new ProfileDto(source.Id, source.FullName.GetFullName(), source.Login, avatarUrl);
     }
 }

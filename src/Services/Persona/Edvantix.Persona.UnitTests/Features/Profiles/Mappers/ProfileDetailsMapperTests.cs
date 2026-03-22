@@ -8,9 +8,8 @@ public sealed class ProfileDetailsMapperTests
 {
     private readonly Mock<IBlobService> _blobServiceMock = new();
     private readonly Mock<IMapper<ProfileContact, ContactDto>> _contactMapperMock = new();
-    private readonly Mock<
-        IMapper<EmploymentHistory, EmploymentHistoryDto>
-    > _employmentMapperMock = new();
+    private readonly Mock<IMapper<EmploymentHistory, EmploymentHistoryDto>> _employmentMapperMock =
+        new();
     private readonly Mock<IMapper<Education, EducationDto>> _educationMapperMock = new();
     private readonly Mock<IMapper<ProfileSkill, SkillDto>> _skillMapperMock = new();
     private readonly DetailedDomainToDtoMapper _mapper;

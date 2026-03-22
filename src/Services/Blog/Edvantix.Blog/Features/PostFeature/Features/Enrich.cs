@@ -31,7 +31,12 @@ public static class Enrich
             CancellationToken cancellationToken
         )
         {
-            post.Author = await ResolveAuthor(authorId, profileService, authorMapper, cancellationToken);
+            post.Author = await ResolveAuthor(
+                authorId,
+                profileService,
+                authorMapper,
+                cancellationToken
+            );
         }
 
         public async Task EnrichIsLikeByMe(
@@ -64,7 +69,12 @@ public static class Enrich
             CancellationToken cancellationToken
         )
         {
-            post.Author = await ResolveAuthor(authorId, profileService, authorMapper, cancellationToken);
+            post.Author = await ResolveAuthor(
+                authorId,
+                profileService,
+                authorMapper,
+                cancellationToken
+            );
         }
     }
 }

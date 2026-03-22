@@ -2,8 +2,9 @@ namespace Edvantix.Notification.Features.Notifications.MarkAllNotificationsAsRea
 
 public sealed record MarkAllNotificationsAsReadCommand(Guid AccountId) : ICommand;
 
-public sealed class MarkAllNotificationsAsReadCommandHandler(IInAppNotificationRepository repository)
-    : ICommandHandler<MarkAllNotificationsAsReadCommand>
+public sealed class MarkAllNotificationsAsReadCommandHandler(
+    IInAppNotificationRepository repository
+) : ICommandHandler<MarkAllNotificationsAsReadCommand>
 {
     public async ValueTask<Unit> Handle(
         MarkAllNotificationsAsReadCommand request,

@@ -33,7 +33,11 @@ public sealed class GetNotificationsQueryHandler(IInAppNotificationRepository re
 
         var countSpec = new InAppNotificationsCountSpec(request.AccountId, request.IsRead);
 
-        var (items, totalCount) = await repository.ListPagedAsync(listSpec, countSpec, cancellationToken);
+        var (items, totalCount) = await repository.ListPagedAsync(
+            listSpec,
+            countSpec,
+            cancellationToken
+        );
 
         var viewModels = items.Select(NotificationViewModel.FromDomain).ToList();
 

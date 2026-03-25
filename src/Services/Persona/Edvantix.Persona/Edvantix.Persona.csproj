@@ -8,7 +8,6 @@
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="Mediator.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />

@@ -22,8 +22,17 @@ public sealed class GetProfileQueryHandler(
     {
         var profileId = claims.TryGetProfileId();
 
-        if (!profileId.HasValue || profileId == Guid.Empty)
-            throw new NotFoundException("Профиль не найден.");
+        if (profileId is null || profileId == Guid.Empty)
+        {
+            var accountId = claims.GetUserId();
+            var userByAccountSpec = new ProfileAccountSpecification(accountId);
+            var profileByAccount = await repository.FindAsync(userByAccountSpec, cancellationToken);
+
+            if (profileByAccount is null)
+                throw new NotFoundException("Account not found.");
+
+            profileId = profileByAccount.Id;
+        }
 
         var spec = ProfileSpecification.Minimal(profileId.Value);
 

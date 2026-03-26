@@ -12,6 +12,12 @@ public static class AuthorizeExtensions
     /// <param name="claims">Объект <see cref="ClaimsPrincipal"/>, содержащий клеймы пользователя.</param>
     extension(ClaimsPrincipal claims)
     {
+        public Guid? TryGetUserId()
+        {
+            var sub = claims.GetClaimValue(ClaimTypes.NameIdentifier);
+            return sub is null ? null : Guid.Parse(sub);
+        }
+
         /// <summary>
         /// Получает идентификатор текущего пользователя из клеймов.
         /// </summary>

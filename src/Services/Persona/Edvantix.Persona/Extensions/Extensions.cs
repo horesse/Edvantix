@@ -129,10 +129,5 @@ internal static class Extensions
         services.AddKeycloakTokenIntrospection();
 
         services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
-
-        if (builder.Environment.IsDevelopment())
-        {
-            services.AddHostedService<KeycloakProfileSyncService>();
-        }
     }
 }

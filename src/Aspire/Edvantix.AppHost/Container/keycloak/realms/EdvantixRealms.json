@@ -1252,7 +1252,7 @@
         "offline_access",
         "microprofile-jwt"
       ]
-    },
+    }
   ],
   "clientScopes": [
     {

@@ -79,7 +79,9 @@ export function PageBreadcrumb({
 
   const allItems = items.length > 0 ? items : generateBreadcrumbItems(pathname);
   const displayedItems =
-    allItems.length > 3 ? [...allItems.slice(0, 1), ...allItems.slice(-2)] : allItems;
+    allItems.length > 3
+      ? [...allItems.slice(0, 1), ...allItems.slice(-2)]
+      : allItems;
   const hasEllipsis = allItems.length > 3;
   const lastItem = allItems[allItems.length - 1];
 

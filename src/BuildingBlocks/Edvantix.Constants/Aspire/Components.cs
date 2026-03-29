@@ -21,6 +21,9 @@ public static class Components
 
         public static readonly string Notification =
             $"{nameof(Notification).ToLowerInvariant()}{Suffix}";
+
+        public static readonly string Organizational =
+            $"{nameof(Organizational).ToLowerInvariant()}{Suffix}";
     }
 
     public static class Azure

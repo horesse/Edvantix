@@ -18,8 +18,8 @@ importers:
   .:
     devDependencies:
       '@lavamoat/allow-scripts':
-        specifier: ^3.4.3
-        version: 3.4.3
+        specifier: ^4.0.0
+        version: 4.0.0
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^6.0.2
         version: 6.0.2(prettier@3.8.1)
@@ -42,14 +42,14 @@ importers:
         specifier: ^2.8.21
         version: 2.8.21
       typescript:
-        specifier: 5.9.3
-        version: 5.9.3
+        specifier: 6.0.2
+        version: 6.0.2
 
   apps/admin:
     dependencies:
       '@t3-oss/env-nextjs':
         specifier: ^0.13.11
-        version: 0.13.11(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.3.6)
+        version: 0.13.11(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)
       next:
         specifier: 16.2.1
         version: 16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -82,8 +82,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0(jiti@2.6.1)
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
 
   apps/blog:
     dependencies:
@@ -92,19 +92,19 @@ importers:
         version: 5.2.2(react-hook-form@7.72.0(react@19.2.4))
       '@t3-oss/env-nextjs':
         specifier: ^0.13.11
-        version: 0.13.11(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.3.6)
+        version: 0.13.11(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)
       '@tanstack/react-query':
         specifier: ^5.95.2
         version: 5.95.2(react@19.2.4)
       better-auth:
         specifier: ^1.5.6
-        version: 1.5.6(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))(mongodb@7.1.0(socks@2.8.7))(mysql2@3.15.3)(next@16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.1.2)
+        version: 1.5.6(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)))(mongodb@7.1.0(socks@2.8.7))(mysql2@3.15.3)(next@16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.1.2)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
       lucide-react:
-        specifier: ^0.577.0
-        version: 0.577.0(react@19.2.4)
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.2.4)
       next:
         specifier: 16.2.1
         version: 16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -164,17 +164,17 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0(jiti@2.6.1)
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
 
   apps/landing:
     dependencies:
       '@t3-oss/env-nextjs':
         specifier: ^0.13.11
-        version: 0.13.11(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.3.6)
+        version: 0.13.11(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)
       lucide-react:
-        specifier: ^0.577.0
-        version: 0.577.0(react@19.2.4)
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.2.4)
       next:
         specifier: 16.2.1
         version: 16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -207,8 +207,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0(jiti@2.6.1)
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
 
   apps/organization:
     dependencies:
@@ -216,17 +216,17 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.72.0(react@19.2.4))
       '@opentelemetry/exporter-trace-otlp-proto':
-        specifier: ^0.213.0
-        version: 0.213.0(@opentelemetry/api@1.9.1)
+        specifier: ^0.214.0
+        version: 0.214.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-node':
-        specifier: ^0.213.0
-        version: 0.213.0(@opentelemetry/api@1.9.1)
+        specifier: ^0.214.0
+        version: 0.214.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-node':
         specifier: ^2.6.1
         version: 2.6.1(@opentelemetry/api@1.9.1)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.11
-        version: 0.13.11(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.3.6)
+        version: 0.13.11(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)
       '@tanstack/react-query':
         specifier: ^5.95.2
         version: 5.95.2(react@19.2.4)
@@ -238,13 +238,13 @@ importers:
         version: 2.0.1(next@16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       better-auth:
         specifier: ^1.5.6
-        version: 1.5.6(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))(mongodb@7.1.0(socks@2.8.7))(mysql2@3.15.3)(next@16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.1.2)
+        version: 1.5.6(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)))(mongodb@7.1.0(socks@2.8.7))(mysql2@3.15.3)(next@16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.1.2)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
       lucide-react:
-        specifier: ^0.577.0
-        version: 0.577.0(react@19.2.4)
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.2.4)
       next:
         specifier: 16.2.1
         version: 16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -341,7 +341,7 @@ importers:
         version: link:../../packages/validations
       allure:
         specifier: ^3.3.1
-        version: 3.3.1(preact@10.29.0)(typescript@5.9.3)
+        version: 3.3.1(preact@10.29.0)(typescript@6.0.2)
       allure-playwright:
         specifier: ^3.6.0
         version: 3.6.0(@playwright/test@1.58.2)
@@ -365,13 +365,13 @@ importers:
         version: 3.10.0
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@25.5.0)(typescript@5.9.3)
+        version: 10.9.2(@types/node@25.5.0)(typescript@6.0.2)
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
       vitest:
         specifier: ^4.1.2
-        version: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
+        version: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
 
   packages/api-client:
     dependencies:
@@ -436,10 +436,10 @@ importers:
         version: 16.2.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.57.2
-        version: 8.57.2(@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+        version: 8.57.2(@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2))(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
       '@typescript-eslint/parser':
         specifier: ^8.57.2
-        version: 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+        version: 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
       eslint:
         specifier: ^10.1.0
         version: 10.1.0(jiti@2.6.1)
@@ -462,11 +462,11 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
       typescript-eslint:
         specifier: ^8.57.2
-        version: 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+        version: 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
 
   packages/types:
     devDependencies:
@@ -551,8 +551,8 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       lucide-react:
-        specifier: ^0.577.0
-        version: 0.577.0(react@19.2.4)
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.2.4)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -612,8 +612,8 @@ importers:
         specifier: ^4.2.2
         version: 4.2.2
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
 
   packages/utils:
     devDependencies:
@@ -624,8 +624,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0(jiti@2.6.1)
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
 
   packages/validations:
     dependencies:
@@ -1784,14 +1784,14 @@ packages:
   '@js-sdsl/ordered-map@4.4.2':
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
 
-  '@lavamoat/aa@4.3.6':
-    resolution: {integrity: sha512-7PHRcAPS1xpexffdWh3AyW2hQ+DS2CYvblzOlP3yM8i7gAEtVIXK6o0BqVSNAJwgMyneaaWeObhyMTT+xSJE6A==}
-    engines: {node: ^16.20.0 || ^18.0.0 || ^20.0.0 || ^22.0.0 || ^24.0.0}
+  '@lavamoat/aa@5.0.0':
+    resolution: {integrity: sha512-xGcKHqr+KPPV8AxnHywycdTUdZzxlTxFcMhTH7HixSRwlQ5DUbWh/bK9skYI6VZViFeSeKymWVDqMgK/D/lr5g==}
+    engines: {node: ^20.19.0 || ^22.5.1 || ^24.0.0}
     hasBin: true
 
-  '@lavamoat/allow-scripts@3.4.3':
-    resolution: {integrity: sha512-BW8k2yslOLpI8M4C+D/SsWJ1l854Wyxh+1E2ItcJnyw+nwDwDsdwfh7g6r6AVaMrvjc+UBEkjFeUiuohnoA+0A==}
-    engines: {node: ^16.20.0 || ^18.0.0 || ^20.0.0 || ^22.0.0 || ^24.0.0}
+  '@lavamoat/allow-scripts@4.0.0':
+    resolution: {integrity: sha512-stjiuDZqH4ODrLGrpqC6rfmda7eJByo07VK2yu1fF/81nTwft6wrQp1sF1FHIWWHWWhKyM+b7EZNU7gUnbMyGA==}
+    engines: {node: ^20.19.0 || ^22.5.1 || ^24.0.0}
     hasBin: true
 
   '@mongodb-js/saslprep@1.4.6':
@@ -2010,34 +2010,22 @@ packages:
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==}
 
-  '@opentelemetry/api-logs@0.213.0':
-    resolution: {integrity: sha512-zRM5/Qj6G84Ej3F1yt33xBVY/3tnMxtL1fiDIxYbDWYaZ/eudVw3/PBiZ8G7JwUxXxjW8gU4g6LnOyfGKYHYgw==}
+  '@opentelemetry/api-logs@0.214.0':
+    resolution: {integrity: sha512-40lSJeqYO8Uz2Yj7u94/SJWE/wONa7rmMKjI1ZcIjgf3MHNHv1OZUCrCETGuaRF62d5pQD1wKIW+L4lmSMTzZA==}
     engines: {node: '>=8.0.0'}
 
   '@opentelemetry/api@1.9.1':
     resolution: {integrity: sha512-gLyJlPHPZYdAk1JENA9LeHejZe1Ti77/pTeFm/nMXmQH/HFZlcS/O2XJB+L8fkbrNSqhdtlvjBVjxwUYanNH5Q==}
     engines: {node: '>=8.0.0'}
 
-  '@opentelemetry/configuration@0.213.0':
-    resolution: {integrity: sha512-MfVgZiUuwL1d3bPPvXcEkVHGTGNUGoqGK97lfwBuRoKttcVGGqDyxTCCVa5MGbirtBQkUTysXMBUVWPaq7zbWw==}
+  '@opentelemetry/configuration@0.214.0':
+    resolution: {integrity: sha512-Q+awuEwxhETwIAXuxHvIY5ZMEP0ZqvxLTi9kclrkyVJppEUXYL3Bhiw3jYrxdHYMh0Y0tVInQH9FEZ1aMinvLA==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
 
-  '@opentelemetry/context-async-hooks@2.6.0':
-    resolution: {integrity: sha512-L8UyDwqpTcbkIK5cgwDRDYDoEhQoj8wp8BwsO19w3LB1Z41yEQm2VJyNfAi9DrLP/YTqXqWpKHyZfR9/tFYo1Q==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.0.0 <1.10.0'
-
   '@opentelemetry/context-async-hooks@2.6.1':
     resolution: {integrity: sha512-XHzhwRNkBpeP8Fs/qjGrAf9r9PRv67wkJQ/7ZPaBQQ68DYlTBBx5MF9LvPx7mhuXcDessKK2b+DcxqwpgkcivQ==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.0.0 <1.10.0'
-
-  '@opentelemetry/core@2.6.0':
-    resolution: {integrity: sha512-HLM1v2cbZ4TgYN6KEOj+Bbj8rAKriOdkF9Ed3tG25FoprSiQl7kYc+RRT6fUZGOvx0oMi5U67GoFdT+XUn8zEg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
@@ -2048,113 +2036,107 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
-  '@opentelemetry/exporter-logs-otlp-grpc@0.213.0':
-    resolution: {integrity: sha512-QiRZzvayEOFnenSXi85Eorgy5WTqyNQ+E7gjl6P6r+W3IUIwAIH8A9/BgMWfP056LwmdrBL6+qvnwaIEmug6Yg==}
+  '@opentelemetry/exporter-logs-otlp-grpc@0.214.0':
+    resolution: {integrity: sha512-SwmFRwO8mi6nndzbsjPgSFg7qy1WeNHRFD+s6uCsdiUDUt3+yzI2qiHE3/ub2f37+/CbeGcG+Ugc8Gwr6nu2Aw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-logs-otlp-http@0.213.0':
-    resolution: {integrity: sha512-vqDVSpLp09ZzcFIdb7QZrEFPxUlO3GzdhBKLstq3jhYB5ow3+ZtV5V0ngSdi/0BZs+J5WPiN1+UDV4X5zD/GzA==}
+  '@opentelemetry/exporter-logs-otlp-http@0.214.0':
+    resolution: {integrity: sha512-9qv2Tl/Hq6qc5pJCbzFJnzA0uvlb9DgM70yGJPYf3bA5LlLkRCpcn81i4JbcIH4grlQIWY6A+W7YG0LLvS1BAw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-logs-otlp-proto@0.213.0':
-    resolution: {integrity: sha512-gQk41nqfK3KhDk8jbSo3LR/fQBlV7f6Q5xRcfDmL1hZlbgXQPdVFV9/rIfYUrCoq1OM+2NnKnFfGjBt6QpLSsA==}
+  '@opentelemetry/exporter-logs-otlp-proto@0.214.0':
+    resolution: {integrity: sha512-IWAVvCO1TlpotRjFmhQFz9RSfQy5BsLtDRBtptSrXZRwfyRPpuql/RMe5zdmu0Gxl3ERDFwOzOqkf3bwy7Jzcw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-metrics-otlp-grpc@0.213.0':
-    resolution: {integrity: sha512-Z8gYKUAU48qwm+a1tjnGv9xbE7a5lukVIwgF6Z5i3VPXPVMe4Sjra0nN3zU7m277h+V+ZpsPGZJ2Xf0OTkL7/w==}
+  '@opentelemetry/exporter-metrics-otlp-grpc@0.214.0':
+    resolution: {integrity: sha512-0NGxWHVYHgbp51SEzmsP+Hdups81eRs229STcSWHo3WO0aqY6RpJ9csxfyEtFgaNrBDv6UfOh0je4ss/ROS6XA==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-metrics-otlp-http@0.213.0':
-    resolution: {integrity: sha512-yw3fTIw4KQIRXC/ZyYQq5gtA3Ogfdfz/g5HVgleobQAcjUUE8Nj3spGMx8iQPp+S+u6/js7BixufRkXhzLmpJA==}
+  '@opentelemetry/exporter-metrics-otlp-http@0.214.0':
+    resolution: {integrity: sha512-Tx/59RmjBgkXJ3qnsD04rpDrVWL53LU/czpgLJh+Ab98nAroe91I7vZ3uGN9mxwPS0jsZEnmqmHygVwB2vRMlA==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-metrics-otlp-proto@0.213.0':
-    resolution: {integrity: sha512-geHF+zZaDb0/WRkJTxR8o8dG4fCWT/Wq7HBdNZCxwH5mxhwRi/5f37IDYH7nvU+dwU6IeY4Pg8TPI435JCiNkg==}
+  '@opentelemetry/exporter-metrics-otlp-proto@0.214.0':
+    resolution: {integrity: sha512-pJIcghFGhx3VSCgP5U+yZx+OMNj0t+ttnhC8IjL5Wza7vWIczctF6t3AGcVQffi2dEqX+ZHANoBwoPR8y6RMKA==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-prometheus@0.213.0':
-    resolution: {integrity: sha512-FyV3/JfKGAgx+zJUwCHdjQHbs+YeGd2fOWvBHYrW6dmfv/w89lb8WhJTSZEoWgP525jwv/gFeBttlGu1flebdA==}
+  '@opentelemetry/exporter-prometheus@0.214.0':
+    resolution: {integrity: sha512-4TGYoZKebUWVuYkV6r5wS2dUF4zH7EbWFw/Uqz1ZM1tGHQeFT9wzHGXq3iSIXMUrwu5jRdxjfMaXrYejPu2kpQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-trace-otlp-grpc@0.213.0':
-    resolution: {integrity: sha512-L8y6piP4jBIIx1Nv7/9hkx25ql6/Cro/kQrs+f9e8bPF0Ar5Dm991v7PnbtubKz6Q4fT872H56QXUWVnz/Cs4Q==}
+  '@opentelemetry/exporter-trace-otlp-grpc@0.214.0':
+    resolution: {integrity: sha512-FWRZ7AWoTryYhthralHkfXUuyO3l7cRsnr49WcDio1orl2a7KxT8aDZdwQtV1adzoUvZ9Gfo+IstElghCS4zfw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-trace-otlp-http@0.213.0':
-    resolution: {integrity: sha512-tnRmJD39aWrE/Sp7F6AbRNAjKHToDkAqBi6i0lESpGWz3G+f4bhVAV6mgSXH2o18lrDVJXo6jf9bAywQw43wRA==}
+  '@opentelemetry/exporter-trace-otlp-http@0.214.0':
+    resolution: {integrity: sha512-kIN8nTBMgV2hXzV/a20BCFilPZdAIMYYJGSgfMMRm/Xa+07y5hRDS2Vm12A/z8Cdu3Sq++ZvJfElokX2rkgGgw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-trace-otlp-proto@0.213.0':
-    resolution: {integrity: sha512-six3vPq3sL+ge1iZOfKEg+RHuFQhGb8ZTdlvD234w/0gi8ty/qKD46qoGpKvM3amy5yYunWBKiFBW47WaVS26w==}
+  '@opentelemetry/exporter-trace-otlp-proto@0.214.0':
+    resolution: {integrity: sha512-ON0spYWb2yAdQ9b+ItNyK0c6qdtcs+0eVR4YFJkhJL7agfT8sHFg0e5EesauSRiTHPZHiDobI92k77q0lwAmqg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/exporter-zipkin@2.6.0':
-    resolution: {integrity: sha512-AFP77OQMLfw/Jzh6WT2PtrywstNjdoyT9t9lYrYdk1s4igsvnMZ8DkZKCwxsItC01D+4Lydgrb+Wy0bAvpp8xg==}
+  '@opentelemetry/exporter-zipkin@2.6.1':
+    resolution: {integrity: sha512-km2/hD3inLTqtLnUAHDGz7ZP/VOyZNslrC/iN66x4jkmpckwlONW54LRPNI6fm09/musDtZga9EWsxgwnjGUlw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
 
-  '@opentelemetry/instrumentation@0.213.0':
-    resolution: {integrity: sha512-3i9NdkET/KvQomeh7UaR/F4r9P25Rx6ooALlWXPIjypcEOUxksCmVu0zA70NBJWlrMW1rPr/LRidFAflLI+s/w==}
+  '@opentelemetry/instrumentation@0.214.0':
+    resolution: {integrity: sha512-MHqEX5Dk59cqVah5LiARMACku7jXSVk9iVDWOea4x3cr7VfdByeDCURK6o1lntT1JS/Tsovw01UJrBhN3/uC5w==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/otlp-exporter-base@0.213.0':
-    resolution: {integrity: sha512-MegxAP1/n09Ob2dQvY5NBDVjAFkZRuKtWKxYev1R2M8hrsgXzQGkaMgoEKeUOyQ0FUyYcO29UOnYdQWmWa0PXg==}
+  '@opentelemetry/otlp-exporter-base@0.214.0':
+    resolution: {integrity: sha512-u1Gdv0/E9wP+apqWf7Wv2npXmgJtxsW2XL0TEv9FZloTZRuMBKmu8cYVXwS4Hm3q/f/3FuCnPTgiwYvIqRSpRg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/otlp-grpc-exporter-base@0.213.0':
-    resolution: {integrity: sha512-XgRGuLE9usFNlnw2lgMIM4HTwpcIyjdU/xPoJ8v3LbBLBfjaDkIugjc9HoWa7ZSJ/9Bhzgvm/aD0bGdYUFgnTw==}
+  '@opentelemetry/otlp-grpc-exporter-base@0.214.0':
+    resolution: {integrity: sha512-IDP6zcyA24RhNZ289MP6eToIZcinlmirHjX8v3zKCQ2ZhPpt5cGwkN91tCth337lqHIgWcTy90uKRiX/SzALDw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/otlp-transformer@0.213.0':
-    resolution: {integrity: sha512-RSuAlxFFPjeK4d5Y6ps8L2WhaQI6CXWllIjvo5nkAlBpmq2XdYWEBGiAbOF4nDs8CX4QblJDv5BbMUft3sEfDw==}
+  '@opentelemetry/otlp-transformer@0.214.0':
+    resolution: {integrity: sha512-DSaYcuBRh6uozfsWN3R8HsN0yDhCuWP7tOFdkUOVaWD1KVJg8m4qiLUsg/tNhTLS9HUYUcwNpwL2eroLtsZZ/w==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
-  '@opentelemetry/propagator-b3@2.6.0':
-    resolution: {integrity: sha512-SguK4jMmRvQ0c0dxAMl6K+Eu1+01X0OP7RLiIuHFjOS8hlB23ZYNnhnbAdSQEh5xVXQmH0OAS0TnmVI+6vB2Kg==}
+  '@opentelemetry/propagator-b3@2.6.1':
+    resolution: {integrity: sha512-Dvz9TA6cPqIbxolSzQ5x9br6iQlqdGhVYrm+oYc7pfJ7LaVXz8F0XIqhWbnKB5YvfZ6SUmabBUUxnvHs/9uhxA==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
-  '@opentelemetry/propagator-jaeger@2.6.0':
-    resolution: {integrity: sha512-KGWJuvp9X8X36bhHgIhWEnHAzXDInFr+Fvo9IQhhuu6pXLT8mF7HzFyx/X+auZUITvPaZhM39Phj3vK12MbhwA==}
+  '@opentelemetry/propagator-jaeger@2.6.1':
+    resolution: {integrity: sha512-kKFMxBcjBZAC1vBch5mtZ/dJQvcAEKWga+c+q5iGgRLPIE6Mc649zEwMaCIQCzalziMJQiyUadFYMHmELB7AFw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
-
-  '@opentelemetry/resources@2.6.0':
-    resolution: {integrity: sha512-D4y/+OGe3JSuYUCBxtH5T9DSAWNcvCb/nQWIga8HNtXTVPQn59j0nTBAgaAXxUVBDl40mG3Tc76b46wPlZaiJQ==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
   '@opentelemetry/resources@2.6.1':
     resolution: {integrity: sha512-lID/vxSuKWXM55XhAKNoYXu9Cutoq5hFdkbTdI/zDKQktXzcWBVhNsOkiZFTMU9UtEWuGRNe0HUgmsFldIdxVA==}
@@ -2162,26 +2144,20 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
-  '@opentelemetry/sdk-logs@0.213.0':
-    resolution: {integrity: sha512-00xlU3GZXo3kXKve4DLdrAL0NAFUaZ9appU/mn00S/5kSUdAvyYsORaDUfR04Mp2CLagAOhrzfUvYozY/EZX2g==}
+  '@opentelemetry/sdk-logs@0.214.0':
+    resolution: {integrity: sha512-zf6acnScjhsaBUU22zXZ/sLWim1dfhUAbGXdMmHmNG3LfBnQ3DKsOCITb2IZwoUsNNMTogqFKBnlIPPftUgGwA==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.4.0 <1.10.0'
 
-  '@opentelemetry/sdk-metrics@2.6.0':
-    resolution: {integrity: sha512-CicxWZxX6z35HR83jl+PLgtFgUrKRQ9LCXyxgenMnz5A1lgYWfAog7VtdOvGkJYyQgMNPhXQwkYrDLujk7z1Iw==}
+  '@opentelemetry/sdk-metrics@2.6.1':
+    resolution: {integrity: sha512-9t9hJHX15meBy2NmTJxL+NJfXmnausR2xUDvE19XQce0Qi/GBtDGamU8nS1RMbdgDmhgpm3VaOu2+fiS/SfTpQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.9.0 <1.10.0'
 
-  '@opentelemetry/sdk-node@0.213.0':
-    resolution: {integrity: sha512-8s7SQtY8DIAjraXFrUf0+I90SBAUQbsMWMtUGKmusswRHWXtKJx42aJQMoxEtC82Csqj+IlBH6FoP8XmmUDSrQ==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.3.0 <1.10.0'
-
-  '@opentelemetry/sdk-trace-base@2.6.0':
-    resolution: {integrity: sha512-g/OZVkqlxllgFM7qMKqbPV9c1DUPhQ7d4n3pgZFcrnrNft9eJXZM2TNHTPYREJBrtNdRytYyvwjgL5geDKl3EQ==}
+  '@opentelemetry/sdk-node@0.214.0':
+    resolution: {integrity: sha512-gl2XvQBJuPjhGcw9SsnQO5qxChAPMuGRPFaD8lqtF+Cey91NgGUQ0sio2vlDFOSm3JOLzc44vL+OAfx1dXuZjg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
@@ -2191,12 +2167,6 @@ packages:
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
-
-  '@opentelemetry/sdk-trace-node@2.6.0':
-    resolution: {integrity: sha512-YhswtasmsbIGEFvLGvR9p/y3PVRTfFf+mgY8van4Ygpnv4sA3vooAjvh+qAn9PNWxs4/IwGGqiQS0PPsaRJ0vQ==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
   '@opentelemetry/sdk-trace-node@2.6.1':
     resolution: {integrity: sha512-Hh2i4FwHWRFhnO2Q/p6svMxy8MPsNCG0uuzUY3glqm0rwM0nQvbTO1dXSp9OqQoTKXcQzaz9q1f65fsurmOhNw==}
@@ -5638,8 +5608,8 @@ packages:
     resolution: {integrity: sha512-DqC6n3QQ77zdFpCMASA1a3Jlb64Hv2N2DciFGkO/4L9+q/IpIAuRlKOvCXabtRW6cQf8usbmM6BE/TOPysCdIA==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
-  lucide-react@0.577.0:
-    resolution: {integrity: sha512-4LjoFv2eEPwYDPg/CUdBJQSDfPyzXCRrVW1X7jrx/trgxnxkHFjnVZINbzvzxjN70dxychOfg+FTYwBiS3pQ5A==}
+  lucide-react@1.7.0:
+    resolution: {integrity: sha512-yI7BeItCLZJTXikmK4KNUGCKoGzSvbKlfCvw44bU4fXAL6v3gYS4uHD1jzsLkfwODYwI6Drw5Tu9Z5ulDe0TSg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -6562,8 +6532,8 @@ packages:
     resolution: {integrity: sha512-+1lzwXehGCXSeryaISr6WujZzowloigEofRB+dj75y9RRa/obVcYgbHJd53tdYw8pvZj8GojXaaENws8Ktw/hQ==}
     engines: {node: '>=8'}
 
-  resolve@1.22.10:
-    resolution: {integrity: sha512-NPRy+/ncIMeDlTAsuqwKIiferiawhefFJtkNSW0qZJEqMEb+qBt/77B/jGeeek+F0uOeN05CDa6HXbbIgtVX4w==}
+  resolve@1.22.11:
+    resolution: {integrity: sha512-RfqAvLnMl313r7c9oclB1HhUEAezcpLjz95wFH4LVuhk9JF/r22qmVP9AMmOU4vMX7Q8pN8jwNg/CSpdFnMjTQ==}
     engines: {node: '>= 0.4'}
     hasBin: true
 
@@ -7036,8 +7006,8 @@ packages:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '>=4.8.4 <6.0.0'
 
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -7454,16 +7424,16 @@ snapshots:
     dependencies:
       d3-shape: 3.2.0
 
-  '@allurereport/core@3.3.1(preact@10.29.0)(typescript@5.9.3)':
+  '@allurereport/core@3.3.1(preact@10.29.0)(typescript@6.0.2)':
     dependencies:
       '@allurereport/ci': 3.3.1
       '@allurereport/core-api': 3.3.1
       '@allurereport/plugin-allure2': 3.3.1(preact@10.29.0)
       '@allurereport/plugin-api': 3.3.1
-      '@allurereport/plugin-awesome': 3.3.1(preact@10.29.0)(typescript@5.9.3)
-      '@allurereport/plugin-classic': 3.3.1(preact@10.29.0)(typescript@5.9.3)
+      '@allurereport/plugin-awesome': 3.3.1(preact@10.29.0)(typescript@6.0.2)
+      '@allurereport/plugin-classic': 3.3.1(preact@10.29.0)(typescript@6.0.2)
       '@allurereport/plugin-csv': 3.3.1
-      '@allurereport/plugin-dashboard': 3.3.1(preact@10.29.0)(typescript@5.9.3)
+      '@allurereport/plugin-dashboard': 3.3.1(preact@10.29.0)(typescript@6.0.2)
       '@allurereport/plugin-jira': 3.3.1
       '@allurereport/plugin-log': 3.3.1
       '@allurereport/plugin-progress': 3.3.1
@@ -7473,7 +7443,7 @@ snapshots:
       '@allurereport/reader': 3.3.1
       '@allurereport/reader-api': 3.3.1
       '@allurereport/service': 3.3.1
-      '@allurereport/summary': 3.3.1(typescript@5.9.3)
+      '@allurereport/summary': 3.3.1(typescript@6.0.2)
       handlebars: 4.7.9
       node-stream-zip: 1.15.0
       p-limit: 7.3.0
@@ -7503,12 +7473,12 @@ snapshots:
     dependencies:
       '@allurereport/core-api': 3.3.1
 
-  '@allurereport/plugin-awesome@3.3.1(preact@10.29.0)(typescript@5.9.3)':
+  '@allurereport/plugin-awesome@3.3.1(preact@10.29.0)(typescript@6.0.2)':
     dependencies:
       '@allurereport/charts-api': 3.3.1
       '@allurereport/core-api': 3.3.1
       '@allurereport/plugin-api': 3.3.1
-      '@allurereport/web-awesome': 3.3.1(typescript@5.9.3)
+      '@allurereport/web-awesome': 3.3.1(typescript@6.0.2)
       '@allurereport/web-commons': 3.3.1(preact@10.29.0)
       d3-shape: 3.2.0
       handlebars: 4.7.9
@@ -7517,12 +7487,12 @@ snapshots:
       - preact
       - typescript
 
-  '@allurereport/plugin-classic@3.3.1(preact@10.29.0)(typescript@5.9.3)':
+  '@allurereport/plugin-classic@3.3.1(preact@10.29.0)(typescript@6.0.2)':
     dependencies:
       '@allurereport/core-api': 3.3.1
       '@allurereport/plugin-api': 3.3.1
-      '@allurereport/web-awesome': 3.3.1(typescript@5.9.3)
-      '@allurereport/web-classic': 3.3.1(typescript@5.9.3)
+      '@allurereport/web-awesome': 3.3.1(typescript@6.0.2)
+      '@allurereport/web-classic': 3.3.1(typescript@6.0.2)
       '@allurereport/web-commons': 3.3.1(preact@10.29.0)
       d3-shape: 3.2.0
       handlebars: 4.7.9
@@ -7536,13 +7506,13 @@ snapshots:
       '@allurereport/core-api': 3.3.1
       '@allurereport/plugin-api': 3.3.1
 
-  '@allurereport/plugin-dashboard@3.3.1(preact@10.29.0)(typescript@5.9.3)':
+  '@allurereport/plugin-dashboard@3.3.1(preact@10.29.0)(typescript@6.0.2)':
     dependencies:
       '@allurereport/charts-api': 3.3.1
       '@allurereport/core-api': 3.3.1
       '@allurereport/plugin-api': 3.3.1
       '@allurereport/web-commons': 3.3.1(preact@10.29.0)
-      '@allurereport/web-dashboard': 3.3.1(typescript@5.9.3)
+      '@allurereport/web-dashboard': 3.3.1(typescript@6.0.2)
       d3-shape: 3.2.0
       handlebars: 4.7.9
     transitivePeerDependencies:
@@ -7625,11 +7595,11 @@ snapshots:
       '@allurereport/directory-watcher': 3.3.1
       open: 10.2.0
 
-  '@allurereport/summary@3.3.1(typescript@5.9.3)':
+  '@allurereport/summary@3.3.1(typescript@6.0.2)':
     dependencies:
       '@allurereport/core-api': 3.3.1
       '@allurereport/plugin-api': 3.3.1
-      '@allurereport/web-summary': 3.3.1(typescript@5.9.3)
+      '@allurereport/web-summary': 3.3.1(typescript@6.0.2)
       handlebars: 4.7.9
     transitivePeerDependencies:
       - typescript
@@ -7664,7 +7634,7 @@ snapshots:
     transitivePeerDependencies:
       - preact
 
-  '@allurereport/web-awesome@3.3.1(typescript@5.9.3)':
+  '@allurereport/web-awesome@3.3.1(typescript@6.0.2)':
     dependencies:
       '@allurereport/charts-api': 3.3.1
       '@allurereport/core-api': 3.3.1
@@ -7674,14 +7644,14 @@ snapshots:
       '@preact/signals': 2.9.0(preact@10.29.0)
       clsx: 2.1.1
       d3-shape: 3.2.0
-      i18next: 24.2.3(typescript@5.9.3)
+      i18next: 24.2.3(typescript@6.0.2)
       md5: 2.3.0
       preact: 10.29.0
       prismjs: 1.30.0
     transitivePeerDependencies:
       - typescript
 
-  '@allurereport/web-classic@3.3.1(typescript@5.9.3)':
+  '@allurereport/web-classic@3.3.1(typescript@6.0.2)':
     dependencies:
       '@allurereport/charts-api': 3.3.1
       '@allurereport/core-api': 3.3.1
@@ -7690,7 +7660,7 @@ snapshots:
       '@preact/signals': 2.9.0(preact@10.29.0)
       clsx: 2.1.1
       d3-shape: 3.2.0
-      i18next: 24.2.3(typescript@5.9.3)
+      i18next: 24.2.3(typescript@6.0.2)
       md5: 2.3.0
       preact: 10.29.0
       prismjs: 1.30.0
@@ -7753,7 +7723,7 @@ snapshots:
       sortablejs: 1.15.7
       use-debounce: 10.1.0(@preact/compat@18.3.2(preact@10.29.0))
 
-  '@allurereport/web-dashboard@3.3.1(typescript@5.9.3)':
+  '@allurereport/web-dashboard@3.3.1(typescript@6.0.2)':
     dependencies:
       '@allurereport/charts-api': 3.3.1
       '@allurereport/core-api': 3.3.1
@@ -7761,19 +7731,19 @@ snapshots:
       '@allurereport/web-components': 3.3.1
       '@preact/signals': 2.9.0(preact@10.29.0)
       clsx: 2.1.1
-      i18next: 24.2.3(typescript@5.9.3)
+      i18next: 24.2.3(typescript@6.0.2)
       preact: 10.29.0
     transitivePeerDependencies:
       - typescript
 
-  '@allurereport/web-summary@3.3.1(typescript@5.9.3)':
+  '@allurereport/web-summary@3.3.1(typescript@6.0.2)':
     dependencies:
       '@allurereport/core-api': 3.3.1
       '@allurereport/web-commons': 3.3.1(preact@10.29.0)
       '@allurereport/web-components': 3.3.1
       '@preact/signals': 2.9.0(preact@10.29.0)
       clsx: 2.1.1
-      i18next: 24.2.3(typescript@5.9.3)
+      i18next: 24.2.3(typescript@6.0.2)
       preact: 10.29.0
     transitivePeerDependencies:
       - typescript
@@ -7900,12 +7870,12 @@ snapshots:
       nanostores: 1.2.0
       zod: 4.3.6
 
-  '@better-auth/drizzle-adapter@1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))':
+  '@better-auth/drizzle-adapter@1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)))':
     dependencies:
       '@better-auth/core': 1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0)
       '@better-auth/utils': 0.3.1
     optionalDependencies:
-      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))
+      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))
 
   '@better-auth/kysely-adapter@1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(kysely@0.28.14)':
     dependencies:
@@ -7926,13 +7896,13 @@ snapshots:
     optionalDependencies:
       mongodb: 7.1.0(socks@2.8.7)
 
-  '@better-auth/prisma-adapter@1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))':
+  '@better-auth/prisma-adapter@1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))':
     dependencies:
       '@better-auth/core': 1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0)
       '@better-auth/utils': 0.3.1
     optionalDependencies:
-      '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
-      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+      '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2)
+      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
 
   '@better-auth/telemetry@1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))':
     dependencies:
@@ -8713,13 +8683,13 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@lavamoat/aa@4.3.6':
+  '@lavamoat/aa@5.0.0':
     dependencies:
-      resolve: 1.22.10
+      resolve: 1.22.11
 
-  '@lavamoat/allow-scripts@3.4.3':
+  '@lavamoat/allow-scripts@4.0.0':
     dependencies:
-      '@lavamoat/aa': 4.3.6
+      '@lavamoat/aa': 5.0.0
       '@npmcli/run-script': 10.0.3
       bin-links: 4.0.4
       npm-normalize-package-bin: 3.0.1
@@ -9104,191 +9074,176 @@ snapshots:
   '@open-draft/until@2.1.0':
     optional: true
 
-  '@opentelemetry/api-logs@0.213.0':
+  '@opentelemetry/api-logs@0.214.0':
     dependencies:
       '@opentelemetry/api': 1.9.1
 
   '@opentelemetry/api@1.9.1': {}
 
-  '@opentelemetry/configuration@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/configuration@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
       yaml: 2.8.3
-
-  '@opentelemetry/context-async-hooks@2.6.0(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
 
   '@opentelemetry/context-async-hooks@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-
-  '@opentelemetry/core@2.6.0(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/semantic-conventions': 1.40.0
 
   '@opentelemetry/core@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/semantic-conventions': 1.40.0
 
-  '@opentelemetry/exporter-logs-otlp-grpc@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-logs-otlp-grpc@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@grpc/grpc-js': 1.14.3
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-grpc-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-logs': 0.213.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-grpc-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-logs': 0.214.0(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-logs-otlp-http@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-logs-otlp-http@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.213.0
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-logs': 0.213.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/api-logs': 0.214.0
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-logs': 0.214.0(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-logs-otlp-proto@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-logs-otlp-proto@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.213.0
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-logs': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/api-logs': 0.214.0
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-logs': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-metrics-otlp-grpc@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-metrics-otlp-grpc@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@grpc/grpc-js': 1.14.3
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-metrics-otlp-http': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-grpc-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-metrics-otlp-http': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-grpc-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-metrics-otlp-http@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-metrics-otlp-http@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-metrics-otlp-proto@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-metrics-otlp-proto@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-metrics-otlp-http': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-metrics-otlp-http': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-prometheus@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-prometheus@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics': 2.6.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
 
-  '@opentelemetry/exporter-trace-otlp-grpc@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-trace-otlp-grpc@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@grpc/grpc-js': 1.14.3
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-grpc-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-grpc-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-trace-otlp-http@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-trace-otlp-http@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-trace-otlp-proto@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-trace-otlp-proto@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/exporter-zipkin@2.6.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/exporter-zipkin@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.6.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
 
-  '@opentelemetry/instrumentation@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.213.0
+      '@opentelemetry/api-logs': 0.214.0
       import-in-the-middle: 3.0.0
       require-in-the-middle: 8.0.1
     transitivePeerDependencies:
       - supports-color
 
-  '@opentelemetry/otlp-exporter-base@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/otlp-exporter-base@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/otlp-grpc-exporter-base@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/otlp-grpc-exporter-base@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@grpc/grpc-js': 1.14.3
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-exporter-base': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/otlp-transformer': 0.213.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-transformer': 0.214.0(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/otlp-transformer@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/otlp-transformer@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.213.0
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-logs': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/api-logs': 0.214.0
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-logs': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.6.1(@opentelemetry/api@1.9.1)
       protobufjs: 7.5.4
 
-  '@opentelemetry/propagator-b3@2.6.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/propagator-b3@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/propagator-jaeger@2.6.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/propagator-jaeger@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-
-  '@opentelemetry/resources@2.6.0(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.40.0
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
 
   '@opentelemetry/resources@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -9296,56 +9251,50 @@ snapshots:
       '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
 
-  '@opentelemetry/sdk-logs@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/sdk-logs@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.213.0
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/api-logs': 0.214.0
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
 
-  '@opentelemetry/sdk-metrics@2.6.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/sdk-metrics@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/sdk-node@0.213.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/sdk-node@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.213.0
-      '@opentelemetry/configuration': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/context-async-hooks': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-logs-otlp-grpc': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-logs-otlp-http': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-logs-otlp-proto': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-metrics-otlp-grpc': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-metrics-otlp-http': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-metrics-otlp-proto': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-prometheus': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-trace-otlp-grpc': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-trace-otlp-http': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-trace-otlp-proto': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-zipkin': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/propagator-b3': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/propagator-jaeger': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-logs': 0.213.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-node': 2.6.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/api-logs': 0.214.0
+      '@opentelemetry/configuration': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/context-async-hooks': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-logs-otlp-grpc': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-logs-otlp-http': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-logs-otlp-proto': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-metrics-otlp-grpc': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-metrics-otlp-http': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-metrics-otlp-proto': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-prometheus': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-grpc': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-http': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-proto': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-zipkin': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/otlp-exporter-base': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/propagator-b3': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/propagator-jaeger': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-logs': 0.214.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.6.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-node': 2.6.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
     transitivePeerDependencies:
       - supports-color
-
-  '@opentelemetry/sdk-trace-base@2.6.0(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.40.0
 
   '@opentelemetry/sdk-trace-base@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -9353,13 +9302,6 @@ snapshots:
       '@opentelemetry/core': 2.6.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.6.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
-
-  '@opentelemetry/sdk-trace-node@2.6.0(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/context-async-hooks': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/core': 2.6.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.6.0(@opentelemetry/api@1.9.1)
 
   '@opentelemetry/sdk-trace-node@2.6.1(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -9390,12 +9332,12 @@ snapshots:
   '@prisma/client-runtime-utils@7.4.2':
     optional: true
 
-  '@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)':
+  '@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2)':
     dependencies:
       '@prisma/client-runtime-utils': 7.4.2
     optionalDependencies:
-      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
-      typescript: 5.9.3
+      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
+      typescript: 6.0.2
     optional: true
 
   '@prisma/config@7.4.2':
@@ -9414,7 +9356,7 @@ snapshots:
   '@prisma/debug@7.4.2':
     optional: true
 
-  '@prisma/dev@0.20.0(typescript@5.9.3)':
+  '@prisma/dev@0.20.0(typescript@6.0.2)':
     dependencies:
       '@electric-sql/pglite': 0.3.15
       '@electric-sql/pglite-socket': 0.0.20(@electric-sql/pglite@0.3.15)
@@ -9431,7 +9373,7 @@ snapshots:
       proper-lockfile: 4.1.2
       remeda: 2.33.4
       std-env: 3.10.0
-      valibot: 1.2.0(typescript@5.9.3)
+      valibot: 1.2.0(typescript@6.0.2)
       zeptomatch: 2.1.0
     transitivePeerDependencies:
       - typescript
@@ -10396,18 +10338,18 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.11(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.3.6)':
+  '@t3-oss/env-core@0.13.11(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)':
     optionalDependencies:
-      typescript: 5.9.3
-      valibot: 1.2.0(typescript@5.9.3)
+      typescript: 6.0.2
+      valibot: 1.2.0(typescript@6.0.2)
       zod: 4.3.6
 
-  '@t3-oss/env-nextjs@0.13.11(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.3.6)':
+  '@t3-oss/env-nextjs@0.13.11(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)':
     dependencies:
-      '@t3-oss/env-core': 0.13.11(typescript@5.9.3)(valibot@1.2.0(typescript@5.9.3))(zod@4.3.6)
+      '@t3-oss/env-core': 0.13.11(typescript@6.0.2)(valibot@1.2.0(typescript@6.0.2))(zod@4.3.6)
     optionalDependencies:
-      typescript: 5.9.3
-      valibot: 1.2.0(typescript@5.9.3)
+      typescript: 6.0.2
+      valibot: 1.2.0(typescript@6.0.2)
       zod: 4.3.6
 
   '@tailwindcss/node@4.2.2':
@@ -10688,40 +10630,40 @@ snapshots:
     dependencies:
       '@types/node': 25.5.0
 
-  '@typescript-eslint/eslint-plugin@8.57.2(@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)':
+  '@typescript-eslint/eslint-plugin@8.57.2(@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2))(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
-      '@typescript-eslint/parser': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/parser': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
       '@typescript-eslint/scope-manager': 8.57.2
-      '@typescript-eslint/type-utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/type-utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
+      '@typescript-eslint/utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
       '@typescript-eslint/visitor-keys': 8.57.2
       eslint: 10.1.0(jiti@2.6.1)
       ignore: 7.0.5
       natural-compare: 1.4.0
-      ts-api-utils: 2.5.0(typescript@5.9.3)
-      typescript: 5.9.3
+      ts-api-utils: 2.5.0(typescript@6.0.2)
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)':
+  '@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.57.2
       '@typescript-eslint/types': 8.57.2
-      '@typescript-eslint/typescript-estree': 8.57.2(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.57.2(typescript@6.0.2)
       '@typescript-eslint/visitor-keys': 8.57.2
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 10.1.0(jiti@2.6.1)
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/project-service@8.57.2(typescript@5.9.3)':
+  '@typescript-eslint/project-service@8.57.2(typescript@6.0.2)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.57.2(typescript@5.9.3)
+      '@typescript-eslint/tsconfig-utils': 8.57.2(typescript@6.0.2)
       '@typescript-eslint/types': 8.57.2
       debug: 4.4.3(supports-color@8.1.1)
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
@@ -10730,47 +10672,47 @@ snapshots:
       '@typescript-eslint/types': 8.57.2
       '@typescript-eslint/visitor-keys': 8.57.2
 
-  '@typescript-eslint/tsconfig-utils@8.57.2(typescript@5.9.3)':
+  '@typescript-eslint/tsconfig-utils@8.57.2(typescript@6.0.2)':
     dependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
-  '@typescript-eslint/type-utils@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)':
+  '@typescript-eslint/type-utils@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)':
     dependencies:
       '@typescript-eslint/types': 8.57.2
-      '@typescript-eslint/typescript-estree': 8.57.2(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.57.2(typescript@6.0.2)
+      '@typescript-eslint/utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 10.1.0(jiti@2.6.1)
-      ts-api-utils: 2.5.0(typescript@5.9.3)
-      typescript: 5.9.3
+      ts-api-utils: 2.5.0(typescript@6.0.2)
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
   '@typescript-eslint/types@8.57.2': {}
 
-  '@typescript-eslint/typescript-estree@8.57.2(typescript@5.9.3)':
+  '@typescript-eslint/typescript-estree@8.57.2(typescript@6.0.2)':
     dependencies:
-      '@typescript-eslint/project-service': 8.57.2(typescript@5.9.3)
-      '@typescript-eslint/tsconfig-utils': 8.57.2(typescript@5.9.3)
+      '@typescript-eslint/project-service': 8.57.2(typescript@6.0.2)
+      '@typescript-eslint/tsconfig-utils': 8.57.2(typescript@6.0.2)
       '@typescript-eslint/types': 8.57.2
       '@typescript-eslint/visitor-keys': 8.57.2
       debug: 4.4.3(supports-color@8.1.1)
       minimatch: 10.2.4
       semver: 7.7.4
       tinyglobby: 0.2.15
-      ts-api-utils: 2.5.0(typescript@5.9.3)
-      typescript: 5.9.3
+      ts-api-utils: 2.5.0(typescript@6.0.2)
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)':
+  '@typescript-eslint/utils@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.1.0(jiti@2.6.1))
       '@typescript-eslint/scope-manager': 8.57.2
       '@typescript-eslint/types': 8.57.2
-      '@typescript-eslint/typescript-estree': 8.57.2(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.57.2(typescript@6.0.2)
       eslint: 10.1.0(jiti@2.6.1)
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
@@ -10803,7 +10745,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
+      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
 
   '@vitest/expect@4.1.2':
     dependencies:
@@ -10814,13 +10756,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.2(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))':
+  '@vitest/mocker@4.1.2(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))':
     dependencies:
       '@vitest/spy': 4.1.2
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      msw: 2.12.10(@types/node@25.5.0)(typescript@5.9.3)
+      msw: 2.12.10(@types/node@25.5.0)(typescript@6.0.2)
       vite: 7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)
 
   '@vitest/pretty-format@4.1.2':
@@ -10850,7 +10792,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.1.0
-      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
+      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
 
   '@vitest/utils@4.1.2':
     dependencies:
@@ -10904,23 +10846,23 @@ snapshots:
     dependencies:
       '@vitest/runner': 4.1.2
       allure-js-commons: 3.6.0(allure-playwright@3.6.0(@playwright/test@1.58.2))
-      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
+      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
     transitivePeerDependencies:
       - allure-playwright
 
-  allure@3.3.1(preact@10.29.0)(typescript@5.9.3):
+  allure@3.3.1(preact@10.29.0)(typescript@6.0.2):
     dependencies:
       '@allurereport/charts-api': 3.3.1
       '@allurereport/ci': 3.3.1
-      '@allurereport/core': 3.3.1(preact@10.29.0)(typescript@5.9.3)
+      '@allurereport/core': 3.3.1(preact@10.29.0)(typescript@6.0.2)
       '@allurereport/core-api': 3.3.1
       '@allurereport/directory-watcher': 3.3.1
       '@allurereport/plugin-allure2': 3.3.1(preact@10.29.0)
       '@allurereport/plugin-api': 3.3.1
-      '@allurereport/plugin-awesome': 3.3.1(preact@10.29.0)(typescript@5.9.3)
-      '@allurereport/plugin-classic': 3.3.1(preact@10.29.0)(typescript@5.9.3)
+      '@allurereport/plugin-awesome': 3.3.1(preact@10.29.0)(typescript@6.0.2)
+      '@allurereport/plugin-classic': 3.3.1(preact@10.29.0)(typescript@6.0.2)
       '@allurereport/plugin-csv': 3.3.1
-      '@allurereport/plugin-dashboard': 3.3.1(preact@10.29.0)(typescript@5.9.3)
+      '@allurereport/plugin-dashboard': 3.3.1(preact@10.29.0)(typescript@6.0.2)
       '@allurereport/plugin-jira': 3.3.1
       '@allurereport/plugin-log': 3.3.1
       '@allurereport/plugin-progress': 3.3.1
@@ -11103,14 +11045,14 @@ snapshots:
 
   baseline-browser-mapping@2.10.12: {}
 
-  better-auth@1.5.6(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))(mongodb@7.1.0(socks@2.8.7))(mysql2@3.15.3)(next@16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.1.2):
+  better-auth@1.5.6(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)))(mongodb@7.1.0(socks@2.8.7))(mysql2@3.15.3)(next@16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.1.2):
     dependencies:
       '@better-auth/core': 1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0)
-      '@better-auth/drizzle-adapter': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))
+      '@better-auth/drizzle-adapter': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)))
       '@better-auth/kysely-adapter': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(kysely@0.28.14)
       '@better-auth/memory-adapter': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)
       '@better-auth/mongo-adapter': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(mongodb@7.1.0(socks@2.8.7))
-      '@better-auth/prisma-adapter': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))
+      '@better-auth/prisma-adapter': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))
       '@better-auth/telemetry': 1.5.6(@better-auth/core@1.5.6(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@opentelemetry/api@1.9.1)(better-call@1.3.2(zod@4.3.6))(jose@6.2.2)(kysely@0.28.14)(nanostores@1.2.0))
       '@better-auth/utils': 0.3.1
       '@better-fetch/fetch': 1.1.21
@@ -11123,15 +11065,15 @@ snapshots:
       nanostores: 1.2.0
       zod: 4.3.6
     optionalDependencies:
-      '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
-      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))
+      '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2)
+      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))
       mongodb: 7.1.0(socks@2.8.7)
       mysql2: 3.15.3
       next: 16.2.1(@opentelemetry/api@1.9.1)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
-      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
+      vitest: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@opentelemetry/api'
@@ -11637,15 +11579,15 @@ snapshots:
   dotenv@16.6.1:
     optional: true
 
-  drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)):
+  drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@opentelemetry/api@1.9.1)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(kysely@0.28.14)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)):
     optionalDependencies:
       '@electric-sql/pglite': 0.3.15
       '@opentelemetry/api': 1.9.1
-      '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2)
       kysely: 0.28.14
       mysql2: 3.15.3
       postgres: 3.4.7
-      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+      prisma: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
     optional: true
 
   dunder-proto@1.0.1:
@@ -12359,11 +12301,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  i18next@24.2.3(typescript@5.9.3):
+  i18next@24.2.3(typescript@6.0.2):
     dependencies:
       '@babel/runtime': 7.29.2
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   i18next@8.4.3: {}
 
@@ -12792,7 +12734,7 @@ snapshots:
   lru.min@1.1.4:
     optional: true
 
-  lucide-react@0.577.0(react@19.2.4):
+  lucide-react@1.7.0(react@19.2.4):
     dependencies:
       react: 19.2.4
 
@@ -13285,7 +13227,7 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3):
+  msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2):
     dependencies:
       '@inquirer/confirm': 5.1.21(@types/node@25.5.0)
       '@mswjs/interceptors': 0.41.3
@@ -13306,7 +13248,7 @@ snapshots:
       until-async: 3.0.2
       yargs: 17.7.2
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - '@types/node'
     optional: true
@@ -13678,16 +13620,16 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 17.0.2
 
-  prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3):
+  prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2):
     dependencies:
       '@prisma/config': 7.4.2
-      '@prisma/dev': 0.20.0(typescript@5.9.3)
+      '@prisma/dev': 0.20.0(typescript@6.0.2)
       '@prisma/engines': 7.4.2
       '@prisma/studio-core': 0.13.1(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       mysql2: 3.15.3
       postgres: 3.4.7
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - '@types/react'
       - magicast
@@ -14012,7 +13954,7 @@ snapshots:
     dependencies:
       resolve-from: 5.0.0
 
-  resolve@1.22.10:
+  resolve@1.22.11:
     dependencies:
       is-core-module: 2.16.1
       path-parse: 1.0.7
@@ -14478,13 +14420,13 @@ snapshots:
 
   trough@2.2.0: {}
 
-  ts-api-utils@2.5.0(typescript@5.9.3):
+  ts-api-utils@2.5.0(typescript@6.0.2):
     dependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   ts-dedent@2.2.0: {}
 
-  ts-node@10.9.2(@types/node@25.5.0)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
@@ -14498,7 +14440,7 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.4
       make-error: 1.3.6
-      typescript: 5.9.3
+      typescript: 6.0.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
@@ -14572,18 +14514,18 @@ snapshots:
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
 
-  typescript-eslint@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3):
+  typescript-eslint@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 8.57.2(@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
-      '@typescript-eslint/parser': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
-      '@typescript-eslint/typescript-estree': 8.57.2(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/eslint-plugin': 8.57.2(@typescript-eslint/parser@8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2))(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
+      '@typescript-eslint/parser': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
+      '@typescript-eslint/typescript-estree': 8.57.2(typescript@6.0.2)
+      '@typescript-eslint/utils': 8.57.2(eslint@10.1.0(jiti@2.6.1))(typescript@6.0.2)
       eslint: 10.1.0(jiti@2.6.1)
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
-  typescript@5.9.3: {}
+  typescript@6.0.2: {}
 
   uc.micro@2.1.0: {}
 
@@ -14702,9 +14644,9 @@ snapshots:
 
   v8-compile-cache-lib@3.0.1: {}
 
-  valibot@1.2.0(typescript@5.9.3):
+  valibot@1.2.0(typescript@6.0.2):
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     optional: true
 
   validate-npm-package-license@3.0.4:
@@ -14755,10 +14697,10 @@ snapshots:
       tsx: 4.21.0
       yaml: 2.8.3
 
-  vitest@4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)):
+  vitest@4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(happy-dom@20.8.9)(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.2
-      '@vitest/mocker': 4.1.2(msw@2.12.10(@types/node@25.5.0)(typescript@5.9.3))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
+      '@vitest/mocker': 4.1.2(msw@2.12.10(@types/node@25.5.0)(typescript@6.0.2))(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
       '@vitest/pretty-format': 4.1.2
       '@vitest/runner': 4.1.2
       '@vitest/snapshot': 4.1.2

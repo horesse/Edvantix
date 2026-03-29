@@ -53,11 +53,6 @@ format: format-cs format-fe format-keycloakify
 clean:
     dotnet clean {{ solution }}
 
-# Trust the development certificate
-
-trust:
-    dotnet dev-certs https --trust
-
 # Setup pre-commit hooks
 
 hook:
@@ -66,28 +61,13 @@ hook:
 
 # First-time setup after cloning
 
-prepare: restore trust hook
+prepare: restore hook
     echo "Setup complete! Run 'just run' to start the application."
 
 # Run the application
 
 run:
     aspire run
-
-# Update EventCatalog bun packages
-
-update-eventcatalog:
-    cd docs/eventcatalog && bun update
-
-# Update Docusaurus bun packages
-
-update-docusaurus:
-    cd docs/docusaurus && bun update
-
-# Update K6 bun packages
-
-update-k6:
-    cd src/Aspire/Edvantix.AppHost/Container/k6 && bun update
 
 # Update Keycloakify bun packages
 

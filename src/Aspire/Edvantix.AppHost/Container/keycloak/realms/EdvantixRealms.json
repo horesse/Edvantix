@@ -887,12 +887,8 @@
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "${CLIENT_ORGANIZATIONFRONT_URL}/*"
-      ],
-      "webOrigins": [
-        "${CLIENT_ORGANIZATIONFRONT_URL}"
-      ],
+      "redirectUris": ["*"],
+      "webOrigins": ["*"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,

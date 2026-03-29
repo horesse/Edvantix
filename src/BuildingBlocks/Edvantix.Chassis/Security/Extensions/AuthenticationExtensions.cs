@@ -23,7 +23,8 @@ public static class AuthenticationExtensions
 
         var keycloakUrl = HttpUtilities
             .AsUrlBuilder()
-            .WithScheme(Http.Schemes.HttpOrHttps)
+            // TODO: здесь по идее должно быть Http.Schemes.HttpOrHttps, но на винде ад
+            .WithScheme(Uri.UriSchemeHttp)
             .WithHost(Components.KeyCloak)
             .Build();
 

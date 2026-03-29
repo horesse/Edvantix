@@ -47,7 +47,6 @@ var personaApi = builder
     .WithReference(profileDb)
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)
-    .WaitFor(keycloak)
     .WithContainerRegistry(registry)
     .WithReference(profileContainer)
     .WaitFor(profileContainer)
@@ -92,12 +91,12 @@ var front = turbo
     .WithMappedEndpointPort()
     .WithHttpHealthCheck()
     .WithExternalHttpEndpoints()
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Uri.UriSchemeHttps))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Uri.UriSchemeHttp))
     .WithKeycloak(keycloak)
     .WaitFor(gateway);
 
-front.WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Http.Schemes.Http));
+front.WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Uri.UriSchemeHttp));
 
 var blogFront = turbo
     .AddApp(Clients.BlogFront, Clients.BlogTurboApp)
@@ -106,8 +105,8 @@ var blogFront = turbo
     .WithMappedEndpointPort()
     .WithHttpHealthCheck()
     .WithExternalHttpEndpoints()
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Uri.UriSchemeHttps))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Uri.UriSchemeHttp))
     .WithKeycloak(keycloak)
     .WaitFor(gateway)
     .WithExplicitStart();
@@ -120,7 +119,7 @@ builder
     .WithFriendlyUrls("Quartz Dashboard", path: Http.Endpoints.QuartzDashboardEndpointPath)
     .WithExplicitStart();
 
-blogFront.WithEnvironment("NEXT_PUBLIC_APP_URL", blogFront.GetEndpoint(Http.Schemes.Http));
+blogFront.WithEnvironment("NEXT_PUBLIC_APP_URL", blogFront.GetEndpoint(Uri.UriSchemeHttp));
 
 var landingFront = turbo
     .AddApp(Clients.LandingFront, Clients.LandingTurboApp)
@@ -129,12 +128,12 @@ var landingFront = turbo
     .WithMappedEndpointPort()
     .WithHttpHealthCheck()
     .WithExternalHttpEndpoints()
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Uri.UriSchemeHttps))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Uri.UriSchemeHttp))
     .WaitFor(gateway)
     .WithExplicitStart();
 
-landingFront.WithEnvironment("NEXT_PUBLIC_APP_URL", landingFront.GetEndpoint(Http.Schemes.Http));
+landingFront.WithEnvironment("NEXT_PUBLIC_APP_URL", landingFront.GetEndpoint(Uri.UriSchemeHttp));
 
 var adminFront = turbo
     .AddApp(Clients.AdminFront, Clients.AdminTurboApp)
@@ -143,13 +142,13 @@ var adminFront = turbo
     .WithMappedEndpointPort()
     .WithHttpHealthCheck()
     .WithExternalHttpEndpoints()
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Http.Schemes.Https))
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Http.Schemes.Http))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Uri.UriSchemeHttps))
+    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Uri.UriSchemeHttp))
     .WithKeycloak(keycloak)
     .WaitFor(gateway)
     .WithExplicitStart();
 
-adminFront.WithEnvironment("NEXT_PUBLIC_APP_URL", adminFront.GetEndpoint(Http.Schemes.Http));
+adminFront.WithEnvironment("NEXT_PUBLIC_APP_URL", adminFront.GetEndpoint(Uri.UriSchemeHttp));
 
 if (builder.ExecutionContext.IsRunMode)
 {

@@ -1,4 +1,4 @@
-﻿namespace Edvantix.AppHost.Extensions.Security;
+﻿﻿namespace Edvantix.AppHost.Extensions.Security;
 
 internal static class KeycloakExtensions
 {
@@ -44,10 +44,6 @@ internal static class KeycloakExtensions
                     .WithReference(keycloakContainer)
                     .WaitForStart(keycloakContainer)
                     .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
-                    .WithEnvironment(
-                        "KEYCLOAK_URL",
-                        keycloakContainer.GetEndpoint(Uri.UriSchemeHttp)
-                    )
                     .WithEnvironment("KEYCLOAK_REALM", _defaultLocalKeycloakName)
                     .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
                 break;
@@ -90,9 +86,9 @@ internal static class KeycloakExtensions
                     keycloakContainer,
                     builder,
                     clientId,
-                    clientType: "API",
+                    "API",
                     clientSecret,
-                    includeContainerHostUrl: true
+                    true
                 );
 
                 builder
@@ -218,7 +214,7 @@ internal static class KeycloakExtensions
             .WithReference(keycloakHosted)
             .WaitFor(keycloakHosted)
             .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
-            .WithEnvironment("KEYCLOAK_URL", keycloakHosted)
+            .WithEnvironment("KEYCLOAK_HTTPS", keycloakHosted)
             .WithEnvironment("KEYCLOAK_REALM", realmParameter)
             .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
     }
@@ -265,8 +261,8 @@ internal static class KeycloakExtensions
                         Name = "KeycloakUrlParameter",
                         Label = "Keycloak URL",
                         InputType = InputType.Text,
-                        Value = "https://identity.edvantix.ru",
-                        Description = "Enter your Keycloak server URL here",
+                        Value = "https://identity.bookworm.com",
+                        Description = "Enter your Keycloak server URL here (must be https)",
                     }
                 );
 

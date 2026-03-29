@@ -47,7 +47,6 @@ var personaApi = builder
     .WithReference(profileDb)
     .WaitFor(profileDb)
     .WithKeycloak(keycloak)
-    .WaitFor(keycloak)
     .WithContainerRegistry(registry)
     .WithReference(profileContainer)
     .WaitFor(profileContainer)

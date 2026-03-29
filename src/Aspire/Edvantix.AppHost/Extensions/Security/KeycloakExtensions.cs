@@ -1,4 +1,4 @@
-﻿﻿namespace Edvantix.AppHost.Extensions.Security;
+﻿namespace Edvantix.AppHost.Extensions.Security;
 
 internal static class KeycloakExtensions
 {

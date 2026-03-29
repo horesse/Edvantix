@@ -18,8 +18,8 @@ importers:
   .:
     devDependencies:
       '@lavamoat/allow-scripts':
-        specifier: ^3.4.3
-        version: 3.4.3
+        specifier: ^4.0.0
+        version: 4.0.0
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^6.0.2
         version: 6.0.2(prettier@3.8.1)
@@ -1784,14 +1784,14 @@ packages:
   '@js-sdsl/ordered-map@4.4.2':
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
 
-  '@lavamoat/aa@4.3.6':
-    resolution: {integrity: sha512-7PHRcAPS1xpexffdWh3AyW2hQ+DS2CYvblzOlP3yM8i7gAEtVIXK6o0BqVSNAJwgMyneaaWeObhyMTT+xSJE6A==}
-    engines: {node: ^16.20.0 || ^18.0.0 || ^20.0.0 || ^22.0.0 || ^24.0.0}
+  '@lavamoat/aa@5.0.0':
+    resolution: {integrity: sha512-xGcKHqr+KPPV8AxnHywycdTUdZzxlTxFcMhTH7HixSRwlQ5DUbWh/bK9skYI6VZViFeSeKymWVDqMgK/D/lr5g==}
+    engines: {node: ^20.19.0 || ^22.5.1 || ^24.0.0}
     hasBin: true
 
-  '@lavamoat/allow-scripts@3.4.3':
-    resolution: {integrity: sha512-BW8k2yslOLpI8M4C+D/SsWJ1l854Wyxh+1E2ItcJnyw+nwDwDsdwfh7g6r6AVaMrvjc+UBEkjFeUiuohnoA+0A==}
-    engines: {node: ^16.20.0 || ^18.0.0 || ^20.0.0 || ^22.0.0 || ^24.0.0}
+  '@lavamoat/allow-scripts@4.0.0':
+    resolution: {integrity: sha512-stjiuDZqH4ODrLGrpqC6rfmda7eJByo07VK2yu1fF/81nTwft6wrQp1sF1FHIWWHWWhKyM+b7EZNU7gUnbMyGA==}
+    engines: {node: ^20.19.0 || ^22.5.1 || ^24.0.0}
     hasBin: true
 
   '@mongodb-js/saslprep@1.4.6':
@@ -6562,8 +6562,8 @@ packages:
     resolution: {integrity: sha512-+1lzwXehGCXSeryaISr6WujZzowloigEofRB+dj75y9RRa/obVcYgbHJd53tdYw8pvZj8GojXaaENws8Ktw/hQ==}
     engines: {node: '>=8'}
 
-  resolve@1.22.10:
-    resolution: {integrity: sha512-NPRy+/ncIMeDlTAsuqwKIiferiawhefFJtkNSW0qZJEqMEb+qBt/77B/jGeeek+F0uOeN05CDa6HXbbIgtVX4w==}
+  resolve@1.22.11:
+    resolution: {integrity: sha512-RfqAvLnMl313r7c9oclB1HhUEAezcpLjz95wFH4LVuhk9JF/r22qmVP9AMmOU4vMX7Q8pN8jwNg/CSpdFnMjTQ==}
     engines: {node: '>= 0.4'}
     hasBin: true
 
@@ -8030,7 +8030,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@32.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -8068,7 +8068,7 @@ snapshots:
       yaml: 2.8.3
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@32.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -8713,13 +8713,13 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@lavamoat/aa@4.3.6':
+  '@lavamoat/aa@5.0.0':
     dependencies:
-      resolve: 1.22.10
+      resolve: 1.22.11
 
-  '@lavamoat/allow-scripts@3.4.3':
+  '@lavamoat/allow-scripts@4.0.0':
     dependencies:
-      '@lavamoat/aa': 4.3.6
+      '@lavamoat/aa': 5.0.0
       '@npmcli/run-script': 10.0.3
       bin-links: 4.0.4
       npm-normalize-package-bin: 3.0.1
@@ -14012,7 +14012,7 @@ snapshots:
     dependencies:
       resolve-from: 5.0.0
 
-  resolve@1.22.10:
+  resolve@1.22.11:
     dependencies:
       is-core-module: 2.16.1
       path-parse: 1.0.7

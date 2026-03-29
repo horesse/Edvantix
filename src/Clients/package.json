@@ -34,7 +34,7 @@
     "allowScripts": {}
   },
   "devDependencies": {
-    "@lavamoat/allow-scripts": "^3.4.3",
+    "@lavamoat/allow-scripts": "^4.0.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",

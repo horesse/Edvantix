@@ -72,12 +72,12 @@ run:
 # Update Keycloakify bun packages
 
 update-keycloakify:
-    cd src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify && bun update
+    cd src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify && bun update --latest
 
 # Update frontend packages
 
 update-fe:
-    cd src/Clients && pnpm update --recursive --filter=*
+    cd src/Clients && pnpm update --recursive --latest
 
 # Update all packages
 

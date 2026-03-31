@@ -37,6 +37,7 @@ var profileContainer = storage
 
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
+var organizationalDb = postgres.AddDatabase(Components.Database.Organizational);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -70,10 +71,21 @@ var notificationApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+var organizationalApi = builder
+    .AddProject<Edvantix_Organizational>(Services.Organizational)
+    .WithKeycloak(keycloak)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithReference(organizationalDb)
+    .WaitFor(organizationalDb)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls();
+
 var gateway = builder
     .AddApiGatewayProxy()
     .WithService(personaApi, true)
     .WithService(notificationApi, true)
+    .WithService(organizationalApi, true)
     .Build();
 
 var turbo = builder
@@ -152,7 +164,11 @@ adminFront.WithEnvironment("NEXT_PUBLIC_APP_URL", adminFront.GetEndpoint(Uri.Uri
 
 if (builder.ExecutionContext.IsRunMode)
 {
-    builder.AddScalar(keycloak).WithOpenAPI(personaApi).WithOpenAPI(notificationApi);
+    builder
+        .AddScalar(keycloak)
+        .WithOpenAPI(personaApi)
+        .WithOpenAPI(notificationApi)
+        .WithOpenAPI(organizationalApi);
 }
 
 await builder.Build().RunAsync();

@@ -5,13 +5,13 @@ import { env } from "@/env.mjs";
 
 const isDev = process.env.NODE_ENV === "development";
 const keycloakUrl = isDev
-    ? env.KEYCLOAK_HTTP || env.KEYCLOAK_HTTPS || ""
-    : env.KEYCLOAK_HTTPS || env.KEYCLOAK_HTTP || "";
+  ? env.KEYCLOAK_HTTP || env.KEYCLOAK_HTTPS || ""
+  : env.KEYCLOAK_HTTPS || env.KEYCLOAK_HTTP || "";
 
 if (!keycloakUrl) {
-    console.warn(
-        "No Keycloak URL provided. Authentication will not work without it.",
-    );
+  console.warn(
+    "No Keycloak URL provided. Authentication will not work without it.",
+  );
 }
 export const auth = betterAuth({
   baseURL: env.NEXT_PUBLIC_APP_URL || "http://localhost:3001",

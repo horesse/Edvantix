@@ -33,7 +33,7 @@
     "@opentelemetry/sdk-node": "^0.214.0",
     "@opentelemetry/sdk-trace-node": "^2.6.1",
     "@t3-oss/env-nextjs": "^0.13.11",
-    "@tanstack/react-query": "^5.95.2",
+    "@tanstack/react-query": "^5.96.0",
     "@tanstack/react-table": "^8.21.3",
     "@vercel/analytics": "2.0.1",
     "better-auth": "^1.5.6",

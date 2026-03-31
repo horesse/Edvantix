@@ -170,5 +170,13 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(notificationApi)
         .WithOpenAPI(organizationalApi);
 }
+else
+{
+    var organizationFrontUrl = builder.AddCorsOriginParameters();
+
+    personaApi.WithCorsOrigins(organizationFrontUrl);
+    organizationalApi.WithCorsOrigins(organizationFrontUrl);
+    notificationApi.WithCorsOrigins(organizationFrontUrl);
+}
 
 await builder.Build().RunAsync();

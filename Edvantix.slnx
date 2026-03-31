@@ -28,6 +28,9 @@
   <Folder Name="/src/Services/Notification/">
     <Project Path="src/Services/Notification/Edvantix.Notification/Edvantix.Notification.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Organizational/">
+    <Project Path="src/Services/Organizational/Edvantix.Organizational/Edvantix.Organizational.csproj" />
+  </Folder>
   <Folder Name="/src/Services/Persona/">
     <Project Path="src/Services/Persona/Edvantix.Persona.ContractTests/Edvantix.Persona.ContractTests.csproj" />
     <Project Path="src/Services/Persona/Edvantix.Persona.UnitTests/Edvantix.Persona.UnitTests.csproj" />

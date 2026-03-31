@@ -1,0 +1,17 @@
+global using System.Diagnostics.CodeAnalysis;
+global using System.Text.Json;
+global using Edvantix.Chassis.EF;
+global using Edvantix.Chassis.Endpoints;
+global using Edvantix.Chassis.EventBus;
+global using Edvantix.Chassis.Exceptions;
+global using Edvantix.Chassis.Repository;
+global using Edvantix.Constants.Aspire;
+global using Edvantix.Constants.Core;
+global using Edvantix.Organizational.Infrastructure;
+global using Edvantix.ServiceDefaults;
+global using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
+global using Edvantix.ServiceDefaults.Kestrel;
+global using FluentValidation;
+global using MassTransit;
+global using Mediator;
+global using Microsoft.EntityFrameworkCore;

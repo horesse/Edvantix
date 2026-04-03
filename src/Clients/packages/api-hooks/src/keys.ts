@@ -43,3 +43,9 @@ export const notificationKeys = {
     [...notificationKeys.all, "list", params] as const,
   unreadCount: () => [...notificationKeys.all, "unread-count"] as const,
 };
+
+export const adminKeys = {
+  all: ["admin"] as const,
+  profiles: (query?: unknown) => [...adminKeys.all, "profiles", query] as const,
+  profile: (id: string) => [...adminKeys.all, "profile", id] as const,
+};

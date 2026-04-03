@@ -217,4 +217,19 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
 
     /// <summary>Помечает профиль как удалённый (мягкое удаление).</summary>
     public void Delete() => IsDeleted = true;
+
+    /// <summary>Признак блокировки аккаунта.</summary>
+    public bool IsBlocked { get; private set; }
+
+    /// <summary>Дата и время последнего входа пользователя.</summary>
+    public DateTime? LastLoginAt { get; private set; }
+
+    /// <summary>Блокирует профиль администратором.</summary>
+    public void Block() => IsBlocked = true;
+
+    /// <summary>Снимает блокировку с профиля.</summary>
+    public void Unblock() => IsBlocked = false;
+
+    /// <summary>Обновляет время последнего входа пользователя.</summary>
+    public void RecordLastLogin() => LastLoginAt = DateTime.UtcNow;
 }

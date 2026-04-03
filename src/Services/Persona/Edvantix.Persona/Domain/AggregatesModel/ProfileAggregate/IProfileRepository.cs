@@ -27,4 +27,16 @@ public interface IProfileRepository : IRepository<Profile>
     /// <see cref="IUnitOfWork.SaveEntitiesAsync"/>.
     /// </summary>
     Task<Profile> AddAsync(Profile profile, CancellationToken cancellationToken = default);
+
+    /// <summary>Возвращает список профилей по спецификации.</summary>
+    Task<IReadOnlyList<Profile>> FindAllAsync(
+        ISpecification<Profile> spec,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Подсчитывает количество профилей по спецификации.</summary>
+    Task<int> CountAsync(
+        ISpecification<Profile> spec,
+        CancellationToken cancellationToken = default
+    );
 }

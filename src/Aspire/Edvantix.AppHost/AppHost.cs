@@ -172,11 +172,11 @@ if (builder.ExecutionContext.IsRunMode)
 }
 else
 {
-    var organizationFrontUrl = builder.AddCorsOriginParameters();
+    var (organizationFrontUrl, adminFrontUrl) = builder.AddCorsOriginParameters();
 
-    personaApi.WithCorsOrigins(organizationFrontUrl);
-    organizationalApi.WithCorsOrigins(organizationFrontUrl);
-    notificationApi.WithCorsOrigins(organizationFrontUrl);
+    personaApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
+    organizationalApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
+    notificationApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
 }
 
 await builder.Build().RunAsync();

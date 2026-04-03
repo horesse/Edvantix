@@ -12,4 +12,10 @@ public interface IKeycloakAdminService
         Guid profileId,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>Отключает учётную запись Keycloak (блокировка пользователя).</summary>
+    Task DisableUserAsync(Guid accountId, CancellationToken cancellationToken = default);
+
+    /// <summary>Включает учётную запись Keycloak (снятие блокировки пользователя).</summary>
+    Task EnableUserAsync(Guid accountId, CancellationToken cancellationToken = default);
 }

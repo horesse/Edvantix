@@ -31,6 +31,7 @@
     "./profiles/*": "./src/profiles/*.ts",
     "./company/*": "./src/company/*.ts",
     "./blog/*": "./src/blog/*.ts",
-    "./notifications/*": "./src/notifications/*.ts"
+    "./notifications/*": "./src/notifications/*.ts",
+    "./admin/*": "./src/admin/*.ts"
   }
 }

@@ -61,6 +61,45 @@ public sealed class KeycloakAdminService(
             );
     }
 
+    /// <inheritdoc />
+    public async Task DisableUserAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        await SetUserEnabledAsync(accountId, enabled: false, cancellationToken);
+        logger.LogInformation("Учётная запись Keycloak {AccountId} отключена", accountId);
+    }
+
+    /// <inheritdoc />
+    public async Task EnableUserAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        await SetUserEnabledAsync(accountId, enabled: true, cancellationToken);
+        logger.LogInformation("Учётная запись Keycloak {AccountId} включена", accountId);
+    }
+
+    /// <summary>Устанавливает флаг enabled для учётной записи Keycloak через Admin API.</summary>
+    private async Task SetUserEnabledAsync(
+        Guid accountId,
+        bool enabled,
+        CancellationToken cancellationToken
+    )
+    {
+        var token = await GetServiceAccountTokenAsync(cancellationToken);
+
+        using var client = httpClientFactory.CreateClient(Components.KeyCloak);
+
+        var userEndpoint = $"admin/realms/{identityOptions.Realm}/users/{accountId}";
+
+        var payload = JsonSerializer.Serialize(new { enabled });
+
+        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint)
+        {
+            Headers = { Authorization = new AuthenticationHeaderValue("Bearer", token) },
+            Content = new StringContent(payload, Encoding.UTF8, "application/json"),
+        };
+
+        var response = await client.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
+    }
+
     /// <summary>
     /// Выполняет PATCH-запрос к Admin API, чтобы добавить атрибут profileId.
     /// Keycloak Admin API PUT /admin/realms/{realm}/users/{id} перезаписывает атрибуты.

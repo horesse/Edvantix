@@ -196,10 +196,20 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("gender");
 
+                    b.Property<bool>("IsBlocked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_blocked");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted")
                         .HasComment("Признак удаленной записи");
+
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_login_at");
 
                     b.Property<string>("Login")
                         .IsRequired()

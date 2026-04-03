@@ -16,25 +16,23 @@ namespace Edvantix.Persona.Infrastructure.Migrations
                 table: "profiles",
                 type: "boolean",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: false
+            );
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "last_login_at",
                 table: "profiles",
                 type: "timestamp with time zone",
-                nullable: true);
+                nullable: true
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "is_blocked",
-                table: "profiles");
+            migrationBuilder.DropColumn(name: "is_blocked", table: "profiles");
 
-            migrationBuilder.DropColumn(
-                name: "last_login_at",
-                table: "profiles");
+            migrationBuilder.DropColumn(name: "last_login_at", table: "profiles");
         }
     }
 }

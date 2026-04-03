@@ -10,7 +10,10 @@ public sealed class BlockProfileCommandHandler(
     ILogger<BlockProfileCommandHandler> logger
 ) : ICommandHandler<BlockProfileCommand>
 {
-    public async ValueTask<Unit> Handle(BlockProfileCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(
+        BlockProfileCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var spec = ProfileSpecification.MinimalForWrite(request.ProfileId);
         var profile = await repository.FindAsync(spec, cancellationToken);

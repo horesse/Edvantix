@@ -35,7 +35,4 @@ public sealed record AdminProfileDetailDto(
     IReadOnlyList<SkillDto> Skills
 );
 
-public sealed record AdminProfilesResponse(
-    IReadOnlyList<AdminProfileDto> Items,
-    int TotalCount
-);
+public sealed record AdminProfilesResponse(IReadOnlyList<AdminProfileDto> Items, int TotalCount);

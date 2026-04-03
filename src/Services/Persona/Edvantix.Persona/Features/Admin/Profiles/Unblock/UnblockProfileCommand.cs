@@ -10,7 +10,10 @@ public sealed class UnblockProfileCommandHandler(
     ILogger<UnblockProfileCommandHandler> logger
 ) : ICommandHandler<UnblockProfileCommand>
 {
-    public async ValueTask<Unit> Handle(UnblockProfileCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(
+        UnblockProfileCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var spec = ProfileSpecification.MinimalForWrite(request.ProfileId);
         var profile = await repository.FindAsync(spec, cancellationToken);

@@ -2,7 +2,8 @@ using Edvantix.Persona.Infrastructure.Blob;
 
 namespace Edvantix.Persona.Features.Admin.Profiles;
 
-public sealed class AdminDomainToDtoMapper(IBlobService blobService) : Mapper<Profile, AdminProfileDto>
+public sealed class AdminDomainToDtoMapper(IBlobService blobService)
+    : Mapper<Profile, AdminProfileDto>
 {
     public override AdminProfileDto Map(Profile source)
     {

@@ -13,11 +13,12 @@ public sealed class AdminProfileListSpecification : Specification<Profile>
         bool? isBlocked = null
     )
     {
-        Query.AsNoTracking()
-             .OrderByDescending(p => p.LastLoginAt)
-             .ThenBy(p => p.FullName.LastName)
-             .Skip(offset)
-             .Take(limit);
+        Query
+            .AsNoTracking()
+            .OrderByDescending(p => p.LastLoginAt)
+            .ThenBy(p => p.FullName.LastName)
+            .Skip(offset)
+            .Take(limit);
 
         ApplyFilters(Query, search, isBlocked);
     }
@@ -32,9 +33,9 @@ public sealed class AdminProfileListSpecification : Specification<Profile>
         {
             var lower = search.ToLowerInvariant();
             query.Where(p =>
-                p.Login.ToLower().Contains(lower) ||
-                p.FullName.LastName.ToLower().Contains(lower) ||
-                p.FullName.FirstName.ToLower().Contains(lower)
+                p.Login.ToLower().Contains(lower)
+                || p.FullName.LastName.ToLower().Contains(lower)
+                || p.FullName.FirstName.ToLower().Contains(lower)
             );
         }
 

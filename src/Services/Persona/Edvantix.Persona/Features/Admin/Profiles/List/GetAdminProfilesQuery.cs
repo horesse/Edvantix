@@ -29,10 +29,7 @@ public sealed class GetAdminProfilesQueryHandler(
             request.IsBlocked
         );
 
-        var countSpec = new AdminProfileCountSpecification(
-            request.Search,
-            request.IsBlocked
-        );
+        var countSpec = new AdminProfileCountSpecification(request.Search, request.IsBlocked);
 
         var profiles = await repository.FindAllAsync(listSpec, cancellationToken);
         var totalCount = await repository.CountAsync(countSpec, cancellationToken);

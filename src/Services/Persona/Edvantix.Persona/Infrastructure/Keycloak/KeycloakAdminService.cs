@@ -62,7 +62,10 @@ public sealed class KeycloakAdminService(
     }
 
     /// <inheritdoc />
-    public async Task DisableUserAsync(Guid accountId, CancellationToken cancellationToken = default)
+    public async Task DisableUserAsync(
+        Guid accountId,
+        CancellationToken cancellationToken = default
+    )
     {
         await SetUserEnabledAsync(accountId, enabled: false, cancellationToken);
         logger.LogInformation("Учётная запись Keycloak {AccountId} отключена", accountId);

@@ -40,13 +40,11 @@ public sealed class ProfileRepository(PersonaDbContext context) : IProfileReposi
     public async Task<IReadOnlyList<Profile>> FindAllAsync(
         ISpecification<Profile> spec,
         CancellationToken cancellationToken = default
-    ) =>
-        await Specification.GetQuery(context.Profiles, spec).ToListAsync(cancellationToken);
+    ) => await Specification.GetQuery(context.Profiles, spec).ToListAsync(cancellationToken);
 
     /// <inheritdoc/>
     public async Task<int> CountAsync(
         ISpecification<Profile> spec,
         CancellationToken cancellationToken = default
-    ) =>
-        await Specification.GetQuery(context.Profiles, spec).CountAsync(cancellationToken);
+    ) => await Specification.GetQuery(context.Profiles, spec).CountAsync(cancellationToken);
 }

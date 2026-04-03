@@ -24,10 +24,11 @@ internal static class CorsExtensions
         HttpMethods.Patch,
         HttpMethods.Options,
     ];
-    
-    public static (IResourceBuilder<ParameterResource> OrganizationFrontUrl, IResourceBuilder<ParameterResource> AdminFrontUrl) AddCorsOriginParameters(
-        this IDistributedApplicationBuilder builder
-    )
+
+    public static (
+        IResourceBuilder<ParameterResource> OrganizationFrontUrl,
+        IResourceBuilder<ParameterResource> AdminFrontUrl
+    ) AddCorsOriginParameters(this IDistributedApplicationBuilder builder)
     {
         var organizationFrontUrl = builder
             .AddParameter("organizationfront-url")

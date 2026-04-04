@@ -11,7 +11,8 @@ public static class Extensions
             _ =>
             {
                 services.AddMigration<IdentityDbContext>();
-            }
+            },
+            excludeDefaultInterceptors: true
         );
     }
 }

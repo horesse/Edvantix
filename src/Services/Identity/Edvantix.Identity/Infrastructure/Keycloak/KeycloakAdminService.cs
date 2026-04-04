@@ -1,9 +1,9 @@
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Edvantix.Chassis.Security.Settings;
 
-namespace Edvantix.Persona.Infrastructure.Keycloak;
+namespace Edvantix.Identity.Infrastructure.Keycloak;
 
 /// <summary>
 /// Реализация <see cref="IKeycloakAdminService"/>.
@@ -35,7 +35,7 @@ public sealed class KeycloakAdminService(
 
     /// <summary>
     /// Получает токен сервисного аккаунта через client_credentials.
-    /// Persona client должен иметь роль manage-users в realm-management.
+    /// Identity client должен иметь роль manage-users в realm-management.
     /// </summary>
     private async Task<string> GetServiceAccountTokenAsync(CancellationToken cancellationToken)
     {
@@ -104,8 +104,7 @@ public sealed class KeycloakAdminService(
     }
 
     /// <summary>
-    /// Выполняет PATCH-запрос к Admin API, чтобы добавить атрибут profileId.
-    /// Keycloak Admin API PUT /admin/realms/{realm}/users/{id} перезаписывает атрибуты.
+    /// Выполняет PUT-запрос к Admin API, чтобы добавить атрибут profileId.
     /// </summary>
     private async Task UpdateUserAttributesAsync(
         Guid accountId,

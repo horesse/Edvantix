@@ -1,4 +1,4 @@
-using Edvantix.Persona.Features.Profiles.Avatar.UpdateAvatar;
+﻿using Edvantix.Persona.Features.Profiles.Avatar.UpdateAvatar;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.UpdateAvatar;
 

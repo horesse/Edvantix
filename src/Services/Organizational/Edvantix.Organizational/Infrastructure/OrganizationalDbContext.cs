@@ -1,4 +1,4 @@
-using Edvantix.Chassis.EF.Contexts;
+﻿using Edvantix.Chassis.EF.Contexts;
 
 namespace Edvantix.Organizational.Infrastructure;
 

@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Admin.Profiles.List;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.List;
 
 public sealed record GetAdminProfilesQuery(
     [property: Description("Индекс страницы")]

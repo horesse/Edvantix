@@ -1,4 +1,4 @@
-using Edvantix.Constants.Other;
+﻿using Edvantix.Constants.Other;
 using Edvantix.Contracts;
 
 namespace Edvantix.Persona.Features.Admin.Profiles.Notify;

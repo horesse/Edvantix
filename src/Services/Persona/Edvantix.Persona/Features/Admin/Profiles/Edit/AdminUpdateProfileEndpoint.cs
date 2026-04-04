@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Admin.Profiles.Edit;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.Edit;
 
 public sealed class AdminUpdateProfileEndpoint
     : IEndpoint<NoContent, (Guid ProfileId, AdminUpdateProfileRequest Request), ISender>

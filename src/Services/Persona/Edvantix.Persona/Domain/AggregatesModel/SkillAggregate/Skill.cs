@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
+﻿namespace Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
 
 /// <summary>
 /// Навык из глобального каталога. Используется как справочник для автодополнения

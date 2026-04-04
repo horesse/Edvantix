@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Admin.Profiles.TrackLogin;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.TrackLogin;
 
 public sealed class RecordLastLoginEndpoint : IEndpoint<NoContent, ISender>
 {

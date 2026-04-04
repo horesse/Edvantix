@@ -1,4 +1,4 @@
-using Edvantix.Persona.Features.Profiles.Create;
+﻿using Edvantix.Persona.Features.Profiles.Create;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.Registration;
 

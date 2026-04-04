@@ -1,4 +1,4 @@
-using Edvantix.Constants.Other;
+﻿using Edvantix.Constants.Other;
 using Edvantix.Notification.Infrastructure.Senders.InApp;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;

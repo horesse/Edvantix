@@ -1,4 +1,4 @@
-namespace Edvantix.Contracts;
+﻿namespace Edvantix.Contracts;
 
 /// <summary>
 /// Интеграционное событие для создания in-app уведомления.

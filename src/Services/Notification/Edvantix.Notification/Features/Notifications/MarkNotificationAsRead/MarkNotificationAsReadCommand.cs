@@ -1,4 +1,4 @@
-namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
+﻿namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
 
 public sealed record MarkNotificationAsReadCommand(Guid NotificationId, Guid AccountId)
     : ICommand<bool>;

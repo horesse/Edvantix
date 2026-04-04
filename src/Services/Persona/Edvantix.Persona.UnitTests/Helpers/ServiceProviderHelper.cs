@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Security.Keycloak;
+﻿using Edvantix.Chassis.Security.Keycloak;
 
 namespace Edvantix.Persona.UnitTests.Helpers;
 

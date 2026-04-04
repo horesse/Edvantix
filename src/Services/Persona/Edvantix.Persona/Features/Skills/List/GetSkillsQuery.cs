@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Skills.List;
+﻿namespace Edvantix.Persona.Features.Skills.List;
 
 public sealed record GetSkillsQuery(string Query, int Limit = 20) : IQuery<IReadOnlyList<SkillDto>>;
 

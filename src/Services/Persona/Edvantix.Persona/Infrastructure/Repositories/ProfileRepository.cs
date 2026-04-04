@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Specification.Evaluators;
+﻿using Edvantix.Chassis.Specification.Evaluators;
 
 namespace Edvantix.Persona.Infrastructure.Repositories;
 

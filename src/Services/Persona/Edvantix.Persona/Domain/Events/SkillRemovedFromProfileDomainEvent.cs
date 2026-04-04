@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Domain.Events;
+﻿namespace Edvantix.Persona.Domain.Events;
 
 public sealed class SkillRemovedFromProfileDomainEvent(Guid profileId, Guid skillId) : DomainEvent
 {

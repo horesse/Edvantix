@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Specification;
+﻿using Edvantix.Chassis.Specification;
 using Edvantix.Persona.Features.Profiles.Details;
 using Edvantix.Persona.UnitTests.Helpers;
 

@@ -1,4 +1,4 @@
-global using System.Security.Claims;
+﻿global using System.Security.Claims;
 global using Edvantix.Chassis.Exceptions;
 global using Edvantix.Chassis.Mapper;
 global using Edvantix.Chassis.Repository;
@@ -12,9 +12,9 @@ global using Edvantix.Persona.Features.Profiles;
 global using Edvantix.Persona.Features.Skills;
 global using Edvantix.Persona.Grpc.Services;
 global using Edvantix.Persona.Infrastructure.Blob;
-global using Edvantix.Persona.Infrastructure.Keycloak;
 global using Edvantix.SharedKernel.SeedWork;
 global using FluentValidation.TestHelper;
+global using MassTransit;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;

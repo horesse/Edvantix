@@ -1,4 +1,4 @@
-using Edvantix.Chassis.CQRS;
+﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;

@@ -1,4 +1,4 @@
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Edvantix.Persona.Features.Profiles.Avatar.UpdateAvatar;

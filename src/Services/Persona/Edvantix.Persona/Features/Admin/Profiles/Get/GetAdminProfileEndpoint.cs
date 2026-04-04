@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Admin.Profiles.Get;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.Get;
 
 public sealed class GetAdminProfileEndpoint : IEndpoint<Ok<AdminProfileDetailDto>, Guid, ISender>
 {

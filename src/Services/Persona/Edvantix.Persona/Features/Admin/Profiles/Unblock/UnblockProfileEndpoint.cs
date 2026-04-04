@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Admin.Profiles.Unblock;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.Unblock;
 
 public sealed class UnblockProfileEndpoint : IEndpoint<NoContent, Guid, ISender>
 {

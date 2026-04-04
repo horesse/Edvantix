@@ -1,4 +1,4 @@
-namespace Edvantix.Notification.Features.Notifications.GetNotifications;
+﻿namespace Edvantix.Notification.Features.Notifications.GetNotifications;
 
 public sealed record GetNotificationsQuery(
     [property: Description("Идентификатор аккаунта Keycloak")] Guid AccountId,

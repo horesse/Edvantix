@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Admin.Profiles.Notify;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.Notify;
 
 public sealed class SendAdminNotificationEndpoint
     : IEndpoint<NoContent, (Guid ProfileId, SendAdminNotificationRequest Request), ISender>

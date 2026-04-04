@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
+﻿namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
 /// <summary>
 /// Спецификация для постраничного получения профилей в административной панели.

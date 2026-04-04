@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Profiles.Get;
+﻿namespace Edvantix.Persona.Features.Profiles.Get;
 
 public sealed class GetProfileEndpoint : IEndpoint<Ok<ProfileDto>, ISender>
 {

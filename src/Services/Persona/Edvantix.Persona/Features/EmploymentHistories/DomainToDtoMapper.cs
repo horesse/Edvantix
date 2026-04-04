@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.EmploymentHistories;
+﻿namespace Edvantix.Persona.Features.EmploymentHistories;
 
 public sealed class DomainToDtoMapper : Mapper<EmploymentHistory, EmploymentHistoryDto>
 {

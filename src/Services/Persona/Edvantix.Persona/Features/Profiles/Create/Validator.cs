@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Profiles.Create;
+﻿namespace Edvantix.Persona.Features.Profiles.Create;
 
 public sealed class Validator : AbstractValidator<RegistrationCommand>
 {

@@ -1,4 +1,4 @@
-using MimeKit.Text;
+﻿using MimeKit.Text;
 
 namespace Edvantix.Notification.Domain.Builders;
 

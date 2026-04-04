@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Profiles.Avatar.UpdateAvatar;
+﻿namespace Edvantix.Persona.Features.Profiles.Avatar.UpdateAvatar;
 
 public sealed class UpdateAvatarValidator : AbstractValidator<UpdateAvatarCommand>
 {

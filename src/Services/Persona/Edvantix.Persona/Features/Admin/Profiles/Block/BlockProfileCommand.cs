@@ -1,4 +1,4 @@
-using Edvantix.Persona.Infrastructure.Keycloak;
+﻿using Edvantix.Contracts;
 
 namespace Edvantix.Persona.Features.Admin.Profiles.Block;
 
@@ -6,7 +6,7 @@ public sealed record BlockProfileCommand(Guid ProfileId) : ICommand;
 
 public sealed class BlockProfileCommandHandler(
     IProfileRepository repository,
-    IKeycloakAdminService keycloakAdminService,
+    IPublishEndpoint publishEndpoint,
     ILogger<BlockProfileCommandHandler> logger
 ) : ICommandHandler<BlockProfileCommand>
 {
@@ -22,8 +22,12 @@ public sealed class BlockProfileCommandHandler(
 
         profile.Block();
 
-        await keycloakAdminService.DisableUserAsync(profile.AccountId, cancellationToken);
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        await publishEndpoint.Publish(
+            new DisableKeycloakUserIntegrationEvent(profile.AccountId),
+            cancellationToken
+        );
 
         logger.LogInformation(
             "Профиль {ProfileId} (аккаунт {AccountId}) заблокирован администратором",

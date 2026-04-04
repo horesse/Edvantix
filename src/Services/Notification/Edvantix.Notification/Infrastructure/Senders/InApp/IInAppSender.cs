@@ -1,4 +1,4 @@
-namespace Edvantix.Notification.Infrastructure.Senders.InApp;
+﻿namespace Edvantix.Notification.Infrastructure.Senders.InApp;
 
 /// <summary>
 /// Интерфейс отправителя in-app уведомлений.

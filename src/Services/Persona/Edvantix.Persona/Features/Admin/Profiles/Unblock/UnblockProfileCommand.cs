@@ -1,4 +1,4 @@
-using Edvantix.Persona.Infrastructure.Keycloak;
+﻿using Edvantix.Contracts;
 
 namespace Edvantix.Persona.Features.Admin.Profiles.Unblock;
 
@@ -6,7 +6,7 @@ public sealed record UnblockProfileCommand(Guid ProfileId) : ICommand;
 
 public sealed class UnblockProfileCommandHandler(
     IProfileRepository repository,
-    IKeycloakAdminService keycloakAdminService,
+    IPublishEndpoint publishEndpoint,
     ILogger<UnblockProfileCommandHandler> logger
 ) : ICommandHandler<UnblockProfileCommand>
 {
@@ -22,8 +22,12 @@ public sealed class UnblockProfileCommandHandler(
 
         profile.Unblock();
 
-        await keycloakAdminService.EnableUserAsync(profile.AccountId, cancellationToken);
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+        await publishEndpoint.Publish(
+            new EnableKeycloakUserIntegrationEvent(profile.AccountId),
+            cancellationToken
+        );
 
         logger.LogInformation(
             "Блокировка профиля {ProfileId} (аккаунт {AccountId}) снята администратором",

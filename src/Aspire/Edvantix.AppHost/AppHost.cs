@@ -1,4 +1,4 @@
-var builder = DistributedApplication.CreateBuilder(args);
+﻿var builder = DistributedApplication.CreateBuilder(args);
 
 builder.AddAzureContainerAppEnvironment(Components.Azure.ContainerApp).ProvisionAsService();
 
@@ -36,6 +36,7 @@ var profileContainer = storage
     .WithAzureStorageExplorer();
 
 var profileDb = postgres.AddDatabase(Components.Database.Persona);
+var identityDb = postgres.AddDatabase(Components.Database.Identity);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
 var organizationalDb = postgres.AddDatabase(Components.Database.Organizational);
 
@@ -80,6 +81,15 @@ var organizationalApi = builder
     .WaitFor(organizationalDb)
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
+
+builder
+    .AddProject<Edvantix_Identity>(Services.Identity)
+    .WithReference(identityDb)
+    .WaitFor(identityDb)
+    .WithKeycloak(keycloak)
+    .WithContainerRegistry(registry)
+    .WithReference(queue)
+    .WaitFor(queue);
 
 var gateway = builder
     .AddApiGatewayProxy()

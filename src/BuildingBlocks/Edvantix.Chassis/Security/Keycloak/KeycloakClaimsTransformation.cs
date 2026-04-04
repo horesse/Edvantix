@@ -1,4 +1,4 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.Json.Nodes;
 using Edvantix.Chassis.Security.Extensions;
 using Microsoft.AspNetCore.Authentication;

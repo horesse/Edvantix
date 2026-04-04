@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Specification;
+﻿using Edvantix.Chassis.Specification;
 using Edvantix.Persona.UnitTests.Grpc.Context;
 using Grpc.Core;
 

@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Admin.Profiles.Block;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.Block;
 
 public sealed class BlockProfileEndpoint : IEndpoint<NoContent, Guid, ISender>
 {

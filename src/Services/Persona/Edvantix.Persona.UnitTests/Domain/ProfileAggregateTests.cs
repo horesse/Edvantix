@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.UnitTests.Domain;
+﻿namespace Edvantix.Persona.UnitTests.Domain;
 
 public sealed class ProfileAggregateTests
 {

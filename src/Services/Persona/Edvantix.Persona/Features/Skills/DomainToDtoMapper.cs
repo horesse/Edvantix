@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Skills;
+﻿namespace Edvantix.Persona.Features.Skills;
 
 public sealed class DomainToDtoMapper : Mapper<ProfileSkill, SkillDto>
 {

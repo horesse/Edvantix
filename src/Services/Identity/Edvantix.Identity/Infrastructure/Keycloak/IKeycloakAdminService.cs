@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Infrastructure.Keycloak;
+﻿namespace Edvantix.Identity.Infrastructure.Keycloak;
 
 /// <summary>Сервис для взаимодействия с Keycloak Admin REST API.</summary>
 public interface IKeycloakAdminService

@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
+﻿namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
 /// <summary>
 /// Репозиторий профилей пользователей.

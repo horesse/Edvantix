@@ -27,7 +27,9 @@ function getRealmRoles(): string[] {
  * Guards routes that require the `admin` realm role.
  * Reads realm roles from the decoded JWT access token stored in localStorage.
  */
-export function AdminGuard({ children }: Readonly<{ children: React.ReactNode }>) {
+export function AdminGuard({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -42,20 +44,22 @@ export function AdminGuard({ children }: Readonly<{ children: React.ReactNode }>
 
   if (!isAdmin) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-6">
+      <div className="bg-background flex min-h-screen items-center justify-center p-6">
         <div className="flex max-w-sm flex-col items-center gap-4 text-center">
-          <div className="flex size-16 items-center justify-center rounded-full bg-destructive/10">
-            <ShieldAlert className="size-8 text-destructive" />
+          <div className="bg-destructive/10 flex size-16 items-center justify-center rounded-full">
+            <ShieldAlert className="text-destructive size-8" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-foreground">Доступ запрещён</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <h1 className="text-foreground text-xl font-bold">
+              Доступ запрещён
+            </h1>
+            <p className="text-muted-foreground mt-1 text-sm">
               У вас нет прав администратора для доступа к этой панели.
             </p>
           </div>
           <button
             onClick={() => signOut()}
-            className="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:bg-destructive/90"
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-lg px-4 py-2 text-sm font-medium"
           >
             Выйти
           </button>

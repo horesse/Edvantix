@@ -20,7 +20,10 @@ function SectionLabel({ children }: Readonly<{ children: React.ReactNode }>) {
   );
 }
 
-function isActive(pathname: string, item: { url: string; exact?: boolean }): boolean {
+function isActive(
+  pathname: string,
+  item: { url: string; exact?: boolean },
+): boolean {
   if (item.exact) return pathname === item.url;
   return pathname.startsWith(item.url);
 }

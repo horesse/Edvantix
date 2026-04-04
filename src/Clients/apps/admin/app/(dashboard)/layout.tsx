@@ -15,9 +15,7 @@ export default function DashboardLayout({
         <div className="bg-background text-foreground flex h-screen overflow-hidden">
           <AppSidebar />
           <main className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-            <div className="px-6 pt-6 pb-6 lg:px-8 lg:pt-8">
-              {children}
-            </div>
+            <div className="px-6 pt-6 pb-6 lg:px-8 lg:pt-8">{children}</div>
           </main>
         </div>
       </AdminGuard>

@@ -21,7 +21,7 @@ export function SidebarLogo({ className }: Readonly<SidebarLogoProps>) {
         </svg>
       </div>
       <div className="min-w-0">
-        <span className="text-foreground block text-base font-bold leading-none tracking-tight">
+        <span className="text-foreground block text-base leading-none font-bold tracking-tight">
           Edvantix
         </span>
         <span className="text-muted-foreground block text-[10px] font-medium tracking-wider uppercase">

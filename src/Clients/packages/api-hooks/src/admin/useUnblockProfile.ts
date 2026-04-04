@@ -16,8 +16,7 @@ export default function useUnblockProfile(
 
   return useMutation({
     ...options,
-    mutationFn: (profileId: string) =>
-      adminApiClient.unblockProfile(profileId),
+    mutationFn: (profileId: string) => adminApiClient.unblockProfile(profileId),
     onSuccess: (...args) => {
       const [, profileId] = args;
       queryClient.invalidateQueries({ queryKey: adminKeys.profiles() });

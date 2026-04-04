@@ -38,7 +38,9 @@ async function fetchFreshToken(): Promise<string | null> {
   }
 }
 
-export function AuthGuard({ children }: Readonly<{ children: React.ReactNode }>) {
+export function AuthGuard({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const { isAuthenticated, isLoading } = useUserContext();
   const [tokenReady, setTokenReady] = useState(false);
 

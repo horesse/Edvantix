@@ -16,8 +16,7 @@ export default function useBlockProfile(
 
   return useMutation({
     ...options,
-    mutationFn: (profileId: string) =>
-      adminApiClient.blockProfile(profileId),
+    mutationFn: (profileId: string) => adminApiClient.blockProfile(profileId),
     onSuccess: (...args) => {
       const [, profileId] = args;
       queryClient.invalidateQueries({ queryKey: adminKeys.profiles() });

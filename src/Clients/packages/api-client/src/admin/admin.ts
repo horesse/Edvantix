@@ -65,10 +65,7 @@ class AdminApiClient {
     profileId: string,
     request: AdminUpdateProfileRequest,
   ): Promise<void> {
-    await apiClient.patch<void>(
-      `${BASE}/admin/profiles/${profileId}`,
-      request,
-    );
+    await apiClient.patch<void>(`${BASE}/admin/profiles/${profileId}`, request);
   }
 
   /** Records the current admin's last login timestamp. */

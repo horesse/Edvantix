@@ -3,6 +3,8 @@
 import type React from "react";
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import {
   Bell,
   Filter,
@@ -13,10 +15,9 @@ import {
   Shield,
   ShieldAlert,
   ShieldCheck,
-  Users,
   UserX,
+  Users,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import useAdminProfiles from "@workspace/api-hooks/admin/useAdminProfiles";
@@ -73,14 +74,27 @@ interface StatCardProps {
   value: number | string;
 }
 
-function StatCard({ icon: Icon, iconBg, iconColor, label, value }: StatCardProps) {
+function StatCard({
+  icon: Icon,
+  iconBg,
+  iconColor,
+  label,
+  value,
+}: StatCardProps) {
   return (
     <div className="bg-card border-border flex items-center gap-3 rounded-xl border px-4 py-3 shadow-sm">
-      <div className={cn("flex size-8 shrink-0 items-center justify-center rounded-lg", iconBg)}>
+      <div
+        className={cn(
+          "flex size-8 shrink-0 items-center justify-center rounded-lg",
+          iconBg,
+        )}
+      >
         <Icon className={cn("size-4", iconColor)} />
       </div>
       <div>
-        <p className="text-foreground text-lg leading-none font-bold tabular-nums">{value}</p>
+        <p className="text-foreground text-lg leading-none font-bold tabular-nums">
+          {value}
+        </p>
         <p className="text-muted-foreground mt-0.5 text-[11px]">{label}</p>
       </div>
     </div>
@@ -103,10 +117,16 @@ function SkeletonRows() {
               </div>
             </div>
           </td>
-          <td className="px-3 py-3"><Skeleton className="h-3 w-28" /></td>
-          <td className="px-3 py-3"><Skeleton className="h-5 w-20 rounded-full" /></td>
-          <td className="px-3 py-3"><Skeleton className="h-3 w-28" /></td>
-          <td className="px-3 py-3 w-20" />
+          <td className="px-3 py-3">
+            <Skeleton className="h-3 w-28" />
+          </td>
+          <td className="px-3 py-3">
+            <Skeleton className="h-5 w-20 rounded-full" />
+          </td>
+          <td className="px-3 py-3">
+            <Skeleton className="h-3 w-28" />
+          </td>
+          <td className="w-20 px-3 py-3" />
         </tr>
       ))}
     </>
@@ -158,8 +178,12 @@ function ProfileRow({
             {initials}
           </div>
           <div className="min-w-0">
-            <p className="text-foreground truncate text-sm font-medium hover:underline">{profile.fullName}</p>
-            <p className="text-muted-foreground truncate text-xs">@{profile.userName}</p>
+            <p className="text-foreground truncate text-sm font-medium hover:underline">
+              {profile.fullName}
+            </p>
+            <p className="text-muted-foreground truncate text-xs">
+              @{profile.userName}
+            </p>
           </div>
         </button>
       </td>
@@ -322,7 +346,9 @@ function SendNotificationDialog({
               Отмена
             </Button>
             <Button type="submit" disabled={send.isPending}>
-              {send.isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+              {send.isPending && (
+                <Loader2 className="mr-2 size-4 animate-spin" />
+              )}
               Отправить
             </Button>
           </DialogFooter>
@@ -351,8 +377,9 @@ function BlockConfirmDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Заблокировать пользователя?</AlertDialogTitle>
           <AlertDialogDescription>
-            Пользователь <strong>{profile?.fullName}</strong> (@{profile?.userName}) не сможет
-            войти в систему. Вы можете разблокировать его позже.
+            Пользователь <strong>{profile?.fullName}</strong> (@
+            {profile?.userName}) не сможет войти в систему. Вы можете
+            разблокировать его позже.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -390,8 +417,8 @@ function UnblockConfirmDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Разблокировать пользователя?</AlertDialogTitle>
           <AlertDialogDescription>
-            Пользователь <strong>{profile?.fullName}</strong> (@{profile?.userName}) снова сможет
-            войти в систему.
+            Пользователь <strong>{profile?.fullName}</strong> (@
+            {profile?.userName}) снова сможет войти в систему.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -426,9 +453,13 @@ export function ProfilesPage() {
   const pageSize = 20;
 
   const router = useRouter();
-  const [notifyTarget, setNotifyTarget] = useState<AdminProfileDto | null>(null);
+  const [notifyTarget, setNotifyTarget] = useState<AdminProfileDto | null>(
+    null,
+  );
   const [blockTarget, setBlockTarget] = useState<AdminProfileDto | null>(null);
-  const [unblockTarget, setUnblockTarget] = useState<AdminProfileDto | null>(null);
+  const [unblockTarget, setUnblockTarget] = useState<AdminProfileDto | null>(
+    null,
+  );
 
   const isBlocked =
     activeTab === "blocked" ? true : activeTab === "active" ? false : undefined;
@@ -608,7 +639,8 @@ export function ProfilesPage() {
         {!isLoading && total > 0 && (
           <div className="border-border flex items-center justify-between border-t px-5 py-3">
             <p className="text-muted-foreground text-xs">
-              {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, total)} из {total}
+              {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, total)} из{" "}
+              {total}
             </p>
             <div className="flex items-center gap-1">
               <button
@@ -619,7 +651,10 @@ export function ProfilesPage() {
                 ‹
               </button>
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                const startPage = Math.max(1, Math.min(page - 2, totalPages - 4));
+                const startPage = Math.max(
+                  1,
+                  Math.min(page - 2, totalPages - 4),
+                );
                 const p = startPage + i;
                 if (p > totalPages) return null;
                 return (
@@ -665,7 +700,9 @@ export function ProfilesPage() {
       />
       <UnblockConfirmDialog
         profile={unblockTarget}
-        onConfirm={() => unblockTarget && unblockMutation.mutate(unblockTarget.id)}
+        onConfirm={() =>
+          unblockTarget && unblockMutation.mutate(unblockTarget.id)
+        }
         onClose={() => setUnblockTarget(null)}
         isPending={unblockMutation.isPending}
       />

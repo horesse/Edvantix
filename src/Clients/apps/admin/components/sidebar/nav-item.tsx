@@ -14,7 +14,13 @@ interface NavItemProps {
   onClick?: () => void;
 }
 
-export function NavItem({ href, icon: Icon, label, isActive, onClick }: Readonly<NavItemProps>) {
+export function NavItem({
+  href,
+  icon: Icon,
+  label,
+  isActive,
+  onClick,
+}: Readonly<NavItemProps>) {
   return (
     <Link
       href={href}

@@ -33,7 +33,7 @@ export function SidebarUser() {
             {initials}
           </div>
           <div className="min-w-0 flex-1 text-left">
-            <p className="text-sidebar-foreground truncate text-sm font-medium leading-none">
+            <p className="text-sidebar-foreground truncate text-sm leading-none font-medium">
               {name}
             </p>
             <p className="text-sidebar-foreground/50 mt-0.5 flex items-center gap-1 text-[11px]">
@@ -48,10 +48,7 @@ export function SidebarUser() {
           <p className="text-sm font-medium">{name}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          variant="destructive"
-          onClick={() => signOut()}
-        >
+        <DropdownMenuItem variant="destructive" onClick={() => signOut()}>
           <LogOut className="size-4" />
           Выйти
         </DropdownMenuItem>

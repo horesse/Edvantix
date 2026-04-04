@@ -1,7 +1,4 @@
-import {
-  type UseMutationOptions,
-  useMutation,
-} from "@tanstack/react-query";
+import { type UseMutationOptions, useMutation } from "@tanstack/react-query";
 
 import adminApiClient from "@workspace/api-client/admin/admin";
 import type { SendAdminNotificationRequest } from "@workspace/types/admin";

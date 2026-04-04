@@ -1,8 +1,4 @@
-import {
-  LayoutDashboard,
-  Settings,
-  Users,
-} from "lucide-react";
+import { LayoutDashboard, Settings, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export interface NavItem {

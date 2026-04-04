@@ -15,7 +15,9 @@ export function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-foreground text-2xl font-bold tracking-tight">Дашборд</h1>
+        <h1 className="text-foreground text-2xl font-bold tracking-tight">
+          Дашборд
+        </h1>
         <p className="text-muted-foreground mt-1 text-sm">Обзор системы</p>
       </div>
 
@@ -30,7 +32,9 @@ export function DashboardPage() {
             {isLoading ? (
               <Skeleton className="mt-1 h-7 w-16" />
             ) : (
-              <p className="text-foreground text-3xl font-bold tabular-nums">{total}</p>
+              <p className="text-foreground text-3xl font-bold tabular-nums">
+                {total}
+              </p>
             )}
           </div>
         </div>

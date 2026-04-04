@@ -3,6 +3,8 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 
+import Link from "next/link";
+
 import {
   AlertTriangle,
   ArrowLeft,
@@ -22,7 +24,6 @@ import {
   User,
   X,
 } from "lucide-react";
-import Link from "next/link";
 import { toast } from "sonner";
 
 import useAdminProfile from "@workspace/api-hooks/admin/useAdminProfile";
@@ -31,10 +32,10 @@ import useUnblockProfile from "@workspace/api-hooks/admin/useUnblockProfile";
 import useUpdateAdminProfile from "@workspace/api-hooks/admin/useUpdateAdminProfile";
 import type { AdminProfileDetailDto } from "@workspace/types/admin";
 import {
-  ContactType,
   type ContactRequest,
-  type EducationRequest,
+  ContactType,
   EducationLevel,
+  type EducationRequest,
   type EmploymentHistoryRequest,
 } from "@workspace/types/profile";
 import {
@@ -84,7 +85,10 @@ import { Textarea } from "@workspace/ui/components/textarea";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-const CONTACT_TYPE_LABELS: Record<number, { label: string; icon: typeof Mail }> = {
+const CONTACT_TYPE_LABELS: Record<
+  number,
+  { label: string; icon: typeof Mail }
+> = {
   [ContactType.Email]: { label: "Email", icon: Mail },
   [ContactType.Phone]: { label: "Телефон", icon: Phone },
   [ContactType.Uri]: { label: "Ссылка", icon: Sparkles },
@@ -131,7 +135,8 @@ function PageSkeleton() {
 // ── Profile header ───────────────────────────────────────────────────────────
 
 function ProfileHeader({ profile }: { profile: AdminProfileDetailDto }) {
-  const initials = `${profile.lastName[0]}${profile.firstName[0]}`.toUpperCase();
+  const initials =
+    `${profile.lastName[0]}${profile.firstName[0]}`.toUpperCase();
   const lastLogin = profile.lastLoginAt
     ? new Date(profile.lastLoginAt).toLocaleString("ru-RU", {
         day: "2-digit",
@@ -209,7 +214,7 @@ function ListItem({
       <button
         type="button"
         onClick={onRemove}
-        className="absolute top-3 right-3 flex size-7 items-center justify-center rounded-lg text-rose-400 opacity-0 transition-opacity hover:bg-rose-50 hover:text-rose-600 group-hover:opacity-100"
+        className="absolute top-3 right-3 flex size-7 items-center justify-center rounded-lg text-rose-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-rose-50 hover:text-rose-600"
         title="Удалить"
       >
         <Trash2 className="size-3.5" />
@@ -982,7 +987,7 @@ export function ProfileEditPage({ profileId }: { profileId: string }) {
                     <dt className="text-muted-foreground text-xs">
                       ID профиля
                     </dt>
-                    <dd className="text-foreground mt-0.5 break-all font-mono text-xs">
+                    <dd className="text-foreground mt-0.5 font-mono text-xs break-all">
                       {profile.id}
                     </dd>
                   </div>
@@ -991,7 +996,7 @@ export function ProfileEditPage({ profileId }: { profileId: string }) {
                     <dt className="text-muted-foreground text-xs">
                       ID аккаунта (Keycloak)
                     </dt>
-                    <dd className="text-foreground mt-0.5 break-all font-mono text-xs">
+                    <dd className="text-foreground mt-0.5 font-mono text-xs break-all">
                       {profile.accountId}
                     </dd>
                   </div>
@@ -1055,7 +1060,7 @@ export function ProfileEditPage({ profileId }: { profileId: string }) {
                       <Mail className="size-3" />
                       Контакты
                     </dt>
-                    <dd className="tabular-nums font-medium">
+                    <dd className="font-medium tabular-nums">
                       {contacts.length}
                     </dd>
                   </div>
@@ -1064,7 +1069,7 @@ export function ProfileEditPage({ profileId }: { profileId: string }) {
                       <Briefcase className="size-3" />
                       Опыт работы
                     </dt>
-                    <dd className="tabular-nums font-medium">
+                    <dd className="font-medium tabular-nums">
                       {employmentHistories.length}
                     </dd>
                   </div>
@@ -1073,7 +1078,7 @@ export function ProfileEditPage({ profileId }: { profileId: string }) {
                       <BookOpen className="size-3" />
                       Образование
                     </dt>
-                    <dd className="tabular-nums font-medium">
+                    <dd className="font-medium tabular-nums">
                       {educations.length}
                     </dd>
                   </div>
@@ -1082,7 +1087,7 @@ export function ProfileEditPage({ profileId }: { profileId: string }) {
                       <Sparkles className="size-3" />
                       Навыки
                     </dt>
-                    <dd className="tabular-nums font-medium">
+                    <dd className="font-medium tabular-nums">
                       {skills.length}/20
                     </dd>
                   </div>

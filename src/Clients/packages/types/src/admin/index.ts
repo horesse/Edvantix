@@ -18,11 +18,6 @@ export type AdminProfileDto = {
   lastLoginAt: string | null;
 };
 
-export type AdminProfilesResponse = {
-  items: AdminProfileDto[];
-  totalCount: number;
-};
-
 export type GetAdminProfilesRequest = {
   pageIndex?: number;
   pageSize?: number;

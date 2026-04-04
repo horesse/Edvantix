@@ -1,10 +1,11 @@
 import type {
   AdminProfileDetailDto,
-  AdminProfilesResponse,
+  AdminProfileDto,
   AdminUpdateProfileRequest,
   GetAdminProfilesRequest,
   SendAdminNotificationRequest,
 } from "@workspace/types/admin";
+import type { PagedResult } from "@workspace/types/shared";
 
 import { apiClient } from "../client";
 
@@ -14,12 +15,20 @@ class AdminApiClient {
   /** Retrieves a paged list of all profiles for admin management. */
   public async getProfiles(
     query: GetAdminProfilesRequest,
-  ): Promise<AdminProfilesResponse> {
-    const response = await apiClient.get<AdminProfilesResponse>(
+  ): Promise<PagedResult<AdminProfileDto>> {
+    const response = await apiClient.get<AdminProfileDto[]>(
       `${BASE}/admin/profiles`,
       { params: query },
     );
-    return response.data;
+
+    const totalCount = Number(
+      response.headers?.["pagination-count"] ?? response.data.length,
+    );
+
+    return {
+      items: response.data,
+      totalCount,
+    };
   }
 
   /** Blocks a profile, preventing the user from authenticating. */

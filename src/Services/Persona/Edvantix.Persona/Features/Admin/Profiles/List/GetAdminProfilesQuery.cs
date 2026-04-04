@@ -1,30 +1,36 @@
-using Edvantix.Persona.Features.Admin.Profiles;
-
 namespace Edvantix.Persona.Features.Admin.Profiles.List;
 
 public sealed record GetAdminProfilesQuery(
-    [property: DefaultValue(1)] int PageIndex = 1,
-    [property: DefaultValue(20)] int PageSize = 20,
-    string? Search = null,
-    bool? IsBlocked = null
-) : IQuery<AdminProfilesResponse>;
+    [property: Description("Индекс страницы")]
+    [property: DefaultValue(Pagination.DefaultPageIndex)]
+        int PageIndex = Pagination.DefaultPageIndex,
+    [property: Description("Количество элементов на странице")]
+    [property: DefaultValue(Pagination.DefaultPageSize)]
+        int PageSize = Pagination.DefaultPageSize,
+    [property: Description("Поиск по имени или логину")] string? Search = null,
+    [property: Description("Фильтр по статусу блокировки")] bool? IsBlocked = null
+) : IQuery<PagedResult<AdminProfileDto>>;
 
 public sealed class GetAdminProfilesQueryHandler(
     IProfileRepository repository,
     IMapper<Profile, AdminProfileDto> mapper
-) : IQueryHandler<GetAdminProfilesQuery, AdminProfilesResponse>
+) : IQueryHandler<GetAdminProfilesQuery, PagedResult<AdminProfileDto>>
 {
-    public async ValueTask<AdminProfilesResponse> Handle(
+    public async ValueTask<PagedResult<AdminProfileDto>> Handle(
         GetAdminProfilesQuery request,
         CancellationToken cancellationToken
     )
     {
-        var pageSize = Math.Clamp(request.PageSize, 1, 100);
-        var offset = (request.PageIndex - 1) * pageSize;
+        var clamped = (
+            PageIndex: Math.Max(request.PageIndex, 1),
+            PageSize: Math.Clamp(request.PageSize, 1, 100)
+        );
+
+        var offset = (clamped.PageIndex - 1) * clamped.PageSize;
 
         var listSpec = new AdminProfileListSpecification(
             offset,
-            pageSize,
+            clamped.PageSize,
             request.Search,
             request.IsBlocked
         );
@@ -36,6 +42,11 @@ public sealed class GetAdminProfilesQueryHandler(
 
         var items = profiles.Select(mapper.Map).ToList();
 
-        return new AdminProfilesResponse(items, totalCount);
+        return new PagedResult<AdminProfileDto>(
+            items,
+            clamped.PageIndex,
+            clamped.PageSize,
+            totalCount
+        );
     }
 }

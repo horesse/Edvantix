@@ -34,4 +34,3 @@ public sealed record AdminProfileDetailDto(
     IReadOnlyList<EducationDto> Educations,
     IReadOnlyList<SkillDto> Skills
 );
-

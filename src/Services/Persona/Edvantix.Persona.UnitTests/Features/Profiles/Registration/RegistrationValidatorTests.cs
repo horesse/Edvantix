@@ -129,7 +129,7 @@ public sealed class RegistrationValidatorTests
 
         result.ShouldHaveValidationErrorFor(x => x.Gender);
     }
-    
+
     [Test]
     public void GivenNullAvatar_WhenValidating_ThenShouldNotHaveAvatarValidationError()
     {

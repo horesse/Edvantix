@@ -26,6 +26,7 @@
   </Folder>
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/Identity/">
+    <Project Path="src/Services/Identity/Edvantix.Identity.UnitTests/Edvantix.Identity.UnitTests.csproj" />
     <Project Path="src/Services/Identity/Edvantix.Identity/Edvantix.Identity.csproj" />
   </Folder>
   <Folder Name="/src/Services/Notification/">

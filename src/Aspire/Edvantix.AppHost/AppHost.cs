@@ -120,19 +120,6 @@ var front = turbo
 
 front.WithEnvironment("NEXT_PUBLIC_APP_URL", front.GetEndpoint(Uri.UriSchemeHttp));
 
-var blogFront = turbo
-    .AddApp(Clients.BlogFront, Clients.BlogTurboApp)
-    .WithOtlpExporter()
-    .WithHttpEndpoint(env: "PORT")
-    .WithMappedEndpointPort()
-    .WithHttpHealthCheck()
-    .WithExternalHttpEndpoints()
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTPS", gateway.GetEndpoint(Uri.UriSchemeHttps))
-    .WithEnvironment("NEXT_PUBLIC_GATEWAY_HTTP", gateway.GetEndpoint(Uri.UriSchemeHttp))
-    .WithKeycloak(keycloak)
-    .WaitFor(gateway)
-    .WithExplicitStart();
-
 builder
     .AddProject<Edvantix_Scheduler>(Services.Scheduler)
     .WithReference(queue)
@@ -140,8 +127,6 @@ builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls("Quartz Dashboard", path: Http.Endpoints.QuartzDashboardEndpointPath)
     .WithExplicitStart();
-
-blogFront.WithEnvironment("NEXT_PUBLIC_APP_URL", blogFront.GetEndpoint(Uri.UriSchemeHttp));
 
 var landingFront = turbo
     .AddApp(Clients.LandingFront, Clients.LandingTurboApp)

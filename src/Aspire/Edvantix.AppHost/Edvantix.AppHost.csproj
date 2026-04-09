@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup Label="Services">
     <ProjectReference Include="..\..\Services\Persona\Edvantix.Persona\Edvantix.Persona.csproj" />
+    <ProjectReference Include="..\..\Services\Identity\Edvantix.Identity\Edvantix.Identity.csproj" />
     <ProjectReference Include="..\..\Services\Notification\Edvantix.Notification\Edvantix.Notification.csproj" />
     <ProjectReference Include="..\..\Services\Organizational\Edvantix.Organizational\Edvantix.Organizational.csproj" />
     <ProjectReference Include="..\..\Services\Scheduler\Edvantix.Scheduler\Edvantix.Scheduler.csproj" />

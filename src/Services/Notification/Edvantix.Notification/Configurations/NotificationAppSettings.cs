@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Utilities.Configurations;
+﻿using Edvantix.Chassis.Utilities.Configurations;
 using Microsoft.OpenApi;
 
 namespace Edvantix.Notification.Configurations;

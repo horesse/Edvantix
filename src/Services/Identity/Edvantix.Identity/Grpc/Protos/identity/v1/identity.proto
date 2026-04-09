@@ -1,0 +1,25 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Identity.Grpc.Services";
+
+package identity.v1;
+
+// Сервис управления учётными записями Keycloak — межсервисное взаимодействие.
+service IdentityGrpcService {
+  rpc SetProfileId (SetProfileIdRequest) returns (SetProfileIdReply);
+  rpc SetUserEnabled (SetUserEnabledRequest) returns (SetUserEnabledReply);
+}
+
+message SetProfileIdRequest {
+  string account_id = 1;
+  string profile_id = 2;
+}
+
+message SetProfileIdReply {}
+
+message SetUserEnabledRequest {
+  string account_id = 1;
+  bool enabled = 2;
+}
+
+message SetUserEnabledReply {}

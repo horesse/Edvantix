@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
+﻿namespace Edvantix.Persona.Domain.AggregatesModel.ProfileAggregate;
 
 public sealed class ProfileSpecification : Specification<Profile>
 {
@@ -26,6 +26,14 @@ public sealed class ProfileSpecification : Specification<Profile>
     }
 
     public static ProfileSpecification Minimal(Guid profileId) => new(profileId);
+
+    /// <summary>Минимальный профиль с отслеживанием изменений — для операций записи без загрузки коллекций.</summary>
+    public static ProfileSpecification MinimalForWrite(Guid profileId)
+    {
+        var spec = new ProfileSpecification(profileId);
+        spec.Query.AsTracking();
+        return spec;
+    }
 
     private static ISpecificationBuilder<Profile> IncludeCollections(
         ISpecificationBuilder<Profile> query

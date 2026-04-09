@@ -1,4 +1,4 @@
-using Edvantix.Scheduler.Extensions;
+﻿using Edvantix.Scheduler.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

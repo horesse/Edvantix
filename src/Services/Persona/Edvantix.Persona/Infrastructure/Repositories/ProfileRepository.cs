@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Specification.Evaluators;
+﻿using Edvantix.Chassis.Specification.Evaluators;
 
 namespace Edvantix.Persona.Infrastructure.Repositories;
 
@@ -35,4 +35,16 @@ public sealed class ProfileRepository(PersonaDbContext context) : IProfileReposi
         var entry = await context.Profiles.AddAsync(profile, cancellationToken);
         return entry.Entity;
     }
+
+    /// <inheritdoc/>
+    public async Task<IReadOnlyList<Profile>> FindAllAsync(
+        ISpecification<Profile> spec,
+        CancellationToken cancellationToken = default
+    ) => await Specification.GetQuery(context.Profiles, spec).ToListAsync(cancellationToken);
+
+    /// <inheritdoc/>
+    public async Task<int> CountAsync(
+        ISpecification<Profile> spec,
+        CancellationToken cancellationToken = default
+    ) => await Specification.GetQuery(context.Profiles, spec).CountAsync(cancellationToken);
 }

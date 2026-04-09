@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Contacts;
+﻿namespace Edvantix.Persona.Features.Contacts;
 
 public sealed class DomainToDtoMapper : Mapper<ProfileContact, ContactDto>
 {

@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Skills.List;
+﻿namespace Edvantix.Persona.Features.Skills.List;
 
 public sealed class SkillsEndpoint : IEndpoint<Ok<IReadOnlyList<SkillDto>>, GetSkillsQuery, ISender>
 {

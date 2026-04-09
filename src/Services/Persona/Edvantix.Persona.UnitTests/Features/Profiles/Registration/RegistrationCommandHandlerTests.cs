@@ -1,4 +1,5 @@
-using Edvantix.Chassis.Specification;
+﻿using Edvantix.Chassis.Specification;
+using Edvantix.Contracts;
 using Edvantix.Persona.Features.Profiles.Create;
 using Edvantix.Persona.UnitTests.Helpers;
 
@@ -8,7 +9,7 @@ public sealed class RegistrationCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
     private readonly Mock<IBlobService> _blobServiceMock = new();
-    private readonly Mock<IKeycloakAdminService> _keycloakMock = new();
+    private readonly Mock<IPublishEndpoint> _publishEndpointMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
 
     public RegistrationCommandHandlerTests()
@@ -31,7 +32,7 @@ public sealed class RegistrationCommandHandlerTests
             .ReturnsAsync(
                 (Profile p, CancellationToken _) =>
                 {
-                    p.Id = Guid.CreateVersion7(); // имитируем присваивание Id базой данных
+                    p.Id = Guid.CreateVersion7(); // им��тируем присваивание Id базой данных
                     return p;
                 }
             );
@@ -56,8 +57,14 @@ public sealed class RegistrationCommandHandlerTests
             Times.Once
         );
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        _keycloakMock.Verify(
-            k => k.SetProfileIdAsync(accountId, It.IsAny<Guid>(), It.IsAny<CancellationToken>()),
+        _publishEndpointMock.Verify(
+            p =>
+                p.Publish(
+                    It.Is<LinkKeycloakProfileIntegrationEvent>(e =>
+                        e.AccountId == accountId && e.ProfileId != Guid.Empty
+                    ),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -188,7 +195,7 @@ public sealed class RegistrationCommandHandlerTests
             claims,
             _profileRepoMock.Object,
             _blobServiceMock.Object,
-            _keycloakMock.Object
+            _publishEndpointMock.Object
         );
     }
 

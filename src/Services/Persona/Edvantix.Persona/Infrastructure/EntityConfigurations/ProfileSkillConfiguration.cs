@@ -1,4 +1,4 @@
-using Edvantix.Chassis.EF.Configurations;
+﻿using Edvantix.Chassis.EF.Configurations;
 
 namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 

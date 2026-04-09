@@ -1,4 +1,4 @@
-using Edvantix.Notification.Infrastructure.Attributes;
+﻿using Edvantix.Notification.Infrastructure.Attributes;
 
 namespace Edvantix.Notification.Domain.Models;
 

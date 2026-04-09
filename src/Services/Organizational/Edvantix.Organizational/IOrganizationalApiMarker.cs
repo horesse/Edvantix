@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational;
+﻿namespace Edvantix.Organizational;
 
 /// <summary>
 /// Маркерный интерфейс для сборки Edvantix.Organizational.

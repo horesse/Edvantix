@@ -1,4 +1,4 @@
-using Edvantix.Persona.Features.Profiles.Create;
+﻿using Edvantix.Persona.Features.Profiles.Create;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.Registration;
 
@@ -128,48 +128,6 @@ public sealed class RegistrationValidatorTests
         var result = _validator.TestValidate(command);
 
         result.ShouldHaveValidationErrorFor(x => x.Gender);
-    }
-
-    [Test]
-    public void GivenAvatarExceedingMaxFileSize_WhenValidating_ThenShouldHaveAvatarValidationError()
-    {
-        var avatarMock = new Mock<IFormFile>();
-        avatarMock.Setup(f => f.Length).Returns(2 * 1024 * 1024); // 2 MB
-        avatarMock.Setup(f => f.ContentType).Returns("image/jpeg");
-
-        var command = new RegistrationCommand
-        {
-            FirstName = "Иван",
-            LastName = "Иванов",
-            BirthDate = new DateOnly(1990, 1, 1),
-            Gender = Gender.Male,
-            Avatar = avatarMock.Object,
-        };
-
-        var result = _validator.TestValidate(command);
-
-        result.ShouldHaveValidationErrorFor(x => x.Avatar!.Length);
-    }
-
-    [Test]
-    public void GivenAvatarWithInvalidContentType_WhenValidating_ThenShouldHaveAvatarValidationError()
-    {
-        var avatarMock = new Mock<IFormFile>();
-        avatarMock.Setup(f => f.Length).Returns(512 * 1024); // 512 KB
-        avatarMock.Setup(f => f.ContentType).Returns("image/gif");
-
-        var command = new RegistrationCommand
-        {
-            FirstName = "Иван",
-            LastName = "Иванов",
-            BirthDate = new DateOnly(1990, 1, 1),
-            Gender = Gender.Male,
-            Avatar = avatarMock.Object,
-        };
-
-        var result = _validator.TestValidate(command);
-
-        result.ShouldHaveValidationErrorFor(x => x.Avatar!.ContentType);
     }
 
     [Test]

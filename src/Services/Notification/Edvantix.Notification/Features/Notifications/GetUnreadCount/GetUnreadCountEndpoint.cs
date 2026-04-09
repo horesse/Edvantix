@@ -1,4 +1,4 @@
-namespace Edvantix.Notification.Features.Notifications.GetUnreadCount;
+﻿namespace Edvantix.Notification.Features.Notifications.GetUnreadCount;
 
 public sealed class GetUnreadCountEndpoint
     : IEndpoint<Ok<UnreadCountViewModel>, GetUnreadCountQuery, ISender>

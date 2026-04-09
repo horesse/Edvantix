@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Profiles.Get;
+﻿namespace Edvantix.Persona.Features.Profiles.Get;
 
 /// <summary>
 /// Запрос краткого профиля. Приоритет идентификаторов:

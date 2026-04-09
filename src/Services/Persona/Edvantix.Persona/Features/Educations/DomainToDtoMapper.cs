@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Educations;
+﻿namespace Edvantix.Persona.Features.Educations;
 
 public sealed class DomainToDtoMapper : Mapper<Education, EducationDto>
 {

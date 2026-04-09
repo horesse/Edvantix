@@ -1,4 +1,4 @@
-using Edvantix.Persona.Domain.Events;
+﻿using Edvantix.Persona.Domain.Events;
 
 namespace Edvantix.Persona.Domain.EventHandlers;
 

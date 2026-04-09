@@ -23,6 +23,9 @@ internal sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         // "О себе" — до 600 символов, соответствует требованиям домена
         builder.Property(p => p.Bio).HasMaxLength(600).IsRequired(false);
 
+        builder.Property(p => p.IsBlocked).IsRequired().HasDefaultValue(false);
+        builder.Property(p => p.LastLoginAt).IsRequired(false);
+
         builder.HasQueryFilter(p => !p.IsDeleted);
 
         builder

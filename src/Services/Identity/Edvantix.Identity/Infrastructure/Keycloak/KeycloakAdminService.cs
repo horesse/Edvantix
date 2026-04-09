@@ -1,9 +1,9 @@
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Edvantix.Chassis.Security.Settings;
 
-namespace Edvantix.Persona.Infrastructure.Keycloak;
+namespace Edvantix.Identity.Infrastructure.Keycloak;
 
 /// <summary>
 /// Реализация <see cref="IKeycloakAdminService"/>.
@@ -12,8 +12,7 @@ namespace Edvantix.Persona.Infrastructure.Keycloak;
 /// </summary>
 public sealed class KeycloakAdminService(
     IHttpClientFactory httpClientFactory,
-    IdentityOptions identityOptions,
-    ILogger<KeycloakAdminService> logger
+    IdentityOptions identityOptions
 ) : IKeycloakAdminService
 {
     /// <inheritdoc />
@@ -25,17 +24,11 @@ public sealed class KeycloakAdminService(
     {
         var token = await GetServiceAccountTokenAsync(cancellationToken);
         await UpdateUserAttributesAsync(accountId, profileId, token, cancellationToken);
-
-        logger.LogInformation(
-            "ProfileId {ProfileId} успешно сохранён в Keycloak для аккаунта {AccountId}",
-            profileId,
-            accountId
-        );
     }
 
     /// <summary>
     /// Получает токен сервисного аккаунта через client_credentials.
-    /// Persona client должен иметь роль manage-users в realm-management.
+    /// Identity client должен иметь роль manage-users в realm-management.
     /// </summary>
     private async Task<string> GetServiceAccountTokenAsync(CancellationToken cancellationToken)
     {
@@ -61,9 +54,47 @@ public sealed class KeycloakAdminService(
             );
     }
 
+    /// <inheritdoc />
+    public async Task DisableUserAsync(
+        Guid accountId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        await SetUserEnabledAsync(accountId, enabled: false, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task EnableUserAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        await SetUserEnabledAsync(accountId, enabled: true, cancellationToken);
+    }
+
+    /// <summary>Устанавливает флаг enabled для учётной записи Keycloak через Admin API.</summary>
+    private async Task SetUserEnabledAsync(
+        Guid accountId,
+        bool enabled,
+        CancellationToken cancellationToken
+    )
+    {
+        var token = await GetServiceAccountTokenAsync(cancellationToken);
+
+        using var client = httpClientFactory.CreateClient(Components.KeyCloak);
+
+        var userEndpoint = $"admin/realms/{identityOptions.Realm}/users/{accountId}";
+
+        var payload = JsonSerializer.Serialize(new { enabled });
+
+        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint);
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+        var response = await client.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
+    }
+
     /// <summary>
-    /// Выполняет PATCH-запрос к Admin API, чтобы добавить атрибут profileId.
-    /// Keycloak Admin API PUT /admin/realms/{realm}/users/{id} перезаписывает атрибуты.
+    /// Выполняет PUT-запрос к Admin API, чтобы добавить атрибут profileId.
     /// </summary>
     private async Task UpdateUserAttributesAsync(
         Guid accountId,
@@ -87,11 +118,10 @@ public sealed class KeycloakAdminService(
             }
         );
 
-        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint)
-        {
-            Headers = { Authorization = new AuthenticationHeaderValue("Bearer", token) },
-            Content = new StringContent(payload, Encoding.UTF8, "application/json"),
-        };
+        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint);
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
         var response = await client.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();

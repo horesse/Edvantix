@@ -22,6 +22,8 @@ public static class Components
         public static readonly string Notification =
             $"{nameof(Notification).ToLowerInvariant()}{Suffix}";
 
+        public static readonly string Identity = $"{nameof(Identity).ToLowerInvariant()}{Suffix}";
+
         public static readonly string Organizational =
             $"{nameof(Organizational).ToLowerInvariant()}{Suffix}";
     }

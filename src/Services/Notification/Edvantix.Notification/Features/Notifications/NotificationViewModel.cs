@@ -1,4 +1,4 @@
-namespace Edvantix.Notification.Features.Notifications;
+﻿namespace Edvantix.Notification.Features.Notifications;
 
 /// <summary>
 /// ViewModel in-app уведомления для REST API.

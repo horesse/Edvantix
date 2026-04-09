@@ -1,6 +1,6 @@
-using Edvantix.Constants.Other;
+﻿using Edvantix.Constants.Other;
+using Edvantix.Contracts;
 using Edvantix.Persona.Infrastructure.Blob;
-using Edvantix.Persona.Infrastructure.Keycloak;
 
 namespace Edvantix.Persona.Features.Profiles.Create;
 
@@ -18,7 +18,7 @@ public sealed class RegistrationCommandHandler(
     ClaimsPrincipal claims,
     IProfileRepository repository,
     IBlobService blobService,
-    IKeycloakAdminService keycloakService
+    IPublishEndpoint publishEndpoint
 ) : ICommandHandler<RegistrationCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
@@ -65,7 +65,10 @@ public sealed class RegistrationCommandHandler(
             throw;
         }
 
-        await keycloakService.SetProfileIdAsync(accountId, profile.Id, cancellationToken);
+        await publishEndpoint.Publish(
+            new LinkKeycloakProfileIntegrationEvent(accountId, profile.Id),
+            cancellationToken
+        );
 
         return profile.Id;
     }

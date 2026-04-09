@@ -1,4 +1,4 @@
-global using System.ComponentModel;
+﻿global using System.ComponentModel;
 global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Security.Claims;
@@ -25,6 +25,7 @@ global using Edvantix.Persona.Infrastructure;
 global using Edvantix.ServiceDefaults;
 global using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 global using Edvantix.ServiceDefaults.Kestrel;
+global using Edvantix.SharedKernel.Results;
 global using Edvantix.SharedKernel.SeedWork;
 global using FluentValidation;
 global using MassTransit;

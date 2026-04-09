@@ -1,4 +1,4 @@
-using Edvantix.Persona.Features.Profiles.Update;
+﻿using Edvantix.Persona.Features.Profiles.Update;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.UpdateProfile;
 

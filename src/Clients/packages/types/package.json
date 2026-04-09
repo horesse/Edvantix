@@ -26,6 +26,10 @@
     "./notifications": {
       "import": "./src/notifications/index.ts",
       "types": "./src/notifications/index.ts"
+    },
+    "./admin": {
+      "import": "./src/admin/index.ts",
+      "types": "./src/admin/index.ts"
     }
   },
   "scripts": {

@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Security.Keycloak;
+﻿using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Organizational.Extensions;
 using Edvantix.ServiceDefaults.Cors;
 

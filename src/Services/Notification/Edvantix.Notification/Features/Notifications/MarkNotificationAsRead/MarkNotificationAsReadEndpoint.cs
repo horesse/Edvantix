@@ -1,4 +1,4 @@
-namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
+﻿namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
 
 public sealed class MarkNotificationAsReadEndpoint
     : IEndpoint<Results<NoContent, NotFound>, MarkNotificationAsReadCommand, ISender>

@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Features.Profiles.Avatar.DeleteAvatar;
+﻿namespace Edvantix.Persona.Features.Profiles.Avatar.DeleteAvatar;
 
 public sealed class DeleteAvatarCommand : ICommand<Guid>;
 

@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.UnitTests.Fakers;
+﻿namespace Edvantix.Persona.UnitTests.Fakers;
 
 public sealed class ProfileFaker : Faker<Profile>
 {

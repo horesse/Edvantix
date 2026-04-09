@@ -1,4 +1,4 @@
-using Edvantix.SharedKernel;
+﻿using Edvantix.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;

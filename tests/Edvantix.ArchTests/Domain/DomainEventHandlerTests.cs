@@ -1,4 +1,4 @@
-using ArchUnitNET.TUnit;
+﻿using ArchUnitNET.TUnit;
 using Edvantix.ArchTests.Abstractions;
 using Mediator;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;

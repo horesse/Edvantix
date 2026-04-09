@@ -8,7 +8,6 @@ using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Persona.Configurations;
 using Edvantix.Persona.Infrastructure.EventServices;
-using Edvantix.Persona.Infrastructure.Keycloak;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
@@ -127,7 +126,5 @@ internal static class Extensions
         );
 
         services.AddKeycloakTokenIntrospection();
-
-        services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
     }
 }

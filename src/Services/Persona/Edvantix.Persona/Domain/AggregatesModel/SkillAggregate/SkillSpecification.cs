@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
+﻿namespace Edvantix.Persona.Domain.AggregatesModel.SkillAggregate;
 
 public sealed class SkillSpecification : Specification<Skill>
 {

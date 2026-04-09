@@ -1,4 +1,4 @@
-using Edvantix.Constants.Other;
+﻿using Edvantix.Constants.Other;
 
 namespace Edvantix.Persona.Features.Profiles.Update;
 

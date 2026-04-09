@@ -1,4 +1,4 @@
-namespace Edvantix.Chassis.Security.Settings;
+﻿namespace Edvantix.Chassis.Security.Settings;
 
 public sealed class IdentityOptions : IEquatable<IdentityOptions>
 {

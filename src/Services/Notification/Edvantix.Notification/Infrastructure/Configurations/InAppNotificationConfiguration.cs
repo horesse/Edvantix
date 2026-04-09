@@ -1,4 +1,4 @@
-using Edvantix.SharedKernel.Helpers;
+﻿using Edvantix.SharedKernel.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

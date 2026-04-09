@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
+﻿namespace Edvantix.Persona.Infrastructure.EntityConfigurations;
 
 internal sealed class SkillConfiguration : IEntityTypeConfiguration<Skill>
 {

@@ -1,4 +1,4 @@
-using Edvantix.Persona.Features.Contacts;
+﻿using Edvantix.Persona.Features.Contacts;
 using Edvantix.Persona.Features.Educations;
 using Edvantix.Persona.Features.EmploymentHistories;
 using Edvantix.Persona.Features.Skills;

@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Security.Extensions;
+﻿using Edvantix.Chassis.Security.Extensions;
 
 namespace Edvantix.Notification.Features.Notifications;
 

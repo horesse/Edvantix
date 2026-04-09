@@ -1,4 +1,4 @@
-namespace Edvantix.Persona.UnitTests.Domain.EventHandlers;
+﻿namespace Edvantix.Persona.UnitTests.Domain.EventHandlers;
 
 public sealed class AvatarDomainEventHandlerTests
 {

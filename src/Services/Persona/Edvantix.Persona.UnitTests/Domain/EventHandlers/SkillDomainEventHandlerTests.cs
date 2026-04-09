@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Repository;
+﻿using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Specification;
 
 namespace Edvantix.Persona.UnitTests.Domain.EventHandlers;

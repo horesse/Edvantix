@@ -25,9 +25,10 @@ internal static class CorsExtensions
         HttpMethods.Options,
     ];
 
-    public static IResourceBuilder<ParameterResource> AddCorsOriginParameters(
-        this IDistributedApplicationBuilder builder
-    )
+    public static (
+        IResourceBuilder<ParameterResource> OrganizationFrontUrl,
+        IResourceBuilder<ParameterResource> AdminFrontUrl
+    ) AddCorsOriginParameters(this IDistributedApplicationBuilder builder)
     {
         var organizationFrontUrl = builder
             .AddParameter("organizationfront-url")
@@ -38,21 +39,40 @@ internal static class CorsExtensions
                     Label = "OrganizationFront URL",
                     InputType = InputType.Text,
                     Description =
-                        "Enter the OrganizationFront application URL for CORS (e.g., https://admin.edvantix.ru)",
+                        "Enter the OrganizationFront application URL for CORS (e.g., https://org.edvantix.ru)",
                 }
             );
 
-        return organizationFrontUrl;
+        var adminFrontUrl = builder
+            .AddParameter("adminfront-url")
+            .WithCustomInput(_ =>
+                new()
+                {
+                    Name = "AdminFrontUrlParameter",
+                    Label = "AdminFront URL",
+                    InputType = InputType.Text,
+                    Description =
+                        "Enter the AdminFront application URL for CORS (e.g., https://admin.edvantix.ru)",
+                }
+            );
+
+        return (organizationFrontUrl, adminFrontUrl);
     }
 
     public static IResourceBuilder<ProjectResource> WithCorsOrigins(
         this IResourceBuilder<ProjectResource> builder,
-        IResourceBuilder<ParameterResource> organizationFrontUrl
+        IResourceBuilder<ParameterResource> organizationFrontUrl,
+        IResourceBuilder<ParameterResource>? adminFrontUrl = null
     )
     {
         builder
             .WithEnvironment("Cors__Origins__0", organizationFrontUrl)
             .WithEnvironment("Cors__AllowCredentials", "true");
+
+        if (adminFrontUrl is not null)
+        {
+            builder.WithEnvironment("Cors__Origins__1", adminFrontUrl);
+        }
 
         for (var i = 0; i < _defaultHeaders.Length; i++)
         {

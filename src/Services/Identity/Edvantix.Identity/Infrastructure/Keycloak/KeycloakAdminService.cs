@@ -12,8 +12,7 @@ namespace Edvantix.Identity.Infrastructure.Keycloak;
 /// </summary>
 public sealed class KeycloakAdminService(
     IHttpClientFactory httpClientFactory,
-    IdentityOptions identityOptions,
-    ILogger<KeycloakAdminService> logger
+    IdentityOptions identityOptions
 ) : IKeycloakAdminService
 {
     /// <inheritdoc />
@@ -25,12 +24,6 @@ public sealed class KeycloakAdminService(
     {
         var token = await GetServiceAccountTokenAsync(cancellationToken);
         await UpdateUserAttributesAsync(accountId, profileId, token, cancellationToken);
-
-        logger.LogInformation(
-            "ProfileId {ProfileId} успешно сохранён в Keycloak для аккаунта {AccountId}",
-            profileId,
-            accountId
-        );
     }
 
     /// <summary>
@@ -68,14 +61,12 @@ public sealed class KeycloakAdminService(
     )
     {
         await SetUserEnabledAsync(accountId, enabled: false, cancellationToken);
-        logger.LogInformation("Учётная запись Keycloak {AccountId} отключена", accountId);
     }
 
     /// <inheritdoc />
     public async Task EnableUserAsync(Guid accountId, CancellationToken cancellationToken = default)
     {
         await SetUserEnabledAsync(accountId, enabled: true, cancellationToken);
-        logger.LogInformation("Учётная запись Keycloak {AccountId} включена", accountId);
     }
 
     /// <summary>Устанавливает флаг enabled для учётной записи Keycloak через Admin API.</summary>
@@ -93,11 +84,10 @@ public sealed class KeycloakAdminService(
 
         var payload = JsonSerializer.Serialize(new { enabled });
 
-        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint)
-        {
-            Headers = { Authorization = new AuthenticationHeaderValue("Bearer", token) },
-            Content = new StringContent(payload, Encoding.UTF8, "application/json"),
-        };
+        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint);
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
         var response = await client.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -128,11 +118,10 @@ public sealed class KeycloakAdminService(
             }
         );
 
-        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint)
-        {
-            Headers = { Authorization = new AuthenticationHeaderValue("Bearer", token) },
-            Content = new StringContent(payload, Encoding.UTF8, "application/json"),
-        };
+        using var request = new HttpRequestMessage(HttpMethod.Put, userEndpoint);
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
         var response = await client.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();

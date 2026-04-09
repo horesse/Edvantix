@@ -261,7 +261,7 @@ internal static class KeycloakExtensions
                         Name = "KeycloakUrlParameter",
                         Label = "Keycloak URL",
                         InputType = InputType.Text,
-                        Value = "https://identity.bookworm.com",
+                        Value = "https://identity.edvantix.ru",
                         Description = "Enter your Keycloak server URL here (must be https)",
                     }
                 );

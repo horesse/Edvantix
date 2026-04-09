@@ -1,5 +1,5 @@
-name: Edvantix CD (.NET)
-run-name: .NET CD - ${{ github.event_name }} by ${{ github.actor }}
+﻿name: Edvantix CD (Backend)
+run-name: Backend CD - ${{ github.event_name }} by ${{ github.actor }}
 
 on:
   workflow_dispatch:
@@ -8,6 +8,14 @@ on:
         description: "The environment to deploy to"
         required: true
         type: environment
+      organizationfront_url:
+        description: "The Organizations application URL for CORS (e.g., https://organization.edvantix.ru)"
+        required: true
+        type: string
+      adminfront_url:
+        description: "The Admin application URL for CORS (e.g., https://admin.edvantix.ru)"
+        required: true
+        type: string
 
 env:
   GLOBAL_JSON_PATH: ${{ github.workspace }}/global.json
@@ -15,25 +23,26 @@ env:
 permissions:
   id-token: write
   contents: read
+  packages: read
 
 jobs:
   aspire_deploy:
-    if: github.ref == 'refs/heads/main' || github.event.inputs.environment != ''
     runs-on: ubuntu-latest
-    name: Deploy Edvantix with Aspire
+    name: Deploy Edvantix to ACA from GHCR
     permissions:
       id-token: write
       contents: read
-    environment: ${{ github.event.inputs.environment || 'development' }}
+      packages: read
+    environment: ${{ github.event.inputs.environment }}
     timeout-minutes: 30
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
         with:
           global-json-file: ${{ env.GLOBAL_JSON_PATH }}
 
@@ -45,18 +54,28 @@ jobs:
       - name: Verify Aspire Installation
         run: aspire --version
 
-      - name: List files
-        run: ls -a
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Azure Login
-        uses: azure/login@v3
+        uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Normalize repository name
+        id: normalize
+        run: echo "repository=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
       - name: Deploy with Aspire
-        run: aspire deploy --environment ${{ github.event.inputs.environment }}
+        run: |
+          aspire deploy \
+            --environment ${{ github.event.inputs.environment }}
         env:
           DOTNET_CLI_TELEMETRY_OPTOUT: 1
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -68,15 +87,12 @@ jobs:
           Azure__SubscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           Azure__Location: ${{ secrets.AZURE_LOCATION || 'southeastasia' }}
           Parameters__container_endpoint: ghcr.io
-          Parameters__container_repository: ${{ github.repository_owner }}/${{ github.repository }}
+          Parameters__container_repository: ${{ steps.normalize.outputs.repository }}
           Parameters__openai_openai_apikey: ${{ secrets.OPENAI_APIKEY }}
           Parameters__kc_url: ${{ secrets.KC_URL }}
           Parameters__kc_realm: ${{ secrets.KC_REALM }}
-          Parameters__catalog_secret: ${{ secrets.CATALOG_SECRET }}
-          Parameters__basket_secret: ${{ secrets.BASKET_SECRET }}
-          Parameters__ordering_secret: ${{ secrets.ORDERING_SECRET }}
-          Parameters__chatting_secret: ${{ secrets.CHATTING_SECRET }}
-          Parameters__rating_secret: ${{ secrets.RATING_SECRET }}
           Parameters__sendgrid_api_key: ${{ secrets.SENDGRID_API_KEY }}
           Parameters__sendgrid_email: ${{ secrets.SENDGRID_EMAIL }}
           Parameters__sendgrid_sender_name: ${{ secrets.SENDGRID_SENDER_NAME }}
+          Parameters__organizationfront_url: ${{ github.event.inputs.organizationfront_url }}
+          Parameters__adminfront_url: ${{ github.event.inputs.adminfront_url }}

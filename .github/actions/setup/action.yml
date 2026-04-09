@@ -1,13 +1,18 @@
 name: "Setup"
-description: "Setup the environment for the rest of the workflow"
+description: "Bootstrap the Edvantix development environment by installing .NET SDK, Bun runtime, dotnet tools, and configuring Husky git hooks"
+author: "Edvantix Team"
+
+branding:
+  icon: "settings"
+  color: "gray-dark"
 
 inputs:
   global-json-file:
-    description: "The path to the global.json file"
+    description: "Path to the global.json file that specifies the .NET SDK version"
     required: false
     default: "./global.json"
   bun-version-file:
-    description: "The path to the .bun-version file"
+    description: "Path to the .bun-version file that specifies the Bun runtime version"
     required: false
     default: ".bun-version"
 
@@ -15,12 +20,12 @@ runs:
   using: "composite"
   steps:
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
       with:
         global-json-file: ${{ inputs.global-json-file }}
 
     - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
+      uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.0.2
       with:
         bun-version-file: ${{ inputs.bun-version-file }}
 

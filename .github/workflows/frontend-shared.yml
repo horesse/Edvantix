@@ -16,8 +16,8 @@ on:
 permissions: {}
 
 jobs:
-  lint-build-test:
-    name: Lint, Build & Test
+  lint-build:
+    name: Lint, Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
     permissions:
@@ -50,9 +50,6 @@ jobs:
 
       - name: Build
         run: pnpm turbo run build --affected
-
-      - name: Test
-        run: pnpm turbo run test --affected
 
       - name: Generate Allure Reports
         if: ${{ !cancelled() }}

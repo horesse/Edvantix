@@ -410,3 +410,5 @@ settings.local.json
 /nul
 
 templates/
+
+.mcp.json

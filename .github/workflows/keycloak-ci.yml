@@ -7,13 +7,13 @@ on:
       - main
     paths:
       - "src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify/**"
-      - ".github/workflows/keycloak-ci.yaml"
+      - ".github/workflows/keycloak-ci.yml"
   pull_request:
     branches:
       - main
     paths:
       - "src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify/**"
-      - ".github/workflows/keycloak-ci.yaml"
+      - ".github/workflows/keycloak-ci.yml"
   workflow_dispatch:
     inputs:
       environment:
@@ -23,7 +23,10 @@ on:
 
 permissions:
   contents: read
-  actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 env:
   JAVA_VERSION: "25"
@@ -34,16 +37,16 @@ jobs:
     name: Build Keycloak Theme
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    environment: ${{ github.event.inputs.environment || 'development' }}
+    environment: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'development' }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.0.0
         with:
           distribution: "temurin"
           java-version: "${{ env.JAVA_VERSION }}"
@@ -54,9 +57,17 @@ jobs:
           java -version
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.0.2
         with:
           bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.0
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-keycloakify-${{ hashFiles('src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-keycloakify-
 
       - name: Install dependencies
         working-directory: src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify
@@ -98,9 +109,9 @@ jobs:
 
       - name: Upload JAR artifacts
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
-          name: edvantix-keycloak-theme-v${{ steps.theme-version.outputs.version || 'latest' }}
+          name: Edvantix-keycloak-theme-v${{ steps.theme-version.outputs.version || 'latest' }}
           path: src/Aspire/Edvantix.AppHost/Container/keycloak/jar-artifacts/*.jar
           retention-days: 90
           if-no-files-found: error

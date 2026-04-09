@@ -1,0 +1,220 @@
+﻿name: Trivy Security Scan
+run-name: Trivy Security Scan - ${{ github.event_name }} by ${{ github.actor }}
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly scan to catch newly disclosed vulnerabilities in existing dependencies
+    # Runs every Monday at 10:00 AM Asia/Ho_Chi_Minh (UTC+7)
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+    inputs:
+      severity:
+        description: "Comma-separated severity levels to report (e.g., CRITICAL,HIGH,MEDIUM,LOW)"
+        required: false
+        default: "CRITICAL,HIGH,MEDIUM"
+  repository_dispatch:
+    types:
+      [backend-container-images-published, frontend-container-images-published]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.action || github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  vulnerability-scan:
+    name: Vulnerability Scan
+    if: github.event_name != 'repository_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-fs-results.sarif"
+          severity: ${{ inputs.severity || 'CRITICAL,HIGH,MEDIUM' }}
+
+      - name: Upload vulnerability scan results
+        if: ${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13 # v4.35.1
+        with:
+          sarif_file: trivy-fs-results.sarif
+          category: trivy-vulnerability-scan
+
+  misconfig-scan:
+    name: Misconfiguration Scan
+    if: github.event_name != 'repository_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: Run Trivy misconfiguration scanner
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "config"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-config-results.sarif"
+          severity: ${{ inputs.severity || 'CRITICAL,HIGH,MEDIUM' }}
+
+      - name: Upload misconfiguration scan results
+        if: ${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13 # v4.35.1
+        with:
+          sarif_file: trivy-config-results.sarif
+          category: trivy-misconfig-scan
+
+  container-scan:
+    name: Container Scan
+    if: github.event_name == 'repository_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+      id-token: write
+      attestations: write
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        image: ${{ fromJson(github.event.action == 'backend-container-images-published' && '["edvantix/persona","edvantix/notification","edvantix/scheduler"]' || '["edvantix/organizationfront","edvantix/adminfront"]') }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Resolve image digest for ${{ matrix.image }}
+        id: image-digest
+        env:
+          IMAGE: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}:latest
+        run: |
+          docker pull "${IMAGE}"
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "${IMAGE}" | cut -d@ -f2)
+          echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
+          echo "image_ref=ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}@${DIGEST}" >> "$GITHUB_OUTPUT"
+
+      - name: Run Trivy scanner for ${{ matrix.image }}
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "image"
+          image-ref: ${{ steps.image-digest.outputs.image_ref }}
+          format: "sarif"
+          output: "trivy-image-results.sarif"
+          severity: "CRITICAL,HIGH,MEDIUM"
+
+      - name: Create filesystem-safe image slug
+        id: image-slug
+        run: |
+          echo "value=${{ matrix.image }}" | sed 's|/|-|g' >> "$GITHUB_OUTPUT"
+
+      - name: Upload container scan results
+        if: ${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13 # v4.35.1
+        with:
+          sarif_file: trivy-image-results.sarif
+          category: "trivy-container-scan-${{ matrix.image }}"
+
+      - name: Generate CycloneDX SBOM for ${{ matrix.image }}
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "image"
+          image-ref: ${{ steps.image-digest.outputs.image_ref }}
+          format: "cyclonedx"
+          output: "sbom-${{ steps.image-slug.outputs.value }}.cyclonedx.json"
+
+      - name: Attest SBOM for ${{ matrix.image }}
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+        with:
+          subject-name: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}
+          subject-digest: ${{ steps.image-digest.outputs.digest }}
+          sbom-path: "sbom-${{ steps.image-slug.outputs.value }}.cyclonedx.json"
+          push-to-registry: true
+
+      - name: Upload SBOM for ${{ matrix.image }}
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: sbom-${{ steps.image-slug.outputs.value }}
+          path: "sbom-${{ steps.image-slug.outputs.value }}.cyclonedx.json"
+          retention-days: 7
+
+  sbom:
+    name: SBOM Generation
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: Generate CycloneDX SBOM for attestation
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "cyclonedx"
+          output: "sbom.cyclonedx.json"
+
+      - name: Submit dependency snapshot to GitHub Dependency Graph
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "github"
+          output: "dependency-results.sbom.json"
+          github-pat: ${{ github.token }}
+
+      - name: Attest SBOM
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+        with:
+          subject-path: sbom.cyclonedx.json
+
+      - name: Upload CycloneDX SBOM
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: trivy-sbom-cyclonedx
+          path: sbom.cyclonedx.json
+          retention-days: 7

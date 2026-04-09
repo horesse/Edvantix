@@ -6,15 +6,11 @@ on:
     branches:
       - main
     paths:
-      # Source & test code
       - "src/**"
       - "tests/**"
-      # CI/CD configuration
       - ".github/workflows/sonar.yml"
-      # SonarQube configuration
       - ".sonarlint/**"
       - "SonarQube.Analysis.xml"
-      # Exclusions (last-match-wins, must follow includes)
       - "!src/Aspire/Edvantix.AppHost/Container/**"
   pull_request:
     paths:
@@ -40,38 +36,8 @@ env:
   SESSION_TIMEOUT: "15m"
 
 jobs:
-  frontend-test:
-    name: Frontend tests
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Frontend
-        uses: ./.github/actions/frontend-setup
-        with:
-          bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-      - name: Frontend test with coverage
-        working-directory: src/Clients
-        run: pnpm turbo run test:coverage
-
-      - name: Upload frontend coverage
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-        with:
-          name: frontend-coverage
-          path: |
-            src/Clients/apps/storefront/coverage/lcov.info
-            src/Clients/apps/backoffice/coverage/lcov.info
-          retention-days: 1
-          if-no-files-found: warn
-
   analyze:
     name: Build and analyze
-    needs: [frontend-test]
-    if: ${{ !cancelled() && needs.frontend-test.result != 'failure' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -102,13 +68,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Download frontend coverage
-        if: needs.frontend-test.result == 'success'
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: frontend-coverage
-          path: ${{ github.workspace }}/src/Clients/apps
-
       - name: Setup SonarQube Scanner
         uses: ./.github/actions/sonar-scanner-setup
 
@@ -117,8 +76,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
           .sonar/scanner/dotnet-sonarscanner begin
-          /k:"foxminchan_Edvantix"
-          /o:"foxminchan"
+          /k:"edvantix_Edvantix"
+          /o:"edvantix"
           /d:sonar.token="$SONAR_TOKEN"
           /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
 

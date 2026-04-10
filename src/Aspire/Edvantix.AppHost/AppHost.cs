@@ -79,6 +79,7 @@ var organizationalApi = builder
     .WaitFor(queue)
     .WithReference(organizationalDb)
     .WaitFor(organizationalDb)
+    .WithReference(personaApi)
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 

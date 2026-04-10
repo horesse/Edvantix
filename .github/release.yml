@@ -2,7 +2,6 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
-      - dependencies
       - duplicate
       - invalid
       - wontfix
@@ -70,13 +69,8 @@ changelog:
 
     - title: 📊 Services
       labels:
-        - service:basket
-        - service:catalog
-        - service:chat
-        - service:finance
+        - service:persona
         - service:notification
-        - service:ordering
-        - service:rating
         - service:scheduler
 
     - title: 🔌 Integrations

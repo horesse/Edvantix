@@ -62,7 +62,7 @@ body:
       placeholder: |
         - OS: [e.g. Windows 11, macOS 14, Ubuntu 22.04]
         - Browser / Runtime: [e.g. Chrome 123, .NET 10]
-        - BookWorm version / commit: [e.g. v1.2.0 or abc1234]
+        - Edvantix version / commit: [e.g. v1.2.0 or abc1234]
     validations:
       required: true
   - type: textarea

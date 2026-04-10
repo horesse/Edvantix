@@ -1,6 +1,6 @@
 ﻿name: "Attest .NET Container Image"
 description: "Queries the image digest from GitHub Packages and generates SLSA build provenance attestation for a container image"
-author: "BookWorm Team"
+author: "Edvantix Team"
 
 branding:
   icon: "shield"

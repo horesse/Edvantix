@@ -231,8 +231,8 @@ updates:
   # ── Docker ────────────────────────────────────────────────────────────
   - package-ecosystem: docker
     directories:
-      - "/src/Clients/apps/storefront"
-      - "/src/Clients/apps/backoffice"
+      - "/src/Clients/apps/organizationfront"
+      - "/src/Clients/apps/adminfront"
     schedule:
       interval: weekly
       day: friday

@@ -7,27 +7,27 @@
         {
           "label": "Domain",
           "description": "Domain models, entities, value objects, and domain events",
-          "patterns": ["src/Services/*/BookWorm.*/Domain/**"]
+          "patterns": ["src/Services/*/Edvantix.*/Domain/**"]
         },
         {
           "label": "Application",
           "description": "Application logic, CQRS handlers, and use cases",
           "patterns": [
-            "src/Services/*/BookWorm.*/Application/**",
-            "src/Services/*/BookWorm.*/Features/**"
+            "src/Services/*/Edvantix.*/Application/**",
+            "src/Services/*/Edvantix.*/Features/**"
           ]
         },
         {
           "label": "Infrastructure",
           "description": "Data access, external services, and infrastructure concerns",
-          "patterns": ["src/Services/*/BookWorm.*/Infrastructure/**"]
+          "patterns": ["src/Services/*/Edvantix.*/Infrastructure/**"]
         },
         {
           "label": "API",
           "description": "API endpoints and presentation layer",
           "patterns": [
-            "src/Services/*/BookWorm.*/Endpoints/**",
-            "src/Services/*/BookWorm.*/Program.cs"
+            "src/Services/*/Edvantix.*/Endpoints/**",
+            "src/Services/*/Edvantix.*/Program.cs"
           ]
         }
       ],

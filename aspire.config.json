@@ -1,5 +1,5 @@
 ﻿{
   "appHost": {
-    "path": "src/Aspire/Edvantix.AppHost/BookWorm.AppHost.csproj"
+    "path": "src/Aspire/Edvantix.AppHost/Edvantix.AppHost.csproj"
   }
 }

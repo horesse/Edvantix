@@ -25,7 +25,9 @@ app.UseDefaultCors();
 
 app.UseKeycloakTokenIntrospection();
 
-app.UseAuthorization();
+app.UseRateLimiter();
+
+app.UseTenantContext();
 
 var apiVersionSet = app.NewApiVersionSet()
     .HasApiVersion(ApiVersions.V1)
@@ -37,5 +39,7 @@ app.MapEndpoints(apiVersionSet);
 app.MapDefaultEndpoints();
 
 app.UseDefaultOpenApi();
+
+app.UseAuthorization();
 
 app.Run();

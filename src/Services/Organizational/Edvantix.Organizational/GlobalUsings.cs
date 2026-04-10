@@ -5,6 +5,7 @@ global using Edvantix.Chassis.Endpoints;
 global using Edvantix.Chassis.EventBus;
 global using Edvantix.Chassis.Exceptions;
 global using Edvantix.Chassis.Repository;
+global using Edvantix.Chassis.Security.Tenant;
 global using Edvantix.Constants.Aspire;
 global using Edvantix.Constants.Core;
 global using Edvantix.Organizational.Infrastructure;

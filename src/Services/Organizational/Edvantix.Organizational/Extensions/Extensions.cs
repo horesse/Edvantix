@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS;
+using Edvantix.Chassis.Mapper;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
@@ -23,23 +24,14 @@ internal static class Extensions
 
         services
             .AddAuthorizationBuilder()
-            .AddPolicy(
-                Authorization.Policies.Admin,
-                policy =>
-                    policy
-                        .RequireAuthenticatedUser()
-                        .RequireRole(Authorization.Roles.Admin)
-                        .RequireScope(
-                            $"{Services.Organizational}_{Authorization.Actions.Read}",
-                            $"{Services.Organizational}_{Authorization.Actions.Write}"
-                        )
-            )
             .SetDefaultPolicy(
                 new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .RequireScope($"{Services.Organizational}_{Authorization.Actions.Read}")
                     .Build()
             );
+
+        services.AddTenantContext();
 
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -49,10 +41,6 @@ internal static class Extensions
         builder.AddAppSettings<OrganizationalAppSettings>();
 
         builder.AddRateLimiting();
-
-        services.AddSingleton(
-            new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
-        );
 
         services
             .AddMediator(
@@ -71,6 +59,8 @@ internal static class Extensions
                 OpenApiInfoDefinitionsTransformer<OrganizationalAppSettings>
             >()
         );
+
+        services.AddMapper(typeof(IOrganizationalApiMarker));
 
         services.AddValidatorsFromAssemblyContaining<IOrganizationalApiMarker>(
             includeInternalTypes: true

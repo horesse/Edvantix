@@ -22,8 +22,8 @@ public static class AuthenticationExtensions
         var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
 
         var scheme = builder.Environment.IsDevelopment()
-                    ? Uri.UriSchemeHttp
-                    : Http.Schemes.HttpOrHttps;
+            ? Uri.UriSchemeHttp
+            : Http.Schemes.HttpOrHttps;
 
         var keycloakUrl = HttpUtilities
             .AsUrlBuilder()

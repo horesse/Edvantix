@@ -37,7 +37,7 @@ public sealed class ProfileRepository(PersonaDbContext context) : IProfileReposi
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyList<Profile>> FindAllAsync(
+    public async Task<IReadOnlyList<Profile>> ListAsync(
         ISpecification<Profile> spec,
         CancellationToken cancellationToken = default
     ) => await Specification.GetQuery(context.Profiles, spec).ToListAsync(cancellationToken);

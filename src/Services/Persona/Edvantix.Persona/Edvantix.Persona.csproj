@@ -10,6 +10,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
   </ItemGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).ContractTests" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -37,7 +37,7 @@ public sealed class GetAdminProfilesQueryHandler(
 
         var countSpec = new AdminProfileCountSpecification(request.Search, request.IsBlocked);
 
-        var profiles = await repository.FindAllAsync(listSpec, cancellationToken);
+        var profiles = await repository.ListAsync(listSpec, cancellationToken);
         var totalCount = await repository.CountAsync(countSpec, cancellationToken);
 
         var items = profiles.Select(mapper.Map).ToList();

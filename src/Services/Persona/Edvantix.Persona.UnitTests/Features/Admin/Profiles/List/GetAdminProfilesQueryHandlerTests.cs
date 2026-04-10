@@ -24,7 +24,7 @@ public sealed class GetAdminProfilesQueryHandlerTests
 
         _profileRepoMock
             .Setup(r =>
-                r.FindAllAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+                r.ListAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync([profile]);
         _profileRepoMock
@@ -49,7 +49,7 @@ public sealed class GetAdminProfilesQueryHandlerTests
 
         _profileRepoMock
             .Setup(r =>
-                r.FindAllAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+                r.ListAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync([]);
         _profileRepoMock
@@ -70,7 +70,7 @@ public sealed class GetAdminProfilesQueryHandlerTests
 
         _profileRepoMock
             .Setup(r =>
-                r.FindAllAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+                r.ListAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync([]);
         _profileRepoMock
@@ -91,7 +91,7 @@ public sealed class GetAdminProfilesQueryHandlerTests
 
         _profileRepoMock
             .Setup(r =>
-                r.FindAllAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
+                r.ListAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync([]);
         _profileRepoMock

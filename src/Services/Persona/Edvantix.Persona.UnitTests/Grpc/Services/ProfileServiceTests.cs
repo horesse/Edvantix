@@ -11,7 +11,7 @@ public sealed class ProfileServiceTests
 
     public ProfileServiceTests()
     {
-        _service = new(_profileRepoMock.Object, Mock.Of<ILogger<ProfileService>>());
+        _service = new(_profileRepoMock.Object);
     }
 
     [Test]
@@ -44,10 +44,6 @@ public sealed class ProfileServiceTests
 
         result.ShouldNotBeNull();
         result.Id.ShouldBe(profileId.ToString());
-        result.AccountId.ShouldBe(accountId.ToString());
-        result.Login.ShouldBe("john.doe");
-        result.Gender.ShouldBe((int)Gender.Male);
-        result.BirthDate.ShouldBe("1990-05-20");
         result.FirstName.ShouldBe("Иван");
         result.LastName.ShouldBe("Иванов");
         result.MiddleName.ShouldBe("Петрович");

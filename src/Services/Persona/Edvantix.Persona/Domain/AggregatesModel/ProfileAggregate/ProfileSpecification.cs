@@ -2,6 +2,11 @@
 
 public sealed class ProfileSpecification : Specification<Profile>
 {
+    public ProfileSpecification(IEnumerable<Guid> ids)
+    {
+        Query.Where(x => ids.Contains(x.Id));
+    }
+
     private ProfileSpecification(Guid profileId)
     {
         Query.OrderBy(x => x.FullName.LastName).Where(p => p.Id == profileId);

@@ -4,8 +4,13 @@ namespace Edvantix.Organizational.Grpc.Services.Profile;
 
 public interface IProfileService
 {
-    Task<ProfileResponse?> GetProfileByIdAsync(
+    Task<GetProfileResponse?> GetProfileByIdAsync(
         [StringSyntax(StringSyntaxAttribute.GuidFormat)] string id,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<GetProfilesResponse?> GetProfilesByIdsAsync(
+        [StringSyntax(StringSyntaxAttribute.GuidFormat)] string[] ids,
         CancellationToken cancellationToken = default
     );
 }

@@ -4,16 +4,15 @@ option csharp_namespace = "Edvantix.Persona.Grpc.Services";
 
 package profile.v1;
 
-// Сервис профилей — используется другими микросервисами для получения данных пользователей.
 service ProfileGrpcService {
-  rpc GetProfile (GetProfileRequest) returns (ProfileReply);
+  rpc GetProfile (GetProfileRequest) returns (ProfileResponse);
 }
 
 message GetProfileRequest {
   string profile_id = 1;
 }
 
-message ProfileReply {
+message ProfileResponse {
   string id = 1;
   string account_id = 2;
   int32 gender = 3;

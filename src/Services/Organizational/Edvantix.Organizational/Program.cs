@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Organizational.Extensions;
+using Edvantix.Organizational.Grpc.Services.Permission;
 using Edvantix.ServiceDefaults.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +35,11 @@ var apiVersionSet = app.NewApiVersionSet()
     .ReportApiVersions()
     .Build();
 
-app.MapEndpoints(apiVersionSet);
+app.MapEndpoints(apiVersionSet, "organizations");
+
+app.MapGrpcService<PermissionService>();
+
+app.MapGrpcHealthChecksService();
 
 app.MapDefaultEndpoints();
 

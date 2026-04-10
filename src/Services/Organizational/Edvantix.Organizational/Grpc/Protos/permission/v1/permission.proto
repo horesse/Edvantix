@@ -1,0 +1,18 @@
+﻿edition = "2023";
+
+option csharp_namespace = "Edvantix.Organizational.Grpc.Services";
+
+package permissions.v1;
+
+service PermissionGrpcService {
+  rpc CheckPermission (CheckPermissionRequest) returns (CheckPermissionReply);
+}
+
+message CheckPermissionRequest {
+  string organization_id = 1;
+  string permission = 2;
+}
+
+message CheckPermissionReply {
+  bool has_permission = 1;
+}

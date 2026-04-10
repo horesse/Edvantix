@@ -15,7 +15,7 @@ public sealed class ProfileService(IProfileRepository profileRepo, ILogger<Profi
     /// Возвращает краткий профиль по ProfileId или AccountId (Keycloak GUID).
     /// Ровно одно поле из oneof должно быть заполнено.
     /// </summary>
-    public override async Task<ProfileReply> GetProfile(
+    public override async Task<ProfileResponse> GetProfile(
         GetProfileRequest request,
         ServerCallContext context
     )
@@ -31,7 +31,7 @@ public sealed class ProfileService(IProfileRepository profileRepo, ILogger<Profi
             if (profile is null)
                 throw new RpcException(new Status(StatusCode.NotFound, "Профиль не найден."));
 
-            return new ProfileReply
+            return new ProfileResponse()
             {
                 Id = profile.Id.ToString(),
                 AccountId = profile.AccountId.ToString(),

@@ -4,8 +4,8 @@ using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
-using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
+using Edvantix.Organizational.Grpc;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
@@ -65,6 +65,8 @@ internal static class Extensions
         services.AddValidatorsFromAssemblyContaining<IOrganizationalApiMarker>(
             includeInternalTypes: true
         );
+
+        builder.AddGrpcServices();
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 

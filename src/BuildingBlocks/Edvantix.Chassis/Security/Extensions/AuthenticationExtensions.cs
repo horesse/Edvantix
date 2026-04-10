@@ -21,10 +21,13 @@ public static class AuthenticationExtensions
 
         var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
 
+        var scheme = builder.Environment.IsDevelopment()
+                    ? Uri.UriSchemeHttp
+                    : Http.Schemes.HttpOrHttps;
+
         var keycloakUrl = HttpUtilities
             .AsUrlBuilder()
-            // TODO: здесь по идее должно быть Http.Schemes.HttpOrHttps, но на винде ад
-            .WithScheme(Uri.UriSchemeHttp)
+            .WithScheme(scheme)
             .WithHost(Components.KeyCloak)
             .Build();
 

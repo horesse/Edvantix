@@ -2,10 +2,10 @@
 
 option csharp_namespace = "Edvantix.Organizational.Grpc.Services";
 
-package permissions.v1;
+package permission.v1;
 
 service PermissionGrpcService {
-  rpc CheckPermission (CheckPermissionRequest) returns (CheckPermissionReply);
+  rpc CheckPermission (CheckPermissionRequest) returns (CheckPermissionResponse);
 }
 
 message CheckPermissionRequest {
@@ -13,6 +13,6 @@ message CheckPermissionRequest {
   string permission = 2;
 }
 
-message CheckPermissionReply {
+message CheckPermissionResponse {
   bool has_permission = 1;
 }

@@ -8,7 +8,7 @@ internal class PermissionService() : PermissionGrpcService.PermissionGrpcService
 {
     [Authorize]
     [EnableRateLimiting("PerUserRateLimit")]
-    public override Task<CheckPermissionReply> CheckPermission(
+    public override Task<CheckPermissionResponse> CheckPermission(
         CheckPermissionRequest request,
         ServerCallContext context
     )

@@ -10,78 +10,83 @@ public static class RateLimiterExtensions
 {
     private const string PerUserPolicy = "PerUserRateLimit";
 
-    public static void AddRateLimiting(this IHostApplicationBuilder builder)
+    extension(IHostApplicationBuilder builder)
     {
-        var services = builder.Services;
+        /// <summary>
+        /// Регистрирует и настраивает ограничение частоты запросов API для текущего хоста.
+        /// </summary>
+        /// <remarks>
+        /// Метод настраивает:
+        /// <list type="bullet">
+        ///     <item><description>Глобальный ограничитель фиксированного окна для всех запросов.</description></item>
+        ///     <item><description>Политику токенового ведра на пользователя с именем <c>PerUserRateLimit</c>.</description></item>
+        ///     <item><description>Единое поведение отклонения, возвращающее HTTP <c>429</c>.</description></item>
+        /// </list>
+        /// </remarks>
+        public void AddRateLimiting()
+        {
+            var services = builder.Services;
 
-        services.AddRateLimiter();
+            // Регистрирует сервисы ограничения частоты запросов ASP.NET Core.
+            services.AddRateLimiter();
 
-        builder.Configure<FixedWindowRateLimiterOptions>(
-            nameof(FixedWindowRateLimiter),
-            configure: options =>
-            {
-                options.AutoReplenishment = true;
-                options.PermitLimit = 30;
-                options.QueueLimit = 5;
-                options.Window = TimeSpan.FromMinutes(1);
-            }
-        );
-
-        builder.Configure<TokenBucketRateLimiterOptions>(
-            nameof(TokenBucketRateLimiter),
-            configure: options =>
-            {
-                options.AutoReplenishment = true;
-                options.TokenLimit = 100;
-                options.TokensPerPeriod = 100;
-                options.QueueLimit = 100;
-                options.ReplenishmentPeriod = TimeSpan.FromSeconds(10);
-            }
-        );
-
-        services
-            .AddOptions<RateLimiterOptions>()
-            .Configure(
-                (
-                    RateLimiterOptions options,
-                    IOptionsMonitor<TokenBucketRateLimiterOptions> userRateLimitingOptions,
-                    IOptionsMonitor<FixedWindowRateLimiterOptions> windowRateLimiterOptions
-                ) =>
+            // Настраивает параметры глобального ограничителя фиксированного окна.
+            builder.Configure<FixedWindowRateLimiterOptions>(
+                nameof(FixedWindowRateLimiter),
+                configure: options =>
                 {
-                    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-
-                    options.AddRejectBehavior();
-
-                    options.AddDefaultLimiter(windowRateLimiterOptions);
-
-                    options.AddUserRateLimiter(userRateLimitingOptions);
+                    options.AutoReplenishment = true;
+                    options.PermitLimit = 30;
+                    options.QueueLimit = 5;
+                    options.Window = TimeSpan.FromMinutes(1);
                 }
             );
+
+            // Настраивает параметры токенового ведра для ограничения на пользователя.
+            builder.Configure<TokenBucketRateLimiterOptions>(
+                nameof(TokenBucketRateLimiter),
+                configure: options =>
+                {
+                    options.AutoReplenishment = true;
+                    options.TokenLimit = 100;
+                    options.TokensPerPeriod = 100;
+                    options.QueueLimit = 100;
+                    options.ReplenishmentPeriod = TimeSpan.FromSeconds(10);
+                }
+            );
+
+            // Применяет поведение конвейера ограничителя и привязывает политики.
+            services
+                .AddOptions<RateLimiterOptions>()
+                .Configure(
+                    (
+                        RateLimiterOptions options,
+                        IOptionsMonitor<TokenBucketRateLimiterOptions> userRateLimitingOptions,
+                        IOptionsMonitor<FixedWindowRateLimiterOptions> windowRateLimiterOptions
+                    ) =>
+                    {
+                        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+                        options.AddRejectBehavior();
+
+                        options.AddDefaultLimiter(windowRateLimiterOptions);
+
+                        options.AddUserRateLimiter(userRateLimitingOptions);
+                    }
+                );
+        }
     }
 
-    public static IEndpointConventionBuilder RequirePerUserRateLimit(
-        this IEndpointConventionBuilder builder
-    )
+    extension(IEndpointConventionBuilder builder)
     {
-        return builder.RequireRateLimiting(PerUserPolicy);
-    }
-
-    private static string GetClientIdentifier(this HttpContext context)
-    {
-        var forwardedFor = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrEmpty(forwardedFor))
+        /// <summary>
+        /// Применяет политику ограничения частоты запросов на пользователя к эндпоинту.
+        /// </summary>
+        /// <returns>Построитель соглашений эндпоинта с применённой политикой ограничения.</returns>
+        public IEndpointConventionBuilder RequirePerUserRateLimit()
         {
-            return forwardedFor.Split(',')[0].Trim();
+            return builder.RequireRateLimiting(PerUserPolicy);
         }
-
-        var realIp = context.Request.Headers["X-Real-IP"].FirstOrDefault();
-        if (!string.IsNullOrEmpty(realIp))
-        {
-            return realIp;
-        }
-
-        return context.Connection.RemoteIpAddress?.ToString()
-            ?? context.Request.Headers.Host.ToString();
     }
 
     extension(RateLimiterOptions option)
@@ -92,7 +97,8 @@ public static class RateLimiterExtensions
         {
             option.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
                 RateLimitPartition.GetFixedWindowLimiter(
-                    context.GetClientIdentifier(),
+                    context.Connection.RemoteIpAddress?.ToString()
+                        ?? context.Request.Headers.Host.ToString(),
                     _ => fixedWindowRateLimiterOptions.CurrentValue
                 )
             );

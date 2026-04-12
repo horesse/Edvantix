@@ -4,7 +4,9 @@ using Edvantix.Chassis.Security.Settings;
 using Edvantix.Constants.Aspire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Chassis.Security.Keycloak;
@@ -40,10 +42,7 @@ internal sealed class KeycloakTokenIntrospectionMiddleware(
 
         if (string.IsNullOrWhiteSpace(token))
         {
-            logger.LogWarning(
-                "Missing or invalid Authorization header for {Path}",
-                context.Request.Path
-            );
+            logger.LogWarning("Missing or invalid Authorization header");
 
             await WriteProblemAsync(context, "Authorization header missing or invalid", traceId);
             return;
@@ -69,11 +68,7 @@ internal sealed class KeycloakTokenIntrospectionMiddleware(
 
         if (!response.IsSuccessStatusCode)
         {
-            logger.LogWarning(
-                "Token introspection returned {StatusCode} for {Path}",
-                response.StatusCode,
-                context.Request.Path
-            );
+            logger.LogWarning("Token introspection returned {StatusCode}", response.StatusCode);
 
             await WriteProblemAsync(context, "Token introspection failed", traceId);
             return;
@@ -91,7 +86,7 @@ internal sealed class KeycloakTokenIntrospectionMiddleware(
 
         if (!isActive)
         {
-            logger.LogInformation("Inactive token presented for {Path}", context.Request.Path);
+            logger.LogInformation("Inactive token presented");
 
             await WriteProblemAsync(context, "Token is not active", traceId);
             return;
@@ -109,5 +104,36 @@ internal sealed class KeycloakTokenIntrospectionMiddleware(
                 extensions: new Dictionary<string, object?> { { nameof(traceId), traceId } }
             )
             .ExecuteAsync(context);
+    }
+}
+
+public static class KeycloakTokenIntrospectionMiddlewareExtensions
+{
+    extension(IServiceCollection services)
+    {
+        /// <summary>
+        /// Регистрирует middleware интроспекции токена Keycloak в контейнере внедрения зависимостей.
+        /// </summary>
+        /// <returns>
+        /// Обновлённый экземпляр <see cref="IServiceCollection" />.
+        /// </returns>
+        public IServiceCollection AddKeycloakTokenIntrospection()
+        {
+            return services.AddScoped<KeycloakTokenIntrospectionMiddleware>();
+        }
+    }
+
+    extension(IApplicationBuilder app)
+    {
+        /// <summary>
+        /// Добавляет middleware интроспекции токена Keycloak в конвейер обработки запросов приложения.
+        /// </summary>
+        /// <returns>
+        /// Тот же экземпляр <see cref="IApplicationBuilder" /> для дальнейшей цепочки middleware.
+        /// </returns>
+        public IApplicationBuilder UseKeycloakTokenIntrospection()
+        {
+            return app.UseMiddleware<KeycloakTokenIntrospectionMiddleware>();
+        }
     }
 }

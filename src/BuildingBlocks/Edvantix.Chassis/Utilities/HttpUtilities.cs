@@ -125,7 +125,7 @@ public sealed class UrlBuilder
 
         var url = inner.ToString();
 
-        // UriBuilder always appends "/" for root path; strip for scheme+host-only URLs
+        // UriBuilder всегда добавляет "/" для корневого пути; убираем для URL, содержащих только схему и хост
         if (inner.Path is "/" && _pathSegments.Count == 0)
         {
             url = url.TrimEnd('/');

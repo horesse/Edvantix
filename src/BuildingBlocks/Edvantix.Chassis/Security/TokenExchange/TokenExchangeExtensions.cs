@@ -8,23 +8,33 @@ namespace Edvantix.Chassis.Security.TokenExchange;
 
 public static class TokenExchangeExtensions
 {
-    public static IHttpClientBuilder AddAuthTokenExchange(
-        this IHttpClientBuilder builder,
-        string? serviceKey = null
-    )
+    extension(IHttpClientBuilder builder)
     {
-        var service = builder.Services;
+        /// <summary>
+        /// Добавляет поддержку token exchange в настроенный <see cref="IHttpClientBuilder" />,
+        /// регистрируя сервис обмена токенов и delegating handler авторизации.
+        /// </summary>
+        /// <param name="serviceKey">
+        /// Необязательный идентификатор целевого сервиса, используемый для определения audience и scope при обмене токена.
+        /// </param>
+        /// <returns>
+        /// Тот же экземпляр <see cref="IHttpClientBuilder" /> для цепочки вызовов.
+        /// </returns>
+        public IHttpClientBuilder AddAuthTokenExchange(string? serviceKey = null)
+        {
+            var service = builder.Services;
 
-        service.TryAddTransient<ITokenExchange, TokenExchange>();
+            service.TryAddTransient<ITokenExchange, TokenExchange>();
 
-        service.AddTransient(sp => new HttpClientAuthorizationDelegatingHandler(
-            sp.GetRequiredService<IHttpContextAccessor>(),
-            serviceKey
-        ));
+            service.AddTransient(sp => new HttpClientAuthorizationDelegatingHandler(
+                sp.GetRequiredService<IHttpContextAccessor>(),
+                serviceKey
+            ));
 
-        builder.AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            builder.AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
-        return builder;
+            return builder;
+        }
     }
 
     private sealed class HttpClientAuthorizationDelegatingHandler(
@@ -82,7 +92,7 @@ public static class TokenExchangeExtensions
                 return (serviceKey, scope);
             }
 
-            // fallback: find a configured key that is contained in the service key
+            // Запасной вариант: ищет настроенный ключ, который содержится в ключе сервиса.
             var found = identity.TokenExchangeTargets.FirstOrDefault(kvp =>
                 !string.IsNullOrWhiteSpace(kvp.Key)
                 && (

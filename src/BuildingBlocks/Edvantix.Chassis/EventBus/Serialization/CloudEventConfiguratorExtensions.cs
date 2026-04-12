@@ -2,23 +2,39 @@
 
 namespace Edvantix.Chassis.EventBus.Serialization;
 
-/// <summary>
-///     Extension methods to configure CloudEvents serialization on MassTransit bus
-///     and receive endpoint configurators.
-/// </summary>
-/// <remarks>
-///     Follows the pattern established by
-///     <see href="https://github.com/riezebosch/CloudEventify">CloudEventify</see>:
-///     the deserializer is registered as the default content type handler so incoming
-///     <c>application/cloudevents+json</c> messages are consumed automatically, while
-///     the serializer wraps all outgoing messages in a CloudEvents envelope.
-/// </remarks>
 public static class CloudEventConfiguratorExtensions
 {
-    public static void UseCloudEvents(this IBusFactoryConfigurator configurator)
+    extension(IBusFactoryConfigurator configurator)
     {
-        var factory = new CloudEventSerializerFactory();
-        configurator.AddSerializer(factory);
-        configurator.AddDeserializer(factory, true);
+        /// <summary>
+        /// Настраивает конфигуратор MassTransit для использования CloudEvents при сериализации и десериализации сообщений.
+        /// </summary>
+        /// <remarks>
+        /// Единственный экземпляр <see cref="CloudEventSerializerFactory" /> регистрируется и для сериализатора, и для десериализатора
+        /// для обеспечения согласованной обработки полезной нагрузки.
+        /// </remarks>
+        public void UseCloudEvents()
+        {
+            var factory = new CloudEventSerializerFactory();
+            configurator.AddSerializer(factory);
+            configurator.AddDeserializer(factory, true);
+        }
+    }
+
+    extension(IReceiveEndpointConfigurator configurator)
+    {
+        /// <summary>
+        /// Настраивает эндпоинт получения для использования CloudEvents при сериализации и десериализации сообщений.
+        /// </summary>
+        /// <remarks>
+        /// Единственный экземпляр <see cref="CloudEventSerializerFactory" /> используется и для сериализатора, и для десериализатора
+        /// для согласованной обработки полезной нагрузки на этом эндпоинте.
+        /// </remarks>
+        public void UseCloudEvents()
+        {
+            var factory = new CloudEventSerializerFactory();
+            configurator.AddSerializer(factory);
+            configurator.AddDeserializer(factory, true);
+        }
     }
 }

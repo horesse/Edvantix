@@ -22,6 +22,24 @@ public static class ServiceReferenceExtensions
 
     extension(IServiceCollection services)
     {
+        /// <summary>
+        /// Добавляет типизированный gRPC-клиент с устойчивостью и регистрацией проверки работоспособности.
+        /// </summary>
+        /// <typeparam name="TClient">
+        /// Контракт типизированного gRPC-клиента.
+        /// </typeparam>
+        /// <param name="address">
+        /// Абсолютный URI нижестоящего gRPC-сервиса.
+        /// </param>
+        /// <param name="failureStatus">
+        /// Одно из значений перечисления, определяющее статус работоспособности при сбое пробы.
+        /// </param>
+        /// <returns>
+        /// Построитель HTTP-клиента для зарегистрированного gRPC-клиента.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Адрес не является допустимым абсолютным URI.
+        /// </exception>
         public IHttpClientBuilder AddGrpcServiceReference<TClient>(
             string address,
             HealthStatus failureStatus
@@ -51,6 +69,27 @@ public static class ServiceReferenceExtensions
             return builder;
         }
 
+        /// <summary>
+        /// Добавляет типизированный HTTP-клиент с необязательной регистрацией проверки работоспособности эндпоинта.
+        /// </summary>
+        /// <typeparam name="TClient">
+        /// Контракт типизированного Refit-клиента.
+        /// </typeparam>
+        /// <param name="address">
+        /// Абсолютный URI нижестоящего HTTP-сервиса.
+        /// </param>
+        /// <param name="failureStatus">
+        /// Одно из значений перечисления, определяющее статус работоспособности при сбое пробы.
+        /// </param>
+        /// <param name="healthRelativePath">
+        /// Относительный путь URI эндпоинта проверки работоспособности. Если <see langword="null" /> или пустой, используется путь по умолчанию.
+        /// </param>
+        /// <exception cref="ArgumentException">
+        /// Адрес не является допустимым абсолютным URI.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Путь проверки работоспособности не является допустимым относительным URI.
+        /// </exception>
         public void AddHttpServiceReference<TClient>(
             string address,
             HealthStatus failureStatus,

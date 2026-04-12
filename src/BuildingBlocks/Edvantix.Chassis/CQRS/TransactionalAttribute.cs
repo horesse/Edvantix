@@ -3,15 +3,14 @@
 namespace Edvantix.Chassis.CQRS;
 
 /// <summary>
-///     Marks a command as requiring ACID transaction wrapping.
-///     When a command is decorated with this attribute, the <c>TransactionBehavior</c> pipeline
-///     will automatically begin a database transaction before the handler executes
-///     and commit it upon success (or roll back on failure).
+/// Помечает команду как требующую обёртки в ACID-транзакцию.
+/// При наличии этого атрибута конвейер <c>TransactionBehavior</c> автоматически начнёт транзакцию базы данных
+/// перед выполнением обработчика и зафиксирует её при успехе (или откатит при сбое).
 /// </summary>
 /// <param name="isolationLevel">
-///     The isolation level for the transaction.
-///     Defaults to <see cref="System.Data.IsolationLevel.ReadCommitted" />, which prevents dirty reads
-///     and is appropriate for most OLTP write commands.
+/// Уровень изоляции транзакции.
+/// По умолчанию <see cref="System.Data.IsolationLevel.ReadCommitted" />, который предотвращает грязное чтение
+/// и подходит для большинства OLTP-команд записи.
 /// </param>
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public sealed class TransactionalAttribute(

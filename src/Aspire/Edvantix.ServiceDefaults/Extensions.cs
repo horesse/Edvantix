@@ -9,106 +9,126 @@ using OpenTelemetry.Trace;
 
 namespace Edvantix.ServiceDefaults;
 
-// Adds common Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
-// This project should be referenced by each service project in your solution.
-// To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
+// Регистрирует общие сервисы Aspire: обнаружение сервисов, устойчивость, проверки работоспособности и OpenTelemetry.
+// Этот проект должен быть подключён к каждому сервисному проекту решения.
 public static class Extensions
 {
-    private static void AddLogging(this IHostApplicationBuilder builder)
+    extension(IHostApplicationBuilder builder)
     {
-        var logger = builder.Logging;
-
-        logger.EnableEnrichment();
-        builder.Services.AddLogEnricher<ApplicationEnricher>();
-
-        logger.AddGlobalBuffer(builder.Configuration.GetSection("Logging"));
-        logger.AddPerIncomingRequestBuffer(builder.Configuration.GetSection("Logging"));
-
-        logger.AddOpenTelemetry(logging =>
+        private void AddDefaultHealthChecks()
         {
-            logging.IncludeFormattedMessage = true;
-            logging.IncludeScopes = true;
-        });
-
-        if (builder.Environment.IsDevelopment())
-        {
-            logger.AddTraceBasedSampler();
+            builder
+                .Services.AddHealthChecks()
+                // Добавляет базовую проверку живости для подтверждения работоспособности приложения
+                .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
         }
     }
 
-    private static void AddOpenTelemetry(
-        this IServiceCollection services,
-        IHostApplicationBuilder builder
-    )
+    extension(WebApplication app)
     {
-        Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-
-        services
-            .AddOpenTelemetry()
-            .WithMetrics(metrics =>
+        /// <summary>
+        /// Регистрирует эндпоинты проверки работоспособности только для среды разработки.
+        /// </summary>
+        /// <remarks>
+        /// Эндпоинт готовности требует прохождения всех проверок, эндпоинт живости — только проверок с тегом <c>live</c>.
+        /// </remarks>
+        public void MapDefaultEndpoints()
+        {
+            if (!app.Environment.IsDevelopment())
             {
-                metrics
-                    .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddRuntimeInstrumentation()
-                    .AddMeter(ActivitySourceProvider.DefaultSourceName);
-            })
-            .WithTracing(tracing =>
-            {
-                if (builder.Environment.IsDevelopment())
-                {
-                    tracing.SetSampler(new AlwaysOnSampler());
-                }
+                return;
+            }
 
-                tracing
-                    .AddSource(builder.Environment.ApplicationName)
-                    .AddAspNetCoreInstrumentation(options =>
-                        // Don't trace requests to the health endpoint to avoid filling the dashboard with noise
-                        options.Filter = httpContext =>
-                            !(
-                                httpContext.Request.Path.StartsWithSegments(
-                                    Http.Endpoints.HealthEndpointPath
-                                )
-                                || httpContext.Request.Path.StartsWithSegments(
-                                    Http.Endpoints.AlivenessEndpointPath
-                                )
-                            )
-                    )
-                    .AddGrpcClientInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddProcessor(new FixHttpRouteProcessor())
-                    .AddSource(ActivitySourceProvider.DefaultSourceName);
+            // Все проверки работоспособности должны пройти, чтобы приложение считалось готовым принимать трафик.
+            app.MapHealthChecks(Http.Endpoints.HealthEndpointPath);
+
+            // Только проверки с тегом "live" должны пройти, чтобы приложение считалось живым.
+            app.MapHealthChecks(
+                Http.Endpoints.AlivenessEndpointPath,
+                new() { Predicate = r => r.Tags.Contains("live") }
+            );
+        }
+    }
+
+    extension(IHostApplicationBuilder builder)
+    {
+        private void AddLogging()
+        {
+            var logger = builder.Logging;
+
+            logger.EnableEnrichment();
+            builder.AddApplicationEnricher();
+
+            logger.AddGlobalBuffer(builder.Configuration.GetSection("Logging"));
+            logger.AddPerIncomingRequestBuffer(builder.Configuration.GetSection("Logging"));
+
+            logger.AddOpenTelemetry(logging =>
+            {
+                logging.IncludeFormattedMessage = true;
+                logging.IncludeScopes = true;
             });
-    }
 
-    private static void AddDefaultHealthChecks(this IHostApplicationBuilder builder)
-    {
-        builder
-            .Services.AddHealthChecks()
-            // Add a default liveness check to ensure app is responsive
-            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
-    }
-
-    public static void MapDefaultEndpoints(this WebApplication app)
-    {
-        if (!app.Environment.IsDevelopment())
-        {
-            return;
+            if (builder.Environment.IsDevelopment())
+            {
+                logger.AddTraceBasedSampler();
+            }
         }
+    }
 
-        // All health checks must pass for app to be considered ready to accept traffic after starting
-        app.MapHealthChecks(Http.Endpoints.HealthEndpointPath);
+    extension(IServiceCollection services)
+    {
+        private void AddOpenTelemetry(IHostApplicationBuilder builder)
+        {
+            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 
-        // Only health checks tagged with the "live" tag must pass for app to be considered alive
-        app.MapHealthChecks(
-            Http.Endpoints.AlivenessEndpointPath,
-            new() { Predicate = r => r.Tags.Contains("live") }
-        );
+            services
+                .AddOpenTelemetry()
+                .WithMetrics(metrics =>
+                {
+                    metrics
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddRuntimeInstrumentation()
+                        .AddMeter(ActivitySourceProvider.DefaultSourceName);
+                })
+                .WithTracing(tracing =>
+                {
+                    if (builder.Environment.IsDevelopment())
+                    {
+                        tracing.SetSampler(new AlwaysOnSampler());
+                    }
+
+                    tracing
+                        .AddSource(builder.Environment.ApplicationName)
+                        .AddAspNetCoreInstrumentation(options =>
+                            // Исключает запросы к эндпоинтам проверки работоспособности из трассировки во избежание шума на дашборде
+                            options.Filter = httpContext =>
+                                !(
+                                    httpContext.Request.Path.StartsWithSegments(
+                                        Http.Endpoints.HealthEndpointPath
+                                    )
+                                    || httpContext.Request.Path.StartsWithSegments(
+                                        Http.Endpoints.AlivenessEndpointPath
+                                    )
+                                )
+                        )
+                        .AddGrpcClientInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddProcessor(new FixHttpRouteProcessor())
+                        .AddSource(ActivitySourceProvider.DefaultSourceName);
+                });
+        }
     }
 
     extension<TBuilder>(TBuilder builder)
         where TBuilder : IHostApplicationBuilder
     {
+        /// <summary>
+        /// Настраивает базовые возможности платформы для хоста сервиса.
+        /// </summary>
+        /// <remarks>
+        /// Включает OpenTelemetry, базовые проверки работоспособности, обнаружение сервисов и устойчивость HTTP-клиентов.
+        /// </remarks>
         public void AddServiceDefaults()
         {
             builder.ConfigureOpenTelemetry();
@@ -121,10 +141,10 @@ public static class Extensions
             {
                 http.RemoveAllResilienceHandlers();
 
-                // Turn on resilience by default
+                // Включает устойчивость по умолчанию
                 http.AddStandardResilienceHandler();
 
-                // Turn on service discovery by default
+                // Включает обнаружение сервисов по умолчанию
                 http.AddServiceDiscovery();
             });
         }

@@ -5,15 +5,21 @@ namespace Edvantix.Chassis.Security.Tenant;
 
 public static class TenantServiceExtensions
 {
-    public static IServiceCollection AddTenantContext(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services.AddScoped<ITenantContext, TenantContext>();
-        return services;
+        public IServiceCollection AddTenantContext()
+        {
+            services.AddScoped<ITenantContext, TenantContext>();
+            return services;
+        }
     }
 
-    public static IApplicationBuilder UseTenantContext(this IApplicationBuilder app)
+    extension(IApplicationBuilder app)
     {
-        app.UseMiddleware<TenantMiddleware>();
-        return app;
+        public IApplicationBuilder UseTenantContext()
+        {
+            app.UseMiddleware<TenantMiddleware>();
+            return app;
+        }
     }
 }

@@ -11,51 +11,68 @@ namespace Edvantix.Chassis.Security.Extensions;
 
 public static class AuthenticationExtensions
 {
-    public static IHostApplicationBuilder AddDefaultAuthentication(
-        this IHostApplicationBuilder builder
-    )
+    extension(IHostApplicationBuilder builder)
     {
-        var services = builder.Services;
+        /// <summary>
+        /// Настраивает стандартный конвейер аутентификации JWT bearer с использованием параметров Keycloak,
+        /// полученных из настроенных identity-опций.
+        /// </summary>
+        /// <remarks>
+        /// Метод также регистрирует именованный HTTP-клиент для Keycloak и включает более строгую
+        /// валидацию токенов вне среды разработки.
+        /// </remarks>
+        /// <returns>Тот же экземпляр <see cref="IHostApplicationBuilder" /> для цепочки вызовов.</returns>
+        public IHostApplicationBuilder AddDefaultAuthentication()
+        {
+            var services = builder.Services;
 
-        builder.Configure<IdentityOptions>(IdentityOptions.ConfigurationSection);
+            // Привязывает секцию конфигурации identity к <see cref="IdentityOptions" />.
+            builder.Configure<IdentityOptions>(IdentityOptions.ConfigurationSection);
 
-        var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
+            // Получает realm Keycloak из привязанных identity-опций.
+            var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
 
-        var scheme = builder.Environment.IsDevelopment()
-            ? Uri.UriSchemeHttp
-            : Http.Schemes.HttpOrHttps;
+            // Использует HTTP в среде разработки и HTTP/HTTPS вне её.
+            var scheme = builder.Environment.IsDevelopment()
+                ? Uri.UriSchemeHttp
+                : Http.Schemes.HttpOrHttps;
 
-        var keycloakUrl = HttpUtilities
-            .AsUrlBuilder()
-            .WithScheme(scheme)
-            .WithHost(Components.KeyCloak)
-            .Build();
+            // Формирует базовый URL Keycloak на основе внутренних соглашений об именовании компонентов.
+            var keycloakUrl = HttpUtilities
+                .AsUrlBuilder()
+                .WithScheme(scheme)
+                .WithHost(Components.KeyCloak)
+                .Build();
 
-        services.AddHttpClient(
-            Components.KeyCloak,
-            client => client.BaseAddress = new(keycloakUrl)
-        );
-
-        services
-            .AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddKeycloakJwtBearer(
+            // Регистрирует именованный HTTP-клиент для взаимодействия с Keycloak.
+            services.AddHttpClient(
                 Components.KeyCloak,
-                realm,
-                options =>
-                {
-                    options.Audience = "account";
-                    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
-                    options.TokenValidationParameters.ValidateAudience =
-                        !builder.Environment.IsDevelopment();
-                    options.TokenValidationParameters.ValidateIssuer =
-                        !builder.Environment.IsDevelopment();
-                }
+                client => client.BaseAddress = new(keycloakUrl)
             );
 
-        return builder;
+            // Настраивает JWT bearer-аутентификацию с использованием Keycloak.
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddKeycloakJwtBearer(
+                    Components.KeyCloak,
+                    realm,
+                    options =>
+                    {
+                        // Использует audience клиента account в Keycloak.
+                        options.Audience = "account";
+                        options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+                        options.TokenValidationParameters.ValidateAudience =
+                            !builder.Environment.IsDevelopment();
+                        options.TokenValidationParameters.ValidateIssuer =
+                            !builder.Environment.IsDevelopment();
+                    }
+                );
+
+            return builder;
+        }
     }
 }

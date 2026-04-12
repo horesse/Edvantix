@@ -1,8 +1,5 @@
 ﻿namespace Edvantix.Chassis.EventBus.Serialization;
 
-/// <summary>
-///     Maps MassTransit message type URNs to/from CloudEvent <c>type</c> attribute values.
-/// </summary>
 internal static class CloudEventTypes
 {
     private const string Prefix = "urn:message:";
@@ -14,8 +11,8 @@ internal static class CloudEventTypes
             return "com.masstransit.message";
         }
 
-        // MassTransit URNs look like "urn:message:Namespace:TypeName"
-        // Convert to a dot-separated CloudEvent type, e.g. "Namespace.TypeName"
+        // URN MassTransit имеют вид "urn:message:Namespace:TypeName"
+        // Преобразует в тип CloudEvent через точку, например "Namespace.TypeName"
         var primary = messageTypes[0];
         return primary.StartsWith(Prefix, StringComparison.OrdinalIgnoreCase)
             ? primary[Prefix.Length..].Replace(':', '.')

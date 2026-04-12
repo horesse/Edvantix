@@ -67,7 +67,7 @@ prepare: restore hook
 # Run the application
 
 run:
-    aspire run
+    aspire run --isolated
 
 # Update Keycloakify bun packages
 

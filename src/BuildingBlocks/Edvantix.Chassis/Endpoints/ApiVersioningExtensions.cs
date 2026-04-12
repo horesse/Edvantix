@@ -6,18 +6,28 @@ namespace Edvantix.Chassis.Endpoints;
 
 public static class Extension
 {
-    public static void AddVersioning(this IServiceCollection service)
+    extension(IServiceCollection service)
     {
-        service
-            .AddApiVersioning(options =>
-            {
-                options.DefaultApiVersion = ApiVersions.V1;
-                options.ApiVersionReader = new UrlSegmentApiVersionReader();
-            })
-            .AddApiExplorer(options =>
-            {
-                options.GroupNameFormat = "'v'V";
-                options.SubstituteApiVersionInUrl = true;
-            });
+        /// <summary>
+        /// Настраивает версионирование API и метаданные API Explorer для обнаружения эндпоинтов.
+        /// </summary>
+        /// <remarks>
+        /// Устанавливает версию API по умолчанию <c>v1</c>, читает версии из сегментов URL
+        /// и включает подстановку версий в шаблонах маршрутов для сгруппированной документации API.
+        /// </remarks>
+        public void AddVersioning()
+        {
+            service
+                .AddApiVersioning(options =>
+                {
+                    options.DefaultApiVersion = ApiVersions.V1;
+                    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                })
+                .AddApiExplorer(options =>
+                {
+                    options.GroupNameFormat = "'v'V";
+                    options.SubstituteApiVersionInUrl = true;
+                });
+        }
     }
 }

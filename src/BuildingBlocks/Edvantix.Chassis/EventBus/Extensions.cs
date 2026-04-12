@@ -16,68 +16,6 @@ public static class Extensions
 {
     private static readonly KebabCaseEndpointNameFormatter _formatter = new(false);
 
-    public static void AddEventBus(
-        this IHostApplicationBuilder builder,
-        Type type,
-        Action<IBusRegistrationConfigurator>? busConfigure = null
-    )
-    {
-        var connectionString = builder.Configuration.GetConnectionString(Components.Broker);
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            return;
-        }
-
-        builder.Services.AddMassTransit(config =>
-        {
-            config.SetKebabCaseEndpointNameFormatter();
-
-            config.AddActivities(type.Assembly);
-
-            config.UsingInMemory(
-                (context, configurator) =>
-                {
-                    configurator.UseCloudEvents();
-                    configurator.ConfigureEndpoints(context);
-                    configurator.UseMessageRetry(AddRetryConfiguration);
-                    configurator.UseDelayedMessageScheduler();
-                    configurator.UsePublishFilter(typeof(KafkaPublishFilter<>), context);
-                }
-            );
-
-            config.AddRider(rider =>
-            {
-                var consumerEntries = DiscoverConsumerEntries(type.Assembly);
-
-                RegisterKafkaConsumers(rider, consumerEntries);
-                RegisterKafkaProducers(rider, type.Assembly);
-
-                rider.UsingKafka(
-                    (context, k) =>
-                    {
-                        k.Host(connectionString);
-                        k.SetSerializationFactory(new CloudEventKafkaSerializerFactory());
-
-                        ConfigureKafkaTopicEndpoints(k, context, type, consumerEntries);
-                    }
-                );
-            });
-
-            busConfigure?.Invoke(config);
-        });
-
-        builder
-            .Services.AddOpenTelemetry()
-            .WithMetrics(b => b.AddMeter(DiagnosticHeaders.DefaultListenerName))
-            .WithTracing(p => p.AddSource(DiagnosticHeaders.DefaultListenerName));
-    }
-
-    public static void AddEventDispatcher(this IServiceCollection services)
-    {
-        services.AddScoped<IEventDispatcher, EventDispatcher>();
-    }
-
     private static void AddRetryConfiguration(IRetryConfigurator retryConfigurator)
     {
         retryConfigurator
@@ -195,6 +133,111 @@ public static class Extensions
         }
 
         return messageTypes;
+    }
+
+    extension(IHostApplicationBuilder builder)
+    {
+        /// <summary>
+        /// Регистрирует и настраивает инфраструктуру шины событий для текущего хоста.
+        /// </summary>
+        /// <param name="type">
+        /// Маркерный тип для обнаружения потребителей, производителей и активностей из его сборки.
+        /// </param>
+        /// <param name="busConfigure">
+        /// Необязательный обратный вызов для дополнительной настройки <see cref="IBusRegistrationConfigurator" />.
+        /// </param>
+        /// <remarks>
+        /// Метод настраивает in-memory транспорт MassTransit для локального конвейера
+        /// и Kafka rider для брокерного обмена сообщениями. Если строка подключения к брокеру не настроена, регистрация пропускается.
+        /// </remarks>
+        public void AddEventBus(
+            Type type,
+            Action<IBusRegistrationConfigurator>? busConfigure = null
+        )
+        {
+            // Считывает параметры подключения к брокеру из конфигурации.
+            var connectionString = builder.Configuration.GetConnectionString(Components.Broker);
+
+            // Пропускает регистрацию шины событий, если брокер не настроен.
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                return;
+            }
+
+            builder.Services.AddMassTransit(config =>
+            {
+                // Устанавливает форматирование имён эндпоинтов в kebab-case для единообразия.
+                config.SetKebabCaseEndpointNameFormatter();
+
+                // Автоматически регистрирует активности MassTransit из целевой сборки.
+                config.AddActivities(type.Assembly);
+
+                config.UsingInMemory(
+                    (context, configurator) =>
+                    {
+                        // Использует конверты CloudEvents для совместимости.
+                        configurator.UseCloudEvents();
+
+                        // Автоматически настраивает эндпоинты обнаруженных потребителей.
+                        configurator.ConfigureEndpoints(context);
+
+                        // Применяет общую политику повторных попыток и игнорирует исключения валидации.
+                        configurator.UseMessageRetry(AddRetryConfiguration);
+
+                        // Включает отложенное планирование для доставки сообщений с задержкой.
+                        configurator.UseDelayedMessageScheduler();
+
+                        // Перенаправляет операции публикации через Kafka с помощью фильтра публикации.
+                        configurator.UsePublishFilter(typeof(KafkaPublishFilter<>), context);
+                    }
+                );
+
+                config.AddRider(rider =>
+                {
+                    // Обнаруживает потребителей один раз и переиспользует результат для регистрации и настройки эндпоинтов.
+                    var consumerEntries = DiscoverConsumerEntries(type.Assembly);
+
+                    // Регистрирует всех обнаруженных Kafka-потребителей и производителей.
+                    RegisterKafkaConsumers(rider, consumerEntries);
+                    RegisterKafkaProducers(rider, type.Assembly);
+
+                    rider.UsingKafka(
+                        (context, k) =>
+                        {
+                            // Настраивает хост Kafka и стратегию сериализации.
+                            k.Host(connectionString);
+                            k.SetSerializationFactory(new CloudEventKafkaSerializerFactory());
+
+                            // Создаёт эндпоинты топиков и привязывает каждого потребителя к его топику сообщений.
+                            ConfigureKafkaTopicEndpoints(k, context, type, consumerEntries);
+                        }
+                    );
+                });
+
+                // Позволяет вызывающему коду добавлять дополнительную конфигурацию MassTransit.
+                busConfigure?.Invoke(config);
+            });
+
+            // Регистрирует счётчик/источник диагностики MassTransit для метрик и трассировок OpenTelemetry.
+            builder
+                .Services.AddOpenTelemetry()
+                .WithMetrics(b => b.AddMeter(DiagnosticHeaders.DefaultListenerName))
+                .WithTracing(p => p.AddSource(DiagnosticHeaders.DefaultListenerName));
+        }
+    }
+
+    extension(IServiceCollection services)
+    {
+        /// <summary>
+        /// Регистрирует сервис диспетчера событий в контейнере зависимостей.
+        /// </summary>
+        /// <remarks>
+        /// Диспетчер регистрируется с областью видимости scoped, поэтому один экземпляр используется на всё время запроса.
+        /// </remarks>
+        public void AddEventDispatcher()
+        {
+            services.AddScoped<IEventDispatcher, EventDispatcher>();
+        }
     }
 
     private sealed record ConsumerEntry(Type ConsumerType, Type MessageType);

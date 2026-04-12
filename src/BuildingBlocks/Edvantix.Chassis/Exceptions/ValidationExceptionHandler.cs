@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.Buffering;
 using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Chassis.Exceptions;
 
-public sealed class ValidationExceptionHandler(
+internal sealed class ValidationExceptionHandler(
     ILogger<ValidationExceptionHandler> logger,
     PerRequestLogBuffer logBuffer
 ) : IExceptionHandler
@@ -43,5 +44,19 @@ public sealed class ValidationExceptionHandler(
             .ExecuteAsync(httpContext);
 
         return true;
+    }
+}
+
+public static class ValidationExceptionHandlerExtensions
+{
+    extension(IServiceCollection services)
+    {
+        /// <summary>
+        /// Регистрирует обработчик исключений валидации, чтобы ошибки FluentValidation возвращались как стандартизированные ответы-проблемы валидации.
+        /// </summary>
+        public void AddValidationExceptionHandler()
+        {
+            services.AddExceptionHandler<ValidationExceptionHandler>();
+        }
     }
 }

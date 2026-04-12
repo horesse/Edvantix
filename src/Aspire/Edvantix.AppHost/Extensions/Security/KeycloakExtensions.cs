@@ -11,139 +11,6 @@ internal static class KeycloakExtensions
     private const string BaseContainerPath = "Container/keycloak";
     private static readonly string _defaultLocalKeycloakName = nameof(Edvantix).ToLowerInvariant();
 
-    /// <summary>
-    ///     Configures the turborepo app resource to integrate with Keycloak as an Identity Provider (IdP).
-    /// </summary>
-    /// <param name="builder">The turborepo app resource builder.</param>
-    /// <param name="keycloak">The Keycloak resource builder to configure as an IdP.</param>
-    /// <returns>The turborepo app resource builder for method chaining.</returns>
-    public static IResourceBuilder<TurborepoAppResource> WithKeycloak(
-        this IResourceBuilder<TurborepoAppResource> builder,
-        IResourceBuilder<IResource> keycloak
-    )
-    {
-        var clientId = builder.Resource.Name;
-
-        var betterAuthSecret = builder
-            .ApplicationBuilder.AddParameter($"{clientId}-better-auth-secret", true)
-            .WithGeneratedDefault(new() { MinLength = 32, Special = false });
-
-        switch (keycloak)
-        {
-            case IResourceBuilder<KeycloakResource> keycloakContainer:
-                ConfigureKeycloakForClient(
-                    keycloakContainer,
-                    builder,
-                    clientId,
-                    "APP",
-                    null,
-                    false
-                );
-
-                builder
-                    .WithReference(keycloakContainer)
-                    .WaitForStart(keycloakContainer)
-                    .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
-                    .WithEnvironment("KEYCLOAK_REALM", _defaultLocalKeycloakName)
-                    .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
-                break;
-            case IResourceBuilder<ExternalServiceResource> keycloakHosted:
-                ConfigureClientForHostedKeycloak(
-                    builder,
-                    keycloakHosted,
-                    betterAuthSecret,
-                    clientId
-                );
-                break;
-        }
-
-        return builder;
-    }
-
-    /// <summary>
-    ///     Configures the project resource to integrate with Keycloak as an Identity Provider (IdP).
-    /// </summary>
-    /// <param name="builder">The project resource builder.</param>
-    /// <param name="keycloak">The Keycloak resource builder to configure as an IdP.</param>
-    /// <returns>The project resource builder for method chaining.</returns>
-    public static IResourceBuilder<ProjectResource> WithKeycloak(
-        this IResourceBuilder<ProjectResource> builder,
-        IResourceBuilder<IResource> keycloak
-    )
-    {
-        var clientId = builder.Resource.Name;
-        var applicationBuilder = builder.ApplicationBuilder;
-
-        switch (keycloak)
-        {
-            case IResourceBuilder<KeycloakResource> keycloakContainer:
-            {
-                var clientSecret = applicationBuilder
-                    .AddParameter($"{clientId}-secret", true)
-                    .WithGeneratedDefault(new() { MinLength = 32, Special = false });
-
-                ConfigureKeycloakForClient(
-                    keycloakContainer,
-                    builder,
-                    clientId,
-                    "API",
-                    clientSecret,
-                    true
-                );
-
-                builder
-                    .WithReference(keycloakContainer)
-                    .WaitForStart(keycloakContainer)
-                    .WithEnvironment("Identity__Realm", _defaultLocalKeycloakName)
-                    .WithEnvironment("Identity__ClientId", clientId)
-                    .WithEnvironment("Identity__ClientSecret", clientSecret)
-                    .WithEnvironment(
-                        $"Identity__Scopes__{clientId}_{Authorization.Actions.Read}",
-                        $"{nameof(Authorization.Actions.Read)} for {Services.ToClientName(clientId, "API")}"
-                    )
-                    .WithEnvironment(
-                        $"Identity__Scopes__{clientId}_{Authorization.Actions.Write}",
-                        $"{nameof(Authorization.Actions.Write)} for {Services.ToClientName(clientId, "API")}"
-                    );
-                break;
-            }
-            case IResourceBuilder<ExternalServiceResource> keycloakHosted:
-            {
-                var clientSecret = applicationBuilder
-                    .AddParameter($"{clientId}-secret", true)
-                    .WithCustomInput(_ =>
-                        new()
-                        {
-                            Name = $"KeycloakClientSecretParameter-{clientId}",
-                            Label = $"Keycloak Client Secret ({clientId})",
-                            InputType = InputType.SecretText,
-                            Description = $"Enter the Keycloak client secret for {clientId}",
-                        }
-                    );
-
-                var realmParameter = applicationBuilder
-                    .Resources.OfType<ParameterResource>()
-                    .First(r =>
-                        string.Equals(r.Name, "kc-realm", StringComparison.OrdinalIgnoreCase)
-                    );
-
-                builder
-                    .WithReference(keycloakHosted)
-                    .WaitFor(keycloakHosted)
-                    .WithEnvironment("Identity__Realm", realmParameter)
-                    .WithEnvironment("Identity__ClientId", clientId)
-                    .WithEnvironment("Identity__ClientSecret", clientSecret)
-                    .WithEnvironment(
-                        $"Identity__Scopes__{clientId}",
-                        Services.ToClientName(clientId, "API")
-                    );
-                break;
-            }
-        }
-
-        return builder;
-    }
-
     private static void ConfigureKeycloakForClient<TResource>(
         IResourceBuilder<KeycloakResource> keycloakContainer,
         IResourceBuilder<TResource> clientBuilder,
@@ -219,15 +86,147 @@ internal static class KeycloakExtensions
             .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
     }
 
+    extension(IResourceBuilder<TurborepoAppResource> builder)
+    {
+        /// <summary>
+        /// Настраивает ресурс Turborepo для интеграции с Keycloak в качестве провайдера идентификации (IdP).
+        /// </summary>
+        /// <param name="keycloak">Построитель ресурса Keycloak, настраиваемый как IdP.</param>
+        /// <returns>Построитель ресурса Turborepo для цепочки вызовов.</returns>
+        public IResourceBuilder<TurborepoAppResource> WithKeycloak(
+            IResourceBuilder<IResource> keycloak
+        )
+        {
+            var clientId = builder.Resource.Name;
+
+            var betterAuthSecret = builder
+                .ApplicationBuilder.AddParameter($"{clientId}-better-auth-secret", true)
+                .WithGeneratedDefault(new() { MinLength = 32, Special = false });
+
+            switch (keycloak)
+            {
+                case IResourceBuilder<KeycloakResource> keycloakContainer:
+                    ConfigureKeycloakForClient(
+                        keycloakContainer,
+                        builder,
+                        clientId,
+                        "APP",
+                        null,
+                        false
+                    );
+
+                    builder
+                        .WithReference(keycloakContainer)
+                        .WaitForStart(keycloakContainer)
+                        .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
+                        .WithEnvironment("KEYCLOAK_REALM", _defaultLocalKeycloakName)
+                        .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
+                    break;
+                case IResourceBuilder<ExternalServiceResource> keycloakHosted:
+                    ConfigureClientForHostedKeycloak(
+                        builder,
+                        keycloakHosted,
+                        betterAuthSecret,
+                        clientId
+                    );
+                    break;
+            }
+
+            return builder;
+        }
+    }
+
+    extension(IResourceBuilder<ProjectResource> builder)
+    {
+        /// <summary>
+        /// Настраивает ресурс проекта для интеграции с Keycloak в качестве провайдера идентификации (IdP).
+        /// </summary>
+        /// <param name="keycloak">Построитель ресурса Keycloak, настраиваемый как IdP.</param>
+        /// <returns>Построитель ресурса проекта для цепочки вызовов.</returns>
+        public IResourceBuilder<ProjectResource> WithKeycloak(IResourceBuilder<IResource> keycloak)
+        {
+            var clientId = builder.Resource.Name;
+            var applicationBuilder = builder.ApplicationBuilder;
+
+            switch (keycloak)
+            {
+                case IResourceBuilder<KeycloakResource> keycloakContainer:
+                {
+                    var clientSecret = applicationBuilder
+                        .AddParameter($"{clientId}-secret", true)
+                        .WithGeneratedDefault(new() { MinLength = 32, Special = false });
+
+                    ConfigureKeycloakForClient(
+                        keycloakContainer,
+                        builder,
+                        clientId,
+                        "API",
+                        clientSecret,
+                        true
+                    );
+
+                    builder
+                        .WithReference(keycloakContainer)
+                        .WaitForStart(keycloakContainer)
+                        .WithEnvironment("Identity__Realm", _defaultLocalKeycloakName)
+                        .WithEnvironment("Identity__ClientId", clientId)
+                        .WithEnvironment("Identity__ClientSecret", clientSecret)
+                        .WithEnvironment(
+                            $"Identity__Scopes__{clientId}_{Authorization.Actions.Read}",
+                            $"{nameof(Authorization.Actions.Read)} for {Services.ToClientName(clientId, "API")}"
+                        )
+                        .WithEnvironment(
+                            $"Identity__Scopes__{clientId}_{Authorization.Actions.Write}",
+                            $"{nameof(Authorization.Actions.Write)} for {Services.ToClientName(clientId, "API")}"
+                        );
+                    break;
+                }
+                case IResourceBuilder<ExternalServiceResource> keycloakHosted:
+                {
+                    var clientSecret = applicationBuilder
+                        .AddParameter($"{clientId}-secret", true)
+                        .WithCustomInput(_ =>
+                            new()
+                            {
+                                Name = $"KeycloakClientSecretParameter-{clientId}",
+                                Label = $"Keycloak Client Secret ({clientId})",
+                                InputType = InputType.SecretText,
+                                Description = $"Enter the Keycloak client secret for {clientId}",
+                            }
+                        );
+
+                    var realmParameter = applicationBuilder
+                        .Resources.OfType<ParameterResource>()
+                        .First(r =>
+                            string.Equals(r.Name, "kc-realm", StringComparison.OrdinalIgnoreCase)
+                        );
+
+                    builder
+                        .WithReference(keycloakHosted)
+                        .WaitFor(keycloakHosted)
+                        .WithEnvironment("Identity__Realm", realmParameter)
+                        .WithEnvironment("Identity__ClientId", clientId)
+                        .WithEnvironment("Identity__ClientSecret", clientSecret)
+                        .WithEnvironment(
+                            $"Identity__Scopes__{clientId}",
+                            Services.ToClientName(clientId, "API")
+                        );
+                    break;
+                }
+            }
+
+            return builder;
+        }
+    }
+
     extension(IDistributedApplicationBuilder builder)
     {
         /// <summary>
-        ///     Adds a Keycloak container resource to the distributed application builder with custom theme and realm import
-        ///     settings.
+        /// Добавляет контейнерный ресурс Keycloak к построителю распределённого приложения с пользовательской темой и настройками импорта realm.
         /// </summary>
-        /// <param name="name">The name of the Keycloak resource.</param>
+        /// <param name="name">Имя ресурса Keycloak.</param>
         /// <returns>
-        ///     An <see cref="IResourceBuilder{KeycloakResource}" /> representing the configured Keycloak resource.
+        /// <see cref="IResourceBuilder{KeycloakResource}" />, представляющий настроенный ресурс Keycloak.
         /// </returns>
         public IResourceBuilder<KeycloakResource> AddLocalKeycloak(string name)
         {
@@ -245,11 +244,11 @@ internal static class KeycloakExtensions
         }
 
         /// <summary>
-        ///     Adds a hosted Keycloak external service to the distributed application builder.
+        /// Добавляет размещённый внешний сервис Keycloak к построителю распределённого приложения.
         /// </summary>
-        /// <param name="name">The name of the Keycloak external service resource.</param>
+        /// <param name="name">Имя ресурса внешнего сервиса Keycloak.</param>
         /// <returns>
-        ///     An <see cref="IResourceBuilder{ExternalServiceResource}" /> representing the configured Keycloak external service.
+        /// <see cref="IResourceBuilder{ExternalServiceResource}" />, представляющий настроенный внешний сервис Keycloak.
         /// </returns>
         public IResourceBuilder<ExternalServiceResource> AddHostedKeycloak(string name)
         {
@@ -261,7 +260,7 @@ internal static class KeycloakExtensions
                         Name = "KeycloakUrlParameter",
                         Label = "Keycloak URL",
                         InputType = InputType.Text,
-                        Value = "https://identity.edvantix.ru",
+                        Value = "https://identity.bookworm.com",
                         Description = "Enter your Keycloak server URL here (must be https)",
                     }
                 );

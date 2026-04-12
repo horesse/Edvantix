@@ -153,10 +153,19 @@ internal sealed class PaginationHeaderFilter : IEndpointFilter
 
 public static class PaginationHeaderFilterExtensions
 {
-    public static TBuilder WithPaginationHeaders<TBuilder>(this TBuilder builder)
+    extension<TBuilder>(TBuilder builder)
         where TBuilder : IEndpointConventionBuilder
     {
-        builder.AddEndpointFilter(new PaginationHeaderFilter());
-        return builder;
+        /// <summary>
+        /// Добавляет фильтр эндпоинта пагинации к текущему построителю эндпоинта.
+        /// </summary>
+        /// <returns>
+        /// Тот же экземпляр построителя эндпоинта для цепочки вызовов.
+        /// </returns>
+        public TBuilder WithPaginationHeaders()
+        {
+            builder.AddEndpointFilter(new PaginationHeaderFilter());
+            return builder;
+        }
     }
 }

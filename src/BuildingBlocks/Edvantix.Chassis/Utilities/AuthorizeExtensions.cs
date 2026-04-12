@@ -63,7 +63,7 @@ public static class AuthorizeExtensions
 
         public Guid GetProfileIdOrError()
         {
-            return claims.TryGetProfileId() ?? throw new ForbiddenException("У Вас нет профиля.");
+            return claims.TryGetProfileId() ?? throw new Exception("У Вас нет профиля.");
         }
     }
 }

@@ -35,9 +35,9 @@ internal static class Extensions
             .AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
-        services.AddExceptionHandler<ValidationExceptionHandler>();
-        services.AddExceptionHandler<NotFoundExceptionHandler>();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddValidationExceptionHandler();
+        services.AddNotFoundExceptionHandler();
+        services.AddGlobalExceptionHandler();
         services.AddProblemDetails();
 
         builder.AddAppSettings<NotificationAppSettings>();

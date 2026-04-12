@@ -3,6 +3,8 @@ using System.Text.Json.Nodes;
 using Edvantix.Chassis.Security.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Edvantix.Chassis.Security.Keycloak;
@@ -32,7 +34,7 @@ internal sealed class KeycloakRolesClaimsTransformation(
 
         var claimsIdentity = new ClaimsIdentity();
 
-        // Convert resource roles to regular roles.
+        // Преобразует роли ресурса в обычные роли.
         var resourceRoleClaims = resourceRoles
             .GetValues<string>()
             .Where(role =>
@@ -42,7 +44,7 @@ internal sealed class KeycloakRolesClaimsTransformation(
 
         claimsIdentity.AddClaims(resourceRoleClaims);
 
-        // Convert realm roles to regular roles.
+        // Преобразует роли realm в обычные роли.
         var realmRoleClaims = realmRoles
             .GetValues<string>()
             .Where(role =>
@@ -55,5 +57,27 @@ internal sealed class KeycloakRolesClaimsTransformation(
         principal.AddIdentity(claimsIdentity);
 
         return Task.FromResult(principal);
+    }
+}
+
+public static class KeycloakClaimsTransformationExtensions
+{
+    extension(IHostApplicationBuilder builder)
+    {
+        /// <summary>
+        /// Регистрирует преобразование утверждений (claims) Keycloak, которое сопоставляет роли realm и resource Keycloak
+        /// с утверждениями типа <see cref="ClaimTypes.Role" />.
+        /// </summary>
+        /// <returns>
+        /// Текущий экземпляр <see cref="IHostApplicationBuilder" /> для цепочного (fluent) вызова методов.
+        /// </returns>
+        public IHostApplicationBuilder WithKeycloakClaimsTransformation()
+        {
+            builder.Services.AddTransient<
+                IClaimsTransformation,
+                KeycloakRolesClaimsTransformation
+            >();
+            return builder;
+        }
     }
 }

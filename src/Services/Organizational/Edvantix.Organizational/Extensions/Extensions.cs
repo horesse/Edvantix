@@ -33,9 +33,9 @@ internal static class Extensions
 
         services.AddTenantContext();
 
-        services.AddExceptionHandler<ValidationExceptionHandler>();
-        services.AddExceptionHandler<NotFoundExceptionHandler>();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddValidationExceptionHandler();
+        services.AddNotFoundExceptionHandler();
+        services.AddGlobalExceptionHandler();
         services.AddProblemDetails();
 
         builder.AddAppSettings<OrganizationalAppSettings>();

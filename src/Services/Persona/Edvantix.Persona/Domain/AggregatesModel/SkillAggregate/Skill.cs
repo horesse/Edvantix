@@ -6,7 +6,7 @@
 /// Создаётся автоматически при первом использовании навыка пользователем,
 /// удаляется когда ни один профиль не ссылается на него.
 /// </summary>
-public sealed class Skill() : Entity
+public sealed class Skill() : Entity, IAggregateRoot
 {
     /// <summary>Создаёт новый навык в каталоге.</summary>
     internal Skill(string name)

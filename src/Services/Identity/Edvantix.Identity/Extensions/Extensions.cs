@@ -13,7 +13,7 @@ internal static class Extensions
 
         builder.AddDefaultAuthentication().WithKeycloakClaimsTransformation();
 
-        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddGlobalExceptionHandler();
         services.AddProblemDetails();
 
         builder.AddAppSettings<IdentityAppSettings>();

@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.Utilities;
 using Edvantix.Chassis.Utilities.Configurations;
-using Edvantix.Organizational.Grpc.Services.Profile;
+using Edvantix.Organizational.Grpc.Services.Profiles;
 using Edvantix.Persona.Grpc.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

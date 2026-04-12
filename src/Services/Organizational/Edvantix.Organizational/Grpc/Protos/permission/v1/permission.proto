@@ -6,6 +6,11 @@ package permission.v1;
 
 service PermissionGrpcService {
   rpc CheckPermission (CheckPermissionRequest) returns (CheckPermissionResponse);
+
+  // Synchronises the permission set for a feature.
+  // All permissions not present in the request are removed; missing ones are created.
+  // Intended for use as a seeder called during service startup.
+  rpc SyncFeaturePermissions (SyncFeaturePermissionsRequest) returns (SyncFeaturePermissionsResponse);
 }
 
 message CheckPermissionRequest {
@@ -15,4 +20,14 @@ message CheckPermissionRequest {
 
 message CheckPermissionResponse {
   bool has_permission = 1;
+}
+
+message SyncFeaturePermissionsRequest {
+  string feature = 1;
+  repeated string permissions = 2;
+}
+
+message SyncFeaturePermissionsResponse {
+  int32 added = 1;
+  int32 removed = 2;
 }

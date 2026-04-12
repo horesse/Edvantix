@@ -1,6 +1,6 @@
 ﻿using Edvantix.Persona.Grpc.Services;
 
-namespace Edvantix.Organizational.Grpc.Services.Profile;
+namespace Edvantix.Organizational.Grpc.Services.Profiles;
 
 [ExcludeFromCodeCoverage]
 internal sealed class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient service)

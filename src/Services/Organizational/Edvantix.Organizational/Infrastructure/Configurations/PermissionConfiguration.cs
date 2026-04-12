@@ -10,8 +10,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
     {
         builder.UseDefaultConfiguration();
 
+        builder.Property(p => p.Feature).IsRequired().HasMaxLength(200);
         builder.Property(p => p.Name).IsRequired().HasMaxLength(200);
 
-        builder.HasIndex(p => p.Name).IsUnique();
+        // Unique per feature — the same permission name can exist in different features.
+        builder.HasIndex(p => new { p.Feature, p.Name }).IsUnique();
     }
 }

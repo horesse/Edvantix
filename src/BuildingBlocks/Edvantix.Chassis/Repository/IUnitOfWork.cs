@@ -3,16 +3,16 @@
 public interface IUnitOfWork : IDisposable
 {
     /// <summary>
-    ///     Persists all tracked changes to the underlying data store.
+    /// Сохраняет все отслеживаемые изменения в базовом хранилище данных.
     /// </summary>
-    /// <param name="cancellationToken">A token used to cancel the asynchronous operation.</param>
-    /// <returns>The number of state entries written to the data store.</returns>
+    /// <param name="cancellationToken">Токен для отмены асинхронной операции.</param>
+    /// <returns>Количество записей состояния, записанных в хранилище данных.</returns>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Saves entities and dispatches related domain events as part of the unit of work.
+    /// Сохраняет сущности и публикует связанные доменные события в рамках единицы работы.
     /// </summary>
-    /// <param name="cancellationToken">A token used to cancel the asynchronous operation.</param>
-    /// <returns><see langword="true" /> when the operation succeeds; otherwise, <see langword="false" />.</returns>
+    /// <param name="cancellationToken">Токен для отмены асинхронной операции.</param>
+    /// <returns><see langword="true" /> при успешном выполнении операции; иначе <see langword="false" />.</returns>
     Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default);
 }

@@ -14,43 +14,43 @@ public static class AuthenticationExtensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Configures the default JWT bearer authentication pipeline using Keycloak settings
-        ///     resolved from the configured identity options.
+        /// Настраивает стандартный конвейер аутентификации JWT bearer с использованием параметров Keycloak,
+        /// полученных из настроенных identity-опций.
         /// </summary>
         /// <remarks>
-        ///     This method also registers a named HTTP client for Keycloak and applies stricter
-        ///     token validation outside development environments.
+        /// Метод также регистрирует именованный HTTP-клиент для Keycloak и включает более строгую
+        /// валидацию токенов вне среды разработки.
         /// </remarks>
-        /// <returns>The same <see cref="IHostApplicationBuilder" /> instance for fluent configuration.</returns>
+        /// <returns>Тот же экземпляр <see cref="IHostApplicationBuilder" /> для цепочки вызовов.</returns>
         public IHostApplicationBuilder AddDefaultAuthentication()
         {
             var services = builder.Services;
 
-            // Binds identity configuration section to <see cref="IdentityOptions"/>.
+            // Привязывает секцию конфигурации identity к <see cref="IdentityOptions" />.
             builder.Configure<IdentityOptions>(IdentityOptions.ConfigurationSection);
 
-            // Resolves the Keycloak realm from bound identity options.
+            // Получает realm Keycloak из привязанных identity-опций.
             var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
 
-            // Uses HTTP in development and HTTP/HTTPS for non-development environments.
+            // Использует HTTP в среде разработки и HTTP/HTTPS вне её.
             var scheme = builder.Environment.IsDevelopment()
                 ? Uri.UriSchemeHttp
                 : Http.Schemes.HttpOrHttps;
 
-            // Builds the Keycloak base URL from internal component naming conventions.
+            // Формирует базовый URL Keycloak на основе внутренних соглашений об именовании компонентов.
             var keycloakUrl = HttpUtilities
                 .AsUrlBuilder()
                 .WithScheme(scheme)
                 .WithHost(Components.KeyCloak)
                 .Build();
 
-            // Registers a named HTTP client used for Keycloak communication.
+            // Регистрирует именованный HTTP-клиент для взаимодействия с Keycloak.
             services.AddHttpClient(
                 Components.KeyCloak,
                 client => client.BaseAddress = new(keycloakUrl)
             );
 
-            // Configures JWT bearer authentication backed by Keycloak.
+            // Настраивает JWT bearer-аутентификацию с использованием Keycloak.
             services
                 .AddAuthentication(options =>
                 {
@@ -62,7 +62,7 @@ public static class AuthenticationExtensions
                     realm,
                     options =>
                     {
-                        // Uses the Keycloak account client audience.
+                        // Использует audience клиента account в Keycloak.
                         options.Audience = "account";
                         options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
                         options.TokenValidationParameters.ValidateAudience =

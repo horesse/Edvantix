@@ -6,7 +6,7 @@ public interface IRepository<T>
     where T : IAggregateRoot
 {
     /// <summary>
-    ///     Gets the current unit of work used to coordinate transactional changes for this repository.
+    /// Возвращает единицу работы, используемую для координации транзакционных изменений в этом репозитории.
     /// </summary>
     IUnitOfWork UnitOfWork { get; }
 }

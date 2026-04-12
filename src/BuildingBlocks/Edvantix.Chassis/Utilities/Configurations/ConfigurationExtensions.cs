@@ -11,12 +11,12 @@ public static class ConfigurationExtensions
     extension(IConfiguration configuration)
     {
         /// <summary>
-        ///     Retrieves a named connection string from configuration and throws if the value is missing or empty.
+        /// Считывает именованную строку подключения из конфигурации и выбрасывает исключение, если значение отсутствует или пустое.
         /// </summary>
-        /// <param name="name">The connection string key under the <c>ConnectionStrings</c> section.</param>
-        /// <returns>The configured connection string value.</returns>
+        /// <param name="name">Ключ строки подключения в секции <c>ConnectionStrings</c>.</param>
+        /// <returns>Значение строки подключения из конфигурации.</returns>
         /// <exception cref="InvalidOperationException">
-        ///     Thrown when the connection string is not found or is empty.
+        /// Выбрасывается, когда строка подключения не найдена или пуста.
         /// </exception>
         public string GetRequiredConnectionString(string name)
         {
@@ -36,15 +36,15 @@ public static class ConfigurationExtensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Registers, binds, and validates a settings type from a configuration section.
+        /// Регистрирует, привязывает и валидирует тип настроек из секции конфигурации.
         /// </summary>
-        /// <typeparam name="TSetting">The settings type to bind.</typeparam>
-        /// <param name="section">The configuration section path.</param>
-        /// <param name="name">An optional named options instance.</param>
-        /// <param name="configure">An optional callback to apply additional in-memory configuration.</param>
+        /// <typeparam name="TSetting">Тип настроек для привязки.</typeparam>
+        /// <param name="section">Путь к секции конфигурации.</param>
+        /// <param name="name">Необязательный именованный экземпляр options.</param>
+        /// <param name="configure">Необязательный обратный вызов для применения дополнительной in-memory конфигурации.</param>
         /// <remarks>
-        ///     This method enables startup validation and data annotation validation, then exposes
-        ///     the resolved settings instance as a singleton for direct dependency injection.
+        /// Этот метод включает валидацию при запуске и валидацию data annotations, а затем
+        /// публикует полученный экземпляр настроек как singleton для прямого внедрения зависимостей.
         /// </remarks>
         public void Configure<TSetting>(
             string section,
@@ -61,7 +61,7 @@ public static class ConfigurationExtensions
                 .BindConfiguration(section)
                 .ValidateDataAnnotations();
 
-            // Expose the bound options value directly for consumers that depend on TSetting.
+            // Публикует привязанное значение options напрямую для потребителей, зависящих от TSetting.
             services.TryAddSingleton(sp =>
             {
                 var options = sp.GetRequiredService<IOptions<TSetting>>();
@@ -71,13 +71,13 @@ public static class ConfigurationExtensions
         }
 
         /// <summary>
-        ///     Parses and registers application settings as a singleton instance.
+        /// Разбирает и регистрирует настройки приложения как singleton-экземпляр.
         /// </summary>
-        /// <typeparam name="T">The concrete app settings type.</typeparam>
-        /// <returns>The updated service collection.</returns>
+        /// <typeparam name="T">Конкретный тип настроек приложения.</typeparam>
+        /// <returns>Обновлённая коллекция сервисов.</returns>
         /// <remarks>
-        ///     This helper uses <see cref="AppSettings.Parse{T}(IConfiguration)" /> to materialize
-        ///     configuration once at startup and register it for DI consumers.
+        /// Этот вспомогательный метод использует <see cref="AppSettings.Parse{T}(IConfiguration)" />,
+        /// чтобы один раз материализовать конфигурацию при запуске и зарегистрировать её для DI-потребителей.
         /// </remarks>
         public IServiceCollection AddAppSettings<T>()
             where T : AppSettings, new()

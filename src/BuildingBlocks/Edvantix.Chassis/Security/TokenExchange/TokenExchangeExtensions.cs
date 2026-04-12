@@ -11,14 +11,14 @@ public static class TokenExchangeExtensions
     extension(IHttpClientBuilder builder)
     {
         /// <summary>
-        ///     Adds token exchange support to the configured <see cref="IHttpClientBuilder" /> by
-        ///     registering the token exchange service and an authorization delegating handler.
+        /// Добавляет поддержку token exchange в настроенный <see cref="IHttpClientBuilder" />,
+        /// регистрируя сервис обмена токенов и delegating handler авторизации.
         /// </summary>
         /// <param name="serviceKey">
-        ///     Optional target service identifier used to resolve audience and scope for token exchange.
+        /// Необязательный идентификатор целевого сервиса, используемый для определения audience и scope при обмене токена.
         /// </param>
         /// <returns>
-        ///     The same <see cref="IHttpClientBuilder" /> instance for fluent configuration.
+        /// Тот же экземпляр <see cref="IHttpClientBuilder" /> для цепочки вызовов.
         /// </returns>
         public IHttpClientBuilder AddAuthTokenExchange(string? serviceKey = null)
         {
@@ -92,7 +92,7 @@ public static class TokenExchangeExtensions
                 return (serviceKey, scope);
             }
 
-            // fallback: find a configured key that is contained in the service key
+            // Запасной вариант: ищет настроенный ключ, который содержится в ключе сервиса.
             var found = identity.TokenExchangeTargets.FirstOrDefault(kvp =>
                 !string.IsNullOrWhiteSpace(kvp.Key)
                 && (

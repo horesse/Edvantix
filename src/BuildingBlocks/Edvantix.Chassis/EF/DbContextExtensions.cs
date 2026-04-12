@@ -46,7 +46,7 @@ public static class DbContextExtensions
                         .UseSnakeCaseNamingConvention()
                         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                         // Подавляет известное предупреждение EF Core о незафиксированных изменениях модели.
-                        // Issue: https://github.com/dotnet/efcore/issues/35285
+                        // Проблема: https://github.com/dotnet/efcore/issues/35285
                         .ConfigureWarnings(warnings =>
                             warnings.Ignore(RelationalEventId.PendingModelChangesWarning)
                         );

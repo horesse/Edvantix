@@ -8,13 +8,13 @@ public static class PolicyBuilderExtensions
     extension(AuthorizationPolicyBuilder authorizationPolicyBuilder)
     {
         /// <summary>
-        ///     Requires that the user contains at least one allowed scope value in the Keycloak scope claim.
+        /// Требует, чтобы пользователь содержал хотя бы одно допустимое значение scope в Keycloak-клейме scope.
         /// </summary>
         /// <param name="allowedValues">
-        ///     The allowed scope values.
+        /// Допустимые значения scope.
         /// </param>
         /// <returns>
-        ///     The configured authorization policy builder.
+        /// Настроенный построитель политики авторизации.
         /// </returns>
         public AuthorizationPolicyBuilder RequireScope(params string[] allowedValues)
         {

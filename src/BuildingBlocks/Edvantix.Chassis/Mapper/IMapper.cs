@@ -5,16 +5,16 @@ public interface IMapper<in TSource, out TDestination>
     where TDestination : notnull
 {
     /// <summary>
-    ///     Maps a source model to a destination object.
+    /// Преобразует исходную модель в целевой объект.
     /// </summary>
-    /// <param name="source">The source model to map from.</param>
-    /// <returns>The mapped destination object.</returns>
+    /// <param name="source">Исходная модель для преобразования.</param>
+    /// <returns>Преобразованный целевой объект.</returns>
     TDestination Map(TSource source);
 
     /// <summary>
-    ///     Maps a collection of source models to a collection of destination objects.
+    /// Преобразует коллекцию исходных моделей в коллекцию целевых объектов.
     /// </summary>
-    /// <param name="sources">The collection of source models to map from.</param>
-    /// <returns>A read-only collection of mapped destination objects.</returns>
+    /// <param name="sources">Коллекция исходных моделей для преобразования.</param>
+    /// <returns>Доступная только для чтения коллекция преобразованных целевых объектов.</returns>
     IReadOnlyList<TDestination> Map(IReadOnlyList<TSource> sources);
 }

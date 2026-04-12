@@ -7,11 +7,11 @@ public static class LaunchProfileExtensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Determines whether the current launch profile uses the HTTPS scheme.
+        /// Определяет, использует ли текущий профиль запуска схему HTTPS.
         /// </summary>
         /// <returns>
-        ///     <see langword="true" /> when `DOTNET_LAUNCH_PROFILE` equals <see cref="Uri.UriSchemeHttps" />; otherwise,
-        ///     <see langword="false" />.
+        /// <see langword="true" />, если переменная <c>DOTNET_LAUNCH_PROFILE</c> равна <see cref="Uri.UriSchemeHttps" />; иначе
+        /// <see langword="false" />.
         /// </returns>
         public bool IsHttpsLaunchProfile()
         {
@@ -19,9 +19,9 @@ public static class LaunchProfileExtensions
         }
 
         /// <summary>
-        ///     Gets the URL scheme for the current launch profile.
+        /// Возвращает схему URL для текущего профиля запуска.
         /// </summary>
-        /// <returns><see cref="Uri.UriSchemeHttps" /> for HTTPS launch profiles; otherwise, <see cref="Uri.UriSchemeHttp" />.</returns>
+        /// <returns><see cref="Uri.UriSchemeHttps" /> для HTTPS-профилей; иначе <see cref="Uri.UriSchemeHttp" />.</returns>
         public string GetScheme()
         {
             return builder.IsHttpsLaunchProfile() ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;

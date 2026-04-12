@@ -5,11 +5,12 @@ public static class GuardAgainstAuthenticationExtensions
     extension(Guard guard)
     {
         /// <summary>
-        ///     Validates that the provided user ID is not null, empty, or whitespace, indicating the user is authenticated.
+        /// Проверяет, что переданный идентификатор пользователя не равен null, не пустой и не состоит только из пробелов,
+        /// что указывает на аутентифицированного пользователя.
         /// </summary>
-        /// <param name="userId">The user ID to validate.</param>
-        /// <returns>The validated user ID if it passes the authentication check.</returns>
-        /// <exception cref="UnauthorizedAccessException">Thrown when the user ID is null, empty, or whitespace.</exception>
+        /// <param name="userId">Идентификатор пользователя для проверки.</param>
+        /// <returns>Проверенный идентификатор пользователя, если проверка аутентификации пройдена.</returns>
+        /// <exception cref="UnauthorizedAccessException">Выбрасывается, когда идентификатор пользователя равен null, пустой или состоит только из пробелов.</exception>
         public string NotAuthenticated(string? userId)
         {
             return string.IsNullOrWhiteSpace(userId)

@@ -1,57 +1,60 @@
 ﻿using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Edvantix.Persona.Grpc.Services;
 
-/// <summary>
-/// gRPC-сервис профилей для межсервисного взаимодействия.
-/// Обращается к репозиторию напрямую, минуя HTTP-маппер (SAS URL аватара не генерируется).
-/// </summary>
-[AllowAnonymous]
-public sealed class ProfileService(IProfileRepository profileRepo, ILogger<ProfileService> logger)
+internal sealed class ProfileService(IProfileRepository profileRepo)
     : ProfileGrpcService.ProfileGrpcServiceBase
 {
-    /// <summary>
-    /// Возвращает краткий профиль по ProfileId или AccountId (Keycloak GUID).
-    /// Ровно одно поле из oneof должно быть заполнено.
-    /// </summary>
-    public override async Task<ProfileReply> GetProfile(
+    [AllowAnonymous]
+    public override async Task<GetProfileResponse> GetProfile(
         GetProfileRequest request,
         ServerCallContext context
     )
     {
-        try
-        {
-            ISpecification<Profile> spec = ProfileSpecification.Minimal(
-                Guid.Parse(request.ProfileId)
-            );
+        var spec = ProfileSpecification.Minimal(Guid.Parse(request.ProfileId));
 
-            var profile = await profileRepo.FindAsync(spec, context.CancellationToken);
+        var profile = await profileRepo.FindAsync(spec, context.CancellationToken);
 
-            if (profile is null)
-                throw new RpcException(new Status(StatusCode.NotFound, "Профиль не найден."));
+        if (profile is null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Профиль не найден."));
 
-            return new ProfileReply
-            {
-                Id = profile.Id.ToString(),
-                AccountId = profile.AccountId.ToString(),
-                Gender = (int)profile.Gender,
-                BirthDate = profile.BirthDate.ToString("yyyy-MM-dd"),
-                FullName = profile.FullName.GetFullName(),
-                FirstName = profile.FullName.FirstName,
-                LastName = profile.FullName.LastName,
-                MiddleName = profile.FullName.MiddleName ?? string.Empty,
-                Login = profile.Login,
-            };
-        }
-        catch (RpcException)
+        return MapToResponse(profile);
+    }
+
+    [Authorize]
+    [EnableRateLimiting("PerUserRateLimit")]
+    public override async Task<GetProfilesResponse> GetProfiles(
+        GetProfilesRequest request,
+        ServerCallContext context
+    )
+    {
+        var profiles = await profileRepo.ListAsync(
+            new ProfileSpecification([.. request.ProfileIds.Select(Guid.Parse)]),
+            context.CancellationToken
+        );
+
+        return MapToResponse(profiles);
+    }
+
+    private static GetProfilesResponse MapToResponse(IReadOnlyCollection<Profile> profile)
+    {
+        var response = new GetProfilesResponse();
+
+        response.Profiles.AddRange(profile.Select(MapToResponse));
+        return response;
+    }
+
+    private static GetProfileResponse MapToResponse(Profile profile)
+    {
+        return new GetProfileResponse
         {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "gRPC GetProfile: внутренняя ошибка. Request: {Request}", request);
-            throw new RpcException(new Status(StatusCode.Internal, "Внутренняя ошибка сервера."));
-        }
+            Id = profile.Id.ToString(),
+            FullName = profile.FullName.GetFullName(),
+            FirstName = profile.FullName.FirstName,
+            LastName = profile.FullName.LastName,
+            MiddleName = profile.FullName.MiddleName ?? string.Empty,
+        };
     }
 }

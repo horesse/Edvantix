@@ -11,7 +11,7 @@ public sealed class ProfileServiceTests
 
     public ProfileServiceTests()
     {
-        _service = new(_profileRepoMock.Object, Mock.Of<ILogger<ProfileService>>());
+        _service = new(_profileRepoMock.Object);
     }
 
     [Test]
@@ -44,10 +44,6 @@ public sealed class ProfileServiceTests
 
         result.ShouldNotBeNull();
         result.Id.ShouldBe(profileId.ToString());
-        result.AccountId.ShouldBe(accountId.ToString());
-        result.Login.ShouldBe("john.doe");
-        result.Gender.ShouldBe((int)Gender.Male);
-        result.BirthDate.ShouldBe("1990-05-20");
         result.FirstName.ShouldBe("Иван");
         result.LastName.ShouldBe("Иванов");
         result.MiddleName.ShouldBe("Петрович");
@@ -104,42 +100,6 @@ public sealed class ProfileServiceTests
         );
 
         exception.StatusCode.ShouldBe(StatusCode.NotFound);
-    }
-
-    [Test]
-    public async Task GivenInvalidProfileIdFormat_WhenGetProfileCalled_ThenShouldThrowRpcExceptionWithInternalStatus()
-    {
-        var context = new TestServerCallContext();
-
-        var exception = await Should.ThrowAsync<RpcException>(async () =>
-            await _service.GetProfile(
-                new GetProfileRequest { ProfileId = "not-a-valid-guid" },
-                context
-            )
-        );
-
-        exception.StatusCode.ShouldBe(StatusCode.Internal);
-    }
-
-    [Test]
-    public async Task GivenRepositoryThrowsUnexpectedException_WhenGetProfileCalled_ThenShouldThrowRpcExceptionWithInternalStatus()
-    {
-        var context = new TestServerCallContext();
-
-        _profileRepoMock
-            .Setup(r =>
-                r.FindAsync(It.IsAny<ISpecification<Profile>>(), It.IsAny<CancellationToken>())
-            )
-            .ThrowsAsync(new InvalidOperationException("Database connection lost"));
-
-        var exception = await Should.ThrowAsync<RpcException>(async () =>
-            await _service.GetProfile(
-                new GetProfileRequest { ProfileId = Guid.CreateVersion7().ToString() },
-                context
-            )
-        );
-
-        exception.StatusCode.ShouldBe(StatusCode.Internal);
     }
 
     /// <summary>Creates a Profile and sets its Id via the public setter on Entity.</summary>

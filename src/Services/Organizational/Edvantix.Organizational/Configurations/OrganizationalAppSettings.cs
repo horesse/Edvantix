@@ -14,8 +14,9 @@ public sealed class OrganizationalAppSettings : AppSettings
         new()
         {
             Title = "Organizational Service API",
-            Summary = "Сервис управления организациями",
-            Description = "Управление организациями, их участниками и структурой.",
+            Summary = "Сервис организаций, ролей и разрешений",
+            Description =
+                "Управление школьными организациями, ролями пользователей и разрешениями.",
             Contact = new()
             {
                 Name = "horesse",

@@ -29,7 +29,7 @@ public interface IProfileRepository : IRepository<Profile>
     Task<Profile> AddAsync(Profile profile, CancellationToken cancellationToken = default);
 
     /// <summary>Возвращает список профилей по спецификации.</summary>
-    Task<IReadOnlyList<Profile>> FindAllAsync(
+    Task<IReadOnlyList<Profile>> ListAsync(
         ISpecification<Profile> spec,
         CancellationToken cancellationToken = default
     );

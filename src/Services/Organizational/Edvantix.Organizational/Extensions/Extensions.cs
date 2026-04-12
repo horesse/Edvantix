@@ -1,10 +1,11 @@
 ﻿using Edvantix.Chassis.CQRS;
+using Edvantix.Chassis.Mapper;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
-using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
+using Edvantix.Organizational.Grpc;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
@@ -23,23 +24,14 @@ internal static class Extensions
 
         services
             .AddAuthorizationBuilder()
-            .AddPolicy(
-                Authorization.Policies.Admin,
-                policy =>
-                    policy
-                        .RequireAuthenticatedUser()
-                        .RequireRole(Authorization.Roles.Admin)
-                        .RequireScope(
-                            $"{Services.Organizational}_{Authorization.Actions.Read}",
-                            $"{Services.Organizational}_{Authorization.Actions.Write}"
-                        )
-            )
             .SetDefaultPolicy(
                 new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .RequireScope($"{Services.Organizational}_{Authorization.Actions.Read}")
                     .Build()
             );
+
+        services.AddTenantContext();
 
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -49,10 +41,6 @@ internal static class Extensions
         builder.AddAppSettings<OrganizationalAppSettings>();
 
         builder.AddRateLimiting();
-
-        services.AddSingleton(
-            new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
-        );
 
         services
             .AddMediator(
@@ -72,9 +60,13 @@ internal static class Extensions
             >()
         );
 
+        services.AddMapper(typeof(IOrganizationalApiMarker));
+
         services.AddValidatorsFromAssemblyContaining<IOrganizationalApiMarker>(
             includeInternalTypes: true
         );
+
+        builder.AddGrpcServices();
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 

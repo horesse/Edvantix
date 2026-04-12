@@ -5,7 +5,7 @@ using Microsoft.Extensions.Diagnostics.Enrichment;
 
 namespace Edvantix.Chassis.Logging;
 
-public sealed class ApplicationEnricher(IHttpContextAccessor httpContextAccessor) : ILogEnricher
+internal sealed class ApplicationEnricher(IHttpContextAccessor httpContextAccessor) : ILogEnricher
 {
     public void Enrich(IEnrichmentTagCollector collector)
     {

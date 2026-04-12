@@ -25,65 +25,66 @@ internal static class CorsExtensions
         HttpMethods.Options,
     ];
 
-    public static (
-        IResourceBuilder<ParameterResource> OrganizationFrontUrl,
-        IResourceBuilder<ParameterResource> AdminFrontUrl
-    ) AddCorsOriginParameters(this IDistributedApplicationBuilder builder)
+    extension(IDistributedApplicationBuilder builder)
     {
-        var organizationFrontUrl = builder
-            .AddParameter("organizationfront-url")
-            .WithCustomInput(_ =>
-                new()
-                {
-                    Name = "OrganizationFrontUrlParameter",
-                    Label = "OrganizationFront URL",
-                    InputType = InputType.Text,
-                    Description =
-                        "Enter the OrganizationFront application URL for CORS (e.g., https://org.edvantix.ru)",
-                }
-            );
+        public (
+            IResourceBuilder<ParameterResource> OrganizationFrontUrl,
+            IResourceBuilder<ParameterResource> AdminFrontUrl
+        ) AddCorsOriginParameters()
+        {
+            var organizationFrontUrl = builder
+                .AddParameter("organizationfront-url")
+                .WithCustomInput(_ =>
+                    new()
+                    {
+                        Name = "OrganizationFrontUrlParameter",
+                        Label = "OrganizationFront URL",
+                        InputType = InputType.Text,
+                        Description =
+                            "Enter the OrganizationFront application URL for CORS (e.g., https://org.edvantix.ru)",
+                    }
+                );
 
-        var adminFrontUrl = builder
-            .AddParameter("adminfront-url")
-            .WithCustomInput(_ =>
-                new()
-                {
-                    Name = "AdminFrontUrlParameter",
-                    Label = "AdminFront URL",
-                    InputType = InputType.Text,
-                    Description =
-                        "Enter the AdminFront application URL for CORS (e.g., https://admin.edvantix.ru)",
-                }
-            );
+            var adminFrontUrl = builder
+                .AddParameter("adminfront-url")
+                .WithCustomInput(_ =>
+                    new()
+                    {
+                        Name = "AdminFrontUrlParameter",
+                        Label = "AdminFront URL",
+                        InputType = InputType.Text,
+                        Description =
+                            "Enter the AdminFront application URL for CORS (e.g., https://admin.edvantix.ru)",
+                    }
+                );
 
-        return (organizationFrontUrl, adminFrontUrl);
+            return (organizationFrontUrl, adminFrontUrl);
+        }
     }
 
-    public static IResourceBuilder<ProjectResource> WithCorsOrigins(
-        this IResourceBuilder<ProjectResource> builder,
-        IResourceBuilder<ParameterResource> organizationFrontUrl,
-        IResourceBuilder<ParameterResource>? adminFrontUrl = null
-    )
+    extension(IResourceBuilder<ProjectResource> builder)
     {
-        builder
-            .WithEnvironment("Cors__Origins__0", organizationFrontUrl)
-            .WithEnvironment("Cors__AllowCredentials", "true");
-
-        if (adminFrontUrl is not null)
+        public IResourceBuilder<ProjectResource> WithCorsOrigins(
+            IResourceBuilder<ParameterResource> organizationFrontUrl,
+            IResourceBuilder<ParameterResource> adminFrontUrl
+        )
         {
-            builder.WithEnvironment("Cors__Origins__1", adminFrontUrl);
-        }
+            builder
+                .WithEnvironment("Cors__Origins__0", organizationFrontUrl)
+                .WithEnvironment("Cors__Origins__1", adminFrontUrl)
+                .WithEnvironment("Cors__AllowCredentials", "true");
 
-        for (var i = 0; i < _defaultHeaders.Length; i++)
-        {
-            builder.WithEnvironment($"Cors__Headers__{i}", _defaultHeaders[i]);
-        }
+            for (var i = 0; i < _defaultHeaders.Length; i++)
+            {
+                builder.WithEnvironment($"Cors__Headers__{i}", _defaultHeaders[i]);
+            }
 
-        for (var i = 0; i < _defaultMethods.Length; i++)
-        {
-            builder.WithEnvironment($"Cors__Methods__{i}", _defaultMethods[i]);
-        }
+            for (var i = 0; i < _defaultMethods.Length; i++)
+            {
+                builder.WithEnvironment($"Cors__Methods__{i}", _defaultMethods[i]);
+            }
 
-        return builder;
+            return builder;
+        }
     }
 }

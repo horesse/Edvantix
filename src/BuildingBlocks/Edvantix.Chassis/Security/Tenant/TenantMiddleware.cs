@@ -9,7 +9,7 @@ namespace Edvantix.Chassis.Security.Tenant;
 /// </summary>
 public sealed class TenantMiddleware(RequestDelegate next)
 {
-    private const string SchoolIdHeader = "X-Organization-Id";
+    private const string OrganizationIdHeader = "X-Organization-Id";
 
     /// <summary>
     /// Вызывает middleware.
@@ -17,7 +17,7 @@ public sealed class TenantMiddleware(RequestDelegate next)
     public async Task InvokeAsync(HttpContext context, ITenantContext tenantContext)
     {
         if (
-            context.Request.Headers.TryGetValue(SchoolIdHeader, out var value)
+            context.Request.Headers.TryGetValue(OrganizationIdHeader, out var value)
             && Guid.TryParse(value, out var schoolId)
         )
         {

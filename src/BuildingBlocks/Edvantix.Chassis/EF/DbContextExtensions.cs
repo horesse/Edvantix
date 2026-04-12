@@ -12,14 +12,14 @@ public static class DbContextExtensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Registers a PostgreSQL <see cref="DbContext" /> configured for Azure usage, snake_case naming,
-        ///     no-tracking queries, and optional EF Core interceptors.
+        /// Регистрирует PostgreSQL <see cref="DbContext" />, настроенный для Azure, с именованием snake_case,
+        /// запросами без отслеживания и опциональными EF Core перехватчиками.
         /// </summary>
-        /// <typeparam name="TDbContext">The <see cref="DbContext" /> type to register.</typeparam>
-        /// <param name="name">The connection string name from configuration.</param>
-        /// <param name="action">An optional callback to apply additional builder configuration.</param>
+        /// <typeparam name="TDbContext">Тип <see cref="DbContext" /> для регистрации.</typeparam>
+        /// <param name="name">Имя строки подключения из конфигурации.</param>
+        /// <param name="action">Необязательный обратный вызов для дополнительной настройки построителя.</param>
         /// <param name="excludeDefaultInterceptors">
-        ///     Set to <see langword="true" /> to skip registering default interceptors.
+        /// Установите <see langword="true" /> для пропуска регистрации перехватчиков по умолчанию.
         /// </param>
         public void AddAzurePostgresDbContext<TDbContext>(
             string name,
@@ -30,7 +30,7 @@ public static class DbContextExtensions
         {
             var services = builder.Services;
 
-            // Register cross-cutting interceptors by default for query diagnostics and domain event dispatching.
+            // Регистрирует сквозные перехватчики по умолчанию для диагностики запросов и диспетчеризации доменных событий.
             if (!excludeDefaultInterceptors)
             {
                 services.AddScoped<IInterceptor, QueryPerformanceInterceptor>();
@@ -45,13 +45,13 @@ public static class DbContextExtensions
                         .UseNpgsql(builder.Configuration.GetConnectionString(name))
                         .UseSnakeCaseNamingConvention()
                         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                        // Suppresses known EF Core pending model changes warning.
+                        // Подавляет известное предупреждение EF Core о незафиксированных изменениях модели.
                         // Issue: https://github.com/dotnet/efcore/issues/35285
                         .ConfigureWarnings(warnings =>
                             warnings.Ignore(RelationalEventId.PendingModelChangesWarning)
                         );
 
-                    // Resolve and apply all registered EF Core interceptors.
+                    // Разрешает и применяет все зарегистрированные перехватчики EF Core.
                     var interceptors = sp.GetServices<IInterceptor>().ToArray();
 
                     if (interceptors.Length != 0)
@@ -61,7 +61,7 @@ public static class DbContextExtensions
                 }
             );
 
-            // Apply project-specific Azure Npgsql enrichment.
+            // Применяет специфическое для проекта обогащение Azure Npgsql.
             builder.EnrichAzureNpgsqlDbContext<TDbContext>();
 
             action?.Invoke(builder);

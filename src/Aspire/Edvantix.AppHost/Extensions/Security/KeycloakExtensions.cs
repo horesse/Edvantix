@@ -89,10 +89,10 @@ internal static class KeycloakExtensions
     extension(IResourceBuilder<TurborepoAppResource> builder)
     {
         /// <summary>
-        ///     Configures the turborepo app resource to integrate with Keycloak as an Identity Provider (IdP).
+        /// Настраивает ресурс Turborepo для интеграции с Keycloak в качестве провайдера идентификации (IdP).
         /// </summary>
-        /// <param name="keycloak">The Keycloak resource builder to configure as an IdP.</param>
-        /// <returns>The turborepo app resource builder for method chaining.</returns>
+        /// <param name="keycloak">Построитель ресурса Keycloak, настраиваемый как IdP.</param>
+        /// <returns>Построитель ресурса Turborepo для цепочки вызовов.</returns>
         public IResourceBuilder<TurborepoAppResource> WithKeycloak(
             IResourceBuilder<IResource> keycloak
         )
@@ -139,10 +139,10 @@ internal static class KeycloakExtensions
     extension(IResourceBuilder<ProjectResource> builder)
     {
         /// <summary>
-        ///     Configures the project resource to integrate with Keycloak as an Identity Provider (IdP).
+        /// Настраивает ресурс проекта для интеграции с Keycloak в качестве провайдера идентификации (IdP).
         /// </summary>
-        /// <param name="keycloak">The Keycloak resource builder to configure as an IdP.</param>
-        /// <returns>The project resource builder for method chaining.</returns>
+        /// <param name="keycloak">Построитель ресурса Keycloak, настраиваемый как IdP.</param>
+        /// <returns>Построитель ресурса проекта для цепочки вызовов.</returns>
         public IResourceBuilder<ProjectResource> WithKeycloak(IResourceBuilder<IResource> keycloak)
         {
             var clientId = builder.Resource.Name;
@@ -222,12 +222,11 @@ internal static class KeycloakExtensions
     extension(IDistributedApplicationBuilder builder)
     {
         /// <summary>
-        ///     Adds a Keycloak container resource to the distributed application builder with custom theme and realm import
-        ///     settings.
+        /// Добавляет контейнерный ресурс Keycloak к построителю распределённого приложения с пользовательской темой и настройками импорта realm.
         /// </summary>
-        /// <param name="name">The name of the Keycloak resource.</param>
+        /// <param name="name">Имя ресурса Keycloak.</param>
         /// <returns>
-        ///     An <see cref="IResourceBuilder{KeycloakResource}" /> representing the configured Keycloak resource.
+        /// <see cref="IResourceBuilder{KeycloakResource}" />, представляющий настроенный ресурс Keycloak.
         /// </returns>
         public IResourceBuilder<KeycloakResource> AddLocalKeycloak(string name)
         {
@@ -245,11 +244,11 @@ internal static class KeycloakExtensions
         }
 
         /// <summary>
-        ///     Adds a hosted Keycloak external service to the distributed application builder.
+        /// Добавляет размещённый внешний сервис Keycloak к построителю распределённого приложения.
         /// </summary>
-        /// <param name="name">The name of the Keycloak external service resource.</param>
+        /// <param name="name">Имя ресурса внешнего сервиса Keycloak.</param>
         /// <returns>
-        ///     An <see cref="IResourceBuilder{ExternalServiceResource}" /> representing the configured Keycloak external service.
+        /// <see cref="IResourceBuilder{ExternalServiceResource}" />, представляющий настроенный внешний сервис Keycloak.
         /// </returns>
         public IResourceBuilder<ExternalServiceResource> AddHostedKeycloak(string name)
         {

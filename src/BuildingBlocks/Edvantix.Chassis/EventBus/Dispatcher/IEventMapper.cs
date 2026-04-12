@@ -5,9 +5,9 @@ namespace Edvantix.Chassis.EventBus.Dispatcher;
 public interface IEventMapper
 {
     /// <summary>
-    ///     Maps a domain event to its corresponding integration event representation.
+    /// Преобразует доменное событие в соответствующее интеграционное событие.
     /// </summary>
-    /// <param name="event">The domain event to map.</param>
-    /// <returns>The mapped integration event.</returns>
+    /// <param name="event">Доменное событие для преобразования.</param>
+    /// <returns>Преобразованное интеграционное событие.</returns>
     IntegrationEvent MapToIntegrationEvent(DomainEvent @event);
 }

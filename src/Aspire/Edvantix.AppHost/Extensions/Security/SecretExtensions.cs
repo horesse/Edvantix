@@ -5,24 +5,20 @@ internal static class SecretExtensions
     extension(IResourceBuilder<ProjectResource> builder)
     {
         /// <summary>
-        ///     Configures the resource builder to create a generated secret parameter and expose it as an environment variable.
+        /// Настраивает построитель ресурса для создания сгенерированного параметра-секрета и его экспозиции как переменной среды.
         /// </summary>
         /// <param name="secretName">
-        ///     Suffix used to form the parameter name; the final parameter will be
-        ///     <c>{builder.Resource.Name}-{secretName}</c>.
+        /// Суффикс для формирования имени параметра; итоговый параметр будет иметь вид
+        /// <c>{builder.Resource.Name}-{secretName}</c>.
         /// </param>
         /// <param name="environmentVariableName">
-        ///     Name of the environment variable that will be bound to the created secret
-        ///     parameter.
+        /// Имя переменной среды, которая будет привязана к созданному параметру-секрету.
         /// </param>
         /// <returns>
-        ///     The original <see cref="IResourceBuilder{ProjectResource}" /> after registering the parameter and mapping it
-        ///     to the environment variable.
+        /// Исходный <see cref="IResourceBuilder{ProjectResource}" /> после регистрации параметра и его сопоставления с переменной среды.
         /// </returns>
         /// <remarks>
-        ///     The generated parameter uses default constraints of minimum length 32 and no special characters.
-        ///     The created parameter is returned as a parameter resource which is then mapped to the specified environment
-        ///     variable.
+        /// Сгенерированный параметр использует ограничения по умолчанию: минимальная длина 32, без специальных символов.
         /// </remarks>
         public IResourceBuilder<ProjectResource> WithSecret(
             string secretName,
@@ -40,15 +36,13 @@ internal static class SecretExtensions
     extension(IResourceBuilder<ParameterResource> builder)
     {
         /// <summary>
-        ///     Configures the resource builder to generate a default parameter value and override the initial state of the
-        ///     resource.
+        /// Настраивает построитель ресурса для генерации значения параметра по умолчанию и переопределения начального состояния ресурса.
         /// </summary>
         /// <param name="generateParameterDefault">
-        ///     A delegate used to generate the default parameter value with specified constraints.
+        /// Делегат для генерации значения параметра по умолчанию с заданными ограничениями.
         /// </param>
         /// <returns>
-        ///     The configured <see cref="IResourceBuilder{ParameterResource}" /> instance with generated default value and proper
-        ///     initial state.
+        /// Настроенный экземпляр <see cref="IResourceBuilder{ParameterResource}" /> со сгенерированным значением по умолчанию и корректным начальным состоянием.
         /// </returns>
         public IResourceBuilder<ParameterResource> WithGeneratedDefault(
             GenerateParameterDefault generateParameterDefault

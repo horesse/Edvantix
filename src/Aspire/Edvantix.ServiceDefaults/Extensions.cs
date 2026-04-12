@@ -9,9 +9,8 @@ using OpenTelemetry.Trace;
 
 namespace Edvantix.ServiceDefaults;
 
-// Adds common Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
-// This project should be referenced by each service project in your solution.
-// To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
+// Регистрирует общие сервисы Aspire: обнаружение сервисов, устойчивость, проверки работоспособности и OpenTelemetry.
+// Этот проект должен быть подключён к каждому сервисному проекту решения.
 public static class Extensions
 {
     extension(IHostApplicationBuilder builder)
@@ -20,7 +19,7 @@ public static class Extensions
         {
             builder
                 .Services.AddHealthChecks()
-                // Add a default liveness check to ensure app is responsive
+                // Добавляет базовую проверку живости для подтверждения работоспособности приложения
                 .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
         }
     }
@@ -28,11 +27,10 @@ public static class Extensions
     extension(WebApplication app)
     {
         /// <summary>
-        ///     Maps development-only health check endpoints for readiness and liveness probing.
+        /// Регистрирует эндпоинты проверки работоспособности только для среды разработки.
         /// </summary>
         /// <remarks>
-        ///     The readiness endpoint requires all checks to pass, while the liveness endpoint
-        ///     evaluates only checks tagged with <c>live</c>.
+        /// Эндпоинт готовности требует прохождения всех проверок, эндпоинт живости — только проверок с тегом <c>live</c>.
         /// </remarks>
         public void MapDefaultEndpoints()
         {
@@ -41,10 +39,10 @@ public static class Extensions
                 return;
             }
 
-            // All health checks must pass for app to be considered ready to accept traffic after starting.
+            // Все проверки работоспособности должны пройти, чтобы приложение считалось готовым принимать трафик.
             app.MapHealthChecks(Http.Endpoints.HealthEndpointPath);
 
-            // Only health checks tagged with the "live" tag must pass for app to be considered alive.
+            // Только проверки с тегом "live" должны пройти, чтобы приложение считалось живым.
             app.MapHealthChecks(
                 Http.Endpoints.AlivenessEndpointPath,
                 new() { Predicate = r => r.Tags.Contains("live") }
@@ -103,7 +101,7 @@ public static class Extensions
                     tracing
                         .AddSource(builder.Environment.ApplicationName)
                         .AddAspNetCoreInstrumentation(options =>
-                            // Don't trace requests to the health endpoint to avoid filling the dashboard with noise
+                            // Исключает запросы к эндпоинтам проверки работоспособности из трассировки во избежание шума на дашборде
                             options.Filter = httpContext =>
                                 !(
                                     httpContext.Request.Path.StartsWithSegments(
@@ -126,11 +124,10 @@ public static class Extensions
         where TBuilder : IHostApplicationBuilder
     {
         /// <summary>
-        ///     Configures the default platform capabilities for a service host.
+        /// Настраивает базовые возможности платформы для хоста сервиса.
         /// </summary>
         /// <remarks>
-        ///     This enables OpenTelemetry, baseline health checks, service discovery, and
-        ///     default HTTP client resilience/service discovery behavior.
+        /// Включает OpenTelemetry, базовые проверки работоспособности, обнаружение сервисов и устойчивость HTTP-клиентов.
         /// </remarks>
         public void AddServiceDefaults()
         {
@@ -144,10 +141,10 @@ public static class Extensions
             {
                 http.RemoveAllResilienceHandlers();
 
-                // Turn on resilience by default
+                // Включает устойчивость по умолчанию
                 http.AddStandardResilienceHandler();
 
-                // Turn on service discovery by default
+                // Включает обнаружение сервисов по умолчанию
                 http.AddServiceDiscovery();
             });
         }

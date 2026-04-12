@@ -9,11 +9,11 @@ public static class Extension
     extension(IServiceCollection service)
     {
         /// <summary>
-        ///     Configures API versioning and API explorer metadata for endpoint discovery.
+        /// Настраивает версионирование API и метаданные API Explorer для обнаружения эндпоинтов.
         /// </summary>
         /// <remarks>
-        ///     Sets the default API version to <c>v1</c>, reads version values from URL segments,
-        ///     and enables version substitution in route templates for grouped API documentation.
+        /// Устанавливает версию API по умолчанию <c>v1</c>, читает версии из сегментов URL
+        /// и включает подстановку версий в шаблонах маршрутов для сгруппированной документации API.
         /// </remarks>
         public void AddVersioning()
         {

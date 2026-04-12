@@ -57,7 +57,7 @@ public static class NotFoundExceptionHandlerExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        ///     Registers the <see cref="NotFoundExceptionHandler" /> in the ASP.NET Core exception handling pipeline.
+        /// Регистрирует <see cref="NotFoundExceptionHandler" /> в конвейере обработки исключений ASP.NET Core.
         /// </summary>
         public void AddNotFoundExceptionHandler()
         {

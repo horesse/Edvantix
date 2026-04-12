@@ -8,11 +8,10 @@ public static class OpenApiExtensions
     extension(WebApplication app)
     {
         /// <summary>
-        ///     Maps the default OpenAPI endpoints for local development.
+        /// Регистрирует эндпоинты OpenAPI для локальной разработки.
         /// </summary>
         /// <remarks>
-        ///     This is intentionally enabled only in development to avoid exposing
-        ///     API specification endpoints in non-development environments.
+        /// Намеренно включается только в среде разработки во избежание экспозиции спецификации API в других окружениях.
         /// </remarks>
         public void UseDefaultOpenApi()
         {
@@ -28,13 +27,13 @@ public static class OpenApiExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        ///     Registers the default OpenAPI configuration for the service.
+        /// Регистрирует конфигурацию OpenAPI по умолчанию для сервиса.
         /// </summary>
         /// <param name="configure">
-        ///     Optional callback to customize <see cref="OpenApiOptions" /> after the default transformers are applied.
+        /// Необязательный обратный вызов для дополнительной настройки <see cref="OpenApiOptions" /> после применения трансформеров по умолчанию.
         /// </param>
         /// <remarks>
-        ///     Adds authorization metadata and security scheme definitions to keep API documentation consistent across services.
+        /// Добавляет метаданные авторизации и определения схем безопасности для единообразия документации API между сервисами.
         /// </remarks>
         public void AddDefaultOpenApi(Action<OpenApiOptions>? configure = null)
         {

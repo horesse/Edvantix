@@ -8,16 +8,16 @@ public static class EndpointRouteBuilderExtensions
     extension(RouteHandlerBuilder builder)
     {
         /// <summary>
-        ///     Configures response metadata for a POST endpoint that returns a created resource.
+        /// Настраивает метаданные ответа для POST-эндпоинта, возвращающего созданный ресурс.
         /// </summary>
         /// <typeparam name="T">
-        ///     The response payload type.
+        /// Тип полезной нагрузки ответа.
         /// </typeparam>
         /// <param name="hasValidation">
-        ///     <see langword="true" /> to include validation problem metadata; otherwise, <see langword="false" />.
+        /// <see langword="true" /> для включения метаданных об ошибке валидации; иначе <see langword="false" />.
         /// </param>
         /// <returns>
-        ///     The configured route handler builder.
+        /// Настроенный построитель обработчика маршрута.
         /// </returns>
         public RouteHandlerBuilder ProducesPost<T>(bool hasValidation = true)
         {
@@ -32,16 +32,16 @@ public static class EndpointRouteBuilderExtensions
         }
 
         /// <summary>
-        ///     Configures response metadata for a POST endpoint that returns a success payload without a location header.
+        /// Настраивает метаданные ответа для POST-эндпоинта, возвращающего успешный ответ без заголовка Location.
         /// </summary>
         /// <typeparam name="T">
-        ///     The response payload type.
+        /// Тип полезной нагрузки ответа.
         /// </typeparam>
         /// <param name="hasValidation">
-        ///     <see langword="true" /> to include validation problem metadata; otherwise, <see langword="false" />.
+        /// <see langword="true" /> для включения метаданных об ошибке валидации; иначе <see langword="false" />.
         /// </param>
         /// <returns>
-        ///     The configured route handler builder.
+        /// Настроенный построитель обработчика маршрута.
         /// </returns>
         public RouteHandlerBuilder ProducesPostWithoutLocation<T>(bool hasValidation = true)
         {
@@ -56,10 +56,10 @@ public static class EndpointRouteBuilderExtensions
         }
 
         /// <summary>
-        ///     Configures response metadata for a PUT endpoint.
+        /// Настраивает метаданные ответа для PUT-эндпоинта.
         /// </summary>
         /// <returns>
-        ///     The configured route handler builder.
+        /// Настроенный построитель обработчика маршрута.
         /// </returns>
         public RouteHandlerBuilder ProducesPut()
         {
@@ -70,10 +70,10 @@ public static class EndpointRouteBuilderExtensions
         }
 
         /// <summary>
-        ///     Configures response metadata for a DELETE endpoint.
+        /// Настраивает метаданные ответа для DELETE-эндпоинта.
         /// </summary>
         /// <returns>
-        ///     The configured route handler builder.
+        /// Настроенный построитель обработчика маршрута.
         /// </returns>
         public RouteHandlerBuilder ProducesDelete()
         {
@@ -83,19 +83,19 @@ public static class EndpointRouteBuilderExtensions
         }
 
         /// <summary>
-        ///     Configures response metadata for a GET endpoint.
+        /// Настраивает метаданные ответа для GET-эндпоинта.
         /// </summary>
         /// <typeparam name="T">
-        ///     The response payload type.
+        /// Тип полезной нагрузки ответа.
         /// </typeparam>
         /// <param name="hasValidation">
-        ///     <see langword="true" /> to include validation problem metadata; otherwise, <see langword="false" />.
+        /// <see langword="true" /> для включения метаданных об ошибке валидации; иначе <see langword="false" />.
         /// </param>
         /// <param name="hasNotFound">
-        ///     <see langword="true" /> to include not found problem metadata; otherwise, <see langword="false" />.
+        /// <see langword="true" /> для включения метаданных об ошибке «не найдено»; иначе <see langword="false" />.
         /// </param>
         /// <returns>
-        ///     The configured route handler builder.
+        /// Настроенный построитель обработчика маршрута.
         /// </returns>
         public RouteHandlerBuilder ProducesGet<T>(
             bool hasValidation = false,
@@ -118,16 +118,16 @@ public static class EndpointRouteBuilderExtensions
         }
 
         /// <summary>
-        ///     Configures response metadata for a PATCH endpoint.
+        /// Настраивает метаданные ответа для PATCH-эндпоинта.
         /// </summary>
         /// <typeparam name="T">
-        ///     The response payload type.
+        /// Тип полезной нагрузки ответа.
         /// </typeparam>
         /// <param name="hasValidation">
-        ///     <see langword="true" /> to include validation problem metadata; otherwise, <see langword="false" />.
+        /// <see langword="true" /> для включения метаданных об ошибке валидации; иначе <see langword="false" />.
         /// </param>
         /// <returns>
-        ///     The configured route handler builder.
+        /// Настроенный построитель обработчика маршрута.
         /// </returns>
         public RouteHandlerBuilder ProducesPatch<T>(bool hasValidation = true)
         {

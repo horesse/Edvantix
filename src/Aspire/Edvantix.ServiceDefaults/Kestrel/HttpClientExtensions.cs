@@ -5,11 +5,11 @@ public static class HttpClientExtensions
     extension(IHttpClientBuilder builder)
     {
         /// <summary>
-        ///     Adds a delegating handler that forwards the current user access token
-        ///     from the active HTTP context to outgoing HTTP client requests.
+        /// Добавляет делегирующий обработчик, который передаёт токен доступа текущего пользователя
+        /// из активного HTTP-контекста в исходящие HTTP-запросы клиента.
         /// </summary>
         /// <returns>
-        ///     The configured <see cref="IHttpClientBuilder" /> instance for chaining.
+        /// Настроенный экземпляр <see cref="IHttpClientBuilder" /> для цепочки вызовов.
         /// </returns>
         public IHttpClientBuilder AddAuthToken()
         {

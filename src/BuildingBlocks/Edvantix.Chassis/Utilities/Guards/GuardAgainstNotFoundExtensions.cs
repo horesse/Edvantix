@@ -8,15 +8,14 @@ public static class GuardAgainstNotFoundExtensions
     extension(Guard guard)
     {
         /// <summary>
-        ///     Validates that the provided value is not null. If null, throws a <see cref="NotFoundException" />
-        ///     for the specified <paramref name="id" />.
+        /// Проверяет, что переданное значение не равно null. Если null, выбрасывает <see cref="NotFoundException" />
+        /// для указанного <paramref name="id" />.
         /// </summary>
-        /// <typeparam name="T">The type of the value being checked.</typeparam>
-        /// <param name="value">The value to check for null.</param>
-        /// <param name="id">The identifier associated with the entity being checked.</param>
+        /// <typeparam name="T">Тип проверяемого значения.</typeparam>
+        /// <param name="value">Значение для проверки на null.</param>
+        /// <param name="id">Идентификатор, связанный с проверяемой сущностью.</param>
         /// <exception cref="NotFoundException">
-        ///     Thrown when the value is null,
-        ///     indicating that the entity with the specified <paramref name="id" /> was not found.
+        /// Выбрасывается, когда значение равно null, что означает, что сущность с указанным <paramref name="id" /> не найдена.
         /// </exception>
         public void NotFound<T>([NotNull] T? value, string id)
         {
@@ -29,15 +28,14 @@ public static class GuardAgainstNotFoundExtensions
         }
 
         /// <summary>
-        ///     Validates that the provided value is not null. If null, throws a <see cref="NotFoundException" />
-        ///     for the specified <paramref name="id" />.
+        /// Проверяет, что переданное значение не равно null. Если null, выбрасывает <see cref="NotFoundException" />
+        /// для указанного <paramref name="id" />.
         /// </summary>
-        /// <typeparam name="T">The type of the value being checked.</typeparam>
-        /// <param name="value">The value to check for null.</param>
-        /// <param name="id">The identifier associated with the entity being checked.</param>
+        /// <typeparam name="T">Тип проверяемого значения.</typeparam>
+        /// <param name="value">Значение для проверки на null.</param>
+        /// <param name="id">Идентификатор, связанный с проверяемой сущностью.</param>
         /// <exception cref="NotFoundException">
-        ///     Thrown when the value is null,
-        ///     indicating that the entity with the specified <paramref name="id" /> was not found.
+        /// Выбрасывается, когда значение равно null, что означает, что сущность с указанным <paramref name="id" /> не найдена.
         /// </exception>
         public void NotFound<T>([NotNull] T? value, Guid id)
         {

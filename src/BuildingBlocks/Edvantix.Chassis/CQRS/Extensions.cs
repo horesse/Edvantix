@@ -12,10 +12,10 @@ public static class Extensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        ///     Adds the command handler metrics collector to the service collection.
+        /// Регистрирует коллектор метрик обработчика команд в контейнере зависимостей.
         /// </summary>
         /// <returns>
-        ///     The current service collection.
+        /// Текущая коллекция сервисов.
         /// </returns>
         public IServiceCollection AddCommandHandlerMetrics()
         {
@@ -24,10 +24,10 @@ public static class Extensions
         }
 
         /// <summary>
-        ///     Adds the query handler metrics collector to the service collection.
+        /// Регистрирует коллектор метрик обработчика запросов в контейнере зависимостей.
         /// </summary>
         /// <returns>
-        ///     The current service collection.
+        /// Текущая коллекция сервисов.
         /// </returns>
         public IServiceCollection AddQueryHandlerMetrics()
         {
@@ -36,10 +36,10 @@ public static class Extensions
         }
 
         /// <summary>
-        ///     Registers the activity pipeline behavior.
+        /// Регистрирует поведение конвейера для трассировки активностей.
         /// </summary>
         /// <returns>
-        ///     The current service collection.
+        /// Текущая коллекция сервисов.
         /// </returns>
         public IServiceCollection ApplyActivityBehavior()
         {
@@ -48,10 +48,10 @@ public static class Extensions
         }
 
         /// <summary>
-        ///     Registers the logging pipeline behavior.
+        /// Регистрирует поведение конвейера для логирования.
         /// </summary>
         /// <returns>
-        ///     The current service collection.
+        /// Текущая коллекция сервисов.
         /// </returns>
         public IServiceCollection ApplyLoggingBehavior()
         {
@@ -60,10 +60,10 @@ public static class Extensions
         }
 
         /// <summary>
-        ///     Registers the validation pipeline behavior.
+        /// Регистрирует поведение конвейера для валидации.
         /// </summary>
         /// <returns>
-        ///     The current service collection.
+        /// Текущая коллекция сервисов.
         /// </returns>
         public IServiceCollection ApplyValidationBehavior()
         {
@@ -72,13 +72,13 @@ public static class Extensions
         }
 
         /// <summary>
-        ///     Registers the transaction pipeline behavior for the specified database context.
+        /// Регистрирует поведение конвейера для управления транзакциями для указанного контекста базы данных.
         /// </summary>
         /// <typeparam name="TDbContext">
-        ///     The database context type used to resolve the transactional scope.
+        /// Тип контекста базы данных, используемый для разрешения транзакционного контекста.
         /// </typeparam>
         /// <returns>
-        ///     The current service collection.
+        /// Текущая коллекция сервисов.
         /// </returns>
         public IServiceCollection ApplyTransactionBehavior<TDbContext>()
             where TDbContext : DbContext

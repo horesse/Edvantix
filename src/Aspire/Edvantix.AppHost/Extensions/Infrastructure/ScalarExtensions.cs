@@ -8,11 +8,11 @@ internal static class ScalarExtensions
     extension(IDistributedApplicationBuilder builder)
     {
         /// <summary>
-        ///     Adds a Scalar API reference to the distributed application builder with predefined theme and font settings.
-        ///     Only local Keycloak authentication is supported.
+        /// Добавляет Scalar API reference к построителю распределённого приложения с предустановленными параметрами темы и шрифтов.
+        /// Поддерживается только локальная аутентификация через Keycloak.
         /// </summary>
-        /// <param name="keycloak">The Keycloak resource builder to use for authentication.</param>
-        /// <returns>An <see cref="IResourceBuilder{ScalarResource}" /> configured with the specified theme and font settings.</returns>
+        /// <param name="keycloak">Построитель ресурса Keycloak для аутентификации.</param>
+        /// <returns><see cref="IResourceBuilder{ScalarResource}" />, настроенный с заданными параметрами темы и шрифтов.</returns>
         public IResourceBuilder<ScalarResource> AddScalar(
             IResourceBuilder<IResource>? keycloak = null
         )
@@ -42,13 +42,12 @@ internal static class ScalarExtensions
     extension(IResourceBuilder<ScalarResource> builder)
     {
         /// <summary>
-        ///     Configures the Scalar resource builder to include an API reference with OAuth authorization.
+        /// Настраивает построитель ресурса Scalar для включения API reference с авторизацией OAuth.
         /// </summary>
-        /// <param name="api">The project resource builder representing the API project.</param>
-        /// <returns>The configured Scalar resource builder with OAuth authorization.</returns>
+        /// <param name="api">Построитель ресурса проекта, представляющий API проект.</param>
+        /// <returns>Настроенный построитель ресурса Scalar с авторизацией OAuth.</returns>
         /// <exception cref="InvalidOperationException">
-        ///     Thrown when Keycloak resource is not found in the application builder or when the required 'kc-realm' parameter is
-        ///     not configured.
+        /// Выбрасывается, когда ресурс Keycloak не найден в построителе приложения или обязательный параметр 'kc-realm' не настроен.
         /// </exception>
         public IResourceBuilder<ScalarResource> WithOpenAPI(IResourceBuilder<ProjectResource> api)
         {

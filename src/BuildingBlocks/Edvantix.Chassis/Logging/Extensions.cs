@@ -13,15 +13,15 @@ public static class Extensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Configures log redaction services for the host builder.
+        /// Настраивает сервисы редактирования логов для построителя хоста.
         /// </summary>
         /// <remarks>
-        ///     This method enables log redaction, applies <see cref="AsteriskRedactor" /> for sensitive data,
-        ///     and configures HMAC-based redaction for PII using the configured `HMAC:Key` value.
-        ///     The key is UTF-8 encoded and converted to Base64 because the HMAC redactor expects a Base64 key.
+        /// Метод включает редактирование логов, применяет <see cref="AsteriskRedactor" /> для чувствительных данных
+        /// и настраивает HMAC-редактирование для персональных данных на основе значения `HMAC:Key`.
+        /// Ключ кодируется в UTF-8 и конвертируется в Base64, так как HMAC-редактор ожидает ключ в формате Base64.
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///     Thrown when the `HMAC:Key` configuration value is missing or empty.
+        /// Выбрасывается, когда значение конфигурации `HMAC:Key` отсутствует или пустое.
         /// </exception>
         public void AddRedaction()
         {
@@ -35,22 +35,22 @@ public static class Extensions
                 throw new InvalidOperationException("HMAC key configuration is missing or empty");
             }
 
-            // Convert configured key material to Base64 for HMAC redactor configuration.
+            // Конвертирует ключевой материал в Base64 для конфигурации HMAC-редактора.
             var keyBytes = Encoding.UTF8.GetBytes(keyString);
             var base64Key = Convert.ToBase64String(keyBytes);
 
-            // Enable framework-level redaction support in logging.
+            // Включает поддержку редактирования на уровне фреймворка в логировании.
             builder.Logging.EnableRedaction();
 
-            // Register redactors by data classification.
+            // Регистрирует редакторы по классификации данных.
             builder.Services.AddRedaction(x =>
             {
-                // Mask sensitive fields with asterisks.
+                // Маскирует чувствительные поля звёздочками.
                 x.SetRedactor<AsteriskRedactor>(
                     new DataClassificationSet(DataTaxonomy.SensitiveData)
                 );
 
-                // Apply deterministic HMAC redaction for PII fields.
+                // Применяет детерминированное HMAC-редактирование для полей персональных данных.
                 x.SetHmacRedactor(
                     options =>
                     {
@@ -63,8 +63,8 @@ public static class Extensions
         }
 
         /// <summary>
-        ///     Registers the <see cref="ApplicationEnricher" /> to enrich log events with application-specific properties such
-        ///     as the machine name and user id.
+        /// Регистрирует <see cref="ApplicationEnricher" /> для обогащения событий лога свойствами приложения,
+        /// такими как имя машины и идентификатор пользователя.
         /// </summary>
         public void AddApplicationEnricher()
         {

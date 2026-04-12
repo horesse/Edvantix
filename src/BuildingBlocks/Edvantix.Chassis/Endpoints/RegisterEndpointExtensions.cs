@@ -10,11 +10,11 @@ public static class RegisterEndpointExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        ///     Scans the assembly that contains the specified type and registers all concrete
-        ///     implementations of <see cref="IEndpoint" /> into the dependency injection container.
+        /// Сканирует сборку, содержащую указанный тип, и регистрирует все конкретные реализации
+        /// <see cref="IEndpoint" /> в контейнере зависимостей.
         /// </summary>
         /// <param name="type">
-        ///     A marker type used to locate the target assembly for endpoint discovery.
+        /// Маркерный тип для поиска целевой сборки при обнаружении эндпоинтов.
         /// </param>
         public void AddEndpoints(Type type)
         {
@@ -38,14 +38,14 @@ public static class RegisterEndpointExtensions
     extension(WebApplication app)
     {
         /// <summary>
-        ///     Maps all discovered <see cref="IEndpoint" /> implementations into a versioned API route group.
+        /// Регистрирует все обнаруженные реализации <see cref="IEndpoint" /> в версионированной группе маршрутов API.
         /// </summary>
         /// <param name="apiVersionSet">
-        ///     The API version set applied to the mapped endpoint group.
+        /// Набор версий API, применяемый к группе эндпоинтов.
         /// </param>
         /// <param name="resourceName">
-        ///     An optional resource segment appended to the base route.
-        ///     When <see langword="null" /> or empty, only the versioned base path is used.
+        /// Необязательный сегмент ресурса, добавляемый к базовому маршруту.
+        /// Если <see langword="null" /> или пустой, используется только версионированный базовый путь.
         /// </param>
         public void MapEndpoints(ApiVersionSet apiVersionSet, string? resourceName = null)
         {

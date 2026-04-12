@@ -23,22 +23,22 @@ public static class ServiceReferenceExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        ///     Adds a typed gRPC client reference with resilience and health check registration.
+        /// Добавляет типизированный gRPC-клиент с устойчивостью и регистрацией проверки работоспособности.
         /// </summary>
         /// <typeparam name="TClient">
-        ///     The typed gRPC client contract.
+        /// Контракт типизированного gRPC-клиента.
         /// </typeparam>
         /// <param name="address">
-        ///     The absolute URI of the downstream gRPC service.
+        /// Абсолютный URI нижестоящего gRPC-сервиса.
         /// </param>
         /// <param name="failureStatus">
-        ///     One of the enumeration values that specifies the health status reported when the health probe fails.
+        /// Одно из значений перечисления, определяющее статус работоспособности при сбое пробы.
         /// </param>
         /// <returns>
-        ///     An HTTP client builder for the registered gRPC client.
+        /// Построитель HTTP-клиента для зарегистрированного gRPC-клиента.
         /// </returns>
         /// <exception cref="ArgumentException">
-        ///     Address is not a valid absolute URI.
+        /// Адрес не является допустимым абсолютным URI.
         /// </exception>
         public IHttpClientBuilder AddGrpcServiceReference<TClient>(
             string address,
@@ -70,26 +70,25 @@ public static class ServiceReferenceExtensions
         }
 
         /// <summary>
-        ///     Adds a typed HTTP client reference with optional endpoint health check registration.
+        /// Добавляет типизированный HTTP-клиент с необязательной регистрацией проверки работоспособности эндпоинта.
         /// </summary>
         /// <typeparam name="TClient">
-        ///     The typed Refit client contract.
+        /// Контракт типизированного Refit-клиента.
         /// </typeparam>
         /// <param name="address">
-        ///     The absolute URI of the downstream HTTP service.
+        /// Абсолютный URI нижестоящего HTTP-сервиса.
         /// </param>
         /// <param name="failureStatus">
-        ///     One of the enumeration values that specifies the health status reported when the health probe fails.
+        /// Одно из значений перечисления, определяющее статус работоспособности при сбое пробы.
         /// </param>
         /// <param name="healthRelativePath">
-        ///     A relative URI path for the health endpoint. When <see langword="null" /> or empty, the default health path is
-        ///     used.
+        /// Относительный путь URI эндпоинта проверки работоспособности. Если <see langword="null" /> или пустой, используется путь по умолчанию.
         /// </param>
         /// <exception cref="ArgumentException">
-        ///     Address is not a valid absolute URI.
+        /// Адрес не является допустимым абсолютным URI.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     Health check path is not a valid relative URI.
+        /// Путь проверки работоспособности не является допустимым относительным URI.
         /// </exception>
         public void AddHttpServiceReference<TClient>(
             string address,

@@ -82,11 +82,10 @@ public static class MigrateDbContextExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        ///     Registers a hosted database migration for the specified <typeparamref name="TContext" />
-        ///     without custom seed logic.
+        /// Регистрирует хостируемую миграцию базы данных для указанного <typeparamref name="TContext" /> без дополнительной логики заполнения.
         /// </summary>
-        /// <typeparam name="TContext">The EF Core database context to migrate.</typeparam>
-        /// <returns>The same service collection for chaining.</returns>
+        /// <typeparam name="TContext">Контекст базы данных EF Core для миграции.</typeparam>
+        /// <returns>Та же коллекция сервисов для цепочки вызовов.</returns>
         public IServiceCollection AddMigration<TContext>()
             where TContext : DbContext
         {
@@ -94,16 +93,16 @@ public static class MigrateDbContextExtensions
         }
 
         /// <summary>
-        ///     Registers a hosted database migration for the specified <typeparamref name="TContext" />
-        ///     and executes the provided seed delegate after migrations are applied.
+        /// Регистрирует хостируемую миграцию базы данных для указанного <typeparamref name="TContext" />
+        /// и выполняет переданный делегат заполнения после применения миграций.
         /// </summary>
-        /// <typeparam name="TContext">The EF Core database context to migrate.</typeparam>
+        /// <typeparam name="TContext">Контекст базы данных EF Core для миграции.</typeparam>
         /// <param name="seeder">
-        ///     A delegate that seeds data after migration using the resolved context and scoped services.
+        /// Делегат для заполнения данных после миграции с использованием разрешённого контекста и scoped-сервисов.
         /// </param>
-        /// <returns>The same service collection for chaining.</returns>
+        /// <returns>Та же коллекция сервисов для цепочки вызовов.</returns>
         /// <remarks>
-        ///     This method also registers OpenTelemetry tracing for the migration activity source.
+        /// Метод также регистрирует трассировку OpenTelemetry для источника активностей миграции.
         /// </remarks>
         public IServiceCollection AddMigration<TContext>(
             Func<TContext, IServiceProvider, Task> seeder
@@ -121,14 +120,13 @@ public static class MigrateDbContextExtensions
         }
 
         /// <summary>
-        ///     Registers a typed database seeder and configures hosted migration for
-        ///     <typeparamref name="TContext" />.
+        /// Регистрирует типизированный заполнитель базы данных и настраивает хостируемую миграцию для <typeparamref name="TContext" />.
         /// </summary>
-        /// <typeparam name="TContext">The EF Core database context to migrate.</typeparam>
+        /// <typeparam name="TContext">Контекст базы данных EF Core для миграции.</typeparam>
         /// <typeparam name="TDbSeeder">
-        ///     The seeder implementation used to seed the migrated database.
+        /// Реализация заполнителя, используемая для заполнения мигрированной базы данных.
         /// </typeparam>
-        /// <returns>The same service collection for chaining.</returns>
+        /// <returns>Та же коллекция сервисов для цепочки вызовов.</returns>
         public IServiceCollection AddMigration<TContext, TDbSeeder>()
             where TContext : DbContext
             where TDbSeeder : class, IDbSeeder<TContext>

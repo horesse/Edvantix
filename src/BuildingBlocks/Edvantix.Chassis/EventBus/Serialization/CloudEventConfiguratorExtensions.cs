@@ -7,11 +7,11 @@ public static class CloudEventConfiguratorExtensions
     extension(IBusFactoryConfigurator configurator)
     {
         /// <summary>
-        ///     Configures this MassTransit configurator to use CloudEvents for message serialization and deserialization.
+        /// Настраивает конфигуратор MassTransit для использования CloudEvents при сериализации и десериализации сообщений.
         /// </summary>
         /// <remarks>
-        ///     A single <see cref="CloudEventSerializerFactory" /> instance is registered for both serializer and deserializer
-        ///     to ensure consistent payload handling.
+        /// Единственный экземпляр <see cref="CloudEventSerializerFactory" /> регистрируется и для сериализатора, и для десериализатора
+        /// для обеспечения согласованной обработки полезной нагрузки.
         /// </remarks>
         public void UseCloudEvents()
         {
@@ -24,11 +24,11 @@ public static class CloudEventConfiguratorExtensions
     extension(IReceiveEndpointConfigurator configurator)
     {
         /// <summary>
-        ///     Configures this receive endpoint to use CloudEvents for message serialization and deserialization.
+        /// Настраивает эндпоинт получения для использования CloudEvents при сериализации и десериализации сообщений.
         /// </summary>
         /// <remarks>
-        ///     A single <see cref="CloudEventSerializerFactory" /> instance is used for both serializer and deserializer
-        ///     to keep payload handling consistent for this endpoint.
+        /// Единственный экземпляр <see cref="CloudEventSerializerFactory" /> используется и для сериализатора, и для десериализатора
+        /// для согласованной обработки полезной нагрузки на этом эндпоинте.
         /// </remarks>
         public void UseCloudEvents()
         {

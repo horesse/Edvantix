@@ -157,10 +157,10 @@ public static class PaginationHeaderFilterExtensions
         where TBuilder : IEndpointConventionBuilder
     {
         /// <summary>
-        ///     Adds the pagination header endpoint filter to the current endpoint builder.
+        /// Добавляет фильтр эндпоинта пагинации к текущему построителю эндпоинта.
         /// </summary>
         /// <returns>
-        ///     The same endpoint builder instance to support fluent chaining.
+        /// Тот же экземпляр построителя эндпоинта для цепочки вызовов.
         /// </returns>
         public TBuilder WithPaginationHeaders()
         {

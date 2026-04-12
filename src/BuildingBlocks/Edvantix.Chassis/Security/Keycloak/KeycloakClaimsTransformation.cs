@@ -32,7 +32,7 @@ internal sealed class KeycloakRolesClaimsTransformation(
 
         var claimsIdentity = new ClaimsIdentity();
 
-        // Convert resource roles to regular roles.
+        // Преобразует роли ресурса в обычные роли.
         var resourceRoleClaims = resourceRoles
             .GetValues<string>()
             .Where(role =>
@@ -42,7 +42,7 @@ internal sealed class KeycloakRolesClaimsTransformation(
 
         claimsIdentity.AddClaims(resourceRoleClaims);
 
-        // Convert realm roles to regular roles.
+        // Преобразует роли realm в обычные роли.
         var realmRoleClaims = realmRoles
             .GetValues<string>()
             .Where(role =>

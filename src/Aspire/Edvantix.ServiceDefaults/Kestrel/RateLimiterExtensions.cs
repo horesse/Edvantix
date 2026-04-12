@@ -13,36 +13,24 @@ public static class RateLimiterExtensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Registers and configures API rate limiting for the current host.
+        /// Регистрирует и настраивает ограничение частоты запросов API для текущего хоста.
         /// </summary>
         /// <remarks>
-        ///     This method configures:
-        ///     <list type="bullet">
-        ///         <item>
-        ///             <description>
-        ///                 A global fixed-window limiter for all requests.
-        ///             </description>
-        ///         </item>
-        ///         <item>
-        ///             <description>
-        ///                 A per-user token-bucket policy identified by <c>PerUserRateLimit</c>.
-        ///             </description>
-        ///         </item>
-        ///         <item>
-        ///             <description>
-        ///                 A unified rejection behavior that returns HTTP <c>429</c> responses.
-        ///             </description>
-        ///         </item>
-        ///     </list>
+        /// Метод настраивает:
+        /// <list type="bullet">
+        ///     <item><description>Глобальный ограничитель фиксированного окна для всех запросов.</description></item>
+        ///     <item><description>Политику токенового ведра на пользователя с именем <c>PerUserRateLimit</c>.</description></item>
+        ///     <item><description>Единое поведение отклонения, возвращающее HTTP <c>429</c>.</description></item>
+        /// </list>
         /// </remarks>
         public void AddRateLimiting()
         {
             var services = builder.Services;
 
-            // Registers ASP.NET Core rate limiting services.
+            // Регистрирует сервисы ограничения частоты запросов ASP.NET Core.
             services.AddRateLimiter();
 
-            // Configures the global fixed-window limiter options.
+            // Настраивает параметры глобального ограничителя фиксированного окна.
             builder.Configure<FixedWindowRateLimiterOptions>(
                 nameof(FixedWindowRateLimiter),
                 configure: options =>
@@ -54,7 +42,7 @@ public static class RateLimiterExtensions
                 }
             );
 
-            // Configures the per-user token bucket limiter options.
+            // Настраивает параметры токенового ведра для ограничения на пользователя.
             builder.Configure<TokenBucketRateLimiterOptions>(
                 nameof(TokenBucketRateLimiter),
                 configure: options =>
@@ -67,7 +55,7 @@ public static class RateLimiterExtensions
                 }
             );
 
-            // Applies rate limiter pipeline behavior and policy wiring.
+            // Применяет поведение конвейера ограничителя и привязывает политики.
             services
                 .AddOptions<RateLimiterOptions>()
                 .Configure(
@@ -92,9 +80,9 @@ public static class RateLimiterExtensions
     extension(IEndpointConventionBuilder builder)
     {
         /// <summary>
-        ///     Applies the per-user rate limiting policy to the endpoint.
+        /// Применяет политику ограничения частоты запросов на пользователя к эндпоинту.
         /// </summary>
-        /// <returns>The endpoint convention builder with the rate limit policy applied.</returns>
+        /// <returns>Построитель соглашений эндпоинта с применённой политикой ограничения.</returns>
         public IEndpointConventionBuilder RequirePerUserRateLimit()
         {
             return builder.RequireRateLimiting(PerUserPolicy);

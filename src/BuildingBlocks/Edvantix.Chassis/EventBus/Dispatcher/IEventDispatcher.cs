@@ -5,10 +5,10 @@ namespace Edvantix.Chassis.EventBus.Dispatcher;
 public interface IEventDispatcher
 {
     /// <summary>
-    ///     Dispatches the specified domain event to its registered handlers.
+    /// Отправляет указанное доменное событие зарегистрированным обработчикам.
     /// </summary>
-    /// <param name="event">The domain event instance to dispatch.</param>
-    /// <param name="cancellationToken">A token used to cancel the asynchronous dispatch operation.</param>
-    /// <returns>A task that represents the asynchronous dispatch operation.</returns>
+    /// <param name="event">Экземпляр доменного события для отправки.</param>
+    /// <param name="cancellationToken">Токен для отмены асинхронной операции отправки.</param>
+    /// <returns>Задача, представляющая асинхронную операцию отправки.</returns>
     Task DispatchAsync(DomainEvent @event, CancellationToken cancellationToken = default);
 }

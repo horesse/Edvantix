@@ -8,9 +8,9 @@ public static class CorsExtensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Registers the CORS policy appropriate for the current environment.
-        ///     In development, allows any request from localhost.
-        ///     In non-development environments, applies the strongly-typed <see cref="CorsSettings" /> configuration.
+        /// Регистрирует политику CORS, соответствующую текущей среде.
+        /// В режиме разработки разрешает любые запросы с localhost.
+        /// В остальных средах применяет строготипизированную конфигурацию <see cref="CorsSettings" />.
         /// </summary>
         public void AddDefaultCors()
         {
@@ -79,8 +79,8 @@ public static class CorsExtensions
     extension(WebApplication app)
     {
         /// <summary>
-        ///     Applies the CORS middleware using the policy registered by <see cref="CorsExtensions" />.
-        ///     Selects <c>AllowAll</c> in development and <c>AllowSpecific</c> in all other environments.
+        /// Применяет CORS middleware, используя политику, зарегистрированную в <see cref="CorsExtensions" />.
+        /// Выбирает <c>AllowAll</c> в режиме разработки и <c>AllowSpecific</c> во всех остальных средах.
         /// </summary>
         public void UseDefaultCors()
         {

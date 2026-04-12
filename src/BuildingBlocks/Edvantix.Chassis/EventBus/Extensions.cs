@@ -138,28 +138,27 @@ public static class Extensions
     extension(IHostApplicationBuilder builder)
     {
         /// <summary>
-        ///     Registers and configures the event bus infrastructure for the current host.
+        /// Регистрирует и настраивает инфраструктуру шины событий для текущего хоста.
         /// </summary>
         /// <param name="type">
-        ///     A marker type used to discover consumers, producers, and activities from its assembly.
+        /// Маркерный тип для обнаружения потребителей, производителей и активностей из его сборки.
         /// </param>
         /// <param name="busConfigure">
-        ///     Optional callback for additional <see cref="IBusRegistrationConfigurator" /> customization.
+        /// Необязательный обратный вызов для дополнительной настройки <see cref="IBusRegistrationConfigurator" />.
         /// </param>
         /// <remarks>
-        ///     This method configures an in-memory MassTransit transport for local pipeline behavior
-        ///     and a Kafka rider for broker-based messaging. If the broker connection string is not configured,
-        ///     registration is skipped.
+        /// Метод настраивает in-memory транспорт MassTransit для локального конвейера
+        /// и Kafka rider для брокерного обмена сообщениями. Если строка подключения к брокеру не настроена, регистрация пропускается.
         /// </remarks>
         public void AddEventBus(
             Type type,
             Action<IBusRegistrationConfigurator>? busConfigure = null
         )
         {
-            // Resolve broker connection details from configuration.
+            // Считывает параметры подключения к брокеру из конфигурации.
             var connectionString = builder.Configuration.GetConnectionString(Components.Broker);
 
-            // Skip event bus registration when no broker is configured.
+            // Пропускает регистрацию шины событий, если брокер не настроен.
             if (string.IsNullOrWhiteSpace(connectionString))
             {
                 return;
@@ -167,59 +166,59 @@ public static class Extensions
 
             builder.Services.AddMassTransit(config =>
             {
-                // Enforce kebab-case endpoint naming consistency across message endpoints.
+                // Устанавливает форматирование имён эндпоинтов в kebab-case для единообразия.
                 config.SetKebabCaseEndpointNameFormatter();
 
-                // Auto-register MassTransit activities from the target assembly.
+                // Автоматически регистрирует активности MassTransit из целевой сборки.
                 config.AddActivities(type.Assembly);
 
                 config.UsingInMemory(
                     (context, configurator) =>
                     {
-                        // Use CloudEvents envelopes for interoperability.
+                        // Использует конверты CloudEvents для совместимости.
                         configurator.UseCloudEvents();
 
-                        // Auto-configure discovered consumer endpoints.
+                        // Автоматически настраивает эндпоинты обнаруженных потребителей.
                         configurator.ConfigureEndpoints(context);
 
-                        // Apply shared retry policy and ignore validation exceptions.
+                        // Применяет общую политику повторных попыток и игнорирует исключения валидации.
                         configurator.UseMessageRetry(AddRetryConfiguration);
 
-                        // Enable delayed scheduling for deferred message delivery.
+                        // Включает отложенное планирование для доставки сообщений с задержкой.
                         configurator.UseDelayedMessageScheduler();
 
-                        // Redirect publish operations through Kafka via publish filter.
+                        // Перенаправляет операции публикации через Kafka с помощью фильтра публикации.
                         configurator.UsePublishFilter(typeof(KafkaPublishFilter<>), context);
                     }
                 );
 
                 config.AddRider(rider =>
                 {
-                    // Discover consumers once and reuse the result for registration and endpoint setup.
+                    // Обнаруживает потребителей один раз и переиспользует результат для регистрации и настройки эндпоинтов.
                     var consumerEntries = DiscoverConsumerEntries(type.Assembly);
 
-                    // Register all discovered Kafka consumers and producers.
+                    // Регистрирует всех обнаруженных Kafka-потребителей и производителей.
                     RegisterKafkaConsumers(rider, consumerEntries);
                     RegisterKafkaProducers(rider, type.Assembly);
 
                     rider.UsingKafka(
                         (context, k) =>
                         {
-                            // Configure Kafka host and serialization strategy.
+                            // Настраивает хост Kafka и стратегию сериализации.
                             k.Host(connectionString);
                             k.SetSerializationFactory(new CloudEventKafkaSerializerFactory());
 
-                            // Create topic endpoints and bind each consumer to its message topic.
+                            // Создаёт эндпоинты топиков и привязывает каждого потребителя к его топику сообщений.
                             ConfigureKafkaTopicEndpoints(k, context, type, consumerEntries);
                         }
                     );
                 });
 
-                // Allow callers to append custom MassTransit configuration.
+                // Позволяет вызывающему коду добавлять дополнительную конфигурацию MassTransit.
                 busConfigure?.Invoke(config);
             });
 
-            // Register MassTransit diagnostic meter/source for OpenTelemetry metrics and traces.
+            // Регистрирует счётчик/источник диагностики MassTransit для метрик и трассировок OpenTelemetry.
             builder
                 .Services.AddOpenTelemetry()
                 .WithMetrics(b => b.AddMeter(DiagnosticHeaders.DefaultListenerName))
@@ -230,10 +229,10 @@ public static class Extensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        ///     Registers the event dispatcher service in the dependency injection container.
+        /// Регистрирует сервис диспетчера событий в контейнере зависимостей.
         /// </summary>
         /// <remarks>
-        ///     The dispatcher is registered with a scoped lifetime so a single instance is used per request scope.
+        /// Диспетчер регистрируется с областью видимости scoped, поэтому один экземпляр используется на всё время запроса.
         /// </remarks>
         public void AddEventDispatcher()
         {

@@ -6,11 +6,15 @@ on:
     branches:
       - main
     paths:
+      # Source & test code
       - "src/**"
       - "tests/**"
+      # CI/CD configuration
       - ".github/workflows/sonar.yml"
+      # SonarQube configuration
       - ".sonarlint/**"
       - "SonarQube.Analysis.xml"
+      # Exclusions (last-match-wins, must follow includes)
       - "!src/Aspire/Edvantix.AppHost/Container/**"
   pull_request:
     paths:
@@ -76,8 +80,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
           .sonar/scanner/dotnet-sonarscanner begin
-          /k:"edvantix_Edvantix"
-          /o:"edvantix"
+          /k:"horesse_Edvantix"
+          /o:"horesse"
           /d:sonar.token="$SONAR_TOKEN"
           /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
 

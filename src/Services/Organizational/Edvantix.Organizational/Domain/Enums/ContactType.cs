@@ -23,5 +23,5 @@ public enum ContactType
 
     /// <summary>Номер в Viber.</summary>
     [Display(Name = "Viber")]
-    Viber = 4
+    Viber = 4,
 }

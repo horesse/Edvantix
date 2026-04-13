@@ -43,5 +43,5 @@ public enum LegalForm
 
     /// <summary>Общее образовательное учреждение.</summary>
     [Display(Name = "Образовательное учреждение")]
-    EducationalInstitution = 9
+    EducationalInstitution = 9,
 }

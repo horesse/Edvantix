@@ -71,5 +71,5 @@ public enum OrganizationType
 
     /// <summary>Онлайн-платформа.</summary>
     [Display(Name = "Онлайн-платформа")]
-    OnlinePlatform = 16
+    OnlinePlatform = 16,
 }

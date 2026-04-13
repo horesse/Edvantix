@@ -15,5 +15,5 @@ public enum OrganizationStatus
 
     /// <summary>Запись помечена как удалённая, исключается из операционных выборок.</summary>
     [Display(Name = "Бездействует, удалено")]
-    Deleted = 2
+    Deleted = 2,
 }

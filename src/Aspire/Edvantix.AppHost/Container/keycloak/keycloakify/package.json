@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "keycloakify": "^11.15.3",
-    "autoprefixer": "^10.4.27",
+    "autoprefixer": "^10.5.0",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^1.8.0",
     "clsx": "^2.1.1",
@@ -81,7 +81,7 @@
     "prettier": "^3.8.2",
     "storybook": "^10.3.5",
     "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.1",
+    "typescript-eslint": "^8.58.2",
     "vite": "^8.0.8"
   },
   "engines": {

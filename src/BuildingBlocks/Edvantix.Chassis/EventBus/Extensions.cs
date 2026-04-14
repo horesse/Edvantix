@@ -140,12 +140,8 @@ public static class Extensions
         /// <summary>
         /// Регистрирует и настраивает инфраструктуру шины событий для текущего хоста.
         /// </summary>
-        /// <param name="type">
-        /// Маркерный тип для обнаружения потребителей, производителей и активностей из его сборки.
-        /// </param>
-        /// <param name="busConfigure">
-        /// Необязательный обратный вызов для дополнительной настройки <see cref="IBusRegistrationConfigurator" />.
-        /// </param>
+        /// <param name="type">Маркерный тип для обнаружения потребителей, производителей и активностей из его сборки.</param>
+        /// <param name="busConfigure">Необязательный обратный вызов для дополнительной настройки <see cref="IBusRegistrationConfigurator" />.</param>
         /// <remarks>
         /// Метод настраивает in-memory транспорт MassTransit для локального конвейера
         /// и Kafka rider для брокерного обмена сообщениями. Если строка подключения к брокеру не настроена, регистрация пропускается.
@@ -187,7 +183,7 @@ public static class Extensions
                         // Включает отложенное планирование для доставки сообщений с задержкой.
                         configurator.UseDelayedMessageScheduler();
 
-                        // Inject UserId from the current user context into message headers.
+                        // Внедряет идентификатор пользователя из текущего HTTP-контекста в заголовки сообщения.
                         configurator.UsePublishFilter(typeof(UserIdPublishFilter<>), context);
 
                         // Перенаправляет операции публикации через Kafka с помощью фильтра публикации.

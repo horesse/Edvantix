@@ -2,10 +2,8 @@
 
 namespace Edvantix.Chassis.OpenTelemetry.ActivityScope;
 
-public sealed class ActivityScope : IActivityScope
+internal sealed class ActivityScope : IActivityScope
 {
-    public static readonly IActivityScope Instance = new ActivityScope();
-
     public Activity? Start(string name, StartActivityOptions options)
     {
         return options.Parent.HasValue
@@ -33,14 +31,14 @@ public sealed class ActivityScope : IActivityScope
         string name,
         Func<Activity?, CancellationToken, Task> run,
         StartActivityOptions options,
-        CancellationToken cancellationToken
+        CancellationToken ct
     )
     {
         using var activity = Start(name, options) ?? Activity.Current;
 
         try
         {
-            await run(activity, cancellationToken).ConfigureAwait(false);
+            await run(activity, ct).ConfigureAwait(false);
 
             activity?.SetStatus(ActivityStatusCode.Ok);
         }
@@ -56,14 +54,14 @@ public sealed class ActivityScope : IActivityScope
         string name,
         Func<Activity?, CancellationToken, Task<TResult>> run,
         StartActivityOptions options,
-        CancellationToken cancellationToken
+        CancellationToken ct
     )
     {
         using var activity = Start(name, options) ?? Activity.Current;
 
         try
         {
-            var result = await run(activity, cancellationToken).ConfigureAwait(false);
+            var result = await run(activity, ct).ConfigureAwait(false);
 
             activity?.SetStatus(ActivityStatusCode.Ok);
 

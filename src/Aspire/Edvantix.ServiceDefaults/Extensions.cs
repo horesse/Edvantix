@@ -114,7 +114,7 @@ public static class Extensions
                         )
                         .AddGrpcClientInstrumentation()
                         .AddHttpClientInstrumentation()
-                        .AddProcessor(new FixHttpRouteProcessor())
+                        .AddFixHttpRouteProcessor()
                         .AddSource(ActivitySourceProvider.DefaultSourceName);
                 });
         }

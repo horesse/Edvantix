@@ -9,6 +9,14 @@ public static class CachingExtensions
 {
     extension(IHostApplicationBuilder builder)
     {
+        /// <summary>
+        /// Регистрирует сервисы гибридного кэширования в контейнере зависимостей,
+        /// настраивая параметры из <see cref="CachingOptions" /> и опционального делегата.
+        /// </summary>
+        /// <param name="configure">
+        /// Опциональный делегат для дополнительной настройки <see cref="HybridCacheOptions" />
+        /// после применения значений по умолчанию из <see cref="CachingOptions" />.
+        /// </param>
         public void AddCaching(Action<HybridCacheOptions>? configure = null)
         {
             var services = builder.Services;

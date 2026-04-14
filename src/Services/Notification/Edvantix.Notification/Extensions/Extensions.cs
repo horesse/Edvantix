@@ -48,7 +48,7 @@ internal static class Extensions
             new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
         );
 
-        services.AddSingleton<IActivityScope, ActivityScope>();
+        services.AddActivityScope();
 
         builder.AddAzurePostgresDbContext<NotificationDbContext>(
             Components.Database.Notification,
@@ -67,8 +67,7 @@ internal static class Extensions
 
         services.AddSingleton<IRenderer, MjmlTemplateRenderer>();
 
-        // Register the mailkit sender for development
-        // and the sendgrid sender for other environments
+        // В среде разработки используется MailKit, в остальных — SendGrid
         if (builder.Environment.IsDevelopment())
         {
             builder.AddMailKitClient(Components.MailPit);

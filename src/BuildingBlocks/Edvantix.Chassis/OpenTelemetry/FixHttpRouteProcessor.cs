@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 using OpenTelemetry;
+using OpenTelemetry.Trace;
 
 namespace Edvantix.Chassis.OpenTelemetry;
 
-public sealed class FixHttpRouteProcessor : BaseProcessor<Activity>
+internal sealed class FixHttpRouteProcessor : BaseProcessor<Activity>
 {
     private const string HttpRequestMethodTag = "http.request.method";
     private const string UrlPathTag = "url.path";
@@ -31,5 +32,29 @@ public sealed class FixHttpRouteProcessor : BaseProcessor<Activity>
         activity.SetTag(HttpRouteTag, path);
         activity.SetTag(NameTag, displayName);
         activity.SetTag(RequestNameTag, displayName);
+    }
+}
+
+public static class FixHttpRouteProcessorExtensions
+{
+    extension(TracerProviderBuilder tracerProviderBuilder)
+    {
+        /// <summary>
+        /// Добавляет <see cref="FixHttpRouteProcessor" /> в пайплайн <see cref="TracerProviderBuilder" />.
+        /// </summary>
+        /// <returns>
+        /// Экземпляр <see cref="TracerProviderBuilder" /> с зарегистрированным <see cref="FixHttpRouteProcessor" />,
+        /// обеспечивающий нормализацию HTTP-маршрутов в трассировках OpenTelemetry.
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// builder.Services.AddOpenTelemetry()
+        ///     .WithTracing(tracing => tracing.AddFixHttpRouteProcessor());
+        /// </code>
+        /// </example>
+        public TracerProviderBuilder AddFixHttpRouteProcessor()
+        {
+            return tracerProviderBuilder.AddProcessor(new FixHttpRouteProcessor());
+        }
     }
 }

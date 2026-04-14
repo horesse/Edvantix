@@ -187,6 +187,9 @@ public static class Extensions
                         // Включает отложенное планирование для доставки сообщений с задержкой.
                         configurator.UseDelayedMessageScheduler();
 
+                        // Inject UserId from the current user context into message headers.
+                        configurator.UsePublishFilter(typeof(UserIdPublishFilter<>), context);
+
                         // Перенаправляет операции публикации через Kafka с помощью фильтра публикации.
                         configurator.UsePublishFilter(typeof(KafkaPublishFilter<>), context);
                     }

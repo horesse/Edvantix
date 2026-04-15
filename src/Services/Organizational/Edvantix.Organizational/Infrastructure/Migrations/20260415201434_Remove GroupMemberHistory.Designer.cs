@@ -3,6 +3,7 @@ using System;
 using Edvantix.Organizational.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Organizational.Infrastructure.Migrations
 {
     [DbContext(typeof(OrganizationalDbContext))]
-    partial class OrganizationalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260415201434_Remove GroupMemberHistory")]
+    partial class RemoveGroupMemberHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,6 +98,10 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                     b.Property<Guid>("GroupRoleId")
                         .HasColumnType("uuid")
                         .HasColumnName("group_role_id");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<DateOnly>("JoinedAt")
                         .HasColumnType("date")

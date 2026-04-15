@@ -33,6 +33,7 @@
     <Project Path="src/Services/Notification/Edvantix.Notification/Edvantix.Notification.csproj" />
   </Folder>
   <Folder Name="/src/Services/Organizational/">
+    <Project Path="src/Services/Organizational/Edvantix.Organizational.UnitTests/Edvantix.Organizational.UnitTests.csproj" />
     <Project Path="src/Services/Organizational/Edvantix.Organizational/Edvantix.Organizational.csproj" />
   </Folder>
   <Folder Name="/src/Services/Persona/">

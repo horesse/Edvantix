@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Edvantix.Organizational\Edvantix.Organizational.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Shouldly" />
+  </ItemGroup>
+</Project>

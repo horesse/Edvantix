@@ -4,8 +4,6 @@ using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
-// Bank entity was intentionally removed from the domain. Delete Bank.cs if still present.
-
 namespace Edvantix.Organizational.Infrastructure;
 
 public sealed class OrganizationalDbContext(DbContextOptions options) : PostgresContext(options)
@@ -23,7 +21,6 @@ public sealed class OrganizationalDbContext(DbContextOptions options) : Postgres
     // Group aggregate
     public DbSet<Group> Groups => Set<Group>();
     public DbSet<GroupMember> GroupMembers => Set<GroupMember>();
-    public DbSet<GroupMembershipHistory> GroupMembershipHistories => Set<GroupMembershipHistory>();
     public DbSet<GroupRole> GroupRoles => Set<GroupRole>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -8,7 +8,9 @@ internal sealed class GroupMemberConfiguration : IEntityTypeConfiguration<GroupM
 {
     public void Configure(EntityTypeBuilder<GroupMember> builder)
     {
-        builder.ConfigureSoftDeletable();
+        builder.UseDefaultConfiguration();
+
+        builder.Property(h => h.ExitReason).HasMaxLength(DataSchemaLength.ExtraLarge);
 
         builder
             .Property(m => m.Status)
@@ -17,15 +19,11 @@ internal sealed class GroupMemberConfiguration : IEntityTypeConfiguration<GroupM
             .HasConversion<string>();
 
         builder
-            .HasMany(m => m.History)
-            .WithOne()
-            .HasForeignKey(h => h.GroupMemberId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasOne<GroupRole>()
             .WithMany()
             .HasForeignKey(m => m.GroupRoleId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasQueryFilter(x => x.ExitedAt == null);
     }
 }

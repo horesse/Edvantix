@@ -82,3 +82,9 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
     /// <inheritdoc />
     public void Delete() => IsDeleted = true;
 }
+
+internal sealed class OrganizationMemberRolePermission
+{
+    public Guid OrganizationMemberRoleId { get; set; }
+    public Guid PermissionId { get; set; }
+}

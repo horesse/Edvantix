@@ -16,4 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\Migrations\" />
+  </ItemGroup>
 </Project>

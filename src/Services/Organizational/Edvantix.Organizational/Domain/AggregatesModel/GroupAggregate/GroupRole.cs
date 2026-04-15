@@ -82,9 +82,9 @@ public sealed class GroupRole() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     /// <inheritdoc />
     public void Delete() => IsDeleted = true;
 }
+
 internal sealed class GroupRolePermission
 {
     public Guid GroupRoleId { get; set; }
     public Guid PermissionId { get; set; }
 }
-

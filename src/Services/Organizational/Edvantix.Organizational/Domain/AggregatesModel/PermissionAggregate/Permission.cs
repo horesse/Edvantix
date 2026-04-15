@@ -20,7 +20,8 @@ public sealed class Permission() : Entity, IAggregateRoot
     public string Name { get; private set; } = string.Empty;
 
     internal IReadOnlyList<GroupRole> GroupRoles => _groupRoles;
-    internal IReadOnlyList<OrganizationMemberRole> OrganizationMemberRoles => _organizationMemberRoles;
+    internal IReadOnlyList<OrganizationMemberRole> OrganizationMemberRoles =>
+        _organizationMemberRoles;
 
     private readonly List<GroupRole> _groupRoles = [];
     private readonly List<OrganizationMemberRole> _organizationMemberRoles = [];

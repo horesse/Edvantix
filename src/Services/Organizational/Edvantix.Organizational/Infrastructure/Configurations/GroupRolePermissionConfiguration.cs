@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Organizational.Infrastructure.Configurations;
 
-internal sealed class GroupRolePermissionConfiguration : IEntityTypeConfiguration<GroupRolePermission>
+internal sealed class GroupRolePermissionConfiguration
+    : IEntityTypeConfiguration<GroupRolePermission>
 {
     public void Configure(EntityTypeBuilder<GroupRolePermission> builder)
     {

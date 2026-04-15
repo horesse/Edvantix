@@ -13,20 +13,11 @@ internal sealed class GroupRoleConfiguration : IEntityTypeConfiguration<GroupRol
         builder.Property(r => r.Code).IsRequired().HasMaxLength(DataSchemaLength.Medium);
         builder.Property(r => r.Description).HasMaxLength(DataSchemaLength.Large);
 
-        // Код роли уникален в рамках организации
         builder.HasIndex(r => new { r.OrganizationId, r.Code }).IsUnique();
 
-        // Связь с разрешениями через промежуточную таблицу
         builder
             .HasMany(r => r.Permissions)
-            .WithMany("GroupRoles")
-            .UsingEntity(
-                "group_role_permissions",
-                j =>
-                {
-                    j.Property<Guid>("GroupRoleId").HasColumnName("role_id");
-                    j.Property<Guid>("PermissionId").HasColumnName("permission_id");
-                }
-            );
+            .WithMany(p => p.GroupRoles)
+            .UsingEntity<GroupRolePermission>();
     }
 }

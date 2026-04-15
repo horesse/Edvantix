@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Edvantix.Chassis.Specification.Builders;
+﻿using Edvantix.Chassis.Specification.Builders;
 using Edvantix.Chassis.Specification.Expressions;
 
 namespace Edvantix.Chassis.Specification;
@@ -12,35 +11,25 @@ public class Specification<T> : ISpecification<T>
     private const int DefaultCapacityOrder = 2;
     private const int DefaultCapacityInclude = 2;
     private const int DefaultCapacityIncludeString = 1;
-    private List<IncludeExpression>? _includeExpressions;
+
     private List<string>? _includeStrings;
+    private List<IncludeExpression>? _includeExpressions;
     private List<OrderExpression<T>>? _orderExpressions;
+    private List<WhereExpression<T>>? _whereExpressions;
     private List<SearchExpression<T>>? _searchExpressions;
 
-    private List<WhereExpression<T>>? _whereExpressions;
-
     protected ISpecificationBuilder<T> Query => new SpecificationBuilder<T>(this);
-
     public IEnumerable<WhereExpression<T>> WhereExpressions => _whereExpressions ?? [];
-
     public IEnumerable<SearchExpression<T>> SearchExpressions => _searchExpressions ?? [];
-
     public IEnumerable<OrderExpression<T>> OrderExpressions => _orderExpressions ?? [];
-
     public IEnumerable<IncludeExpression> IncludeExpressions => _includeExpressions ?? [];
-
     public IEnumerable<string> IncludeStrings => _includeStrings ?? [];
 
-    public int Take { get; set; }
-
-    public int Skip { get; set; }
-
+    public int Take { get; internal set; }
+    public int Skip { get; internal set; }
     public bool AsNoTracking { get; internal set; }
-
     public bool AsTracking { get; internal set; }
-
     public bool AsSplitQuery { get; internal set; }
-
     public bool IgnoreQueryFilters { get; internal set; }
 
     internal void Add(WhereExpression<T> whereExpressions)

@@ -32,25 +32,25 @@ public static class RateLimiterExtensions
 
             // Настраивает параметры глобального ограничителя фиксированного окна.
             builder.Configure<FixedWindowRateLimiterOptions>(
-                nameof(FixedWindowRateLimiter),
+                $"{nameof(RateLimiter)}:{nameof(FixedWindowRateLimiter)}",
                 configure: options =>
                 {
                     options.AutoReplenishment = true;
                     options.PermitLimit = 30;
-                    options.QueueLimit = 5;
+                    options.QueueLimit = 0;
                     options.Window = TimeSpan.FromMinutes(1);
                 }
             );
 
             // Настраивает параметры токенового ведра для ограничения на пользователя.
             builder.Configure<TokenBucketRateLimiterOptions>(
-                nameof(TokenBucketRateLimiter),
+                $"{nameof(RateLimiter)}:{nameof(TokenBucketRateLimiter)}",
                 configure: options =>
                 {
                     options.AutoReplenishment = true;
-                    options.TokenLimit = 100;
-                    options.TokensPerPeriod = 100;
-                    options.QueueLimit = 100;
+                    options.TokenLimit = 30;
+                    options.TokensPerPeriod = 20;
+                    options.QueueLimit = 5;
                     options.ReplenishmentPeriod = TimeSpan.FromSeconds(10);
                 }
             );

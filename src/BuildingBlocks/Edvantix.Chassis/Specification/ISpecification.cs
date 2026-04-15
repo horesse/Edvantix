@@ -15,9 +15,9 @@ public interface ISpecification<T>
 
     IEnumerable<string> IncludeStrings { get; }
 
-    int Take { get; set; }
+    int Take { get; }
 
-    int Skip { get; set; }
+    int Skip { get; }
 
     bool AsNoTracking { get; }
 

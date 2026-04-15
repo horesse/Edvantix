@@ -50,7 +50,6 @@ public sealed class GroupMember() : Entity, ITenanted
         GroupRoleId = groupRoleId;
         Status = OrganizationStatus.Active;
         JoinedAt = joinedAt;
-        IsDeleted = false;
     }
 
     /// <inheritdoc />
@@ -79,9 +78,6 @@ public sealed class GroupMember() : Entity, ITenanted
 
     /// <summary>Причина выхода из группы (отчисление, перевод, завершение курса и т.д.).</summary>
     public string? ExitReason { get; private set; }
-
-    /// <inheritdoc />
-    public bool IsDeleted { get; set; }
 
     /// <summary>Изменяет роль участника в группе.</summary>
     public void ChangeRole(Guid groupRoleId)

@@ -41,7 +41,6 @@ public sealed class GroupMemberTests
         member.GroupRoleId.ShouldBe(ValidGroupRoleId);
         member.Status.ShouldBe(OrganizationStatus.Active);
         member.JoinedAt.ShouldBe(ValidJoinDate);
-        member.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -122,6 +121,6 @@ public sealed class GroupMemberTests
         member.Exit(exitDate, "Завершение курса");
 
         member.Status.ShouldBe(OrganizationStatus.Archived);
-        member.IsDeleted.ShouldBeTrue();
+        member.ExitedAt.ShouldBe(exitDate);
     }
 }

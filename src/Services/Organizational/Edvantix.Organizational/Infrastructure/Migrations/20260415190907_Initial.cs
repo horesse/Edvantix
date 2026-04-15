@@ -471,27 +471,27 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "group_role_permissions",
+                name: "group_role_permission",
                 columns: table => new
                 {
-                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    group_role_id = table.Column<Guid>(type: "uuid", nullable: false),
                     permission_id = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey(
-                        "pk_group_role_permissions",
-                        x => new { x.role_id, x.permission_id }
+                        "pk_group_role_permission",
+                        x => new { x.group_role_id, x.permission_id }
                     );
                     table.ForeignKey(
-                        name: "fk_group_role_permissions_group_roles_group_role_id",
-                        column: x => x.role_id,
+                        name: "fk_group_role_permission_group_roles_group_role_id",
+                        column: x => x.group_role_id,
                         principalTable: "group_roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade
                     );
                     table.ForeignKey(
-                        name: "fk_group_role_permissions_permissions_permission_id",
+                        name: "fk_group_role_permission_permissions_permission_id",
                         column: x => x.permission_id,
                         principalTable: "permissions",
                         principalColumn: "id",
@@ -504,18 +504,18 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 name: "organization_member_role_permission",
                 columns: table => new
                 {
-                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    organization_member_role_id = table.Column<Guid>(type: "uuid", nullable: false),
                     permission_id = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey(
                         "pk_organization_member_role_permission",
-                        x => new { x.role_id, x.permission_id }
+                        x => new { x.organization_member_role_id, x.permission_id }
                     );
                     table.ForeignKey(
                         name: "fk_organization_member_role_permission_organization_member_rol",
-                        column: x => x.role_id,
+                        column: x => x.organization_member_role_id,
                         principalTable: "organization_member_roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade
@@ -587,8 +587,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
             );
 
             migrationBuilder.CreateIndex(
-                name: "ix_group_role_permissions_permission_id",
-                table: "group_role_permissions",
+                name: "ix_group_role_permission_permission_id",
+                table: "group_role_permission",
                 column: "permission_id"
             );
 
@@ -677,7 +677,7 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             migrationBuilder.DropTable(name: "group_membership_histories");
 
-            migrationBuilder.DropTable(name: "group_role_permissions");
+            migrationBuilder.DropTable(name: "group_role_permission");
 
             migrationBuilder.DropTable(name: "organization_member_role_permission");
 

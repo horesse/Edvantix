@@ -10,6 +10,6 @@ internal sealed class OrganizationMemberRolePermissionConfiguration
     {
         builder.HasKey(x => new { x.OrganizationMemberRoleId, x.PermissionId });
 
-        builder.Property(x => x.OrganizationMemberRoleId).HasColumnName("role_id");
+        builder.Property(x => x.OrganizationMemberRoleId);
     }
 }

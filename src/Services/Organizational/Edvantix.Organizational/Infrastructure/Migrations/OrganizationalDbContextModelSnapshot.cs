@@ -197,19 +197,19 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 {
                     b.Property<Guid>("GroupRoleId")
                         .HasColumnType("uuid")
-                        .HasColumnName("role_id");
+                        .HasColumnName("group_role_id");
 
                     b.Property<Guid>("PermissionId")
                         .HasColumnType("uuid")
                         .HasColumnName("permission_id");
 
                     b.HasKey("GroupRoleId", "PermissionId")
-                        .HasName("pk_group_role_permissions");
+                        .HasName("pk_group_role_permission");
 
                     b.HasIndex("PermissionId")
-                        .HasDatabaseName("ix_group_role_permissions_permission_id");
+                        .HasDatabaseName("ix_group_role_permission_permission_id");
 
-                    b.ToTable("group_role_permissions", (string)null);
+                    b.ToTable("group_role_permission", (string)null);
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.Contact", b =>
@@ -417,7 +417,7 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 {
                     b.Property<Guid>("OrganizationMemberRoleId")
                         .HasColumnType("uuid")
-                        .HasColumnName("role_id");
+                        .HasColumnName("organization_member_role_id");
 
                     b.Property<Guid>("PermissionId")
                         .HasColumnType("uuid")
@@ -714,14 +714,14 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasForeignKey("GroupRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_group_role_permissions_group_roles_group_role_id");
+                        .HasConstraintName("fk_group_role_permission_group_roles_group_role_id");
 
                     b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Permission", null)
                         .WithMany()
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_group_role_permissions_permissions_permission_id");
+                        .HasConstraintName("fk_group_role_permission_permissions_permission_id");
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.Contact", b =>

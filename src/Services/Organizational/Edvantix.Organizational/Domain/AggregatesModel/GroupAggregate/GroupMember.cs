@@ -1,6 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.GroupMembershipHistoryAggregate;
 using Edvantix.Organizational.Domain.Enums;
-using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
@@ -8,12 +6,9 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 /// <summary>
 /// Текущий факт участия пользователя в учебной группе.
 /// Один пользователь может одновременно быть членом нескольких групп с разными ролями.
-/// История всех изменений состава фиксируется в <see cref="GroupMembershipHistory"/>.
 /// </summary>
-public sealed class GroupMember() : Entity, ISoftDelete, ITenanted
+public sealed class GroupMember() : Entity, ITenanted
 {
-    private readonly List<GroupMembershipHistory> _history = [];
-
     /// <param name="organizationId">Идентификатор организации (для мультиарендности).</param>
     /// <param name="groupId">Идентификатор группы.</param>
     /// <param name="profileId">Идентификатор пользователя из Profile Service.</param>
@@ -54,10 +49,8 @@ public sealed class GroupMember() : Entity, ISoftDelete, ITenanted
         ProfileId = profileId;
         GroupRoleId = groupRoleId;
         Status = OrganizationStatus.Active;
+        JoinedAt = joinedAt;
         IsDeleted = false;
-
-        // Фиксируем вступление в журнале истории
-        RegisterDomainEvent(new CreateGroupMemberDomainEvent(this, joinedAt));
     }
 
     /// <inheritdoc />
@@ -75,11 +68,20 @@ public sealed class GroupMember() : Entity, ISoftDelete, ITenanted
     /// <summary>Текущий статус участника группы.</summary>
     public OrganizationStatus Status { get; private set; }
 
+    /// <summary>Дата вступления участника в группу.</summary>
+    public DateOnly JoinedAt { get; private set; }
+
+    /// <summary>
+    /// Дата выхода участника из группы.
+    /// null означает, что участник всё ещё состоит в группе.
+    /// </summary>
+    public DateOnly? ExitedAt { get; private set; }
+
+    /// <summary>Причина выхода из группы (отчисление, перевод, завершение курса и т.д.).</summary>
+    public string? ExitReason { get; private set; }
+
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
-
-    /// <summary>История участия в группе.</summary>
-    public IReadOnlyList<GroupMembershipHistory> History => _history;
 
     /// <summary>Изменяет роль участника в группе.</summary>
     public void ChangeRole(Guid groupRoleId)
@@ -98,13 +100,9 @@ public sealed class GroupMember() : Entity, ISoftDelete, ITenanted
     /// <param name="exitReason">Причина выхода.</param>
     public void Exit(DateOnly exitedAt, string? exitReason = null)
     {
-        var activeEntry = _history.LastOrDefault(h => !h.ExitedAt.HasValue);
-        activeEntry?.RecordExit(exitedAt, exitReason);
+        ExitedAt = exitedAt;
+        ExitReason = exitReason;
 
         Status = OrganizationStatus.Archived;
-        IsDeleted = true;
     }
-
-    /// <inheritdoc />
-    public void Delete() => IsDeleted = true;
 }

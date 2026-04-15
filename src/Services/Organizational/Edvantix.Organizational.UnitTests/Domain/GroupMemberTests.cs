@@ -40,19 +40,9 @@ public sealed class GroupMemberTests
         member.ProfileId.ShouldBe(ValidProfileId);
         member.GroupRoleId.ShouldBe(ValidGroupRoleId);
         member.Status.ShouldBe(OrganizationStatus.Active);
+        member.JoinedAt.ShouldBe(ValidJoinDate);
         member.IsDeleted.ShouldBeFalse();
     }
-
-    // TODO: Переезд на события
-    // [Test]
-    // public void GivenValidData_WhenCreatingGroupMember_ThenShouldCreateInitialHistoryEntry()
-    // {
-    //     var member = CreateValidMember();
-    //
-    //     member.History.ShouldHaveSingleItem();
-    //     member.History[0].JoinedAt.ShouldBe(ValidJoinDate);
-    //     member.History[0].ExitedAt.ShouldBeNull();
-    // }
 
     [Test]
     public void GivenEmptyOrganizationId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
@@ -132,30 +122,6 @@ public sealed class GroupMemberTests
         member.Exit(exitDate, "Завершение курса");
 
         member.Status.ShouldBe(OrganizationStatus.Archived);
-        member.IsDeleted.ShouldBeTrue();
-    }
-
-    // TODO: Доменные события
-    // [Test]
-    // public void GivenValidExitDate_WhenExiting_ThenShouldUpdateHistoryEntry()
-    // {
-    //     var member = CreateValidMember();
-    //     var exitDate = ValidJoinDate.AddMonths(3);
-    //
-    //     member.Exit(exitDate, "Завершение курса");
-    //
-    //     var historyEntry = member.History[0];
-    //     historyEntry.ExitedAt.ShouldBe(exitDate);
-    //     historyEntry.ExitReason.ShouldBe("Завершение курса");
-    // }
-
-    [Test]
-    public void GivenActiveMember_WhenDeleting_ThenIsDeletedShouldBeTrue()
-    {
-        var member = CreateValidMember();
-
-        member.Delete();
-
         member.IsDeleted.ShouldBeTrue();
     }
 }

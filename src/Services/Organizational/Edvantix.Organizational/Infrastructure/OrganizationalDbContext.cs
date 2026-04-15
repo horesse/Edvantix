@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.EF.Contexts;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.GroupMembershipHistoryAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
@@ -23,8 +24,10 @@ public sealed class OrganizationalDbContext(DbContextOptions options) : Postgres
     // Group aggregate
     public DbSet<Group> Groups => Set<Group>();
     public DbSet<GroupMember> GroupMembers => Set<GroupMember>();
-    public DbSet<GroupMembershipHistory> GroupMembershipHistories => Set<GroupMembershipHistory>();
     public DbSet<GroupRole> GroupRoles => Set<GroupRole>();
+
+    // Group history aggregate
+    public DbSet<GroupMembershipHistory> GroupMembershipHistories => Set<GroupMembershipHistory>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

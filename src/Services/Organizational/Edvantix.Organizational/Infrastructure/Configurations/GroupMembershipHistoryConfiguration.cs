@@ -1,5 +1,6 @@
 using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.GroupMembershipHistoryAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Organizational.Infrastructure.Configurations;

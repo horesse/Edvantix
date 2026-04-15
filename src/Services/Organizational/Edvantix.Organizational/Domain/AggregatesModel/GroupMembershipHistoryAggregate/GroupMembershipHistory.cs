@@ -1,16 +1,8 @@
 using Edvantix.SharedKernel.SeedWork;
 
-namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+namespace Edvantix.Organizational.Domain.AggregatesModel.GroupMembershipHistoryAggregate;
 
-/// <summary>
-/// Иммутабельный журнал событий вступления и выхода участника из группы.
-/// Сохраняет полную историю изменений состава с указанием причины выхода.
-/// <para>
-/// Таблица является журналом событий и не должна физически удаляться.
-/// Поле is_deleted отсутствует намеренно.
-/// </para>
-/// </summary>
-public sealed class GroupMembershipHistory() : Entity
+public sealed class GroupMembershipHistory() : Entity, IAggregateRoot
 {
     /// <param name="groupMemberId">Идентификатор записи участника группы.</param>
     /// <param name="joinedAt">Дата вступления участника в группу.</param>

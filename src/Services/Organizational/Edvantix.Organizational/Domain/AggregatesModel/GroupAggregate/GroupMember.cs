@@ -1,4 +1,6 @@
+using Edvantix.Organizational.Domain.AggregatesModel.GroupMembershipHistoryAggregate;
 using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
@@ -55,7 +57,7 @@ public sealed class GroupMember() : Entity, ISoftDelete, ITenanted
         IsDeleted = false;
 
         // Фиксируем вступление в журнале истории
-        _history.Add(new GroupMembershipHistory(Id, joinedAt));
+        RegisterDomainEvent(new CreateGroupMemberDomainEvent(this, joinedAt));
     }
 
     /// <inheritdoc />

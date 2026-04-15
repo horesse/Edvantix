@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Organizational.Infrastructure.Configurations;

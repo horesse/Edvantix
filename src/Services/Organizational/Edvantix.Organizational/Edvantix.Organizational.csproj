@@ -20,6 +20,9 @@
     <Folder Include="Infrastructure\Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <InternalsVisibleTo Include="Edvantix.Organizational.UnitTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).ContractTests" />
   </ItemGroup>
 </Project>

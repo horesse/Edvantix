@@ -20,7 +20,6 @@ public sealed class ContactTests
         contact.Description.ShouldBe("Основной email");
         contact.ContactType.ShouldBe(ContactType.Email);
         contact.IsPrimary.ShouldBeTrue();
-        contact.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -88,16 +87,6 @@ public sealed class ContactTests
         contact.UnsetPrimary();
 
         contact.IsPrimary.ShouldBeFalse();
-    }
-
-    [Test]
-    public void GivenActiveContact_WhenDeleting_ThenIsDeletedShouldBeTrue()
-    {
-        var contact = new Contact(ValidOrgId, "info@example.com", "Описание", ContactType.Email);
-
-        contact.Delete();
-
-        contact.IsDeleted.ShouldBeTrue();
     }
 
     [Test]

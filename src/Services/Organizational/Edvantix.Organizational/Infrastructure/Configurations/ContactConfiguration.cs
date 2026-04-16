@@ -8,7 +8,7 @@ internal sealed class ContactConfiguration : IEntityTypeConfiguration<Contact>
 {
     public void Configure(EntityTypeBuilder<Contact> builder)
     {
-        builder.ConfigureSoftDeletable();
+        builder.UseDefaultConfiguration();
 
         builder.Property(c => c.Value).IsRequired().HasMaxLength(DataSchemaLength.ExtraLarge);
         builder.Property(c => c.Description).HasMaxLength(DataSchemaLength.SuperLarge);

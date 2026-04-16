@@ -108,7 +108,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
 
         if (contact.IsPrimary)
         {
-            foreach (var existing in _contacts.Where(c => c.IsPrimary && !c.IsDeleted))
+            foreach (var existing in _contacts.Where(c => c.IsPrimary))
             {
                 existing.UnsetPrimary();
             }
@@ -124,7 +124,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     public void SetPrimaryContact(Guid contactId)
     {
         var target =
-            _contacts.FirstOrDefault(c => c.Id == contactId && !c.IsDeleted)
+            _contacts.FirstOrDefault(c => c.Id == contactId)
             ?? throw new InvalidOperationException(
                 $"Активный контакт с идентификатором {contactId} не найден в организации."
             );

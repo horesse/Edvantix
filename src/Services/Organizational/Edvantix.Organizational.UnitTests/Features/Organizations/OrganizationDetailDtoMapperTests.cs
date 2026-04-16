@@ -59,28 +59,6 @@ public sealed class OrganizationDetailDtoMapperTests
     }
 
     [Test]
-    public void GivenOrganizationWithDeletedContact_WhenMapping_ThenShouldExcludeDeletedContacts()
-    {
-        var org = CreateOrganization();
-        var active = new Contact(
-            org.Id,
-            "active@test.com",
-            "Активный",
-            ContactType.Email,
-            isPrimary: true
-        );
-        var deleted = new Contact(org.Id, "deleted@test.com", "Удалённый", ContactType.MobilePhone);
-        deleted.Delete();
-        org.AddContact(active);
-        org.AddContact(deleted);
-
-        var dto = _mapper.Map(org);
-
-        dto.Contacts.ShouldHaveSingleItem();
-        dto.Contacts[0].Value.ShouldBe("active@test.com");
-    }
-
-    [Test]
     public void GivenOrganizationWithNullShortName_WhenMapping_ThenShortNameShouldBeNull()
     {
         var org = new Organization(

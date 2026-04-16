@@ -16,7 +16,7 @@ public sealed class OrganizationDetailDtoMapper : Mapper<Organization, Organizat
             source.CurrencyId,
             source.OrganizationType,
             source.Status,
-            [.. source.Contacts.Where(c => !c.IsDeleted).Select(MapContact)]
+            [.. source.Contacts.Select(MapContact)]
         );
 
     private static ContactDto MapContact(Contact c) =>

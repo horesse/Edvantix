@@ -3,6 +3,7 @@
 public static class Services
 {
     public static readonly string Gateway = nameof(Gateway).ToLowerInvariant();
+
     // TODO: Баг. Organizational (с z) - выдает ошибку по scope keycloak
     public static readonly string Organisational = nameof(Organisational).ToLowerInvariant();
     public static readonly string Persona = nameof(Persona).ToLowerInvariant();

@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
@@ -146,6 +147,21 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
         ShortName = shortName?.Trim();
         OrganizationType = organizationType;
         LegalForm = legalForm;
+    }
+
+    /// <summary>
+    /// Регистрирует доменное событие создания организации с назначением владельца.
+    /// Вызывается однократно из application-слоя сразу после создания агрегата.
+    /// </summary>
+    public void InitializeOwnership(Guid ownerProfileId)
+    {
+        if (ownerProfileId == Guid.Empty)
+            throw new ArgumentException(
+                "Идентификатор профиля владельца не может быть пустым.",
+                nameof(ownerProfileId)
+            );
+
+        RegisterDomainEvent(new OrganizationCreatedDomainEvent(Id, ownerProfileId));
     }
 
     /// <summary>Архивирует организацию.</summary>

@@ -33,15 +33,15 @@ internal static class Extensions
                         .RequireAuthenticatedUser()
                         .RequireRole(Authorization.Roles.Admin)
                         .RequireScope(
-                            $"{Services.Organizational}_{Authorization.Actions.Read}",
-                            $"{Services.Organizational}_{Authorization.Actions.Write}"
+                            $"{Services.Organisational}_{Authorization.Actions.Read}",
+                            $"{Services.Organisational}_{Authorization.Actions.Write}"
                         );
                 }
             )
             .SetDefaultPolicy(
                 new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .RequireScope($"{Services.Organizational}_{Authorization.Actions.Read}")
+                    .RequireScope($"{Services.Organisational}_{Authorization.Actions.Read}")
                     .Build()
             );
 

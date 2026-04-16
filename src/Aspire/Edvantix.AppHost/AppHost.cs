@@ -73,7 +73,7 @@ var notificationApi = builder
     .WithFriendlyUrls();
 
 var organizationalApi = builder
-    .AddProject<Edvantix_Organizational>(Services.Organizational)
+    .AddProject<Edvantix_Organizational>(Services.Organisational)
     .WithKeycloak(keycloak)
     .WithReference(queue)
     .WaitFor(queue)

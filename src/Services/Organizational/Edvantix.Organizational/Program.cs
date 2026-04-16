@@ -35,7 +35,7 @@ var apiVersionSet = app.NewApiVersionSet()
     .ReportApiVersions()
     .Build();
 
-app.MapEndpoints(apiVersionSet, "organizations");
+app.MapEndpoints(apiVersionSet);
 
 app.MapGrpcService<PermissionService>();
 

@@ -17,4 +17,7 @@ global using Edvantix.Organizational.Features.Organizations.Delete;
 global using Edvantix.Organizational.Features.Organizations.Get;
 global using Edvantix.Organizational.Features.Organizations.Update;
 global using FluentValidation.TestHelper;
+global using Mediator;
+global using Microsoft.AspNetCore.Http.HttpResults;
+global using Microsoft.AspNetCore.Routing;
 global using Microsoft.Extensions.Logging;

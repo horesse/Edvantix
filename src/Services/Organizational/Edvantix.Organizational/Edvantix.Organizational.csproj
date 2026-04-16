@@ -19,4 +19,7 @@
   <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Edvantix.Organizational.UnitTests" />
+  </ItemGroup>
 </Project>

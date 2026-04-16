@@ -39,6 +39,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     )
         : this()
     {
+        Id = Guid.CreateVersion7();
         Guard.Against.NullOrWhiteSpace(fullLegalName, nameof(fullLegalName));
 
         if (countryId == Guid.Empty)

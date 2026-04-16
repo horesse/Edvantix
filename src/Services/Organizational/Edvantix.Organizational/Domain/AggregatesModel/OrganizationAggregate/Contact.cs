@@ -25,6 +25,7 @@ public sealed class Contact() : Entity, ISoftDelete, ITenanted
     )
         : this()
     {
+        Id = Guid.CreateVersion7();
         if (organizationId == Guid.Empty)
             throw new ArgumentException(
                 "Идентификатор организации не может быть пустым.",

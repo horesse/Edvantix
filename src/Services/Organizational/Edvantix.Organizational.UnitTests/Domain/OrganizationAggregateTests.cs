@@ -267,4 +267,39 @@ public sealed class OrganizationAggregateTests
 
         org.ShortName.ShouldBeNull();
     }
+
+    [Test]
+    public void GivenValidOwnerProfileId_WhenInitializingOwnership_ThenShouldRegisterDomainEvent()
+    {
+        var org = CreateValidOrganization();
+        var ownerProfileId = Guid.CreateVersion7();
+
+        org.InitializeOwnership(ownerProfileId);
+
+        org.DomainEvents.ShouldHaveSingleItem();
+        var @event = org.DomainEvents.Single().ShouldBeOfType<OrganizationCreatedDomainEvent>();
+        @event.OrganizationId.ShouldBe(org.Id);
+        @event.OwnerProfileId.ShouldBe(ownerProfileId);
+    }
+
+    [Test]
+    public void GivenEmptyOwnerProfileId_WhenInitializingOwnership_ThenShouldThrowArgumentException()
+    {
+        var org = CreateValidOrganization();
+
+        var act = () => org.InitializeOwnership(Guid.Empty);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    public void GivenValidOwnerProfileId_WhenInitializingOwnershipTwice_ThenShouldHaveTwoDomainEvents()
+    {
+        var org = CreateValidOrganization();
+
+        org.InitializeOwnership(Guid.CreateVersion7());
+        org.InitializeOwnership(Guid.CreateVersion7());
+
+        org.DomainEvents.Count.ShouldBe(2);
+    }
 }

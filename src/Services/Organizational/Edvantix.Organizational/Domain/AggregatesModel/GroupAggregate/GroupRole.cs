@@ -18,6 +18,7 @@ public sealed class GroupRole() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     public GroupRole(Guid organizationId, string code, string? description = null)
         : this()
     {
+        Id = Guid.CreateVersion7();
         if (organizationId == Guid.Empty)
             throw new ArgumentException(
                 "Идентификатор организации не может быть пустым.",

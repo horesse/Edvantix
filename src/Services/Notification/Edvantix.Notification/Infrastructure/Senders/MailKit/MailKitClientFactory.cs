@@ -15,6 +15,9 @@ internal sealed class MailKitClientFactory(MailKitSettings settings)
 
         try
         {
+            if (settings.Endpoint is null)
+                throw new InvalidOperationException("SMTP endpoint is not set.");
+
             await client.ConnectAsync(settings.Endpoint, cancellationToken);
 
             if (settings.Credentials is not null)

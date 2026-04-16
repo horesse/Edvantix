@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
@@ -38,6 +39,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     )
         : this()
     {
+        Id = Guid.CreateVersion7();
         Guard.Against.NullOrWhiteSpace(fullLegalName, nameof(fullLegalName));
 
         if (countryId == Guid.Empty)
@@ -106,7 +108,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
 
         if (contact.IsPrimary)
         {
-            foreach (var existing in _contacts.Where(c => c.IsPrimary && !c.IsDeleted))
+            foreach (var existing in _contacts.Where(c => c.IsPrimary))
             {
                 existing.UnsetPrimary();
             }
@@ -122,7 +124,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     public void SetPrimaryContact(Guid contactId)
     {
         var target =
-            _contacts.FirstOrDefault(c => c.Id == contactId && !c.IsDeleted)
+            _contacts.FirstOrDefault(c => c.Id == contactId)
             ?? throw new InvalidOperationException(
                 $"Активный контакт с идентификатором {contactId} не найден в организации."
             );
@@ -146,6 +148,21 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
         ShortName = shortName?.Trim();
         OrganizationType = organizationType;
         LegalForm = legalForm;
+    }
+
+    /// <summary>
+    /// Регистрирует доменное событие создания организации с назначением владельца.
+    /// Вызывается однократно из application-слоя сразу после создания агрегата.
+    /// </summary>
+    public void InitializeOwnership(Guid ownerProfileId)
+    {
+        if (ownerProfileId == Guid.Empty)
+            throw new ArgumentException(
+                "Идентификатор профиля владельца не может быть пустым.",
+                nameof(ownerProfileId)
+            );
+
+        RegisterDomainEvent(new OrganizationCreatedDomainEvent(Id, ownerProfileId));
     }
 
     /// <summary>Архивирует организацию.</summary>

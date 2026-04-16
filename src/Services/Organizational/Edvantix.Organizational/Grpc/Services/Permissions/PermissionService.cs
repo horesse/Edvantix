@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.RateLimiting;
 
 namespace Edvantix.Organizational.Grpc.Services.Permissions;
 
-internal class PermissionService(IPermissionRepository permissionRepository)
+internal sealed class PermissionService(IPermissionRepository permissionRepository)
     : PermissionGrpcService.PermissionGrpcServiceBase
 {
     [Authorize]

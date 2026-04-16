@@ -7,6 +7,10 @@
     <ProjectReference Include="..\Edvantix.Organizational\Edvantix.Organizational.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Moq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Moq" />
     <Using Include="Shouldly" />
   </ItemGroup>
 </Project>

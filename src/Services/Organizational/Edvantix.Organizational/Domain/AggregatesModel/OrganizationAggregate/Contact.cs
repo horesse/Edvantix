@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Organizational.Domain.Enums;
 using Edvantix.SharedKernel.SeedWork;
 
@@ -9,7 +8,7 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 /// Одна запись — один канал связи определённого типа (email, телефон, мессенджер).
 /// Бизнес-правило: в организации должен быть ровно один контакт с <see cref="IsPrimary"/> = true.
 /// </summary>
-public sealed class Contact() : Entity, ISoftDelete, ITenanted
+public sealed class Contact() : Entity, ITenanted
 {
     /// <param name="organizationId">Идентификатор организации-владельца.</param>
     /// <param name="value">Значение контакта (адрес email, номер телефона, username мессенджера).</param>
@@ -25,6 +24,7 @@ public sealed class Contact() : Entity, ISoftDelete, ITenanted
     )
         : this()
     {
+        Id = Guid.CreateVersion7();
         if (organizationId == Guid.Empty)
             throw new ArgumentException(
                 "Идентификатор организации не может быть пустым.",
@@ -39,7 +39,6 @@ public sealed class Contact() : Entity, ISoftDelete, ITenanted
         Description = description.Trim();
         ContactType = contactType;
         IsPrimary = isPrimary;
-        IsDeleted = false;
     }
 
     /// <inheritdoc />
@@ -57,15 +56,9 @@ public sealed class Contact() : Entity, ISoftDelete, ITenanted
     /// <summary>Признак основного контакта организации. Ровно один активный контакт должен быть Primary.</summary>
     public bool IsPrimary { get; private set; }
 
-    /// <inheritdoc />
-    public bool IsDeleted { get; set; }
-
     /// <summary>Назначает данный контакт основным.</summary>
     public void SetPrimary() => IsPrimary = true;
 
     /// <summary>Снимает признак основного контакта.</summary>
     public void UnsetPrimary() => IsPrimary = false;
-
-    /// <inheritdoc />
-    public void Delete() => IsDeleted = true;
 }

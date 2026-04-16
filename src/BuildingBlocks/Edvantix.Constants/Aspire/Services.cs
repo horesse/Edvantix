@@ -3,12 +3,11 @@
 public static class Services
 {
     public static readonly string Gateway = nameof(Gateway).ToLowerInvariant();
-    public static readonly string Organizational = nameof(Organizational).ToLowerInvariant();
+
+    // TODO: Баг. Organizational (с z) - выдает ошибку по scope keycloak
+    public static readonly string Organisational = nameof(Organisational).ToLowerInvariant();
     public static readonly string Persona = nameof(Persona).ToLowerInvariant();
-    public static readonly string Subscriptions = nameof(Subscriptions).ToLowerInvariant();
-    public static readonly string Blog = nameof(Blog).ToLowerInvariant();
     public static readonly string Notification = nameof(Notification).ToLowerInvariant();
-    public static readonly string Catalog = nameof(Catalog).ToLowerInvariant();
     public static readonly string Identity = nameof(Identity).ToLowerInvariant();
     public static readonly string Scheduler = nameof(Scheduler).ToLowerInvariant();
 

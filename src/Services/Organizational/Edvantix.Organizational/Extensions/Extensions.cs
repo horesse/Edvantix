@@ -19,14 +19,29 @@ internal static class Extensions
 
         builder.AddDefaultCors();
 
+        builder.AddAppSettings<OrganizationalAppSettings>();
+
         builder.AddDefaultAuthentication().WithKeycloakClaimsTransformation();
 
         services
             .AddAuthorizationBuilder()
+            .AddPolicy(
+                Authorization.Policies.Admin,
+                policy =>
+                {
+                    policy
+                        .RequireAuthenticatedUser()
+                        .RequireRole(Authorization.Roles.Admin)
+                        .RequireScope(
+                            $"{Services.Organisational}_{Authorization.Actions.Read}",
+                            $"{Services.Organisational}_{Authorization.Actions.Write}"
+                        );
+                }
+            )
             .SetDefaultPolicy(
                 new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .RequireScope($"{Services.Organizational}_{Authorization.Actions.Read}")
+                    .RequireScope($"{Services.Organisational}_{Authorization.Actions.Read}")
                     .Build()
             );
 
@@ -37,8 +52,6 @@ internal static class Extensions
         services.AddGlobalExceptionHandler();
         services.AddProblemDetails();
 
-        builder.AddAppSettings<OrganizationalAppSettings>();
-
         builder.AddRateLimiting();
 
         services
@@ -47,9 +60,18 @@ internal static class Extensions
             )
             .ApplyActivityBehavior()
             .ApplyLoggingBehavior()
-            .ApplyValidationBehavior();
+            .ApplyValidationBehavior()
+            .ApplyTransactionBehavior<OrganizationalDbContext>();
+
+        services.AddRateLimiter();
 
         services.AddActivityScope().AddCommandHandlerMetrics().AddQueryHandlerMetrics();
+
+        builder.AddGrpcServices();
+
+        services.AddValidatorsFromAssemblyContaining<IOrganizationalApiMarker>(
+            includeInternalTypes: true
+        );
 
         services.AddVersioning();
         services.AddEndpoints(typeof(IOrganizationalApiMarker));
@@ -60,12 +82,6 @@ internal static class Extensions
         );
 
         services.AddMapper(typeof(IOrganizationalApiMarker));
-
-        services.AddValidatorsFromAssemblyContaining<IOrganizationalApiMarker>(
-            includeInternalTypes: true
-        );
-
-        builder.AddGrpcServices();
 
         services.AddTransient(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.User);
 

@@ -13,10 +13,9 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
         Guid id,
         CancellationToken cancellationToken = default
     ) =>
-        await context.OrganizationMembers.FirstOrDefaultAsync(
-            m => m.Id == id && !m.IsDeleted,
-            cancellationToken
-        );
+        await context
+            .OrganizationMembers.AsTracking()
+            .FirstOrDefaultAsync(m => m.Id == id && !m.IsDeleted, cancellationToken);
 
     public async Task<IReadOnlyCollection<OrganizationMember>> ListByOrganizationAsync(
         Guid organizationId,
@@ -33,6 +32,14 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
         await Specification
             .GetQuery(context.OrganizationMembers.AsQueryable(), specification)
             .ToListAsync(cancellationToken);
+
+    public async Task<int> CountAsync(
+        ISpecification<OrganizationMember> specification,
+        CancellationToken cancellationToken = default
+    ) =>
+        await Specification
+            .GetQuery(context.OrganizationMembers.AsQueryable(), specification)
+            .CountAsync(cancellationToken);
 
     public async Task AddAsync(
         OrganizationMember member,

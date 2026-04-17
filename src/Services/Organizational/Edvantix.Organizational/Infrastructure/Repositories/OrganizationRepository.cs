@@ -14,7 +14,8 @@ internal sealed class OrganizationRepository(OrganizationalDbContext context)
         CancellationToken cancellationToken = default
     ) =>
         await context
-            .Organizations.Include(o => o.Contacts)
+            .Organizations.AsTracking()
+            .Include(o => o.Contacts)
             .FirstOrDefaultAsync(o => o.Id == id && !o.IsDeleted, cancellationToken);
 
     public async Task<IReadOnlyCollection<Organization>> ListAsync(

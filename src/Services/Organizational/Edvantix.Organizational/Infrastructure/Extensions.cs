@@ -1,4 +1,6 @@
-﻿namespace Edvantix.Organizational.Infrastructure;
+﻿using Edvantix.Chassis.Caching;
+
+namespace Edvantix.Organizational.Infrastructure;
 
 public static class Extensions
 {
@@ -14,5 +16,11 @@ public static class Extensions
                 services.AddRepositories(typeof(IOrganizationalApiMarker));
             }
         );
+
+        builder
+            .AddRedisClientBuilder(Components.Redis, o => o.DisableAutoActivation = false)
+            .WithAzureAuthentication();
+
+        builder.AddCaching();
     }
 }

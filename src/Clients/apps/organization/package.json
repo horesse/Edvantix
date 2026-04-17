@@ -76,7 +76,7 @@
     "allure-playwright": "^3.7.1",
     "allure-vitest": "^3.7.1",
     "cucumber-html-reporter": "^7.2.0",
-    "eslint": "^10.2.0",
+    "eslint": "^10.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "happy-dom": "^20.9.0",
     "multiple-cucumber-html-reporter": "^3.10.0",

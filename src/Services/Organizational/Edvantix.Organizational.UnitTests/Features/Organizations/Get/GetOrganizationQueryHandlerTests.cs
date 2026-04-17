@@ -1,9 +1,12 @@
+using Edvantix.Chassis.Caching;
+
 namespace Edvantix.Organizational.UnitTests.Features.Organizations.Get;
 
 public sealed class GetOrganizationQueryHandlerTests
 {
     private readonly Mock<IOrganizationRepository> _repoMock = new();
     private readonly Mock<IMapper<Organization, OrganizationDetailDto>> _mapperMock = new();
+    private readonly Mock<IHybridCache> _cacheMock = new();
     private readonly GetOrganizationQueryHandler _handler;
 
     private static readonly Guid ValidCountryId = Guid.CreateVersion7();
@@ -11,7 +14,25 @@ public sealed class GetOrganizationQueryHandlerTests
 
     public GetOrganizationQueryHandlerTests()
     {
-        _handler = new(_repoMock.Object, _mapperMock.Object);
+        _cacheMock
+            .Setup(c =>
+                c.GetOrCreateAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<Organization>>>(),
+                    It.IsAny<IEnumerable<string>?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .Returns(
+                (
+                    string _,
+                    Func<CancellationToken, ValueTask<Organization>> factory,
+                    IEnumerable<string>? _,
+                    CancellationToken ct
+                ) => factory(ct)
+            );
+
+        _handler = new(_cacheMock.Object, _repoMock.Object, _mapperMock.Object);
     }
 
     [Test]

@@ -14,6 +14,24 @@ public sealed class GetOrganizationQueryHandlerTests
 
     public GetOrganizationQueryHandlerTests()
     {
+        _cacheMock
+            .Setup(c =>
+                c.GetOrCreateAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<Organization>>>(),
+                    It.IsAny<IEnumerable<string>?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .Returns(
+                (
+                    string _,
+                    Func<CancellationToken, ValueTask<Organization>> factory,
+                    IEnumerable<string>? _,
+                    CancellationToken ct
+                ) => factory(ct)
+            );
+
         _handler = new(_cacheMock.Object, _repoMock.Object, _mapperMock.Object);
     }
 

@@ -148,6 +148,8 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
         ShortName = shortName?.Trim();
         OrganizationType = organizationType;
         LegalForm = legalForm;
+
+        RegisterDomainEvent(new OrganizationUpdatedDomainEvent(Id));
     }
 
     /// <summary>
@@ -177,5 +179,7 @@ public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
     {
         IsDeleted = true;
         Status = OrganizationStatus.Deleted;
+
+        RegisterDomainEvent(new OrganizationDeletedDomainEvent(Id));
     }
 }

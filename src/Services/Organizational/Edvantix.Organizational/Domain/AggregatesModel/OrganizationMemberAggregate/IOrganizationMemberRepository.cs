@@ -18,6 +18,12 @@ public interface IOrganizationMemberRepository : IRepository<OrganizationMember>
         CancellationToken cancellationToken = default
     );
 
+    /// <summary>Подсчитывает количество участников по спецификации.</summary>
+    Task<int> CountAsync(
+        ISpecification<OrganizationMember> specification,
+        CancellationToken cancellationToken = default
+    );
+
     /// <summary>Добавляет участника.</summary>
     Task AddAsync(OrganizationMember member, CancellationToken cancellationToken = default);
 }

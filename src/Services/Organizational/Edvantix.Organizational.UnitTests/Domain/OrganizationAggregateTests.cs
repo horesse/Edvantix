@@ -116,6 +116,18 @@ public sealed class OrganizationAggregateTests
     }
 
     [Test]
+    public void GivenValidData_WhenUpdating_ThenShouldRegisterOrganizationUpdatedDomainEvent()
+    {
+        var org = CreateValidOrganization();
+
+        org.Update("АО Новое Название", "НовНаз", OrganizationType.University, LegalForm.Ojsc);
+
+        org.DomainEvents.ShouldHaveSingleItem();
+        var @event = org.DomainEvents.Single().ShouldBeOfType<OrganizationUpdatedDomainEvent>();
+        @event.OrganizationId.ShouldBe(org.Id);
+    }
+
+    [Test]
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
@@ -156,6 +168,18 @@ public sealed class OrganizationAggregateTests
 
         org.IsDeleted.ShouldBeTrue();
         org.Status.ShouldBe(OrganizationStatus.Deleted);
+    }
+
+    [Test]
+    public void GivenActiveOrganization_WhenDeleting_ThenShouldRegisterOrganizationDeletedDomainEvent()
+    {
+        var org = CreateValidOrganization();
+
+        org.Delete();
+
+        org.DomainEvents.ShouldHaveSingleItem();
+        var @event = org.DomainEvents.Single().ShouldBeOfType<OrganizationDeletedDomainEvent>();
+        @event.OrganizationId.ShouldBe(org.Id);
     }
 
     [Test]

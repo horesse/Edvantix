@@ -14,7 +14,8 @@ internal sealed class OrganizationRepository(OrganizationalDbContext context)
         CancellationToken cancellationToken = default
     ) =>
         await context
-            .Organizations.Include(o => o.Contacts)
+            .Organizations.AsTracking()
+            .Include(o => o.Contacts)
             .FirstOrDefaultAsync(o => o.Id == id && !o.IsDeleted, cancellationToken);
 
     public async Task<IReadOnlyCollection<Organization>> ListAsync(
@@ -24,6 +25,14 @@ internal sealed class OrganizationRepository(OrganizationalDbContext context)
         await Specification
             .GetQuery(context.Organizations.AsQueryable(), specification)
             .ToListAsync(cancellationToken);
+
+    public async Task<int> CountAsync(
+        ISpecification<Organization> specification,
+        CancellationToken cancellationToken = default
+    ) =>
+        await Specification
+            .GetQuery(context.Organizations.AsQueryable(), specification)
+            .CountAsync(cancellationToken);
 
     public async Task AddAsync(
         Organization organization,

@@ -1,11 +1,11 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
-using Edvantix.Organizational.Features.Organizations;
 
 namespace Edvantix.Organizational.Features.Organizations.Get;
 
 public sealed record GetOrganizationQuery(Guid Id) : IQuery<OrganizationDetailDto>;
 
 internal sealed class GetOrganizationQueryHandler(
+    IHybridCache cache,
     IOrganizationRepository repository,
     IMapper<Organization, OrganizationDetailDto> mapper
 ) : IQueryHandler<GetOrganizationQuery, OrganizationDetailDto>
@@ -15,8 +15,20 @@ internal sealed class GetOrganizationQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var organization = await repository.GetByIdAsync(query.Id, cancellationToken);
-        Guard.Against.NotFound(organization, query.Id);
+        var tag = nameof(Organization).ToLowerInvariant();
+
+        var organization = await cache.GetOrCreateAsync(
+            $"{tag}:{query.Id}",
+            async ctx =>
+            {
+                var organization = await repository.GetByIdAsync(query.Id, ctx);
+                Guard.Against.NotFound(organization, query.Id);
+
+                return organization;
+            },
+            [tag],
+            cancellationToken
+        );
 
         return mapper.Map(organization);
     }

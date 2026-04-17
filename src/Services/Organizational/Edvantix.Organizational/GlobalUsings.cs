@@ -1,6 +1,6 @@
 ﻿global using System.Diagnostics.CodeAnalysis;
 global using System.Security.Claims;
-global using System.Text.Json;
+global using Edvantix.Chassis.Caching;
 global using Edvantix.Chassis.EF;
 global using Edvantix.Chassis.Endpoints;
 global using Edvantix.Chassis.EventBus;

@@ -25,6 +25,14 @@ internal sealed class OrganizationRepository(OrganizationalDbContext context)
             .GetQuery(context.Organizations.AsQueryable(), specification)
             .ToListAsync(cancellationToken);
 
+    public async Task<int> CountAsync(
+        ISpecification<Organization> specification,
+        CancellationToken cancellationToken = default
+    ) =>
+        await Specification
+            .GetQuery(context.Organizations.AsQueryable(), specification)
+            .CountAsync(cancellationToken);
+
     public async Task AddAsync(
         Organization organization,
         CancellationToken cancellationToken = default

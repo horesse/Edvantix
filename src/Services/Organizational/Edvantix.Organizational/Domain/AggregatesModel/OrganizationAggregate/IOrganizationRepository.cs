@@ -12,6 +12,12 @@ public interface IOrganizationRepository : IRepository<Organization>
         CancellationToken cancellationToken = default
     );
 
+    /// <summary>Подсчитывает количество организаций по спецификации.</summary>
+    Task<int> CountAsync(
+        ISpecification<Organization> specification,
+        CancellationToken cancellationToken = default
+    );
+
     /// <summary>Добавляет новую организацию.</summary>
     Task AddAsync(Organization organization, CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,5 @@
-﻿global using System.Diagnostics.CodeAnalysis;
+﻿global using System.ComponentModel;
+global using System.Diagnostics.CodeAnalysis;
 global using System.Security.Claims;
 global using Edvantix.Chassis.Caching;
 global using Edvantix.Chassis.EF;
@@ -18,6 +19,7 @@ global using Edvantix.Organizational.Infrastructure;
 global using Edvantix.ServiceDefaults;
 global using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 global using Edvantix.ServiceDefaults.Kestrel;
+global using Edvantix.SharedKernel.Results;
 global using FluentValidation;
 global using MassTransit;
 global using Mediator;

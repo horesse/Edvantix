@@ -13,8 +13,6 @@ public sealed class CreateOrganizationEndpointTests
             IsLegalEntity: true,
             new DateOnly(2020, 1, 1),
             LegalForm.Llc,
-            Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
             OrganizationType.PrivateEducationalCenter,
             "info@test.com",
             ContactType.Email,

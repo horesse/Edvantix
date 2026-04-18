@@ -70,22 +70,6 @@ public sealed class CreateOrganizationValidatorTests
     }
 
     [Test]
-    public void GivenEmptyCountryId_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(BuildValidCommand() with { CountryId = Guid.Empty });
-
-        result.ShouldHaveValidationErrorFor(x => x.CountryId);
-    }
-
-    [Test]
-    public void GivenEmptyCurrencyId_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(BuildValidCommand() with { CurrencyId = Guid.Empty });
-
-        result.ShouldHaveValidationErrorFor(x => x.CurrencyId);
-    }
-
-    [Test]
     [Arguments("")]
     [Arguments("   ")]
     public void GivenEmptyPrimaryContactValue_WhenValidating_ThenShouldHaveError(string value)
@@ -174,8 +158,6 @@ public sealed class CreateOrganizationValidatorTests
             IsLegalEntity: true,
             new DateOnly(2020, 1, 1),
             LegalForm.Llc,
-            Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
             OrganizationType.PrivateEducationalCenter,
             "info@test.com",
             ContactType.Email,

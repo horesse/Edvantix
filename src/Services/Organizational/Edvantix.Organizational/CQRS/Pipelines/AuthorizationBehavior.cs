@@ -45,7 +45,8 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
 
         var permissions = await cache.GetOrCreateAsync<HashSet<string>>(
             cacheKey,
-            async ct => await memberRepository.GetActivePermissionsAsync(organizationId, profileId, ct),
+            async ct =>
+                await memberRepository.GetActivePermissionsAsync(organizationId, profileId, ct),
             tags,
             cancellationToken
         );

@@ -24,7 +24,6 @@ public sealed class PermissionsDbSeeder(ILogger<PermissionsDbSeeder> logger)
         (OrganizationPermissions.Feature, OrganizationPermissions.ViewAnalytics),
         (OrganizationPermissions.Feature, OrganizationPermissions.ManageSettings),
         (OrganizationPermissions.Feature, OrganizationPermissions.ManageSubscription),
-
         (GroupPermissions.Feature, GroupPermissions.Create),
         (GroupPermissions.Feature, GroupPermissions.Read),
         (GroupPermissions.Feature, GroupPermissions.Update),
@@ -39,22 +38,16 @@ public sealed class PermissionsDbSeeder(ILogger<PermissionsDbSeeder> logger)
     public async Task SeedAsync(OrganizationalDbContext context)
     {
         var permissions = await context.Permissions.ToListAsync();
-        
+
         foreach (var (feature, name) in _knownPermissions)
         {
-            var exists = permissions.Any(p =>
-                p.Feature == feature && p.Name == name
-            );
+            var exists = permissions.Any(p => p.Feature == feature && p.Name == name);
 
             if (exists)
                 continue;
 
             context.Permissions.Add(new Permission(feature, name));
-            logger.LogInformation(
-                "Seeding permission {Feature}/{Name}",
-                feature,
-                name
-            );
+            logger.LogInformation("Seeding permission {Feature}/{Name}", feature, name);
         }
 
         await context.SaveChangesAsync();

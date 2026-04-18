@@ -4,7 +4,6 @@ using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Features.Organizations.Get;
 
-[RequirePermission(OrganizationPermissions.Read)]
 public sealed record GetOrganizationQuery(Guid Id) : IQuery<OrganizationDetailDto>;
 
 internal sealed class GetOrganizationQueryHandler(

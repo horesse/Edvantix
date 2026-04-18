@@ -22,11 +22,11 @@ internal sealed class OrganizationCreatedDomainEventHandler(
     )
     {
         var orgPermissions = await permissionRepository.ListAsync(
-            new PermissionByFeatureSpecification(OrganizationPermissions.Feature),
+            new PermissionByFeatureSpecification(OrganizationPermissions.Feature, true),
             cancellationToken
         );
         var groupPermissions = await permissionRepository.ListAsync(
-            new PermissionByFeatureSpecification(GroupPermissions.Feature),
+            new PermissionByFeatureSpecification(GroupPermissions.Feature, true),
             cancellationToken
         );
 

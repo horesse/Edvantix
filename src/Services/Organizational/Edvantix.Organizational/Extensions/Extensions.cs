@@ -18,14 +18,9 @@ internal static class MediatorExtensions
     /// Регистрирует <see cref="AuthorizationBehavior{TMessage,TResponse}"/> в конвейере Mediator.
     /// Проверяет разрешения профиля в организации для команд и запросов с атрибутом <c>[RequirePermission]</c>.
     /// </summary>
-    internal static IServiceCollection ApplyAuthorizationBehavior(
-        this IServiceCollection services
-    )
+    internal static IServiceCollection ApplyAuthorizationBehavior(this IServiceCollection services)
     {
-        services.AddScoped(
-            typeof(IPipelineBehavior<,>),
-            typeof(AuthorizationBehavior<,>)
-        );
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
         return services;
     }
 }

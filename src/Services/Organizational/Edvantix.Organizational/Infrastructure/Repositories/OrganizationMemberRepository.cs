@@ -59,8 +59,7 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
                 on member.OrganizationMemberRoleId equals role.Id
             join rp in context.Set<OrganizationMemberRolePermission>()
                 on role.Id equals rp.OrganizationMemberRoleId
-            join perm in context.Permissions
-                on rp.PermissionId equals perm.Id
+            join perm in context.Permissions on rp.PermissionId equals perm.Id
             where
                 member.OrganizationId == organizationId
                 && member.ProfileId == profileId

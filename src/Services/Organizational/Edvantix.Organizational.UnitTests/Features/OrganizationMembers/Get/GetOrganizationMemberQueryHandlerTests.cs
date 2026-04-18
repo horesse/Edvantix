@@ -46,7 +46,9 @@ public sealed class GetOrganizationMemberQueryHandlerTests
             .ReturnsAsync((OrganizationMember?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new GetOrganizationMemberQuery(memberId), CancellationToken.None).AsTask()
+            _handler
+                .Handle(new GetOrganizationMemberQuery(memberId), CancellationToken.None)
+                .AsTask()
         );
     }
 

@@ -1,10 +1,14 @@
+using Edvantix.Chassis.Security.Tenant;
+
 namespace Edvantix.Organizational.UnitTests.Features.Organizations.Update;
 
 public sealed class UpdateOrganizationCommandHandlerTests
 {
+    private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IOrganizationRepository> _repoMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly UpdateOrganizationCommandHandler _handler;
+    private readonly Guid _organizationId = Guid.CreateVersion7();
 
     private static readonly Guid ValidCountryId = Guid.CreateVersion7();
     private static readonly Guid ValidCurrencyId = Guid.CreateVersion7();
@@ -15,21 +19,21 @@ public sealed class UpdateOrganizationCommandHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
+        _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
 
-        _handler = new(_repoMock.Object);
+        _handler = new(_repoMock.Object, _tenantMock.Object);
     }
 
     [Test]
     public async Task GivenExistingOrganization_WhenHandling_ThenShouldUpdateProperties()
     {
-        var orgId = Guid.CreateVersion7();
-        var org = CreateOrganization(orgId);
+        var org = CreateOrganization();
         _repoMock
-            .Setup(r => r.GetByIdAsync(orgId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetByIdAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(org);
 
         var command = new UpdateOrganizationCommand(
-            orgId,
+            _organizationId,
             "АО Новое Название",
             "НовНаз",
             OrganizationType.University,
@@ -50,7 +54,7 @@ public sealed class UpdateOrganizationCommandHandlerTests
         var orgId = Guid.CreateVersion7();
         _repoMock
             .Setup(r => r.GetByIdAsync(orgId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(CreateOrganization(orgId));
+            .ReturnsAsync(CreateOrganization());
 
         await _handler.Handle(BuildValidCommand(orgId), CancellationToken.None);
 
@@ -73,20 +77,19 @@ public sealed class UpdateOrganizationCommandHandlerTests
     [Test]
     public async Task GivenExistingOrganization_WhenHandlingWithNullShortName_ThenShouldClearShortName()
     {
-        var orgId = Guid.CreateVersion7();
-        var org = CreateOrganization(orgId);
+        var org = CreateOrganization();
         _repoMock
-            .Setup(r => r.GetByIdAsync(orgId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetByIdAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(org);
 
-        var command = BuildValidCommand(orgId) with { ShortName = null };
+        var command = BuildValidCommand(_organizationId) with { ShortName = null };
 
         await _handler.Handle(command, CancellationToken.None);
 
         org.ShortName.ShouldBeNull();
     }
 
-    private static Organization CreateOrganization(Guid id) =>
+    private Organization CreateOrganization() =>
         new Organization(
             "ООО Тестовая Компания",
             isLegalEntity: true,
@@ -97,7 +100,7 @@ public sealed class UpdateOrganizationCommandHandlerTests
             OrganizationType.PrivateEducationalCenter
         )
         {
-            Id = id,
+            Id = _organizationId,
         };
 
     private static UpdateOrganizationCommand BuildValidCommand(Guid id) =>

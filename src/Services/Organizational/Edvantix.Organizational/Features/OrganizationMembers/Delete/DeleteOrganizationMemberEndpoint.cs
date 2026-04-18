@@ -6,11 +6,8 @@ public sealed class DeleteOrganizationMemberEndpoint : IEndpoint<NoContent, Guid
     {
         app.MapDelete(
                 "/members/{id:guid}",
-                async (
-                    Guid id,
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) => await HandleAsync(id, sender, cancellationToken)
+                async (Guid id, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(id, sender, cancellationToken)
             )
             .WithName("DeleteOrganizationMember")
             .WithTags("Участники организации")

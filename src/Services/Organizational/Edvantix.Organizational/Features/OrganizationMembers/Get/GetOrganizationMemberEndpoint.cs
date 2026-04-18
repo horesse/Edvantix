@@ -1,16 +1,14 @@
 namespace Edvantix.Organizational.Features.OrganizationMembers.Get;
 
-public sealed class GetOrganizationMemberEndpoint : IEndpoint<Ok<OrganizationMemberDto>, Guid, ISender>
+public sealed class GetOrganizationMemberEndpoint
+    : IEndpoint<Ok<OrganizationMemberDto>, Guid, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
                 "/members/{id:guid}",
-                async (
-                    Guid id,
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) => await HandleAsync(id, sender, cancellationToken)
+                async (Guid id, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(id, sender, cancellationToken)
             )
             .WithName("GetOrganizationMemberById")
             .WithTags("Участники организации")

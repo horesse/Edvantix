@@ -15,14 +15,21 @@ public sealed record UpdateOrganizationCommand(
     LegalForm LegalForm
 ) : ICommand;
 
-internal sealed class UpdateOrganizationCommandHandler(IOrganizationRepository repository)
-    : ICommandHandler<UpdateOrganizationCommand>
+internal sealed class UpdateOrganizationCommandHandler(
+    IOrganizationRepository repository,
+    ITenantContext tenantContext
+) : ICommandHandler<UpdateOrganizationCommand>
 {
     public async ValueTask<Unit> Handle(
         UpdateOrganizationCommand command,
         CancellationToken cancellationToken
     )
     {
+        if (tenantContext.OrganizationId != command.Id)
+            throw new ForbiddenException(
+                "Попытка обновить учетную отличную от активной организации."
+            );
+
         var organization = await repository.GetByIdAsync(command.Id, cancellationToken);
         Guard.Against.NotFound(organization, command.Id);
 

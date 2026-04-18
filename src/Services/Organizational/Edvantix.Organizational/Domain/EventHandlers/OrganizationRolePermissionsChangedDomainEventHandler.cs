@@ -13,9 +13,6 @@ internal sealed class OrganizationRolePermissionsChangedDomainEventHandler(IHybr
         CancellationToken cancellationToken
     )
     {
-        await cache.RemoveByTagAsync(
-            $"org-perms:{notification.OrganizationId}",
-            cancellationToken
-        );
+        await cache.RemoveByTagAsync($"org-perms:{notification.OrganizationId}", cancellationToken);
     }
 }

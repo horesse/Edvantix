@@ -13,8 +13,7 @@ internal sealed class OrganizationMemberStatusChangedDomainEventHandler(IHybridC
         CancellationToken cancellationToken
     )
     {
-        var key =
-            $"perm:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
+        var key = $"perm:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
         await cache.RemoveAsync(key, cancellationToken);
     }
 }

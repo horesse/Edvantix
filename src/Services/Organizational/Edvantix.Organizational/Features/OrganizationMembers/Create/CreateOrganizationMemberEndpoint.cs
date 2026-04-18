@@ -34,8 +34,7 @@ public sealed class CreateOrganizationMemberEndpoint
     {
         var id = await sender.Send(command, cancellationToken);
         var location =
-            linker.GetPathByName("GetOrganizationMemberById", new { id })
-            ?? $"/api/members/{id}";
+            linker.GetPathByName("GetOrganizationMemberById", new { id }) ?? $"/api/members/{id}";
 
         return TypedResults.Created(location, id);
     }

@@ -12,8 +12,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-import { OrganizationRole } from "@workspace/types/company";
-
 export interface NavItem {
   id: string;
   title: string;
@@ -21,8 +19,8 @@ export interface NavItem {
   icon: LucideIcon;
   /** Use exact pathname match instead of startsWith. */
   exact?: boolean;
-  /** Minimum role required (Owner=1 is most privileged, Student=4 is least). */
-  minRole?: OrganizationRole;
+  /** When true, item is hidden unless user has an organisation selected. */
+  requiresOrg?: boolean;
 }
 
 export interface NavSection {
@@ -31,12 +29,6 @@ export interface NavSection {
   items: NavItem[];
 }
 
-/**
- * Navigation sections for the organization microfrontend.
- * Sections are derived from the edvantix-members.html design reference.
- * Organization-level backend features (billing, CRM, contacts) are
- * intentionally omitted pending backend redesign.
- */
 const allNavSections: NavSection[] = [
   {
     id: "overview",
@@ -54,7 +46,7 @@ const allNavSections: NavSection[] = [
         title: "Аналитика",
         url: "/school/analytics",
         icon: BarChart2,
-        minRole: OrganizationRole.Teacher,
+        requiresOrg: true,
       },
     ],
   },
@@ -67,21 +59,21 @@ const allNavSections: NavSection[] = [
         title: "Участники",
         url: "/organization/members",
         icon: Users,
-        minRole: OrganizationRole.Teacher,
+        requiresOrg: true,
       },
       {
         id: "students",
         title: "Ученики",
         url: "/organization/members/students",
         icon: GraduationCap,
-        minRole: OrganizationRole.Teacher,
+        requiresOrg: true,
       },
       {
         id: "teachers",
         title: "Учителя",
         url: "/organization/members/teachers",
         icon: UserCheck,
-        minRole: OrganizationRole.Teacher,
+        requiresOrg: true,
       },
     ],
   },
@@ -100,7 +92,7 @@ const allNavSections: NavSection[] = [
         title: "Группы",
         url: "/organization/groups",
         icon: UsersRound,
-        minRole: OrganizationRole.Teacher,
+        requiresOrg: true,
       },
       {
         id: "attendance",
@@ -125,23 +117,21 @@ const allNavSections: NavSection[] = [
         title: "Настройки",
         url: "/organization/settings",
         icon: Settings,
-        minRole: OrganizationRole.Manager,
+        requiresOrg: true,
       },
     ],
   },
 ];
 
 /**
- * Returns sections filtered by the user's role.
- * Sections with no visible items after filtering are removed entirely.
+ * Returns navigation sections filtered by whether the user has an organisation.
+ * Sections with no visible items are removed entirely.
  */
-export function getNavSections(role: OrganizationRole): NavSection[] {
+export function getNavSections(hasOrg: boolean): NavSection[] {
   return allNavSections
     .map((section) => ({
       ...section,
-      items: section.items.filter(
-        (item) => item.minRole === undefined || role <= item.minRole,
-      ),
+      items: section.items.filter((item) => !item.requiresOrg || hasOrg),
     }))
     .filter((section) => section.items.length > 0);
 }

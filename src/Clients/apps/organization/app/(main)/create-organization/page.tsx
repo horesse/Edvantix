@@ -8,12 +8,15 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import useCreateOrganization from "@workspace/api-hooks/company/useCreateOrganization";
-import useLegalForms from "@workspace/api-hooks/company/useLegalForms";
 import {
+  ContactType,
+  LEGAL_FORM_LABELS,
+  LegalForm,
   ORGANIZATION_TYPE_LABELS,
   OrganizationType,
 } from "@workspace/types/company";
 import { Button } from "@workspace/ui/components/button";
+import { Checkbox } from "@workspace/ui/components/checkbox";
 import {
   Form,
   FormControl,
@@ -30,7 +33,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
-import { Textarea } from "@workspace/ui/components/textarea";
 import {
   type CreateOrganizationInput,
   createOrganizationSchema,
@@ -38,21 +40,29 @@ import {
 
 import { PageHeader } from "@/components/layout/page-header";
 
+const CONTACT_TYPE_LABELS: Record<ContactType, string> = {
+  [ContactType.Email]: "Email",
+  [ContactType.MobilePhone]: "Мобильный телефон",
+  [ContactType.Telegram]: "Telegram",
+  [ContactType.WhatsApp]: "WhatsApp",
+  [ContactType.Viber]: "Viber",
+};
+
 export default function CreateOrganizationPage() {
   const router = useRouter();
-
-  const { data: legalForms = [], isLoading: isLegalFormsLoading } =
-    useLegalForms();
 
   const form = useForm<CreateOrganizationInput>({
     resolver: zodResolver(createOrganizationSchema),
     defaultValues: {
-      name: "",
-      nameLatin: "",
+      fullLegalName: "",
       shortName: "",
-      legalFormId: "",
-      printName: "",
-      description: "",
+      isLegalEntity: true,
+      registrationDate: "",
+      legalForm: LegalForm.Llc,
+      organizationType: OrganizationType.PrivateEducationalCenter,
+      primaryContactType: ContactType.Email,
+      primaryContactValue: "",
+      primaryContactDescription: "",
     },
   });
 
@@ -68,13 +78,15 @@ export default function CreateOrganizationPage() {
 
   function handleSubmit(data: CreateOrganizationInput) {
     createMutation.mutate({
-      name: data.name,
-      nameLatin: data.nameLatin,
-      shortName: data.shortName,
+      fullLegalName: data.fullLegalName,
+      shortName: data.shortName || null,
+      isLegalEntity: data.isLegalEntity,
+      registrationDate: data.registrationDate,
+      legalForm: data.legalForm,
       organizationType: data.organizationType,
-      legalFormId: data.legalFormId,
-      printName: data.printName || null,
-      description: data.description || null,
+      primaryContactType: data.primaryContactType,
+      primaryContactValue: data.primaryContactValue,
+      primaryContactDescription: data.primaryContactDescription,
     });
   }
 
@@ -85,164 +97,255 @@ export default function CreateOrganizationPage() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
+            className="space-y-5"
           >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Название</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Образовательный центр «Знание»"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="nameLatin"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Название (латиница)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Knowledge Education Center"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="shortName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Краткое название</FormLabel>
-                  <FormControl>
-                    <Input placeholder="ОЦ Знание" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Основные реквизиты */}
+            <div className="space-y-4">
+              <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                Основные реквизиты
+              </p>
 
-            {/* Организационно-правовая форма */}
-            <FormField
-              control={form.control}
-              name="legalFormId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Правовая форма</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={isLegalFormsLoading}
-                  >
+              <FormField
+                control={form.control}
+                name="fullLegalName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Полное наименование{" "}
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите форму" />
-                      </SelectTrigger>
+                      <Input
+                        placeholder='Частное учреждение образования "Образовательный центр «Знание»"'
+                        {...field}
+                      />
                     </FormControl>
-                    <SelectContent>
-                      {legalForms.map((lf) => (
-                        <SelectItem key={lf.id} value={lf.id}>
-                          <span className="font-medium">{lf.shortName}</span>
-                          <span className="text-muted-foreground">
-                            {" "}
-                            — {lf.name}
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="shortName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Краткое название{" "}
+                      <span className="text-muted-foreground font-normal">
+                        (необязательно)
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="ОЦ Знание" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="legalForm"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Правовая форма{" "}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <Select
+                        value={String(field.value)}
+                        onValueChange={(v) =>
+                          field.onChange(Number(v) as LegalForm)
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите форму" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {(
+                            Object.entries(LEGAL_FORM_LABELS) as [
+                              string,
+                              string,
+                            ][]
+                          ).map(([value, label]) => (
+                            <SelectItem key={value} value={value}>
+                              {label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="registrationDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Дата регистрации{" "}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="isLegalEntity"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center gap-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="cursor-pointer font-normal">
+                      Юридическое лицо
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* Тип организации */}
-            <FormField
-              control={form.control}
-              name="organizationType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Тип организации</FormLabel>
-                  <Select
-                    value={field.value !== undefined ? String(field.value) : ""}
-                    onValueChange={(v) =>
-                      field.onChange(Number(v) as OrganizationType)
-                    }
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тип" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {(
-                        Object.entries(ORGANIZATION_TYPE_LABELS) as [
-                          string,
-                          string,
-                        ][]
-                      ).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-4 border-t pt-4">
+              <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                Тип организации
+              </p>
 
-            <FormField
-              control={form.control}
-              name="printName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Печатное название{" "}
-                    <span className="font-normal opacity-60">
-                      (необязательно)
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="ОЦ «Знание»" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Описание{" "}
-                    <span className="font-normal opacity-60">
-                      (необязательно)
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Краткое описание организации"
-                      rows={3}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="organizationType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Тип <span className="text-destructive">*</span>
+                    </FormLabel>
+                    <Select
+                      value={String(field.value)}
+                      onValueChange={(v) =>
+                        field.onChange(Number(v) as OrganizationType)
+                      }
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выберите тип" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {(
+                          Object.entries(ORGANIZATION_TYPE_LABELS) as [
+                            string,
+                            string,
+                          ][]
+                        ).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Основной контакт */}
+            <div className="space-y-4 border-t pt-4">
+              <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                Основной контакт
+              </p>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="primaryContactType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Тип <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <Select
+                        value={String(field.value)}
+                        onValueChange={(v) =>
+                          field.onChange(Number(v) as ContactType)
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите тип" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {(
+                            Object.entries(CONTACT_TYPE_LABELS) as [
+                              string,
+                              string,
+                            ][]
+                          ).map(([value, label]) => (
+                            <SelectItem key={value} value={value}>
+                              {label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="primaryContactValue"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Значение <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="info@example.by" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="primaryContactDescription"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Описание контакта{" "}
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Основная почта для связи"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <div className="flex justify-end gap-2 pt-2">
               <Button
                 type="button"

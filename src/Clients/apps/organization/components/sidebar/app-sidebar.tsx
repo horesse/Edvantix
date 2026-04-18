@@ -4,7 +4,6 @@ import * as React from "react";
 
 import { usePathname } from "next/navigation";
 
-import { OrganizationRole } from "@workspace/types/company";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { Separator } from "@workspace/ui/components/separator";
 
@@ -47,12 +46,9 @@ function isNavItemActive(
  */
 export function AppSidebar() {
   const pathname = usePathname();
-  const { userRole } = useOrganization();
+  const { canManage } = useOrganization();
 
-  const sections = React.useMemo(
-    () => getNavSections(userRole ?? OrganizationRole.Student),
-    [userRole],
-  );
+  const sections = React.useMemo(() => getNavSections(canManage), [canManage]);
 
   return (
     <aside className="bg-sidebar border-sidebar-border hidden w-64 shrink-0 flex-col border-r lg:flex">

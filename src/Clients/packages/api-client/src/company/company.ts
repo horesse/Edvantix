@@ -1,23 +1,12 @@
 import type {
-  AddGroupMemberRequest,
-  AddMemberRequest,
-  AddOrganizationContactRequest,
-  CreateGroupRequest,
-  CreateInvitationRequest,
+  CreateOrganizationMemberRequest,
   CreateOrganizationRequest,
-  GroupMemberModel,
-  GroupModel,
-  GroupSummaryModel,
-  InvitationModel,
-  LegalFormModel,
-  OrganizationContactModel,
-  OrganizationMemberModel,
-  OrganizationModel,
-  OrganizationSummaryModel,
-  UpdateGroupMemberRoleRequest,
-  UpdateGroupRequest,
-  UpdateMemberRoleRequest,
-  UpdateOrganizationContactRequest,
+  OrganizationDetailDto,
+  OrganizationDto,
+  OrganizationMemberDto,
+  OrganizationMembersQuery,
+  OrganizationsQuery,
+  UpdateOrganizationMemberRequest,
   UpdateOrganizationRequest,
 } from "@workspace/types/company";
 import type { PagedResult } from "@workspace/types/shared";
@@ -25,48 +14,21 @@ import type { PagedResult } from "@workspace/types/shared";
 import { apiClient } from "../client";
 import type ApiClient from "../client";
 
-// --- Query Types ---
-
-export type OrganizationMembersQuery = {
-  organizationId: string;
-  pageIndex?: number;
-  pageSize?: number;
-  orderBy?: string;
-  isDescending?: boolean;
-};
-
-export type OrganizationGroupsQuery = {
-  organizationId: string;
-  pageIndex?: number;
-  pageSize?: number;
-  orderBy?: string;
-  isDescending?: boolean;
-};
-
-export type GroupMembersQuery = {
-  groupId: string;
-  pageIndex?: number;
-  pageSize?: number;
-  orderBy?: string;
-  isDescending?: boolean;
-};
-
-export type MyGroupsQuery = {
-  pageIndex?: number;
-  pageSize?: number;
-  orderBy?: string;
-  isDescending?: boolean;
-};
-
-export type OrganizationContactsQuery = {
-  organizationId: string;
-  pageIndex?: number;
-  pageSize?: number;
-  orderBy?: string;
-  isDescending?: boolean;
-};
-
 const BASE = "/organizational/api/v1";
+
+/** Ключ localStorage, под которым хранится ID выбранной организации. */
+const SELECTED_ORG_KEY = "selectedOrgId";
+
+/** Возвращает axios-config с заголовком X-OrganizationId-Id для multi-tenant запросов. */
+function orgConfig(
+  extra?: object,
+): { headers: Record<string, string> } & typeof extra {
+  const orgId =
+    typeof window !== "undefined"
+      ? (window.localStorage.getItem(SELECTED_ORG_KEY) ?? "")
+      : "";
+  return { headers: { "X-OrganizationId-Id": orgId }, ...extra };
+}
 
 class CompanyApiClient {
   private readonly client: ApiClient;
@@ -77,6 +39,26 @@ class CompanyApiClient {
 
   // --- Organizations ---
 
+  /** Получить список всех организаций с опциональным поиском/фильтрацией. */
+  public async getOrganizations(
+    query?: OrganizationsQuery,
+  ): Promise<PagedResult<OrganizationDto>> {
+    const response = await this.client.get<PagedResult<OrganizationDto>>(
+      `${BASE}/organizations`,
+      { params: query },
+    );
+    return response.data;
+  }
+
+  /** Получить детальную информацию об организации по ID. */
+  public async getOrganization(id: string): Promise<OrganizationDetailDto> {
+    const response = await this.client.get<OrganizationDetailDto>(
+      `${BASE}/organizations/${id}`,
+    );
+    return response.data;
+  }
+
+  /** Создать новую организацию. Возвращает ID созданной организации. */
   public async createOrganization(
     request: CreateOrganizationRequest,
   ): Promise<string> {
@@ -87,254 +69,93 @@ class CompanyApiClient {
     return response.data;
   }
 
-  public async getOrganization(id: string): Promise<OrganizationModel> {
-    const response = await this.client.get<OrganizationModel>(
-      `${BASE}/organizations/${id}`,
-    );
-    return response.data;
-  }
-
-  public async getMyOrganizations(): Promise<OrganizationSummaryModel[]> {
-    const response = await this.client.get<OrganizationSummaryModel[]>(
-      `${BASE}/organizations/my`,
-    );
-    return response.data;
-  }
-
+  /**
+   * Обновить базовые реквизиты организации.
+   * Требует заголовок X-OrganizationId-Id (читается из localStorage).
+   */
   public async updateOrganization(
     id: string,
     request: UpdateOrganizationRequest,
   ): Promise<void> {
-    await this.client.put<void>(`${BASE}/organizations/${id}`, request);
-  }
-
-  // --- Members ---
-
-  public async addMember(
-    orgId: string,
-    request: AddMemberRequest,
-  ): Promise<void> {
-    await this.client.post<void>(
-      `${BASE}/organizations/${orgId}/members`,
+    await this.client.patch<void>(
+      `${BASE}/organizations/${id}`,
       request,
+      orgConfig(),
     );
   }
 
+  /**
+   * Удалить организацию.
+   * Требует заголовок X-OrganizationId-Id (читается из localStorage).
+   */
+  public async deleteOrganization(id: string): Promise<void> {
+    await this.client.delete<void>(`${BASE}/organizations/${id}`, orgConfig());
+  }
+
+  // --- Organization Members ---
+
+  /**
+   * Получить постраничный список участников текущей организации.
+   * Организация определяется заголовком X-OrganizationId-Id из localStorage.
+   */
   public async getMembers(
-    query: OrganizationMembersQuery,
-  ): Promise<PagedResult<OrganizationMemberModel>> {
-    const response = await this.client.get<
-      PagedResult<OrganizationMemberModel>
-    >(`${BASE}/organizations/members`, {
-      params: query,
-    });
-    return response.data;
-  }
-
-  public async removeMember(orgId: string, memberId: string): Promise<void> {
-    await this.client.delete<void>(
-      `${BASE}/organizations/${orgId}/members/${memberId}`,
-    );
-  }
-
-  public async updateMemberRole(
-    orgId: string,
-    memberId: string,
-    request: UpdateMemberRoleRequest,
-  ): Promise<void> {
-    await this.client.put<void>(
-      `${BASE}/organizations/${orgId}/members/${memberId}/role`,
-      request,
-    );
-  }
-
-  // --- Invitations ---
-
-  public async createInvitation(
-    orgId: string,
-    request: CreateInvitationRequest,
-  ): Promise<void> {
-    await this.client.post<void>(
-      `${BASE}/organizations/${orgId}/invitations`,
-      request,
-    );
-  }
-
-  public async getPendingInvitations(
-    orgId: string,
-  ): Promise<InvitationModel[]> {
-    const response = await this.client.get<InvitationModel[]>(
-      `${BASE}/organizations/${orgId}/invitations`,
+    query?: OrganizationMembersQuery,
+  ): Promise<PagedResult<OrganizationMemberDto>> {
+    const response = await this.client.get<PagedResult<OrganizationMemberDto>>(
+      `${BASE}/members`,
+      orgConfig({ params: query }),
     );
     return response.data;
   }
 
-  public async cancelInvitation(
-    orgId: string,
-    invitationId: string,
-  ): Promise<void> {
-    await this.client.delete<void>(
-      `${BASE}/organizations/${orgId}/invitations/${invitationId}`,
-    );
-  }
-
-  public async getMyInvitations(): Promise<InvitationModel[]> {
-    const response = await this.client.get<InvitationModel[]>(
-      `${BASE}/invitations/my`,
+  /**
+   * Получить участника организации по ID.
+   * Организация определяется заголовком X-OrganizationId-Id из localStorage.
+   */
+  public async getMember(id: string): Promise<OrganizationMemberDto> {
+    const response = await this.client.get<OrganizationMemberDto>(
+      `${BASE}/members/${id}`,
+      orgConfig(),
     );
     return response.data;
   }
 
-  public async acceptInvitation(token: string): Promise<void> {
-    await this.client.post<void>(`${BASE}/invitations/${token}/accept`);
-  }
-
-  public async declineInvitation(token: string): Promise<void> {
-    await this.client.post<void>(`${BASE}/invitations/${token}/decline`);
-  }
-
-  // --- Groups ---
-
-  public async createGroup(
-    orgId: string,
-    request: CreateGroupRequest,
+  /**
+   * Добавить участника в организацию. Возвращает ID записи участника.
+   * Организация определяется заголовком X-OrganizationId-Id из localStorage.
+   */
+  public async addMember(
+    request: CreateOrganizationMemberRequest,
   ): Promise<string> {
     const response = await this.client.post<string>(
-      `${BASE}/organizations/${orgId}/groups`,
+      `${BASE}/members`,
       request,
+      orgConfig(),
     );
     return response.data;
   }
 
-  public async getOrganizationGroups(
-    query: OrganizationGroupsQuery,
-  ): Promise<PagedResult<GroupModel>> {
-    const response = await this.client.get<PagedResult<GroupModel>>(
-      `${BASE}/organizations/groups`,
-      {
-        params: query,
-      },
-    );
-    return response.data;
-  }
-
-  public async getGroup(id: string): Promise<GroupModel> {
-    const response = await this.client.get<GroupModel>(`${BASE}/groups/${id}`);
-    return response.data;
-  }
-
-  public async getMyGroups(
-    query?: MyGroupsQuery,
-  ): Promise<PagedResult<GroupSummaryModel>> {
-    const response = await this.client.get<PagedResult<GroupSummaryModel>>(
-      `${BASE}/groups/my`,
-      {
-        params: query,
-      },
-    );
-    return response.data;
-  }
-
-  public async updateGroup(
+  /**
+   * Обновить роль участника организации.
+   * Организация определяется заголовком X-OrganizationId-Id из localStorage.
+   */
+  public async updateMember(
     id: string,
-    request: UpdateGroupRequest,
-  ): Promise<void> {
-    await this.client.put<void>(`${BASE}/groups/${id}`, request);
-  }
-
-  public async deleteGroup(id: string): Promise<void> {
-    await this.client.delete<void>(`${BASE}/groups/${id}`);
-  }
-
-  // --- Group Members ---
-
-  public async addGroupMember(
-    groupId: string,
-    request: AddGroupMemberRequest,
-  ): Promise<void> {
-    await this.client.post<void>(`${BASE}/groups/${groupId}/members`, request);
-  }
-
-  public async getGroupMembers(
-    query: GroupMembersQuery,
-  ): Promise<PagedResult<GroupMemberModel>> {
-    const response = await this.client.get<PagedResult<GroupMemberModel>>(
-      `${BASE}/groups/members`,
-      {
-        params: query,
-      },
-    );
-    return response.data;
-  }
-
-  public async removeGroupMember(
-    groupId: string,
-    memberId: string,
-  ): Promise<void> {
-    await this.client.delete<void>(
-      `${BASE}/groups/${groupId}/members/${memberId}`,
-    );
-  }
-
-  public async updateGroupMemberRole(
-    groupId: string,
-    memberId: string,
-    request: UpdateGroupMemberRoleRequest,
+    request: UpdateOrganizationMemberRequest,
   ): Promise<void> {
     await this.client.put<void>(
-      `${BASE}/groups/${groupId}/members/${memberId}/role`,
-      request,
+      `${BASE}/members/${id}`,
+      { id, ...request },
+      orgConfig(),
     );
   }
 
-  // --- Contacts ---
-
-  public async addContact(
-    orgId: string,
-    request: AddOrganizationContactRequest,
-  ): Promise<string> {
-    const response = await this.client.post<string>(
-      `${BASE}/organizations/${orgId}/contacts`,
-      request,
-    );
-    return response.data;
-  }
-
-  public async getContacts(
-    query: OrganizationContactsQuery,
-  ): Promise<PagedResult<OrganizationContactModel>> {
-    const response = await this.client.get<
-      PagedResult<OrganizationContactModel>
-    >(`${BASE}/organizations/contacts`, {
-      params: query,
-    });
-    return response.data;
-  }
-
-  public async updateContact(
-    orgId: string,
-    contactId: string,
-    request: UpdateOrganizationContactRequest,
-  ): Promise<void> {
-    await this.client.put<void>(
-      `${BASE}/organizations/${orgId}/contacts/${contactId}`,
-      request,
-    );
-  }
-
-  public async deleteContact(orgId: string, contactId: string): Promise<void> {
-    await this.client.delete<void>(
-      `${BASE}/organizations/${orgId}/contacts/${contactId}`,
-    );
-  }
-
-  // --- Legal Forms ---
-
-  public async getLegalForms(): Promise<LegalFormModel[]> {
-    const response = await this.client.get<LegalFormModel[]>(
-      `${BASE}/legal-forms`,
-    );
-    return response.data;
+  /**
+   * Удалить участника из организации.
+   * Организация определяется заголовком X-OrganizationId-Id из localStorage.
+   */
+  public async removeMember(id: string): Promise<void> {
+    await this.client.delete<void>(`${BASE}/members/${id}`, orgConfig());
   }
 }
 

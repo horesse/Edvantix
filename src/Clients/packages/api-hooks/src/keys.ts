@@ -17,24 +17,13 @@ export const profileKeys = {
 
 export const companyKeys = {
   all: ["organizational"] as const,
-  myOrganizations: () => [...companyKeys.all, "organizations", "my"] as const,
+  organizations: (query?: unknown) =>
+    [...companyKeys.all, "organizations", query] as const,
   organization: (id: string) =>
     [...companyKeys.all, "organizations", id] as const,
   members: (orgId: string, query?: unknown) =>
     [...companyKeys.all, "members", orgId, query] as const,
-  invitations: (orgId: string) =>
-    [...companyKeys.all, "invitations", orgId] as const,
-  myInvitations: () => [...companyKeys.all, "invitations", "my"] as const,
-  groups: (orgId: string, query?: unknown) =>
-    [...companyKeys.all, "groups", orgId, query] as const,
-  group: (id: string) => [...companyKeys.all, "group", id] as const,
-  myGroups: (query?: unknown) =>
-    [...companyKeys.all, "groups", "my", query] as const,
-  groupMembers: (groupId: string, query?: unknown) =>
-    [...companyKeys.all, "groupMembers", groupId, query] as const,
-  contacts: (orgId: string, query?: unknown) =>
-    [...companyKeys.all, "contacts", orgId, query] as const,
-  legalForms: () => [...companyKeys.all, "legal-forms"] as const,
+  member: (id: string) => [...companyKeys.all, "member", id] as const,
 };
 
 export const notificationKeys = {

@@ -1,24 +1,23 @@
 "use client";
 
-import type { OrganizationRole } from "@workspace/types/company";
-
 import { useOrganization } from "@/components/organization/provider";
 
 type RoleGateProps = {
-  allowedRoles: OrganizationRole[];
   children: React.ReactNode;
   fallback?: React.ReactNode;
 };
 
-/** Display-only guard that conditionally renders children based on the user's role. */
+/**
+ * Показывает children только когда организация выбрана.
+ * Ролевой контроль доступа будет добавлен после реализации ролей в бэкенде.
+ */
 export function RoleGate({
-  allowedRoles,
   children,
   fallback = null,
-}: RoleGateProps) {
-  const { userRole } = useOrganization();
+}: Readonly<RoleGateProps>) {
+  const { canManage } = useOrganization();
 
-  if (!userRole || !allowedRoles.includes(userRole)) {
+  if (!canManage) {
     return <>{fallback}</>;
   }
 

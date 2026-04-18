@@ -369,7 +369,7 @@ function GroupsCard({ orgId }: Readonly<{ orgId: string }>) {
         <div>
           <p className="text-foreground text-sm font-semibold">Группы</p>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            {org?.groupsCount ?? groups.length} активных
+            {groups.length} активных
           </p>
         </div>
         <Button asChild size="sm" variant="outline">
@@ -618,7 +618,7 @@ function DashboardContent({
     },
     {
       label: "Активных групп",
-      value: org?.groupsCount ?? 18,
+      value: 18,
       change: "+3",
       trend: "up",
       icon: BookOpen,
@@ -658,7 +658,7 @@ function DashboardContent({
           ) : (
             <>
               <h1 className="text-foreground text-lg font-bold tracking-tight">
-                {org?.name ?? "Главная"}
+                {org ? (org.shortName ?? org.fullLegalName) : "Главная"}
               </h1>
               <p className="text-muted-foreground mt-0.5 text-sm capitalize">
                 {today()}

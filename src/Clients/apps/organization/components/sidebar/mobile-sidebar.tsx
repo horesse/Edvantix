@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 
 import { Menu } from "lucide-react";
 
-import { OrganizationRole } from "@workspace/types/company";
 import { Button } from "@workspace/ui/components/button";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { Separator } from "@workspace/ui/components/separator";
@@ -48,15 +47,12 @@ function isNavItemActive(
  */
 export function MobileSidebar() {
   const pathname = usePathname();
-  const { userRole } = useOrganization();
+  const { canManage } = useOrganization();
   const [open, setOpen] = React.useState(false);
 
   const close = () => setOpen(false);
 
-  const sections = React.useMemo(
-    () => getNavSections(userRole ?? OrganizationRole.Student),
-    [userRole],
-  );
+  const sections = React.useMemo(() => getNavSections(canManage), [canManage]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

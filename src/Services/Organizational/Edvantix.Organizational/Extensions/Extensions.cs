@@ -4,26 +4,12 @@ using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Organizational.Configurations;
-using Edvantix.Organizational.CQRS.Pipelines;
 using Edvantix.Organizational.Grpc;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Organizational.Extensions;
-
-internal static class MediatorExtensions
-{
-    /// <summary>
-    /// Регистрирует <see cref="AuthorizationBehavior{TMessage,TResponse}"/> в конвейере Mediator.
-    /// Проверяет разрешения профиля в организации для команд и запросов с атрибутом <c>[RequirePermission]</c>.
-    /// </summary>
-    internal static IServiceCollection ApplyAuthorizationBehavior(this IServiceCollection services)
-    {
-        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
-        return services;
-    }
-}
 
 internal static class Extensions
 {

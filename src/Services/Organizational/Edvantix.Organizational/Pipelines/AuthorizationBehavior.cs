@@ -2,7 +2,7 @@ using System.Reflection;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 
-namespace Edvantix.Organizational.CQRS.Pipelines;
+namespace Edvantix.Organizational.Pipelines;
 
 /// <summary>
 /// Пре-процессор Mediator: проверяет, что профиль является активным участником организации

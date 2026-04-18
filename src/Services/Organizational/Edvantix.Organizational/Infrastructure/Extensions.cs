@@ -1,6 +1,4 @@
-﻿using Edvantix.Chassis.Caching;
-
-namespace Edvantix.Organizational.Infrastructure;
+﻿namespace Edvantix.Organizational.Infrastructure;
 
 public static class Extensions
 {

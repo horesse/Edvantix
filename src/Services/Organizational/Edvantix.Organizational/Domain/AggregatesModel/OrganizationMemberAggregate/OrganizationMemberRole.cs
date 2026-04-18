@@ -1,5 +1,5 @@
-using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
@@ -61,7 +61,10 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
     {
         ArgumentNullException.ThrowIfNull(permission);
         if (_permissions.All(p => p.Id != permission.Id))
+        {
             _permissions.Add(permission);
+            RegisterDomainEvent(new OrganizationRolePermissionsChangedDomainEvent(OrganizationId));
+        }
     }
 
     /// <summary>Назначает набор разрешений роли, заменяя текущий.</summary>
@@ -70,6 +73,7 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
         ArgumentNullException.ThrowIfNull(permissions);
         _permissions.Clear();
         _permissions.AddRange(permissions.Where(p => p is not null));
+        RegisterDomainEvent(new OrganizationRolePermissionsChangedDomainEvent(OrganizationId));
     }
 
     /// <summary>Удаляет разрешение из роли.</summary>
@@ -77,7 +81,10 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
     {
         var entry = _permissions.FirstOrDefault(p => p.Id == permissionId);
         if (entry is not null)
+        {
             _permissions.Remove(entry);
+            RegisterDomainEvent(new OrganizationRolePermissionsChangedDomainEvent(OrganizationId));
+        }
     }
 
     /// <inheritdoc />

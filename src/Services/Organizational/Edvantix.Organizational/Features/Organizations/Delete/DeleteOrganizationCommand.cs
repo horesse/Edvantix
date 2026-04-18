@@ -1,7 +1,11 @@
+using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Features.Organizations.Delete;
 
+[Transactional]
+[RequirePermission(OrganizationPermissions.Delete)]
 public sealed record DeleteOrganizationCommand(Guid Id) : ICommand;
 
 internal sealed class DeleteOrganizationCommandHandler(IOrganizationRepository repository)

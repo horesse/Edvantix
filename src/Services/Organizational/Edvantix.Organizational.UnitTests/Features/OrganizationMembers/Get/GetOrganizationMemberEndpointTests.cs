@@ -17,29 +17,24 @@ public sealed class GetOrganizationMemberEndpointTests
         );
 
     [Test]
-    public async Task GivenValidIds_WhenHandling_ThenShouldSendQueryWithCorrectIds()
+    public async Task GivenValidId_WhenHandling_ThenShouldSendQueryWithCorrectId()
     {
-        var organizationId = Guid.CreateVersion7();
         var memberId = Guid.CreateVersion7();
         _senderMock
             .Setup(s =>
                 s.Send(
-                    It.Is<GetOrganizationMemberQuery>(q =>
-                        q.OrganizationId == organizationId && q.Id == memberId
-                    ),
+                    It.Is<GetOrganizationMemberQuery>(q => q.Id == memberId),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(CreateDto(organizationId, memberId));
+            .ReturnsAsync(CreateDto(Guid.CreateVersion7(), memberId));
 
-        await _endpoint.HandleAsync(organizationId, memberId, _senderMock.Object);
+        await _endpoint.HandleAsync(memberId, _senderMock.Object);
 
         _senderMock.Verify(
             s =>
                 s.Send(
-                    It.Is<GetOrganizationMemberQuery>(q =>
-                        q.OrganizationId == organizationId && q.Id == memberId
-                    ),
+                    It.Is<GetOrganizationMemberQuery>(q => q.Id == memberId),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -47,7 +42,7 @@ public sealed class GetOrganizationMemberEndpointTests
     }
 
     [Test]
-    public async Task GivenValidIds_WhenHandling_ThenShouldReturnOkWithDto()
+    public async Task GivenValidId_WhenHandling_ThenShouldReturnOkWithDto()
     {
         var organizationId = Guid.CreateVersion7();
         var memberId = Guid.CreateVersion7();
@@ -58,18 +53,16 @@ public sealed class GetOrganizationMemberEndpointTests
             )
             .ReturnsAsync(dto);
 
-        var result = await _endpoint.HandleAsync(organizationId, memberId, _senderMock.Object);
+        var result = await _endpoint.HandleAsync(memberId, _senderMock.Object);
 
         result.ShouldBeOfType<Ok<OrganizationMemberDto>>();
         result.Value.ShouldBe(dto);
         result.Value!.Id.ShouldBe(memberId);
-        result.Value.OrganizationId.ShouldBe(organizationId);
     }
 
     [Test]
     public async Task GivenExceptionFromSender_WhenHandling_ThenShouldPropagateException()
     {
-        var organizationId = Guid.CreateVersion7();
         var memberId = Guid.CreateVersion7();
         _senderMock
             .Setup(s =>
@@ -77,8 +70,7 @@ public sealed class GetOrganizationMemberEndpointTests
             )
             .ThrowsAsync(NotFoundException.For<OrganizationMember>(memberId));
 
-        var act = async () =>
-            await _endpoint.HandleAsync(organizationId, memberId, _senderMock.Object);
+        var act = async () => await _endpoint.HandleAsync(memberId, _senderMock.Object);
 
         await act.ShouldThrowAsync<NotFoundException>();
     }

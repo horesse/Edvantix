@@ -6,7 +6,7 @@ public sealed class UpdateOrganizationMemberEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut(
-                "/organizations/{organizationId:guid}/members/{id:guid}",
+                "/members/{id:guid}",
                 async (
                     UpdateOrganizationMemberCommand command,
                     ISender sender,

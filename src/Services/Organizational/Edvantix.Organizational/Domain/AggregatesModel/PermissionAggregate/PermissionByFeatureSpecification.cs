@@ -1,5 +1,3 @@
-using Edvantix.Chassis.Specification.Builders;
-
 namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 public sealed class PermissionByFeatureSpecification : Specification<Permission>

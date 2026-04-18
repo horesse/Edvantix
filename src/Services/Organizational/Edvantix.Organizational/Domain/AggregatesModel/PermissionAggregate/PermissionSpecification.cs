@@ -1,6 +1,4 @@
-﻿using Edvantix.Chassis.Specification.Builders;
-
-namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 public sealed class PermissionSpecification : Specification<Permission>
 {

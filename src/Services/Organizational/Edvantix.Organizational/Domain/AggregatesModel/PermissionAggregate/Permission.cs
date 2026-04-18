@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.SharedKernel.SeedWork;

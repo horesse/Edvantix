@@ -5,10 +5,6 @@ internal sealed class CreateOrganizationMemberValidator
 {
     public CreateOrganizationMemberValidator()
     {
-        RuleFor(x => x.OrganizationId)
-            .NotEmpty()
-            .WithMessage("Идентификатор организации обязателен");
-
         RuleFor(x => x.ProfileId).NotEmpty().WithMessage("Идентификатор профиля обязателен");
 
         RuleFor(x => x.OrganizationMemberRoleId)

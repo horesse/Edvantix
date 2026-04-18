@@ -1,22 +1,26 @@
+using Edvantix.Chassis.Security.Tenant;
+
 namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Get;
 
 public sealed class GetOrganizationMemberQueryHandlerTests
 {
+    private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IOrganizationMemberRepository> _repoMock = new();
     private readonly Mock<IMapper<OrganizationMember, OrganizationMemberDto>> _mapperMock = new();
+    private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetOrganizationMemberQueryHandler _handler;
 
     public GetOrganizationMemberQueryHandlerTests()
     {
-        _handler = new(_repoMock.Object, _mapperMock.Object);
+        _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _handler = new(_tenantMock.Object, _repoMock.Object, _mapperMock.Object);
     }
 
     [Test]
     public async Task GivenExistingMember_WhenQuerying_ThenShouldReturnDto()
     {
-        var orgId = Guid.CreateVersion7();
-        var member = CreateMember(orgId);
-        var dto = CreateDto(member.Id, orgId);
+        var member = CreateMember(_organizationId);
+        var dto = CreateDto(member.Id, _organizationId);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(member.Id, It.IsAny<CancellationToken>()))
@@ -24,7 +28,7 @@ public sealed class GetOrganizationMemberQueryHandlerTests
         _mapperMock.Setup(m => m.Map(member)).Returns(dto);
 
         var result = await _handler.Handle(
-            new GetOrganizationMemberQuery(orgId, member.Id),
+            new GetOrganizationMemberQuery(member.Id),
             CancellationToken.None
         );
 
@@ -35,7 +39,6 @@ public sealed class GetOrganizationMemberQueryHandlerTests
     [Test]
     public async Task GivenMemberNotFound_WhenQuerying_ThenShouldThrowNotFoundException()
     {
-        var orgId = Guid.CreateVersion7();
         var memberId = Guid.CreateVersion7();
 
         _repoMock
@@ -43,18 +46,14 @@ public sealed class GetOrganizationMemberQueryHandlerTests
             .ReturnsAsync((OrganizationMember?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new GetOrganizationMemberQuery(orgId, memberId), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new GetOrganizationMemberQuery(memberId), CancellationToken.None).AsTask()
         );
     }
 
     [Test]
     public async Task GivenMemberFromDifferentOrganization_WhenQuerying_ThenShouldThrowNotFoundException()
     {
-        var requestOrgId = Guid.CreateVersion7();
-        var actualOrgId = Guid.CreateVersion7();
-        var member = CreateMember(actualOrgId);
+        var member = CreateMember(Guid.CreateVersion7());
 
         _repoMock
             .Setup(r => r.GetByIdAsync(member.Id, It.IsAny<CancellationToken>()))
@@ -62,10 +61,7 @@ public sealed class GetOrganizationMemberQueryHandlerTests
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler
-                .Handle(
-                    new GetOrganizationMemberQuery(requestOrgId, member.Id),
-                    CancellationToken.None
-                )
+                .Handle(new GetOrganizationMemberQuery(member.Id), CancellationToken.None)
                 .AsTask()
         );
     }

@@ -1,13 +1,18 @@
+using Edvantix.Chassis.Security.Tenant;
+
 namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Create;
 
 public sealed class CreateOrganizationMemberCommandHandlerTests
 {
+    private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IOrganizationMemberRepository> _repoMock = new();
+    private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly CreateOrganizationMemberCommandHandler _handler;
 
     public CreateOrganizationMemberCommandHandlerTests()
     {
-        _handler = new(_repoMock.Object);
+        _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _handler = new(_tenantMock.Object, _repoMock.Object);
     }
 
     [Test]
@@ -70,7 +75,6 @@ public sealed class CreateOrganizationMemberCommandHandlerTests
 
     private static CreateOrganizationMemberCommand BuildCommand(DateOnly? endDate = null) =>
         new(
-            OrganizationId: Guid.CreateVersion7(),
             ProfileId: Guid.CreateVersion7(),
             OrganizationMemberRoleId: Guid.CreateVersion7(),
             StartDate: new DateOnly(2025, 1, 1),

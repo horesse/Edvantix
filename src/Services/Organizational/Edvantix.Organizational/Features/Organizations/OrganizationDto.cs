@@ -1,4 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.Enums;
 
 namespace Edvantix.Organizational.Features.Organizations;

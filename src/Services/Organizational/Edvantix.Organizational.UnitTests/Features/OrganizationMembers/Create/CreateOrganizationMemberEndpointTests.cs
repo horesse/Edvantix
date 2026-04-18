@@ -8,7 +8,6 @@ public sealed class CreateOrganizationMemberEndpointTests
 
     private static CreateOrganizationMemberCommand BuildValidCommand() =>
         new(
-            OrganizationId: Guid.CreateVersion7(),
             ProfileId: Guid.CreateVersion7(),
             OrganizationMemberRoleId: Guid.CreateVersion7(),
             StartDate: new DateOnly(2025, 1, 1)
@@ -55,20 +54,6 @@ public sealed class CreateOrganizationMemberEndpointTests
         var result = await _endpoint.HandleAsync(command, _senderMock.Object, _linkGenerator);
 
         result.Location!.ShouldContain(expectedId.ToString());
-    }
-
-    [Test]
-    public async Task GivenValidCommand_WhenHandling_ThenLocationShouldContainOrganizationId()
-    {
-        var command = BuildValidCommand();
-        var expectedId = Guid.CreateVersion7();
-        _senderMock
-            .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(expectedId);
-
-        var result = await _endpoint.HandleAsync(command, _senderMock.Object, _linkGenerator);
-
-        result.Location!.ShouldContain(command.OrganizationId.ToString());
     }
 
     [Test]

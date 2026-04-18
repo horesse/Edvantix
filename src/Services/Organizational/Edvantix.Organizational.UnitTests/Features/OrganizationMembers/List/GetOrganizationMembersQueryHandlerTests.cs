@@ -1,23 +1,27 @@
+using Edvantix.Chassis.Security.Tenant;
+
 namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.List;
 
 public sealed class GetOrganizationMembersQueryHandlerTests
 {
+    private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IOrganizationMemberRepository> _repoMock = new();
     private readonly Mock<IMapper<OrganizationMember, OrganizationMemberDto>> _mapperMock = new();
+    private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetOrganizationMembersQueryHandler _handler;
 
     public GetOrganizationMembersQueryHandlerTests()
     {
-        _handler = new(_repoMock.Object, _mapperMock.Object);
+        _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _handler = new(_tenantMock.Object, _repoMock.Object, _mapperMock.Object);
     }
 
     [Test]
     public async Task GivenMembersExist_WhenHandling_ThenShouldReturnPagedResult()
     {
-        var orgId = Guid.CreateVersion7();
-        var member = CreateMember(orgId);
-        var dto = CreateDto(member.Id, orgId);
-        var query = new GetOrganizationMembersQuery(orgId, PageIndex: 1, PageSize: 10);
+        var member = CreateMember(_organizationId);
+        var dto = CreateDto(member.Id, _organizationId);
+        var query = new GetOrganizationMembersQuery(PageIndex: 1, PageSize: 10);
 
         _repoMock
             .Setup(r =>
@@ -48,7 +52,7 @@ public sealed class GetOrganizationMembersQueryHandlerTests
     [Test]
     public async Task GivenNoMembers_WhenHandling_ThenShouldReturnEmptyPagedResult()
     {
-        var query = new GetOrganizationMembersQuery(Guid.CreateVersion7());
+        var query = new GetOrganizationMembersQuery();
 
         _repoMock
             .Setup(r =>
@@ -76,11 +80,7 @@ public sealed class GetOrganizationMembersQueryHandlerTests
     [Test]
     public async Task GivenPageIndexBelowOne_WhenHandling_ThenShouldClampToOne()
     {
-        var query = new GetOrganizationMembersQuery(
-            Guid.CreateVersion7(),
-            PageIndex: -3,
-            PageSize: 10
-        );
+        var query = new GetOrganizationMembersQuery(PageIndex: -3, PageSize: 10);
 
         _repoMock
             .Setup(r =>
@@ -107,11 +107,7 @@ public sealed class GetOrganizationMembersQueryHandlerTests
     [Test]
     public async Task GivenPageSizeAbove100_WhenHandling_ThenShouldClampTo100()
     {
-        var query = new GetOrganizationMembersQuery(
-            Guid.CreateVersion7(),
-            PageIndex: 1,
-            PageSize: 999
-        );
+        var query = new GetOrganizationMembersQuery(PageIndex: 1, PageSize: 999);
 
         _repoMock
             .Setup(r =>

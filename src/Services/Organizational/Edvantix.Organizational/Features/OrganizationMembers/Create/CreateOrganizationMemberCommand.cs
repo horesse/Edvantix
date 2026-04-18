@@ -1,9 +1,12 @@
+using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.Create;
 
+[Transactional]
+[RequirePermission(OrganizationPermissions.ManageMembers)]
 public sealed record CreateOrganizationMemberCommand(
-    Guid OrganizationId,
     Guid ProfileId,
     Guid OrganizationMemberRoleId,
     DateOnly StartDate,
@@ -11,6 +14,7 @@ public sealed record CreateOrganizationMemberCommand(
 ) : ICommand<Guid>;
 
 internal sealed class CreateOrganizationMemberCommandHandler(
+    ITenantContext tenantContext,
     IOrganizationMemberRepository repository
 ) : ICommandHandler<CreateOrganizationMemberCommand, Guid>
 {
@@ -20,7 +24,7 @@ internal sealed class CreateOrganizationMemberCommandHandler(
     )
     {
         var member = new OrganizationMember(
-            command.OrganizationId,
+            tenantContext.OrganizationId,
             command.ProfileId,
             command.OrganizationMemberRoleId,
             command.StartDate,

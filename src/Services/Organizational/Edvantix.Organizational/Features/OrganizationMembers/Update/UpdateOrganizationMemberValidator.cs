@@ -5,10 +5,6 @@ internal sealed class UpdateOrganizationMemberValidator
 {
     public UpdateOrganizationMemberValidator()
     {
-        RuleFor(x => x.OrganizationId)
-            .NotEmpty()
-            .WithMessage("Идентификатор организации обязателен");
-
         RuleFor(x => x.Id).NotEmpty().WithMessage("Идентификатор участника обязателен");
 
         RuleFor(x => x.OrganizationMemberRoleId)

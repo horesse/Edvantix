@@ -19,8 +19,7 @@ public sealed class GetOrganizationMembersEndpointTests
     [Test]
     public async Task GivenDefaultQuery_WhenHandling_ThenShouldSendQueryToSender()
     {
-        var organizationId = Guid.CreateVersion7();
-        var query = new GetOrganizationMembersQuery(organizationId);
+        var query = new GetOrganizationMembersQuery();
         var pagedResult = new PagedResult<OrganizationMemberDto>([], 1, 20, 0);
 
         _senderMock
@@ -37,7 +36,7 @@ public sealed class GetOrganizationMembersEndpointTests
     {
         var organizationId = Guid.CreateVersion7();
         var dto = CreateDto(organizationId);
-        var query = new GetOrganizationMembersQuery(organizationId);
+        var query = new GetOrganizationMembersQuery();
         var pagedResult = new PagedResult<OrganizationMemberDto>([dto], 1, 20, 1);
 
         _senderMock
@@ -54,8 +53,7 @@ public sealed class GetOrganizationMembersEndpointTests
     [Test]
     public async Task GivenNoMembers_WhenHandling_ThenShouldReturnOkWithEmptyResult()
     {
-        var organizationId = Guid.CreateVersion7();
-        var query = new GetOrganizationMembersQuery(organizationId);
+        var query = new GetOrganizationMembersQuery();
         var pagedResult = new PagedResult<OrganizationMemberDto>([], 1, 20, 0);
 
         _senderMock
@@ -72,11 +70,7 @@ public sealed class GetOrganizationMembersEndpointTests
     [Test]
     public async Task GivenStatusFilter_WhenHandling_ThenShouldSendQueryWithFilter()
     {
-        var organizationId = Guid.CreateVersion7();
-        var query = new GetOrganizationMembersQuery(
-            organizationId,
-            Status: OrganizationStatus.Active
-        );
+        var query = new GetOrganizationMembersQuery(Status: OrganizationStatus.Active);
         var pagedResult = new PagedResult<OrganizationMemberDto>([], 1, 20, 0);
 
         _senderMock

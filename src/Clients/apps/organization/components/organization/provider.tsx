@@ -38,7 +38,7 @@ export function OrganizationProvider({
   children: React.ReactNode;
 }>) {
   const { data: orgPage, isLoading } = useOrganizations();
-  const organizations = orgPage?.items ?? [];
+  const organizations = useMemo(() => orgPage?.items ?? [], [orgPage]);
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
 
   // Restore persisted selection on mount.

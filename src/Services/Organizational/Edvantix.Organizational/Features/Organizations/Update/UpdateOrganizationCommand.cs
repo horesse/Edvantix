@@ -26,9 +26,7 @@ internal sealed class UpdateOrganizationCommandHandler(
     )
     {
         if (tenantContext.OrganizationId != command.Id)
-            throw new ForbiddenException(
-                "Попытка обновить учетную отличную от активной организации."
-            );
+            throw new ForbiddenException("Нет прав.");
 
         var organization = await repository.GetByIdAsync(command.Id, cancellationToken);
         Guard.Against.NotFound(organization, command.Id);

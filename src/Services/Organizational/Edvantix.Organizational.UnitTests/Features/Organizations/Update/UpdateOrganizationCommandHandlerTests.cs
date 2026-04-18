@@ -51,12 +51,11 @@ public sealed class UpdateOrganizationCommandHandlerTests
     [Test]
     public async Task GivenExistingOrganization_WhenHandling_ThenShouldSaveEntities()
     {
-        var orgId = Guid.CreateVersion7();
         _repoMock
-            .Setup(r => r.GetByIdAsync(orgId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetByIdAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(CreateOrganization());
 
-        await _handler.Handle(BuildValidCommand(orgId), CancellationToken.None);
+        await _handler.Handle(BuildValidCommand(_organizationId), CancellationToken.None);
 
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -64,13 +63,12 @@ public sealed class UpdateOrganizationCommandHandlerTests
     [Test]
     public async Task GivenOrganizationNotFound_WhenHandling_ThenShouldThrowNotFoundException()
     {
-        var orgId = Guid.CreateVersion7();
         _repoMock
-            .Setup(r => r.GetByIdAsync(orgId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetByIdAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Organization?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(BuildValidCommand(orgId), CancellationToken.None).AsTask()
+            _handler.Handle(BuildValidCommand(_organizationId), CancellationToken.None).AsTask()
         );
     }
 

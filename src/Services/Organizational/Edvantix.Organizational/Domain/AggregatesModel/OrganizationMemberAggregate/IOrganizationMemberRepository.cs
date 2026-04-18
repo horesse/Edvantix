@@ -26,4 +26,14 @@ public interface IOrganizationMemberRepository : IRepository<OrganizationMember>
 
     /// <summary>Добавляет участника.</summary>
     Task AddAsync(OrganizationMember member, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Возвращает множество кодов разрешений активного участника организации.
+    /// Возвращает пустое множество, если участник не найден или не активен.
+    /// </summary>
+    Task<HashSet<string>> GetActivePermissionsAsync(
+        Guid organizationId,
+        Guid profileId,
+        CancellationToken cancellationToken = default
+    );
 }

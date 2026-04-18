@@ -2,6 +2,7 @@ global using System.Security.Claims;
 global using Edvantix.Chassis.Exceptions;
 global using Edvantix.Chassis.Mapper;
 global using Edvantix.Chassis.Repository;
+global using Edvantix.Chassis.Security.Tenant;
 global using Edvantix.Chassis.Specification;
 global using Edvantix.Constants.Core;
 global using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;

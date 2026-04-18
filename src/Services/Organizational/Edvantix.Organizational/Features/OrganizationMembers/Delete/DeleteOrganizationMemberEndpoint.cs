@@ -1,17 +1,13 @@
 namespace Edvantix.Organizational.Features.OrganizationMembers.Delete;
 
-public sealed class DeleteOrganizationMemberEndpoint : IEndpoint<NoContent, Guid, Guid, ISender>
+public sealed class DeleteOrganizationMemberEndpoint : IEndpoint<NoContent, Guid, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapDelete(
-                "/organizations/{organizationId:guid}/members/{id:guid}",
-                async (
-                    Guid organizationId,
-                    Guid id,
-                    ISender sender,
-                    CancellationToken cancellationToken
-                ) => await HandleAsync(organizationId, id, sender, cancellationToken)
+                "/members/{id:guid}",
+                async (Guid id, ISender sender, CancellationToken cancellationToken) =>
+                    await HandleAsync(id, sender, cancellationToken)
             )
             .WithName("DeleteOrganizationMember")
             .WithTags("Участники организации")
@@ -24,16 +20,12 @@ public sealed class DeleteOrganizationMemberEndpoint : IEndpoint<NoContent, Guid
     }
 
     public async Task<NoContent> HandleAsync(
-        Guid organizationId,
         Guid id,
         ISender sender,
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(
-            new DeleteOrganizationMemberCommand(organizationId, id),
-            cancellationToken
-        );
+        await sender.Send(new DeleteOrganizationMemberCommand(id), cancellationToken);
         return TypedResults.NoContent();
     }
 }

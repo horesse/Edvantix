@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Organizational.Domain.Enums;
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;

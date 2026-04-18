@@ -6,7 +6,7 @@ public sealed class CreateOrganizationMemberEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(
-                "/organizations/{organizationId:guid}/members",
+                "/members",
                 async (
                     CreateOrganizationMemberCommand command,
                     ISender sender,
@@ -34,10 +34,7 @@ public sealed class CreateOrganizationMemberEndpoint
     {
         var id = await sender.Send(command, cancellationToken);
         var location =
-            linker.GetPathByName(
-                "GetOrganizationMemberById",
-                new { organizationId = command.OrganizationId, id }
-            ) ?? $"/api/organizations/{command.OrganizationId}/members/{id}";
+            linker.GetPathByName("GetOrganizationMemberById", new { id }) ?? $"/api/members/{id}";
 
         return TypedResults.Created(location, id);
     }

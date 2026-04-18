@@ -1,5 +1,4 @@
-﻿using Edvantix.Chassis.Utilities.Guards;
-using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;

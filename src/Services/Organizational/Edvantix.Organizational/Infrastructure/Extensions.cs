@@ -1,6 +1,4 @@
-﻿using Edvantix.Chassis.Caching;
-
-namespace Edvantix.Organizational.Infrastructure;
+﻿namespace Edvantix.Organizational.Infrastructure;
 
 public static class Extensions
 {
@@ -12,7 +10,7 @@ public static class Extensions
             Components.Database.Organizational,
             _ =>
             {
-                services.AddMigration<OrganizationalDbContext>();
+                services.AddMigration<OrganizationalDbContext, PermissionsDbSeeder>();
                 services.AddRepositories(typeof(IOrganizationalApiMarker));
             }
         );

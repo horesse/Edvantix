@@ -15,19 +15,6 @@ public sealed class CreateOrganizationMemberValidatorTests
     }
 
     [Test]
-    public void GivenEmptyOrganizationId_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(
-            BuildValidCommand() with
-            {
-                OrganizationId = Guid.Empty,
-            }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.OrganizationId);
-    }
-
-    [Test]
     public void GivenEmptyProfileId_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(BuildValidCommand() with { ProfileId = Guid.Empty });
@@ -103,7 +90,6 @@ public sealed class CreateOrganizationMemberValidatorTests
 
     private static CreateOrganizationMemberCommand BuildValidCommand() =>
         new(
-            OrganizationId: Guid.CreateVersion7(),
             ProfileId: Guid.CreateVersion7(),
             OrganizationMemberRoleId: Guid.CreateVersion7(),
             StartDate: new DateOnly(2025, 1, 1)

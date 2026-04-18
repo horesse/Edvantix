@@ -49,6 +49,7 @@ internal static class Extensions
 
         services.AddValidationExceptionHandler();
         services.AddNotFoundExceptionHandler();
+        services.AddForbiddenExceptionHandler();
         services.AddGlobalExceptionHandler();
         services.AddProblemDetails();
 
@@ -61,6 +62,7 @@ internal static class Extensions
             .ApplyActivityBehavior()
             .ApplyLoggingBehavior()
             .ApplyValidationBehavior()
+            .ApplyAuthorizationBehavior()
             .ApplyTransactionBehavior<OrganizationalDbContext>();
 
         services.AddRateLimiter();

@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.Enums;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
 
@@ -45,4 +46,31 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
         OrganizationMember member,
         CancellationToken cancellationToken = default
     ) => await context.OrganizationMembers.AddAsync(member, cancellationToken);
+
+    public async Task<HashSet<string>> GetActivePermissionsAsync(
+        Guid organizationId,
+        Guid profileId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var permissions = await (
+            from member in context.OrganizationMembers
+            join role in context.OrganizationMemberRoles
+                on member.OrganizationMemberRoleId equals role.Id
+            join rp in context.Set<OrganizationMemberRolePermission>()
+                on role.Id equals rp.OrganizationMemberRoleId
+            join perm in context.Permissions on rp.PermissionId equals perm.Id
+            where
+                member.OrganizationId == organizationId
+                && member.ProfileId == profileId
+                && member.Status == OrganizationStatus.Active
+                && !member.IsDeleted
+                && !role.IsDeleted
+            select perm.Name
+        )
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return [.. permissions];
+    }
 }

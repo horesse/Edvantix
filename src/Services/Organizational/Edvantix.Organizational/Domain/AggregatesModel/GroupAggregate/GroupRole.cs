@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Utilities.Guards;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.SharedKernel.SeedWork;
 

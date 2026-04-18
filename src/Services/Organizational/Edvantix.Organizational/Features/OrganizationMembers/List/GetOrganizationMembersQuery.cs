@@ -1,10 +1,12 @@
+using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Enums;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.List;
 
+[RequirePermission(OrganizationPermissions.Read)]
 public sealed record GetOrganizationMembersQuery(
-    [property: Description("Идентификатор организации")] Guid OrganizationId,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,
@@ -15,6 +17,7 @@ public sealed record GetOrganizationMembersQuery(
 ) : IQuery<PagedResult<OrganizationMemberDto>>;
 
 internal sealed class GetOrganizationMembersQueryHandler(
+    ITenantContext tenantContext,
     IOrganizationMemberRepository repository,
     IMapper<OrganizationMember, OrganizationMemberDto> mapper
 ) : IQueryHandler<GetOrganizationMembersQuery, PagedResult<OrganizationMemberDto>>
@@ -31,17 +34,16 @@ internal sealed class GetOrganizationMembersQueryHandler(
 
         var offset = (clamped.PageIndex - 1) * clamped.PageSize;
 
+        var organizationId = tenantContext.OrganizationId;
+
         var listSpec = new OrganizationMemberListSpecification(
-            request.OrganizationId,
+            organizationId,
             offset,
             clamped.PageSize,
             request.Status
         );
 
-        var countSpec = new OrganizationMemberCountSpecification(
-            request.OrganizationId,
-            request.Status
-        );
+        var countSpec = new OrganizationMemberCountSpecification(organizationId, request.Status);
 
         var members = await repository.ListAsync(listSpec, cancellationToken);
         var totalCount = await repository.CountAsync(countSpec, cancellationToken);

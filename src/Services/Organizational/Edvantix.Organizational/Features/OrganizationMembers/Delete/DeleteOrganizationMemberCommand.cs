@@ -1,10 +1,15 @@
+using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.Delete;
 
-public sealed record DeleteOrganizationMemberCommand(Guid OrganizationId, Guid Id) : ICommand;
+[Transactional]
+[RequirePermission(OrganizationPermissions.ManageMembers)]
+public sealed record DeleteOrganizationMemberCommand(Guid Id) : ICommand;
 
 internal sealed class DeleteOrganizationMemberCommandHandler(
+    ITenantContext tenantContext,
     IOrganizationMemberRepository repository
 ) : ICommandHandler<DeleteOrganizationMemberCommand>
 {
@@ -15,7 +20,7 @@ internal sealed class DeleteOrganizationMemberCommandHandler(
     {
         var member = await repository.GetByIdAsync(command.Id, cancellationToken);
 
-        if (member is null || member.OrganizationId != command.OrganizationId)
+        if (member is null || member.OrganizationId != tenantContext.OrganizationId)
             throw NotFoundException.For<OrganizationMember>(command.Id);
 
         member.Delete();

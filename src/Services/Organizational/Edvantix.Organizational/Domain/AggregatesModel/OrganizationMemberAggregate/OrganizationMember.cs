@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
@@ -56,6 +57,8 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
         EndDate = endDate;
         Status = OrganizationStatus.Active;
         IsDeleted = false;
+
+        RegisterDomainEvent(new OrganizationMemberCreatedDomainEvent(organizationId, profileId));
     }
 
     /// <inheritdoc />
@@ -89,6 +92,9 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
             );
 
         OrganizationMemberRoleId = organizationMemberRoleId;
+        RegisterDomainEvent(
+            new OrganizationMemberRoleChangedDomainEvent(OrganizationId, ProfileId)
+        );
     }
 
     /// <summary>Завершает участие в организации с указанием даты.</summary>
@@ -106,6 +112,9 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
 
         EndDate = endDate;
         Status = OrganizationStatus.Archived;
+        RegisterDomainEvent(
+            new OrganizationMemberStatusChangedDomainEvent(OrganizationId, ProfileId)
+        );
     }
 
     /// <inheritdoc />
@@ -113,5 +122,8 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
     {
         IsDeleted = true;
         Status = OrganizationStatus.Deleted;
+        RegisterDomainEvent(
+            new OrganizationMemberStatusChangedDomainEvent(OrganizationId, ProfileId)
+        );
     }
 }

@@ -1,22 +1,26 @@
+using Edvantix.Chassis.Security.Tenant;
+
 namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Update;
 
 public sealed class UpdateOrganizationMemberCommandHandlerTests
 {
+    private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IOrganizationMemberRepository> _repoMock = new();
+    private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly UpdateOrganizationMemberCommandHandler _handler;
 
     public UpdateOrganizationMemberCommandHandlerTests()
     {
-        _handler = new(_repoMock.Object);
+        _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _handler = new(_tenantMock.Object, _repoMock.Object);
     }
 
     [Test]
     public async Task GivenExistingMember_WhenChangingRole_ThenShouldSaveChanges()
     {
-        var orgId = Guid.CreateVersion7();
         var newRoleId = Guid.CreateVersion7();
-        var member = CreateMember(orgId);
-        var command = new UpdateOrganizationMemberCommand(orgId, member.Id, newRoleId);
+        var member = CreateMember(_organizationId);
+        var command = new UpdateOrganizationMemberCommand(member.Id, newRoleId);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(member.Id, It.IsAny<CancellationToken>()))
@@ -37,9 +41,8 @@ public sealed class UpdateOrganizationMemberCommandHandlerTests
     [Test]
     public async Task GivenMemberNotFound_WhenChangingRole_ThenShouldThrowNotFoundException()
     {
-        var orgId = Guid.CreateVersion7();
         var memberId = Guid.CreateVersion7();
-        var command = new UpdateOrganizationMemberCommand(orgId, memberId, Guid.CreateVersion7());
+        var command = new UpdateOrganizationMemberCommand(memberId, Guid.CreateVersion7());
 
         _repoMock
             .Setup(r => r.GetByIdAsync(memberId, It.IsAny<CancellationToken>()))
@@ -53,14 +56,8 @@ public sealed class UpdateOrganizationMemberCommandHandlerTests
     [Test]
     public async Task GivenMemberFromDifferentOrganization_WhenChangingRole_ThenShouldThrowNotFoundException()
     {
-        var requestOrgId = Guid.CreateVersion7();
-        var actualOrgId = Guid.CreateVersion7();
-        var member = CreateMember(actualOrgId);
-        var command = new UpdateOrganizationMemberCommand(
-            requestOrgId,
-            member.Id,
-            Guid.CreateVersion7()
-        );
+        var member = CreateMember(Guid.CreateVersion7());
+        var command = new UpdateOrganizationMemberCommand(member.Id, Guid.CreateVersion7());
 
         _repoMock
             .Setup(r => r.GetByIdAsync(member.Id, It.IsAny<CancellationToken>()))

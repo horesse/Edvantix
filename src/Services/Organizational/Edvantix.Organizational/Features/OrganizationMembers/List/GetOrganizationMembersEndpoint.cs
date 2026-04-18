@@ -6,7 +6,7 @@ public sealed class GetOrganizationMembersEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
-                "/organizations/{organizationId:guid}/members",
+                "/members",
                 async (
                     [AsParameters] GetOrganizationMembersQuery request,
                     ISender sender,

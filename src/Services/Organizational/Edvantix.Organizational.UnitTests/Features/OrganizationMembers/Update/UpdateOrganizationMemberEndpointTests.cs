@@ -6,11 +6,7 @@ public sealed class UpdateOrganizationMemberEndpointTests
     private readonly Mock<ISender> _senderMock = new();
 
     private static UpdateOrganizationMemberCommand BuildValidCommand() =>
-        new(
-            OrganizationId: Guid.CreateVersion7(),
-            Id: Guid.CreateVersion7(),
-            OrganizationMemberRoleId: Guid.CreateVersion7()
-        );
+        new(Id: Guid.CreateVersion7(), OrganizationMemberRoleId: Guid.CreateVersion7());
 
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldCallSenderOnce()

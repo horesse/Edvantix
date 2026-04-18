@@ -33,10 +33,6 @@ internal sealed class CreateOrganizationValidator : AbstractValidator<CreateOrga
             .IsInEnum()
             .WithMessage("Указан недопустимый тип организации");
 
-        RuleFor(x => x.CountryId).NotEmpty().WithMessage("Идентификатор страны обязателен");
-
-        RuleFor(x => x.CurrencyId).NotEmpty().WithMessage("Идентификатор валюты обязателен");
-
         RuleFor(x => x.PrimaryContactValue)
             .NotEmpty()
             .WithMessage("Значение основного контакта обязательно")

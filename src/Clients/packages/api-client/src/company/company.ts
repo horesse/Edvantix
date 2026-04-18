@@ -14,7 +14,7 @@ import type { PagedResult } from "@workspace/types/shared";
 import { apiClient } from "../client";
 import type ApiClient from "../client";
 
-const BASE = "/organizational/api/v1";
+const BASE = "/organisational/api/v1";
 
 /** Ключ localStorage, под которым хранится ID выбранной организации. */
 const SELECTED_ORG_KEY = "selectedOrgId";

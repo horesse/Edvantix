@@ -2,7 +2,7 @@
 
 /// <summary>
 /// Представляет текущий контекст арендатора (организации) для запроса.
-/// Определяется с помощью <see cref="TenantMiddleware"/> из HTTP-заголовка <c>X-OrganizationId-Id</c>.
+/// Определяется с помощью <see cref="TenantMiddleware"/> из HTTP-заголовка <c>X-OrganizationId</c>.
 /// </summary>
 public interface ITenantContext
 {

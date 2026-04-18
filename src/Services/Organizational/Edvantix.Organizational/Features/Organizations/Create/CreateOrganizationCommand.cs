@@ -11,8 +11,6 @@ public sealed record CreateOrganizationCommand(
     bool IsLegalEntity,
     DateOnly RegistrationDate,
     LegalForm LegalForm,
-    Guid CountryId,
-    Guid CurrencyId,
     OrganizationType OrganizationType,
     string PrimaryContactValue,
     ContactType PrimaryContactType,
@@ -36,8 +34,8 @@ internal sealed class CreateOrganizationCommandHandler(
             command.IsLegalEntity,
             command.RegistrationDate,
             command.LegalForm,
-            command.CountryId,
-            command.CurrencyId,
+            Guid.NewGuid(),
+            Guid.NewGuid(),
             command.OrganizationType,
             command.ShortName
         );

@@ -47,26 +47,28 @@ export function StepContact({ control }: StepContactProps) {
           <FormItem>
             <FieldLabel label="Канал связи" required />
             <FormControl>
-              <div className="inline-flex gap-0.5 rounded-[10px] border border-slate-200 bg-slate-100 p-[3px]">
-                {CONTACT_TYPE_DATA.map((c) => {
-                  const isActive = field.value === c.value;
-                  return (
-                    <button
-                      key={c.value}
-                      type="button"
-                      onClick={() => field.onChange(c.value as ContactType)}
-                      className={cn(
-                        "inline-flex items-center gap-1.5 rounded-lg px-3.5 py-[7px] text-[13px] font-medium transition-all",
-                        isActive
-                          ? "text-foreground bg-white font-semibold shadow-sm"
-                          : "text-slate-500 hover:text-slate-700",
-                      )}
-                    >
-                      <c.Icon className="size-3.5" />
-                      {c.short}
-                    </button>
-                  );
-                })}
+              <div className="overflow-x-auto pb-0.5">
+                <div className="inline-flex gap-0.5 rounded-[10px] border border-slate-200 bg-slate-100 p-[3px]">
+                  {CONTACT_TYPE_DATA.map((c) => {
+                    const isActive = field.value === c.value;
+                    return (
+                      <button
+                        key={c.value}
+                        type="button"
+                        onClick={() => field.onChange(c.value as ContactType)}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-lg px-3.5 py-[7px] text-[13px] font-medium transition-all",
+                          isActive
+                            ? "text-foreground bg-white font-semibold shadow-sm"
+                            : "text-slate-500 hover:text-slate-700",
+                        )}
+                      >
+                        <c.Icon className="size-3.5 shrink-0" />
+                        <span className="whitespace-nowrap">{c.short}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </FormControl>
             <FieldHint error={fieldState.error?.message} />

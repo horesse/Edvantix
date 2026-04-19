@@ -35,7 +35,7 @@ export function CreateOrganizationPage() {
           current={WIZARD_STEPS.length}
           completed={new Set([0, 1, 2, 3])}
         />
-        <div className="flex flex-1 items-center justify-center p-8">
+        <div className="flex flex-1 items-center justify-center p-4 sm:p-8">
           <SuccessScreen
             name={values.shortName || values.fullLegalName}
             onDashboard={() => router.push("/")}

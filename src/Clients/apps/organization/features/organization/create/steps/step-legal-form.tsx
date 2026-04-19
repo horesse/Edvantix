@@ -41,7 +41,7 @@ export function StepLegalForm({ control }: StepLegalFormProps) {
           <FormItem>
             <FieldLabel label="Форма собственности" required />
             <FormControl>
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 {LEGAL_FORM_DATA.map((entry) => {
                   const isActive = field.value === entry.value;
                   return (

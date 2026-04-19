@@ -28,7 +28,7 @@ export function StepperSidebar({
   const remaining = Math.max(0, WIZARD_STEPS.length - current);
 
   return (
-    <aside className="border-border bg-card flex w-[280px] shrink-0 flex-col gap-4 overflow-y-auto border-r p-5">
+    <aside className="border-border bg-card hidden w-[280px] shrink-0 flex-col gap-4 overflow-y-auto border-r p-5 lg:flex">
       {/* Header */}
       <div>
         <div className="bg-brand-100 text-brand-700 mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide">

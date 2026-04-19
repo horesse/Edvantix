@@ -1,30 +1,13 @@
 {
-	"name": "@bookworm/k6",
+	"name": "@edvantix/k6",
 	"version": "1.0.0",
-	"description": "Performance and load testing suite for BookWorm microservices with K6 and TypeScript",
-	"author": "Nhan Nguyen <nguyenxuannhan407@gmail.com> (https://github.com/foxminchan)",
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "https://opensource.org/licenses/MIT"
-		}
-	],
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/foxminchan/BookWorm.git",
-		"directory": "src/Aspire/BookWorm.AppHost/Container/k6"
-	},
-	"bugs": {
-		"url": "https://github.com/foxminchan/BookWorm/issues"
-	},
-	"homepage": "https://github.com/foxminchan/BookWorm#readme",
 	"main": "dist/main.js",
 	"type": "commonjs",
 	"scripts": {
 		"prepare": "allow-scripts",
 		"build": "webpack",
 		"build:watch": "webpack --watch",
-		"deploy": "bun run build && echo 'TypeScript build completed successfully'",
+		"deploy": "bun run build",
 		"format": "prettier --write .",
 		"check": "eslint . && prettier --check .",
 		"lint": "eslint --fix .",

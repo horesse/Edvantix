@@ -167,6 +167,8 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(personaApi)
         .WithOpenAPI(notificationApi)
         .WithOpenAPI(organizationalApi);
+
+    builder.AddK6(gateway);
 }
 else
 {

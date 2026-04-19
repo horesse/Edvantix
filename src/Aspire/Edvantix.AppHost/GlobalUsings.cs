@@ -3,6 +3,7 @@ global using Azure.Provisioning.Storage;
 global using Edvantix.AppHost.Extensions.Infrastructure;
 global using Edvantix.AppHost.Extensions.Network;
 global using Edvantix.AppHost.Extensions.Security;
+global using Edvantix.AppHost.Extensions.Testing;
 global using Edvantix.Constants.Aspire;
 global using Edvantix.Constants.Core;
 global using Projects;

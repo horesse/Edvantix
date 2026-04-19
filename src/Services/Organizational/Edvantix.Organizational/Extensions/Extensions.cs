@@ -1,8 +1,10 @@
-﻿using Edvantix.Chassis.CQRS;
+﻿using System.Text.Json;
+using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
+using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
 using Edvantix.Organizational.Grpc;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
@@ -81,6 +83,10 @@ internal static class Extensions
             options.AddDocumentTransformer<
                 OpenApiInfoDefinitionsTransformer<OrganizationalAppSettings>
             >()
+        );
+
+        services.AddSingleton(
+            new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }
         );
 
         services.AddMapper(typeof(IOrganizationalApiMarker));

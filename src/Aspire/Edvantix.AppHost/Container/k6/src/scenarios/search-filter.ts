@@ -10,24 +10,20 @@ import {
 
 export function searchFilterScenario(dataGen: TestDataGenerator, random: SeededRandom): void {
 	try {
-		// Test comprehensive search and filtering functionality
-		const searchTerm = dataGen.getRandomSearchTerm();
-		const minPrice = dataGen.getRandomPrice(5, 25);
-		const maxPrice = dataGen.getRandomPrice(26, 100);
-		const sortOption = dataGen.getRandomSortOption();
+		const baseUrl = getBaseUrl();
 
-		// Test search with various parameters
+		const searchTerm = dataGen.getRandomSearchTerm();
+		const orgType = dataGen.getRandomOrganizationType();
+
+		// Поиск организаций по тексту с комбинированными параметрами
 		const searchParams = {
 			search: searchTerm,
-			minPrice,
-			maxPrice,
 			pageIndex: 1,
 			pageSize: dataGen.getRandomPageSize(),
-			...sortOption,
 		};
 
 		const searchResponse = testEndpointWithRetry(
-			`${getBaseUrl()}/catalog/api/v1/books`,
+			`${baseUrl}/organisational/api/v1/organizations`,
 			searchParams,
 			"search"
 		);
@@ -36,41 +32,64 @@ export function searchFilterScenario(dataGen: TestDataGenerator, random: SeededR
 			validatePagedResponse(searchData, "search");
 		}
 
-		// Test price-only filtering
-		const priceFilterParams = {
-			minPrice: dataGen.getRandomPrice(10, 30),
-			maxPrice: dataGen.getRandomPrice(31, 80),
+		// Фильтрация только по типу организации
+		const typeFilterParams = {
+			organizationType: orgType,
 			pageIndex: 1,
 			pageSize: 10,
 		};
 
-		const queryString = Object.entries(priceFilterParams)
+		const queryString = Object.entries(typeFilterParams)
 			.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
 			.join("&");
-		const requestUrl = `${getBaseUrl()}/catalog/api/v1/books?${queryString}`;
-		const priceFilterResponse = http.get(requestUrl, {
-			tags: { scenario: "search_filter", endpoint: "price_filter" },
-		});
-		validateResponse(priceFilterResponse, "price_filter");
+		const typeFilterResponse = http.get(
+			`${baseUrl}/organisational/api/v1/organizations?${queryString}`,
+			{
+				tags: { scenario: "search_filter", endpoint: "type_filter" },
+			}
+		);
+		validateResponse(typeFilterResponse, "type_filter");
 
-		// Test pagination with different page sizes
+		// Фильтрация по статусу организации (50% вероятность)
 		if (random.bool(0.5)) {
-			const paginationParams = {
-				pageIndex: random.int(1, 3), // Pages 1-3
+			const statusFilterParams = {
+				status: dataGen.getRandomOrganizationStatus(),
+				pageIndex: 1,
 				pageSize: dataGen.getRandomPageSize(),
 			};
 
-			const queryString = Object.entries(paginationParams)
+			const statusQueryString = Object.entries(statusFilterParams)
 				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
 				.join("&");
-			const requestUrl = `${getBaseUrl()}/catalog/api/v1/books?${queryString}`;
-			const paginationResponse = http.get(requestUrl, {
-				tags: { scenario: "search_filter", endpoint: "pagination" },
-			});
+			const statusFilterResponse = http.get(
+				`${baseUrl}/organisational/api/v1/organizations?${statusQueryString}`,
+				{
+					tags: { scenario: "search_filter", endpoint: "status_filter" },
+				}
+			);
+			validateResponse(statusFilterResponse, "status_filter");
+		}
+
+		// Пагинация с различными размерами страниц (50% вероятность)
+		if (random.bool(0.5)) {
+			const paginationParams = {
+				pageIndex: random.int(1, 3),
+				pageSize: dataGen.getRandomPageSize(),
+			};
+
+			const paginationQueryString = Object.entries(paginationParams)
+				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+				.join("&");
+			const paginationResponse = http.get(
+				`${baseUrl}/organisational/api/v1/organizations?${paginationQueryString}`,
+				{
+					tags: { scenario: "search_filter", endpoint: "pagination" },
+				}
+			);
 			validateResponse(paginationResponse, "pagination");
 		}
 	} catch (error) {
-		const errorMsg = error instanceof Error ? error.message : "Unknown error";
-		console.error(`Error in searchFilterScenario: ${errorMsg}`);
+		const errorMsg = error instanceof Error ? error.message : "Неизвестная ошибка";
+		console.error(`Ошибка в searchFilterScenario: ${errorMsg}`);
 	}
 }

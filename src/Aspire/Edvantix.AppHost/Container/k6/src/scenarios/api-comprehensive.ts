@@ -8,50 +8,49 @@ import { validateResponse } from "../utils/validation";
 
 export function apiComprehensiveScenario(dataGen: TestDataGenerator, random: SeededRandom): void {
 	try {
-		// Test all available API endpoints systematically
+		const baseUrl = getBaseUrl();
+
+		// Систематическое тестирование всех основных API-эндпоинтов
 		const endpoints = [
 			{
-				url: `${getBaseUrl()}/catalog/api/v1/books`,
-				name: "books",
+				url: `${baseUrl}/organisational/api/v1/organizations`,
+				name: "organizations",
 				maxDuration: 600,
 			},
 			{
-				url: `${getBaseUrl()}/catalog/api/v1/categories`,
-				name: "categories",
+				url: `${baseUrl}/persona/api/v1/skills`,
+				name: "skills",
 				maxDuration: 300,
 			},
 			{
-				url: `${getBaseUrl()}/catalog/api/v1/authors`,
-				name: "authors",
-				maxDuration: 400,
-			},
-			{
-				url: `${getBaseUrl()}/catalog/api/v1/publishers`,
-				name: "publishers",
+				url: `${baseUrl}/notification/api/v1/notifications`,
+				name: "notifications",
 				maxDuration: 400,
 			},
 		];
 
-		// Test all basic endpoints
+		// Тестируем все базовые эндпоинты
 		for (const endpoint of endpoints) {
 			const response = http.get(endpoint.url, {
 				tags: { scenario: "api_comprehensive", endpoint: endpoint.name },
 			});
 			validateResponse(response, endpoint.name, CONSTANTS.HTTP_OK, endpoint.maxDuration);
 
-			// Test with various query parameters for books endpoint
-			if (endpoint.name === "books") {
+			// Для эндпоинта организаций тестируем различные комбинации параметров
+			if (endpoint.name === "organizations") {
 				const paramCombinations = [
-					{ pageSize: 5, orderBy: "Name", isDescending: false },
-					{ pageSize: 10, orderBy: "Price", isDescending: true },
-					{ minPrice: 10, maxPrice: 50 },
-					{ category: dataGen.getRandomCategory() },
+					{ pageSize: 5, organizationType: dataGen.getRandomOrganizationType() },
+					{ pageSize: 10, status: dataGen.getRandomOrganizationStatus() },
 					{ search: dataGen.getRandomSearchTerm(), pageSize: 15 },
+					{ pageIndex: 2, pageSize: dataGen.getRandomPageSize() },
+					{
+						search: dataGen.getRandomSearchTerm(),
+						organizationType: dataGen.getRandomOrganizationType(),
+					},
 				];
 
 				let index = 0;
 				for (const params of paramCombinations) {
-					// Build URL with query parameters
 					const queryString = Object.entries(params)
 						.map(
 							([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
@@ -69,23 +68,33 @@ export function apiComprehensiveScenario(dataGen: TestDataGenerator, random: See
 					index++;
 				}
 			}
+
+			// Для эндпоинта навыков тестируем поисковые запросы
+			if (endpoint.name === "skills") {
+				const skillParams = { query: dataGen.getRandomSkillQuery(), limit: 10 };
+				const queryString = Object.entries(skillParams)
+					.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+					.join("&");
+				const skillsResponse = http.get(`${endpoint.url}?${queryString}`, {
+					tags: { scenario: "api_comprehensive", endpoint: "skills_search" },
+				});
+				validateResponse(skillsResponse, "skills_search", CONSTANTS.HTTP_OK, 300);
+			}
 		}
 
-		// Test edge cases and boundary conditions
+		// Граничные условия для эндпоинта организаций
 		const edgeCases = [
 			{ params: { pageSize: 1 }, name: "min_page_size" },
 			{ params: { pageSize: 100 }, name: "max_page_size" },
 			{ params: { pageIndex: 1000 }, name: "high_page_index" },
-			{ params: { minPrice: 0, maxPrice: 1 }, name: "low_price_range" },
-			{ params: { minPrice: 999, maxPrice: 1000 }, name: "high_price_range" },
+			{ params: { search: "" }, name: "empty_search" },
 		];
 
 		for (const testCase of edgeCases) {
-			// Build URL with query parameters
 			const queryString = Object.entries(testCase.params)
 				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
 				.join("&");
-			const requestUrl = `${getBaseUrl()}/catalog/api/v1/books?${queryString}`;
+			const requestUrl = `${baseUrl}/organisational/api/v1/organizations?${queryString}`;
 
 			const response = http.get(requestUrl, {
 				tags: {
@@ -96,18 +105,13 @@ export function apiComprehensiveScenario(dataGen: TestDataGenerator, random: See
 			validateResponse(response, `edge_case_${testCase.name}`);
 		}
 
-		// Test error scenarios (20% chance)
+		// Тестирование несуществующих ресурсов (20% вероятность)
 		if (random.bool(0.2)) {
 			const errorTests = [
 				{
-					url: `${getBaseUrl()}/catalog/api/v1/books/999999`,
+					url: `${baseUrl}/organisational/api/v1/organizations/00000000-0000-0000-0000-000000000000`,
 					expectedStatus: CONSTANTS.HTTP_NOT_FOUND,
-					name: "invalid_book_id",
-				},
-				{
-					url: `${getBaseUrl()}/catalog/api/v1/categories/999999`,
-					expectedStatus: CONSTANTS.HTTP_NOT_FOUND,
-					name: "invalid_category_id",
+					name: "invalid_org_id",
 				},
 			];
 
@@ -122,33 +126,32 @@ export function apiComprehensiveScenario(dataGen: TestDataGenerator, random: See
 			}
 		}
 
-		// Test malformed query parameters (10% chance)
+		// Тестирование некорректных параметров (10% вероятность)
 		if (random.bool(0.1)) {
-			const malformedParams = { pageSize: "invalid", minPrice: "not_a_number" };
-			// Build URL with malformed query parameters
+			const malformedParams = { pageSize: "invalid", organizationType: "not_a_number" };
 			const queryString = Object.entries(malformedParams)
 				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
 				.join("&");
-			const requestUrl = `${getBaseUrl()}/catalog/api/v1/books?${queryString}`;
+			const requestUrl = `${baseUrl}/organisational/api/v1/organizations?${queryString}`;
 
 			const malformedResponse = http.get(requestUrl, {
 				tags: { scenario: "api_comprehensive", endpoint: "malformed_params" },
 			});
 
-			// Expecting either 400 Bad Request or the API to handle gracefully
+			// API должен вернуть 400 Bad Request или обработать параметры корректно
 			const acceptableStatuses = [CONSTANTS.HTTP_OK, CONSTANTS.HTTP_BAD_REQUEST];
 			const isValidStatus = acceptableStatuses.includes(malformedResponse.status);
 
 			check(
 				malformedResponse,
 				{
-					"malformed params handled appropriately": () => isValidStatus,
+					"некорректные параметры обработаны корректно": () => isValidStatus,
 				},
 				{ scenario: "api_comprehensive", endpoint: "malformed_params" }
 			);
 		}
 	} catch (error) {
-		const errorMsg = error instanceof Error ? error.message : "Unknown error";
-		console.error(`Error in apiComprehensiveScenario: ${errorMsg}`);
+		const errorMsg = error instanceof Error ? error.message : "Неизвестная ошибка";
+		console.error(`Ошибка в apiComprehensiveScenario: ${errorMsg}`);
 	}
 }

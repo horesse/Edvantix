@@ -1,116 +1,120 @@
 import type { TestConstants } from "../types";
 
 /**
- * Test constants and thresholds
+ * Константы и пороговые значения для тестов Edvantix
  */
 export const CONSTANTS: TestConstants = {
 	HTTP_OK: 200,
 	HTTP_BAD_REQUEST: 400,
 	HTTP_NOT_FOUND: 404,
-	RESPONSE_TIME_THRESHOLD_95: 1000, // milliseconds - more realistic for development
-	RESPONSE_TIME_THRESHOLD_99: 2000, // milliseconds - more lenient
-	CHECK_RATE_THRESHOLD: 0.9, // 90% instead of 95% for development environment
+	HTTP_UNAUTHORIZED: 401,
+	RESPONSE_TIME_THRESHOLD_95: 1000, // миллисекунды — реалистично для среды разработки
+	RESPONSE_TIME_THRESHOLD_99: 2000, // миллисекунды — мягкий порог
+	CHECK_RATE_THRESHOLD: 0.9, // 90% успешных проверок
 };
 
 /**
- * K6 options configuration
+ * Конфигурация K6 для нагрузочного тестирования Edvantix
  */
 export const options = {
-	maxVUs: 50, // Reduced from 200 for development environment
-	preAllocatedVUs: 10, // Reduced from 50
+	maxVUs: 50,
+	preAllocatedVUs: 10,
 	timeUnit: "1s",
 	startRate: 0,
 	abortOnFail: false,
 	scenarios: {
-		// Scenario 1: Browse catalog (light load)
-		browse_catalog: {
+		// Сценарий 1: Просмотр списка организаций (лёгкая нагрузка)
+		browse_organizations: {
 			executor: "ramping-vus",
-			env: { scenario: "browse_catalog" },
+			env: { scenario: "browse_organizations" },
 			startVUs: 0,
 			stages: [
-				{ duration: "30s", target: 3 }, // Reduced from 10
-				{ duration: "1m", target: 5 }, // Reduced from 15, shorter duration
+				{ duration: "30s", target: 3 },
+				{ duration: "1m", target: 5 },
 				{ duration: "30s", target: 0 },
 			],
 			gracefulRampDown: "30s",
 		},
-		// Scenario 2: Search and filter (medium load)
+		// Сценарий 2: Поиск и фильтрация организаций (средняя нагрузка)
 		search_filter: {
 			executor: "ramping-vus",
 			env: { scenario: "search_filter" },
 			startVUs: 0,
 			stages: [
-				{ duration: "30s", target: 5 }, // Reduced from 20
-				{ duration: "1m", target: 8 }, // Reduced from 30, shorter duration
+				{ duration: "30s", target: 5 },
+				{ duration: "1m", target: 8 },
 				{ duration: "30s", target: 0 },
 			],
 			gracefulRampDown: "30s",
 		},
-		// Scenario 3: API endpoint testing (comprehensive)
+		// Сценарий 3: Комплексное тестирование всех API-эндпоинтов
 		api_comprehensive: {
 			executor: "ramping-vus",
 			env: { scenario: "api_comprehensive" },
 			startVUs: 0,
 			stages: [
-				{ duration: "20s", target: 3 }, // Reduced from 15
-				{ duration: "40s", target: 6 }, // Reduced from 25, shorter duration
+				{ duration: "20s", target: 3 },
+				{ duration: "40s", target: 6 },
 				{ duration: "20s", target: 0 },
 			],
 			gracefulRampDown: "20s",
 		},
-		// Scenario 4: Stress test (high load) - significantly reduced
+		// Сценарий 4: Стресс-тест (высокая нагрузка)
 		stress_test: {
 			executor: "ramping-vus",
 			env: { scenario: "stress_test" },
 			startVUs: 0,
 			stages: [
-				{ duration: "30s", target: 10 }, // Reduced from 50
-				{ duration: "1m", target: 15 }, // Reduced from 100, shorter duration
+				{ duration: "30s", target: 10 },
+				{ duration: "1m", target: 15 },
 				{ duration: "30s", target: 0 },
 			],
 			gracefulRampDown: "30s",
 		},
-		// Scenario 5: Spike test (sudden load increase) - reduced
+		// Сценарий 5: Спайк-тест (внезапный всплеск нагрузки)
 		spike_test: {
 			executor: "ramping-vus",
 			env: { scenario: "spike_test" },
 			startVUs: 0,
 			stages: [
-				{ duration: "20s", target: 2 }, // Reduced from 10
-				{ duration: "10s", target: 12 }, // Reduced from 80
-				{ duration: "20s", target: 12 }, // Maintain spike
-				{ duration: "10s", target: 2 }, // Quick recovery
+				{ duration: "20s", target: 2 },
+				{ duration: "10s", target: 12 },
+				{ duration: "20s", target: 12 }, // Поддерживаем пиковую нагрузку
+				{ duration: "10s", target: 2 }, // Быстрое восстановление
 				{ duration: "20s", target: 0 },
 			],
 			gracefulRampDown: "20s",
 		},
 	},
 	thresholds: {
-		// Response time thresholds - more realistic for development
+		// Пороги времени ответа
 		http_req_duration: [
 			`p(95)<${CONSTANTS.RESPONSE_TIME_THRESHOLD_95}`,
 			`p(99)<${CONSTANTS.RESPONSE_TIME_THRESHOLD_99}`,
-			"avg<500", // Average response time should be under 500ms
-			"med<300", // Median response time should be under 300ms
+			"avg<500", // Среднее время ответа не более 500 мс
+			"med<300", // Медиана не более 300 мс
 		],
-		// Error rate thresholds - more lenient for development
-		http_req_failed: ["rate<0.05"], // Error rate should be less than 5%
-		http_req_waiting: ["p(95)<800"], // Server processing time
-		checks: [`rate>${CONSTANTS.CHECK_RATE_THRESHOLD}`], // 90% of checks should pass
+		// Порог ошибок — не более 5%
+		http_req_failed: ["rate<0.05"],
+		// Время обработки на сервере
+		http_req_waiting: ["p(95)<800"],
+		// Минимальный процент успешных проверок
+		checks: [`rate>${CONSTANTS.CHECK_RATE_THRESHOLD}`],
 
-		// Custom metrics thresholds per endpoint - more realistic
-		"http_req_duration{name:books}": ["p(95)<1200", "avg<500"],
-		"http_req_duration{name:search}": ["p(95)<1500", "avg<600"],
-		"http_req_duration{name:categories}": ["p(95)<800", "avg<300"],
-		"http_req_duration{name:authors}": ["p(95)<800", "avg<300"],
-		"http_req_duration{name:publishers}": ["p(95)<800", "avg<300"],
+		// Пороги по конкретным эндпоинтам
+		"http_req_duration{name:organizations}": ["p(95)<1200", "avg<500"],
+		"http_req_duration{name:organization_details}": ["p(95)<800", "avg<300"],
+		"http_req_duration{name:members}": ["p(95)<1000", "avg<400"],
+		"http_req_duration{name:skills}": ["p(95)<600", "avg<250"],
+		"http_req_duration{name:notifications}": ["p(95)<800", "avg<300"],
+		"http_req_duration{name:profile}": ["p(95)<600", "avg<250"],
 
-		// Scenario-specific thresholds
+		// Пороги по сценариям
 		"http_req_duration{scenario:stress_test}": ["p(95)<2000"],
 		"http_req_duration{scenario:spike_test}": ["p(95)<3000"],
 
-		// Check success rates per scenario - more lenient
-		"checks{scenario:browse_catalog}": ["rate>0.90"],
+		// Успешность проверок по сценариям
+		"checks{scenario:browse_organizations}": ["rate>0.90"],
 		"checks{scenario:search_filter}": ["rate>0.85"],
 		"checks{scenario:api_comprehensive}": ["rate>0.88"],
 	},

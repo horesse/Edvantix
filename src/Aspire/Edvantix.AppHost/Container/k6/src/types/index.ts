@@ -1,26 +1,24 @@
-// Type definitions for BookWorm K6 performance tests
+// Типы для K6 нагрузочных тестов Edvantix
 
-export type SortOption = {
-	orderBy: string;
-	isDescending: boolean;
-};
-
-export type SearchParams = {
-	search?: string;
-	minPrice?: number;
-	maxPrice?: number;
-	pageIndex?: number;
-	pageSize?: number;
-	orderBy?: string;
-	isDescending?: boolean;
-	category?: string;
-};
-
-export type BookItem = {
+export type OrganizationItem = {
 	id: string;
-	title: string;
-	price: number;
+	name: string;
+	shortName?: string;
+	type?: number;
+	status?: number;
 	[key: string]: unknown;
+};
+
+export type OrganizationMemberItem = {
+	id: string;
+	profileId: string;
+	status?: number;
+	[key: string]: unknown;
+};
+
+export type SkillItem = {
+	id: string;
+	name: string;
 };
 
 export type PagedResponse<T> = {
@@ -33,20 +31,22 @@ export type PagedResponse<T> = {
 
 export type TestData = {
 	searchTerms: string[];
-	categoryFilters: string[];
-	sortOptions: SortOption[];
-	authorNames: string[];
-	publisherNames: string[];
+	skillQueries: string[];
+	organizationTypes: number[];
+	organizationStatuses: number[];
+	pageSizes: number[];
 };
 
 export type TestScenario = {
 	name: string;
 	execute: () => void;
 };
+
 export type TestConstants = {
 	HTTP_OK: number;
 	HTTP_BAD_REQUEST: number;
 	HTTP_NOT_FOUND: number;
+	HTTP_UNAUTHORIZED: number;
 	RESPONSE_TIME_THRESHOLD_95: number;
 	RESPONSE_TIME_THRESHOLD_99: number;
 	CHECK_RATE_THRESHOLD: number;
@@ -63,7 +63,7 @@ export type TestConfiguration = {
 	randomSeed: number;
 };
 
-// K6 Summary Types
+// Типы для итоговых данных K6
 export type K6MetricValues = {
 	avg?: number;
 	min?: number;

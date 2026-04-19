@@ -3,18 +3,65 @@ import http from "k6/http";
 import { CONSTANTS } from "../config";
 
 /**
- * Test specific book details
+ * Проверяет доступность сервисов через health-эндпоинты шлюза.
+ * Возвращает false при недоступности хотя бы одного сервиса.
  */
-export function testBookDetails(bookId: string, name: string = "book_details"): unknown {
-	const response = http.get(`${getBaseUrl()}/catalog/api/v1/books/${bookId}`);
-	const data = validateResponse(response, name) as Record<string, unknown> | null;
+export function checkServiceAvailability(): boolean {
+	const baseUrl = getBaseUrl();
+	const services = ["persona", "organisational"];
+
+	for (const service of services) {
+		const response = http.get(`${baseUrl}/${service}/health`, {
+			timeout: "5s",
+		});
+
+		if (response.status === 0) {
+			console.error(
+				`Сервис ${service} недоступен по адресу ${baseUrl}. Убедитесь, что сервис запущен.`
+			);
+			return false;
+		}
+
+		// Принимаем любой HTTP-ответ как признак работоспособности сервиса
+		const acceptableStatuses = [CONSTANTS.HTTP_OK, 404];
+		if (!acceptableStatuses.includes(response.status)) {
+			console.warn(`Сервис ${service} вернул статус ${response.status}`);
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Получает базовый URL шлюза из переменных окружения Aspire.
+ */
+export function getBaseUrl(): string {
+	const baseUrl = __ENV.services__gateway__http__0;
+	if (!baseUrl) {
+		throw new Error(
+			"services__gateway__http__0 не задан. Убедитесь, что шлюз запущен и привязан к K6."
+		);
+	}
+	return baseUrl;
+}
+
+/**
+ * Тестирует получение деталей конкретной организации по идентификатору.
+ */
+export function testOrganizationDetails(
+	orgId: string,
+	name: string = "organization_details"
+): unknown {
+	const response = http.get(`${getBaseUrl()}/organisational/api/v1/organizations/${orgId}`, {
+		tags: { name },
+		timeout: "10s",
+	});
+	const data = parseJsonResponse(response, name) as Record<string, unknown> | null;
 
 	if (data && response.status === CONSTANTS.HTTP_OK) {
 		check(response, {
-			[`${name} should have id`]: () => Object.hasOwn(data, "id"),
-			[`${name} should have title`]: () => Object.hasOwn(data, "title"),
-			[`${name} should have price`]: () => Object.hasOwn(data, "price"),
-			[`${name} price should be positive`]: () => typeof data.price === "number" && data.price > 0,
+			[`${name}: содержит id`]: () => Object.hasOwn(data, "id"),
+			[`${name}: содержит name`]: () => Object.hasOwn(data, "name"),
 		});
 	}
 
@@ -22,44 +69,9 @@ export function testBookDetails(bookId: string, name: string = "book_details"): 
 }
 
 /**
- * Basic connectivity check
+ * Парсит JSON-тело ответа при успешном статусе.
  */
-export function checkServiceAvailability(): boolean {
-	const response = http.get(`${getBaseUrl()}/catalog/health`, {
-		timeout: "5s",
-	});
-
-	if (response.status === 0) {
-		console.error(`Service not available at ${getBaseUrl()}. Check if the service is running.`);
-		return false;
-	}
-
-	// Accept various health check status codes
-	const acceptableStatuses = [CONSTANTS.HTTP_OK, 404]; // Some services might not have /health endpoint
-	if (!acceptableStatuses.includes(response.status)) {
-		console.warn(`Service at ${getBaseUrl()} responded with status ${response.status}`);
-	}
-
-	return true;
-}
-
-/**
- * Get base URL from environment
- */
-export function getBaseUrl(): string {
-	const baseUrl = __ENV.services__gateway__http__0;
-	if (!baseUrl) {
-		throw new Error(
-			"BASE_URL is not set. Please provide services__gateway__http__0 environment variable."
-		);
-	}
-	return baseUrl;
-}
-
-/**
- * Simple response validation
- */
-function validateResponse(response: http.Response, name: string): unknown {
+function parseJsonResponse(response: http.Response, name: string): unknown {
 	if (response.status === CONSTANTS.HTTP_OK) {
 		try {
 			if (
@@ -70,8 +82,8 @@ function validateResponse(response: http.Response, name: string): unknown {
 				return JSON.parse(response.body);
 			}
 		} catch (error) {
-			const errorMsg = error instanceof Error ? error.message : "Unknown error";
-			console.warn(`JSON parsing failed for ${name}:`, errorMsg);
+			const errorMsg = error instanceof Error ? error.message : "Неизвестная ошибка";
+			console.warn(`Ошибка парсинга JSON для ${name}:`, errorMsg);
 		}
 	}
 	return null;

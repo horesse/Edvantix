@@ -1,53 +1,43 @@
-import type { SortOption, TestData } from "../types";
+import type { TestData } from "../types";
 import type { SeededRandom } from "./seeded-random";
 
 /**
- * Test data pools for realistic scenarios
+ * Тестовые данные для реалистичного моделирования нагрузки в Edvantix
  */
 export const TEST_DATA: TestData = {
 	searchTerms: [
-		"book",
-		"programming",
-		"fiction",
-		"science",
-		"history",
-		"mystery",
-		"romance",
-		"fantasy",
-		"thriller",
-		"biography",
+		"школа",
+		"университет",
+		"лицей",
+		"колледж",
+		"гимназия",
+		"центр",
+		"онлайн",
+		"технология",
+		"образование",
+		"академия",
 	],
-	categoryFilters: [
-		"Technology",
-		"Fiction",
-		"Science",
-		"History",
-		"Business",
-		"Romance",
-		"Mystery",
-		"Fantasy",
-		"Biography",
+	skillQueries: [
+		"JavaScript",
+		"Python",
+		"React",
+		"TypeScript",
+		"SQL",
+		".NET",
+		"C#",
+		"Kotlin",
+		"Английский",
+		"Дизайн",
 	],
-	sortOptions: [
-		{ orderBy: "Name", isDescending: false },
-		{ orderBy: "Name", isDescending: true },
-		{ orderBy: "Price", isDescending: false },
-		{ orderBy: "Price", isDescending: true },
-		{ orderBy: "Rating", isDescending: true },
-		{ orderBy: "PublishDate", isDescending: true },
-	],
-	authorNames: ["John Doe", "Jane Smith", "Robert Johnson", "Mary Wilson", "David Brown"],
-	publisherNames: [
-		"TechBooks",
-		"Fiction House",
-		"Academic Press",
-		"Popular Books",
-		"Classic Publishing",
-	],
+	// OrganizationType: 0=EducationalInstitution, 1=GeneralEducationSchool, 2=Lyceum, ...
+	organizationTypes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+	// OrganizationStatus: 0=Active, 1=Archived
+	organizationStatuses: [0, 1],
+	pageSizes: [5, 10, 15, 20, 25],
 };
 
 /**
- * Random data generators using seeded random for reproducible test runs
+ * Генераторы случайных тестовых данных с фиксированным сидом для воспроизводимых прогонов
  */
 export class TestDataGenerator {
 	constructor(private readonly random: SeededRandom) {}
@@ -56,20 +46,20 @@ export class TestDataGenerator {
 		return this.random.pick(TEST_DATA.searchTerms);
 	}
 
-	getRandomCategory(): string {
-		return this.random.pick(TEST_DATA.categoryFilters);
+	getRandomSkillQuery(): string {
+		return this.random.pick(TEST_DATA.skillQueries);
 	}
 
-	getRandomSortOption(): SortOption {
-		return this.random.pick(TEST_DATA.sortOptions);
+	getRandomOrganizationType(): number {
+		return this.random.pick(TEST_DATA.organizationTypes);
 	}
 
-	getRandomPrice(min: number = 5, max: number = 100): number {
-		return this.random.int(min, max);
+	getRandomOrganizationStatus(): number {
+		return this.random.pick(TEST_DATA.organizationStatuses);
 	}
 
 	getRandomPageSize(): number {
-		return this.random.pick([5, 10, 15, 20, 25]);
+		return this.random.pick(TEST_DATA.pageSizes);
 	}
 
 	getRandomPageIndex(): number {

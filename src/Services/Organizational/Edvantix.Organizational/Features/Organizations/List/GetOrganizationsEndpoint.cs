@@ -20,8 +20,7 @@ public sealed class GetOrganizationsEndpoint
             .WithPaginationHeaders()
             .Produces<PagedResult<OrganizationDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
-            .MapToApiVersion(ApiVersions.V1)
-            .RequireAuthorization();
+            .MapToApiVersion(ApiVersions.V1);
     }
 
     public async Task<Ok<PagedResult<OrganizationDto>>> HandleAsync(

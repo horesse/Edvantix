@@ -7,10 +7,12 @@ import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useLegalForms from "@workspace/api-hooks/company/useLegalForms";
 import useOrganization from "@workspace/api-hooks/company/useOrganization";
 import useUpdateOrganization from "@workspace/api-hooks/company/useUpdateOrganization";
+import type { OrganizationDetailDto } from "@workspace/types/company";
 import {
+  LEGAL_FORM_LABELS,
+  LegalForm,
   ORGANIZATION_TYPE_LABELS,
   OrganizationType,
 } from "@workspace/types/company";
@@ -32,7 +34,6 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import { Textarea } from "@workspace/ui/components/textarea";
 import {
   type UpdateOrganizationInput,
   updateOrganizationSchema,
@@ -47,10 +48,10 @@ const SECTION =
 function SectionMeta({
   title,
   description,
-}: {
+}: Readonly<{
   title: string;
   description: string;
-}) {
+}>) {
   return (
     <div>
       <p className="text-sm font-medium">{title}</p>
@@ -65,7 +66,7 @@ function OrgSettingsSkeleton() {
       <div className="pb-2">
         <Skeleton className="h-5 w-44" />
       </div>
-      {[3, 2, 2].map((count, i) => (
+      {[2, 2].map((count, i) => (
         <div key={i} className={SECTION}>
           <div className="space-y-2">
             <Skeleton className="h-4 w-28" />
@@ -125,55 +126,30 @@ export function OrgSettingsPage() {
   );
 }
 
-function OrganizationForm({
-  org,
-}: {
-  org: {
-    id: string;
-    name: string;
-    nameLatin: string;
-    shortName: string;
-    printName?: string | null;
-    description?: string | null;
-    organizationType: OrganizationType;
-    legalForm: { id: string };
-  };
-}) {
-  const { data: legalForms = [], isLoading: isLegalFormsLoading } =
-    useLegalForms();
-
+function OrganizationForm({ org }: Readonly<{ org: OrganizationDetailDto }>) {
   const form = useForm<UpdateOrganizationInput>({
     resolver: zodResolver(updateOrganizationSchema),
     defaultValues: {
-      name: org.name,
-      nameLatin: org.nameLatin,
-      shortName: org.shortName,
+      fullLegalName: org.fullLegalName,
+      shortName: org.shortName ?? "",
       organizationType: org.organizationType,
-      legalFormId: org.legalForm.id,
-      printName: org.printName ?? "",
-      description: org.description ?? "",
+      legalForm: org.legalForm,
     },
   });
 
   useEffect(() => {
     form.reset({
-      name: org.name,
-      nameLatin: org.nameLatin,
-      shortName: org.shortName,
+      fullLegalName: org.fullLegalName,
+      shortName: org.shortName ?? "",
       organizationType: org.organizationType,
-      legalFormId: org.legalForm.id,
-      printName: org.printName ?? "",
-      description: org.description ?? "",
+      legalForm: org.legalForm,
     });
   }, [
     org.id,
-    org.name,
-    org.nameLatin,
+    org.fullLegalName,
     org.shortName,
-    org.printName,
-    org.description,
     org.organizationType,
-    org.legalForm.id,
+    org.legalForm,
     form,
   ]);
 
@@ -189,13 +165,10 @@ function OrganizationForm({
     mutation.mutate({
       id: org.id,
       request: {
-        name: data.name,
-        nameLatin: data.nameLatin,
-        shortName: data.shortName,
+        fullLegalName: data.fullLegalName,
+        shortName: data.shortName || null,
         organizationType: data.organizationType,
-        legalFormId: data.legalFormId,
-        printName: data.printName || null,
-        description: data.description || null,
+        legalForm: data.legalForm,
       },
     });
   }
@@ -206,19 +179,19 @@ function OrganizationForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        {/* ── Названия ── */}
+        {/* ── Наименования ── */}
         <section className={SECTION}>
           <SectionMeta
-            title="Названия"
-            description="Официальное и сокращённое наименование"
+            title="Наименования"
+            description="Полное юридическое и краткое наименование"
           />
           <div className="space-y-3">
             <FormField
               control={form.control}
-              name="name"
+              name="fullLegalName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Полное название</FormLabel>
+                  <FormLabel>Полное наименование</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -226,34 +199,24 @@ function OrganizationForm({
                 </FormItem>
               )}
             />
-            <div className="grid gap-3 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="nameLatin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Название (латиница)</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="shortName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Краткое название</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="shortName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Краткое название{" "}
+                    <span className="text-muted-foreground font-normal">
+                      (необязательно)
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </section>
 
@@ -264,17 +227,17 @@ function OrganizationForm({
             description="Правовая форма и тип деятельности организации"
           />
           <div className="space-y-3">
-            {/* Организационно-правовая форма */}
             <FormField
               control={form.control}
-              name="legalFormId"
+              name="legalForm"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Правовая форма</FormLabel>
                   <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={isLegalFormsLoading}
+                    value={String(field.value)}
+                    onValueChange={(v) =>
+                      field.onChange(Number(v) as LegalForm)
+                    }
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -282,13 +245,11 @@ function OrganizationForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {legalForms.map((lf) => (
-                        <SelectItem key={lf.id} value={lf.id}>
-                          <span className="font-medium">{lf.shortName}</span>
-                          <span className="text-muted-foreground">
-                            {" "}
-                            — {lf.name}
-                          </span>
+                      {(
+                        Object.entries(LEGAL_FORM_LABELS) as [string, string][]
+                      ).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -298,7 +259,6 @@ function OrganizationForm({
               )}
             />
 
-            {/* Тип организации */}
             <FormField
               control={form.control}
               name="organizationType"
@@ -306,7 +266,7 @@ function OrganizationForm({
                 <FormItem>
                   <FormLabel>Тип организации</FormLabel>
                   <Select
-                    value={field.value !== undefined ? String(field.value) : ""}
+                    value={String(field.value)}
                     onValueChange={(v) =>
                       field.onChange(Number(v) as OrganizationType)
                     }
@@ -329,52 +289,6 @@ function OrganizationForm({
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </section>
-
-        {/* ── Дополнительно ── */}
-        <section className={SECTION}>
-          <SectionMeta
-            title="Дополнительно"
-            description="Печатное название и описание организации"
-          />
-          <div className="space-y-3">
-            <FormField
-              control={form.control}
-              name="printName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Печатное название{" "}
-                    <span className="font-normal opacity-60">
-                      (необязательно)
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Описание{" "}
-                    <span className="font-normal opacity-60">
-                      (необязательно)
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea rows={3} {...field} />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

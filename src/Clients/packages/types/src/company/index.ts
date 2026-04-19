@@ -1,66 +1,84 @@
-import type { ContactType } from "../profile";
-
 // --- Enums ---
 
-export enum OrganizationRole {
-  Owner = 1,
-  Manager = 2,
-  Teacher = 3,
-  Student = 4,
+/** Тип контакта организации. */
+export enum ContactType {
+  Email = 0,
+  MobilePhone = 1,
+  Telegram = 2,
+  WhatsApp = 3,
+  Viber = 4,
 }
 
-export enum GroupRole {
-  Teacher = 1,
-  Student = 2,
-  Manager = 3,
+/** Организационно-правовая форма. */
+export enum LegalForm {
+  Llc = 0,
+  Ojsc = 1,
+  Cjsc = 2,
+  Ue = 3,
+  Pue = 4,
+  IndividualEntrepreneur = 5,
+  ProductionCooperative = 6,
+  StateEducationalInstitution = 7,
+  PrivateEducationalInstitution = 8,
+  EducationalInstitution = 9,
 }
 
-export enum InvitationStatus {
-  Pending = 1,
-  Accepted = 2,
-  Declined = 3,
-  Cancelled = 4,
-  Expired = 5,
+export const LEGAL_FORM_LABELS: Record<LegalForm, string> = {
+  [LegalForm.Llc]: "ООО",
+  [LegalForm.Ojsc]: "ОАО",
+  [LegalForm.Cjsc]: "ЗАО",
+  [LegalForm.Ue]: "УП",
+  [LegalForm.Pue]: "ЧУП",
+  [LegalForm.IndividualEntrepreneur]: "ИП",
+  [LegalForm.ProductionCooperative]: "Кооператив",
+  [LegalForm.StateEducationalInstitution]: "ГУО",
+  [LegalForm.PrivateEducationalInstitution]: "ЧУО",
+  [LegalForm.EducationalInstitution]: "Образовательное учреждение",
+};
+
+/** Статус организационной сущности. */
+export enum OrganizationStatus {
+  Active = 0,
+  Archived = 1,
+  Deleted = 2,
 }
 
-/** Тип организации (информационное поле). */
+/** Тип образовательного или бизнес-учреждения. */
 export enum OrganizationType {
-  EducationalInstitution = 1,
-  GeneralSecondaryEducation = 2,
-  Lyceum = 3,
-  Gymnasium = 4,
-  College = 5,
-  VocationalTechnicalSchool = 6,
-  University = 7,
-  AdditionalEducationForYouth = 8,
-  Preschool = 9,
-  PrivateEducationalCenter = 10,
-  TrainingCenter = 11,
-  LlcEducational = 12,
-  IndividualEntrepreneur = 13,
-  LanguageSchool = 14,
-  ItSchool = 15,
-  TutoringCenter = 16,
-  OnlinePlatform = 17,
+  EducationalInstitution = 0,
+  GeneralEducationSchool = 1,
+  Lyceum = 2,
+  Gymnasium = 3,
+  College = 4,
+  VocationalSchool = 5,
+  University = 6,
+  AdditionalEducation = 7,
+  Preschool = 8,
+  PrivateEducationalCenter = 9,
+  TrainingCompany = 10,
+  LlcEducation = 11,
+  IndividualEntrepreneur = 12,
+  LanguageSchool = 13,
+  ItSchool = 14,
+  TutoringCenter = 15,
+  OnlinePlatform = 16,
 }
 
-/** Русские названия типов организаций. */
 export const ORGANIZATION_TYPE_LABELS: Record<OrganizationType, string> = {
   [OrganizationType.EducationalInstitution]: "Учреждение образования",
-  [OrganizationType.GeneralSecondaryEducation]:
+  [OrganizationType.GeneralEducationSchool]:
     "Учреждение общего среднего образования",
   [OrganizationType.Lyceum]: "Лицей",
   [OrganizationType.Gymnasium]: "Гимназия",
   [OrganizationType.College]: "Колледж",
-  [OrganizationType.VocationalTechnicalSchool]:
-    "Профессионально-техническое училище",
+  [OrganizationType.VocationalSchool]: "Профессионально-техническое училище",
   [OrganizationType.University]: "Университет, институт",
-  [OrganizationType.AdditionalEducationForYouth]:
+  [OrganizationType.AdditionalEducation]:
     "Учреждение дополнительного образования детей и молодёжи",
   [OrganizationType.Preschool]: "Дошкольное учреждение образования",
   [OrganizationType.PrivateEducationalCenter]: "Частный образовательный центр",
-  [OrganizationType.TrainingCenter]: "Учебный центр, обучающая компания",
-  [OrganizationType.LlcEducational]: "ООО в сфере образования",
+  [OrganizationType.TrainingCompany]: "Учебный центр, обучающая компания",
+  [OrganizationType.LlcEducation]: "ООО в сфере образования",
   [OrganizationType.IndividualEntrepreneur]: "Индивидуальный предприниматель",
   [OrganizationType.LanguageSchool]: "Языковая школа",
   [OrganizationType.ItSchool]: "IT-школа, школа программирования",
@@ -68,168 +86,94 @@ export const ORGANIZATION_TYPE_LABELS: Record<OrganizationType, string> = {
   [OrganizationType.OnlinePlatform]: "Онлайн-платформа",
 };
 
-// --- Legal Forms ---
+// --- DTOs ---
 
-export type LegalFormModel = {
-  id: string;
-  name: string;
-  shortName: string;
+export type ContactDto = {
+  readonly id: string;
+  readonly value: string;
+  readonly description: string;
+  readonly contactType: ContactType;
+  readonly isPrimary: boolean;
 };
 
-// --- Organization ---
-
-export type OrganizationModel = {
-  id: string;
-  name: string;
-  nameLatin: string;
-  shortName: string;
-  printName?: string | null;
-  description?: string | null;
-  registrationDate: string;
-  membersCount: number;
-  groupsCount: number;
-  organizationType: OrganizationType;
-  legalForm: LegalFormModel;
+/** Краткая сводка организации (используется в списке). */
+export type OrganizationDto = {
+  readonly id: string;
+  readonly fullLegalName: string;
+  readonly shortName: string | null;
+  readonly organizationType: OrganizationType;
+  readonly status: OrganizationStatus;
+  readonly isLegalEntity: boolean;
 };
 
-export type OrganizationSummaryModel = {
-  id: string;
-  name: string;
-  shortName: string;
-  description?: string | null;
-  role: string;
+/** Полные данные организации (используется на странице деталей/настроек). */
+export type OrganizationDetailDto = {
+  readonly id: string;
+  readonly fullLegalName: string;
+  readonly shortName: string | null;
+  readonly isLegalEntity: boolean;
+  readonly registrationDate: string;
+  readonly legalForm: LegalForm;
+  readonly countryId: string;
+  readonly currencyId: string;
+  readonly organizationType: OrganizationType;
+  readonly status: OrganizationStatus;
+  readonly contacts: readonly ContactDto[];
 };
+
+/** Участник организации. */
+export type OrganizationMemberDto = {
+  readonly id: string;
+  readonly organizationId: string;
+  readonly profileId: string;
+  readonly organizationMemberRoleId: string;
+  readonly status: OrganizationStatus;
+  readonly startDate: string;
+  readonly endDate: string | null;
+};
+
+// --- Request types ---
 
 export type CreateOrganizationRequest = {
-  name: string;
-  nameLatin: string;
-  shortName: string;
-  organizationType: OrganizationType;
-  legalFormId: string;
-  printName?: string | null;
-  description?: string | null;
+  readonly fullLegalName: string;
+  readonly shortName?: string | null;
+  readonly isLegalEntity: boolean;
+  readonly registrationDate: string;
+  readonly legalForm: LegalForm;
+  readonly organizationType: OrganizationType;
+  readonly primaryContactValue: string;
+  readonly primaryContactType: ContactType;
+  readonly primaryContactDescription: string;
 };
 
 export type UpdateOrganizationRequest = {
-  name: string;
-  nameLatin: string;
-  shortName: string;
-  organizationType: OrganizationType;
-  legalFormId: string;
-  printName?: string | null;
-  description?: string | null;
+  readonly fullLegalName: string;
+  readonly shortName?: string | null;
+  readonly organizationType: OrganizationType;
+  readonly legalForm: LegalForm;
 };
 
-// --- Members ---
-
-export type OrganizationMemberModel = {
-  id: string;
-  organizationId: string;
-  profileId: string;
-  role: OrganizationRole;
-  joinedAt: string;
-  displayName?: string | null;
+export type OrganizationsQuery = {
+  readonly pageIndex?: number;
+  readonly pageSize?: number;
+  readonly search?: string;
+  readonly status?: OrganizationStatus;
+  readonly organizationType?: OrganizationType;
 };
 
-export type AddMemberRequest = {
-  profileId: string;
-  role: OrganizationRole;
+export type CreateOrganizationMemberRequest = {
+  readonly profileId: string;
+  readonly organizationMemberRoleId: string;
+  readonly startDate: string;
+  readonly endDate?: string | null;
 };
 
-export type UpdateMemberRoleRequest = {
-  newRole: OrganizationRole;
+export type UpdateOrganizationMemberRequest = {
+  readonly organizationMemberRoleId: string;
 };
 
-// --- Invitations ---
-
-export type InvitationModel = {
-  id: string;
-  organizationId: string;
-  organizationName?: string | null;
-  invitedByProfileId: string;
-  inviteeProfileId?: string | null;
-  inviteeEmail?: string | null;
-  role: OrganizationRole;
-  status: InvitationStatus;
-  token: string;
-  createdAt: string;
-  expiresAt: string;
-  respondedAt?: string | null;
-};
-
-export type CreateInvitationRequest = {
-  inviteeEmail?: string | null;
-  inviteeProfileId?: string | null;
-  role: OrganizationRole;
-  ttlDays?: number;
-};
-
-// --- Groups ---
-
-export type GroupModel = {
-  id: string;
-  organizationId: string;
-  name: string;
-  description?: string | null;
-  membersCount: number;
-};
-
-export type GroupSummaryModel = {
-  id: string;
-  organizationId: string;
-  name: string;
-  description?: string | null;
-  role: string;
-};
-
-export type CreateGroupRequest = {
-  name: string;
-  description?: string | null;
-};
-
-export type UpdateGroupRequest = {
-  name: string;
-  description?: string | null;
-};
-
-// --- Group Members ---
-
-export type GroupMemberModel = {
-  id: string;
-  groupId: string;
-  profileId: string;
-  role: GroupRole;
-  joinedAt: string;
-  displayName?: string | null;
-};
-
-export type AddGroupMemberRequest = {
-  profileId: string;
-  role: GroupRole;
-};
-
-export type UpdateGroupMemberRoleRequest = {
-  newRole: GroupRole;
-};
-
-// --- Organization Contacts ---
-
-export type OrganizationContactModel = {
-  id: string;
-  organizationId: string;
-  type: ContactType;
-  value: string;
-  description?: string | null;
-};
-
-export type AddOrganizationContactRequest = {
-  type: ContactType;
-  value: string;
-  description?: string | null;
-};
-
-export type UpdateOrganizationContactRequest = {
-  type: ContactType;
-  value: string;
-  description?: string | null;
+export type OrganizationMembersQuery = {
+  readonly pageIndex?: number;
+  readonly pageSize?: number;
+  readonly status?: OrganizationStatus;
 };

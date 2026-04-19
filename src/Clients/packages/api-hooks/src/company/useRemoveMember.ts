@@ -9,10 +9,12 @@ import companyApiClient from "@workspace/api-client/company/company";
 import { companyKeys } from "../keys";
 
 type RemoveMemberParams = {
+  /** ID организации — используется для инвалидации кэша. */
   orgId: string;
   memberId: string;
 };
 
+/** Удаляет участника из текущей организации (X-OrganizationId-Id из localStorage). */
 export default function useRemoveMember(
   options?: UseMutationOptions<void, Error, RemoveMemberParams>,
 ) {
@@ -20,14 +22,10 @@ export default function useRemoveMember(
 
   return useMutation({
     ...options,
-    mutationFn: ({ orgId, memberId }) =>
-      companyApiClient.removeMember(orgId, memberId),
+    mutationFn: ({ memberId }) => companyApiClient.removeMember(memberId),
     onSuccess: (...args) => {
       const { orgId } = args[1];
       queryClient.invalidateQueries({ queryKey: companyKeys.members(orgId) });
-      queryClient.invalidateQueries({
-        queryKey: companyKeys.organization(orgId),
-      });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

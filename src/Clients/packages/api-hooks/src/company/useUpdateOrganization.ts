@@ -27,7 +27,7 @@ export default function useUpdateOrganization(
       const { id } = args[1];
       queryClient.invalidateQueries({ queryKey: companyKeys.organization(id) });
       queryClient.invalidateQueries({
-        queryKey: companyKeys.myOrganizations(),
+        queryKey: companyKeys.organizations(),
       });
       options?.onSuccess?.(...args);
     },

@@ -19,7 +19,7 @@ export default function useCreateOrganization(
     mutationFn: (request) => companyApiClient.createOrganization(request),
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: companyKeys.myOrganizations(),
+        queryKey: companyKeys.organizations(),
       });
       options?.onSuccess?.(...args);
     },

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { ChevronsUpDown, GraduationCap, Plus } from "lucide-react";
 
-import type { OrganizationSummaryModel } from "@workspace/types/company";
+import type { OrganizationDto } from "@workspace/types/company";
 import {
   Popover,
   PopoverContent,
@@ -25,7 +25,7 @@ export function OrganizationSelector() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  function handleSelect(org: OrganizationSummaryModel) {
+  function handleSelect(org: OrganizationDto) {
     selectOrganization(org);
     setOpen(false);
   }
@@ -76,7 +76,8 @@ export function OrganizationSelector() {
     );
   }
 
-  const initials = currentOrg.shortName.slice(0, 2).toUpperCase();
+  const displayName = currentOrg.shortName ?? currentOrg.fullLegalName;
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -90,10 +91,10 @@ export function OrganizationSelector() {
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="text-sidebar-foreground truncate font-semibold">
-              {currentOrg.shortName}
+              {displayName}
             </span>
             <span className="text-sidebar-foreground/50 truncate text-xs">
-              {currentOrg.name}
+              {currentOrg.fullLegalName}
             </span>
           </div>
           <ChevronsUpDown className="text-sidebar-foreground/40 ml-auto size-4 shrink-0" />
@@ -116,10 +117,10 @@ export function OrganizationSelector() {
               onClick={() => handleSelect(org)}
             >
               <div className="bg-primary/10 text-primary flex size-6 shrink-0 items-center justify-center rounded text-xs font-bold">
-                {org.shortName.slice(0, 2).toUpperCase()}
+                {(org.shortName ?? org.fullLegalName).slice(0, 2).toUpperCase()}
               </div>
               <p className="flex-1 truncate text-left font-medium">
-                {org.shortName}
+                {org.shortName ?? org.fullLegalName}
               </p>
             </button>
           ))}

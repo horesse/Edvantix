@@ -9,20 +9,22 @@ import {
   useState,
 } from "react";
 
-import useMyOrganizations from "@workspace/api-hooks/company/useMyOrganizations";
-import type { OrganizationSummaryModel } from "@workspace/types/company";
-import { OrganizationRole } from "@workspace/types/company";
-
-import { parseOrganizationRole } from "@/lib/company-options";
+import useOrganizations from "@workspace/api-hooks/company/useOrganizations";
+import type { OrganizationDto } from "@workspace/types/company";
 
 const STORAGE_KEY = "selectedOrgId";
 
 type OrganizationContextValue = {
-  currentOrg: OrganizationSummaryModel | null;
-  organizations: OrganizationSummaryModel[];
+  currentOrg: OrganizationDto | null;
+  organizations: OrganizationDto[];
   isLoading: boolean;
-  selectOrganization: (org: OrganizationSummaryModel) => void;
-  userRole: OrganizationRole | null;
+  selectOrganization: (org: OrganizationDto) => void;
+  /**
+   * Роль пользователя в текущей организации.
+   * Пока возвращает null — бэкенд не включает роль в список организаций.
+   */
+  userRole: null;
+  /** Временно true — до получения ролей от API. */
   canManage: boolean;
 };
 
@@ -35,7 +37,8 @@ export function OrganizationProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data: organizations = [], isLoading } = useMyOrganizations();
+  const { data: orgPage, isLoading } = useOrganizations();
+  const organizations = useMemo(() => orgPage?.items ?? [], [orgPage]);
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
 
   // Restore persisted selection on mount.
@@ -61,7 +64,7 @@ export function OrganizationProvider({
     }
   }, [organizations, selectedOrgId]);
 
-  const selectOrganization = useCallback((org: OrganizationSummaryModel) => {
+  const selectOrganization = useCallback((org: OrganizationDto) => {
     setSelectedOrgId(org.id);
     localStorage.setItem(STORAGE_KEY, String(org.id));
   }, []);
@@ -71,35 +74,16 @@ export function OrganizationProvider({
     [organizations, selectedOrgId],
   );
 
-  const userRole = useMemo(
-    () => (currentOrg ? parseOrganizationRole(currentOrg.role) : null),
-    [currentOrg],
-  );
-
-  const canManage = useMemo(
-    () =>
-      userRole === OrganizationRole.Owner ||
-      userRole === OrganizationRole.Manager,
-    [userRole],
-  );
-
   const value = useMemo<OrganizationContextValue>(
     () => ({
       currentOrg,
       organizations,
       isLoading,
       selectOrganization,
-      userRole,
-      canManage,
+      userRole: null,
+      canManage: currentOrg !== null,
     }),
-    [
-      currentOrg,
-      organizations,
-      isLoading,
-      selectOrganization,
-      userRole,
-      canManage,
-    ],
+    [currentOrg, organizations, isLoading, selectOrganization],
   );
 
   return <OrganizationContext value={value}>{children}</OrganizationContext>;

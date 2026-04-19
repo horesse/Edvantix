@@ -1,23 +1,4 @@
-﻿# Agent Guidance: dotnet-skills
-
-IMPORTANT: Prefer retrieval-led reasoning over pretraining for any .NET work.
-Workflow: skim repo patterns -> consult dotnet-skills by name -> implement smallest-change -> note conflicts.
-
-Routing (invoke by name)
-- C# / code quality: modern-csharp-coding-standards, csharp-concurrency-patterns, api-design, type-design-performance
-- ASP.NET Core / Web (incl. Aspire): aspire-service-defaults, aspire-integration-testing, transactional-emails
-- Data: efcore-patterns, database-performance
-- DI / config: dependency-injection-patterns, microsoft-extensions-configuration
-- Testing: testcontainers-integration-tests, playwright-blazor-testing, snapshot-testing
-
-Quality gates (use when applicable)
-- dotnet-slopwatch: after substantial new/refactor/LLM-authored code
-- crap-analysis: after tests added/changed in complex code
-
-Specialist agents
-- dotnet-concurrency-specialist, dotnet-performance-analyst, dotnet-benchmark-designer, akka-net-specialist, docfx-specialist
-
-# Project Contributor Guide
+﻿# Agent Instructions
 
 ## General recommendations for working with Aspire
 
@@ -30,68 +11,87 @@ Specialist agents
 
 The project uses a `.justfile` for common tasks. Run these commands:
 
-- **Restore dependencies**: `just restore` (or `dotnet restore`)
+- **Restore dependencies**: `just restore` (or `dotnet restore && dotnet tool restore`)
 - **Build solution**: `just build` (or `dotnet build`)
 - **Run with Aspire**: `just run` (handles setup + runs Aspire)
 - **Run tests**: `just test` (or `dotnet test`)
-- **Format code**: `just format`
+- **Format code**: `just format` (formats C#, frontend, k6, keycloakify)
 - **Clean build**: `just clean`
-- **Trust dev certificate**: `just trust`
-- **Update packages**: `just update`
+- **Post-clone setup**: `just prepare` (restore + git hooks)
 
 If there is already an instance of the application running it will prompt to stop the existing instance. You only need to restart the application if code in `apphost.cs` is changed, but if you experience problems it can be useful to reset everything to the starting state.
 
-## Checking resources
+## Local Development Flow
 
-To check the status of resources defined in the app model use the _list resources_ tool. This will show you the current state of each resource and if there are any issues. If a resource is not running as expected you can use the _execute resource command_ tool to restart it or perform other actions.
-
-## Listing integrations
-
-IMPORTANT! When a user asks you to add a resource to the app model you should first use the _list integrations_ tool to get a list of the current versions of all the available integrations. You should try to use the version of the integration which aligns with the version of the Aspire.AppHost.Sdk. Some integration versions may have a preview suffix. Once you have identified the correct integration you should always use the _get integration docs_ tool to fetch the latest documentation for the integration and follow the links to get additional guidance.
-
-## Debugging issues
-
-IMPORTANT! Aspire is designed to capture rich logs and telemetry for all resources defined in the app model. Use the following diagnostic tools when debugging issues with the application before making changes to make sure you are focusing on the right things.
-
-1. _list structured logs_; use this tool to get details about structured logs.
-2. _list console logs_; use this tool to get details about console logs.
-3. _list traces_; use this tool to get details about traces.
-4. _list trace structured logs_; use this tool to get logs related to a trace
-
-## Other Aspire MCP tools
-
-1. _select apphost_; use this tool if working with multiple app hosts within a workspace.
-2. _list apphosts_; use this tool to get details about active app hosts.
-
-## Playwright MCP server
-
-The playwright MCP server has also been configured in this repository and you should use it to perform functional investigations of the resources defined in the app model as you work on the codebase. To get endpoints that can be used for navigation using the playwright MCP server use the list resources tool.
-
-## Updating the app host
-
-The user may request that you update the Aspire apphost. You can do this using the `aspire update` command. This will update the apphost to the latest version and some of the Aspire specific packages in referenced projects, however you may need to manually update other packages in the solution to ensure compatibility. You can consider using the `dotnet-outdated` with the users consent. To install the `dotnet-outdated` tool use the following command:
-
-```
-dotnet tool install dotnet-outdated-tool
-```
-
-## Persistent containers
-
-IMPORTANT! Consider avoiding persistent containers early during development to avoid creating state management issues when restarting the app.
-
-## Aspire workload
-
-IMPORTANT! The aspire workload is obsolete. You should never attempt to install or use the Aspire workload.
+1. **Prerequisites**: .NET SDK (per `global.json`), Node.js, Docker for AppHost resources.
+2. **Restore & build**: `just restore` then `just build`, or `dotnet restore && dotnet build`.
+3. **Run the system**: Launch Aspire AppHost — inspect the dashboard URL from console output.
+4. **Frontend**: From `src/Clients/`: `pnpm i`, then `pnpm run dev`.
+5. **Secrets**: Use User Secrets or environment variables for API keys. Never commit secrets.
+6. **Tests**: `dotnet test` from the solution root or specific test projects.
 
 ## Project Structure
 
 - `src/Aspire/`: Aspire host and service defaults
 - `src/BuildingBlocks/`: Shared libraries (Chassis, Constants, SharedKernel)
-- `src/Clients/`: Frontend applications (Next.js 16 monorepo)
-- `src/Services/`: Individual microservices
-- `src/Integrations/`: Integration components (HealthChecks, MCP Tools)
-- `tests/`: Test projects including architecture tests
-- `docs/`: Documentation including EventCatalog and Docusaurus
+- `src/Clients/`: Frontend applications (Next.js 16 Turbo monorepo)
+    - `apps/organization/`: Organization dashboard
+    - `apps/admin/`: Admin dashboard
+    - `packages/`: Shared packages (api-client, api-hooks, eslint-config, mocks, types, typescript-config, ui, utils, validations)
+- `src/Services/`: Individual microservices (Organizational, Persona, Notification, Scheduler)
+- `tests/`: Cross-cutting test projects (architecture tests)
+
+## Key Code Patterns
+
+### Adding a New Feature
+
+Features follow Vertical Slice Architecture. To add a feature to a service:
+
+1. Create `Features/{FeatureName}/` folder in the service project
+2. Add a command/query record implementing `ICommand<T>` or `IQuery<T>`
+3. Add a handler implementing `ICommandHandler<TCommand, TResult>` or `IQueryHandler<TQuery, TResult>`
+4. Add an endpoint class implementing `IEndpoint<TResult, TRequest>` with `MapEndpoint()` and `HandleAsync()`
+5. The endpoint is auto-discovered — no manual route registration needed
+
+### Adding a New Endpoint
+
+```csharp
+public sealed class MyEndpoint : IEndpoint<Ok<MyResult>, MyRequest, ISender>
+{
+    public void MapEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapGet("/my-route", async (MyRequest request, ISender sender)
+                => await HandleAsync(request, sender))
+            .ProducesGet<MyResult>()
+            .MapToApiVersion(ApiVersions.V1);
+    }
+
+    public async Task<Ok<MyResult>> HandleAsync(
+        MyRequest request, ISender sender,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new MyQuery(request), cancellationToken);
+        return TypedResults.Ok(result);
+    }
+}
+```
+
+### Infrastructure
+
+- **Database**: Each service has its own PostgreSQL database, configured with snake_case naming and UUID v7 keys
+- **Events**: MassTransit with Kafka; use Outbox/Inbox for transactional consistency
+- **Caching**: HybridCache (distributed + local tiers)
+- **Auth**: Keycloak with token introspection; use `.RequireAuthorization()` on endpoints
+- **API Versioning**: Asp.Versioning with `ApiVersions.V1`
+
+## Common Pitfalls
+
+- **CQRS library**: Use `Mediator.SourceGenerator` (source-gen based), NOT MediatR. The interface names look similar but the packages differ.
+- **snake_case DB**: PostgreSQL columns/tables are snake_case via `UseSnakeCaseNamingConvention()`. Don't use PascalCase in raw SQL.
+- **Sealed classes**: All endpoints, handlers, tests, and DbContexts should be `sealed`.
+- **Warnings = Errors**: `TreatWarningsAsErrors=true` — the build will fail on any warning.
+- **Package versions**: Centralized in `Directory.Packages.props` — don't add version numbers in individual `.csproj` files.
+- **Test projects**: Follow `Edvantix.{Service}.{UnitTests|ContractTests|IntegrationTests}` naming. Tests are auto-detected by project name suffix.
 
 ## Documentation
 

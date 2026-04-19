@@ -1,6 +1,4 @@
-using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
-using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Features.Organizations.Get;
 
@@ -17,7 +15,7 @@ internal sealed class GetOrganizationQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var tag = nameof(Organization).ToLowerInvariant();
+        var tag = nameof(OrganizationDetailDto).ToLowerInvariant();
 
         var organization = await cache.GetOrCreateAsync(
             $"{tag}:{query.Id}",
@@ -26,12 +24,12 @@ internal sealed class GetOrganizationQueryHandler(
                 var organization = await repository.GetByIdAsync(query.Id, ctx);
                 Guard.Against.NotFound(organization, query.Id);
 
-                return organization;
+                return mapper.Map(organization);
             },
             [tag],
             cancellationToken
         );
 
-        return mapper.Map(organization);
+        return organization;
     }
 }

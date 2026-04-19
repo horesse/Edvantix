@@ -43,9 +43,14 @@ format-fe:
 format-keycloakify:
     cd src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify && bun run format
 
+# Format K6
+
+format-k6:
+    cd src/Aspire/Edvantix.AppHost/Container/k6 && bun run format
+
 # Format all code
 
-format: format-cs format-fe format-keycloakify
+format: format-cs format-fe format-keycloakify format-k6
     echo "All code formatted successfully!"
 
 # Clean build artifacts
@@ -73,6 +78,11 @@ run:
 
 update-keycloakify:
     cd src/Aspire/Edvantix.AppHost/Container/keycloak/keycloakify && bun update --latest
+    
+# Update K6 bun packages
+
+update-k6:
+    cd src/Aspire/Edvantix.AppHost/Container/k6 && bun update --latest
 
 # Update frontend packages
 
@@ -81,5 +91,5 @@ update-fe:
 
 # Update all packages
 
-update: update-keycloakify update-fe
+update: update-keycloakify update-fe update-k6
     echo "All packages updated successfully!"

@@ -37,4 +37,8 @@
       IsAspireProjectResource="false"
     />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Container\k6\src\config\" />
+    <Folder Include="Container\k6\src\utils\" />
+  </ItemGroup>
 </Project>

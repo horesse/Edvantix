@@ -1,0 +1,58 @@
+{
+	"name": "@bookworm/k6",
+	"version": "1.0.0",
+	"description": "Performance and load testing suite for BookWorm microservices with K6 and TypeScript",
+	"author": "Nhan Nguyen <nguyenxuannhan407@gmail.com> (https://github.com/foxminchan)",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://opensource.org/licenses/MIT"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/foxminchan/BookWorm.git",
+		"directory": "src/Aspire/BookWorm.AppHost/Container/k6"
+	},
+	"bugs": {
+		"url": "https://github.com/foxminchan/BookWorm/issues"
+	},
+	"homepage": "https://github.com/foxminchan/BookWorm#readme",
+	"main": "dist/main.js",
+	"type": "commonjs",
+	"scripts": {
+		"prepare": "allow-scripts",
+		"build": "webpack",
+		"build:watch": "webpack --watch",
+		"deploy": "bun run build && echo 'TypeScript build completed successfully'",
+		"format": "prettier --write .",
+		"check": "eslint . && prettier --check .",
+		"lint": "eslint --fix .",
+		"ci": "eslint . && prettier --check .",
+		"precommit": "bun run format && bun run lint"
+	},
+	"lavamoat": {
+		"allowScripts": {
+			"core-js": false
+		}
+	},
+	"devDependencies": {
+		"@babel/core": "^7.29.0",
+		"@babel/preset-env": "^7.29.2",
+		"@babel/preset-typescript": "^7.28.5",
+		"@eslint/js": "^10.0.1",
+		"@lavamoat/allow-scripts": "^5.0.1",
+		"@types/k6": "^1.7.0",
+		"babel-loader": "^10.1.1",
+		"core-js": "^3.49.0",
+		"eslint": "^10.2.0",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.5.0",
+		"prettier": "^3.8.3",
+		"ts-loader": "^9.5.7",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.58.2",
+		"webpack": "^5.106.2",
+		"webpack-cli": "^7.0.2"
+	}
+}

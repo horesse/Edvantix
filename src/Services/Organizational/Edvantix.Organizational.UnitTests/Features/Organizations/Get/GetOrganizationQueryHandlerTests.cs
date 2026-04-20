@@ -18,7 +18,7 @@ public sealed class GetOrganizationQueryHandlerTests
             .Setup(c =>
                 c.GetOrCreateAsync(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Organization>>>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<OrganizationDetailDto>>>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -26,7 +26,7 @@ public sealed class GetOrganizationQueryHandlerTests
             .Returns(
                 (
                     string _,
-                    Func<CancellationToken, ValueTask<Organization>> factory,
+                    Func<CancellationToken, ValueTask<OrganizationDetailDto>> factory,
                     IEnumerable<string>? _,
                     CancellationToken ct
                 ) => factory(ct)

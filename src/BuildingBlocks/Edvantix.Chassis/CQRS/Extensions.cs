@@ -85,9 +85,7 @@ public static class Extensions
         /// если обработчик принимает <c>DbContext</c> как параметр.
         /// Альтернатива явному вызову <see cref="UseDomainEvents"/> с транзакциями.
         /// </summary>
-        public void UseAutoTransactions(
-            IdempotencyStyle idempotency = IdempotencyStyle.None
-        )
+        public void UseAutoTransactions(IdempotencyStyle idempotency = IdempotencyStyle.None)
         {
             options.Policies.AutoApplyTransactions(idempotency);
         }

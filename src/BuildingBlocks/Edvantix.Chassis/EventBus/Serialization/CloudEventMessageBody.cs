@@ -35,7 +35,7 @@ internal sealed class CloudEventMessageBody<T>(SendContext<T> context, JsonEvent
 
         var cloudEvent = new CloudEvent
         {
-            Id = (context.MessageId ?? NewId.NextGuid()).ToString(),
+            Id = (context.MessageId ?? Guid.NewGuid()).ToString(),
             Type = CloudEventTypes.FromMessageTypes(messageTypes),
             Source = context.SourceAddress ?? new Uri("urn:masstransit:unknown"),
             Time = context.SentTime,

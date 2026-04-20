@@ -1,91 +1,95 @@
-﻿using Edvantix.Chassis.CQRS.Command;
-using Edvantix.Chassis.CQRS.Pipelines;
-using Edvantix.Chassis.CQRS.Query;
-using Mediator;
-using Microsoft.EntityFrameworkCore;
+﻿using Edvantix.SharedKernel.SeedWork;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.FluentValidation;
+using Wolverine.Http.FluentValidation;
+using Wolverine.Persistence;
 
 namespace Edvantix.Chassis.CQRS;
 
 public static class Extensions
 {
+    /// <summary>
+    /// Имя ActivitySource и Meter, которое Wolverine регистрирует для OpenTelemetry.
+    /// Используется в ServiceDefaults для подключения трассировки и метрик.
+    /// </summary>
+    public const string WolverineActivitySourceName = "Wolverine";
+
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Регистрирует коллектор метрик обработчика команд в контейнере зависимостей.
+        /// Регистрирует Wolverine с автообнаружением обработчиков из сборки <typeparamref name="TMarker"/>
+        /// и стандартными политиками логирования. Дополнительная конфигурация передаётся через <paramref name="configure"/>.
         /// </summary>
-        /// <returns>
-        /// Текущая коллекция сервисов.
-        /// </returns>
-        public IServiceCollection AddCommandHandlerMetrics()
+        public IServiceCollection AddWolverine<TMarker>(Action<WolverineOptions>? configure = null)
         {
-            services.AddSingleton<CommandHandlerMetrics>();
+            services.AddWolverine(
+                ExtensionDiscovery.ManualOnly,
+                opts =>
+                {
+                    opts.Discovery.IncludeAssembly(typeof(TMarker).Assembly);
+
+                    opts.Policies.LogMessageStarting(LogLevel.Information);
+                    opts.Policies.MessageExecutionLogLevel(LogLevel.None);
+                    opts.Policies.MessageSuccessLogLevel(LogLevel.Debug);
+
+                    configure?.Invoke(opts);
+                }
+            );
+
             return services;
+        }
+    }
+
+    extension(WolverineOptions options)
+    {
+        /// <summary>
+        /// Включает публикацию доменных событий через EF Core и опционально оборачивает обработчики
+        /// в транзакцию EF Core.
+        /// </summary>
+        public void UseDomainEvents(bool useTransactions = true)
+        {
+            if (useTransactions)
+            {
+                options.UseEntityFrameworkCoreTransactions();
+            }
+
+            options.PublishDomainEventsFromEntityFrameworkCore<HasDomainEvents>(x =>
+                x.DomainEvents
+            );
         }
 
         /// <summary>
-        /// Регистрирует коллектор метрик обработчика запросов в контейнере зависимостей.
+        /// Подключает FluentValidation к конвейеру Wolverine: валидация сообщений и HTTP ProblemDetails.
         /// </summary>
-        /// <returns>
-        /// Текущая коллекция сервисов.
-        /// </returns>
-        public IServiceCollection AddQueryHandlerMetrics()
+        public void UseValidation()
         {
-            services.AddSingleton<QueryHandlerMetrics>();
-            return services;
+            options.UseFluentValidation(fv => fv.IncludeInternalTypes = true);
+            options.UseFluentValidationProblemDetail();
         }
 
         /// <summary>
-        /// Регистрирует поведение конвейера для трассировки активностей.
+        /// Включает полный режим трассировки OpenTelemetry для <c>IMessageBus.InvokeAsync</c>.
+        /// По умолчанию Wolverine использует <c>InvokeTracingMode.Lightweight</c>.
+        /// <c>Full</c> эмитирует те же структурированные события, что и асинхронные обработчики.
         /// </summary>
-        /// <returns>
-        /// Текущая коллекция сервисов.
-        /// </returns>
-        public IServiceCollection ApplyActivityBehavior()
+        public void UseFullOpenTelemetry()
         {
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ActivityBehavior<,>));
-            return services;
+            options.InvokeTracing = InvokeTracingMode.Full;
         }
 
         /// <summary>
-        /// Регистрирует поведение конвейера для логирования.
+        /// Автоматически оборачивает обработчики сообщений в транзакцию EF Core,
+        /// если обработчик принимает <c>DbContext</c> как параметр.
+        /// Альтернатива явному вызову <see cref="UseDomainEvents"/> с транзакциями.
         /// </summary>
-        /// <returns>
-        /// Текущая коллекция сервисов.
-        /// </returns>
-        public IServiceCollection ApplyLoggingBehavior()
+        public void UseAutoTransactions(
+            IdempotencyStyle idempotency = IdempotencyStyle.None
+        )
         {
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            return services;
-        }
-
-        /// <summary>
-        /// Регистрирует поведение конвейера для валидации.
-        /// </summary>
-        /// <returns>
-        /// Текущая коллекция сервисов.
-        /// </returns>
-        public IServiceCollection ApplyValidationBehavior()
-        {
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            return services;
-        }
-
-        /// <summary>
-        /// Регистрирует поведение конвейера для управления транзакциями для указанного контекста базы данных.
-        /// </summary>
-        /// <typeparam name="TDbContext">
-        /// Тип контекста базы данных, используемый для разрешения транзакционного контекста.
-        /// </typeparam>
-        /// <returns>
-        /// Текущая коллекция сервисов.
-        /// </returns>
-        public IServiceCollection ApplyTransactionBehavior<TDbContext>()
-            where TDbContext : DbContext
-        {
-            services.AddScoped<DbContext>(sp => sp.GetRequiredService<TDbContext>());
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-            return services;
+            options.Policies.AutoApplyTransactions(idempotency);
         }
     }
 }

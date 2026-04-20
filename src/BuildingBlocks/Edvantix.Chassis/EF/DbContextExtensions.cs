@@ -34,8 +34,6 @@ public static class DbContextExtensions
             if (!excludeDefaultInterceptors)
             {
                 services.AddScoped<IInterceptor, QueryPerformanceInterceptor>();
-                services.AddScoped<IInterceptor, EventDispatchInterceptor>();
-                services.AddMediatorDomainEventDispatcher();
             }
 
             services.AddDbContext<TDbContext>(

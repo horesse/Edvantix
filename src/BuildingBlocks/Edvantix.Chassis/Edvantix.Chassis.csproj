@@ -11,6 +11,10 @@
     <PackageReference Include="CloudNative.CloudEvents.SystemTextJson" />
     <PackageReference Include="MassTransit.Kafka" />
     <PackageReference Include="Scrutor" />
+    <PackageReference Include="WolverineFx.EntityFrameworkCore" />
+    <PackageReference Include="WolverineFx.FluentValidation" />
+    <PackageReference Include="WolverineFx.Http" />
+    <PackageReference Include="WolverineFx.Http.FluentValidation" />
   </ItemGroup>
   <ItemGroup Label="Telemetry">
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Middleware" />

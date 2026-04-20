@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Logging;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.OpenTelemetry.ActivityScope;
@@ -90,7 +91,8 @@ public static class Extensions
                         .AddAspNetCoreInstrumentation()
                         .AddHttpClientInstrumentation()
                         .AddRuntimeInstrumentation()
-                        .AddMeter(ActivitySourceProvider.DefaultSourceName);
+                        .AddMeter(ActivitySourceProvider.DefaultSourceName)
+                        .AddMeter(Edvantix.Chassis.CQRS.Extensions.WolverineActivitySourceName);
                 })
                 .WithTracing(tracing =>
                 {
@@ -116,7 +118,8 @@ public static class Extensions
                         .AddGrpcClientInstrumentation()
                         .AddHttpClientInstrumentation()
                         .AddFixHttpRouteProcessor()
-                        .AddSource(ActivitySourceProvider.DefaultSourceName);
+                        .AddSource(ActivitySourceProvider.DefaultSourceName)
+                        .AddSource(Edvantix.Chassis.CQRS.Extensions.WolverineActivitySourceName);
                 });
         }
     }

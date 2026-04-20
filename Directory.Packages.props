@@ -28,6 +28,11 @@
     <!-- Extra -->
     <PackageVersion Include="TUnit.Aspire" Version="$(TUnitVersion)" />
     <PackageVersion Include="Scalar.Aspire" Version="0.9.23" />
+    <PackageVersion Include="WolverineFx" Version="5.31.1" />
+    <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="5.31.1" />
+    <PackageVersion Include="WolverineFx.FluentValidation" Version="5.31.1" />
+    <PackageVersion Include="WolverineFx.Http" Version="5.31.1" />
+    <PackageVersion Include="WolverineFx.Http.FluentValidation" Version="5.31.1" />
   </ItemGroup>
   <ItemGroup Label="Core Packages">
     <!-- Microsoft Extensions -->

@@ -1,4 +1,6 @@
-﻿using Grpc.Health.V1;
+﻿using Grpc.Core;
+using Grpc.Health.V1;
+using Polly.Timeout;
 using Refit;
 
 namespace Edvantix.ServiceDefaults.Kestrel;
@@ -139,16 +141,28 @@ public static class ServiceReferenceExtensions
             CancellationToken cancellationToken = default
         )
         {
-            var response = await healthClient.CheckAsync(
-                new(),
-                cancellationToken: cancellationToken
-            );
-
-            return response.Status switch
+            try
             {
-                HealthCheckResponse.Types.ServingStatus.Serving => HealthCheckResult.Healthy(),
-                _ => HealthCheckResult.Unhealthy(),
-            };
+                var response = await healthClient.CheckAsync(
+                    new HealthCheckRequest(),
+                    cancellationToken: cancellationToken
+                );
+
+                return response.Status switch
+                {
+                    HealthCheckResponse.Types.ServingStatus.Serving => HealthCheckResult.Healthy(),
+                    _ => HealthCheckResult.Unhealthy(),
+                };
+            }
+            catch (RpcException exception)
+                when (exception.StatusCode is StatusCode.Cancelled or StatusCode.DeadlineExceeded)
+            {
+                return HealthCheckResult.Unhealthy(exception.Status.Detail, exception);
+            }
+            catch (TimeoutRejectedException exception)
+            {
+                return HealthCheckResult.Unhealthy(exception.Message, exception);
+            }
         }
     }
 }

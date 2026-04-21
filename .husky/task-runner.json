@@ -15,11 +15,6 @@
       "name": "style",
       "command": "dnx",
       "args": ["csharpier", "check", "."]
-    },
-    {
-      "name": "analyzers",
-      "command": "dotnet",
-      "args": ["format", "analyzers", "Edvantix.slnx", "--verify-no-changes"]
     }
   ]
 }

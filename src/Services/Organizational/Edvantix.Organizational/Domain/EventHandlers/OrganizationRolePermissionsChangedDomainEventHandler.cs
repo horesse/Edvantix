@@ -1,9 +1,11 @@
 using Edvantix.Organizational.Domain.Events;
+using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
 /// <summary>
-/// Инвалидирует кеш разрешений всех участников организации после изменения набора разрешений роли.
+/// Инвалидирует кеш разрешений конкретной роли после изменения её набора разрешений.
+/// Затрагивает только участников с данной ролью, не трогая кеш остальных ролей организации.
 /// </summary>
 internal sealed class OrganizationRolePermissionsChangedDomainEventHandler(IHybridCache cache)
     : INotificationHandler<OrganizationRolePermissionsChangedDomainEvent>
@@ -13,6 +15,9 @@ internal sealed class OrganizationRolePermissionsChangedDomainEventHandler(IHybr
         CancellationToken cancellationToken
     )
     {
-        await cache.RemoveByTagAsync($"org-perms:{notification.OrganizationId}", cancellationToken);
+        await cache.RemoveByTagAsync(
+            AuthorizationCacheKeys.RolePerms(notification.RoleId),
+            cancellationToken
+        );
     }
 }

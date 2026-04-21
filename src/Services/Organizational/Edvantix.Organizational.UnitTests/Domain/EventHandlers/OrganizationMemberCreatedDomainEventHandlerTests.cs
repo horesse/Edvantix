@@ -1,4 +1,5 @@
 using Edvantix.Chassis.Caching;
+using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
@@ -29,7 +30,7 @@ public sealed class OrganizationMemberCreatedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveAsync(
-                    $"perm:org:{OrgId}:profile:{ProfileId}",
+                    AuthorizationCacheKeys.MemberRole(OrgId, ProfileId),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -46,7 +47,7 @@ public sealed class OrganizationMemberCreatedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveAsync(
-                    It.Is<string>(k => k != $"perm:org:{OrgId}:profile:{ProfileId}"),
+                    It.Is<string>(k => k != AuthorizationCacheKeys.MemberRole(OrgId, ProfileId)),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -65,7 +66,7 @@ public sealed class OrganizationMemberCreatedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveAsync(
-                    $"perm:org:{anotherOrgId}:profile:{anotherProfileId}",
+                    AuthorizationCacheKeys.MemberRole(anotherOrgId, anotherProfileId),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once

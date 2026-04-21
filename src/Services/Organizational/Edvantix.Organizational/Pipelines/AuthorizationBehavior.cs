@@ -7,12 +7,17 @@ namespace Edvantix.Organizational.Pipelines;
 /// <summary>
 /// Пре-процессор Mediator: проверяет, что профиль является активным участником организации
 /// и имеет разрешение, указанное в <see cref="RequirePermissionAttribute"/> на команде или запросе.
-/// Разрешения кешируются в HybridCache для снижения нагрузки на БД.
+/// Используется двухуровневый кеш:
+/// <list type="bullet">
+///   <item><description>L1 — связка «участник → roleId» (уникальна для каждого участника).</description></item>
+///   <item><description>L2 — разрешения роли по roleId (разделяется между всеми участниками с одной ролью).</description></item>
+/// </list>
 /// </summary>
 internal sealed class AuthorizationBehavior<TMessage, TResponse>(
     ClaimsPrincipal claims,
     ITenantContext tenantContext,
     IOrganizationMemberRepository memberRepository,
+    IOrganizationMemberRoleRepository roleRepository,
     IHybridCache cache,
     ILogger<AuthorizationBehavior<TMessage, TResponse>> logger
 ) : MessagePreProcessor<TMessage, TResponse>
@@ -40,14 +45,42 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
 
         var organizationId = tenantContext.OrganizationId;
 
-        var cacheKey = $"perm:org:{organizationId}:profile:{profileId}";
-        string[] tags = [$"org-perms:{organizationId}", $"profile-perms:{profileId}"];
-
-        var permissions = await cache.GetOrCreateAsync<HashSet<string>>(
-            cacheKey,
+        // Уровень 1: получаем roleId участника. Guid.Empty — сигнал об отсутствии активного членства.
+        var roleId = await cache.GetOrCreateAsync(
+            AuthorizationCacheKeys.MemberRole(organizationId, profileId),
             async ct =>
-                await memberRepository.GetActivePermissionsAsync(organizationId, profileId, ct),
-            tags,
+                await memberRepository.GetActiveMemberRoleIdAsync(organizationId, profileId, ct)
+                ?? Guid.Empty,
+            [AuthorizationCacheKeys.OrgPermsTag(organizationId)],
+            cancellationToken
+        );
+
+        if (roleId == Guid.Empty)
+        {
+            logger.LogWarning(
+                "[AuthorizationBehavior] Profile {ProfileId} is not an active member of org {OrgId}",
+                profileId,
+                organizationId
+            );
+            throw new ForbiddenException("Профиль не является активным участником организации.");
+        }
+
+        // Уровень 2: разрешения роли — общий кеш для всех участников с одинаковой ролью.
+        var permissions = await cache.GetOrCreateAsync<HashSet<string>>(
+            AuthorizationCacheKeys.RolePerms(roleId),
+            async ct =>
+            {
+                var role = await roleRepository.GetByIdWithPermissionsAsync(roleId, ct);
+                return role is null
+                    ? []
+                    : role
+                        .Permissions.Select(p => p.Name)
+                        .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            },
+            [
+                AuthorizationCacheKeys.RolePerms(roleId),
+                AuthorizationCacheKeys.OrgPermsTag(organizationId),
+            ],
             cancellationToken
         );
 

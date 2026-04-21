@@ -17,21 +17,23 @@ public sealed class AuthorizationBehaviorTests
 
     private readonly Mock<ITenantContext> _tenantContextMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
+    private readonly Mock<IOrganizationMemberRoleRepository> _roleRepoMock = new();
     private readonly Mock<IHybridCache> _cacheMock = new();
     private static readonly ILogger<AuthorizationBehavior<TestCommandWithPermission, Guid>> Logger =
         NullLogger<AuthorizationBehavior<TestCommandWithPermission, Guid>>.Instance;
 
     private static readonly Guid OrgId = Guid.CreateVersion7();
     private static readonly Guid ProfileId = Guid.CreateVersion7();
+    private static readonly Guid RoleId = Guid.CreateVersion7();
 
     [Test]
     public async Task GivenMessageWithoutRequirePermissionAttribute_WhenHandling_ThenShouldCallNext()
     {
-        var claims = BuildClaims(ProfileId);
         var behavior = new AuthorizationBehavior<TestCommandWithoutPermission, Guid>(
-            claims,
+            BuildClaims(ProfileId),
             _tenantContextMock.Object,
             _memberRepoMock.Object,
+            _roleRepoMock.Object,
             _cacheMock.Object,
             NullLogger<AuthorizationBehavior<TestCommandWithoutPermission, Guid>>.Instance
         );
@@ -48,11 +50,12 @@ public sealed class AuthorizationBehaviorTests
         );
 
         nextCalled.ShouldBeTrue();
-        _memberRepoMock.Verify(
-            r =>
-                r.GetActivePermissionsAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<Guid>(),
+        _cacheMock.Verify(
+            c =>
+                c.GetOrCreateAsync<Guid>(
+                    It.IsAny<string>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -64,10 +67,8 @@ public sealed class AuthorizationBehaviorTests
     {
         _tenantContextMock.Setup(t => t.IsResolved).Returns(false);
 
-        var behavior = BuildBehavior(ProfileId);
-
         await Should.ThrowAsync<ForbiddenException>(() =>
-            behavior
+            BuildBehavior(ProfileId)
                 .Handle(
                     new TestCommandWithPermission(),
                     (_, _) => ValueTask.FromResult(Guid.Empty),
@@ -80,15 +81,14 @@ public sealed class AuthorizationBehaviorTests
     [Test]
     public async Task GivenMessageWithPermissionAttribute_WhenProfileClaimMissing_ThenShouldThrowException()
     {
-        var claimsWithNoProfile = new ClaimsPrincipal(new ClaimsIdentity());
-
         _tenantContextMock.Setup(t => t.IsResolved).Returns(true);
         _tenantContextMock.Setup(t => t.OrganizationId).Returns(OrgId);
 
         var behavior = new AuthorizationBehavior<TestCommandWithPermission, Guid>(
-            claimsWithNoProfile,
+            new ClaimsPrincipal(new ClaimsIdentity()),
             _tenantContextMock.Object,
             _memberRepoMock.Object,
+            _roleRepoMock.Object,
             _cacheMock.Object,
             Logger
         );
@@ -105,57 +105,22 @@ public sealed class AuthorizationBehaviorTests
     }
 
     [Test]
-    public async Task GivenMessageWithPermissionAttribute_WhenPermissionPresent_ThenShouldCallNext()
+    public async Task GivenMemberNotActive_WhenL1CacheReturnsEmptyGuid_ThenShouldThrowForbiddenException()
     {
-        _tenantContextMock.Setup(t => t.IsResolved).Returns(true);
-        _tenantContextMock.Setup(t => t.OrganizationId).Returns(OrgId);
+        SetupTenant();
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
+                c.GetOrCreateAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new HashSet<string> { TestPermission });
-
-        var behavior = BuildBehavior(ProfileId);
-        var nextCalled = false;
-
-        await behavior.Handle(
-            new TestCommandWithPermission(),
-            (_, _) =>
-            {
-                nextCalled = true;
-                return ValueTask.FromResult(Guid.Empty);
-            },
-            CancellationToken.None
-        );
-
-        nextCalled.ShouldBeTrue();
-    }
-
-    [Test]
-    public async Task GivenMessageWithPermissionAttribute_WhenPermissionAbsent_ThenShouldThrowForbiddenException()
-    {
-        _tenantContextMock.Setup(t => t.IsResolved).Returns(true);
-        _tenantContextMock.Setup(t => t.OrganizationId).Returns(OrgId);
-        _cacheMock
-            .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
-                    It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(new HashSet<string> { "other.permission" });
-
-        var behavior = BuildBehavior(ProfileId);
+            .ReturnsAsync(Guid.Empty);
 
         await Should.ThrowAsync<ForbiddenException>(() =>
-            behavior
+            BuildBehavior(ProfileId)
                 .Handle(
                     new TestCommandWithPermission(),
                     (_, _) => ValueTask.FromResult(Guid.Empty),
@@ -166,10 +131,91 @@ public sealed class AuthorizationBehaviorTests
     }
 
     [Test]
-    public async Task GivenMessageWithPermissionAttribute_WhenPermissionPresent_ThenShouldUseCacheKeyWithOrgAndProfile()
+    public async Task GivenMessageWithPermissionAttribute_WhenPermissionPresent_ThenShouldCallNext()
     {
-        _tenantContextMock.Setup(t => t.IsResolved).Returns(true);
-        _tenantContextMock.Setup(t => t.OrganizationId).Returns(OrgId);
+        SetupActiveRoleWithPermissions(new HashSet<string> { TestPermission });
+
+        var nextCalled = false;
+        await BuildBehavior(ProfileId)
+            .Handle(
+                new TestCommandWithPermission(),
+                (_, _) =>
+                {
+                    nextCalled = true;
+                    return ValueTask.FromResult(Guid.Empty);
+                },
+                CancellationToken.None
+            );
+
+        nextCalled.ShouldBeTrue();
+    }
+
+    [Test]
+    public async Task GivenMessageWithPermissionAttribute_WhenPermissionAbsent_ThenShouldThrowForbiddenException()
+    {
+        SetupActiveRoleWithPermissions(new HashSet<string> { "other.permission" });
+
+        await Should.ThrowAsync<ForbiddenException>(() =>
+            BuildBehavior(ProfileId)
+                .Handle(
+                    new TestCommandWithPermission(),
+                    (_, _) => ValueTask.FromResult(Guid.Empty),
+                    CancellationToken.None
+                )
+                .AsTask()
+        );
+    }
+
+    [Test]
+    public async Task GivenMessageWithPermissionAttribute_WhenHandling_ThenL1CacheKeyShouldContainOrgAndProfile()
+    {
+        SetupTenant();
+
+        string? capturedKey = null;
+        _cacheMock
+            .Setup(c =>
+                c.GetOrCreateAsync<Guid>(
+                    It.IsAny<string>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<IEnumerable<string>?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .Callback<
+                string,
+                Func<CancellationToken, ValueTask<Guid>>,
+                IEnumerable<string>?,
+                CancellationToken
+            >((key, _, _, _) => capturedKey = key)
+            .ReturnsAsync(Guid.Empty);
+
+        await Should.ThrowAsync<ForbiddenException>(() =>
+            BuildBehavior(ProfileId)
+                .Handle(
+                    new TestCommandWithPermission(),
+                    (_, _) => ValueTask.FromResult(Guid.Empty),
+                    CancellationToken.None
+                )
+                .AsTask()
+        );
+
+        capturedKey.ShouldBe(AuthorizationCacheKeys.MemberRole(OrgId, ProfileId));
+    }
+
+    [Test]
+    public async Task GivenActiveMember_WhenHandling_ThenL2CacheKeyShouldContainRoleId()
+    {
+        SetupTenant();
+        _cacheMock
+            .Setup(c =>
+                c.GetOrCreateAsync<Guid>(
+                    It.IsAny<string>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<IEnumerable<string>?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(RoleId);
 
         string? capturedKey = null;
         _cacheMock
@@ -189,22 +235,55 @@ public sealed class AuthorizationBehaviorTests
             >((key, _, _, _) => capturedKey = key)
             .ReturnsAsync(new HashSet<string> { TestPermission });
 
-        var behavior = BuildBehavior(ProfileId);
+        await BuildBehavior(ProfileId)
+            .Handle(
+                new TestCommandWithPermission(),
+                (_, _) => ValueTask.FromResult(Guid.Empty),
+                CancellationToken.None
+            );
 
-        await behavior.Handle(
-            new TestCommandWithPermission(),
-            (_, _) => ValueTask.FromResult(Guid.Empty),
-            CancellationToken.None
-        );
-
-        capturedKey.ShouldBe($"perm:org:{OrgId}:profile:{ProfileId}");
+        capturedKey.ShouldBe(AuthorizationCacheKeys.RolePerms(RoleId));
     }
 
     [Test]
     public async Task GivenMessageWithPermissionAttribute_WhenPermissionPresentWithDifferentCase_ThenShouldCallNext()
     {
+        SetupActiveRoleWithPermissions(new HashSet<string> { TestPermission.ToUpperInvariant() });
+
+        var nextCalled = false;
+        await BuildBehavior(ProfileId)
+            .Handle(
+                new TestCommandWithPermission(),
+                (_, _) =>
+                {
+                    nextCalled = true;
+                    return ValueTask.FromResult(Guid.Empty);
+                },
+                CancellationToken.None
+            );
+
+        nextCalled.ShouldBeTrue();
+    }
+
+    private void SetupTenant()
+    {
         _tenantContextMock.Setup(t => t.IsResolved).Returns(true);
         _tenantContextMock.Setup(t => t.OrganizationId).Returns(OrgId);
+    }
+
+    private void SetupActiveRoleWithPermissions(HashSet<string> permissions)
+    {
+        SetupTenant();
+        _cacheMock
+            .Setup(c =>
+                c.GetOrCreateAsync<Guid>(
+                    It.IsAny<string>(),
+                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<IEnumerable<string>?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(RoleId);
         _cacheMock
             .Setup(c =>
                 c.GetOrCreateAsync<HashSet<string>>(
@@ -214,22 +293,7 @@ public sealed class AuthorizationBehaviorTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new HashSet<string> { TestPermission.ToUpperInvariant() });
-
-        var behavior = BuildBehavior(ProfileId);
-        var nextCalled = false;
-
-        await behavior.Handle(
-            new TestCommandWithPermission(),
-            (_, _) =>
-            {
-                nextCalled = true;
-                return ValueTask.FromResult(Guid.Empty);
-            },
-            CancellationToken.None
-        );
-
-        nextCalled.ShouldBeTrue();
+            .ReturnsAsync(permissions);
     }
 
     private AuthorizationBehavior<TestCommandWithPermission, Guid> BuildBehavior(Guid profileId) =>
@@ -237,6 +301,7 @@ public sealed class AuthorizationBehaviorTests
             BuildClaims(profileId),
             _tenantContextMock.Object,
             _memberRepoMock.Object,
+            _roleRepoMock.Object,
             _cacheMock.Object,
             Logger
         );

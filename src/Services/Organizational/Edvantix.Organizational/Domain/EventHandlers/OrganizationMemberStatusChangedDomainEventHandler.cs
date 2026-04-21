@@ -1,9 +1,11 @@
 using Edvantix.Organizational.Domain.Events;
+using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
 /// <summary>
-/// Инвалидирует кеш разрешений участника после его деактивации или удаления.
+/// Инвалидирует кеш связки «участник → роль» после деактивации или удаления участника.
+/// При следующем обращении запрос вернёт null, что вызовет ForbiddenException.
 /// </summary>
 internal sealed class OrganizationMemberStatusChangedDomainEventHandler(IHybridCache cache)
     : INotificationHandler<OrganizationMemberStatusChangedDomainEvent>
@@ -13,7 +15,9 @@ internal sealed class OrganizationMemberStatusChangedDomainEventHandler(IHybridC
         CancellationToken cancellationToken
     )
     {
-        var key = $"perm:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
-        await cache.RemoveAsync(key, cancellationToken);
+        await cache.RemoveAsync(
+            AuthorizationCacheKeys.MemberRole(notification.OrganizationId, notification.ProfileId),
+            cancellationToken
+        );
     }
 }

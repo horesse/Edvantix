@@ -63,7 +63,9 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
         if (_permissions.All(p => p.Id != permission.Id))
         {
             _permissions.Add(permission);
-            RegisterDomainEvent(new OrganizationRolePermissionsChangedDomainEvent(OrganizationId));
+            RegisterDomainEvent(
+                new OrganizationRolePermissionsChangedDomainEvent(OrganizationId, Id)
+            );
         }
     }
 
@@ -73,7 +75,7 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
         ArgumentNullException.ThrowIfNull(permissions);
         _permissions.Clear();
         _permissions.AddRange(permissions.Where(p => p is not null));
-        RegisterDomainEvent(new OrganizationRolePermissionsChangedDomainEvent(OrganizationId));
+        RegisterDomainEvent(new OrganizationRolePermissionsChangedDomainEvent(OrganizationId, Id));
     }
 
     /// <summary>Удаляет разрешение из роли.</summary>
@@ -83,7 +85,9 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
         if (entry is not null)
         {
             _permissions.Remove(entry);
-            RegisterDomainEvent(new OrganizationRolePermissionsChangedDomainEvent(OrganizationId));
+            RegisterDomainEvent(
+                new OrganizationRolePermissionsChangedDomainEvent(OrganizationId, Id)
+            );
         }
     }
 

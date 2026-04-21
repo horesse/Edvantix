@@ -8,6 +8,7 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
     private readonly OrganizationRolePermissionsChangedDomainEventHandler _handler;
 
     private static readonly Guid OrgId = Guid.CreateVersion7();
+    private static readonly Guid RoleId = Guid.CreateVersion7();
 
     public OrganizationRolePermissionsChangedDomainEventHandlerTests()
     {
@@ -19,14 +20,14 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
     }
 
     [Test]
-    public async Task GivenValidEvent_WhenHandling_ThenShouldRemoveByTagWithCorrectTag()
+    public async Task GivenValidEvent_WhenHandling_ThenShouldRemoveByRolePermsTag()
     {
-        var @event = new OrganizationRolePermissionsChangedDomainEvent(OrgId);
+        var @event = new OrganizationRolePermissionsChangedDomainEvent(OrgId, RoleId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
         _cacheMock.Verify(
-            c => c.RemoveByTagAsync($"org-perms:{OrgId}", It.IsAny<CancellationToken>()),
+            c => c.RemoveByTagAsync($"role-perms:{RoleId}", It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
@@ -34,14 +35,14 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldNotRemoveByOtherTags()
     {
-        var @event = new OrganizationRolePermissionsChangedDomainEvent(OrgId);
+        var @event = new OrganizationRolePermissionsChangedDomainEvent(OrgId, RoleId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
         _cacheMock.Verify(
             c =>
                 c.RemoveByTagAsync(
-                    It.Is<string>(t => t != $"org-perms:{OrgId}"),
+                    It.Is<string>(t => t != $"role-perms:{RoleId}"),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -51,7 +52,7 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldNotCallRemoveAsync()
     {
-        var @event = new OrganizationRolePermissionsChangedDomainEvent(OrgId);
+        var @event = new OrganizationRolePermissionsChangedDomainEvent(OrgId, RoleId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
@@ -62,15 +63,15 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
     }
 
     [Test]
-    public async Task GivenDifferentOrg_WhenHandling_ThenShouldUseCorrectTag()
+    public async Task GivenDifferentRole_WhenHandling_ThenShouldUseCorrectRoleTag()
     {
-        var anotherOrgId = Guid.CreateVersion7();
-        var @event = new OrganizationRolePermissionsChangedDomainEvent(anotherOrgId);
+        var anotherRoleId = Guid.CreateVersion7();
+        var @event = new OrganizationRolePermissionsChangedDomainEvent(OrgId, anotherRoleId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
         _cacheMock.Verify(
-            c => c.RemoveByTagAsync($"org-perms:{anotherOrgId}", It.IsAny<CancellationToken>()),
+            c => c.RemoveByTagAsync($"role-perms:{anotherRoleId}", It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

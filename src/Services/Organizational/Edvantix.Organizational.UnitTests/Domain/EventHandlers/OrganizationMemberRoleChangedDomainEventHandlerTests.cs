@@ -29,7 +29,7 @@ public sealed class OrganizationMemberRoleChangedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveAsync(
-                    $"perm:org:{OrgId}:profile:{ProfileId}",
+                    $"member-role:org:{OrgId}:profile:{ProfileId}",
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -46,7 +46,7 @@ public sealed class OrganizationMemberRoleChangedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveAsync(
-                    It.Is<string>(k => k != $"perm:org:{OrgId}:profile:{ProfileId}"),
+                    It.Is<string>(k => k != $"member-role:org:{OrgId}:profile:{ProfileId}"),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -65,7 +65,7 @@ public sealed class OrganizationMemberRoleChangedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveAsync(
-                    $"perm:org:{anotherOrgId}:profile:{anotherProfileId}",
+                    $"member-role:org:{anotherOrgId}:profile:{anotherProfileId}",
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once

@@ -23,6 +23,7 @@ global using Edvantix.Organizational.Features.Organizations.Create;
 global using Edvantix.Organizational.Features.Organizations.Delete;
 global using Edvantix.Organizational.Features.Organizations.Get;
 global using Edvantix.Organizational.Features.Organizations.List;
+global using Edvantix.Organizational.Features.Organizations.ListByProfile;
 global using Edvantix.Organizational.Features.Organizations.Update;
 global using Edvantix.Organizational.Features.Roles;
 global using Edvantix.Organizational.Features.Roles.Create;

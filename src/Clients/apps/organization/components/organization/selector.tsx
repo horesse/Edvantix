@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { ChevronsUpDown, GraduationCap, Plus } from "lucide-react";
 
-import type { OrganizationDto } from "@workspace/types/company";
+import type { OrganizationWithRoleDto } from "@workspace/types/company";
 import {
   Popover,
   PopoverContent,
@@ -14,6 +14,17 @@ import {
 } from "@workspace/ui/components/popover";
 
 import { useOrganization } from "./provider";
+
+const ROLE_LABELS: Record<string, string> = {
+  Owner: "Владелец",
+  Manager: "Менеджер",
+  Teacher: "Учитель",
+  Student: "Ученик",
+};
+
+function getRoleLabel(roleCode: string): string {
+  return ROLE_LABELS[roleCode] ?? roleCode;
+}
 
 /**
  * Dropdown for switching between organisations.
@@ -25,7 +36,7 @@ export function OrganizationSelector() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  function handleSelect(org: OrganizationDto) {
+  function handleSelect(org: OrganizationWithRoleDto) {
     selectOrganization(org);
     setOpen(false);
   }
@@ -94,7 +105,7 @@ export function OrganizationSelector() {
               {displayName}
             </span>
             <span className="text-sidebar-foreground/50 truncate text-xs">
-              {currentOrg.fullLegalName}
+              {getRoleLabel(currentOrg.roleCode)}
             </span>
           </div>
           <ChevronsUpDown className="text-sidebar-foreground/40 ml-auto size-4 shrink-0" />
@@ -119,9 +130,14 @@ export function OrganizationSelector() {
               <div className="bg-primary/10 text-primary flex size-6 shrink-0 items-center justify-center rounded text-xs font-bold">
                 {(org.shortName ?? org.fullLegalName).slice(0, 2).toUpperCase()}
               </div>
-              <p className="flex-1 truncate text-left font-medium">
-                {org.shortName ?? org.fullLegalName}
-              </p>
+              <div className="flex min-w-0 flex-1 flex-col text-left">
+                <p className="truncate font-medium">
+                  {org.shortName ?? org.fullLegalName}
+                </p>
+                <p className="text-muted-foreground truncate text-xs">
+                  {getRoleLabel(org.roleCode)}
+                </p>
+              </div>
             </button>
           ))}
           <div className="border-border my-1 border-t" />

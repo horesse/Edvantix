@@ -70,6 +70,9 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
     /// <summary>Идентификатор кастомной роли участника в организации.</summary>
     public Guid OrganizationMemberRoleId { get; private set; }
 
+    /// <summary>Роль участника в организации.</summary>
+    public OrganizationMemberRole? Role { get; private set; }
+
     /// <summary>Текущий статус участника.</summary>
     public OrganizationStatus Status { get; private set; }
 

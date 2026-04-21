@@ -121,6 +121,12 @@ export type OrganizationDetailDto = {
   readonly contacts: readonly ContactDto[];
 };
 
+/** Организация с ролью текущего пользователя в ней (эндпоинт /organizations/mine). */
+export type OrganizationWithRoleDto = OrganizationDto & {
+  readonly roleCode: string;
+  readonly roleDescription: string | null;
+};
+
 /** Участник организации. */
 export type OrganizationMemberDto = {
   readonly id: string;

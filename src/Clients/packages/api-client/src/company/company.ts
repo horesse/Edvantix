@@ -20,7 +20,7 @@ const BASE = "/organisational/api/v1";
 /** Ключ localStorage, под которым хранится ID выбранной организации. */
 const SELECTED_ORG_KEY = "selectedOrgId";
 
-/** Возвращает axios-config с заголовком X-OrganizationId-Id для multi-tenant запросов. */
+/** Возвращает axios-config с заголовком X-Organization-Id для multi-tenant запросов. */
 function orgConfig(
   extra?: object,
 ): { headers: Record<string, string> } & typeof extra {
@@ -28,7 +28,7 @@ function orgConfig(
     typeof window !== "undefined"
       ? (window.localStorage.getItem(SELECTED_ORG_KEY) ?? "")
       : "";
-  return { headers: { "X-OrganizationId-Id": orgId }, ...extra };
+  return { headers: { "X-Organization-Id": orgId }, ...extra };
 }
 
 class CompanyApiClient {

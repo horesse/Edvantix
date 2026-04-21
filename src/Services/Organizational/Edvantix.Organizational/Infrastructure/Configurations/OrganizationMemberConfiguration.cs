@@ -16,11 +16,10 @@ internal sealed class OrganizationMemberConfiguration : IEntityTypeConfiguration
             .HasMaxLength(DataSchemaLength.Small)
             .HasConversion<string>();
 
-        // Индекс для быстрой выборки участников организации; уникальность активного членства обеспечивается доменом
         builder.HasIndex(m => new { m.OrganizationId, m.ProfileId });
 
         builder
-            .HasOne<OrganizationMemberRole>()
+            .HasOne<OrganizationMemberRole>(m => m.Role)
             .WithMany()
             .HasForeignKey(m => m.OrganizationMemberRoleId)
             .OnDelete(DeleteBehavior.Restrict);

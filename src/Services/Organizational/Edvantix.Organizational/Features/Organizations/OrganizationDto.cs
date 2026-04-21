@@ -32,3 +32,14 @@ public sealed record ContactDto(
     ContactType ContactType,
     bool IsPrimary
 );
+
+public sealed record OrganizationWithRoleDto(
+    Guid Id,
+    string FullLegalName,
+    string? ShortName,
+    OrganizationType OrganizationType,
+    OrganizationStatus Status,
+    bool IsLegalEntity,
+    string RoleCode,
+    string? RoleDescription
+);

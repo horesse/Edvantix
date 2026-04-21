@@ -3,7 +3,7 @@ using Edvantix.Organizational.Domain.Events;
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
 /// <summary>
-/// Инвалидирует кешированный пустой набор разрешений, если он был записан до добавления участника.
+/// Инвалидирует кеш связки «участник → роль», если он был записан до добавления участника.
 /// </summary>
 internal sealed class OrganizationMemberCreatedDomainEventHandler(IHybridCache cache)
     : INotificationHandler<OrganizationMemberCreatedDomainEvent>
@@ -13,7 +13,7 @@ internal sealed class OrganizationMemberCreatedDomainEventHandler(IHybridCache c
         CancellationToken cancellationToken
     )
     {
-        var key = $"perm:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
+        var key = $"member-role:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
         await cache.RemoveAsync(key, cancellationToken);
     }
 }

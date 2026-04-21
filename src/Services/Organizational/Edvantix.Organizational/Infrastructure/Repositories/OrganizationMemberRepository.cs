@@ -47,6 +47,21 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
         CancellationToken cancellationToken = default
     ) => await context.OrganizationMembers.AddAsync(member, cancellationToken);
 
+    public async Task<Guid?> GetActiveMemberRoleIdAsync(
+        Guid organizationId,
+        Guid profileId,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context
+            .OrganizationMembers.Where(m =>
+                m.OrganizationId == organizationId
+                && m.ProfileId == profileId
+                && m.Status == OrganizationStatus.Active
+                && !m.IsDeleted
+            )
+            .Select(m => (Guid?)m.OrganizationMemberRoleId)
+            .FirstOrDefaultAsync(cancellationToken);
+
     public async Task<HashSet<string>> GetActivePermissionsAsync(
         Guid organizationId,
         Guid profileId,

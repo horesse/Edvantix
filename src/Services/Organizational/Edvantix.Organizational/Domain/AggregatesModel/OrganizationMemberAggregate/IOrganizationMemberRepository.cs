@@ -28,6 +28,16 @@ public interface IOrganizationMemberRepository : IRepository<OrganizationMember>
     Task AddAsync(OrganizationMember member, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Возвращает идентификатор роли активного участника организации.
+    /// Возвращает <see langword="null"/>, если участник не найден или не активен.
+    /// </summary>
+    Task<Guid?> GetActiveMemberRoleIdAsync(
+        Guid organizationId,
+        Guid profileId,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>
     /// Возвращает множество кодов разрешений активного участника организации.
     /// Возвращает пустое множество, если участник не найден или не активен.
     /// </summary>

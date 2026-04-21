@@ -3,7 +3,8 @@ using Edvantix.Organizational.Domain.Events;
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
 /// <summary>
-/// Инвалидирует кеш разрешений конкретного участника после смены его роли.
+/// Инвалидирует кеш связки «участник → роль» после смены роли.
+/// Кеш разрешений самой роли остаётся актуальным — участник просто получит новую роль при следующем обращении.
 /// </summary>
 internal sealed class OrganizationMemberRoleChangedDomainEventHandler(IHybridCache cache)
     : INotificationHandler<OrganizationMemberRoleChangedDomainEvent>
@@ -13,7 +14,7 @@ internal sealed class OrganizationMemberRoleChangedDomainEventHandler(IHybridCac
         CancellationToken cancellationToken
     )
     {
-        var key = $"perm:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
+        var key = $"member-role:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
         await cache.RemoveAsync(key, cancellationToken);
     }
 }

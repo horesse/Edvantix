@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.Events;
+using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
@@ -14,6 +15,9 @@ internal sealed class OrganizationRolePermissionsChangedDomainEventHandler(IHybr
         CancellationToken cancellationToken
     )
     {
-        await cache.RemoveByTagAsync($"role-perms:{notification.RoleId}", cancellationToken);
+        await cache.RemoveByTagAsync(
+            AuthorizationCacheKeys.RolePerms(notification.RoleId),
+            cancellationToken
+        );
     }
 }

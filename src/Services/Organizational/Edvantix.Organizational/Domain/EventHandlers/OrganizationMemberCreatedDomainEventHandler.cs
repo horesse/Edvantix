@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.Events;
+using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
@@ -13,7 +14,9 @@ internal sealed class OrganizationMemberCreatedDomainEventHandler(IHybridCache c
         CancellationToken cancellationToken
     )
     {
-        var key = $"member-role:org:{notification.OrganizationId}:profile:{notification.ProfileId}";
-        await cache.RemoveAsync(key, cancellationToken);
+        await cache.RemoveAsync(
+            AuthorizationCacheKeys.MemberRole(notification.OrganizationId, notification.ProfileId),
+            cancellationToken
+        );
     }
 }

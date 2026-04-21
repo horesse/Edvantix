@@ -1,4 +1,5 @@
 using Edvantix.Chassis.Caching;
+using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
@@ -27,7 +28,11 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
         await _handler.Handle(@event, CancellationToken.None);
 
         _cacheMock.Verify(
-            c => c.RemoveByTagAsync($"role-perms:{RoleId}", It.IsAny<CancellationToken>()),
+            c =>
+                c.RemoveByTagAsync(
+                    AuthorizationCacheKeys.RolePerms(RoleId),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -42,7 +47,7 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveByTagAsync(
-                    It.Is<string>(t => t != $"role-perms:{RoleId}"),
+                    It.Is<string>(t => t != AuthorizationCacheKeys.RolePerms(RoleId)),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -71,7 +76,11 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
         await _handler.Handle(@event, CancellationToken.None);
 
         _cacheMock.Verify(
-            c => c.RemoveByTagAsync($"role-perms:{anotherRoleId}", It.IsAny<CancellationToken>()),
+            c =>
+                c.RemoveByTagAsync(
+                    AuthorizationCacheKeys.RolePerms(anotherRoleId),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

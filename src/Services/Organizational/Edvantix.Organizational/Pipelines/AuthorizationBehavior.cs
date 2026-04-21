@@ -46,13 +46,12 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
         var organizationId = tenantContext.OrganizationId;
 
         // Уровень 1: получаем roleId участника. Guid.Empty — сигнал об отсутствии активного членства.
-        var memberRoleKey = $"member-role:org:{organizationId}:profile:{profileId}";
         var roleId = await cache.GetOrCreateAsync(
-            memberRoleKey,
+            AuthorizationCacheKeys.MemberRole(organizationId, profileId),
             async ct =>
                 await memberRepository.GetActiveMemberRoleIdAsync(organizationId, profileId, ct)
                 ?? Guid.Empty,
-            [$"org-perms:{organizationId}"],
+            [AuthorizationCacheKeys.OrgPermsTag(organizationId)],
             cancellationToken
         );
 
@@ -67,9 +66,8 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
         }
 
         // Уровень 2: разрешения роли — общий кеш для всех участников с одинаковой ролью.
-        var rolePermsKey = $"role-perms:{roleId}";
         var permissions = await cache.GetOrCreateAsync<HashSet<string>>(
-            rolePermsKey,
+            AuthorizationCacheKeys.RolePerms(roleId),
             async ct =>
             {
                 var role = await roleRepository.GetByIdWithPermissionsAsync(roleId, ct);
@@ -79,7 +77,10 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
                         .Permissions.Select(p => p.Name)
                         .ToHashSet(StringComparer.OrdinalIgnoreCase);
             },
-            [$"role-perms:{roleId}", $"org-perms:{organizationId}"],
+            [
+                AuthorizationCacheKeys.RolePerms(roleId),
+                AuthorizationCacheKeys.OrgPermsTag(organizationId),
+            ],
             cancellationToken
         );
 

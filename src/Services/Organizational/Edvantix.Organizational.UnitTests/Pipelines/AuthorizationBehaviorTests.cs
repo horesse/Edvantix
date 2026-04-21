@@ -199,7 +199,7 @@ public sealed class AuthorizationBehaviorTests
                 .AsTask()
         );
 
-        capturedKey.ShouldBe($"member-role:org:{OrgId}:profile:{ProfileId}");
+        capturedKey.ShouldBe(AuthorizationCacheKeys.MemberRole(OrgId, ProfileId));
     }
 
     [Test]
@@ -242,7 +242,7 @@ public sealed class AuthorizationBehaviorTests
                 CancellationToken.None
             );
 
-        capturedKey.ShouldBe($"role-perms:{RoleId}");
+        capturedKey.ShouldBe(AuthorizationCacheKeys.RolePerms(RoleId));
     }
 
     [Test]

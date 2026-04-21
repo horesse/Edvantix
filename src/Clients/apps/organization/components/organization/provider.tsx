@@ -9,22 +9,18 @@ import {
   useState,
 } from "react";
 
-import useOrganizations from "@workspace/api-hooks/company/useOrganizations";
-import type { OrganizationDto } from "@workspace/types/company";
+import useMyOrganizations from "@workspace/api-hooks/company/useMyOrganizations";
+import type { OrganizationWithRoleDto } from "@workspace/types/company";
 
 const STORAGE_KEY = "selectedOrgId";
 
 type OrganizationContextValue = {
-  currentOrg: OrganizationDto | null;
-  organizations: OrganizationDto[];
+  currentOrg: OrganizationWithRoleDto | null;
+  organizations: readonly OrganizationWithRoleDto[];
   isLoading: boolean;
-  selectOrganization: (org: OrganizationDto) => void;
-  /**
-   * Роль пользователя в текущей организации.
-   * Пока возвращает null — бэкенд не включает роль в список организаций.
-   */
-  userRole: null;
-  /** Временно true — до получения ролей от API. */
+  selectOrganization: (org: OrganizationWithRoleDto) => void;
+  /** Код роли текущего пользователя в выбранной организации. */
+  userRole: string | null;
   canManage: boolean;
 };
 
@@ -37,8 +33,7 @@ export function OrganizationProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data: orgPage, isLoading } = useOrganizations();
-  const organizations = useMemo(() => orgPage?.items ?? [], [orgPage]);
+  const { data: organizations = [], isLoading } = useMyOrganizations();
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
 
   // Restore persisted selection on mount.
@@ -64,7 +59,7 @@ export function OrganizationProvider({
     }
   }, [organizations, selectedOrgId]);
 
-  const selectOrganization = useCallback((org: OrganizationDto) => {
+  const selectOrganization = useCallback((org: OrganizationWithRoleDto) => {
     setSelectedOrgId(org.id);
     localStorage.setItem(STORAGE_KEY, String(org.id));
   }, []);
@@ -80,7 +75,7 @@ export function OrganizationProvider({
       organizations,
       isLoading,
       selectOrganization,
-      userRole: null,
+      userRole: currentOrg?.roleCode ?? null,
       canManage: currentOrg !== null,
     }),
     [currentOrg, organizations, isLoading, selectOrganization],

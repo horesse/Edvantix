@@ -5,6 +5,7 @@ import type {
   OrganizationDto,
   OrganizationMemberDto,
   OrganizationMembersQuery,
+  OrganizationWithRoleDto,
   OrganizationsQuery,
   UpdateOrganizationMemberRequest,
   UpdateOrganizationRequest,
@@ -46,6 +47,16 @@ class CompanyApiClient {
     const response = await this.client.get<PagedResult<OrganizationDto>>(
       `${BASE}/organizations`,
       { params: query },
+    );
+    return response.data;
+  }
+
+  /** Получить список организаций текущего пользователя с его ролью в каждой. */
+  public async getMyOrganizations(): Promise<
+    readonly OrganizationWithRoleDto[]
+  > {
+    const response = await this.client.get<readonly OrganizationWithRoleDto[]>(
+      `${BASE}/organizations/mine`,
     );
     return response.data;
   }

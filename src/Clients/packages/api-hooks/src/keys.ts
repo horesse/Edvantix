@@ -17,6 +17,7 @@ export const profileKeys = {
 
 export const companyKeys = {
   all: ["organizational"] as const,
+  myOrganizations: () => [...companyKeys.all, "organizations", "mine"] as const,
   organizations: (query?: unknown) =>
     [...companyKeys.all, "organizations", query] as const,
   organization: (id: string) =>

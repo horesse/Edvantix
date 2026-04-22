@@ -1,7 +1,5 @@
-using System.Text.Json;
-using Edvantix.Constants.Other;
+using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Contracts;
-using Edvantix.Organizational.Domain.Enums;
 using Edvantix.Organizational.Domain.Events;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
@@ -11,7 +9,7 @@ namespace Edvantix.Organizational.Domain.EventHandlers;
 /// Email-приглашения — через интеграционное событие <see cref="SendEmailInvitationIntegrationEvent"/>;
 /// In-app — через <see cref="SendInAppNotificationIntegrationEvent"/>.
 /// </summary>
-internal sealed class InvitationCreatedDomainEventHandler(IBus bus)
+internal sealed class InvitationCreatedDomainEventHandler(IEventDispatcher dispatcher)
     : INotificationHandler<InvitationCreatedDomainEvent>
 {
     public async ValueTask Handle(
@@ -19,36 +17,6 @@ internal sealed class InvitationCreatedDomainEventHandler(IBus bus)
         CancellationToken cancellationToken
     )
     {
-        if (notification.Type == InvitationType.Email)
-        {
-            await bus.Publish(
-                new SendEmailInvitationIntegrationEvent
-                {
-                    InvitationId = notification.InvitationId,
-                    Email = notification.Email!,
-                    Token = notification.Token,
-                    OrganizationId = notification.OrganizationId,
-                    ExpiresAt = notification.ExpiresAt,
-                },
-                cancellationToken
-            );
-        }
-        else
-        {
-            var metadata = JsonSerializer.Serialize(
-                new { InvitationId = notification.InvitationId, RoleId = notification.RoleId }
-            );
-
-            await bus.Publish(
-                new SendInAppNotificationIntegrationEvent(
-                    ProfileId: notification.InviteeProfileId!.Value,
-                    Type: NotificationType.Invitation,
-                    Title: "Приглашение в организацию",
-                    MessageText: $"Вас пригласили вступить в организацию. Примите или отклоните приглашение в разделе уведомлений.",
-                    Metadata: metadata
-                ),
-                cancellationToken
-            );
-        }
+        await dispatcher.DispatchAsync(notification, cancellationToken);
     }
 }

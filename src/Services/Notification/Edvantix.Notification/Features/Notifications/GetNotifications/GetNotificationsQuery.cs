@@ -1,7 +1,7 @@
 ﻿namespace Edvantix.Notification.Features.Notifications.GetNotifications;
 
 public sealed record GetNotificationsQuery(
-    [property: Description("Идентификатор аккаунта Keycloak")] Guid AccountId,
+    [property: Description("Идентификатор профиля пользователя")] Guid ProfileId,
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,
@@ -25,13 +25,13 @@ public sealed class GetNotificationsQueryHandler(IInAppNotificationRepository re
         );
 
         var listSpec = new InAppNotificationsByAccountSpec(
-            request.AccountId,
+            request.ProfileId,
             clamped.PageIndex,
             clamped.PageSize,
             request.IsRead
         );
 
-        var countSpec = new InAppNotificationsCountSpec(request.AccountId, request.IsRead);
+        var countSpec = new InAppNotificationsCountSpec(request.ProfileId, request.IsRead);
 
         var (items, totalCount) = await repository.ListPagedAsync(
             listSpec,

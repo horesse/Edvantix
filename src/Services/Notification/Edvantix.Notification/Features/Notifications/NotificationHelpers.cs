@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.Security.Extensions;
+using Edvantix.Chassis.Utilities;
 
 namespace Edvantix.Notification.Features.Notifications;
 
@@ -8,18 +8,7 @@ namespace Edvantix.Notification.Features.Notifications;
 internal static class NotificationHelpers
 {
     /// <summary>
-    /// Извлекает Keycloak account_id из claim "sub" JWT-токена.
+    /// Извлекает ProfileId из клейма "profile" JWT-токена.
     /// </summary>
-    internal static Guid GetAccountId(ClaimsPrincipal user)
-    {
-        var sub =
-            user.GetClaimValue(ClaimTypes.NameIdentifier)
-            ?? throw new UnauthorizedAccessException("Пользователь не аутентифицирован.");
-
-        return Guid.TryParse(sub, out var id)
-            ? id
-            : throw new UnauthorizedAccessException(
-                "Некорректный формат идентификатора пользователя."
-            );
-    }
+    internal static Guid GetProfileId(ClaimsPrincipal user) => user.GetProfileIdOrError();
 }

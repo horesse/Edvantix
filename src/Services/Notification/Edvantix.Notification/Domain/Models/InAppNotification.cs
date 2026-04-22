@@ -6,20 +6,20 @@ namespace Edvantix.Notification.Domain.Models;
 
 /// <summary>
 /// Агрегат внутриприложенческого уведомления.
-/// Хранит уведомление, адресованное конкретному пользователю (по Keycloak account_id).
+/// Хранит уведомление, адресованное конкретному пользователю (по Profile.Id).
 /// </summary>
 public sealed class InAppNotification() : IAggregateRoot
 {
     /// <summary>
     /// Создаёт новое уведомление для пользователя.
     /// </summary>
-    /// <param name="accountId">Keycloak UUID получателя.</param>
+    /// <param name="profileId">Идентификатор профиля получателя.</param>
     /// <param name="type">Тип уведомления (Info, Success, Warning и т.д.).</param>
     /// <param name="title">Краткий заголовок (до 100 символов).</param>
     /// <param name="message">Текст уведомления (до 10 000 символов).</param>
     /// <param name="metadata">Опциональные метаданные в формате JSON.</param>
     public InAppNotification(
-        Guid accountId,
+        Guid profileId,
         NotificationType type,
         string title,
         string message,
@@ -27,7 +27,7 @@ public sealed class InAppNotification() : IAggregateRoot
     )
         : this()
     {
-        AccountId = accountId;
+        ProfileId = profileId;
         Type = type;
         Title = title;
         Message = message;
@@ -38,8 +38,8 @@ public sealed class InAppNotification() : IAggregateRoot
 
     public Guid Id { get; private set; }
 
-    /// <summary>Keycloak UUID пользователя-получателя.</summary>
-    public Guid AccountId { get; private set; }
+    /// <summary>Идентификатор профиля пользователя-получателя (Profile.Id).</summary>
+    public Guid ProfileId { get; private set; }
 
     public NotificationType Type { get; private set; }
     public string Title { get; private set; } = string.Empty;

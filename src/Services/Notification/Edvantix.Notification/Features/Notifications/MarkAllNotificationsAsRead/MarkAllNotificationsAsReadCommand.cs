@@ -1,6 +1,6 @@
 ﻿namespace Edvantix.Notification.Features.Notifications.MarkAllNotificationsAsRead;
 
-public sealed record MarkAllNotificationsAsReadCommand(Guid AccountId) : ICommand;
+public sealed record MarkAllNotificationsAsReadCommand(Guid ProfileId) : ICommand;
 
 public sealed class MarkAllNotificationsAsReadCommandHandler(
     IInAppNotificationRepository repository
@@ -11,7 +11,7 @@ public sealed class MarkAllNotificationsAsReadCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        await repository.MarkAllAsReadAsync(request.AccountId, cancellationToken);
+        await repository.MarkAllAsReadAsync(request.ProfileId, cancellationToken);
 
         return Unit.Value;
     }

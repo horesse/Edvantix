@@ -33,7 +33,7 @@ public sealed class SendAdminNotificationCommandHandler(
         Guard.Against.NotFound(profile, request.ProfileId);
 
         var integrationEvent = new SendInAppNotificationIntegrationEvent(
-            profile.AccountId,
+            profile.Id,
             request.Type,
             request.Title,
             request.Message

@@ -1,6 +1,6 @@
 ﻿namespace Edvantix.Notification.Features.Notifications.MarkNotificationAsRead;
 
-public sealed record MarkNotificationAsReadCommand(Guid NotificationId, Guid AccountId)
+public sealed record MarkNotificationAsReadCommand(Guid NotificationId, Guid ProfileId)
     : ICommand<bool>;
 
 public sealed class MarkNotificationAsReadCommandHandler(IInAppNotificationRepository repository)
@@ -13,7 +13,7 @@ public sealed class MarkNotificationAsReadCommandHandler(IInAppNotificationRepos
     {
         var spec = new InAppNotificationByIdAndAccountSpec(
             request.NotificationId,
-            request.AccountId
+            request.ProfileId
         );
         var notification = await repository.FindAsync(spec, cancellationToken);
 

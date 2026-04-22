@@ -7,7 +7,7 @@ namespace Edvantix.Contracts;
 /// Публикуется Organizational-сервисом; потребляется Notification-сервисом через MassTransit.
 /// </summary>
 public sealed record SendInAppNotificationIntegrationEvent(
-    Guid AccountId,
+    Guid ProfileId,
     NotificationType Type,
     string Title,
     string MessageText,

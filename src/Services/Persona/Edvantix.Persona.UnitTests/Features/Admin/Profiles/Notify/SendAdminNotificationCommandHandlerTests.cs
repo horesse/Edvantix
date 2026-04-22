@@ -43,7 +43,7 @@ public sealed class SendAdminNotificationCommandHandlerTests
             b =>
                 b.Publish(
                     It.Is<SendInAppNotificationIntegrationEvent>(e =>
-                        e.AccountId == profile.AccountId
+                        e.ProfileId == profile.Id
                         && e.Title == "Заголовок"
                         && e.MessageText == "Текст сообщения"
                     ),

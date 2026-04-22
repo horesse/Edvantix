@@ -9,7 +9,7 @@ public sealed class GetUnreadCountEndpoint
                 "/notifications/unread-count",
                 async (ClaimsPrincipal user, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(
-                        new GetUnreadCountQuery(NotificationHelpers.GetAccountId(user)),
+                        new GetUnreadCountQuery(NotificationHelpers.GetProfileId(user)),
                         sender,
                         cancellationToken
                     )

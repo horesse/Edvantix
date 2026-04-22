@@ -16,7 +16,7 @@ public sealed class MarkNotificationAsReadEndpoint
                     await HandleAsync(
                         new MarkNotificationAsReadCommand(
                             id,
-                            NotificationHelpers.GetAccountId(user)
+                            NotificationHelpers.GetProfileId(user)
                         ),
                         sender,
                         cancellationToken

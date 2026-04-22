@@ -10,7 +10,7 @@ public sealed class MarkAllNotificationsAsReadEndpoint
                 async (ClaimsPrincipal user, ISender sender, CancellationToken cancellationToken) =>
                     await HandleAsync(
                         new MarkAllNotificationsAsReadCommand(
-                            NotificationHelpers.GetAccountId(user)
+                            NotificationHelpers.GetProfileId(user)
                         ),
                         sender,
                         cancellationToken

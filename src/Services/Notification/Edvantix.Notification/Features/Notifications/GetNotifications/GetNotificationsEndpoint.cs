@@ -22,7 +22,7 @@ public sealed class GetNotificationsEndpoint
                 ) =>
                     await HandleAsync(
                         new GetNotificationsQuery(
-                            NotificationHelpers.GetAccountId(user),
+                            NotificationHelpers.GetProfileId(user),
                             request.PageIndex,
                             request.PageSize,
                             request.IsRead

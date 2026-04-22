@@ -12,7 +12,7 @@ internal sealed class InAppNotificationConfiguration : IEntityTypeConfiguration<
 
         builder.Property(p => p.Id).HasDefaultValueSql(UniqueIdentifierHelper.NewUuidV7);
 
-        builder.Property(p => p.AccountId).IsRequired();
+        builder.Property(p => p.ProfileId).IsRequired();
 
         builder.Property(p => p.Type).IsRequired();
 
@@ -25,9 +25,9 @@ internal sealed class InAppNotificationConfiguration : IEntityTypeConfiguration<
         builder.Property(p => p.IsRead).IsRequired();
 
         // Индекс для быстрой выборки уведомлений пользователя по дате (убывающий)
-        builder.HasIndex(e => new { e.AccountId, e.CreatedAt });
+        builder.HasIndex(e => new { e.ProfileId, e.CreatedAt });
 
         // Индекс для подсчёта непрочитанных
-        builder.HasIndex(e => new { e.AccountId, e.IsRead });
+        builder.HasIndex(e => new { e.ProfileId, e.IsRead });
     }
 }

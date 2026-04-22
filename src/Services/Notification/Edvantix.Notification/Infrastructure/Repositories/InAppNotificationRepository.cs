@@ -69,13 +69,13 @@ public sealed class InAppNotificationRepository(NotificationDbContext context)
 
     /// <inheritdoc />
     public async Task MarkAllAsReadAsync(
-        Guid accountId,
+        Guid profileId,
         CancellationToken cancellationToken = default
     )
     {
         // Эффективное bulk-обновление через ExecuteUpdateAsync (EF Core 7+)
         await _context
-            .InAppNotifications.Where(n => n.AccountId == accountId && !n.IsRead)
+            .InAppNotifications.Where(n => n.ProfileId == profileId && !n.IsRead)
             .ExecuteUpdateAsync(
                 setters =>
                     setters

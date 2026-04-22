@@ -16,7 +16,7 @@ internal sealed class InAppNotificationSender(
     )
     {
         var notification = new InAppNotification(
-            message.AccountId,
+            message.ProfileId,
             message.Type,
             message.Title,
             message.Message,
@@ -27,9 +27,9 @@ internal sealed class InAppNotificationSender(
         await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
-            "In-app notification {NotificationId} sent to account {AccountId} (type: {Type})",
+            "In-app notification {NotificationId} sent to profile {ProfileId} (type: {Type})",
             notification.Id,
-            message.AccountId,
+            message.ProfileId,
             message.Type
         );
     }

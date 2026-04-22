@@ -2,7 +2,7 @@
 
 public sealed record UnreadCountViewModel(int Count);
 
-public sealed record GetUnreadCountQuery(Guid AccountId) : IQuery<UnreadCountViewModel>;
+public sealed record GetUnreadCountQuery(Guid ProfileId) : IQuery<UnreadCountViewModel>;
 
 public sealed class GetUnreadCountQueryHandler(IInAppNotificationRepository repository)
     : IQueryHandler<GetUnreadCountQuery, UnreadCountViewModel>
@@ -12,7 +12,7 @@ public sealed class GetUnreadCountQueryHandler(IInAppNotificationRepository repo
         CancellationToken cancellationToken
     )
     {
-        var spec = new InAppNotificationsCountSpec(request.AccountId, isRead: false);
+        var spec = new InAppNotificationsCountSpec(request.ProfileId, isRead: false);
         var count = await repository.CountAsync(spec, cancellationToken);
 
         return new UnreadCountViewModel(count);

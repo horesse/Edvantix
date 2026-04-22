@@ -7,8 +7,8 @@
 /// </summary>
 public sealed record SendInAppNotificationIntegrationEvent : IntegrationEvent
 {
-    /// <summary>Keycloak account_id получателя.</summary>
-    public required Guid AccountId { get; init; }
+    /// <summary>Идентификатор профиля получателя (Profile.Id).</summary>
+    public required Guid ProfileId { get; init; }
 
     /// <summary>Тип уведомления (соответствует <c>NotificationType</c> enum).</summary>
     public required int Type { get; init; }

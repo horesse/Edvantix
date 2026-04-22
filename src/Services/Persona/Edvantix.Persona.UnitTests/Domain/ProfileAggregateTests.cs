@@ -29,6 +29,7 @@ public sealed class ProfileAggregateTests
             "Ивановна"
         );
 
+        profile.Id.ShouldNotBe(Guid.Empty);
         profile.AccountId.ShouldBe(accountId);
         profile.Login.ShouldBe(login);
         profile.Gender.ShouldBe(Gender.Female);
@@ -62,6 +63,7 @@ public sealed class ProfileAggregateTests
 
         profile.DomainEvents.ShouldHaveSingleItem();
         var @event = profile.DomainEvents.Single().ShouldBeOfType<ProfileRegisteredEvent>();
+        @event.ProfileId.ShouldBe(profile.Id);
         @event.AccountId.ShouldBe(accountId);
         @event.Login.ShouldBe(login);
     }

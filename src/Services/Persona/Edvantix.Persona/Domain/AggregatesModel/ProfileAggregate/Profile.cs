@@ -34,13 +34,16 @@ public sealed class Profile() : Entity, IAggregateRoot, ISoftDelete
             throw new ArgumentException("AccountId не может быть пустым.", nameof(accountId));
         ArgumentException.ThrowIfNullOrWhiteSpace(login, nameof(login));
 
+        // Генерируем Id до регистрации события, чтобы ProfileRegisteredEvent мог его захватить
+        Id = Guid.CreateVersion7();
+
         AccountId = accountId;
         Login = login;
         Gender = gender;
         BirthDate = birthDate;
         FullName = new FullName(firstName, lastName, middleName);
 
-        RegisterDomainEvent(new ProfileRegisteredEvent(accountId, login));
+        RegisterDomainEvent(new ProfileRegisteredEvent(Id, accountId, login));
     }
 
     /// <summary>GUID аккаунта в Keycloak.</summary>

@@ -41,7 +41,7 @@ internal sealed class InvitationCreatedDomainEventHandler(IBus bus)
 
             await bus.Publish(
                 new SendInAppNotificationIntegrationEvent(
-                    AccountId: notification.InviteeAccountId!.Value,
+                    ProfileId: notification.InviteeProfileId!.Value,
                     Type: NotificationType.Invitation,
                     Title: "Приглашение в организацию",
                     MessageText: $"Вас пригласили вступить в организацию. Примите или отклоните приглашение в разделе уведомлений.",

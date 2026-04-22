@@ -8,8 +8,8 @@ namespace Edvantix.Notification.Infrastructure.Senders.InApp;
 /// </summary>
 public sealed record InAppNotificationMessage
 {
-    /// <summary>Идентификатор Keycloak-аккаунта получателя.</summary>
-    public required Guid AccountId { get; init; }
+    /// <summary>Идентификатор профиля получателя (Profile.Id).</summary>
+    public required Guid ProfileId { get; init; }
 
     /// <summary>Тип уведомления (определяет иконку и цвет на фронте).</summary>
     public required NotificationType Type { get; init; }

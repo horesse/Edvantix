@@ -1,4 +1,6 @@
-﻿using Edvantix.Chassis.Security.Keycloak;
+﻿using Edvantix.Chassis.Endpoints;
+using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Constants.Core;
 using Edvantix.Notification.Extensions;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 using Edvantix.ServiceDefaults.Cors;

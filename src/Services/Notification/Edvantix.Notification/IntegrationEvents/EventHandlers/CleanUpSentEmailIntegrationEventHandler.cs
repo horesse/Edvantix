@@ -1,6 +1,8 @@
-﻿namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
+﻿using Edvantix.Notification.Domain.Models;
 
-public sealed class CleanUpSentEmailIntegrationEventHandler(
+namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
+
+internal sealed class CleanUpSentEmailIntegrationEventHandler(
     ILogger<CleanUpSentEmailIntegrationEventHandler> logger,
     GlobalLogBuffer logBuffer,
     IOutboxRepository repository
@@ -39,7 +41,7 @@ public sealed class CleanUpSentEmailIntegrationEventHandler(
 }
 
 [ExcludeFromCodeCoverage]
-public sealed class CleanUpSentEmailIntegrationEventHandlerDefinition
+internal sealed class CleanUpSentEmailIntegrationEventHandlerDefinition
     : ConsumerDefinition<CleanUpSentEmailIntegrationEventHandler>
 {
     public CleanUpSentEmailIntegrationEventHandlerDefinition()

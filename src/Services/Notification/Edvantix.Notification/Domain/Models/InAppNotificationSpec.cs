@@ -11,18 +11,18 @@ public sealed class InAppNotificationsByAccountSpec : Specification<InAppNotific
     /// <summary>
     /// Возвращает страницу уведомлений пользователя.
     /// </summary>
-    /// <param name="accountId">Keycloak UUID пользователя.</param>
+    /// <param name="profileId">Идентификатор профиля пользователя.</param>
     /// <param name="page">Номер страницы (с 1).</param>
     /// <param name="pageSize">Размер страницы.</param>
     /// <param name="isRead">Фильтр по прочитанности; null — возвращать все.</param>
     public InAppNotificationsByAccountSpec(
-        Guid accountId,
+        Guid profileId,
         int page,
         int pageSize,
         bool? isRead = null
     )
     {
-        Query.Where(n => n.AccountId == accountId);
+        Query.Where(n => n.ProfileId == profileId);
 
         if (isRead.HasValue)
         {
@@ -38,9 +38,9 @@ public sealed class InAppNotificationsByAccountSpec : Specification<InAppNotific
 /// </summary>
 public sealed class InAppNotificationsCountSpec : Specification<InAppNotification>
 {
-    public InAppNotificationsCountSpec(Guid accountId, bool? isRead = null)
+    public InAppNotificationsCountSpec(Guid profileId, bool? isRead = null)
     {
-        Query.Where(n => n.AccountId == accountId);
+        Query.Where(n => n.ProfileId == profileId);
 
         if (isRead.HasValue)
         {
@@ -50,13 +50,13 @@ public sealed class InAppNotificationsCountSpec : Specification<InAppNotificatio
 }
 
 /// <summary>
-/// Спецификация для нахождения конкретного уведомления по id и account_id.
+/// Спецификация для нахождения конкретного уведомления по id и profile_id.
 /// Включает проверку владельца, чтобы исключить несанкционированный доступ.
 /// </summary>
 public sealed class InAppNotificationByIdAndAccountSpec : Specification<InAppNotification>
 {
-    public InAppNotificationByIdAndAccountSpec(Guid id, Guid accountId)
+    public InAppNotificationByIdAndAccountSpec(Guid id, Guid profileId)
     {
-        Query.Where(n => n.Id == id && n.AccountId == accountId);
+        Query.Where(n => n.Id == id && n.ProfileId == profileId);
     }
 }

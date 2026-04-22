@@ -31,5 +31,5 @@ public interface IInAppNotificationRepository : IRepository<InAppNotification>
     );
 
     /// <summary>Отмечает все непрочитанные уведомления пользователя как прочитанные.</summary>
-    Task MarkAllAsReadAsync(Guid accountId, CancellationToken cancellationToken = default);
+    Task MarkAllAsReadAsync(Guid profileId, CancellationToken cancellationToken = default);
 }

@@ -3,7 +3,7 @@
 namespace Edvantix.Contracts;
 
 public sealed record SendInAppNotificationIntegrationEvent(
-    Guid AccountId,
+    Guid ProfileId,
     NotificationType Type,
     string Title,
     string MessageText

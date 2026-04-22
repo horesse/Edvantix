@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Moq" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="Verify.SendGrid" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Edvantix.Notification\Edvantix.Notification.csproj" />
+    <Compile
+      Include="$(SolutionDir)\tests\Edvantix.Common\SnapshotTestHelper.cs"
+      Link="SnapshotTestHelper.cs"
+    />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Moq" />
+    <Using Include="Shouldly" />
+  </ItemGroup>
+</Project>

@@ -17,7 +17,7 @@ namespace Edvantix.Notification.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -29,10 +29,6 @@ namespace Edvantix.Notification.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id")
                         .HasDefaultValueSql("uuidv7()");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("account_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -53,6 +49,10 @@ namespace Edvantix.Notification.Infrastructure.Migrations
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("metadata");
 
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
                     b.Property<DateTime?>("ReadAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("read_at");
@@ -70,11 +70,11 @@ namespace Edvantix.Notification.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_in_app_notifications");
 
-                    b.HasIndex("AccountId", "CreatedAt")
-                        .HasDatabaseName("ix_in_app_notifications_account_id_created_at");
+                    b.HasIndex("ProfileId", "CreatedAt")
+                        .HasDatabaseName("ix_in_app_notifications_profile_id_created_at");
 
-                    b.HasIndex("AccountId", "IsRead")
-                        .HasDatabaseName("ix_in_app_notifications_account_id_is_read");
+                    b.HasIndex("ProfileId", "IsRead")
+                        .HasDatabaseName("ix_in_app_notifications_profile_id_is_read");
 
                     b.ToTable("in_app_notifications", (string)null);
                 });

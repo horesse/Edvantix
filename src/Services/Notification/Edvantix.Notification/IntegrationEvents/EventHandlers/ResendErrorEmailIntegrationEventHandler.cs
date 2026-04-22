@@ -1,63 +1,67 @@
-﻿using System.Collections.Concurrent;
+﻿using Edvantix.Notification.Domain.Models;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-public sealed class ResendErrorEmailIntegrationEventHandler(
+internal sealed class ResendErrorEmailIntegrationEventHandler(
     ILogger<ResendErrorEmailIntegrationEventHandler> logger,
     GlobalLogBuffer logBuffer,
     IOutboxRepository repository,
-    Edvantix.Notification.Infrastructure.Senders.ISender sender
+    ISender sender
 ) : IConsumer<ResendErrorEmailIntegrationEvent>
 {
     public async Task Consume(ConsumeContext<ResendErrorEmailIntegrationEvent> context)
     {
-        var failedEmails = await repository.ListAsync(
-            new OutboxFilterSpec(),
-            context.CancellationToken
-        );
+        var ct = context.CancellationToken;
 
-        var results = new ConcurrentBag<(string? email, bool success)>();
+        var unsentEmails = await repository.ListAsync(new UnsentOutboxSpec(), ct);
 
-        var parallelOptions = new ParallelOptions
+        if (unsentEmails.Count == 0)
         {
-            CancellationToken = context.CancellationToken,
-            MaxDegreeOfParallelism = 5,
-        };
+            logger.LogDebug("No unsent emails found for resend");
+            return;
+        }
 
-        await Parallel.ForEachAsync(
-            failedEmails,
-            parallelOptions,
-            async (email, ct) =>
+        var successCount = 0;
+        var failureCount = 0;
+
+        foreach (var email in unsentEmails)
+        {
+            try
             {
-                try
-                {
-                    var message = WelcomeMimeMessageBuilder
-                        .Initialize()
-                        .WithTo(email.ToName, email.ToEmail)
-                        .WithSubject(email.Subject)
-                        .WithBody(email.Body)
-                        .Build();
+                var message = WelcomeMimeMessageBuilder
+                    .Initialize()
+                    .WithTo(email.ToName, email.ToEmail)
+                    .WithSubject(email.Subject)
+                    .WithBody(email.Body)
+                    .Build();
 
-                    await sender.SendAsync(message, ct);
-                    logger.LogDebug("Successfully resent email to {Email}", email.ToEmail);
-                    results.Add((email.ToEmail, true));
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Failed to resend email to {Email}", email.ToEmail);
-                    results.Add((email.ToEmail, false));
-                }
+                await sender.SendAsync(message, ct);
+                email.MarkAsSent();
+                successCount++;
+
+                logger.LogDebug("Successfully resent email to {Email}", email.ToEmail);
             }
-        );
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                failureCount++;
+                logger.LogError(ex, "Failed to resend email to {Email}", email.ToEmail);
+            }
+        }
 
-        var successCount = results.Count(r => r.success);
-        var failureCount = results.Count(r => !r.success);
+        if (successCount > 0)
+        {
+            await repository.UnitOfWork.SaveChangesAsync(ct);
+        }
 
         logger.LogInformation(
             "Email resend completed. Success: {SuccessCount}, Failed: {FailureCount}, Total: {TotalCount}",
             successCount,
             failureCount,
-            failedEmails.Count
+            unsentEmails.Count
         );
 
         if (failureCount > 0)
@@ -68,7 +72,7 @@ public sealed class ResendErrorEmailIntegrationEventHandler(
 }
 
 [ExcludeFromCodeCoverage]
-public sealed class ResendErrorEmailIntegrationEventHandlerDefinition
+internal sealed class ResendErrorEmailIntegrationEventHandlerDefinition
     : ConsumerDefinition<ResendErrorEmailIntegrationEventHandler>
 {
     public ResendErrorEmailIntegrationEventHandlerDefinition()

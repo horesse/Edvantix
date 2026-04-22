@@ -13,7 +13,7 @@ internal sealed class EventMapper : IEventMapper
         {
             ProfileRegisteredEvent profileRegisteredEvent =>
                 new SendInAppNotificationIntegrationEvent(
-                    profileRegisteredEvent.AccountId,
+                    profileRegisteredEvent.ProfileId,
                     NotificationType.Achievement,
                     "Добро пожаловать!",
                     "Вы успешно зарегистрировали свой профиль!"

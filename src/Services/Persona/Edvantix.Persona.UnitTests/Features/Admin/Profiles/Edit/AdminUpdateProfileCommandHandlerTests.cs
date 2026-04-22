@@ -50,9 +50,7 @@ public sealed class AdminUpdateProfileCommandHandlerTests
         _busMock.Verify(
             b =>
                 b.Publish(
-                    It.Is<SendInAppNotificationIntegrationEvent>(e =>
-                        e.AccountId == profile.AccountId
-                    ),
+                    It.Is<SendInAppNotificationIntegrationEvent>(e => e.ProfileId == profile.Id),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once

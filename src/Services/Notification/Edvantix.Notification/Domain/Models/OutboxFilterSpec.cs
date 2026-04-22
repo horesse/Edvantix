@@ -3,7 +3,7 @@ using Edvantix.Chassis.Specification.Builders;
 
 namespace Edvantix.Notification.Domain.Models;
 
-public sealed class OutboxFilterSpec : Specification<Outbox>
+internal sealed class OutboxFilterSpec : Specification<Outbox>
 {
     public OutboxFilterSpec()
     {

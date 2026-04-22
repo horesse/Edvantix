@@ -183,6 +183,96 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                     b.ToTable("group_role_permission", (string)null);
                 });
 
+            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Invitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("uuidv7()");
+
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("accepted_at");
+
+                    b.Property<Guid?>("AcceptedByProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("accepted_by_profile_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("email");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid?>("InviteeAccountId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("invitee_account_id");
+
+                    b.Property<string>("InviteeLogin")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("invitee_login");
+
+                    b.Property<Guid?>("InviteeProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("invitee_profile_id");
+
+                    b.Property<Guid>("InviterProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("inviter_profile_id");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted")
+                        .HasComment("Признак удаленной записи");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("organization_id");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("token_hash");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_invitations");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique()
+                        .HasDatabaseName("ix_invitations_token_hash");
+
+                    b.HasIndex("OrganizationId", "Status")
+                        .HasDatabaseName("ix_invitations_organization_id_status");
+
+                    b.ToTable("invitations", (string)null);
+                });
+
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.Contact", b =>
                 {
                     b.Property<Guid>("Id")

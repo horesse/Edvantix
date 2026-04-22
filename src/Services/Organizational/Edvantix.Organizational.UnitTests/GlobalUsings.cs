@@ -12,6 +12,7 @@ global using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 global using Edvantix.Organizational.Domain.Enums;
 global using Edvantix.Organizational.Domain.EventHandlers;
 global using Edvantix.Organizational.Domain.Events;
+global using Edvantix.Organizational.Features.Invitations;
 global using Edvantix.Organizational.Features.OrganizationMembers;
 global using Edvantix.Organizational.Features.OrganizationMembers.Create;
 global using Edvantix.Organizational.Features.OrganizationMembers.Delete;

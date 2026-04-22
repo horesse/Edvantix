@@ -82,7 +82,7 @@ public sealed class AdminUpdateProfileCommandHandler(
 
         // Отправляем уведомление пользователю об изменении профиля
         var notification = new SendInAppNotificationIntegrationEvent(
-            profile.AccountId,
+            profile.Id,
             NotificationType.Warning,
             "Ваш профиль был изменён администратором",
             $"Администратор внёс изменения в ваш профиль. Причина: {request.Reason}"

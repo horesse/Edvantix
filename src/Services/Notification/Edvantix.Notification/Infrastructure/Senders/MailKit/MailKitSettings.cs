@@ -3,7 +3,7 @@
 namespace Edvantix.Notification.Infrastructure.Senders.MailKit;
 
 [OptionsValidator]
-public sealed partial class MailKitSettings : IValidateOptions<MailKitSettings>
+internal sealed partial class MailKitSettings : IValidateOptions<MailKitSettings>
 {
     internal const string ConfigurationSection = "Email";
 

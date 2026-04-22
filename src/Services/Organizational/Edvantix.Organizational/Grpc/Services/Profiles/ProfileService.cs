@@ -31,4 +31,17 @@ internal sealed class ProfileService(ProfileGrpcService.ProfileGrpcServiceClient
 
         return result;
     }
+
+    public async Task<GetProfileByLoginResponse?> GetProfileByLoginAsync(
+        string login,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var result = await service.GetProfileByLoginAsync(
+            new GetProfileByLoginRequest { Login = login },
+            cancellationToken: cancellationToken
+        );
+
+        return result;
+    }
 }

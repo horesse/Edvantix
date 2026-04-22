@@ -5,7 +5,8 @@ namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 internal sealed class ResendErrorEmailIntegrationEventHandler(
     ILogger<ResendErrorEmailIntegrationEventHandler> logger,
     GlobalLogBuffer logBuffer,
-    IOutboxRepository repository
+    IOutboxRepository repository,
+    ISender sender
 ) : IConsumer<ResendErrorEmailIntegrationEvent>
 {
     public async Task Consume(ConsumeContext<ResendErrorEmailIntegrationEvent> context)
@@ -27,7 +28,18 @@ internal sealed class ResendErrorEmailIntegrationEventHandler(
         {
             try
             {
-                // TODO: Отправить повторно
+                var message = WelcomeMimeMessageBuilder
+                    .Initialize()
+                    .WithTo(email.ToName, email.ToEmail)
+                    .WithSubject(email.Subject)
+                    .WithBody(email.Body)
+                    .Build();
+
+                await sender.SendAsync(message, ct);
+                email.MarkAsSent();
+                successCount++;
+
+                logger.LogDebug("Successfully resent email to {Email}", email.ToEmail);
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested)
             {

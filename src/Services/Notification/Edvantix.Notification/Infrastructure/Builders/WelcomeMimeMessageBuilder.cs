@@ -1,6 +1,6 @@
 ﻿using MimeKit.Text;
 
-namespace Edvantix.Notification.Domain.Builders;
+namespace Edvantix.Notification.Infrastructure.Builders;
 
 /// <summary>
 ///     Fluent builder for constructing a <see cref="MimeMessage" /> representing
@@ -16,7 +16,7 @@ namespace Edvantix.Notification.Domain.Builders;
 ///     .Build();
 /// </code>
 /// </example>
-public sealed class WelcomeMimeMessageBuilder
+internal sealed class WelcomeMimeMessageBuilder
 {
     private WelcomeMimeMessageBuilder() { }
 

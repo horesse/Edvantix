@@ -1,11 +1,12 @@
 ﻿using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Specification;
 using Edvantix.Chassis.Specification.Evaluators;
+using Edvantix.Notification.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Edvantix.Notification.Infrastructure.Repositories;
 
-public sealed class OutboxRepository(NotificationDbContext context) : IOutboxRepository
+internal sealed class OutboxRepository(NotificationDbContext context) : IOutboxRepository
 {
     private readonly NotificationDbContext _context =
         context ?? throw new ArgumentNullException(nameof(context));

@@ -1,6 +1,4 @@
-using Edvantix.Notification.Infrastructure.Senders;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Edvantix.Notification.Domain.Models;
 using ISender = Edvantix.Notification.Infrastructure.Senders.ISender;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;

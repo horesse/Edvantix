@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.EF.Contexts;
+using Edvantix.Notification.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Edvantix.Notification.Infrastructure;

@@ -1,7 +1,9 @@
-﻿namespace Edvantix.Notification.Infrastructure.Senders.SendGrid;
+﻿using Edvantix.Constants.Core;
+
+namespace Edvantix.Notification.Infrastructure.Senders.SendGrid;
 
 [OptionsValidator]
-public sealed partial class SendGridSettings : IValidateOptions<SendGridSettings>
+internal sealed partial class SendGridSettings : IValidateOptions<SendGridSettings>
 {
     internal const string ConfigurationSection = "SendGrid";
 

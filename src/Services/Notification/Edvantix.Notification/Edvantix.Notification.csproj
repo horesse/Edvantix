@@ -18,4 +18,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Templates\**\*.mjml" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).ContractTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
+  </ItemGroup>
 </Project>

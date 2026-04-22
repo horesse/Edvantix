@@ -1,4 +1,6 @@
-﻿namespace Edvantix.Notification.Infrastructure.Senders.InApp;
+﻿using Edvantix.Notification.Domain.Models;
+
+namespace Edvantix.Notification.Infrastructure.Senders.InApp;
 
 /// <summary>
 /// Реализация <see cref="IInAppSender"/>: сохраняет уведомление в БД.

@@ -32,6 +32,18 @@ public sealed class ProfileSpecification : Specification<Profile>
 
     public static ProfileSpecification Minimal(Guid profileId) => new(profileId);
 
+    /// <summary>Минимальный профиль по логину — для поиска пользователя при отправке приглашения.</summary>
+    public static ProfileSpecification ForLogin(string login)
+    {
+        var spec = new ProfileSpecification(login);
+        return spec;
+    }
+
+    private ProfileSpecification(string login)
+    {
+        Query.AsNoTracking().Where(p => p.Login == login && !p.IsDeleted);
+    }
+
     /// <summary>Минимальный профиль с отслеживанием изменений — для операций записи без загрузки коллекций.</summary>
     public static ProfileSpecification MinimalForWrite(Guid profileId)
     {

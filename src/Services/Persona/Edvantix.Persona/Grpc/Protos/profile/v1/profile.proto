@@ -7,6 +7,7 @@ package profile.v1;
 service ProfileGrpcService {
   rpc GetProfile (GetProfileRequest) returns (GetProfileResponse);
   rpc GetProfiles (GetProfilesRequest) returns (GetProfilesResponse);
+  rpc GetProfileByLogin (GetProfileByLoginRequest) returns (GetProfileByLoginResponse);
 }
 
 message GetProfileRequest {
@@ -27,4 +28,15 @@ message GetProfilesRequest {
 
 message GetProfilesResponse {
   repeated GetProfileResponse profiles = 1;
+}
+
+message GetProfileByLoginRequest {
+  string login = 1;
+}
+
+message GetProfileByLoginResponse {
+  string profile_id = 1;
+  string account_id = 2;
+  string full_name = 3;
+  string login = 4;
 }

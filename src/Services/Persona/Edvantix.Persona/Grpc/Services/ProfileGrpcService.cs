@@ -46,6 +46,27 @@ internal sealed class ProfileService(IProfileRepository profileRepo)
         return response;
     }
 
+    [AllowAnonymous]
+    public override async Task<GetProfileByLoginResponse> GetProfileByLogin(
+        GetProfileByLoginRequest request,
+        ServerCallContext context
+    )
+    {
+        var spec = ProfileSpecification.ForLogin(request.Login);
+        var profile = await profileRepo.FindAsync(spec, context.CancellationToken);
+
+        if (profile is null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Профиль не найден."));
+
+        return new GetProfileByLoginResponse
+        {
+            ProfileId = profile.Id.ToString(),
+            AccountId = profile.AccountId.ToString(),
+            FullName = profile.FullName.GetFullName(),
+            Login = profile.Login,
+        };
+    }
+
     private static GetProfileResponse MapToResponse(Profile profile)
     {
         return new GetProfileResponse

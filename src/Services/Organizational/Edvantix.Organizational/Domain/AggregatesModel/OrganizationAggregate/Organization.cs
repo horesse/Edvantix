@@ -14,7 +14,7 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 ///   <item>У организации всегда должен быть хотя бы один активный контакт, помеченный как Primary.</item>
 /// </list>
 /// </summary>
-public sealed class Organization() : Entity, IAggregateRoot, ISoftDelete
+public sealed class Organization() : AuditableEntity, IAggregateRoot, ISoftDelete
 {
     private readonly List<Contact> _contacts = [];
 

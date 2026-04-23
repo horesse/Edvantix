@@ -78,7 +78,11 @@ internal sealed class GetOrganizationMembersQueryHandler(
             var profile = profiles.GetValueOrDefault(profileId);
             Guard.Against.NotFound(profile, items[i].ProfileId);
 
-            items[i] = items[i] with { FullName = profile!.FullName };
+            items[i] = items[i] with
+            {
+                FullName = profile!.FullName,
+                AvatarUrl = profile.HasAvatarUrl ? profile.AvatarUrl : null,
+            };
         }
     }
 }

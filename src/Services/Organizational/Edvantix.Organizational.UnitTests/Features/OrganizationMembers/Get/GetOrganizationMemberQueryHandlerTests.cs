@@ -54,8 +54,40 @@ public sealed class GetOrganizationMemberQueryHandlerTests
         result.Id.ShouldBe(dto.Id);
         result.ProfileId.ShouldBe(dto.ProfileId);
         result.FullName.ShouldBe("Иванов Иван Иванович");
+        result.AvatarUrl.ShouldBeNull();
         result.LastActivity.ShouldNotBeNull();
         _mapperMock.Verify(m => m.Map(member), Times.Once);
+    }
+
+    [Test]
+    public async Task GivenExistingMemberWithAvatar_WhenQuerying_ThenShouldReturnDtoWithAvatarUrl()
+    {
+        const string avatarUrl = "https://cdn.example.com/avatars/ivan.jpg";
+        var member = CreateMember(_organizationId);
+        var dto = CreateDto(member.Id);
+        var profileResponse = new GetProfileResponse
+        {
+            Id = dto.ProfileId.ToString(),
+            FullName = "Иванов Иван Иванович",
+            AvatarUrl = avatarUrl,
+        };
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(member.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(member);
+        _mapperMock.Setup(m => m.Map(member)).Returns(dto);
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfileByIdAsync(member.ProfileId.ToString(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(profileResponse);
+
+        var result = await _handler.Handle(
+            new GetOrganizationMemberQuery(member.Id),
+            CancellationToken.None
+        );
+
+        result.AvatarUrl.ShouldBe(avatarUrl);
     }
 
     [Test]

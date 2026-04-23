@@ -69,7 +69,7 @@ internal sealed class ProfileService(IProfileRepository profileRepo)
 
     private static GetProfileResponse MapToResponse(Profile profile)
     {
-        return new GetProfileResponse
+        var response = new GetProfileResponse
         {
             Id = profile.Id.ToString(),
             FullName = profile.FullName.GetFullName(),
@@ -77,5 +77,10 @@ internal sealed class ProfileService(IProfileRepository profileRepo)
             LastName = profile.FullName.LastName,
             MiddleName = profile.FullName.MiddleName ?? string.Empty,
         };
+
+        if (profile.AvatarUrl is not null)
+            response.AvatarUrl = profile.AvatarUrl;
+
+        return response;
     }
 }

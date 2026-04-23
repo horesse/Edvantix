@@ -20,6 +20,7 @@ message GetProfileResponse {
   string first_name = 3;
   string last_name = 4;
   string middle_name = 5;
+  string avatar_url = 6;
 }
 
 message GetProfilesRequest {

@@ -73,6 +73,49 @@ public sealed class GetOrganizationMembersQueryHandlerTests
         result.PageIndex.ShouldBe(1);
         result.PageSize.ShouldBe(10);
         result[0].FullName.ShouldBe("Иванов Иван Иванович");
+        result[0].AvatarUrl.ShouldBeNull();
+    }
+
+    [Test]
+    public async Task GivenMembersWithAvatar_WhenHandling_ThenShouldReturnDtoWithAvatarUrl()
+    {
+        const string avatarUrl = "https://cdn.example.com/avatars/ivan.jpg";
+        var member = CreateMember(_organizationId);
+        var dto = CreateDto(member.Id);
+        var query = new GetOrganizationMembersQuery(PageIndex: 1, PageSize: 10);
+        var profileResponse = new GetProfileResponse
+        {
+            Id = dto.ProfileId.ToString(),
+            FullName = "Иванов Иван Иванович",
+            AvatarUrl = avatarUrl,
+        };
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync([member]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(1);
+        _mapperMock.Setup(m => m.Map(member)).Returns(dto);
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new GetProfilesResponse { Profiles = { profileResponse } });
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result[0].AvatarUrl.ShouldBe(avatarUrl);
     }
 
     [Test]

@@ -34,6 +34,7 @@ internal sealed class GetOrganizationMemberQueryHandler(
         return mapper.Map(member) with
         {
             FullName = profile!.FullName,
+            AvatarUrl = profile.HasAvatarUrl ? profile.AvatarUrl : null,
             LastActivity = DateTime.UtcNow.AddMinutes(-30), // заменить на данные из модуля аудита
         };
     }

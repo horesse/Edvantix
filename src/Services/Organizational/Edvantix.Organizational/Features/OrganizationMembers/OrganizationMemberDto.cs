@@ -4,10 +4,12 @@ namespace Edvantix.Organizational.Features.OrganizationMembers;
 
 public sealed record OrganizationMemberDto(
     Guid Id,
-    Guid OrganizationId,
     Guid ProfileId,
-    Guid OrganizationMemberRoleId,
-    OrganizationStatus Status,
-    DateOnly StartDate,
-    DateOnly? EndDate
-);
+    string Role,
+    OrganizationStatus Status
+)
+{
+    public string FullName { get; init; } = string.Empty;
+    public string? AvatarUrl { get; init; }
+    public DateTime? LastActivity { get; init; }
+}

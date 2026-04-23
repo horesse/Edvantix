@@ -6,12 +6,13 @@ namespace Edvantix.Persona.UnitTests.Grpc.Services;
 
 public sealed class ProfileServiceTests
 {
+    private readonly Mock<IBlobService> _blobServiceMock = new();
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
     private readonly ProfileService _service;
 
     public ProfileServiceTests()
     {
-        _service = new(_profileRepoMock.Object);
+        _service = new(_profileRepoMock.Object, _blobServiceMock.Object);
     }
 
     [Test]

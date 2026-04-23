@@ -1,13 +1,15 @@
-﻿using Grpc.Core;
+﻿using Edvantix.Persona.Infrastructure.Blob;
+using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace Edvantix.Persona.Grpc.Services;
 
-internal sealed class ProfileService(IProfileRepository profileRepo)
+internal sealed class ProfileService(IProfileRepository profileRepo, IBlobService blobService)
     : ProfileGrpcService.ProfileGrpcServiceBase
 {
-    [AllowAnonymous]
+    [Authorize]
+    [EnableRateLimiting("PerUserRateLimit")]
     public override async Task<GetProfileResponse> GetProfile(
         GetProfileRequest request,
         ServerCallContext context
@@ -38,7 +40,7 @@ internal sealed class ProfileService(IProfileRepository profileRepo)
         return MapToResponse(profiles);
     }
 
-    private static GetProfilesResponse MapToResponse(IReadOnlyCollection<Profile> profile)
+    private GetProfilesResponse MapToResponse(IReadOnlyCollection<Profile> profile)
     {
         var response = new GetProfilesResponse();
 
@@ -46,7 +48,8 @@ internal sealed class ProfileService(IProfileRepository profileRepo)
         return response;
     }
 
-    [AllowAnonymous]
+    [Authorize]
+    [EnableRateLimiting("PerUserRateLimit")]
     public override async Task<GetProfileByLoginResponse> GetProfileByLogin(
         GetProfileByLoginRequest request,
         ServerCallContext context
@@ -67,7 +70,7 @@ internal sealed class ProfileService(IProfileRepository profileRepo)
         };
     }
 
-    private static GetProfileResponse MapToResponse(Profile profile)
+    private GetProfileResponse MapToResponse(Profile profile)
     {
         var response = new GetProfileResponse
         {
@@ -79,7 +82,7 @@ internal sealed class ProfileService(IProfileRepository profileRepo)
         };
 
         if (profile.AvatarUrl is not null)
-            response.AvatarUrl = profile.AvatarUrl;
+            response.AvatarUrl = blobService.GetFileSasUrl(profile.AvatarUrl);
 
         return response;
     }

@@ -17,6 +17,8 @@ public sealed class EntityTests : ArchUnitBaseTest
             .And()
             .DoNotHaveName(nameof(Entity))
             .And()
+            .DoNotHaveName(nameof(AuditableEntity))
+            .And()
             .AreNotAbstract()
             .Should()
             .BeAssignableTo(typeof(Entity))

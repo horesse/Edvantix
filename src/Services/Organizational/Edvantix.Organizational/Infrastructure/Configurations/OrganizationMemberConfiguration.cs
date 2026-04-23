@@ -23,5 +23,7 @@ internal sealed class OrganizationMemberConfiguration : IEntityTypeConfiguration
             .WithMany()
             .HasForeignKey(m => m.OrganizationMemberRoleId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Navigation(m => m.Role).AutoInclude();
     }
 }

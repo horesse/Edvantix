@@ -6,7 +6,7 @@ public abstract class Mapper<TFirst, TSecond> : IMapper<TFirst, TSecond>
 {
     public abstract TSecond Map(TFirst source);
 
-    public virtual IReadOnlyList<TSecond> Map(IReadOnlyList<TFirst> sources)
+    public virtual IReadOnlyCollection<TSecond> Map(IReadOnlyCollection<TFirst> sources)
     {
         return [.. sources.Select(Map)];
     }

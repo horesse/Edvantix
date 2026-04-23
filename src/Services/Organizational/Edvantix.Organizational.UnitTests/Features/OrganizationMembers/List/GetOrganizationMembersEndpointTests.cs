@@ -6,15 +6,7 @@ public sealed class GetOrganizationMembersEndpointTests
     private readonly Mock<ISender> _senderMock = new();
 
     private static OrganizationMemberDto CreateDto(Guid organizationId) =>
-        new(
-            Guid.CreateVersion7(),
-            organizationId,
-            Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
-            OrganizationStatus.Active,
-            new DateOnly(2025, 1, 1),
-            null
-        );
+        new(Guid.CreateVersion7(), Guid.CreateVersion7(), "admin", OrganizationStatus.Active);
 
     [Test]
     public async Task GivenDefaultQuery_WhenHandling_ThenShouldSendQueryToSender()

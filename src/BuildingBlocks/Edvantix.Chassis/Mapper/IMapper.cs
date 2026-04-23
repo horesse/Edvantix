@@ -16,5 +16,5 @@ public interface IMapper<in TSource, out TDestination>
     /// </summary>
     /// <param name="sources">Коллекция исходных моделей для преобразования.</param>
     /// <returns>Доступная только для чтения коллекция преобразованных целевых объектов.</returns>
-    IReadOnlyList<TDestination> Map(IReadOnlyList<TSource> sources);
+    IReadOnlyCollection<TDestination> Map(IReadOnlyCollection<TSource> sources);
 }

@@ -6,15 +6,7 @@ public sealed class GetOrganizationMemberEndpointTests
     private readonly Mock<ISender> _senderMock = new();
 
     private static OrganizationMemberDto CreateDto(Guid organizationId, Guid memberId) =>
-        new(
-            memberId,
-            organizationId,
-            Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
-            OrganizationStatus.Active,
-            new DateOnly(2025, 1, 1),
-            null
-        );
+        new(memberId, Guid.CreateVersion7(), "admin", OrganizationStatus.Active);
 
     [Test]
     public async Task GivenValidId_WhenHandling_ThenShouldSendQueryWithCorrectId()

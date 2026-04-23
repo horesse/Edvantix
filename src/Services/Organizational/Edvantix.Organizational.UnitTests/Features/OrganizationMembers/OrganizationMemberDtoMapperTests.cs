@@ -5,44 +5,27 @@ public sealed class OrganizationMemberDtoMapperTests
     private readonly OrganizationMemberDtoMapper _mapper = new();
 
     [Test]
-    public void GivenActiveMember_WhenMapping_ThenShouldMapAllProperties()
+    public void GivenActiveMember_WhenMapping_ThenShouldMapCoreProperties()
     {
         var organizationId = Guid.CreateVersion7();
         var profileId = Guid.CreateVersion7();
-        var roleId = Guid.CreateVersion7();
-        var startDate = new DateOnly(2025, 1, 1);
-
-        var member = new OrganizationMember(organizationId, profileId, roleId, startDate);
-
-        var dto = _mapper.Map(member);
-
-        dto.Id.ShouldBe(member.Id);
-        dto.OrganizationId.ShouldBe(organizationId);
-        dto.ProfileId.ShouldBe(profileId);
-        dto.OrganizationMemberRoleId.ShouldBe(roleId);
-        dto.StartDate.ShouldBe(startDate);
-        dto.Status.ShouldBe(OrganizationStatus.Active);
-        dto.EndDate.ShouldBeNull();
-    }
-
-    [Test]
-    public void GivenMemberWithEndDate_WhenMapping_ThenEndDateShouldBeMapped()
-    {
-        var startDate = new DateOnly(2025, 1, 1);
-        var endDate = new DateOnly(2025, 12, 31);
 
         var member = new OrganizationMember(
+            organizationId,
+            profileId,
             Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
-            startDate,
-            endDate
+            new DateOnly(2025, 1, 1)
         );
 
         var dto = _mapper.Map(member);
 
-        dto.StartDate.ShouldBe(startDate);
-        dto.EndDate.ShouldBe(endDate);
+        dto.Id.ShouldBe(member.Id);
+        dto.ProfileId.ShouldBe(profileId);
+        dto.Status.ShouldBe(OrganizationStatus.Active);
+        dto.Role.ShouldBe(string.Empty); // Role — nav property, загружается через EF Include
+        dto.FullName.ShouldBe(string.Empty);
+        dto.AvatarUrl.ShouldBeNull();
+        dto.LastActivity.ShouldBeNull();
     }
 
     [Test]
@@ -59,7 +42,6 @@ public sealed class OrganizationMemberDtoMapperTests
         var dto = _mapper.Map(member);
 
         dto.Status.ShouldBe(OrganizationStatus.Archived);
-        dto.EndDate.ShouldBe(new DateOnly(2025, 6, 30));
     }
 
     [Test]

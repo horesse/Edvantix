@@ -161,6 +161,76 @@ public sealed class GetOrganizationMembersQueryHandlerTests
         result.PageSize.ShouldBe(100);
     }
 
+    [Test]
+    public async Task GivenProfileServiceReturnsNull_WhenHandling_ThenShouldThrowArgumentNullException()
+    {
+        var member = CreateMember(_organizationId);
+        var dto = CreateDto(member.Id);
+        var query = new GetOrganizationMembersQuery(PageIndex: 1, PageSize: 10);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync([member]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(1);
+        _mapperMock.Setup(m => m.Map(member)).Returns(dto);
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync((GetProfilesResponse?)null);
+
+        await Should.ThrowAsync<ArgumentNullException>(() =>
+            _handler.Handle(query, CancellationToken.None).AsTask()
+        );
+    }
+
+    [Test]
+    public async Task GivenMemberProfileMissingInResponse_WhenHandling_ThenShouldThrowNotFoundException()
+    {
+        var member = CreateMember(_organizationId);
+        var dto = CreateDto(member.Id);
+        var query = new GetOrganizationMembersQuery(PageIndex: 1, PageSize: 10);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync([member]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(1);
+        _mapperMock.Setup(m => m.Map(member)).Returns(dto);
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new GetProfilesResponse()); // пустой ответ — профиль участника не найден
+
+        await Should.ThrowAsync<NotFoundException>(() =>
+            _handler.Handle(query, CancellationToken.None).AsTask()
+        );
+    }
+
     private static OrganizationMember CreateMember(Guid orgId) =>
         new(orgId, Guid.CreateVersion7(), Guid.CreateVersion7(), new DateOnly(2025, 1, 1));
 

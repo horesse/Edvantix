@@ -90,6 +90,29 @@ public sealed class GetOrganizationMemberQueryHandlerTests
         );
     }
 
+    [Test]
+    public async Task GivenProfileNotFound_WhenQuerying_ThenShouldThrowNotFoundException()
+    {
+        var member = CreateMember(_organizationId);
+        var dto = CreateDto(member.Id);
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(member.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(member);
+        _mapperMock.Setup(m => m.Map(member)).Returns(dto);
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfileByIdAsync(member.ProfileId.ToString(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync((GetProfileResponse?)null);
+
+        await Should.ThrowAsync<NotFoundException>(() =>
+            _handler
+                .Handle(new GetOrganizationMemberQuery(member.Id), CancellationToken.None)
+                .AsTask()
+        );
+    }
+
     private static OrganizationMember CreateMember(Guid orgId) =>
         new(orgId, Guid.CreateVersion7(), Guid.CreateVersion7(), new DateOnly(2025, 1, 1));
 

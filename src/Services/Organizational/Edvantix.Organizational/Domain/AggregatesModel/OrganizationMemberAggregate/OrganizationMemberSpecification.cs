@@ -28,7 +28,6 @@ public sealed class OrganizationMemberSpecification : Specification<Organization
     {
         Query
             .Where(m => m.OrganizationId == organizationId)
-            .Include(m => m.Role)
             .OrderByDescending(m => m.StartDate)
             .Skip(offset)
             .Take(limit);

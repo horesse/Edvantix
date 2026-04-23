@@ -16,7 +16,6 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
     ) =>
         await context
             .OrganizationMembers.AsTracking()
-            .Include(m => m.Role)
             .FirstOrDefaultAsync(m => m.Id == id && !m.IsDeleted, cancellationToken);
 
     public async Task<IReadOnlyCollection<OrganizationMember>> ListByOrganizationAsync(

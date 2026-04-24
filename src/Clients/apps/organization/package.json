@@ -71,7 +71,7 @@
     "@vitest/ui": "^4.1.4",
     "@workspace/eslint-config": "workspace:^",
     "@workspace/typescript-config": "workspace:*",
-    "allure": "^3.6.0",
+    "allure": "^3.6.1",
     "allure-playwright": "^3.7.1",
     "allure-vitest": "^3.7.1",
     "eslint": "^10.2.1",

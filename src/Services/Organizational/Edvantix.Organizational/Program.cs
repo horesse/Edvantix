@@ -45,4 +45,6 @@ app.MapDefaultEndpoints();
 
 app.UseDefaultOpenApi();
 
+app.UseAuthorization();
+
 app.Run();

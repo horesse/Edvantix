@@ -18,7 +18,6 @@ internal static class AuthorizationExtensions
                 .AddAuthorizationBuilder()
                 .SetDefaultPolicy(
                     new AuthorizationPolicyBuilder()
-                        .RequireRole(Authorization.Roles.User)
                         .RequireAuthenticatedUser()
                         .RequireScope(
                             $"{Services.Organisational}_{Authorization.Actions.Read}",

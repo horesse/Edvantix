@@ -3,7 +3,7 @@
     <!-- Core Libraries -->
     <AspireVersion>13.2.2</AspireVersion>
     <AspireUnstableVersion>13.2.2-preview.1.26207.2</AspireUnstableVersion>
-    <DotnetPackagesVersion>10.0.5</DotnetPackagesVersion>
+    <DotnetPackagesVersion>10.0.6</DotnetPackagesVersion>
     <GrpcVersion>2.76.0</GrpcVersion>
     <!-- Integration Libraries -->
     <MassTransitVersion>8.5.9</MassTransitVersion>

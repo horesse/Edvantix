@@ -1,5 +1,3 @@
-using Edvantix.Chassis.Security.Tenant;
-
 namespace Edvantix.Organizational.UnitTests.Features.Roles.List;
 
 public sealed class GetRolesQueryHandlerTests

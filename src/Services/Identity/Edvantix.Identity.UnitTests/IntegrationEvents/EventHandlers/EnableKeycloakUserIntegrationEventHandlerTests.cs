@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Logging;
 using Edvantix.Contracts;
 using Edvantix.Identity.IntegrationEvents.EventHandlers;
 

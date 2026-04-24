@@ -1,7 +1,6 @@
 using Edvantix.Chassis.Specification;
 using Edvantix.Contracts;
 using Edvantix.Persona.Features.Admin.Profiles.Edit;
-using Edvantix.Persona.Features.Profiles.Update;
 
 namespace Edvantix.Persona.UnitTests.Features.Admin.Profiles.Edit;
 

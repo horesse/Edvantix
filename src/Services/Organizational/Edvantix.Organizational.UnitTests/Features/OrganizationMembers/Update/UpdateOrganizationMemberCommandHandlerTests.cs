@@ -1,5 +1,3 @@
-using Edvantix.Chassis.Security.Tenant;
-
 namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Update;
 
 public sealed class UpdateOrganizationMemberCommandHandlerTests

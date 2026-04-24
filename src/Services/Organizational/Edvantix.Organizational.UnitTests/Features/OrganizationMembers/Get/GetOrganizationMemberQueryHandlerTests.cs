@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Security.Tenant;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 using Edvantix.Persona.Grpc.Services;
 

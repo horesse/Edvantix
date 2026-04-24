@@ -1,4 +1,3 @@
-using Edvantix.Organizational.Domain.Enums;
 using Edvantix.Organizational.Features.Invitations.Send;
 
 namespace Edvantix.Organizational.UnitTests.Features.Invitations.Send;

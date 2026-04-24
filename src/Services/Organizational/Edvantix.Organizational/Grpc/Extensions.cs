@@ -18,8 +18,6 @@ internal static class Extensions
             options.Interceptors.Add<GrpcExceptionInterceptor>();
         });
 
-        services.AddGrpcHealthChecks();
-
         services
             .AddGrpcServiceReference<ProfileGrpcService.ProfileGrpcServiceClient>(
                 HttpUtilities

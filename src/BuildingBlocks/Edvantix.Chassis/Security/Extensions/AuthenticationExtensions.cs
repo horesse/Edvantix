@@ -1,4 +1,5 @@
-﻿using Edvantix.Chassis.Security.Settings;
+﻿using System.Security.Claims;
+using Edvantix.Chassis.Security.Settings;
 using Edvantix.Chassis.Utilities;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Constants.Aspire;
@@ -6,6 +7,7 @@ using Edvantix.Constants.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Edvantix.Chassis.Security.Extensions;
 
@@ -69,6 +71,26 @@ public static class AuthenticationExtensions
                             !builder.Environment.IsDevelopment();
                         options.TokenValidationParameters.ValidateIssuer =
                             !builder.Environment.IsDevelopment();
+
+                        options.SaveToken = true;
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnTokenValidated = ctx =>
+                            {
+                                if (
+                                    ctx is
+                                    {
+                                        SecurityToken: JsonWebToken jwt,
+                                        Principal.Identity: ClaimsIdentity identity
+                                    }
+                                )
+                                {
+                                    identity.AddClaim(new("access_token", jwt.EncodedToken));
+                                }
+
+                                return Task.CompletedTask;
+                            },
+                        };
                     }
                 );
 

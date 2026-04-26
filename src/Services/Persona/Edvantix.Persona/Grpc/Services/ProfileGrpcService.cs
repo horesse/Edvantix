@@ -1,15 +1,15 @@
 ﻿using Edvantix.Persona.Infrastructure.Blob;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.RateLimiting;
 
 namespace Edvantix.Persona.Grpc.Services;
 
 internal sealed class ProfileService(IProfileRepository profileRepo, IBlobService blobService)
     : ProfileGrpcService.ProfileGrpcServiceBase
 {
-    [Authorize]
-    [EnableRateLimiting("PerUserRateLimit")]
+    // [Authorize]
+    // [EnableRateLimiting("PerUserRateLimit")]
+    [AllowAnonymous]
     public override async Task<GetProfileResponse> GetProfile(
         GetProfileRequest request,
         ServerCallContext context
@@ -25,8 +25,9 @@ internal sealed class ProfileService(IProfileRepository profileRepo, IBlobServic
         return MapToResponse(profile);
     }
 
-    [Authorize]
-    [EnableRateLimiting("PerUserRateLimit")]
+    // [Authorize]
+    // [EnableRateLimiting("PerUserRateLimit")]
+    [AllowAnonymous]
     public override async Task<GetProfilesResponse> GetProfiles(
         GetProfilesRequest request,
         ServerCallContext context
@@ -48,8 +49,9 @@ internal sealed class ProfileService(IProfileRepository profileRepo, IBlobServic
         return response;
     }
 
-    [Authorize]
-    [EnableRateLimiting("PerUserRateLimit")]
+    // [Authorize]
+    // [EnableRateLimiting("PerUserRateLimit")]
+    [AllowAnonymous]
     public override async Task<GetProfileByLoginResponse> GetProfileByLogin(
         GetProfileByLoginRequest request,
         ServerCallContext context

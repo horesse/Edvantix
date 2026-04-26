@@ -1,9 +1,7 @@
 ﻿using System.Security.Claims;
-using Edvantix.Chassis.Exceptions;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Guards;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Edvantix.Chassis.Utilities;
 

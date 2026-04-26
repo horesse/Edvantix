@@ -1,7 +1,5 @@
-using System.Security.Claims;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Domain.Enums;
 using Edvantix.Organizational.Features.Invitations.Accept;
 
 namespace Edvantix.Organizational.UnitTests.Features.Invitations.Accept;

@@ -1,5 +1,4 @@
-﻿using Edvantix.Chassis.Specification;
-using Edvantix.Contracts;
+﻿using Edvantix.Contracts;
 using Edvantix.Persona.Features.Profiles.Create;
 using Edvantix.Persona.UnitTests.Helpers;
 

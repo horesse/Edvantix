@@ -1,5 +1,3 @@
-using Edvantix.Organizational.Domain.Enums;
-
 namespace Edvantix.Organizational.Features.Invitations.List;
 
 /// <summary>Возвращает постраничный список приглашений организации.</summary>

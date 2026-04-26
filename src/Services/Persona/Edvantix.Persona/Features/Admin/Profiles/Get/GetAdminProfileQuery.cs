@@ -1,6 +1,4 @@
-﻿using Edvantix.Persona.Features.Admin.Profiles;
-
-namespace Edvantix.Persona.Features.Admin.Profiles.Get;
+﻿namespace Edvantix.Persona.Features.Admin.Profiles.Get;
 
 public sealed record GetAdminProfileQuery(Guid ProfileId) : IQuery<AdminProfileDetailDto>;
 

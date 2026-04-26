@@ -126,5 +126,7 @@ internal static class Extensions
         );
 
         services.AddKeycloakTokenIntrospection();
+
+        builder.AddGrpcServices();
     }
 }

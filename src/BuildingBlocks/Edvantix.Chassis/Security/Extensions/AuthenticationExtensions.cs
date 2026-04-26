@@ -71,19 +71,21 @@ public static class AuthenticationExtensions
                             !builder.Environment.IsDevelopment();
                         options.TokenValidationParameters.ValidateIssuer =
                             !builder.Environment.IsDevelopment();
-
-                        // Сохраняет сырой токен в AuthenticationProperties и добавляет его
-                        // как claim "access_token" в ClaimsPrincipal — это требуется для
-                        // TokenExchange (S2S flow), который читает токен через FindFirst("access_token").
+                        
                         options.SaveToken = true;
                         options.Events = new JwtBearerEvents
                         {
                             OnTokenValidated = ctx =>
                             {
-                                if (ctx.SecurityToken is JsonWebToken jwt)
+                                if (
+                                    ctx is
+                                    {
+                                        SecurityToken: JsonWebToken jwt,
+                                        Principal.Identity: ClaimsIdentity identity
+                                    }
+                                )
                                 {
-                                    var identity = (ClaimsIdentity?)ctx.Principal?.Identity;
-                                    identity?.AddClaim(new Claim("access_token", jwt.EncodedToken));
+                                    identity.AddClaim(new("access_token", jwt.EncodedToken));
                                 }
 
                                 return Task.CompletedTask;

@@ -1,17 +1,10 @@
 ﻿using System.Text.Json;
-using Edvantix.Chassis.CQRS;
-using Edvantix.Chassis.EventBus.Dispatcher;
-using Edvantix.Chassis.OpenTelemetry;
-using Edvantix.Chassis.Security.Extensions;
-using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
 using Edvantix.Organizational.Grpc;
-using Edvantix.Organizational.Infrastructure.Services;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Edvantix.Organizational.Extensions;
 

@@ -1,5 +1,4 @@
-﻿using Edvantix.Chassis.Security.TokenExchange;
-using Edvantix.Chassis.Utilities.Configurations;
+﻿using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 using Edvantix.Persona.Grpc.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -18,16 +17,14 @@ internal static class Extensions
             options.Interceptors.Add<GrpcExceptionInterceptor>();
         });
 
-        services
-            .AddGrpcServiceReference<ProfileGrpcService.ProfileGrpcServiceClient>(
-                HttpUtilities
-                    .AsUrlBuilder()
-                    .WithScheme(builder.GetScheme())
-                    .WithHost(Constants.Aspire.Services.Persona)
-                    .Build(),
-                HealthStatus.Degraded
-            )
-            .AddAuthTokenExchange(Constants.Aspire.Services.Persona);
+        services.AddGrpcServiceReference<ProfileGrpcService.ProfileGrpcServiceClient>(
+            HttpUtilities
+                .AsUrlBuilder()
+                .WithScheme(builder.GetScheme())
+                .WithHost(Constants.Aspire.Services.Persona)
+                .Build(),
+            HealthStatus.Degraded
+        );
 
         services.AddSingleton<IProfileService, ProfileService>();
     }

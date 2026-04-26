@@ -1,4 +1,5 @@
-﻿using Edvantix.Chassis.Security.Settings;
+﻿using System.Security.Claims;
+using Edvantix.Chassis.Security.Settings;
 using Edvantix.Chassis.Utilities;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Constants.Aspire;
@@ -6,6 +7,7 @@ using Edvantix.Constants.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Edvantix.Chassis.Security.Extensions;
 
@@ -69,6 +71,24 @@ public static class AuthenticationExtensions
                             !builder.Environment.IsDevelopment();
                         options.TokenValidationParameters.ValidateIssuer =
                             !builder.Environment.IsDevelopment();
+
+                        // Сохраняет сырой токен в AuthenticationProperties и добавляет его
+                        // как claim "access_token" в ClaimsPrincipal — это требуется для
+                        // TokenExchange (S2S flow), который читает токен через FindFirst("access_token").
+                        options.SaveToken = true;
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnTokenValidated = ctx =>
+                            {
+                                if (ctx.SecurityToken is JsonWebToken jwt)
+                                {
+                                    var identity = (ClaimsIdentity?)ctx.Principal?.Identity;
+                                    identity?.AddClaim(new Claim("access_token", jwt.EncodedToken));
+                                }
+
+                                return Task.CompletedTask;
+                            },
+                        };
                     }
                 );
 

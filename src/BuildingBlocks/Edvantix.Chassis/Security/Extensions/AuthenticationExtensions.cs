@@ -71,7 +71,7 @@ public static class AuthenticationExtensions
                             !builder.Environment.IsDevelopment();
                         options.TokenValidationParameters.ValidateIssuer =
                             !builder.Environment.IsDevelopment();
-                        
+
                         options.SaveToken = true;
                         options.Events = new JwtBearerEvents
                         {

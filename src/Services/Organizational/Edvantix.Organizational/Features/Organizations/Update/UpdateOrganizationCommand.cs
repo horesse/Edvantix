@@ -12,7 +12,11 @@ public sealed record UpdateOrganizationCommand(
     string FullLegalName,
     string? ShortName,
     OrganizationType OrganizationType,
-    LegalForm LegalForm
+    LegalForm LegalForm,
+    DateOnly RegistrationDate,
+    ContactType ContactType,
+    string ContactValue,
+    string ContactDescription
 ) : ICommand;
 
 internal sealed class UpdateOrganizationCommandHandler(
@@ -35,7 +39,14 @@ internal sealed class UpdateOrganizationCommandHandler(
             command.FullLegalName,
             command.ShortName,
             command.OrganizationType,
-            command.LegalForm
+            command.LegalForm,
+            command.RegistrationDate
+        );
+
+        organization.UpdatePrimaryContact(
+            command.ContactType,
+            command.ContactValue,
+            command.ContactDescription
         );
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

@@ -11,7 +11,11 @@ public sealed class UpdateOrganizationEndpointTests
             "ООО Обновлённая Организация",
             "ОО",
             OrganizationType.PrivateEducationalCenter,
-            LegalForm.Llc
+            LegalForm.Llc,
+            new DateOnly(2020, 5, 1),
+            ContactType.Email,
+            "org@example.com",
+            "Основной контакт"
         );
 
     [Test]

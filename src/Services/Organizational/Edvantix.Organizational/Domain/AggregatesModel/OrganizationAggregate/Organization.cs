@@ -1,5 +1,6 @@
 using Edvantix.Organizational.Domain.Enums;
 using Edvantix.Organizational.Domain.Events;
+using Edvantix.SharedKernel.Helpers;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
@@ -139,7 +140,8 @@ public sealed class Organization() : AuditableEntity, IAggregateRoot, ISoftDelet
         string fullLegalName,
         string? shortName,
         OrganizationType organizationType,
-        LegalForm legalForm
+        LegalForm legalForm,
+        DateOnly registrationDate
     )
     {
         Guard.Against.NullOrWhiteSpace(fullLegalName, nameof(fullLegalName));
@@ -147,8 +149,21 @@ public sealed class Organization() : AuditableEntity, IAggregateRoot, ISoftDelet
         ShortName = shortName?.Trim();
         OrganizationType = organizationType;
         LegalForm = legalForm;
+        RegistrationDate = registrationDate;
+        LastModifiedAt = DateTimeHelper.UtcNow();
 
         RegisterDomainEvent(new OrganizationUpdatedDomainEvent(Id));
+    }
+
+    /// <summary>Обновляет основной контакт организации.</summary>
+    /// <exception cref="InvalidOperationException">Если основной контакт не найден.</exception>
+    public void UpdatePrimaryContact(ContactType contactType, string value, string description)
+    {
+        var primary =
+            _contacts.FirstOrDefault(c => c.IsPrimary)
+            ?? throw new InvalidOperationException("Основной контакт организации не найден.");
+        primary.Update(value, description, contactType);
+        LastModifiedAt = DateTimeHelper.UtcNow();
     }
 
     /// <summary>

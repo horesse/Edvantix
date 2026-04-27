@@ -20,7 +20,8 @@ public sealed class GetOrganizationEndpointTests
             ValidCurrencyId,
             OrganizationType.PrivateEducationalCenter,
             OrganizationStatus.Active,
-            []
+            [],
+            null
         );
 
     [Test]

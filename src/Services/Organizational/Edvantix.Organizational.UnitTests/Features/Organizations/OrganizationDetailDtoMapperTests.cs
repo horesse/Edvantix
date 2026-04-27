@@ -35,6 +35,7 @@ public sealed class OrganizationDetailDtoMapperTests
         dto.OrganizationType.ShouldBe(OrganizationType.ItSchool);
         dto.Status.ShouldBe(OrganizationStatus.Active);
         dto.Contacts.ShouldBeEmpty();
+        dto.LastModifiedAt.ShouldBeNull();
     }
 
     [Test]

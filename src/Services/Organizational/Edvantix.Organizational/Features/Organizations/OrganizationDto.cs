@@ -22,7 +22,8 @@ public sealed record OrganizationDetailDto(
     Guid CurrencyId,
     OrganizationType OrganizationType,
     OrganizationStatus Status,
-    IReadOnlyList<ContactDto> Contacts
+    IReadOnlyList<ContactDto> Contacts,
+    DateTime? LastModifiedAt
 );
 
 public sealed record ContactDto(

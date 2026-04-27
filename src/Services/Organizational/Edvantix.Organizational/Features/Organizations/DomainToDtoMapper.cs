@@ -29,7 +29,8 @@ public sealed class OrganizationDetailDtoMapper : Mapper<Organization, Organizat
             source.CurrencyId,
             source.OrganizationType,
             source.Status,
-            [.. source.Contacts.Select(MapContact)]
+            [.. source.Contacts.Select(MapContact)],
+            source.LastModifiedAt
         );
 
     private static ContactDto MapContact(Contact c) =>

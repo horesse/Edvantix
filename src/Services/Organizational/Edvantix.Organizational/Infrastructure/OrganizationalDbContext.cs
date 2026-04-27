@@ -1,5 +1,4 @@
-﻿using Edvantix.Chassis.EF.Contexts;
-using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
@@ -7,7 +6,9 @@ using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Infrastructure;
 
-public sealed class OrganizationalDbContext(DbContextOptions options) : PostgresContext(options)
+public sealed class OrganizationalDbContext(DbContextOptions options)
+    : DbContext(options),
+        IUnitOfWork
 {
     public DbSet<Permission> Permissions => Set<Permission>();
 
@@ -34,5 +35,11 @@ public sealed class OrganizationalDbContext(DbContextOptions options) : Postgres
         modelBuilder.AddOutboxMessageEntity();
         modelBuilder.AddOutboxStateEntity();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrganizationalDbContext).Assembly);
+    }
+
+    public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
+    {
+        await SaveChangesAsync(cancellationToken);
+        return true;
     }
 }

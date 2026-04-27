@@ -28,5 +28,23 @@ internal sealed class UpdateOrganizationValidator : AbstractValidator<UpdateOrga
         RuleFor(x => x.LegalForm)
             .IsInEnum()
             .WithMessage("Указана недопустимая организационно-правовая форма");
+
+        RuleFor(x => x.RegistrationDate)
+            .Must(d => d <= DateOnly.FromDateTime(DateTime.Today))
+            .WithMessage("Дата регистрации не может быть в будущем");
+
+        RuleFor(x => x.ContactType).IsInEnum().WithMessage("Указан недопустимый тип контакта");
+
+        RuleFor(x => x.ContactValue)
+            .NotEmpty()
+            .WithMessage("Значение контакта обязательно")
+            .MaximumLength(DataSchemaLength.Large)
+            .WithMessage($"Контакт не должен превышать {DataSchemaLength.Large} символов");
+
+        RuleFor(x => x.ContactDescription)
+            .NotEmpty()
+            .WithMessage("Описание контакта обязательно")
+            .MaximumLength(DataSchemaLength.SuperLarge)
+            .WithMessage($"Описание не должно превышать {DataSchemaLength.SuperLarge} символов");
     }
 }

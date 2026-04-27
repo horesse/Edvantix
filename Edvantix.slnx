@@ -8,9 +8,6 @@
     <File Path="NuGet.config" />
     <File Path="Versions.props" />
   </Folder>
-  <Folder Name="/build/.aspire/">
-    <File Path=".aspire/settings.json" />
-  </Folder>
   <Folder Name="/build/.config/">
     <File Path=".config/dotnet-tools.json" />
   </Folder>

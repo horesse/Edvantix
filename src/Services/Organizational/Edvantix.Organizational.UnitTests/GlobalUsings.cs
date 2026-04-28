@@ -20,6 +20,7 @@ global using Edvantix.Organizational.Features.OrganizationMembers.Get;
 global using Edvantix.Organizational.Features.OrganizationMembers.List;
 global using Edvantix.Organizational.Features.OrganizationMembers.Update;
 global using Edvantix.Organizational.Features.Organizations;
+global using Edvantix.Organizational.Features.Organizations.Archive;
 global using Edvantix.Organizational.Features.Organizations.Create;
 global using Edvantix.Organizational.Features.Organizations.Delete;
 global using Edvantix.Organizational.Features.Organizations.Get;

@@ -15,7 +15,7 @@ internal sealed class GetOrganizationQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var tag = nameof(OrganizationDetailDto).ToLowerInvariant();
+        var tag = nameof(Organization).ToLowerInvariant();
 
         var organization = await cache.GetOrCreateAsync(
             $"{tag}:{query.Id}",

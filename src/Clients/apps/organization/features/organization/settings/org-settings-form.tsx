@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronRight, CircleCheck, History } from "lucide-react";
@@ -34,25 +34,25 @@ interface OrgSettingsFormProps {
 }
 
 export function OrgSettingsForm({ org }: Readonly<OrgSettingsFormProps>) {
-  const primaryContact = useMemo(
-    () => org.contacts.find((c) => c.isPrimary) ?? null,
-    [org.contacts],
+  const buildDefaults = useCallback(
+    (o: OrganizationDetailDto): EditFormValues => {
+      const pc = o.contacts.find((c) => c.isPrimary) ?? null;
+      return {
+        fullLegalName: o.fullLegalName,
+        shortName: o.shortName ?? "",
+        legalForm: o.legalForm,
+        organizationType: o.organizationType,
+        registrationDate: o.registrationDate,
+        contactType: pc?.contactType ?? ContactType.Email,
+        contactValue: pc?.value ?? "",
+        contactDescription: pc?.description ?? "",
+      };
+    },
+    [],
   );
 
-  const defaults = useMemo<EditFormValues>(
-    () => ({
-      fullLegalName: org.fullLegalName,
-      shortName: org.shortName ?? "",
-      legalForm: org.legalForm,
-      organizationType: org.organizationType,
-      registrationDate: org.registrationDate,
-      contactType: primaryContact?.contactType ?? ContactType.Email,
-      contactValue: primaryContact?.value ?? "",
-      contactDescription: primaryContact?.description ?? "",
-    }),
-    // only recompute when the org's identity changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [org.id],
+  const [defaults, setDefaults] = useState<EditFormValues>(() =>
+    buildDefaults(org),
   );
 
   const {
@@ -68,18 +68,10 @@ export function OrgSettingsForm({ org }: Readonly<OrgSettingsFormProps>) {
   });
 
   useEffect(() => {
-    const pc = org.contacts.find((c) => c.isPrimary) ?? null;
-    reset({
-      fullLegalName: org.fullLegalName,
-      shortName: org.shortName ?? "",
-      legalForm: org.legalForm,
-      organizationType: org.organizationType,
-      registrationDate: org.registrationDate,
-      contactType: pc?.contactType ?? ContactType.Email,
-      contactValue: pc?.value ?? "",
-      contactDescription: pc?.description ?? "",
-    });
-  }, [org, reset]);
+    const d = buildDefaults(org);
+    setDefaults(d);
+    reset(d);
+  }, [org, reset, buildDefaults]);
 
   const { field: legalFormField } = useController({
     control,
@@ -178,6 +170,8 @@ export function OrgSettingsForm({ org }: Readonly<OrgSettingsFormProps>) {
           contactDescription: values.contactDescription,
         },
       });
+      setDefaults(values);
+      reset(values);
       setSavingState("saved");
       toast.success("Изменения сохранены");
     } catch {

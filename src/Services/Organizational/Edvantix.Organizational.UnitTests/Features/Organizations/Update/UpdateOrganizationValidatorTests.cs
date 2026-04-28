@@ -90,12 +90,71 @@ public sealed class UpdateOrganizationValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.LegalForm);
     }
 
+    [Test]
+    public void GivenFutureRegistrationDate_WhenValidating_ThenShouldHaveError()
+    {
+        var result = _validator.TestValidate(
+            BuildValidCommand() with
+            {
+                RegistrationDate = DateOnly.FromDateTime(DateTime.Today.AddDays(1)),
+            }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.RegistrationDate);
+    }
+
+    [Test]
+    public void GivenTodayRegistrationDate_WhenValidating_ThenShouldNotHaveError()
+    {
+        var result = _validator.TestValidate(
+            BuildValidCommand() with
+            {
+                RegistrationDate = DateOnly.FromDateTime(DateTime.Today),
+            }
+        );
+
+        result.ShouldNotHaveValidationErrorFor(x => x.RegistrationDate);
+    }
+
+    [Test]
+    public void GivenEmptyContactValue_WhenValidating_ThenShouldHaveError()
+    {
+        var result = _validator.TestValidate(BuildValidCommand() with { ContactValue = "" });
+
+        result.ShouldHaveValidationErrorFor(x => x.ContactValue);
+    }
+
+    [Test]
+    public void GivenEmptyContactDescription_WhenValidating_ThenShouldHaveError()
+    {
+        var result = _validator.TestValidate(BuildValidCommand() with { ContactDescription = "" });
+
+        result.ShouldHaveValidationErrorFor(x => x.ContactDescription);
+    }
+
+    [Test]
+    public void GivenInvalidContactType_WhenValidating_ThenShouldHaveError()
+    {
+        var result = _validator.TestValidate(
+            BuildValidCommand() with
+            {
+                ContactType = (ContactType)999,
+            }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.ContactType);
+    }
+
     private static UpdateOrganizationCommand BuildValidCommand() =>
         new(
             Guid.CreateVersion7(),
             "ООО Тестовая Организация",
             "ТестОрг",
             OrganizationType.PrivateEducationalCenter,
-            LegalForm.Llc
+            LegalForm.Llc,
+            new DateOnly(2020, 1, 15),
+            ContactType.Email,
+            "test@example.com",
+            "Основной контакт директора"
         );
 }

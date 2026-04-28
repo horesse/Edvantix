@@ -30,12 +30,17 @@ public sealed class UpdateOrganizationCommandHandlerTests
             .Setup(r => r.GetByIdAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(org);
 
+        var newDate = new DateOnly(2022, 6, 1);
         var command = new UpdateOrganizationCommand(
             _organizationId,
             "АО Новое Название",
             "НовНаз",
             OrganizationType.University,
-            LegalForm.Ojsc
+            LegalForm.Ojsc,
+            newDate,
+            ContactType.Telegram,
+            "@school_official",
+            "Телеграм директора"
         );
 
         await _handler.Handle(command, CancellationToken.None);
@@ -44,6 +49,40 @@ public sealed class UpdateOrganizationCommandHandlerTests
         org.ShortName.ShouldBe("НовНаз");
         org.OrganizationType.ShouldBe(OrganizationType.University);
         org.LegalForm.ShouldBe(LegalForm.Ojsc);
+        org.RegistrationDate.ShouldBe(newDate);
+        org.LastModifiedAt.ShouldNotBeNull();
+    }
+
+    [Test]
+    public async Task GivenExistingOrganizationWithContact_WhenHandling_ThenShouldUpdatePrimaryContact()
+    {
+        var org = CreateOrganization();
+        var contact = new Contact(
+            org.Id,
+            "old@test.com",
+            "Старый контакт",
+            ContactType.Email,
+            isPrimary: true
+        );
+        org.AddContact(contact);
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(_organizationId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(org);
+
+        var command = BuildValidCommand(_organizationId) with
+        {
+            ContactType = ContactType.MobilePhone,
+            ContactValue = "+7 900 123 45 67",
+            ContactDescription = "Мобильный директора",
+        };
+
+        await _handler.Handle(command, CancellationToken.None);
+
+        var primary = org.Contacts.Single(c => c.IsPrimary);
+        primary.ContactType.ShouldBe(ContactType.MobilePhone);
+        primary.Value.ShouldBe("+7 900 123 45 67");
+        primary.Description.ShouldBe("Мобильный директора");
     }
 
     [Test]
@@ -85,8 +124,9 @@ public sealed class UpdateOrganizationCommandHandlerTests
         org.ShortName.ShouldBeNull();
     }
 
-    private Organization CreateOrganization() =>
-        new Organization(
+    private Organization CreateOrganization()
+    {
+        var org = new Organization(
             "ООО Тестовая Компания",
             isLegalEntity: true,
             new DateOnly(2020, 1, 15),
@@ -98,7 +138,28 @@ public sealed class UpdateOrganizationCommandHandlerTests
         {
             Id = _organizationId,
         };
+        org.AddContact(
+            new Contact(
+                org.Id,
+                "old@example.com",
+                "Исходный контакт",
+                ContactType.Email,
+                isPrimary: true
+            )
+        );
+        return org;
+    }
 
     private static UpdateOrganizationCommand BuildValidCommand(Guid id) =>
-        new(id, "ООО Обновлённая Компания", "ОбнКо", OrganizationType.ItSchool, LegalForm.Pue);
+        new(
+            id,
+            "ООО Обновлённая Компания",
+            "ОбнКо",
+            OrganizationType.ItSchool,
+            LegalForm.Pue,
+            new DateOnly(2021, 3, 10),
+            ContactType.Email,
+            "updated@example.com",
+            "Основной email организации"
+        );
 }

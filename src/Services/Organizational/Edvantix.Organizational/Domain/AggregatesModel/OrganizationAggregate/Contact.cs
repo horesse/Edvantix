@@ -56,6 +56,16 @@ public sealed class Contact() : Entity, ITenanted
     /// <summary>Признак основного контакта организации. Ровно один активный контакт должен быть Primary.</summary>
     public bool IsPrimary { get; private set; }
 
+    /// <summary>Обновляет значение, описание и тип контакта.</summary>
+    public void Update(string value, string description, ContactType contactType)
+    {
+        Guard.Against.NullOrWhiteSpace(value, nameof(value));
+        Guard.Against.NullOrWhiteSpace(description, nameof(description));
+        Value = value.Trim();
+        Description = description.Trim();
+        ContactType = contactType;
+    }
+
     /// <summary>Назначает данный контакт основным.</summary>
     public void SetPrimary() => IsPrimary = true;
 

@@ -107,12 +107,20 @@ public sealed class OrganizationAggregateTests
     {
         var org = CreateValidOrganization();
 
-        org.Update("АО Новое Название", "НовНаз", OrganizationType.University, LegalForm.Ojsc);
+        var newDate = new DateOnly(2022, 6, 1);
+        org.Update(
+            "АО Новое Название",
+            "НовНаз",
+            OrganizationType.University,
+            LegalForm.Ojsc,
+            newDate
+        );
 
         org.FullLegalName.ShouldBe("АО Новое Название");
         org.ShortName.ShouldBe("НовНаз");
         org.OrganizationType.ShouldBe(OrganizationType.University);
         org.LegalForm.ShouldBe(LegalForm.Ojsc);
+        org.RegistrationDate.ShouldBe(newDate);
     }
 
     [Test]
@@ -120,7 +128,13 @@ public sealed class OrganizationAggregateTests
     {
         var org = CreateValidOrganization();
 
-        org.Update("АО Новое Название", "НовНаз", OrganizationType.University, LegalForm.Ojsc);
+        org.Update(
+            "АО Новое Название",
+            "НовНаз",
+            OrganizationType.University,
+            LegalForm.Ojsc,
+            new DateOnly(2022, 6, 1)
+        );
 
         org.DomainEvents.ShouldHaveSingleItem();
         var @event = org.DomainEvents.Single().ShouldBeOfType<OrganizationUpdatedDomainEvent>();
@@ -142,7 +156,8 @@ public sealed class OrganizationAggregateTests
                 fullLegalName!,
                 null,
                 OrganizationType.PrivateEducationalCenter,
-                LegalForm.Llc
+                LegalForm.Llc,
+                new DateOnly(2020, 1, 15)
             );
 
         act.ShouldThrow<ArgumentException>();

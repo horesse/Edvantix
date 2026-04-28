@@ -108,6 +108,7 @@ public sealed class GetOrganizationQueryHandlerTests
             ValidCurrencyId,
             OrganizationType.PrivateEducationalCenter,
             OrganizationStatus.Active,
-            []
+            [],
+            null
         );
 }

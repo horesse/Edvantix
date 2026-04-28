@@ -23,6 +23,7 @@ export enum LegalForm {
   EducationalInstitution = 9,
 }
 
+/** Аббревиатура правовой формы для отображения в бейджах и карточках. */
 export const LEGAL_FORM_LABELS: Record<LegalForm, string> = {
   [LegalForm.Llc]: "ООО",
   [LegalForm.Ojsc]: "ОАО",
@@ -33,7 +34,36 @@ export const LEGAL_FORM_LABELS: Record<LegalForm, string> = {
   [LegalForm.ProductionCooperative]: "Кооператив",
   [LegalForm.StateEducationalInstitution]: "ГУО",
   [LegalForm.PrivateEducationalInstitution]: "ЧУО",
-  [LegalForm.EducationalInstitution]: "Образовательное учреждение",
+  [LegalForm.EducationalInstitution]: "ОУ",
+};
+
+/** Полное наименование правовой формы. */
+export const LEGAL_FORM_FULL_NAMES: Record<LegalForm, string> = {
+  [LegalForm.Llc]: "Общество с ограниченной ответственностью",
+  [LegalForm.Ojsc]: "Открытое акционерное общество",
+  [LegalForm.Cjsc]: "Закрытое акционерное общество",
+  [LegalForm.Ue]: "Унитарное предприятие",
+  [LegalForm.Pue]: "Частное унитарное предприятие",
+  [LegalForm.IndividualEntrepreneur]: "Индивидуальный предприниматель",
+  [LegalForm.ProductionCooperative]: "Производственный кооператив",
+  [LegalForm.StateEducationalInstitution]:
+    "Государственное учреждение образования",
+  [LegalForm.PrivateEducationalInstitution]: "Частное учреждение образования",
+  [LegalForm.EducationalInstitution]: "Общее образовательное учреждение",
+};
+
+/** true — юридическое лицо, false — физическое (ИП). */
+export const LEGAL_FORM_IS_LEGAL_ENTITY: Record<LegalForm, boolean> = {
+  [LegalForm.Llc]: true,
+  [LegalForm.Ojsc]: true,
+  [LegalForm.Cjsc]: true,
+  [LegalForm.Ue]: true,
+  [LegalForm.Pue]: true,
+  [LegalForm.IndividualEntrepreneur]: false,
+  [LegalForm.ProductionCooperative]: true,
+  [LegalForm.StateEducationalInstitution]: true,
+  [LegalForm.PrivateEducationalInstitution]: true,
+  [LegalForm.EducationalInstitution]: true,
 };
 
 /** Статус организационной сущности. */
@@ -119,6 +149,7 @@ export type OrganizationDetailDto = {
   readonly organizationType: OrganizationType;
   readonly status: OrganizationStatus;
   readonly contacts: readonly ContactDto[];
+  readonly lastModifiedAt: string | null;
 };
 
 /** Организация с ролью текущего пользователя в ней (эндпоинт /organizations/mine). */
@@ -157,6 +188,10 @@ export type UpdateOrganizationRequest = {
   readonly shortName?: string | null;
   readonly organizationType: OrganizationType;
   readonly legalForm: LegalForm;
+  readonly registrationDate: string;
+  readonly contactType: ContactType;
+  readonly contactValue: string;
+  readonly contactDescription: string;
 };
 
 export type OrganizationsQuery = {

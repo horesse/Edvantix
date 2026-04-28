@@ -96,6 +96,18 @@ class CompanyApiClient {
   }
 
   /**
+   * Архивировать организацию.
+   * Требует заголовок X-OrganizationId-Id (читается из localStorage).
+   */
+  public async archiveOrganization(id: string): Promise<void> {
+    await this.client.post<void>(
+      `${BASE}/organizations/${id}/archive`,
+      {},
+      orgConfig(),
+    );
+  }
+
+  /**
    * Удалить организацию.
    * Требует заголовок X-OrganizationId-Id (читается из localStorage).
    */

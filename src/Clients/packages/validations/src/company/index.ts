@@ -72,6 +72,24 @@ export const updateOrganizationSchema = z.object({
   legalForm: z.nativeEnum(LegalForm, {
     error: "Укажите организационно-правовую форму",
   }),
+  registrationDate: z
+    .string()
+    .min(1, "Укажите дату регистрации")
+    .refine(
+      (d) => new Date(d) <= new Date(),
+      "Дата регистрации не может быть в будущем",
+    ),
+  contactType: z.nativeEnum(ContactType, {
+    error: "Укажите тип контакта",
+  }),
+  contactValue: z
+    .string()
+    .min(1, "Значение контакта обязательно")
+    .max(255, "Контакт не должен превышать 255 символов"),
+  contactDescription: z
+    .string()
+    .min(1, "Описание контакта обязательно")
+    .max(500, "Описание не должно превышать 500 символов"),
 });
 
 export type UpdateOrganizationInput = z.infer<typeof updateOrganizationSchema>;

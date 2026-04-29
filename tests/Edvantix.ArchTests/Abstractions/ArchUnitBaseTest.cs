@@ -8,6 +8,7 @@ public abstract class ArchUnitBaseTest : BaseTest
 {
     protected static readonly Architecture Architecture = new ArchLoader()
         .LoadAssemblies(
+            AuditAssembly,
             PersonaAssembly,
             NotificationAssembly,
             SchedulerAssembly,
@@ -17,6 +18,14 @@ public abstract class ArchUnitBaseTest : BaseTest
             SharedKernelAssembly
         )
         .Build();
+
+    protected static readonly IObjectProvider<IType> AuditServiceTypes = ArchRuleDefinition
+        .Types()
+        .That()
+        .ResideInAssembly(AuditAssembly)
+        .And()
+        .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .As(nameof(Audit));
 
     protected static readonly IObjectProvider<IType> PersonaServiceTypes = ArchRuleDefinition
         .Types()
@@ -78,10 +87,11 @@ public abstract class ArchUnitBaseTest : BaseTest
     {
         return serviceName switch
         {
+            nameof(Audit) => AuditServiceTypes,
             nameof(Persona) => PersonaServiceTypes,
             nameof(Notification) => NotificationServiceTypes,
             nameof(Scheduler) => SchedulerServiceTypes,
-            "Organizational" => OrganizationalServiceTypes,
+            nameof(Organizational) => OrganizationalServiceTypes,
             nameof(Chassis) => ChassisServiceTypes,
             nameof(Constants) => ConstantsServiceTypes,
             nameof(SharedKernel) => SharedKernelServiceTypes,

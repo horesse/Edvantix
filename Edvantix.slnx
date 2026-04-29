@@ -23,6 +23,7 @@
   </Folder>
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/Audit/">
+    <Project Path="src/Services/Audit/Edvantix.Audit.UnitTests/Edvantix.Audit.UnitTests.csproj" />
     <Project Path="src/Services/Audit/Edvantix.Audit/Edvantix.Audit.csproj" />
   </Folder>
   <Folder Name="/src/Services/Identity/">

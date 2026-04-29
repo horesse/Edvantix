@@ -39,6 +39,7 @@ var profileDb = postgres.AddDatabase(Components.Database.Persona);
 var identityDb = postgres.AddDatabase(Components.Database.Identity);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
 var organizationalDb = postgres.AddDatabase(Components.Database.Organizational);
+var auditDb = postgres.AddDatabase(Components.Database.Audit);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -72,6 +73,18 @@ var notificationApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+var auditApi = builder
+    .AddProject<Edvantix_Audit>(Services.Audit)
+    .WithKeycloak(keycloak)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithReference(auditDb)
+    .WaitFor(auditDb)
+    .WithReference(redis)
+    .WaitFor(redis)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls();
+
 var organizationalApi = builder
     .AddProject<Edvantix_Organizational>(Services.Organisational)
     .WithKeycloak(keycloak)
@@ -99,6 +112,7 @@ var gateway = builder
     .WithService(personaApi, true)
     .WithService(notificationApi, true)
     .WithService(organizationalApi, true)
+    .WithService(auditApi, true)
     .Build();
 
 var turbo = builder
@@ -166,7 +180,8 @@ if (builder.ExecutionContext.IsRunMode)
         .AddScalar(keycloak)
         .WithOpenAPI(personaApi)
         .WithOpenAPI(notificationApi)
-        .WithOpenAPI(organizationalApi);
+        .WithOpenAPI(organizationalApi)
+        .WithOpenAPI(auditApi);
 
     builder.AddK6(gateway);
 }
@@ -177,6 +192,7 @@ else
     personaApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
     organizationalApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
     notificationApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
+    auditApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
 }
 
 await builder.Build().RunAsync();

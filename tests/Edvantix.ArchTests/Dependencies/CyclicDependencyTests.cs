@@ -8,12 +8,14 @@ public sealed class CyclicDependencyTests : ArchUnitBaseTest
 {
     private static readonly string[] ServiceNames =
     [
+        nameof(Audit),
         nameof(Persona),
         nameof(Notification),
         nameof(Scheduler),
     ];
 
     [Test]
+    [Arguments(nameof(Audit))]
     [Arguments(nameof(Persona))]
     [Arguments(nameof(Notification))]
     [Arguments(nameof(Scheduler))]

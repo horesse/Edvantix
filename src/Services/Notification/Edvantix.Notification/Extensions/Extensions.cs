@@ -3,6 +3,7 @@ using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Notification.Infrastructure;
+using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.Infrastructure.Senders.MailKit;
 using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
@@ -54,6 +55,7 @@ internal static class Extensions
             }
 
             builder.AddEmailOutbox();
+            builder.AddInAppSender();
 
             builder.AddEventBus(
                 typeof(INotificationApiMarker),

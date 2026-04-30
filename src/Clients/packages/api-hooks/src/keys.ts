@@ -24,6 +24,8 @@ export const companyKeys = {
     [...companyKeys.all, "organizations", id] as const,
   members: (orgId: string, query?: unknown) =>
     [...companyKeys.all, "members", orgId, query] as const,
+  membersKpi: (orgId: string) =>
+    [...companyKeys.all, "members", orgId, "kpi"] as const,
   member: (id: string) => [...companyKeys.all, "member", id] as const,
 };
 

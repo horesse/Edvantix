@@ -161,12 +161,14 @@ export type OrganizationWithRoleDto = OrganizationDto & {
 /** Участник организации. */
 export type OrganizationMemberDto = {
   readonly id: string;
-  readonly organizationId: string;
   readonly profileId: string;
-  readonly organizationMemberRoleId: string;
+  /** Код роли участника (например «Owner», «Teacher»). */
+  readonly role: string;
   readonly status: OrganizationStatus;
-  readonly startDate: string;
-  readonly endDate: string | null;
+  /** Полное имя, обогащённое из Profile Service. */
+  readonly fullName: string;
+  readonly avatarUrl: string | null;
+  readonly lastActivity: string | null;
 };
 
 // --- Request types ---
@@ -216,5 +218,15 @@ export type UpdateOrganizationMemberRequest = {
 export type OrganizationMembersQuery = {
   readonly pageIndex?: number;
   readonly pageSize?: number;
+  /** Фильтр по ID роли. */
+  readonly roleId?: string;
   readonly status?: OrganizationStatus;
+};
+
+/** KPI-статистика участников организации по статусам. */
+export type OrganizationMembersKpiDto = {
+  readonly total: number;
+  readonly active: number;
+  readonly archived: number;
+  readonly deleted: number;
 };

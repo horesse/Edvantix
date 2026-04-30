@@ -4,6 +4,7 @@ import type {
   OrganizationDetailDto,
   OrganizationDto,
   OrganizationMemberDto,
+  OrganizationMembersKpiDto,
   OrganizationMembersQuery,
   OrganizationWithRoleDto,
   OrganizationsQuery,
@@ -14,6 +15,7 @@ import type { PagedResult } from "@workspace/types/shared";
 
 import { apiClient } from "../client";
 import type ApiClient from "../client";
+import { parsePagedResponse } from "../paged-response";
 
 const BASE = "/organisational/api/v1";
 
@@ -44,11 +46,11 @@ class CompanyApiClient {
   public async getOrganizations(
     query?: OrganizationsQuery,
   ): Promise<PagedResult<OrganizationDto>> {
-    const response = await this.client.get<PagedResult<OrganizationDto>>(
+    const response = await this.client.get<OrganizationDto[]>(
       `${BASE}/organizations`,
       { params: query },
     );
-    return response.data;
+    return parsePagedResponse(response);
   }
 
   /** Получить список организаций текущего пользователя с его ролью в каждой. */
@@ -124,9 +126,21 @@ class CompanyApiClient {
   public async getMembers(
     query?: OrganizationMembersQuery,
   ): Promise<PagedResult<OrganizationMemberDto>> {
-    const response = await this.client.get<PagedResult<OrganizationMemberDto>>(
+    const response = await this.client.get<OrganizationMemberDto[]>(
       `${BASE}/members`,
       orgConfig({ params: query }),
+    );
+    return parsePagedResponse(response);
+  }
+
+  /**
+   * Получить KPI-статистику участников организации по статусам.
+   * Организация определяется заголовком X-OrganizationId-Id из localStorage.
+   */
+  public async getMembersKpi(): Promise<OrganizationMembersKpiDto> {
+    const response = await this.client.get<OrganizationMembersKpiDto>(
+      `${BASE}/members/kpi`,
+      orgConfig(),
     );
     return response.data;
   }

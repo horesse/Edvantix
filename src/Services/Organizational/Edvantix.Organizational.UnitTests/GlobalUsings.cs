@@ -17,6 +17,7 @@ global using Edvantix.Organizational.Features.OrganizationMembers;
 global using Edvantix.Organizational.Features.OrganizationMembers.Create;
 global using Edvantix.Organizational.Features.OrganizationMembers.Delete;
 global using Edvantix.Organizational.Features.OrganizationMembers.Get;
+global using Edvantix.Organizational.Features.OrganizationMembers.Kpi;
 global using Edvantix.Organizational.Features.OrganizationMembers.List;
 global using Edvantix.Organizational.Features.OrganizationMembers.Update;
 global using Edvantix.Organizational.Features.Organizations;

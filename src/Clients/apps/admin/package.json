@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.11",
-    "@tanstack/react-query": "^5.100.5",
+    "@tanstack/react-query": "^5.100.6",
     "better-auth": "^1.6.9",
     "lucide-react": "^1.11.0",
     "next": "16.2.4",

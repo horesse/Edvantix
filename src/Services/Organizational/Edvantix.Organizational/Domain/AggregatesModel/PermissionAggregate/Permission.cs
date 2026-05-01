@@ -1,27 +1,44 @@
-using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
-public sealed class Permission() : Entity, IAggregateRoot
+/// <summary>
+/// Разрешение в рамках функциональной области <see cref="Feature"/>.
+/// Создаётся и изменяется исключительно через методы агрегата <see cref="Feature"/>.
+/// Машиночитаемый <see cref="Code"/> используется в проверках авторизации;
+/// <see cref="Name"/> — только для отображения на UI.
+/// </summary>
+public sealed class Permission() : Entity
 {
-    public Permission(string feature, string name)
+    internal Permission(Feature feature, string code, string name)
         : this()
     {
-        Guard.Against.NullOrWhiteSpace(feature, nameof(feature));
+        Feature = feature;
+        Code = code;
+        Name = name;
+    }
+
+    /// <summary>Внешний ключ к <see cref="Feature"/>.</summary>
+    public Guid FeatureId { get; private set; }
+
+    /// <summary>Функциональная область, к которой относится разрешение.</summary>
+    public Feature Feature { get; private set; } = null!;
+
+    /// <summary>Машиночитаемый код разрешения. Используется в проверках авторизации.</summary>
+    public string Code { get; private set; } = string.Empty;
+
+    /// <summary>Отображаемое название для UI.</summary>
+    public string Name { get; private set; } = string.Empty;
+
+    internal void UpdateName(string name)
+    {
         Guard.Against.NullOrWhiteSpace(name, nameof(name));
-        Feature = feature.Trim();
         Name = name.Trim();
     }
 
-    public string Feature { get; private set; } = string.Empty;
-    public string Name { get; private set; } = string.Empty;
-
-    internal IReadOnlyList<GroupRole> GroupRoles => _groupRoles;
     internal IReadOnlyList<OrganizationMemberRole> OrganizationMemberRoles =>
         _organizationMemberRoles;
 
-    private readonly List<GroupRole> _groupRoles = [];
     private readonly List<OrganizationMemberRole> _organizationMemberRoles = [];
 }

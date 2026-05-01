@@ -1,53 +1,68 @@
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Infrastructure;
 
 /// <summary>
-/// Наполняет таблицу разрешений всеми известными кодами из
-/// <see cref="OrganizationPermissions"/> и <see cref="GroupPermissions"/>.
-/// Каждое разрешение проверяется индивидуально — уже существующие пропускаются.
+/// Наполняет таблицы функциональных областей и разрешений всеми известными значениями
+/// из <see cref="OrganizationPermission"/> и <see cref="GroupPermission"/>.
+/// Для существующих записей обновляются отображаемые названия, если они изменились.
 /// </summary>
 public sealed class PermissionsDbSeeder(ILogger<PermissionsDbSeeder> logger)
     : IDbSeeder<OrganizationalDbContext>
 {
-    private static readonly IReadOnlyList<(string Feature, string Name)> _knownPermissions =
-    [
-        (OrganizationPermissions.Feature, OrganizationPermissions.Create),
-        (OrganizationPermissions.Feature, OrganizationPermissions.Read),
-        (OrganizationPermissions.Feature, OrganizationPermissions.Update),
-        (OrganizationPermissions.Feature, OrganizationPermissions.Delete),
-        (OrganizationPermissions.Feature, OrganizationPermissions.TransferOwnership),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageMembers),
-        (OrganizationPermissions.Feature, OrganizationPermissions.InviteMembers),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageRoles),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageGroups),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ViewAnalytics),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageSettings),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageSubscription),
-        (GroupPermissions.Feature, GroupPermissions.Create),
-        (GroupPermissions.Feature, GroupPermissions.Read),
-        (GroupPermissions.Feature, GroupPermissions.Update),
-        (GroupPermissions.Feature, GroupPermissions.Delete),
-        (GroupPermissions.Feature, GroupPermissions.ManageMembers),
-        (GroupPermissions.Feature, GroupPermissions.ViewMembers),
-        (GroupPermissions.Feature, GroupPermissions.ManageContent),
-        (GroupPermissions.Feature, GroupPermissions.ViewContent),
-        (GroupPermissions.Feature, GroupPermissions.ManageSchedule),
-    ];
+    private static IEnumerable<(
+        string FeatureCode,
+        string FeatureName,
+        string Code,
+        string Name
+    )> GetKnownPermissions()
+    {
+        foreach (var value in Enum.GetValues<OrganizationPermission>())
+            yield return (
+                nameof(OrganizationPermission),
+                typeof(OrganizationPermission).GetDisplayName(),
+                value.GetCode(),
+                value.GetDisplayName()
+            );
+    }
 
     public async Task SeedAsync(OrganizationalDbContext context)
     {
-        var permissions = await context.Permissions.ToListAsync();
+        // AutoInclude обеспечивает загрузку Permissions вместе с Feature.
+        var features = await context.Features.ToListAsync();
 
-        foreach (var (feature, name) in _knownPermissions)
+        foreach (var group in GetKnownPermissions().GroupBy(p => p.FeatureCode))
         {
-            var exists = permissions.Any(p => p.Feature == feature && p.Name == name);
+            var featureCode = group.Key;
+            var featureName = group.First().FeatureName;
 
-            if (exists)
-                continue;
+            var feature = features.FirstOrDefault(f => f.Code == featureCode);
 
-            context.Permissions.Add(new Permission(feature, name));
-            logger.LogInformation("Seeding permission {Feature}/{Name}", feature, name);
+            if (feature is null)
+            {
+                feature = new Feature(featureCode, featureName);
+                context.Features.Add(feature);
+                features.Add(feature);
+                logger.LogInformation("Добавлена область {Code}", featureCode);
+            }
+            else if (feature.Name != featureName)
+            {
+                feature.UpdateName(featureName);
+                logger.LogInformation("Обновлено название области {Code}", featureCode);
+            }
+
+            foreach (var (_, _, code, name) in group)
+            {
+                var before = feature.Permissions.Count;
+                feature.AddOrUpdatePermission(code, name);
+                if (feature.Permissions.Count > before)
+                    logger.LogInformation(
+                        "Добавлено разрешение {FeatureCode}/{Code}",
+                        featureCode,
+                        code
+                    );
+            }
         }
 
         await context.SaveChangesAsync();

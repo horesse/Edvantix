@@ -10,4 +10,6 @@ public sealed record RoleDetailDto(
     IReadOnlyList<PermissionDto> Permissions
 );
 
-public sealed record PermissionDto(Guid Id, string Feature, string Name);
+public sealed record FeatureDto(Guid Id, string Code, string Name);
+
+public sealed record PermissionDto(Guid Id, FeatureDto Feature, string Code, string Name);

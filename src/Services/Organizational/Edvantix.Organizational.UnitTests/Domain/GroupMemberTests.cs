@@ -5,18 +5,11 @@ public sealed class GroupMemberTests
     private static readonly Guid ValidOrgId = Guid.CreateVersion7();
     private static readonly Guid ValidGroupId = Guid.CreateVersion7();
     private static readonly Guid ValidProfileId = Guid.CreateVersion7();
-    private static readonly Guid ValidGroupRoleId = Guid.CreateVersion7();
     private static readonly DateOnly ValidJoinDate = new(2024, 9, 1);
 
     private static GroupMember CreateValidMember()
     {
-        var member = new GroupMember(
-            ValidOrgId,
-            ValidGroupId,
-            ValidProfileId,
-            ValidGroupRoleId,
-            ValidJoinDate
-        )
+        var member = new GroupMember(ValidOrgId, ValidGroupId, ValidProfileId, ValidJoinDate)
         {
             Id = Guid.CreateVersion7(),
         };
@@ -27,18 +20,11 @@ public sealed class GroupMemberTests
     [Test]
     public void GivenValidData_WhenCreatingGroupMember_ThenShouldInitializePropertiesCorrectly()
     {
-        var member = new GroupMember(
-            ValidOrgId,
-            ValidGroupId,
-            ValidProfileId,
-            ValidGroupRoleId,
-            ValidJoinDate
-        );
+        var member = new GroupMember(ValidOrgId, ValidGroupId, ValidProfileId, ValidJoinDate);
 
         member.OrganizationId.ShouldBe(ValidOrgId);
         member.GroupId.ShouldBe(ValidGroupId);
         member.ProfileId.ShouldBe(ValidProfileId);
-        member.GroupRoleId.ShouldBe(ValidGroupRoleId);
         member.Status.ShouldBe(OrganizationStatus.Active);
         member.JoinedAt.ShouldBe(ValidJoinDate);
     }
@@ -46,14 +32,7 @@ public sealed class GroupMemberTests
     [Test]
     public void GivenEmptyOrganizationId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
     {
-        var act = () =>
-            new GroupMember(
-                Guid.Empty,
-                ValidGroupId,
-                ValidProfileId,
-                ValidGroupRoleId,
-                ValidJoinDate
-            );
+        var act = () => new GroupMember(Guid.Empty, ValidGroupId, ValidProfileId, ValidJoinDate);
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -61,14 +40,7 @@ public sealed class GroupMemberTests
     [Test]
     public void GivenEmptyGroupId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
     {
-        var act = () =>
-            new GroupMember(
-                ValidOrgId,
-                Guid.Empty,
-                ValidProfileId,
-                ValidGroupRoleId,
-                ValidJoinDate
-            );
+        var act = () => new GroupMember(ValidOrgId, Guid.Empty, ValidProfileId, ValidJoinDate);
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -76,8 +48,7 @@ public sealed class GroupMemberTests
     [Test]
     public void GivenEmptyProfileId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
     {
-        var act = () =>
-            new GroupMember(ValidOrgId, ValidGroupId, Guid.Empty, ValidGroupRoleId, ValidJoinDate);
+        var act = () => new GroupMember(ValidOrgId, ValidGroupId, Guid.Empty, ValidJoinDate);
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -85,29 +56,7 @@ public sealed class GroupMemberTests
     [Test]
     public void GivenEmptyGroupRoleId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
     {
-        var act = () =>
-            new GroupMember(ValidOrgId, ValidGroupId, ValidProfileId, Guid.Empty, ValidJoinDate);
-
-        act.ShouldThrow<ArgumentException>();
-    }
-
-    [Test]
-    public void GivenNewRoleId_WhenChangingRole_ThenShouldUpdateGroupRoleId()
-    {
-        var member = CreateValidMember();
-        var newRoleId = Guid.CreateVersion7();
-
-        member.ChangeRole(newRoleId);
-
-        member.GroupRoleId.ShouldBe(newRoleId);
-    }
-
-    [Test]
-    public void GivenEmptyRoleId_WhenChangingRole_ThenShouldThrowArgumentException()
-    {
-        var member = CreateValidMember();
-
-        var act = () => member.ChangeRole(Guid.Empty);
+        var act = () => new GroupMember(ValidOrgId, ValidGroupId, ValidProfileId, ValidJoinDate);
 
         act.ShouldThrow<ArgumentException>();
     }

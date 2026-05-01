@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.EF.Configurations;
+using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,10 +10,13 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
     {
         builder.UseDefaultConfiguration();
 
-        builder.Property(p => p.Feature).IsRequired().HasMaxLength(200);
+        builder.Property(p => p.Code).IsRequired().HasMaxLength(200);
         builder.Property(p => p.Name).IsRequired().HasMaxLength(200);
 
-        // Unique per feature — the same permission name can exist in different features.
-        builder.HasIndex(p => new { p.Feature, p.Name }).IsUnique();
+        // Feature всегда загружается вместе с разрешением — нужен для маппинга в DTO.
+        builder.Navigation(p => p.Feature).AutoInclude();
+
+        // Код разрешения уникален в рамках одной функциональной области.
+        builder.HasIndex(p => new { p.FeatureId, p.Code }).IsUnique();
     }
 }

@@ -1,10 +1,11 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.List;
 
-[RequirePermission(OrganizationPermissions.ManageRoles)]
+[RequirePermission(nameof(OrganizationPermission.Roles))]
 public sealed record GetRolesQuery(
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]

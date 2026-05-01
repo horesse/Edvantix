@@ -2,11 +2,12 @@ using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Organizations.Update;
 
 [Transactional]
-[RequirePermission(OrganizationPermissions.Update)]
+[RequirePermission(nameof(OrganizationPermission.Edit))]
 public sealed record UpdateOrganizationCommand(
     Guid Id,
     string FullLegalName,

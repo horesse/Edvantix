@@ -18,12 +18,6 @@ internal sealed class GroupMemberConfiguration : IEntityTypeConfiguration<GroupM
             .HasMaxLength(DataSchemaLength.Small)
             .HasConversion<string>();
 
-        builder
-            .HasOne<GroupRole>()
-            .WithMany()
-            .HasForeignKey(m => m.GroupRoleId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasQueryFilter(x => x.ExitedAt == null);
     }
 }

@@ -1,4 +1,4 @@
-﻿edition = "2023";
+edition = "2023";
 
 option csharp_namespace = "Edvantix.Organizational.Grpc.Services";
 
@@ -7,9 +7,9 @@ package permission.v1;
 service PermissionGrpcService {
   rpc CheckPermission (CheckPermissionRequest) returns (CheckPermissionResponse);
 
-  // Synchronises the permission set for a feature.
-  // All permissions not present in the request are removed; missing ones are created.
-  // Intended for use as a seeder called during service startup.
+  // Синхронизирует набор разрешений для функциональной области.
+  // Отсутствующие в запросе разрешения удаляются; новые — создаются.
+  // Предназначен для вызова при старте сервиса в качестве сидера.
   rpc SyncFeaturePermissions (SyncFeaturePermissionsRequest) returns (SyncFeaturePermissionsResponse);
 }
 
@@ -22,9 +22,16 @@ message CheckPermissionResponse {
   bool has_permission = 1;
 }
 
+// Пара «код + отображаемое название» для одного разрешения.
+message PermissionEntry {
+  string code = 1;
+  string name = 2;
+}
+
 message SyncFeaturePermissionsRequest {
-  string feature = 1;
-  repeated string permissions = 2;
+  string feature_code = 1;
+  string feature_name = 2;
+  repeated PermissionEntry permissions = 3;
 }
 
 message SyncFeaturePermissionsResponse {

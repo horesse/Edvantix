@@ -1,3 +1,6 @@
+using Edvantix.Chassis.Utilities;
+using Edvantix.Organizational.Domain.Permissions;
+
 namespace Edvantix.Organizational.UnitTests.Features.Roles;
 
 public sealed class RoleDtoMapperTests
@@ -36,8 +39,18 @@ public sealed class RoleDtoMapperTests
     public void GivenRole_WhenMappingToRoleDetailDto_ThenShouldMapPermissions()
     {
         var role = CreateRole();
-        var permission = new Permission(OrganizationPermissions.Feature, "ORG_READ");
-        permission.Id = Guid.CreateVersion7();
+        var feature = new Feature(
+            nameof(OrganizationPermission),
+            typeof(OrganizationPermission).GetDisplayName()
+        );
+        var permission = new Permission(
+            feature,
+            nameof(OrganizationPermission.View),
+            OrganizationPermission.View.GetDisplayName()
+        )
+        {
+            Id = Guid.CreateVersion7(),
+        };
         role.AddPermission(permission);
         var mapper = new RoleDetailDtoMapper();
 
@@ -45,8 +58,12 @@ public sealed class RoleDtoMapperTests
 
         result.Permissions.ShouldHaveSingleItem();
         result.Permissions[0].Id.ShouldBe(permission.Id);
-        result.Permissions[0].Feature.ShouldBe(OrganizationPermissions.Feature);
-        result.Permissions[0].Name.ShouldBe("ORG_READ");
+        result.Permissions[0].Feature.Code.ShouldBe(nameof(OrganizationPermission));
+        result
+            .Permissions[0]
+            .Feature.Name.ShouldBe(typeof(OrganizationPermission).GetDisplayName());
+        result.Permissions[0].Code.ShouldBe(nameof(OrganizationPermission.View));
+        result.Permissions[0].Name.ShouldBe(OrganizationPermission.View.GetDisplayName());
     }
 
     [Test]

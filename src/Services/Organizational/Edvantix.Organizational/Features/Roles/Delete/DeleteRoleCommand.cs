@@ -1,11 +1,12 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.Delete;
 
 [Transactional]
-[RequirePermission(OrganizationPermissions.ManageRoles)]
+[RequirePermission(nameof(OrganizationPermission.Roles))]
 public sealed record DeleteRoleCommand(Guid Id) : ICommand;
 
 internal sealed class DeleteRoleCommandHandler(

@@ -2,13 +2,14 @@ using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Invitations.List;
 
 /// <summary>
 /// Постраничный список приглашений организации.
 /// </summary>
-[RequirePermission(OrganizationPermissions.InviteMembers)]
+[RequirePermission(nameof(OrganizationPermission.Members))]
 public sealed record ListInvitationsQuery(
     int Offset = 0,
     int Limit = 20,

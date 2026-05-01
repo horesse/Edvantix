@@ -10,6 +10,7 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
     : DbContext(options),
         IUnitOfWork
 {
+    public DbSet<Feature> Features => Set<Feature>();
     public DbSet<Permission> Permissions => Set<Permission>();
 
     // Organization aggregate
@@ -23,7 +24,6 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
     // Group aggregate
     public DbSet<Group> Groups => Set<Group>();
     public DbSet<GroupMember> GroupMembers => Set<GroupMember>();
-    public DbSet<GroupRole> GroupRoles => Set<GroupRole>();
 
     // Invitation aggregate
     public DbSet<Invitation> Invitations => Set<Invitation>();

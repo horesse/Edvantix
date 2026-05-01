@@ -1,7 +1,7 @@
-using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Events;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
@@ -11,9 +11,8 @@ namespace Edvantix.Organizational.Domain.EventHandlers;
 /// </summary>
 internal sealed class OrganizationCreatedDomainEventHandler(
     IOrganizationMemberRoleRepository memberRoleRepository,
-    IGroupRoleRepository groupRoleRepository,
     IOrganizationMemberRepository memberRepository,
-    IPermissionRepository permissionRepository
+    IFeatureRepository featureRepository
 ) : INotificationHandler<OrganizationCreatedDomainEvent>
 {
     public async ValueTask Handle(
@@ -21,22 +20,17 @@ internal sealed class OrganizationCreatedDomainEventHandler(
         CancellationToken cancellationToken
     )
     {
-        var orgPermissions = await permissionRepository.ListAsync(
-            new PermissionByFeatureSpecification(OrganizationPermissions.Feature, true),
-            cancellationToken
-        );
-        var groupPermissions = await permissionRepository.ListAsync(
-            new PermissionByFeatureSpecification(GroupPermissions.Feature, true),
+        var orgFeature = await featureRepository.GetByCodeAsync(
+            nameof(OrganizationPermission),
             cancellationToken
         );
 
-        var (orgRoles, groupRoles) = OrganizationDefaultRolesFactory.CreateFor(
+        var orgRoles = OrganizationDefaultRolesFactory.CreateFor(
             notification.OrganizationId,
-            [.. orgPermissions, .. groupPermissions]
+            orgFeature?.Permissions ?? []
         );
 
         await memberRoleRepository.AddRangeAsync(orgRoles, cancellationToken);
-        await groupRoleRepository.AddRangeAsync(groupRoles, cancellationToken);
 
         var ownerRole = orgRoles.First(r => r.Code == "owner");
         var ownerMember = new OrganizationMember(

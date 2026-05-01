@@ -2,6 +2,7 @@ using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.Invitations.Send;
@@ -13,7 +14,7 @@ namespace Edvantix.Organizational.Features.Invitations.Send;
 /// Возвращает Id созданного приглашения.
 /// </summary>
 [Transactional]
-[RequirePermission(OrganizationPermissions.InviteMembers)]
+[RequirePermission(nameof(OrganizationPermission.Members))]
 public sealed record SendInvitationCommand(
     InvitationType Type,
     Guid RoleId,

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Edvantix.Organizational.Domain.Enums;
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
 /// <summary>Организационно-правовая форма юридического или физического лица.</summary>
 public enum LegalForm

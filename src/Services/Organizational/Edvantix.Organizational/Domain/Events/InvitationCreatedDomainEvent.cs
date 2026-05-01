@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.Events;

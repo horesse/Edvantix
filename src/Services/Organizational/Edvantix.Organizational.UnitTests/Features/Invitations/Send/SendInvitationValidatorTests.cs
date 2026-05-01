@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Features.Invitations.Send;
 
 namespace Edvantix.Organizational.UnitTests.Features.Invitations.Send;

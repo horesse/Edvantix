@@ -1,6 +1,6 @@
 using Edvantix.Chassis.Specification.Evaluators;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
-using Edvantix.Organizational.Domain.Enums;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
 

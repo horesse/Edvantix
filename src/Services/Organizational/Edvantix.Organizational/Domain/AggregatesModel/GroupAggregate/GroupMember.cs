@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;

@@ -1,5 +1,3 @@
-using Edvantix.Organizational.Domain.Enums;
-
 namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 
 /// <summary>Постраничный список приглашений организации с опциональной фильтрацией по статусу.</summary>

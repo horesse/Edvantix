@@ -1,11 +1,16 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
+/// <summary>
+/// Репозиторий агрегата <see cref="Permission"/>.
+/// </summary>
 public interface IPermissionRepository : IRepository<Permission>
 {
-    Task<IReadOnlyCollection<Permission>> ListAsync(
-        ISpecification<Permission> specification,
-        CancellationToken token = default
-    );
-    Task AddRangeAsync(Permission[] permission, CancellationToken token = default);
-    void RemoveRange(Permission[] permission);
+    /// <summary>Возвращает все разрешения из базы данных.</summary>
+    Task<List<Permission>> GetAllAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Добавляет разрешение в контекст.</summary>
+    void Add(Permission permission);
+
+    /// <summary>Помечает разрешение для удаления.</summary>
+    void Remove(Permission permission);
 }

@@ -1,4 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Events;
@@ -11,7 +10,6 @@ namespace Edvantix.Organizational.Domain.EventHandlers;
 /// </summary>
 internal sealed class OrganizationCreatedDomainEventHandler(
     IOrganizationMemberRoleRepository memberRoleRepository,
-    IGroupRoleRepository groupRoleRepository,
     IOrganizationMemberRepository memberRepository,
     IPermissionRepository permissionRepository
 ) : INotificationHandler<OrganizationCreatedDomainEvent>
@@ -21,22 +19,14 @@ internal sealed class OrganizationCreatedDomainEventHandler(
         CancellationToken cancellationToken
     )
     {
-        var orgPermissions = await permissionRepository.ListAsync(
-            new PermissionByFeatureSpecification(OrganizationPermissions.Feature, true),
-            cancellationToken
-        );
-        var groupPermissions = await permissionRepository.ListAsync(
-            new PermissionByFeatureSpecification(GroupPermissions.Feature, true),
-            cancellationToken
-        );
+        var allPermissions = await permissionRepository.GetAllAsync(cancellationToken);
 
-        var (orgRoles, groupRoles) = OrganizationDefaultRolesFactory.CreateFor(
+        var orgRoles = OrganizationDefaultRolesFactory.CreateFor(
             notification.OrganizationId,
-            [.. orgPermissions, .. groupPermissions]
+            allPermissions
         );
 
         await memberRoleRepository.AddRangeAsync(orgRoles, cancellationToken);
-        await groupRoleRepository.AddRangeAsync(groupRoles, cancellationToken);
 
         var ownerRole = orgRoles.First(r => r.Code == "owner");
         var ownerMember = new OrganizationMember(

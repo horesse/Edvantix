@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
@@ -12,15 +12,8 @@ public sealed class GroupMember() : Entity, ITenanted
     /// <param name="organizationId">Идентификатор организации (для мультиарендности).</param>
     /// <param name="groupId">Идентификатор группы.</param>
     /// <param name="profileId">Идентификатор пользователя из Profile Service.</param>
-    /// <param name="groupRoleId">Идентификатор роли участника в группе.</param>
     /// <param name="joinedAt">Дата вступления в группу.</param>
-    public GroupMember(
-        Guid organizationId,
-        Guid groupId,
-        Guid profileId,
-        Guid groupRoleId,
-        DateOnly joinedAt
-    )
+    public GroupMember(Guid organizationId, Guid groupId, Guid profileId, DateOnly joinedAt)
         : this()
     {
         if (organizationId == Guid.Empty)
@@ -38,16 +31,10 @@ public sealed class GroupMember() : Entity, ITenanted
                 "Идентификатор профиля не может быть пустым.",
                 nameof(profileId)
             );
-        if (groupRoleId == Guid.Empty)
-            throw new ArgumentException(
-                "Идентификатор роли не может быть пустым.",
-                nameof(groupRoleId)
-            );
 
         OrganizationId = organizationId;
         GroupId = groupId;
         ProfileId = profileId;
-        GroupRoleId = groupRoleId;
         Status = OrganizationStatus.Active;
         JoinedAt = joinedAt;
     }
@@ -60,9 +47,6 @@ public sealed class GroupMember() : Entity, ITenanted
 
     /// <summary>Идентификатор пользователя из Profile Service.</summary>
     public Guid ProfileId { get; private set; }
-
-    /// <summary>Идентификатор роли участника в данной группе.</summary>
-    public Guid GroupRoleId { get; private set; }
 
     /// <summary>Текущий статус участника группы.</summary>
     public OrganizationStatus Status { get; private set; }
@@ -78,18 +62,6 @@ public sealed class GroupMember() : Entity, ITenanted
 
     /// <summary>Причина выхода из группы (отчисление, перевод, завершение курса и т.д.).</summary>
     public string? ExitReason { get; private set; }
-
-    /// <summary>Изменяет роль участника в группе.</summary>
-    public void ChangeRole(Guid groupRoleId)
-    {
-        if (groupRoleId == Guid.Empty)
-            throw new ArgumentException(
-                "Идентификатор роли не может быть пустым.",
-                nameof(groupRoleId)
-            );
-
-        GroupRoleId = groupRoleId;
-    }
 
     /// <summary>Фиксирует выход участника из группы и обновляет запись в истории.</summary>
     /// <param name="exitedAt">Дата выхода.</param>

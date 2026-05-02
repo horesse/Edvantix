@@ -36,8 +36,16 @@ public sealed class RoleDtoMapperTests
     public void GivenRole_WhenMappingToRoleDetailDto_ThenShouldMapPermissions()
     {
         var role = CreateRole();
-        var permission = new Permission(OrganizationPermissions.Feature, "ORG_READ");
-        permission.Id = Guid.CreateVersion7();
+        var permission = new Permission(
+            "organizational",
+            "Organization",
+            "Организация",
+            "View",
+            "Просмотр организации"
+        )
+        {
+            Id = Guid.CreateVersion7(),
+        };
         role.AddPermission(permission);
         var mapper = new RoleDetailDtoMapper();
 
@@ -45,8 +53,10 @@ public sealed class RoleDtoMapperTests
 
         result.Permissions.ShouldHaveSingleItem();
         result.Permissions[0].Id.ShouldBe(permission.Id);
-        result.Permissions[0].Feature.ShouldBe(OrganizationPermissions.Feature);
-        result.Permissions[0].Name.ShouldBe("ORG_READ");
+        result.Permissions[0].Feature.Code.ShouldBe("Organization");
+        result.Permissions[0].Feature.Name.ShouldBe("Организация");
+        result.Permissions[0].Code.ShouldBe("View");
+        result.Permissions[0].Name.ShouldBe("Просмотр организации");
     }
 
     [Test]

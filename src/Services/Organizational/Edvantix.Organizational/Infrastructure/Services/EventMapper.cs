@@ -2,7 +2,7 @@
 using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Constants.Other;
 using Edvantix.Contracts;
-using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 

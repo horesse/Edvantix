@@ -1,11 +1,12 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.Get;
 
-[RequirePermission(OrganizationPermissions.Read)]
+[RequirePermission(OrganizationPermissions.View)]
 public sealed record GetOrganizationMemberQuery(Guid Id) : IQuery<OrganizationMemberDto>;
 
 internal sealed class GetOrganizationMemberQueryHandler(

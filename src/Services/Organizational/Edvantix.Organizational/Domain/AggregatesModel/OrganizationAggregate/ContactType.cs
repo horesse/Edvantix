@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Edvantix.Organizational.Domain.Enums;
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
 /// <summary>Тип контактных данных участника или организации.</summary>
 public enum ContactType

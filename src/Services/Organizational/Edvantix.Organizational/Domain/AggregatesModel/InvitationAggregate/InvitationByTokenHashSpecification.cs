@@ -1,5 +1,3 @@
-using Edvantix.Organizational.Domain.Enums;
-
 namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 
 /// <summary>Находит единственное активное (Pending) приглашение по SHA-256 хэшу токена.</summary>

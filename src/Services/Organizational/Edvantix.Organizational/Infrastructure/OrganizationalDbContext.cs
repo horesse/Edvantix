@@ -23,7 +23,6 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
     // Group aggregate
     public DbSet<Group> Groups => Set<Group>();
     public DbSet<GroupMember> GroupMembers => Set<GroupMember>();
-    public DbSet<GroupRole> GroupRoles => Set<GroupRole>();
 
     // Invitation aggregate
     public DbSet<Invitation> Invitations => Set<Invitation>();

@@ -1,11 +1,12 @@
 using Edvantix.Chassis.CQRS;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
-using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.Kpi;
 
-[RequirePermission(OrganizationPermissions.Read)]
+[RequirePermission(OrganizationPermissions.View)]
 public sealed record GetOrganizationMembersKpiQuery : IQuery<OrganizationMembersKpiDto>;
 
 internal sealed class GetOrganizationMembersKpiQueryHandler(

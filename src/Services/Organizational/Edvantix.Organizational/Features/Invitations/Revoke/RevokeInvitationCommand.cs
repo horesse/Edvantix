@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Invitations.Revoke;
 
@@ -8,7 +9,7 @@ namespace Edvantix.Organizational.Features.Invitations.Revoke;
 /// Отзывает приглашение по его идентификатору. Только отправитель или администратор организации.
 /// </summary>
 [Transactional]
-[RequirePermission(OrganizationPermissions.InviteMembers)]
+[RequirePermission(OrganizationPermissions.Members)]
 public sealed record RevokeInvitationCommand(Guid InvitationId) : ICommand;
 
 internal sealed class RevokeInvitationCommandHandler(

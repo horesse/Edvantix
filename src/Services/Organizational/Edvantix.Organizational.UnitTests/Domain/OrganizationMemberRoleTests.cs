@@ -9,8 +9,8 @@ public sealed class OrganizationMemberRoleTests
         string? description = "Менеджер"
     ) => new(ValidOrgId, code, description);
 
-    private static Permission CreatePermission(string name = "ORG_READ") =>
-        new(OrganizationPermissions.Feature, name);
+    private static Permission CreatePermission(string code = "View") =>
+        new("organizational", "Organization", "Организация", code, $"Отображаемое название {code}");
 
     [Test]
     public void GivenValidData_WhenCreatingOrganizationMemberRole_ThenShouldInitializePropertiesCorrectly()
@@ -110,7 +110,7 @@ public sealed class OrganizationMemberRoleTests
         role.AssignPermissions(newPermissions);
 
         role.Permissions.Count.ShouldBe(2);
-        role.Permissions.ShouldAllBe(p => p.Name != "ORG_DELETE");
+        role.Permissions.ShouldAllBe(p => p.Code != "ORG_DELETE");
     }
 
     [Test]

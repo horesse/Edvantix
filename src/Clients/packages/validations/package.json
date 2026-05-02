@@ -21,7 +21,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "zod": "^4.3.6"
+    "zod": "^4.4.2"
   },
   "peerDependencies": {
     "@workspace/types": "workspace:*"
@@ -29,6 +29,6 @@
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "eslint": "^10.2.1"
+    "eslint": "^10.3.0"
   }
 }

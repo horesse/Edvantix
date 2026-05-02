@@ -1,12 +1,13 @@
 using Edvantix.Chassis.CQRS;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
-using Edvantix.Organizational.Domain.Enums;
+using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.List;
 
-[RequirePermission(OrganizationPermissions.Read)]
+[RequirePermission(OrganizationPermissions.View)]
 public sealed record GetOrganizationMembersQuery(
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]

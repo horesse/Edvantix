@@ -16,6 +16,13 @@ public sealed class RoleDetailDtoMapper : Mapper<OrganizationMemberRole, RoleDet
             source.OrganizationId,
             source.Code,
             source.Description,
-            source.Permissions.Select(p => new PermissionDto(p.Id, p.Feature, p.Name)).ToList()
+            source
+                .Permissions.Select(p => new PermissionDto(
+                    p.Id,
+                    new FeatureDto(p.FeatureCode, p.FeatureName),
+                    p.Code,
+                    p.Name
+                ))
+                .ToList()
         );
 }

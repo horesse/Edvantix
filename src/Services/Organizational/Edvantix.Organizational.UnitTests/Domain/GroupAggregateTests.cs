@@ -135,7 +135,6 @@ public sealed class GroupAggregateTests
             ValidOrgId,
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
             ValidStartDate
         );
 
@@ -152,7 +151,6 @@ public sealed class GroupAggregateTests
         group.Archive();
         var member = new GroupMember(
             ValidOrgId,
-            Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             ValidStartDate

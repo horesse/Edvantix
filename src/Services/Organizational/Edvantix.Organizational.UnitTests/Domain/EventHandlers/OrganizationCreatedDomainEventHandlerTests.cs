@@ -3,7 +3,6 @@ namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 public sealed class OrganizationCreatedDomainEventHandlerTests
 {
     private readonly Mock<IOrganizationMemberRoleRepository> _memberRoleRepoMock = new();
-    private readonly Mock<IGroupRoleRepository> _groupRoleRepoMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
     private readonly Mock<IPermissionRepository> _permissionRepoMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
@@ -19,14 +18,11 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
         _permissionRepoMock
-            .Setup(r =>
-                r.ListAsync(It.IsAny<ISpecification<Permission>>(), It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync([]);
 
         _handler = new(
             _memberRoleRepoMock.Object,
-            _groupRoleRepoMock.Object,
             _memberRepoMock.Object,
             _permissionRepoMock.Object
         );
@@ -43,23 +39,6 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
             r =>
                 r.AddRangeAsync(
                     It.Is<IReadOnlyList<OrganizationMemberRole>>(roles => roles.Count == 5),
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once
-        );
-    }
-
-    [Test]
-    public async Task GivenValidEvent_WhenHandling_ThenShouldAdd4GroupRoles()
-    {
-        var @event = new OrganizationCreatedDomainEvent(OrgId, OwnerProfileId);
-
-        await _handler.Handle(@event, CancellationToken.None);
-
-        _groupRoleRepoMock.Verify(
-            r =>
-                r.AddRangeAsync(
-                    It.Is<IReadOnlyList<GroupRole>>(roles => roles.Count == 4),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -124,16 +103,13 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
     }
 
     [Test]
-    public async Task GivenValidEvent_WhenHandling_ThenShouldQueryBothPermissionFeatures()
+    public async Task GivenValidEvent_WhenHandling_ThenShouldLoadAllPermissions()
     {
         var @event = new OrganizationCreatedDomainEvent(OrgId, OwnerProfileId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
-        _permissionRepoMock.Verify(
-            r => r.ListAsync(It.IsAny<ISpecification<Permission>>(), It.IsAny<CancellationToken>()),
-            Times.Exactly(2)
-        );
+        _permissionRepoMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]

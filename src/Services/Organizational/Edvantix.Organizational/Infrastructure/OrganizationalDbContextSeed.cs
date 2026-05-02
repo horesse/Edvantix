@@ -1,55 +1,89 @@
+using Edvantix.Chassis.Permissions;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Infrastructure;
 
 /// <summary>
-/// Наполняет таблицу разрешений всеми известными кодами из
-/// <see cref="OrganizationPermissions"/> и <see cref="GroupPermissions"/>.
-/// Каждое разрешение проверяется индивидуально — уже существующие пропускаются.
+/// Синхронизирует таблицу разрешений со всеми зарегистрированными <see cref="PermissionModule"/>.
+/// Добавляет новые, обновляет изменившиеся названия, удаляет устаревшие разрешения
+/// из модулей, принадлежащих данному сервису.
 /// </summary>
-public sealed class PermissionsDbSeeder(ILogger<PermissionsDbSeeder> logger)
-    : IDbSeeder<OrganizationalDbContext>
+public sealed class PermissionsDbSeeder(
+    IEnumerable<PermissionModule> modules,
+    ILogger<PermissionsDbSeeder> logger
+) : IDbSeeder<OrganizationalDbContext>
 {
-    private static readonly IReadOnlyList<(string Feature, string Name)> _knownPermissions =
-    [
-        (OrganizationPermissions.Feature, OrganizationPermissions.Create),
-        (OrganizationPermissions.Feature, OrganizationPermissions.Read),
-        (OrganizationPermissions.Feature, OrganizationPermissions.Update),
-        (OrganizationPermissions.Feature, OrganizationPermissions.Delete),
-        (OrganizationPermissions.Feature, OrganizationPermissions.TransferOwnership),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageMembers),
-        (OrganizationPermissions.Feature, OrganizationPermissions.InviteMembers),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageRoles),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageGroups),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ViewAnalytics),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageSettings),
-        (OrganizationPermissions.Feature, OrganizationPermissions.ManageSubscription),
-        (GroupPermissions.Feature, GroupPermissions.Create),
-        (GroupPermissions.Feature, GroupPermissions.Read),
-        (GroupPermissions.Feature, GroupPermissions.Update),
-        (GroupPermissions.Feature, GroupPermissions.Delete),
-        (GroupPermissions.Feature, GroupPermissions.ManageMembers),
-        (GroupPermissions.Feature, GroupPermissions.ViewMembers),
-        (GroupPermissions.Feature, GroupPermissions.ManageContent),
-        (GroupPermissions.Feature, GroupPermissions.ViewContent),
-        (GroupPermissions.Feature, GroupPermissions.ManageSchedule),
-    ];
-
     public async Task SeedAsync(OrganizationalDbContext context)
     {
-        var permissions = await context.Permissions.ToListAsync();
+        var existing = await context.Permissions.ToListAsync();
+        var byFullCode = existing.ToDictionary(
+            p => $"{p.FeatureCode}.{p.Code}",
+            StringComparer.OrdinalIgnoreCase
+        );
 
-        foreach (var (feature, name) in _knownPermissions)
+        var moduleList = modules.ToList();
+        var desired = moduleList
+            .SelectMany(m => m.GetPermissions().Select(e => (Module: m, Entry: e)))
+            .ToList();
+
+        var desiredFullCodes = desired
+            .Select(x => $"{x.Module.FeatureCode}.{x.Entry.Code}")
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+
+        foreach (var (module, entry) in desired)
         {
-            var exists = permissions.Any(p => p.Feature == feature && p.Name == name);
+            var fullCode = $"{module.FeatureCode}.{entry.Code}";
 
-            if (exists)
-                continue;
+            if (byFullCode.TryGetValue(fullCode, out var perm))
+            {
+                if (perm.FeatureName != module.FeatureName || perm.Name != entry.Name)
+                {
+                    perm.Update(module.FeatureName, entry.Name);
+                    updated++;
+                }
+            }
+            else
+            {
+                context.Permissions.Add(
+                    new Permission(
+                        module.ServiceCode,
+                        module.FeatureCode,
+                        module.FeatureName,
+                        entry.Code,
+                        entry.Name
+                    )
+                );
+                added++;
+                logger.LogInformation("Добавлено разрешение {FullCode}", fullCode);
+            }
+        }
 
-            context.Permissions.Add(new Permission(feature, name));
-            logger.LogInformation("Seeding permission {Feature}/{Name}", feature, name);
+        // Удаляем только разрешения текущего сервиса, которых нет в модулях.
+        var serviceCodes = moduleList
+            .Select(m => m.ServiceCode)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var toRemove = existing
+            .Where(p =>
+                serviceCodes.Contains(p.ServiceCode)
+                && !desiredFullCodes.Contains($"{p.FeatureCode}.{p.Code}")
+            )
+            .ToList();
+
+        if (toRemove.Count > 0)
+        {
+            context.Permissions.RemoveRange(toRemove);
+            logger.LogInformation("Удалено устаревших разрешений: {Count}", toRemove.Count);
         }
 
         await context.SaveChangesAsync();
+        logger.LogInformation(
+            "Сидирование разрешений завершено: добавлено {Added}, обновлено {Updated}",
+            added,
+            updated
+        );
     }
 }

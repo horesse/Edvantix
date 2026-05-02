@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.EF.Configurations;
+using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,10 +10,23 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
     {
         builder.UseDefaultConfiguration();
 
-        builder.Property(p => p.Feature).IsRequired().HasMaxLength(200);
+        builder.Property(p => p.ServiceCode).IsRequired().HasMaxLength(100);
+        builder.Property(p => p.FeatureCode).IsRequired().HasMaxLength(200);
+        builder.Property(p => p.FeatureName).IsRequired().HasMaxLength(200);
+        builder.Property(p => p.Code).IsRequired().HasMaxLength(200);
         builder.Property(p => p.Name).IsRequired().HasMaxLength(200);
 
-        // Unique per feature — the same permission name can exist in different features.
-        builder.HasIndex(p => new { p.Feature, p.Name }).IsUnique();
+        // FullCode вычисляется в памяти из FeatureCode и Code — не хранится в БД.
+        builder.Ignore(p => p.FullCode);
+
+        // Код разрешения уникален в рамках сервиса и функциональной области.
+        builder
+            .HasIndex(p => new
+            {
+                p.ServiceCode,
+                p.FeatureCode,
+                p.Code,
+            })
+            .IsUnique();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
@@ -18,49 +18,62 @@ internal sealed class PermissionService(IPermissionRepository permissionReposito
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Синхронизирует разрешения для конкретной функциональной области сервиса.
+    /// Идемпотентен: безопасно вызывать при каждом старте сервиса.
+    /// </summary>
     public override async Task<SyncFeaturePermissionsResponse> SyncFeaturePermissions(
         SyncFeaturePermissionsRequest request,
         ServerCallContext context
     )
     {
-        Guard.Against.NullOrWhiteSpace(request.Feature, nameof(request.Feature));
+        Guard.Against.NullOrWhiteSpace(request.ServiceCode, nameof(request.ServiceCode));
+        Guard.Against.NullOrWhiteSpace(request.FeatureCode, nameof(request.FeatureCode));
+        Guard.Against.NullOrWhiteSpace(request.FeatureName, nameof(request.FeatureName));
 
-        var existing = await permissionRepository.ListAsync(
-            new PermissionByFeatureSpecification(request.Feature),
-            context.CancellationToken
-        );
+        var all = await permissionRepository.GetAllAsync(context.CancellationToken);
+        var existing = all.Where(p =>
+                p.ServiceCode.Equals(request.ServiceCode, StringComparison.OrdinalIgnoreCase)
+                && p.FeatureCode.Equals(request.FeatureCode, StringComparison.OrdinalIgnoreCase)
+            )
+            .ToList();
 
-        var existingNames = existing
-            .Select(p => p.Name)
+        var existingByCode = existing.ToDictionary(p => p.Code, StringComparer.OrdinalIgnoreCase);
+
+        var desiredCodes = request
+            .Permissions.Where(e => !string.IsNullOrWhiteSpace(e.Code))
+            .Select(e => e.Code.Trim())
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        var requestedNames = request
-            .Permissions.Where(n => !string.IsNullOrWhiteSpace(n))
-            .Select(n => n.Trim())
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var toRemove = existing.Where(p => !desiredCodes.Contains(p.Code)).ToList();
+        foreach (var p in toRemove)
+            permissionRepository.Remove(p);
 
-        var toAdd = requestedNames
-            .Where(name => !existingNames.Contains(name))
-            .Select(name => new Domain.AggregatesModel.PermissionAggregate.Permission(
-                request.Feature,
-                name
-            ))
-            .ToArray();
-
-        var toRemove = existing.Where(p => !requestedNames.Contains(p.Name)).ToArray();
-
-        if (toAdd.Length > 0)
-            await permissionRepository.AddRangeAsync(toAdd, context.CancellationToken);
-
-        if (toRemove.Length > 0)
-            permissionRepository.RemoveRange(toRemove);
+        var added = 0;
+        foreach (var entry in request.Permissions.Where(e => !string.IsNullOrWhiteSpace(e.Code)))
+        {
+            var code = entry.Code.Trim();
+            if (existingByCode.TryGetValue(code, out var perm))
+            {
+                perm.Update(request.FeatureName, entry.Name.Trim());
+            }
+            else
+            {
+                permissionRepository.Add(
+                    new Permission(
+                        request.ServiceCode,
+                        request.FeatureCode,
+                        request.FeatureName,
+                        code,
+                        entry.Name.Trim()
+                    )
+                );
+                added++;
+            }
+        }
 
         await permissionRepository.UnitOfWork.SaveChangesAsync(context.CancellationToken);
 
-        return new SyncFeaturePermissionsResponse
-        {
-            Added = toAdd.Length,
-            Removed = toRemove.Length,
-        };
+        return new SyncFeaturePermissionsResponse { Added = added, Removed = toRemove.Count };
     }
 }

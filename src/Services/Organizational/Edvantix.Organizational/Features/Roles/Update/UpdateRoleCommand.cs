@@ -1,11 +1,12 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.Update;
 
 [Transactional]
-[RequirePermission(OrganizationPermissions.ManageRoles)]
+[RequirePermission(OrganizationPermissions.Roles)]
 public sealed record UpdateRoleCommand(Guid Id, string Code, string? Description) : ICommand;
 
 internal sealed class UpdateRoleCommandHandler(

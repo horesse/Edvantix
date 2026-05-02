@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Edvantix.Organizational.Domain.Enums;
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
 /// <summary>Жизненный статус организационных сущностей платформы.</summary>
 public enum OrganizationStatus

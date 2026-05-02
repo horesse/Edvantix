@@ -1,11 +1,12 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Invitations.Get;
 
 /// <summary>Возвращает приглашение по идентификатору.</summary>
-[RequirePermission(OrganizationPermissions.InviteMembers)]
+[RequirePermission(OrganizationPermissions.Members)]
 public sealed record GetInvitationQuery(Guid Id) : IQuery<InvitationDto>;
 
 internal sealed class GetInvitationQueryHandler(

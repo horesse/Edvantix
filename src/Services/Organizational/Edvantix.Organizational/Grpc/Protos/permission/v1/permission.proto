@@ -32,6 +32,8 @@ message SyncFeaturePermissionsRequest {
   string feature_code = 1;
   string feature_name = 2;
   repeated PermissionEntry permissions = 3;
+  // Код сервиса-владельца (например, "scheduler"). Добавлен в поле 4 для обратной совместимости.
+  string service_code = 4;
 }
 
 message SyncFeaturePermissionsResponse {

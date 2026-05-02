@@ -10,13 +10,23 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
     {
         builder.UseDefaultConfiguration();
 
+        builder.Property(p => p.ServiceCode).IsRequired().HasMaxLength(100);
+        builder.Property(p => p.FeatureCode).IsRequired().HasMaxLength(200);
+        builder.Property(p => p.FeatureName).IsRequired().HasMaxLength(200);
         builder.Property(p => p.Code).IsRequired().HasMaxLength(200);
         builder.Property(p => p.Name).IsRequired().HasMaxLength(200);
 
-        // Feature всегда загружается вместе с разрешением — нужен для маппинга в DTO.
-        builder.Navigation(p => p.Feature).AutoInclude();
+        // FullCode вычисляется в памяти из FeatureCode и Code — не хранится в БД.
+        builder.Ignore(p => p.FullCode);
 
-        // Код разрешения уникален в рамках одной функциональной области.
-        builder.HasIndex(p => new { p.FeatureId, p.Code }).IsUnique();
+        // Код разрешения уникален в рамках сервиса и функциональной области.
+        builder
+            .HasIndex(p => new
+            {
+                p.ServiceCode,
+                p.FeatureCode,
+                p.Code,
+            })
+            .IsUnique();
     }
 }

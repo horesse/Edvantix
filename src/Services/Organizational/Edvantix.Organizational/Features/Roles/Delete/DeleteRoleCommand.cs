@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Roles.Delete;
 
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Roles))]
+[RequirePermission(OrganizationPermissions.Roles)]
 public sealed record DeleteRoleCommand(Guid Id) : ICommand;
 
 internal sealed class DeleteRoleCommandHandler(

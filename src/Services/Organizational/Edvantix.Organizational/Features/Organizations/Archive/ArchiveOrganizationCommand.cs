@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Organizations.Archive;
 
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Edit))]
+[RequirePermission(OrganizationPermissions.Edit)]
 public sealed record ArchiveOrganizationCommand(Guid Id) : ICommand;
 
 internal sealed class ArchiveOrganizationCommandHandler(

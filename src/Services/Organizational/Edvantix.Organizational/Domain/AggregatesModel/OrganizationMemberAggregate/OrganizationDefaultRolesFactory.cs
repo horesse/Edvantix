@@ -12,7 +12,7 @@ public static class OrganizationDefaultRolesFactory
 {
     /// <summary>
     /// Создаёт стандартный набор ролей для организации.
-    /// Разрешения подбираются из <paramref name="availablePermissions"/> по коду (<c>Permission.Code</c>).
+    /// Разрешения подбираются из <paramref name="availablePermissions"/> по полному коду (<c>Permission.FullCode</c>).
     /// Отсутствующие разрешения пропускаются без ошибки.
     /// </summary>
     /// <param name="organizationId">Идентификатор организации.</param>
@@ -30,54 +30,57 @@ public static class OrganizationDefaultRolesFactory
 
         ArgumentNullException.ThrowIfNull(availablePermissions);
 
-        var byCode = availablePermissions.ToDictionary(p => p.Code);
+        var byFullCode = availablePermissions.ToDictionary(
+            p => p.FullCode,
+            StringComparer.OrdinalIgnoreCase
+        );
 
-        Permission[] Resolve(params OrganizationPermission[] perms) =>
-            perms.Select(p => byCode.GetValueOrDefault(p.GetCode())).OfType<Permission>().ToArray();
+        Permission[] Resolve(params string[] fullCodes) =>
+            fullCodes.Select(c => byFullCode.GetValueOrDefault(c)).OfType<Permission>().ToArray();
 
         // --- Роли уровня организации (матрица прав 5.1) ---
 
         var owner = new OrganizationMemberRole(organizationId, "owner", "Владелец");
         owner.AssignPermissions(
             Resolve(
-                OrganizationPermission.View,
-                OrganizationPermission.Edit,
-                OrganizationPermission.Delete,
-                OrganizationPermission.Members,
-                OrganizationPermission.Roles,
-                OrganizationPermission.Groups,
-                OrganizationPermission.Analytics,
-                OrganizationPermission.Subscription
+                OrganizationPermissions.View,
+                OrganizationPermissions.Edit,
+                OrganizationPermissions.Delete,
+                OrganizationPermissions.Members,
+                OrganizationPermissions.Roles,
+                OrganizationPermissions.Groups,
+                OrganizationPermissions.Analytics,
+                OrganizationPermissions.Subscription
             )
         );
 
         var admin = new OrganizationMemberRole(organizationId, "admin", "Администратор");
         admin.AssignPermissions(
             Resolve(
-                OrganizationPermission.View,
-                OrganizationPermission.Edit,
-                OrganizationPermission.Members,
-                OrganizationPermission.Roles,
-                OrganizationPermission.Groups,
-                OrganizationPermission.Analytics
+                OrganizationPermissions.View,
+                OrganizationPermissions.Edit,
+                OrganizationPermissions.Members,
+                OrganizationPermissions.Roles,
+                OrganizationPermissions.Groups,
+                OrganizationPermissions.Analytics
             )
         );
 
         var manager = new OrganizationMemberRole(organizationId, "manager", "Менеджер");
         manager.AssignPermissions(
             Resolve(
-                OrganizationPermission.View,
-                OrganizationPermission.Members,
-                OrganizationPermission.Groups,
-                OrganizationPermission.Analytics
+                OrganizationPermissions.View,
+                OrganizationPermissions.Members,
+                OrganizationPermissions.Groups,
+                OrganizationPermissions.Analytics
             )
         );
 
         var teacher = new OrganizationMemberRole(organizationId, "teacher", "Преподаватель");
-        teacher.AssignPermissions(Resolve(OrganizationPermission.View));
+        teacher.AssignPermissions(Resolve(OrganizationPermissions.View));
 
         var student = new OrganizationMemberRole(organizationId, "student", "Студент");
-        student.AssignPermissions(Resolve(OrganizationPermission.View));
+        student.AssignPermissions(Resolve(OrganizationPermissions.View));
 
         return [owner, admin, manager, teacher, student];
     }

@@ -19,7 +19,7 @@ public sealed class RoleDetailDtoMapper : Mapper<OrganizationMemberRole, RoleDet
             source
                 .Permissions.Select(p => new PermissionDto(
                     p.Id,
-                    new FeatureDto(p.Feature.Id, p.Feature.Code, p.Feature.Name),
+                    new FeatureDto(p.FeatureCode, p.FeatureName),
                     p.Code,
                     p.Name
                 ))

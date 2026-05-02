@@ -13,7 +13,7 @@ namespace Edvantix.Organizational.Features.Invitations.Send;
 /// Возвращает Id созданного приглашения.
 /// </summary>
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Members))]
+[RequirePermission(OrganizationPermissions.Members)]
 public sealed record SendInvitationCommand(
     InvitationType Type,
     Guid RoleId,

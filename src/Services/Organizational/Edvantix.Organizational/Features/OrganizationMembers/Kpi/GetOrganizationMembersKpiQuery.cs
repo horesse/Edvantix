@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.Kpi;
 
-[RequirePermission(nameof(OrganizationPermission.View))]
+[RequirePermission(OrganizationPermissions.View)]
 public sealed record GetOrganizationMembersKpiQuery : IQuery<OrganizationMembersKpiDto>;
 
 internal sealed class GetOrganizationMembersKpiQueryHandler(

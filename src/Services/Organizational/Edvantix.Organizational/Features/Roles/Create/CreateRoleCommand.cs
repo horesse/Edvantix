@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Roles.Create;
 
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Roles))]
+[RequirePermission(OrganizationPermissions.Roles)]
 public sealed record CreateRoleCommand(string Code, string? Description) : ICommand<Guid>;
 
 internal sealed class CreateRoleCommandHandler(

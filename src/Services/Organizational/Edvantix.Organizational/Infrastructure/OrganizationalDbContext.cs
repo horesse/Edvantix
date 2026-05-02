@@ -10,7 +10,6 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
     : DbContext(options),
         IUnitOfWork
 {
-    public DbSet<Feature> Features => Set<Feature>();
     public DbSet<Permission> Permissions => Set<Permission>();
 
     // Organization aggregate

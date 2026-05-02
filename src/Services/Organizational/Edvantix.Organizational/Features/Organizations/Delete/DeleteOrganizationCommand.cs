@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Organizations.Delete;
 
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Delete))]
+[RequirePermission(OrganizationPermissions.Delete)]
 public sealed record DeleteOrganizationCommand(Guid Id) : ICommand;
 
 internal sealed class DeleteOrganizationCommandHandler(

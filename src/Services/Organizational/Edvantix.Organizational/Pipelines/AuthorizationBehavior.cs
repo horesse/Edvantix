@@ -74,7 +74,7 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
                 return role is null
                     ? []
                     : role
-                        .Permissions.Select(p => p.Code)
+                        .Permissions.Select(p => p.FullCode)
                         .ToHashSet(StringComparer.OrdinalIgnoreCase);
             },
             [

@@ -1,12 +1,10 @@
-using Edvantix.Organizational.Domain.Permissions;
-
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
 public sealed class OrganizationCreatedDomainEventHandlerTests
 {
     private readonly Mock<IOrganizationMemberRoleRepository> _memberRoleRepoMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
-    private readonly Mock<IFeatureRepository> _featureRepoMock = new();
+    private readonly Mock<IPermissionRepository> _permissionRepoMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly OrganizationCreatedDomainEventHandler _handler;
 
@@ -19,11 +17,15 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
         _unitOfWorkMock
             .Setup(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _featureRepoMock
-            .Setup(r => r.GetByCodeAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Feature?)null);
+        _permissionRepoMock
+            .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync([]);
 
-        _handler = new(_memberRoleRepoMock.Object, _memberRepoMock.Object, _featureRepoMock.Object);
+        _handler = new(
+            _memberRoleRepoMock.Object,
+            _memberRepoMock.Object,
+            _permissionRepoMock.Object
+        );
     }
 
     [Test]
@@ -101,16 +103,13 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
     }
 
     [Test]
-    public async Task GivenValidEvent_WhenHandling_ThenShouldQueryOrgFeaturePermissions()
+    public async Task GivenValidEvent_WhenHandling_ThenShouldLoadAllPermissions()
     {
         var @event = new OrganizationCreatedDomainEvent(OrgId, OwnerProfileId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
-        _featureRepoMock.Verify(
-            r => r.GetByCodeAsync(nameof(OrganizationPermission), It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _permissionRepoMock.Verify(r => r.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]

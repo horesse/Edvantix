@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.OrganizationMembers.Create;
 
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Members))]
+[RequirePermission(OrganizationPermissions.Members)]
 public sealed record CreateOrganizationMemberCommand(
     Guid ProfileId,
     Guid OrganizationMemberRoleId,

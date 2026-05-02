@@ -1,6 +1,3 @@
-using Edvantix.Chassis.Utilities;
-using Edvantix.Organizational.Domain.Permissions;
-
 namespace Edvantix.Organizational.UnitTests.Domain;
 
 public sealed class OrganizationMemberRoleTests
@@ -12,15 +9,8 @@ public sealed class OrganizationMemberRoleTests
         string? description = "Менеджер"
     ) => new(ValidOrgId, code, description);
 
-    private static Permission CreatePermission(string code = nameof(OrganizationPermission.View))
-    {
-        var feature = new Feature(
-            nameof(OrganizationPermission),
-            typeof(OrganizationPermission).GetDisplayName()
-        );
-        feature.AddOrUpdatePermission(code, $"Отображаемое название {code}");
-        return feature.Permissions[0];
-    }
+    private static Permission CreatePermission(string code = "View") =>
+        new("organizational", "Organization", "Организация", code, $"Отображаемое название {code}");
 
     [Test]
     public void GivenValidData_WhenCreatingOrganizationMemberRole_ThenShouldInitializePropertiesCorrectly()

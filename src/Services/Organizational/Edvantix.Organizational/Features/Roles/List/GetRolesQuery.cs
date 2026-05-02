@@ -5,7 +5,7 @@ using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.List;
 
-[RequirePermission(nameof(OrganizationPermission.Roles))]
+[RequirePermission(OrganizationPermissions.Roles)]
 public sealed record GetRolesQuery(
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]

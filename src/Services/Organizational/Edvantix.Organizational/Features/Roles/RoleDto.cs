@@ -10,6 +10,7 @@ public sealed record RoleDetailDto(
     IReadOnlyList<PermissionDto> Permissions
 );
 
-public sealed record FeatureDto(Guid Id, string Code, string Name);
+// Feature больше не является отдельной сущностью — её данные хранятся в Permission.
+public sealed record FeatureDto(string Code, string Name);
 
 public sealed record PermissionDto(Guid Id, FeatureDto Feature, string Code, string Name);

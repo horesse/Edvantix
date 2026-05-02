@@ -1,70 +1,89 @@
+using Edvantix.Chassis.Permissions;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
-using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Infrastructure;
 
 /// <summary>
-/// Наполняет таблицы функциональных областей и разрешений всеми известными значениями
-/// из <see cref="OrganizationPermission"/> и <see cref="GroupPermission"/>.
-/// Для существующих записей обновляются отображаемые названия, если они изменились.
+/// Синхронизирует таблицу разрешений со всеми зарегистрированными <see cref="PermissionModule"/>.
+/// Добавляет новые, обновляет изменившиеся названия, удаляет устаревшие разрешения
+/// из модулей, принадлежащих данному сервису.
 /// </summary>
-public sealed class PermissionsDbSeeder(ILogger<PermissionsDbSeeder> logger)
-    : IDbSeeder<OrganizationalDbContext>
+public sealed class PermissionsDbSeeder(
+    IEnumerable<PermissionModule> modules,
+    ILogger<PermissionsDbSeeder> logger
+) : IDbSeeder<OrganizationalDbContext>
 {
-    private static IEnumerable<(
-        string FeatureCode,
-        string FeatureName,
-        string Code,
-        string Name
-    )> GetKnownPermissions()
-    {
-        foreach (var value in Enum.GetValues<OrganizationPermission>())
-            yield return (
-                nameof(OrganizationPermission),
-                typeof(OrganizationPermission).GetDisplayName(),
-                value.GetCode(),
-                value.GetDisplayName()
-            );
-    }
-
     public async Task SeedAsync(OrganizationalDbContext context)
     {
-        // AutoInclude обеспечивает загрузку Permissions вместе с Feature.
-        var features = await context.Features.ToListAsync();
+        var existing = await context.Permissions.ToListAsync();
+        var byFullCode = existing.ToDictionary(
+            p => $"{p.FeatureCode}.{p.Code}",
+            StringComparer.OrdinalIgnoreCase
+        );
 
-        foreach (var group in GetKnownPermissions().GroupBy(p => p.FeatureCode))
+        var moduleList = modules.ToList();
+        var desired = moduleList
+            .SelectMany(m => m.GetPermissions().Select(e => (Module: m, Entry: e)))
+            .ToList();
+
+        var desiredFullCodes = desired
+            .Select(x => $"{x.Module.FeatureCode}.{x.Entry.Code}")
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+
+        foreach (var (module, entry) in desired)
         {
-            var featureCode = group.Key;
-            var featureName = group.First().FeatureName;
+            var fullCode = $"{module.FeatureCode}.{entry.Code}";
 
-            var feature = features.FirstOrDefault(f => f.Code == featureCode);
-
-            if (feature is null)
+            if (byFullCode.TryGetValue(fullCode, out var perm))
             {
-                feature = new Feature(featureCode, featureName);
-                context.Features.Add(feature);
-                features.Add(feature);
-                logger.LogInformation("Добавлена область {Code}", featureCode);
+                if (perm.FeatureName != module.FeatureName || perm.Name != entry.Name)
+                {
+                    perm.Update(module.FeatureName, entry.Name);
+                    updated++;
+                }
             }
-            else if (feature.Name != featureName)
+            else
             {
-                feature.UpdateName(featureName);
-                logger.LogInformation("Обновлено название области {Code}", featureCode);
-            }
-
-            foreach (var (_, _, code, name) in group)
-            {
-                var before = feature.Permissions.Count;
-                feature.AddOrUpdatePermission(code, name);
-                if (feature.Permissions.Count > before)
-                    logger.LogInformation(
-                        "Добавлено разрешение {FeatureCode}/{Code}",
-                        featureCode,
-                        code
-                    );
+                context.Permissions.Add(
+                    new Permission(
+                        module.ServiceCode,
+                        module.FeatureCode,
+                        module.FeatureName,
+                        entry.Code,
+                        entry.Name
+                    )
+                );
+                added++;
+                logger.LogInformation("Добавлено разрешение {FullCode}", fullCode);
             }
         }
 
+        // Удаляем только разрешения текущего сервиса, которых нет в модулях.
+        var serviceCodes = moduleList
+            .Select(m => m.ServiceCode)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var toRemove = existing
+            .Where(p =>
+                serviceCodes.Contains(p.ServiceCode)
+                && !desiredFullCodes.Contains($"{p.FeatureCode}.{p.Code}")
+            )
+            .ToList();
+
+        if (toRemove.Count > 0)
+        {
+            context.Permissions.RemoveRange(toRemove);
+            logger.LogInformation("Удалено устаревших разрешений: {Count}", toRemove.Count);
+        }
+
         await context.SaveChangesAsync();
+        logger.LogInformation(
+            "Сидирование разрешений завершено: добавлено {Added}, обновлено {Updated}",
+            added,
+            updated
+        );
     }
 }

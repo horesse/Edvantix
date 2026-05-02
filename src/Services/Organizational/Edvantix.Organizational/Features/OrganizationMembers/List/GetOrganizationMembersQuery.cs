@@ -7,7 +7,7 @@ using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.List;
 
-[RequirePermission(nameof(OrganizationPermission.View))]
+[RequirePermission(OrganizationPermissions.View)]
 public sealed record GetOrganizationMembersQuery(
     [property: Description("Индекс страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]

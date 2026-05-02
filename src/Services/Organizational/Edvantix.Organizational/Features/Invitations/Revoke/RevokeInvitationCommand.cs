@@ -9,7 +9,7 @@ namespace Edvantix.Organizational.Features.Invitations.Revoke;
 /// Отзывает приглашение по его идентификатору. Только отправитель или администратор организации.
 /// </summary>
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Members))]
+[RequirePermission(OrganizationPermissions.Members)]
 public sealed record RevokeInvitationCommand(Guid InvitationId) : ICommand;
 
 internal sealed class RevokeInvitationCommandHandler(

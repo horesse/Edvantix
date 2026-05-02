@@ -5,7 +5,7 @@ using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.Get;
 
-[RequirePermission(nameof(OrganizationPermission.Roles))]
+[RequirePermission(OrganizationPermissions.Roles)]
 public sealed record GetRoleQuery(Guid Id) : IQuery<RoleDetailDto>;
 
 internal sealed class GetRoleQueryHandler(

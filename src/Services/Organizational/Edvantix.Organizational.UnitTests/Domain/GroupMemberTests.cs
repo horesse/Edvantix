@@ -54,14 +54,6 @@ public sealed class GroupMemberTests
     }
 
     [Test]
-    public void GivenEmptyGroupRoleId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
-    {
-        var act = () => new GroupMember(ValidOrgId, ValidGroupId, ValidProfileId, ValidJoinDate);
-
-        act.ShouldThrow<ArgumentException>();
-    }
-
-    [Test]
     public void GivenValidExitDate_WhenExiting_ThenShouldSetArchivedStatusAndMarkAsDeleted()
     {
         var member = CreateValidMember();

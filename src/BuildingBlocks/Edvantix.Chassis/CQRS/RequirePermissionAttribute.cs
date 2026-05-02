@@ -7,6 +7,6 @@ namespace Edvantix.Chassis.CQRS;
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public sealed class RequirePermissionAttribute(string permission) : Attribute
 {
-    /// <summary>Машинный код разрешения из <c>OrganizationPermission</c> или <c>GroupPermission</c>.</summary>
+    /// <summary>Полный код разрешения в формате <c>FeatureCode.Code</c> (например, "Organization.View").</summary>
     public string Permission { get; } = permission;
 }

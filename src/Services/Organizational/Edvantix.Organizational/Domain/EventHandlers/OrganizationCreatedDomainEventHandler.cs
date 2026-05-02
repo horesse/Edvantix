@@ -1,7 +1,6 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Events;
-using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
@@ -12,7 +11,7 @@ namespace Edvantix.Organizational.Domain.EventHandlers;
 internal sealed class OrganizationCreatedDomainEventHandler(
     IOrganizationMemberRoleRepository memberRoleRepository,
     IOrganizationMemberRepository memberRepository,
-    IFeatureRepository featureRepository
+    IPermissionRepository permissionRepository
 ) : INotificationHandler<OrganizationCreatedDomainEvent>
 {
     public async ValueTask Handle(
@@ -20,14 +19,11 @@ internal sealed class OrganizationCreatedDomainEventHandler(
         CancellationToken cancellationToken
     )
     {
-        var orgFeature = await featureRepository.GetByCodeAsync(
-            nameof(OrganizationPermission),
-            cancellationToken
-        );
+        var allPermissions = await permissionRepository.GetAllAsync(cancellationToken);
 
         var orgRoles = OrganizationDefaultRolesFactory.CreateFor(
             notification.OrganizationId,
-            orgFeature?.Permissions ?? []
+            allPermissions
         );
 
         await memberRoleRepository.AddRangeAsync(orgRoles, cancellationToken);

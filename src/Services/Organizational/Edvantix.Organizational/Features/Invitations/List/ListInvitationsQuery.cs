@@ -8,7 +8,7 @@ namespace Edvantix.Organizational.Features.Invitations.List;
 /// <summary>
 /// Постраничный список приглашений организации.
 /// </summary>
-[RequirePermission(nameof(OrganizationPermission.Members))]
+[RequirePermission(OrganizationPermissions.Members)]
 public sealed record ListInvitationsQuery(
     int Offset = 0,
     int Limit = 20,

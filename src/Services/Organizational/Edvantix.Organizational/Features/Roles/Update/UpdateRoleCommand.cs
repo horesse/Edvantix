@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Roles.Update;
 
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Roles))]
+[RequirePermission(OrganizationPermissions.Roles)]
 public sealed record UpdateRoleCommand(Guid Id, string Code, string? Description) : ICommand;
 
 internal sealed class UpdateRoleCommandHandler(

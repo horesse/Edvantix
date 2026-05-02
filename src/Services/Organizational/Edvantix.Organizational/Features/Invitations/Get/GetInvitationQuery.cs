@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Invitations.Get;
 
 /// <summary>Возвращает приглашение по идентификатору.</summary>
-[RequirePermission(nameof(OrganizationPermission.Members))]
+[RequirePermission(OrganizationPermissions.Members)]
 public sealed record GetInvitationQuery(Guid Id) : IQuery<InvitationDto>;
 
 internal sealed class GetInvitationQueryHandler(

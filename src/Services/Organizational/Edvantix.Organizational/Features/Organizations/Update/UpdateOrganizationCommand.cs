@@ -6,7 +6,7 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Organizations.Update;
 
 [Transactional]
-[RequirePermission(nameof(OrganizationPermission.Edit))]
+[RequirePermission(OrganizationPermissions.Edit)]
 public sealed record UpdateOrganizationCommand(
     Guid Id,
     string FullLegalName,

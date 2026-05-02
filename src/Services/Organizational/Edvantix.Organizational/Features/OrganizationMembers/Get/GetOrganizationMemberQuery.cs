@@ -6,7 +6,7 @@ using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.OrganizationMembers.Get;
 
-[RequirePermission(nameof(OrganizationPermission.View))]
+[RequirePermission(OrganizationPermissions.View)]
 public sealed record GetOrganizationMemberQuery(Guid Id) : IQuery<OrganizationMemberDto>;
 
 internal sealed class GetOrganizationMemberQueryHandler(

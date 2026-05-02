@@ -6,8 +6,6 @@ namespace Edvantix.Identity.UnitTests.IntegrationEvents.EventHandlers;
 public sealed class LinkKeycloakProfileIntegrationEventHandlerTests
 {
     private readonly Mock<IKeycloakAdminService> _keycloakMock = new();
-    private readonly Mock<GlobalLogBuffer> _logBufferMock = new();
-    private readonly ILogger _logger = Mock.Of<ILogger>();
 
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldCallSetProfileIdAsync()
@@ -19,8 +17,6 @@ public sealed class LinkKeycloakProfileIntegrationEventHandlerTests
         await LinkKeycloakProfileIntegrationEventHandler.Handle(
             @event,
             _keycloakMock.Object,
-            _logger,
-            _logBufferMock.Object,
             CancellationToken.None
         );
 
@@ -52,12 +48,8 @@ public sealed class LinkKeycloakProfileIntegrationEventHandlerTests
             LinkKeycloakProfileIntegrationEventHandler.Handle(
                 @event,
                 _keycloakMock.Object,
-                _logger,
-                _logBufferMock.Object,
                 CancellationToken.None
             )
         );
-
-        _logBufferMock.Verify(b => b.Flush(), Times.Once);
     }
 }

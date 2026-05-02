@@ -6,8 +6,6 @@ namespace Edvantix.Identity.UnitTests.IntegrationEvents.EventHandlers;
 public sealed class EnableKeycloakUserIntegrationEventHandlerTests
 {
     private readonly Mock<IKeycloakAdminService> _keycloakMock = new();
-    private readonly Mock<GlobalLogBuffer> _logBufferMock = new();
-    private readonly ILogger _logger = Mock.Of<ILogger>();
 
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldCallEnableUserAsync()
@@ -18,8 +16,6 @@ public sealed class EnableKeycloakUserIntegrationEventHandlerTests
         await EnableKeycloakUserIntegrationEventHandler.Handle(
             @event,
             _keycloakMock.Object,
-            _logger,
-            _logBufferMock.Object,
             CancellationToken.None
         );
 
@@ -42,12 +38,8 @@ public sealed class EnableKeycloakUserIntegrationEventHandlerTests
             EnableKeycloakUserIntegrationEventHandler.Handle(
                 @event,
                 _keycloakMock.Object,
-                _logger,
-                _logBufferMock.Object,
                 CancellationToken.None
             )
         );
-
-        _logBufferMock.Verify(b => b.Flush(), Times.Once);
     }
 }

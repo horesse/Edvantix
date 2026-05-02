@@ -34,6 +34,8 @@ public static class Extensions
                         TimeSpan.FromSeconds(5)
                     );
 
+                opts.EnableRelayOfUserName = true;
+
                 configure?.Invoke(opts);
             });
 

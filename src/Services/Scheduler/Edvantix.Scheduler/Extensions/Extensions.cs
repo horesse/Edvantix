@@ -11,7 +11,7 @@ internal static class Extensions
         {
             var services = builder.Services;
 
-            builder.AddEventBus(typeof(ISchedulerApiMarker));
+            services.AddEventBus(typeof(ISchedulerApiMarker));
 
             services.AddAntiforgery();
 

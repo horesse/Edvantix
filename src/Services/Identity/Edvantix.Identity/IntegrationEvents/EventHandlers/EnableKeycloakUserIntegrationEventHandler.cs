@@ -7,25 +7,24 @@ namespace Edvantix.Identity.IntegrationEvents.EventHandlers;
 /// Обрабатывает событие <see cref="EnableKeycloakUserIntegrationEvent"/>:
 /// включает учётную запись Keycloak.
 /// </summary>
-public sealed class EnableKeycloakUserIntegrationEventHandler(
-    IKeycloakAdminService keycloakAdminService,
-    ILogger<EnableKeycloakUserIntegrationEventHandler> logger,
-    GlobalLogBuffer logBuffer
-) : IConsumer<EnableKeycloakUserIntegrationEvent>
+public static class EnableKeycloakUserIntegrationEventHandler
 {
-    public async Task Consume(ConsumeContext<EnableKeycloakUserIntegrationEvent> context)
+    public static async Task Handle(
+        EnableKeycloakUserIntegrationEvent @event,
+        IKeycloakAdminService keycloakAdminService,
+        ILogger logger,
+        GlobalLogBuffer logBuffer,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
-            await keycloakAdminService.EnableUserAsync(
-                context.Message.AccountId,
-                context.CancellationToken
-            );
+            await keycloakAdminService.EnableUserAsync(@event.AccountId, cancellationToken);
 
             logger.LogInformation(
                 "Учётная запись {AccountId} включена в Keycloak через событие {EventId}",
-                context.Message.AccountId,
-                context.Message.Id
+                @event.AccountId,
+                @event.Id
             );
         }
         catch (Exception ex)
@@ -33,22 +32,11 @@ public sealed class EnableKeycloakUserIntegrationEventHandler(
             logger.LogError(
                 ex,
                 "Ошибка включения аккаунта {AccountId} в Keycloak, событие {EventId}",
-                context.Message.AccountId,
-                context.Message.Id
+                @event.AccountId,
+                @event.Id
             );
             logBuffer.Flush();
             throw;
         }
-    }
-}
-
-[ExcludeFromCodeCoverage]
-public sealed class EnableKeycloakUserIntegrationEventHandlerDefinition
-    : ConsumerDefinition<EnableKeycloakUserIntegrationEventHandler>
-{
-    public EnableKeycloakUserIntegrationEventHandlerDefinition()
-    {
-        Endpoint(x => x.Name = "identity-enable-user");
-        ConcurrentMessageLimit = 10;
     }
 }

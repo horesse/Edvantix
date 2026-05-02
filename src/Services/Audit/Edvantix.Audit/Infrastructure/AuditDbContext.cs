@@ -1,4 +1,5 @@
 using Edvantix.Audit.Domain.AggregatesModel.AuditEntryAggregate;
+using Wolverine.EntityFrameworkCore;
 
 namespace Edvantix.Audit.Infrastructure;
 
@@ -9,9 +10,7 @@ public sealed class AuditDbContext(DbContextOptions options) : DbContext(options
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.AddInboxStateEntity();
-        modelBuilder.AddOutboxMessageEntity();
-        modelBuilder.AddOutboxStateEntity();
+        modelBuilder.MapWolverineEnvelopeStorage();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuditDbContext).Assembly);
     }
 

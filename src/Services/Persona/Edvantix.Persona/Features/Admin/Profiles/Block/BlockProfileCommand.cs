@@ -1,4 +1,5 @@
 ﻿using Edvantix.Contracts;
+using Wolverine;
 
 namespace Edvantix.Persona.Features.Admin.Profiles.Block;
 
@@ -6,7 +7,7 @@ public sealed record BlockProfileCommand(Guid ProfileId) : ICommand;
 
 public sealed class BlockProfileCommandHandler(
     IProfileRepository repository,
-    IPublishEndpoint publishEndpoint,
+    IMessageBus publishEndpoint,
     ILogger<BlockProfileCommandHandler> logger
 ) : ICommandHandler<BlockProfileCommand>
 {
@@ -24,9 +25,8 @@ public sealed class BlockProfileCommandHandler(
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        await publishEndpoint.Publish(
-            new DisableKeycloakUserIntegrationEvent(profile.AccountId),
-            cancellationToken
+        await publishEndpoint.PublishAsync(
+            new DisableKeycloakUserIntegrationEvent(profile.AccountId)
         );
 
         logger.LogInformation(

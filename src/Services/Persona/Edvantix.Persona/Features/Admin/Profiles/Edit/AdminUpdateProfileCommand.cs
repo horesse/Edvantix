@@ -34,7 +34,7 @@ public sealed record AdminUpdateProfileCommand(
 public sealed class AdminUpdateProfileCommandHandler(
     IProfileRepository repository,
     ISkillRepository skillRepository,
-    IBus bus,
+    IMessageBus bus,
     ILogger<AdminUpdateProfileCommandHandler> logger
 ) : ICommandHandler<AdminUpdateProfileCommand>
 {
@@ -88,7 +88,7 @@ public sealed class AdminUpdateProfileCommandHandler(
             $"Администратор внёс изменения в ваш профиль. Причина: {request.Reason}"
         );
 
-        await bus.Publish(notification, cancellationToken);
+        await bus.PublishAsync(notification);
 
         logger.LogInformation(
             "Профиль {ProfileId} (аккаунт {AccountId}) обновлён администратором. Причина: {Reason}",

@@ -1,6 +1,7 @@
 using Edvantix.Chassis.Specification;
 using Edvantix.Contracts;
 using Edvantix.Persona.Features.Admin.Profiles.Edit;
+using Wolverine;
 
 namespace Edvantix.Persona.UnitTests.Features.Admin.Profiles.Edit;
 
@@ -8,7 +9,7 @@ public sealed class AdminUpdateProfileCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
     private readonly Mock<ISkillRepository> _skillRepoMock = new();
-    private readonly Mock<IBus> _busMock = new();
+    private readonly Mock<IMessageBus> _busMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly AdminUpdateProfileCommandHandler _handler;
 
@@ -48,9 +49,8 @@ public sealed class AdminUpdateProfileCommandHandlerTests
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
         _busMock.Verify(
             b =>
-                b.Publish(
-                    It.Is<SendInAppNotificationIntegrationEvent>(e => e.ProfileId == profile.Id),
-                    It.IsAny<CancellationToken>()
+                b.PublishAsync(
+                    It.Is<SendInAppNotificationIntegrationEvent>(e => e.ProfileId == profile.Id)
                 ),
             Times.Once
         );

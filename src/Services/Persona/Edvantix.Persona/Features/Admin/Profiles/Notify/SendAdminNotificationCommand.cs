@@ -18,7 +18,7 @@ public sealed record SendAdminNotificationCommand(
 
 public sealed class SendAdminNotificationCommandHandler(
     IProfileRepository repository,
-    IBus bus,
+    IMessageBus bus,
     ILogger<SendAdminNotificationCommandHandler> logger
 ) : ICommandHandler<SendAdminNotificationCommand>
 {
@@ -39,7 +39,7 @@ public sealed class SendAdminNotificationCommandHandler(
             request.Message
         );
 
-        await bus.Publish(integrationEvent, cancellationToken);
+        await bus.PublishAsync(integrationEvent);
 
         logger.LogInformation(
             "Уведомление отправлено профилю {ProfileId} (аккаунт {AccountId}) администратором",

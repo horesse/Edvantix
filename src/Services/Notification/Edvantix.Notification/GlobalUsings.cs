@@ -19,3 +19,4 @@ global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using Microsoft.Extensions.Options;
 global using MimeKit;
 global using Polly;
+global using Wolverine;

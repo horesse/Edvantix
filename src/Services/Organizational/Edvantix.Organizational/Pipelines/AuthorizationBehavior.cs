@@ -1,6 +1,7 @@
 using System.Reflection;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using IMessage = Mediator.IMessage;
 
 namespace Edvantix.Organizational.Pipelines;
 

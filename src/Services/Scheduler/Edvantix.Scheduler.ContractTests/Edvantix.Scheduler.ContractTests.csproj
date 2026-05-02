@@ -1,13 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Edvantix.Scheduler.UnitTests\Edvantix.Scheduler.UnitTests.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Using Include="Moq" />
-    <Using Include="Shouldly" />
+    <ProjectReference Include="..\Edvantix.Scheduler\Edvantix.Scheduler.csproj" />
   </ItemGroup>
 </Project>

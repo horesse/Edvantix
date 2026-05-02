@@ -2,16 +2,18 @@
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-internal sealed class ResendErrorEmailIntegrationEventHandler(
-    ILogger<ResendErrorEmailIntegrationEventHandler> logger,
-    GlobalLogBuffer logBuffer,
-    IOutboxRepository repository,
-    ISender sender
-) : IConsumer<ResendErrorEmailIntegrationEvent>
+public static class ResendErrorEmailIntegrationEventHandler
 {
-    public async Task Consume(ConsumeContext<ResendErrorEmailIntegrationEvent> context)
+    public static async Task Handle(
+        ResendErrorEmailIntegrationEvent @event,
+        ILogger logger,
+        GlobalLogBuffer logBuffer,
+        IOutboxRepository repository,
+        ISender sender,
+        CancellationToken cancellationToken
+    )
     {
-        var ct = context.CancellationToken;
+        var ct = cancellationToken;
 
         var unsentEmails = await repository.ListAsync(new UnsentOutboxSpec(), ct);
 
@@ -68,16 +70,5 @@ internal sealed class ResendErrorEmailIntegrationEventHandler(
         {
             logBuffer.Flush();
         }
-    }
-}
-
-[ExcludeFromCodeCoverage]
-internal sealed class ResendErrorEmailIntegrationEventHandlerDefinition
-    : ConsumerDefinition<ResendErrorEmailIntegrationEventHandler>
-{
-    public ResendErrorEmailIntegrationEventHandlerDefinition()
-    {
-        Endpoint(x => x.Name = "notification-resend-error-email");
-        ConcurrentMessageLimit = 1;
     }
 }

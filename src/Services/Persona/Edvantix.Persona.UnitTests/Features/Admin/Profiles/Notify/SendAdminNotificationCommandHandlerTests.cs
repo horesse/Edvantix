@@ -7,7 +7,7 @@ namespace Edvantix.Persona.UnitTests.Features.Admin.Profiles.Notify;
 public sealed class SendAdminNotificationCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
-    private readonly Mock<IBus> _busMock = new();
+    private readonly Mock<IMessageBus> _busMock = new();
     private readonly SendAdminNotificationCommandHandler _handler;
 
     public SendAdminNotificationCommandHandlerTests()
@@ -41,13 +41,12 @@ public sealed class SendAdminNotificationCommandHandlerTests
 
         _busMock.Verify(
             b =>
-                b.Publish(
+                b.PublishAsync(
                     It.Is<SendInAppNotificationIntegrationEvent>(e =>
                         e.ProfileId == profile.Id
                         && e.Title == "Заголовок"
                         && e.MessageText == "Текст сообщения"
-                    ),
-                    It.IsAny<CancellationToken>()
+                    )
                 ),
             Times.Once
         );
@@ -74,11 +73,7 @@ public sealed class SendAdminNotificationCommandHandlerTests
         );
 
         _busMock.Verify(
-            b =>
-                b.Publish(
-                    It.IsAny<SendInAppNotificationIntegrationEvent>(),
-                    It.IsAny<CancellationToken>()
-                ),
+            b => b.PublishAsync(It.IsAny<SendInAppNotificationIntegrationEvent>()),
             Times.Never
         );
     }

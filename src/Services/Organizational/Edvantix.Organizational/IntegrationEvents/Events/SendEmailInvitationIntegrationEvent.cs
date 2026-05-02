@@ -2,7 +2,7 @@ namespace Edvantix.Contracts;
 
 /// <summary>
 /// Интеграционное событие для отправки email-приглашения в организацию.
-/// Публикуется Organizational-сервисом; потребляется Notification-сервисом через MassTransit.
+/// Публикуется Organizational-сервисом; потребляется Notification-сервисом через Wolverine.
 /// </summary>
 public sealed record SendEmailInvitationIntegrationEvent : IntegrationEvent
 {

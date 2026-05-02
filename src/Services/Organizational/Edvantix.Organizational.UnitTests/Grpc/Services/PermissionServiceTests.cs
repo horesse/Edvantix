@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Repository;
 using Edvantix.Organizational.Grpc.Services;
 using Edvantix.Organizational.Grpc.Services.Permissions;
 using Edvantix.Organizational.UnitTests.Grpc.Context;

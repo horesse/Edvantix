@@ -1,17 +1,13 @@
-﻿namespace Edvantix.Identity.Infrastructure;
+﻿using Wolverine.EntityFrameworkCore;
 
-/// <summary>
-/// Контекст БД сервиса Identity.
-/// Содержит только таблицы MassTransit outbox для гарантированной доставки событий.
-/// </summary>
+namespace Edvantix.Identity.Infrastructure;
+
 public sealed class IdentityDbContext(DbContextOptions<IdentityDbContext> options)
     : DbContext(options)
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.AddInboxStateEntity();
-        modelBuilder.AddOutboxMessageEntity();
-        modelBuilder.AddOutboxStateEntity();
+        modelBuilder.MapWolverineEnvelopeStorage();
     }
 }

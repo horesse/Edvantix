@@ -21,7 +21,7 @@ global using Edvantix.ServiceDefaults.ApiSpecification.OpenApi;
 global using Edvantix.ServiceDefaults.Kestrel;
 global using Edvantix.SharedKernel.Results;
 global using FluentValidation;
-global using MassTransit;
 global using Mediator;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.EntityFrameworkCore;
+global using Wolverine;

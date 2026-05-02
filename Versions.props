@@ -6,7 +6,7 @@
     <DotnetPackagesVersion>10.0.7</DotnetPackagesVersion>
     <GrpcVersion>2.76.0</GrpcVersion>
     <!-- Integration Libraries -->
-    <MassTransitVersion>8.5.9</MassTransitVersion>
+    <WolverineVersion>5.36.0</WolverineVersion>
     <TUnitVersion>1.43.2</TUnitVersion>
     <QuartzVersion>3.18.1</QuartzVersion>
     <!-- Microsoft Packages -->

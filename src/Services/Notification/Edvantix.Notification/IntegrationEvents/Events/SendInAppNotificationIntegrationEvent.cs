@@ -3,7 +3,7 @@
 /// <summary>
 /// Интеграционное событие для создания in-app уведомления.
 /// Публикуется другими сервисами (Organizational, Blog и т.д.);
-/// потребляется Notification-сервисом через MassTransit.
+/// потребляется Notification-сервисом через Wolverine.
 /// </summary>
 public sealed record SendInAppNotificationIntegrationEvent : IntegrationEvent
 {

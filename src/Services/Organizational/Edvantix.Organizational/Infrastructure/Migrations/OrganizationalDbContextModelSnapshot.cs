@@ -18,7 +18,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("WolverineEnabled", "true");
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
@@ -92,10 +93,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("group_id");
 
-                    b.Property<Guid>("GroupRoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("group_role_id");
-
                     b.Property<DateOnly>("JoinedAt")
                         .HasColumnType("date")
                         .HasColumnName("joined_at");
@@ -120,67 +117,7 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                     b.HasIndex("GroupId")
                         .HasDatabaseName("ix_group_members_group_id");
 
-                    b.HasIndex("GroupRoleId")
-                        .HasDatabaseName("ix_group_members_group_role_id");
-
                     b.ToTable("group_members", (string)null);
-                });
-
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("description");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
-                        .HasComment("Признак удаленной записи");
-
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("organization_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_group_roles");
-
-                    b.HasIndex("OrganizationId", "Code")
-                        .IsUnique()
-                        .HasDatabaseName("ix_group_roles_organization_id_code");
-
-                    b.ToTable("group_roles", (string)null);
-                });
-
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupRolePermission", b =>
-                {
-                    b.Property<Guid>("GroupRoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("group_role_id");
-
-                    b.Property<Guid>("PermissionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("permission_id");
-
-                    b.HasKey("GroupRoleId", "PermissionId")
-                        .HasName("pk_group_role_permission");
-
-                    b.HasIndex("PermissionId")
-                        .HasDatabaseName("ix_group_role_permission_permission_id");
-
-                    b.ToTable("group_role_permission", (string)null);
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Invitation", b =>
@@ -513,11 +450,23 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnName("id")
                         .HasDefaultValueSql("uuidv7()");
 
-                    b.Property<string>("Feature")
+                    b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
-                        .HasColumnName("feature");
+                        .HasColumnName("code");
+
+                    b.Property<string>("FeatureCode")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("feature_code");
+
+                    b.Property<string>("FeatureName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("feature_name");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -525,232 +474,114 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("name");
 
+                    b.Property<string>("ServiceCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("service_code");
+
                     b.HasKey("Id")
                         .HasName("pk_permissions");
 
-                    b.HasIndex("Feature", "Name")
+                    b.HasIndex("ServiceCode", "FeatureCode", "Code")
                         .IsUnique()
-                        .HasDatabaseName("ix_permissions_feature_name");
+                        .HasDatabaseName("ix_permissions_service_code_feature_code_code");
 
                     b.ToTable("permissions", (string)null);
                 });
 
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
+            modelBuilder.Entity("Wolverine.EntityFrameworkCore.Internals.IncomingMessage", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime?>("Consumed")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("consumed");
-
-                    b.Property<Guid>("ConsumerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("consumer_id");
-
-                    b.Property<DateTime?>("Delivered")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("delivered");
-
-                    b.Property<DateTime?>("ExpirationTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expiration_time");
-
-                    b.Property<long?>("LastSequenceNumber")
-                        .HasColumnType("bigint")
-                        .HasColumnName("last_sequence_number");
-
-                    b.Property<Guid>("LockId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("lock_id");
-
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("message_id");
-
-                    b.Property<int>("ReceiveCount")
+                    b.Property<int>("Attempts")
                         .HasColumnType("integer")
-                        .HasColumnName("receive_count");
+                        .HasColumnName("attempts");
 
-                    b.Property<DateTime>("Received")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("received");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea")
-                        .HasColumnName("row_version");
-
-                    b.HasKey("Id")
-                        .HasName("pk_inbox_state");
-
-                    b.HasAlternateKey("MessageId", "ConsumerId")
-                        .HasName("ak_inbox_state_message_id_consumer_id");
-
-                    b.HasIndex("Delivered")
-                        .HasDatabaseName("ix_inbox_state_delivered");
-
-                    b.ToTable("inbox_state", (string)null);
-                });
-
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
-                {
-                    b.Property<long>("SequenceNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("sequence_number");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("SequenceNumber"));
-
-                    b.Property<string>("Body")
+                    b.Property<byte[]>("Body")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("bytea")
                         .HasColumnName("body");
 
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("content_type");
-
-                    b.Property<Guid?>("ConversationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("conversation_id");
-
-                    b.Property<Guid?>("CorrelationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("correlation_id");
-
-                    b.Property<string>("DestinationAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("destination_address");
-
-                    b.Property<DateTime?>("EnqueueTime")
+                    b.Property<DateTimeOffset?>("ExecutionTime")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("enqueue_time");
+                        .HasColumnName("execution_time");
 
-                    b.Property<DateTime?>("ExpirationTime")
+                    b.Property<DateTimeOffset?>("KeepUntil")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expiration_time");
-
-                    b.Property<string>("FaultAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("fault_address");
-
-                    b.Property<string>("Headers")
-                        .HasColumnType("text")
-                        .HasColumnName("headers");
-
-                    b.Property<Guid?>("InboxConsumerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("inbox_consumer_id");
-
-                    b.Property<Guid?>("InboxMessageId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("inbox_message_id");
-
-                    b.Property<Guid?>("InitiatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("initiator_id");
-
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("message_id");
+                        .HasColumnName("keep_until");
 
                     b.Property<string>("MessageType")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("message_type");
 
-                    b.Property<Guid?>("OutboxId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("outbox_id");
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("owner_id");
 
-                    b.Property<string>("Properties")
+                    b.Property<string>("ReceivedAt")
                         .HasColumnType("text")
-                        .HasColumnName("properties");
+                        .HasColumnName("received_at");
 
-                    b.Property<Guid?>("RequestId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("request_id");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("status");
 
-                    b.Property<string>("ResponseAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("response_address");
+                    b.HasKey("Id")
+                        .HasName("pk_wolverine_incoming_envelopes");
 
-                    b.Property<DateTime>("SentTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("sent_time");
-
-                    b.Property<string>("SourceAddress")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("source_address");
-
-                    b.HasKey("SequenceNumber")
-                        .HasName("pk_outbox_message");
-
-                    b.HasIndex("EnqueueTime")
-                        .HasDatabaseName("ix_outbox_message_enqueue_time");
-
-                    b.HasIndex("ExpirationTime")
-                        .HasDatabaseName("ix_outbox_message_expiration_time");
-
-                    b.HasIndex("OutboxId", "SequenceNumber")
-                        .IsUnique()
-                        .HasDatabaseName("ix_outbox_message_outbox_id_sequence_number");
-
-                    b.HasIndex("InboxMessageId", "InboxConsumerId", "SequenceNumber")
-                        .IsUnique()
-                        .HasDatabaseName("ix_outbox_message_inbox_message_id_inbox_consumer_id_sequence_");
-
-                    b.ToTable("outbox_message", (string)null);
+                    b.ToTable("wolverine_incoming_envelopes", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxState", b =>
+            modelBuilder.Entity("Wolverine.EntityFrameworkCore.Internals.OutgoingMessage", b =>
                 {
-                    b.Property<Guid>("OutboxId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("outbox_id");
+                        .HasColumnName("id");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created");
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer")
+                        .HasColumnName("attempts");
 
-                    b.Property<DateTime?>("Delivered")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("delivered");
-
-                    b.Property<long?>("LastSequenceNumber")
-                        .HasColumnType("bigint")
-                        .HasColumnName("last_sequence_number");
-
-                    b.Property<Guid>("LockId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("lock_id");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<byte[]>("Body")
+                        .IsRequired()
                         .HasColumnType("bytea")
-                        .HasColumnName("row_version");
+                        .HasColumnName("body");
 
-                    b.HasKey("OutboxId")
-                        .HasName("pk_outbox_state");
+                    b.Property<DateTimeOffset?>("DeliverBy")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deliver_by");
 
-                    b.HasIndex("Created")
-                        .HasDatabaseName("ix_outbox_state_created");
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("destination");
 
-                    b.ToTable("outbox_state", (string)null);
+                    b.Property<string>("MessageType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("message_type");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("owner_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_wolverine_outgoing_envelopes");
+
+                    b.ToTable("wolverine_outgoing_envelopes", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupMember", b =>
@@ -761,30 +592,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_group_members_groups_group_id");
-
-                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupRole", null)
-                        .WithMany()
-                        .HasForeignKey("GroupRoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_group_members_group_roles_group_role_id");
-                });
-
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupRolePermission", b =>
-                {
-                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupRole", null)
-                        .WithMany()
-                        .HasForeignKey("GroupRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_group_role_permission_group_roles_group_role_id");
-
-                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Permission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_group_role_permission_permissions_permission_id");
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.Contact", b =>
@@ -824,20 +631,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_organization_member_role_permission_permissions_permission_");
-                });
-
-            modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
-                {
-                    b.HasOne("MassTransit.EntityFrameworkCoreIntegration.OutboxState", null)
-                        .WithMany()
-                        .HasForeignKey("OutboxId")
-                        .HasConstraintName("fk_outbox_message_outbox_state_outbox_id");
-
-                    b.HasOne("MassTransit.EntityFrameworkCoreIntegration.InboxState", null)
-                        .WithMany()
-                        .HasForeignKey("InboxMessageId", "InboxConsumerId")
-                        .HasPrincipalKey("MessageId", "ConsumerId")
-                        .HasConstraintName("fk_outbox_message_inbox_state_inbox_message_id_inbox_consumer_");
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.Group", b =>

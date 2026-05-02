@@ -3,8 +3,12 @@ using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
 using Edvantix.Organizational.Grpc;
+using Edvantix.Organizational.IntegrationEvents;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence;
+using Wolverine.Postgresql;
 
 namespace Edvantix.Organizational.Extensions;
 
@@ -48,25 +52,20 @@ internal static class Extensions
 
         services.AddMapper(typeof(IOrganizationalApiMarker));
 
-        builder.AddEventBus(
+        services.AddEventBus(
             typeof(IOrganizationalApiMarker),
-            cfg =>
+            options =>
             {
-                cfg.AddEntityFrameworkOutbox<OrganizationalDbContext>(o =>
-                {
-                    o.QueryDelay = TimeSpan.FromSeconds(1);
-
-                    o.DuplicateDetectionWindow = TimeSpan.FromMinutes(5);
-
-                    o.UsePostgres();
-
-                    o.UseBusOutbox();
-                });
-
-                cfg.AddConfigureEndpointsCallback(
-                    (context, _, configurator) =>
-                        configurator.UseEntityFrameworkOutbox<OrganizationalDbContext>(context)
+                var connectionString = builder.Configuration.GetRequiredConnectionString(
+                    Components.Database.Organizational
                 );
+
+                options.PersistMessagesWithPostgresql(connectionString);
+                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
+
+                options.Policies.AutoApplyTransactions();
+
+                options.AddEvents();
             }
         );
 

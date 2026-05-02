@@ -6,7 +6,7 @@ public sealed record UnblockProfileCommand(Guid ProfileId) : ICommand;
 
 public sealed class UnblockProfileCommandHandler(
     IProfileRepository repository,
-    IPublishEndpoint publishEndpoint,
+    IMessageBus publishEndpoint,
     ILogger<UnblockProfileCommandHandler> logger
 ) : ICommandHandler<UnblockProfileCommand>
 {
@@ -24,9 +24,8 @@ public sealed class UnblockProfileCommandHandler(
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        await publishEndpoint.Publish(
-            new EnableKeycloakUserIntegrationEvent(profile.AccountId),
-            cancellationToken
+        await publishEndpoint.PublishAsync(
+            new EnableKeycloakUserIntegrationEvent(profile.AccountId)
         );
 
         logger.LogInformation(

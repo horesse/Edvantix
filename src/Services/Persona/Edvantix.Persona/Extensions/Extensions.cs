@@ -8,9 +8,13 @@ using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Persona.Configurations;
 using Edvantix.Persona.Infrastructure.EventServices;
+using Edvantix.Persona.IntegrationEvents;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 using Microsoft.AspNetCore.Authorization;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence;
+using Wolverine.Postgresql;
 
 namespace Edvantix.Persona.Extensions;
 
@@ -103,25 +107,20 @@ internal static class Extensions
         services.AddScoped<IEventMapper, EventMapper>();
         services.AddEventDispatcher();
 
-        builder.AddEventBus(
+        services.AddEventBus(
             typeof(IPersonaApiMarker),
-            cfg =>
+            options =>
             {
-                cfg.AddEntityFrameworkOutbox<PersonaDbContext>(o =>
-                {
-                    o.QueryDelay = TimeSpan.FromSeconds(1);
-
-                    o.DuplicateDetectionWindow = TimeSpan.FromMinutes(5);
-
-                    o.UsePostgres();
-
-                    o.UseBusOutbox();
-                });
-
-                cfg.AddConfigureEndpointsCallback(
-                    (context, _, configurator) =>
-                        configurator.UseEntityFrameworkOutbox<PersonaDbContext>(context)
+                var connectionString = builder.Configuration.GetRequiredConnectionString(
+                    Components.Database.Persona
                 );
+
+                options.PersistMessagesWithPostgresql(connectionString);
+                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
+
+                options.Policies.AutoApplyTransactions();
+
+                options.AddEvents();
             }
         );
 

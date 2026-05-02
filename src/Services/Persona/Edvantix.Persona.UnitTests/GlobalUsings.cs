@@ -14,7 +14,7 @@ global using Edvantix.Persona.Grpc.Services;
 global using Edvantix.Persona.Infrastructure.Blob;
 global using Edvantix.SharedKernel.SeedWork;
 global using FluentValidation.TestHelper;
-global using MassTransit;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
+global using Wolverine;

@@ -7,7 +7,7 @@ namespace Edvantix.Persona.UnitTests.Features.Admin.Profiles.Unblock;
 public sealed class UnblockProfileCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
-    private readonly Mock<IPublishEndpoint> _publishEndpointMock = new();
+    private readonly Mock<IMessageBus> _busMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly UnblockProfileCommandHandler _handler;
 
@@ -17,7 +17,7 @@ public sealed class UnblockProfileCommandHandlerTests
 
         _handler = new(
             _profileRepoMock.Object,
-            _publishEndpointMock.Object,
+            _busMock.Object,
             Mock.Of<ILogger<UnblockProfileCommandHandler>>()
         );
     }
@@ -42,13 +42,10 @@ public sealed class UnblockProfileCommandHandlerTests
 
         profile.IsBlocked.ShouldBeFalse();
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        _publishEndpointMock.Verify(
+        _busMock.Verify(
             p =>
-                p.Publish(
-                    It.Is<EnableKeycloakUserIntegrationEvent>(e =>
-                        e.AccountId == profile.AccountId
-                    ),
-                    It.IsAny<CancellationToken>()
+                p.PublishAsync(
+                    It.Is<EnableKeycloakUserIntegrationEvent>(e => e.AccountId == profile.AccountId)
                 ),
             Times.Once
         );
@@ -69,12 +66,8 @@ public sealed class UnblockProfileCommandHandlerTests
             _handler.Handle(command, CancellationToken.None).AsTask()
         );
 
-        _publishEndpointMock.Verify(
-            p =>
-                p.Publish(
-                    It.IsAny<EnableKeycloakUserIntegrationEvent>(),
-                    It.IsAny<CancellationToken>()
-                ),
+        _busMock.Verify(
+            p => p.PublishAsync(It.IsAny<EnableKeycloakUserIntegrationEvent>()),
             Times.Never
         );
     }

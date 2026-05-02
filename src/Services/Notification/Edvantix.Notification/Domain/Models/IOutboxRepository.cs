@@ -3,7 +3,7 @@ using Edvantix.Chassis.Specification;
 
 namespace Edvantix.Notification.Domain.Models;
 
-internal interface IOutboxRepository : IRepository<Outbox>
+public interface IOutboxRepository : IRepository<Outbox>
 {
     Task AddAsync(Outbox outbox, CancellationToken cancellationToken = default);
 

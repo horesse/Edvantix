@@ -2,28 +2,27 @@
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-internal sealed class CleanUpSentEmailIntegrationEventHandler(
-    ILogger<CleanUpSentEmailIntegrationEventHandler> logger,
-    GlobalLogBuffer logBuffer,
-    IOutboxRepository repository
-) : IConsumer<CleanUpSentEmailIntegrationEvent>
+public static class CleanUpSentEmailIntegrationEventHandler
 {
-    public async Task Consume(ConsumeContext<CleanUpSentEmailIntegrationEvent> context)
+    public static async Task Handle(
+        CleanUpSentEmailIntegrationEvent @event,
+        ILogger logger,
+        GlobalLogBuffer logBuffer,
+        IOutboxRepository repository,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
             logger.LogDebug("Starting cleanup of sent emails...");
 
-            var sentEmails = await repository.ListAsync(
-                new OutboxFilterSpec(),
-                context.CancellationToken
-            );
+            var sentEmails = await repository.ListAsync(new OutboxFilterSpec(), cancellationToken);
 
             if (sentEmails.Count != 0)
             {
                 logger.LogDebug("Found {Count} sent emails to delete", sentEmails.Count);
                 repository.BulkDelete(sentEmails);
-                await repository.UnitOfWork.SaveChangesAsync(context.CancellationToken);
+                await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
                 logger.LogInformation("Successfully cleaned up sent emails");
             }
             else
@@ -37,16 +36,5 @@ internal sealed class CleanUpSentEmailIntegrationEventHandler(
             logBuffer.Flush();
             throw new InvalidOperationException("Failed to clean up sent emails", ex);
         }
-    }
-}
-
-[ExcludeFromCodeCoverage]
-internal sealed class CleanUpSentEmailIntegrationEventHandlerDefinition
-    : ConsumerDefinition<CleanUpSentEmailIntegrationEventHandler>
-{
-    public CleanUpSentEmailIntegrationEventHandlerDefinition()
-    {
-        Endpoint(x => x.Name = "notification-clean-up-sent-email");
-        ConcurrentMessageLimit = 1;
     }
 }

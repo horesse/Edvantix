@@ -2,6 +2,10 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Identity.Configurations;
 using Edvantix.Identity.Infrastructure.Keycloak;
+using Edvantix.Identity.IntegrationEvents;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence;
+using Wolverine.Postgresql;
 
 namespace Edvantix.Identity.Extensions;
 
@@ -29,25 +33,20 @@ internal static class Extensions
 
         services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
 
-        builder.AddEventBus(
+        services.AddEventBus(
             typeof(IIdentityApiMarker),
-            cfg =>
+            options =>
             {
-                cfg.AddEntityFrameworkOutbox<IdentityDbContext>(o =>
-                {
-                    o.QueryDelay = TimeSpan.FromSeconds(1);
-
-                    o.DuplicateDetectionWindow = TimeSpan.FromMinutes(5);
-
-                    o.UsePostgres();
-
-                    o.UseBusOutbox();
-                });
-
-                cfg.AddConfigureEndpointsCallback(
-                    (context, _, configurator) =>
-                        configurator.UseEntityFrameworkOutbox<IdentityDbContext>(context)
+                var connectionString = builder.Configuration.GetRequiredConnectionString(
+                    Components.Database.Identity
                 );
+
+                options.PersistMessagesWithPostgresql(connectionString);
+                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
+
+                options.Policies.AutoApplyTransactions();
+
+                options.AddEvents();
             }
         );
 

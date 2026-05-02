@@ -3,8 +3,9 @@
     <SuppressCheckGrpcNetClientFactoryVersion>true</SuppressCheckGrpcNetClientFactoryVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="WolverineFx.EntityFrameworkCore" />
+    <PackageReference Include="WolverineFx.Postgresql" />
     <PackageReference Include="Grpc.Tools" PrivateAssets="all" />
-    <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
   </ItemGroup>
   <ItemGroup>

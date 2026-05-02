@@ -8,7 +8,7 @@ public sealed class RegistrationCommandHandlerTests
 {
     private readonly Mock<IProfileRepository> _profileRepoMock = new();
     private readonly Mock<IBlobService> _blobServiceMock = new();
-    private readonly Mock<IPublishEndpoint> _publishEndpointMock = new();
+    private readonly Mock<IMessageBus> _busMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
 
     public RegistrationCommandHandlerTests()
@@ -56,13 +56,12 @@ public sealed class RegistrationCommandHandlerTests
             Times.Once
         );
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        _publishEndpointMock.Verify(
+        _busMock.Verify(
             p =>
-                p.Publish(
+                p.PublishAsync(
                     It.Is<LinkKeycloakProfileIntegrationEvent>(e =>
                         e.AccountId == accountId && e.ProfileId != Guid.Empty
-                    ),
-                    It.IsAny<CancellationToken>()
+                    )
                 ),
             Times.Once
         );
@@ -194,7 +193,7 @@ public sealed class RegistrationCommandHandlerTests
             claims,
             _profileRepoMock.Object,
             _blobServiceMock.Object,
-            _publishEndpointMock.Object
+            _busMock.Object
         );
     }
 

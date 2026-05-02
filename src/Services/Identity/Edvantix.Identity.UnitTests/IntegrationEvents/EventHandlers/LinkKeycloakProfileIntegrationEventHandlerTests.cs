@@ -7,26 +7,22 @@ public sealed class LinkKeycloakProfileIntegrationEventHandlerTests
 {
     private readonly Mock<IKeycloakAdminService> _keycloakMock = new();
     private readonly Mock<GlobalLogBuffer> _logBufferMock = new();
-    private readonly LinkKeycloakProfileIntegrationEventHandler _handler;
-
-    public LinkKeycloakProfileIntegrationEventHandlerTests()
-    {
-        _handler = new(
-            _keycloakMock.Object,
-            Mock.Of<ILogger<LinkKeycloakProfileIntegrationEventHandler>>(),
-            _logBufferMock.Object
-        );
-    }
+    private readonly ILogger _logger = Mock.Of<ILogger>();
 
     [Test]
-    public async Task GivenValidEvent_WhenConsuming_ThenShouldCallSetProfileIdAsync()
+    public async Task GivenValidEvent_WhenHandling_ThenShouldCallSetProfileIdAsync()
     {
         var accountId = Guid.CreateVersion7();
         var profileId = Guid.CreateVersion7();
         var @event = new LinkKeycloakProfileIntegrationEvent(accountId, profileId);
-        var context = CreateConsumeContext(@event);
 
-        await _handler.Consume(context.Object);
+        await LinkKeycloakProfileIntegrationEventHandler.Handle(
+            @event,
+            _keycloakMock.Object,
+            _logger,
+            _logBufferMock.Object,
+            CancellationToken.None
+        );
 
         _keycloakMock.Verify(
             k => k.SetProfileIdAsync(accountId, profileId, It.IsAny<CancellationToken>()),
@@ -35,13 +31,12 @@ public sealed class LinkKeycloakProfileIntegrationEventHandlerTests
     }
 
     [Test]
-    public async Task GivenKeycloakThrows_WhenConsuming_ThenShouldFlushLogBufferAndRethrow()
+    public async Task GivenKeycloakThrows_WhenHandling_ThenShouldFlushLogBufferAndRethrow()
     {
         var @event = new LinkKeycloakProfileIntegrationEvent(
             Guid.CreateVersion7(),
             Guid.CreateVersion7()
         );
-        var context = CreateConsumeContext(@event);
 
         _keycloakMock
             .Setup(k =>
@@ -53,18 +48,16 @@ public sealed class LinkKeycloakProfileIntegrationEventHandlerTests
             )
             .ThrowsAsync(new HttpRequestException("Keycloak unavailable"));
 
-        await Should.ThrowAsync<HttpRequestException>(() => _handler.Consume(context.Object));
+        await Should.ThrowAsync<HttpRequestException>(() =>
+            LinkKeycloakProfileIntegrationEventHandler.Handle(
+                @event,
+                _keycloakMock.Object,
+                _logger,
+                _logBufferMock.Object,
+                CancellationToken.None
+            )
+        );
 
         _logBufferMock.Verify(b => b.Flush(), Times.Once);
-    }
-
-    private static Mock<ConsumeContext<LinkKeycloakProfileIntegrationEvent>> CreateConsumeContext(
-        LinkKeycloakProfileIntegrationEvent @event
-    )
-    {
-        var mock = new Mock<ConsumeContext<LinkKeycloakProfileIntegrationEvent>>();
-        mock.Setup(c => c.Message).Returns(@event);
-        mock.Setup(c => c.CancellationToken).Returns(CancellationToken.None);
-        return mock;
     }
 }

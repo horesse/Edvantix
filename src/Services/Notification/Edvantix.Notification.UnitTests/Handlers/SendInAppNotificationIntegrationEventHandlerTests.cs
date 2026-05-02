@@ -23,8 +23,8 @@ public sealed class SendInAppNotificationIntegrationEventHandlerTests
             .Setup(x =>
                 x.SendAsync(It.IsAny<InAppNotificationMessage>(), It.IsAny<CancellationToken>())
             )
-            .Callback<InAppNotificationMessage, CancellationToken>((message, _) =>
-                sentMessage = message
+            .Callback<InAppNotificationMessage, CancellationToken>(
+                (message, _) => sentMessage = message
             )
             .Returns(Task.CompletedTask);
 
@@ -43,8 +43,7 @@ public sealed class SendInAppNotificationIntegrationEventHandlerTests
         sentMessage.Message.ShouldBe(integrationEvent.MessageText);
         sentMessage.Metadata.ShouldBe(integrationEvent.Metadata);
         _senderMock.Verify(
-            x =>
-                x.SendAsync(It.IsAny<InAppNotificationMessage>(), It.IsAny<CancellationToken>()),
+            x => x.SendAsync(It.IsAny<InAppNotificationMessage>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

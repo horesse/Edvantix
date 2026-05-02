@@ -25,9 +25,7 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
         InvitationEmailModel? renderedModel = null;
         MimeMessage? sentMessage = null;
 
-        _configurationMock
-            .Setup(x => x["Frontend:BaseUrl"])
-            .Returns("https://app.edvantix.test");
+        _configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns("https://app.edvantix.test");
         _rendererMock
             .Setup(x =>
                 x.RenderAsync(
@@ -36,8 +34,8 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<InvitationEmailModel, string, CancellationToken>((model, _, _) =>
-                renderedModel = model
+            .Callback<InvitationEmailModel, string, CancellationToken>(
+                (model, _, _) => renderedModel = model
             )
             .ReturnsAsync("<html>Invitation body</html>");
         _senderMock
@@ -80,9 +78,7 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
     {
         var integrationEvent = CreateEvent();
 
-        _configurationMock
-            .Setup(x => x["Frontend:BaseUrl"])
-            .Returns((string?)null);
+        _configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns((string?)null);
 
         var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
             SendEmailInvitationIntegrationEventHandler.Handle(
@@ -119,9 +115,7 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
         var integrationEvent = CreateEvent();
         var expectedException = new InvalidOperationException("SMTP unavailable");
 
-        _configurationMock
-            .Setup(x => x["Frontend:BaseUrl"])
-            .Returns("https://app.edvantix.test");
+        _configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns("https://app.edvantix.test");
         _rendererMock
             .Setup(x =>
                 x.RenderAsync(

@@ -27,7 +27,9 @@ public sealed class ResendErrorEmailHandlerTests
     public async Task GivenNoUnsentEmails_WhenHandling_ThenShouldNotSendOrSave()
     {
         _repositoryMock
-            .Setup(x => x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>()))
+            .Setup(x =>
+                x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([]);
 
         await ResendErrorEmailIntegrationEventHandler.Handle(
@@ -39,7 +41,10 @@ public sealed class ResendErrorEmailHandlerTests
             CancellationToken.None
         );
 
-        _senderMock.Verify(x => x.SendAsync(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>()), Times.Never);
+        _senderMock.Verify(
+            x => x.SendAsync(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
         _unitOfWorkMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
@@ -50,7 +55,9 @@ public sealed class ResendErrorEmailHandlerTests
         var email2 = new Outbox("User2", "user2@test.com", "Sub2", "Body2");
 
         _repositoryMock
-            .Setup(x => x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>()))
+            .Setup(x =>
+                x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([email1, email2]);
 
         await ResendErrorEmailIntegrationEventHandler.Handle(
@@ -76,7 +83,9 @@ public sealed class ResendErrorEmailHandlerTests
         var email = new Outbox("User1", "user1@test.com", "Sub1", "Body1");
 
         _repositoryMock
-            .Setup(x => x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>()))
+            .Setup(x =>
+                x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([email]);
 
         await ResendErrorEmailIntegrationEventHandler.Handle(
@@ -97,7 +106,9 @@ public sealed class ResendErrorEmailHandlerTests
         var email = new Outbox("User1", "user1@test.com", "Sub1", "Body1");
 
         _repositoryMock
-            .Setup(x => x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>()))
+            .Setup(x =>
+                x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([email]);
 
         _senderMock
@@ -124,7 +135,9 @@ public sealed class ResendErrorEmailHandlerTests
         var failureEmail = new Outbox("User2", "user2@test.com", "Sub2", "Body2");
 
         _repositoryMock
-            .Setup(x => x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>()))
+            .Setup(x =>
+                x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([successEmail, failureEmail]);
 
         _senderMock
@@ -156,7 +169,9 @@ public sealed class ResendErrorEmailHandlerTests
         var email = new Outbox("User1", "user1@test.com", "Sub1", "Body1");
 
         _repositoryMock
-            .Setup(x => x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>()))
+            .Setup(x =>
+                x.ListAsync(It.IsAny<ISpecification<Outbox>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([email]);
 
         _senderMock

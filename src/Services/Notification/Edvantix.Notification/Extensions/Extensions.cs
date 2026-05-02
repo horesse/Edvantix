@@ -8,6 +8,7 @@ using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.Infrastructure.Senders.MailKit;
 using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
+using Edvantix.Notification.IntegrationEvents;
 using Edvantix.ServiceDefaults.Cors;
 using Wolverine.EntityFrameworkCore;
 using Wolverine.Persistence;
@@ -75,6 +76,8 @@ internal static class Extensions
                     );
 
                     options.Policies.AutoApplyTransactions();
+
+                    options.AddEvents();
                 }
             );
         }

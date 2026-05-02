@@ -2,6 +2,7 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Identity.Configurations;
 using Edvantix.Identity.Infrastructure.Keycloak;
+using Edvantix.Identity.IntegrationEvents;
 using Wolverine.EntityFrameworkCore;
 using Wolverine.Persistence;
 using Wolverine.Postgresql;
@@ -44,6 +45,8 @@ internal static class Extensions
                 options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
 
                 options.Policies.AutoApplyTransactions();
+
+                options.AddEvents();
             }
         );
 

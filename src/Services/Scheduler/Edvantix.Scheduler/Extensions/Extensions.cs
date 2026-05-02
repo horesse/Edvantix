@@ -1,4 +1,5 @@
-﻿using OpenTelemetry.Trace;
+﻿using Edvantix.Scheduler.IntegrationEvents;
+using OpenTelemetry.Trace;
 using Quartz.AspNetCore;
 
 namespace Edvantix.Scheduler.Extensions;
@@ -11,7 +12,13 @@ internal static class Extensions
         {
             var services = builder.Services;
 
-            services.AddEventBus(typeof(ISchedulerApiMarker));
+            services.AddEventBus(
+                typeof(ISchedulerApiMarker),
+                options =>
+                {
+                    options.AddEvents();
+                }
+            );
 
             services.AddAntiforgery();
 

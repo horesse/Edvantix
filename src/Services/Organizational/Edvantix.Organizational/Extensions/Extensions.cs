@@ -3,6 +3,7 @@ using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
 using Edvantix.Organizational.Grpc;
+using Edvantix.Organizational.IntegrationEvents;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 using Wolverine.EntityFrameworkCore;
@@ -63,6 +64,8 @@ internal static class Extensions
                 options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
 
                 options.Policies.AutoApplyTransactions();
+
+                options.AddEvents();
             }
         );
 

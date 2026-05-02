@@ -1,11 +1,12 @@
 ﻿using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Constants.Aspire;
 using FluentValidation;
+using JasperFx;
+using JasperFx.Resources;
 using Microsoft.Extensions.DependencyInjection;
 using Wolverine;
 using Wolverine.ErrorHandling;
 using Wolverine.Kafka;
-using Wolverine.Util;
 
 namespace Edvantix.Chassis.EventBus;
 
@@ -18,6 +19,9 @@ public static class Extensions
             services.AddWolverine(opts =>
             {
                 opts.Discovery.IncludeAssembly(type.Assembly);
+                opts.Services.AddResourceSetupOnStartup();
+
+                opts.AutoBuildMessageStorageOnStartup = AutoCreate.All;
 
                 opts.UseKafkaUsingNamedConnection(Components.Broker).AutoProvision();
 
@@ -30,50 +34,24 @@ public static class Extensions
                         TimeSpan.FromSeconds(5)
                     );
 
-                opts.RegisterProducers(type);
-
                 configure?.Invoke(opts);
             });
+
+            services
+                .AddOpenTelemetry()
+                .WithTracing(tracing =>
+                {
+                    tracing.AddSource(nameof(Wolverine));
+                })
+                .WithMetrics(metrics =>
+                {
+                    metrics.AddMeter(nameof(Wolverine));
+                });
         }
 
         public void AddEventDispatcher()
         {
             services.AddScoped<IEventDispatcher, EventDispatcher>();
-        }
-    }
-
-    extension(WolverineOptions opts)
-    {
-        private void RegisterProducers(Type type)
-        {
-            var messageTypes = type
-                .Assembly.GetTypes()
-                .Where(t => typeof(IntegrationEvent).IsAssignableFrom(t));
-
-            foreach (var messageType in messageTypes)
-            {
-                opts.PublishMessage(messageType)
-                    .ToKafkaTopic(messageType.ToMessageTypeName())
-                    .InteropWithCloudEvents();
-            }
-        }
-
-        // TODO: делать регистрацию handler`ов.
-        private void RegisterConsumers(Type type)
-        {
-            var messageTypes = type
-                .Assembly.GetTypes()
-                .Where(t => typeof(IntegrationEvent).IsAssignableFrom(t) && !t.IsAbstract);
-
-            foreach (var messageType in messageTypes)
-            {
-                opts.ListenToKafkaTopic(messageType.ToMessageTypeName())
-                    .InteropWithCloudEvents()
-                    .ConfigureConsumer(c =>
-                    {
-                        c.GroupId = nameof(Edvantix);
-                    });
-            }
         }
     }
 }

@@ -4,8 +4,6 @@ using Edvantix.Notification.Infrastructure.Render;
 using Edvantix.Notification.Infrastructure.Senders;
 using Edvantix.Notification.IntegrationEvents.EventHandlers;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Diagnostics.Buffering;
-using Microsoft.Extensions.Logging;
 using MimeKit;
 
 namespace Edvantix.Notification.UnitTests.Handlers;
@@ -13,8 +11,6 @@ namespace Edvantix.Notification.UnitTests.Handlers;
 public sealed class SendEmailInvitationIntegrationEventHandlerTests
 {
     private readonly Mock<IConfiguration> _configurationMock = new();
-    private readonly Mock<GlobalLogBuffer> _logBufferMock = new();
-    private readonly ILogger _logger = Mock.Of<ILogger>();
     private readonly Mock<IRenderer> _rendererMock = new();
     private readonly Mock<ISender> _senderMock = new();
 
@@ -45,8 +41,6 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
 
         await SendEmailInvitationIntegrationEventHandler.Handle(
             integrationEvent,
-            _logger,
-            _logBufferMock.Object,
             _rendererMock.Object,
             _senderMock.Object,
             _configurationMock.Object,
@@ -83,8 +77,6 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
         var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
             SendEmailInvitationIntegrationEventHandler.Handle(
                 integrationEvent,
-                _logger,
-                _logBufferMock.Object,
                 _rendererMock.Object,
                 _senderMock.Object,
                 _configurationMock.Object,
@@ -106,7 +98,6 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
             x => x.SendAsync(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>()),
             Times.Never
         );
-        _logBufferMock.Verify(x => x.Flush(), Times.Once);
     }
 
     [Test]
@@ -132,8 +123,6 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
         var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
             SendEmailInvitationIntegrationEventHandler.Handle(
                 integrationEvent,
-                _logger,
-                _logBufferMock.Object,
                 _rendererMock.Object,
                 _senderMock.Object,
                 _configurationMock.Object,
@@ -142,7 +131,6 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
         );
 
         exception.ShouldBeSameAs(expectedException);
-        _logBufferMock.Verify(x => x.Flush(), Times.Once);
     }
 
     private static SendEmailInvitationIntegrationEvent CreateEvent() =>

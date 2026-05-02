@@ -2,15 +2,11 @@ using Edvantix.Constants.Other;
 using Edvantix.Contracts;
 using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.IntegrationEvents.EventHandlers;
-using Microsoft.Extensions.Diagnostics.Buffering;
-using Microsoft.Extensions.Logging;
 
 namespace Edvantix.Notification.UnitTests.Handlers;
 
 public sealed class SendInAppNotificationIntegrationEventHandlerTests
 {
-    private readonly Mock<GlobalLogBuffer> _logBufferMock = new();
-    private readonly ILogger _logger = Mock.Of<ILogger>();
     private readonly Mock<IInAppSender> _senderMock = new();
 
     [Test]
@@ -30,8 +26,6 @@ public sealed class SendInAppNotificationIntegrationEventHandlerTests
 
         await SendInAppNotificationIntegrationEventHandler.Handle(
             integrationEvent,
-            _logger,
-            _logBufferMock.Object,
             _senderMock.Object,
             CancellationToken.None
         );
@@ -63,15 +57,12 @@ public sealed class SendInAppNotificationIntegrationEventHandlerTests
         var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
             SendInAppNotificationIntegrationEventHandler.Handle(
                 integrationEvent,
-                _logger,
-                _logBufferMock.Object,
                 _senderMock.Object,
                 CancellationToken.None
             )
         );
 
         exception.ShouldBeSameAs(expectedException);
-        _logBufferMock.Verify(x => x.Flush(), Times.Once);
     }
 
     private static SendInAppNotificationIntegrationEvent CreateEvent() =>

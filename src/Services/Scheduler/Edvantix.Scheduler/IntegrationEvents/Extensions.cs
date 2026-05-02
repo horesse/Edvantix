@@ -1,6 +1,5 @@
 ﻿using Edvantix.Constants.Other;
 using Edvantix.Contracts;
-using Wolverine;
 using Wolverine.Kafka;
 
 namespace Edvantix.Scheduler.IntegrationEvents;

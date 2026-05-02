@@ -13,7 +13,6 @@ global using Edvantix.Notification.Infrastructure.Senders;
 global using Edvantix.ServiceDefaults;
 global using Edvantix.ServiceDefaults.Kestrel;
 global using MailKit.Net.Smtp;
-global using MassTransit;
 global using Microsoft.Extensions.Diagnostics.Buffering;
 global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using Microsoft.Extensions.Options;

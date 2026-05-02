@@ -1,7 +1,6 @@
 using Edvantix.Chassis.Specification;
 using Edvantix.Contracts;
 using Edvantix.Persona.Features.Admin.Profiles.Unblock;
-using Wolverine;
 
 namespace Edvantix.Persona.UnitTests.Features.Admin.Profiles.Unblock;
 

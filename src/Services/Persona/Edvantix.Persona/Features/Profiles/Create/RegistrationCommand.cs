@@ -1,7 +1,6 @@
 ﻿using Edvantix.Constants.Other;
 using Edvantix.Contracts;
 using Edvantix.Persona.Infrastructure.Blob;
-using Wolverine;
 
 namespace Edvantix.Persona.Features.Profiles.Create;
 

@@ -1,5 +1,4 @@
 ﻿using Edvantix.Contracts;
-using Wolverine;
 
 namespace Edvantix.Persona.Features.Admin.Profiles.Block;
 

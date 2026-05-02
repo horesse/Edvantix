@@ -1,5 +1,4 @@
 ﻿using Edvantix.Constants.Other;
-using Wolverine;
 using Wolverine.Kafka;
 
 namespace Edvantix.Identity.IntegrationEvents;

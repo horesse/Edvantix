@@ -1,7 +1,6 @@
 using Edvantix.Chassis.Specification;
 using Edvantix.Contracts;
 using Edvantix.Persona.Features.Admin.Profiles.Notify;
-using Wolverine;
 
 namespace Edvantix.Persona.UnitTests.Features.Admin.Profiles.Notify;
 

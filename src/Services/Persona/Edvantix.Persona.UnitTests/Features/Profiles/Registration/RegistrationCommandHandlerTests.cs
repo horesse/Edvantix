@@ -1,7 +1,6 @@
 ﻿using Edvantix.Contracts;
 using Edvantix.Persona.Features.Profiles.Create;
 using Edvantix.Persona.UnitTests.Helpers;
-using Wolverine;
 
 namespace Edvantix.Persona.UnitTests.Features.Profiles.Registration;
 

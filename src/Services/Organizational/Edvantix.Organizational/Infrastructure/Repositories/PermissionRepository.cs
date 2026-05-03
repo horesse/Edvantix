@@ -7,7 +7,7 @@ internal sealed class PermissionRepository(OrganizationalDbContext context) : IP
     public IUnitOfWork UnitOfWork => context;
 
     public Task<List<Permission>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        context.Permissions.AsNoTracking().ToListAsync(cancellationToken);
+        context.Permissions.AsTracking().ToListAsync(cancellationToken);
 
     public Task<List<Permission>> GetAllWithFeaturesAsync(
         CancellationToken cancellationToken = default

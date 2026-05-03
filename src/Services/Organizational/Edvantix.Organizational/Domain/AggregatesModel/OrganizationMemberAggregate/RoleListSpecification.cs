@@ -14,13 +14,14 @@ public sealed class RoleListSpecification : Specification<OrganizationMemberRole
         Query
             .AsNoTracking()
             .Where(r => r.OrganizationId == organizationId && !r.IsDeleted)
+            .Include(x => x.Permissions)
             .Skip(offset)
             .Take(limit);
 
         if (search != null)
         {
-            Query.Search(x => x.Name, search);
-            Query.Search(x => x.Description, search);
+            Query.Search(x => x.Name, search, 1);
+            Query.Search(x => x.Description, search, 2);
         }
     }
 }
@@ -34,16 +35,12 @@ public sealed class RoleCountSpecification : Specification<OrganizationMemberRol
     /// <param name="search">Подстрока для поиска по названию или описанию (регистронезависимо).</param>
     public RoleCountSpecification(Guid organizationId, string? search = null)
     {
-        Query
-            .AsNoTracking()
-            .Where(r =>
-                r.OrganizationId == organizationId
-                && !r.IsDeleted
-                && (
-                    search == null
-                    || r.Name.Contains(search)
-                    || (r.Description != null && r.Description.Contains(search))
-                )
-            );
+        Query.AsNoTracking().Where(r => r.OrganizationId == organizationId && !r.IsDeleted);
+
+        if (search != null)
+        {
+            Query.Search(x => x.Name, search, 1);
+            Query.Search(x => x.Description, search, 2);
+        }
     }
 }

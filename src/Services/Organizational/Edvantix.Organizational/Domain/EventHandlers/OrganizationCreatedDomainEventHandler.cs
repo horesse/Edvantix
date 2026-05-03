@@ -29,7 +29,7 @@ internal sealed class OrganizationCreatedDomainEventHandler(
 
         await roleRepository.AddRangeAsync(orgRoles, cancellationToken);
 
-        var ownerRole = orgRoles.First(r => r.IsOwner);
+        var ownerRole = orgRoles.First(r => r.IsSystem);
         var ownerMember = new OrganizationMember(
             notification.OrganizationId,
             notification.OwnerProfileId,

@@ -139,5 +139,5 @@ public sealed class GetRoleQueryHandlerTests
         new(orgId, "Менеджер", "Управление проектами");
 
     private static RoleDetailDto CreateDetailDto(Guid id, Guid orgId) =>
-        new(id, orgId, "Менеджер", "Управление проектами", false, false);
+        new(id, orgId, "Менеджер", "Управление проектами", false);
 }

@@ -37,7 +37,7 @@ internal sealed class OrganizationRoleRepository(OrganizationalDbContext context
         CancellationToken cancellationToken = default
     ) =>
         await context.OrganizationRoles.FirstOrDefaultAsync(
-            r => r.OrganizationId == organizationId && r.IsOwner && !r.IsDeleted,
+            r => r.OrganizationId == organizationId && r.IsSystem && !r.IsDeleted,
             cancellationToken
         );
 

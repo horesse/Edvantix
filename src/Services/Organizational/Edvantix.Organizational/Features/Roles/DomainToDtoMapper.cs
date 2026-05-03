@@ -11,7 +11,6 @@ public sealed class RoleDtoMapper : Mapper<OrganizationRole, RoleDto>
             source.Name,
             source.Description,
             source.IsSystem,
-            source.IsOwner,
             source.Permissions.Count
         );
 }
@@ -19,12 +18,5 @@ public sealed class RoleDtoMapper : Mapper<OrganizationRole, RoleDto>
 public sealed class RoleDetailDtoMapper : Mapper<OrganizationRole, RoleDetailDto>
 {
     public override RoleDetailDto Map(OrganizationRole source) =>
-        new(
-            source.Id,
-            source.OrganizationId,
-            source.Name,
-            source.Description,
-            source.IsSystem,
-            source.IsOwner
-        );
+        new(source.Id, source.OrganizationId, source.Name, source.Description, source.IsSystem);
 }

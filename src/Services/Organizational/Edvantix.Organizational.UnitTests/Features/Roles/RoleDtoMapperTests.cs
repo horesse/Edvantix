@@ -22,20 +22,18 @@ public sealed class RoleDtoMapperTests
         result.Name.ShouldBe(role.Name);
         result.Description.ShouldBe(role.Description);
         result.IsSystem.ShouldBeFalse();
-        result.IsOwner.ShouldBeFalse();
         result.PermissionsCount.ShouldBe(0);
     }
 
     [Test]
     public void GivenSystemOwnerRole_WhenMappingToRoleDto_ThenFlagsShouldBeSet()
     {
-        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true, isOwner: true);
+        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true);
         var mapper = new RoleDtoMapper();
 
         var result = mapper.Map(role);
 
         result.IsSystem.ShouldBeTrue();
-        result.IsOwner.ShouldBeTrue();
     }
 
     [Test]
@@ -62,19 +60,17 @@ public sealed class RoleDtoMapperTests
         result.Name.ShouldBe(role.Name);
         result.Description.ShouldBe(role.Description);
         result.IsSystem.ShouldBeFalse();
-        result.IsOwner.ShouldBeFalse();
         result.Features.ShouldBeEmpty();
     }
 
     [Test]
     public void GivenSystemOwnerRole_WhenMappingToRoleDetailDto_ThenFlagsShouldBeSet()
     {
-        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true, isOwner: true);
+        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true);
         var mapper = new RoleDetailDtoMapper();
 
         var result = mapper.Map(role);
 
         result.IsSystem.ShouldBeTrue();
-        result.IsOwner.ShouldBeTrue();
     }
 }

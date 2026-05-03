@@ -147,7 +147,7 @@ public sealed class UpdateRoleCommandHandlerTests
     [Test]
     public async Task GivenOwnerRole_WhenUpdatingWithPermissions_ThenPermissionsShouldNotBeReassigned()
     {
-        var role = new OrganizationRole(_organizationId, "Владелец", isSystem: true, isOwner: true);
+        var role = new OrganizationRole(_organizationId, "Владелец", isSystem: true);
         var existingPerm = CreatePermission("View");
         role.AddPermission(existingPerm);
 

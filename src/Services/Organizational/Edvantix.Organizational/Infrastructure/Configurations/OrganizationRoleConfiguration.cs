@@ -12,7 +12,6 @@ internal sealed class OrganizationRoleConfiguration : IEntityTypeConfiguration<O
 
         builder.Property(r => r.Name).IsRequired().HasMaxLength(DataSchemaLength.Medium);
         builder.Property(r => r.Description).HasMaxLength(DataSchemaLength.Large);
-        builder.Property(r => r.IsOwner);
 
         builder.HasIndex(r => new { r.OrganizationId, r.Name }).IsUnique();
 

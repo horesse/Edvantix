@@ -32,7 +32,7 @@ internal sealed class UpdateRoleCommandHandler(
 
         role.Update(command.Name, command.Description);
 
-        if (!role.IsOwner)
+        if (!role.IsSystem)
         {
             var permissions = await permissionRepository.GetByIdsAsync(
                 command.PermissionIds,

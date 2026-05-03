@@ -7,7 +7,6 @@ public sealed record RoleDto(
     string Name,
     string? Description,
     bool IsSystem,
-    bool IsOwner,
     int PermissionsCount
 )
 {
@@ -24,8 +23,7 @@ public sealed record RoleDetailDto(
     Guid OrganizationId,
     string Name,
     string? Description,
-    bool IsSystem,
-    bool IsOwner
+    bool IsSystem
 )
 {
     /// <summary>Все разрешения системы, сгруппированные по функциональной области, с флагом активации.</summary>

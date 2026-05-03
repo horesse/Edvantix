@@ -90,7 +90,7 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
 
         await _handler.Handle(@event, CancellationToken.None);
 
-        var ownerRole = capturedRoles!.Single(r => r.IsOwner);
+        var ownerRole = capturedRoles!.Single(r => r.IsSystem);
         capturedMember!.OrganizationRoleId.ShouldBe(ownerRole.Id);
     }
 

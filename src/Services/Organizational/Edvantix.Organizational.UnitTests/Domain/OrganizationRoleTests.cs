@@ -23,7 +23,6 @@ public sealed class OrganizationRoleTests
         role.Name.ShouldBe("Администратор");
         role.Description.ShouldBe("Операционное управление");
         role.IsSystem.ShouldBeFalse();
-        role.IsOwner.ShouldBeFalse();
         role.IsDeleted.ShouldBeFalse();
         role.Permissions.ShouldBeEmpty();
     }
@@ -60,10 +59,9 @@ public sealed class OrganizationRoleTests
     [Test]
     public void GivenSystemOwnerFlags_WhenCreatingOrganizationRole_ThenFlagsShouldBeSet()
     {
-        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true, isOwner: true);
+        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true);
 
         role.IsSystem.ShouldBeTrue();
-        role.IsOwner.ShouldBeTrue();
     }
 
     [Test]

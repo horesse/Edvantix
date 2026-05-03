@@ -41,13 +41,9 @@ internal sealed class GetRolesQueryHandler(
         var listSpec = new RoleListSpecification(organizationId, offset, clamped.PageSize, search);
         var countSpec = new RoleCountSpecification(organizationId, search);
 
-        var rolesTask = repository.ListAsync(listSpec, cancellationToken);
-        var totalCountTask = repository.CountAsync(countSpec, cancellationToken);
-        var totalPermissionsCountTask = permissionRepository.CountAsync(cancellationToken);
-
-        var roles = await rolesTask;
-        var totalCount = await totalCountTask;
-        var totalPermissionsCount = await totalPermissionsCountTask;
+        var roles = await repository.ListAsync(listSpec, cancellationToken);
+        var totalCount = await repository.CountAsync(countSpec, cancellationToken);
+        var totalPermissionsCount = await permissionRepository.CountAsync(cancellationToken);
 
         var roleIds = roles.Select(r => r.Id).ToList();
         var memberCounts =

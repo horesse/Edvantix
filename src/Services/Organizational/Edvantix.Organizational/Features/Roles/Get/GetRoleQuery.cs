@@ -28,11 +28,8 @@ internal sealed class GetRoleQueryHandler(
 
         var dto = mapper.Map(role);
 
-        var allPermissionsTask = permissionRepository.GetAllWithFeaturesAsync(cancellationToken);
-        var membersCountTask = memberRepository.CountByRoleAsync(query.Id, cancellationToken);
-
-        var allPermissions = await allPermissionsTask;
-        var membersCount = await membersCountTask;
+        var allPermissions = await permissionRepository.GetAllWithFeaturesAsync(cancellationToken);
+        var membersCount = await memberRepository.CountByRoleAsync(query.Id, cancellationToken);
 
         var rolePermissionIds = role.Permissions.Select(p => p.Id).ToHashSet();
 

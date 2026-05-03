@@ -4,6 +4,6 @@ internal sealed class CreateRoleValidator : AbstractValidator<CreateRoleCommand>
 {
     public CreateRoleValidator()
     {
-        RuleFor(x => x.Code).NotEmpty().WithMessage("Код роли обязателен");
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Название роли обязательно");
     }
 }

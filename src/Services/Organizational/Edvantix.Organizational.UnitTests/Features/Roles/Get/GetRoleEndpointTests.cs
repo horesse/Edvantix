@@ -6,7 +6,7 @@ public sealed class GetRoleEndpointTests
     private readonly Mock<ISender> _senderMock = new();
 
     private static RoleDetailDto BuildDto(Guid id) =>
-        new(id, Guid.CreateVersion7(), "manager", "Менеджер", []);
+        new(id, Guid.CreateVersion7(), "manager", "Менеджер", false, false);
 
     [Test]
     public async Task GivenExistingRole_WhenHandling_ThenShouldReturnOk()

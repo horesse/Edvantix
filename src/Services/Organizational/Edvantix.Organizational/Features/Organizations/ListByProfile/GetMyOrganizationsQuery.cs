@@ -43,7 +43,7 @@ internal sealed class GetMyOrganizationsQueryHandler(
                     orgLookup[m.OrganizationId].OrganizationType,
                     orgLookup[m.OrganizationId].Status,
                     orgLookup[m.OrganizationId].IsLegalEntity,
-                    m.Role!.Code,
+                    m.Role!.Name,
                     m.Role.Description
                 )),
         ];

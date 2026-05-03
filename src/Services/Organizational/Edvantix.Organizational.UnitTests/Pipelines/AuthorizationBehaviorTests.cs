@@ -426,9 +426,7 @@ public sealed class AuthorizationBehaviorTests
 
         // TestPermission = "organizations.manage" → FeatureCode="organizations", Code="manage"
         var role = new OrganizationMemberRole(OrgId, "admin", "Администратор");
-        role.AddPermission(
-            new Permission("organizational", "organizations", "Организации", "manage", "Управление")
-        );
+        role.AddPermission(new Permission("organizations", "manage", "Управление"));
         _roleRepoMock
             .Setup(r =>
                 r.GetByIdWithPermissionsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())

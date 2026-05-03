@@ -6,7 +6,7 @@ namespace Edvantix.Organizational.Features.Roles.Update;
 
 [Transactional]
 [RequirePermission(OrganizationPermissions.Roles)]
-public sealed record UpdateRoleCommand(Guid Id, string Code, string? Description) : ICommand;
+public sealed record UpdateRoleCommand(Guid Id, string Name, string? Description) : ICommand;
 
 internal sealed class UpdateRoleCommandHandler(
     ITenantContext tenantContext,
@@ -23,7 +23,7 @@ internal sealed class UpdateRoleCommandHandler(
         if (role is null || role.OrganizationId != tenantContext.OrganizationId)
             throw NotFoundException.For<OrganizationMemberRole>(command.Id);
 
-        role.Update(command.Code, command.Description);
+        role.Update(command.Name, command.Description);
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

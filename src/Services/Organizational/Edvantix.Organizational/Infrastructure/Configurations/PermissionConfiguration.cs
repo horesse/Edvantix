@@ -10,23 +10,22 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
     {
         builder.UseDefaultConfiguration();
 
-        builder.Property(p => p.ServiceCode).IsRequired().HasMaxLength(100);
-        builder.Property(p => p.FeatureCode).IsRequired().HasMaxLength(200);
-        builder.Property(p => p.FeatureName).IsRequired().HasMaxLength(200);
-        builder.Property(p => p.Code).IsRequired().HasMaxLength(200);
-        builder.Property(p => p.Name).IsRequired().HasMaxLength(200);
+        builder.Property(p => p.FeatureCode).IsRequired().HasMaxLength(DataSchemaLength.Large);
+        builder.Property(p => p.Code).IsRequired().HasMaxLength(DataSchemaLength.Large);
+        builder.Property(p => p.Name).IsRequired().HasMaxLength(DataSchemaLength.ExtraLarge);
 
         // FullCode вычисляется в памяти из FeatureCode и Code — не хранится в БД.
         builder.Ignore(p => p.FullCode);
 
-        // Код разрешения уникален в рамках сервиса и функциональной области.
+        // FK на Feature.Code (alternate key): разрешение всегда принадлежит конкретной области.
         builder
-            .HasIndex(p => new
-            {
-                p.ServiceCode,
-                p.FeatureCode,
-                p.Code,
-            })
-            .IsUnique();
+            .HasOne(p => p.Feature)
+            .WithMany()
+            .HasForeignKey(p => p.FeatureCode)
+            .HasPrincipalKey(f => f.Code)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Код разрешения уникален в рамках функциональной области.
+        builder.HasIndex(p => new { p.FeatureCode, p.Code }).IsUnique();
     }
 }

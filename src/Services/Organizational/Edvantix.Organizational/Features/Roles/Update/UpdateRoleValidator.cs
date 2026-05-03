@@ -6,6 +6,6 @@ internal sealed class UpdateRoleValidator : AbstractValidator<UpdateRoleCommand>
     {
         RuleFor(x => x.Id).NotEmpty().WithMessage("Идентификатор роли обязателен");
 
-        RuleFor(x => x.Code).NotEmpty().WithMessage("Код роли обязателен");
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Название роли обязательно");
     }
 }

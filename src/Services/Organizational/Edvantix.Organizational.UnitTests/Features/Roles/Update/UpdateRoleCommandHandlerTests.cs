@@ -17,7 +17,11 @@ public sealed class UpdateRoleCommandHandlerTests
     public async Task GivenExistingRole_WhenUpdating_ThenShouldUpdateAndSave()
     {
         var role = CreateRole(_organizationId);
-        var command = new UpdateRoleCommand(role.Id, "senior-manager", "Старший менеджер");
+        var command = new UpdateRoleCommand(
+            role.Id,
+            "Старший менеджер",
+            "Управление несколькими командами"
+        );
 
         _repoMock
             .Setup(r => r.GetByIdAsync(role.Id, It.IsAny<CancellationToken>()))
@@ -28,8 +32,8 @@ public sealed class UpdateRoleCommandHandlerTests
 
         await _handler.Handle(command, CancellationToken.None);
 
-        role.Code.ShouldBe("senior-manager");
-        role.Description.ShouldBe("Старший менеджер");
+        role.Name.ShouldBe("Старший менеджер");
+        role.Description.ShouldBe("Управление несколькими командами");
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -40,7 +44,7 @@ public sealed class UpdateRoleCommandHandlerTests
     public async Task GivenRoleNotFound_WhenUpdating_ThenShouldThrowNotFoundException()
     {
         var roleId = Guid.CreateVersion7();
-        var command = new UpdateRoleCommand(roleId, "admin", null);
+        var command = new UpdateRoleCommand(roleId, "Администратор", null);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(roleId, It.IsAny<CancellationToken>()))
@@ -55,7 +59,7 @@ public sealed class UpdateRoleCommandHandlerTests
     public async Task GivenRoleFromDifferentOrganization_WhenUpdating_ThenShouldThrowNotFoundException()
     {
         var role = CreateRole(Guid.CreateVersion7());
-        var command = new UpdateRoleCommand(role.Id, "admin", null);
+        var command = new UpdateRoleCommand(role.Id, "Администратор", null);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(role.Id, It.IsAny<CancellationToken>()))
@@ -70,7 +74,7 @@ public sealed class UpdateRoleCommandHandlerTests
     public async Task GivenExistingRole_WhenUpdatingWithNullDescription_ThenDescriptionShouldBeNull()
     {
         var role = CreateRole(_organizationId);
-        var command = new UpdateRoleCommand(role.Id, "viewer", null);
+        var command = new UpdateRoleCommand(role.Id, "Читатель", null);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(role.Id, It.IsAny<CancellationToken>()))
@@ -85,5 +89,5 @@ public sealed class UpdateRoleCommandHandlerTests
     }
 
     private static OrganizationMemberRole CreateRole(Guid orgId) =>
-        new(orgId, "manager", "Менеджер");
+        new(orgId, "Менеджер", "Управление проектами");
 }

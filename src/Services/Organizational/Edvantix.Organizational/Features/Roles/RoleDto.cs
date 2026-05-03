@@ -1,16 +1,45 @@
 namespace Edvantix.Organizational.Features.Roles;
 
-public sealed record RoleDto(Guid Id, Guid OrganizationId, string Code, string? Description);
+/// <summary>DTO элемента списка ролей.</summary>
+public sealed record RoleDto(
+    Guid Id,
+    Guid OrganizationId,
+    string Name,
+    string? Description,
+    bool IsSystem,
+    bool IsOwner,
+    int PermissionsCount
+)
+{
+    /// <summary>Общее количество доступных разрешений в системе.</summary>
+    public int TotalPermissionsCount { get; init; }
 
+    /// <summary>Количество участников с этой ролью.</summary>
+    public int MembersCount { get; init; }
+}
+
+/// <summary>DTO детального просмотра роли (GetById).</summary>
 public sealed record RoleDetailDto(
     Guid Id,
     Guid OrganizationId,
-    string Code,
+    string Name,
     string? Description,
-    IReadOnlyList<PermissionDto> Permissions
-);
+    bool IsSystem,
+    bool IsOwner
+)
+{
+    /// <summary>Все разрешения системы, сгруппированные по функциональной области, с флагом активации.</summary>
+    public IReadOnlyList<FeatureDto> Features { get; init; } = [];
 
-// Feature больше не является отдельной сущностью — её данные хранятся в Permission.
-public sealed record FeatureDto(string Code, string Name);
+    /// <summary>Общее количество доступных разрешений в системе.</summary>
+    public int TotalPermissionsCount { get; init; }
 
-public sealed record PermissionDto(Guid Id, FeatureDto Feature, string Code, string Name);
+    /// <summary>Количество участников с этой ролью.</summary>
+    public int MembersCount { get; init; }
+}
+
+/// <summary>Функциональная область с набором разрешений и флагами активации.</summary>
+public sealed record FeatureDto(string Code, string Name, IReadOnlyList<PermissionDto> Permissions);
+
+/// <summary>Разрешение с флагом активации в контексте роли.</summary>
+public sealed record PermissionDto(Guid Id, string Code, string Name, bool IsActive);

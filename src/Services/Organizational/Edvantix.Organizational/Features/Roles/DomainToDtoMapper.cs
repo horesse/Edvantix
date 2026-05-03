@@ -5,7 +5,15 @@ namespace Edvantix.Organizational.Features.Roles;
 public sealed class RoleDtoMapper : Mapper<OrganizationMemberRole, RoleDto>
 {
     public override RoleDto Map(OrganizationMemberRole source) =>
-        new(source.Id, source.OrganizationId, source.Code, source.Description);
+        new(
+            source.Id,
+            source.OrganizationId,
+            source.Name,
+            source.Description,
+            source.IsSystem,
+            source.IsOwner,
+            source.Permissions.Count
+        );
 }
 
 public sealed class RoleDetailDtoMapper : Mapper<OrganizationMemberRole, RoleDetailDto>
@@ -14,15 +22,9 @@ public sealed class RoleDetailDtoMapper : Mapper<OrganizationMemberRole, RoleDet
         new(
             source.Id,
             source.OrganizationId,
-            source.Code,
+            source.Name,
             source.Description,
-            source
-                .Permissions.Select(p => new PermissionDto(
-                    p.Id,
-                    new FeatureDto(p.FeatureCode, p.FeatureName),
-                    p.Code,
-                    p.Name
-                ))
-                .ToList()
+            source.IsSystem,
+            source.IsOwner
         );
 }

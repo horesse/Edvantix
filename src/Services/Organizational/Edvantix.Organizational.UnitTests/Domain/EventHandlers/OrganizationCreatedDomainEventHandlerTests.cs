@@ -29,7 +29,7 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
     }
 
     [Test]
-    public async Task GivenValidEvent_WhenHandling_ThenShouldAdd5OrgRoles()
+    public async Task GivenValidEvent_WhenHandling_ThenShouldAdd7OrgRoles()
     {
         var @event = new OrganizationCreatedDomainEvent(OrgId, OwnerProfileId);
 
@@ -38,7 +38,7 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
         _memberRoleRepoMock.Verify(
             r =>
                 r.AddRangeAsync(
-                    It.Is<IReadOnlyList<OrganizationMemberRole>>(roles => roles.Count == 5),
+                    It.Is<IReadOnlyList<OrganizationMemberRole>>(roles => roles.Count == 7),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -88,7 +88,7 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
 
         await _handler.Handle(@event, CancellationToken.None);
 
-        var ownerRole = capturedRoles!.Single(r => r.Code == "owner");
+        var ownerRole = capturedRoles!.Single(r => r.IsOwner);
         capturedMember!.OrganizationMemberRoleId.ShouldBe(ownerRole.Id);
     }
 

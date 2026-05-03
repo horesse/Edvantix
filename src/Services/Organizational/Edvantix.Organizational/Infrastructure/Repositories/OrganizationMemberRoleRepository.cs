@@ -29,6 +29,7 @@ internal sealed class OrganizationMemberRoleRepository(OrganizationalDbContext c
     ) =>
         await context
             .OrganizationMemberRoles.Include(r => r.Permissions)
+                .ThenInclude(p => p.Feature)
             .FirstOrDefaultAsync(r => r.Id == id && !r.IsDeleted, cancellationToken);
 
     public async Task<OrganizationMemberRole?> GetOwnerRoleAsync(
@@ -36,7 +37,7 @@ internal sealed class OrganizationMemberRoleRepository(OrganizationalDbContext c
         CancellationToken cancellationToken = default
     ) =>
         await context.OrganizationMemberRoles.FirstOrDefaultAsync(
-            r => r.OrganizationId == organizationId && r.Code == "owner" && !r.IsDeleted,
+            r => r.OrganizationId == organizationId && r.IsOwner && !r.IsDeleted,
             cancellationToken
         );
 

@@ -28,7 +28,7 @@ internal sealed class OrganizationCreatedDomainEventHandler(
 
         await memberRoleRepository.AddRangeAsync(orgRoles, cancellationToken);
 
-        var ownerRole = orgRoles.First(r => r.Code == "owner");
+        var ownerRole = orgRoles.First(r => r.IsOwner);
         var ownerMember = new OrganizationMember(
             notification.OrganizationId,
             notification.OwnerProfileId,

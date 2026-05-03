@@ -7,6 +7,7 @@ namespace Edvantix.Organizational.UnitTests.Grpc.Services;
 public sealed class PermissionServiceTests
 {
     private readonly Mock<IPermissionRepository> _repoMock = new();
+    private readonly Mock<IFeatureRepository> _featureRepoMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
 
     public PermissionServiceTests()
@@ -15,9 +16,12 @@ public sealed class PermissionServiceTests
         _unitOfWorkMock
             .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
+        _featureRepoMock
+            .Setup(r => r.GetByCodeAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Feature?)null);
     }
 
-    private PermissionService CreateService() => new(_repoMock.Object);
+    private PermissionService CreateService() => new(_repoMock.Object, _featureRepoMock.Object);
 
     private static TestServerCallContext CreateContext() => new();
 
@@ -35,8 +39,6 @@ public sealed class PermissionServiceTests
     }
 
     // ─── SyncFeaturePermissions – Guard validations ────────────────────────────
-    // Note: proto3 string fields cannot be null (protobuf throws ArgumentNullException before service code).
-    // We test empty and whitespace-only values, which reach Guard.Against inside the service.
 
     [Test]
     [Arguments("")]
@@ -153,7 +155,6 @@ public sealed class PermissionServiceTests
 
         response.Added.ShouldBe(0);
         response.Removed.ShouldBe(0);
-        existing[0].FeatureName.ShouldBe("Новая область");
         existing[0].Name.ShouldBe("Новое название");
     }
 
@@ -199,23 +200,7 @@ public sealed class PermissionServiceTests
         _repoMock.Verify(r => r.Remove(It.IsAny<Permission>()), Times.Exactly(2));
     }
 
-    // ─── SyncFeaturePermissions – Isolation by ServiceCode/FeatureCode ────────
-
-    [Test]
-    public async Task GivenPermissionsForDifferentServiceCode_WhenSyncFeaturePermissions_ThenShouldNotModifyOtherServices()
-    {
-        var otherService = CreatePermission("View", serviceCode: "scheduler");
-        _repoMock
-            .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync([otherService]);
-
-        var request = BuildRequest([]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Removed.ShouldBe(0);
-        _repoMock.Verify(r => r.Remove(It.IsAny<Permission>()), Times.Never);
-    }
+    // ─── SyncFeaturePermissions – Isolation by FeatureCode ────────────────────
 
     [Test]
     public async Task GivenPermissionsForDifferentFeatureCode_WhenSyncFeaturePermissions_ThenShouldNotModifyOtherFeatures()
@@ -233,7 +218,7 @@ public sealed class PermissionServiceTests
         _repoMock.Verify(r => r.Remove(It.IsAny<Permission>()), Times.Never);
     }
 
-    // ─── SyncFeaturePermissions – Case-insensitive matching ───────────────────
+    // ─── SyncFeaturePermissions – Case-insensitive code matching ─────────────
 
     [Test]
     public async Task GivenExistingPermissionWithUpperCaseCode_WhenSyncFeaturePermissionsWithLowerCase_ThenShouldUpdateInsteadOfAdd()
@@ -248,23 +233,6 @@ public sealed class PermissionServiceTests
         response.Added.ShouldBe(0);
         response.Removed.ShouldBe(0);
         _repoMock.Verify(r => r.Add(It.IsAny<Permission>()), Times.Never);
-    }
-
-    [Test]
-    public async Task GivenServiceCodeWithDifferentCase_WhenSyncFeaturePermissions_ThenShouldMatchExistingCaseInsensitively()
-    {
-        var existing = new List<Permission>
-        {
-            CreatePermission("View", serviceCode: "ORGANIZATIONAL"),
-        };
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(existing);
-
-        var request = BuildRequest([new PermissionEntry { Code = "View", Name = "Просмотр" }]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(0);
-        response.Removed.ShouldBe(0);
     }
 
     // ─── SyncFeaturePermissions – Skip blank codes in request ─────────────────
@@ -315,6 +283,39 @@ public sealed class PermissionServiceTests
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
+    // ─── SyncFeaturePermissions – Feature upsert ──────────────────────────────
+
+    [Test]
+    public async Task GivenNoExistingFeature_WhenSyncFeaturePermissions_ThenShouldAddNewFeature()
+    {
+        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
+        _featureRepoMock
+            .Setup(r => r.GetByCodeAsync("Organization", It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Feature?)null);
+
+        await CreateService().SyncFeaturePermissions(BuildRequest([]), CreateContext());
+
+        _featureRepoMock.Verify(
+            r => r.Add(It.Is<Feature>(f => f.Code == "Organization" && f.Name == "Организация")),
+            Times.Once
+        );
+    }
+
+    [Test]
+    public async Task GivenExistingFeatureWithDifferentName_WhenSyncFeaturePermissions_ThenShouldUpdateFeatureName()
+    {
+        var existingFeature = new Feature("organizational", "Organization", "Старое название");
+        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
+        _featureRepoMock
+            .Setup(r => r.GetByCodeAsync("Organization", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingFeature);
+
+        await CreateService().SyncFeaturePermissions(BuildRequest([]), CreateContext());
+
+        existingFeature.Name.ShouldBe("Организация");
+        _featureRepoMock.Verify(r => r.Add(It.IsAny<Feature>()), Times.Never);
+    }
+
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
     private static SyncFeaturePermissionsRequest BuildRequest(
@@ -337,8 +338,6 @@ public sealed class PermissionServiceTests
     private static Permission CreatePermission(
         string code,
         string name = "Название",
-        string serviceCode = "organizational",
-        string featureCode = "Organization",
-        string featureName = "Организация"
-    ) => new(serviceCode, featureCode, featureName, code, name);
+        string featureCode = "Organization"
+    ) => new(featureCode, code, name);
 }

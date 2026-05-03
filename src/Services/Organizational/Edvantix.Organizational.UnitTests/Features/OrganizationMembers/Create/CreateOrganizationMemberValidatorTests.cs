@@ -23,7 +23,7 @@ public sealed class CreateOrganizationMemberValidatorTests
     }
 
     [Test]
-    public void GivenEmptyOrganizationMemberRoleId_WhenValidating_ThenShouldHaveError()
+    public void GivenEmptyOrganizationRoleId_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(
             BuildValidCommand() with

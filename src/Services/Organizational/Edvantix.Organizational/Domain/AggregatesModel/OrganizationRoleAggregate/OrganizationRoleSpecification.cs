@@ -1,15 +1,20 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 /// <summary>
 /// Спецификация для постраничного получения ролей организации с поддержкой текстового поиска.
 /// </summary>
-public sealed class RoleListSpecification : Specification<OrganizationMemberRole>
+public sealed class OrganizationRoleSpecification : Specification<OrganizationRole>
 {
     /// <param name="organizationId">Идентификатор организации.</param>
     /// <param name="offset">Смещение для пагинации.</param>
     /// <param name="limit">Количество записей на странице.</param>
     /// <param name="search">Подстрока для поиска по названию или описанию (регистронезависимо).</param>
-    public RoleListSpecification(Guid organizationId, int offset, int limit, string? search = null)
+    public OrganizationRoleSpecification(
+        Guid organizationId,
+        int offset,
+        int limit,
+        string? search = null
+    )
     {
         Query
             .AsNoTracking()
@@ -29,7 +34,7 @@ public sealed class RoleListSpecification : Specification<OrganizationMemberRole
 /// <summary>
 /// Спецификация для подсчёта ролей организации (без пагинации) с поддержкой текстового поиска.
 /// </summary>
-public sealed class RoleCountSpecification : Specification<OrganizationMemberRole>
+public sealed class RoleCountSpecification : Specification<OrganizationRole>
 {
     /// <param name="organizationId">Идентификатор организации.</param>
     /// <param name="search">Подстрока для поиска по названию или описанию (регистронезависимо).</param>

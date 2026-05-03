@@ -1,6 +1,7 @@
 using Edvantix.Chassis.Caching;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Pipelines;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -17,7 +18,7 @@ public sealed class AuthorizationBehaviorTests
 
     private readonly Mock<ITenantContext> _tenantContextMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
-    private readonly Mock<IOrganizationMemberRoleRepository> _roleRepoMock = new();
+    private readonly Mock<IOrganizationRoleRepository> _roleRepoMock = new();
     private readonly Mock<IHybridCache> _cacheMock = new();
     private static readonly ILogger<AuthorizationBehavior<TestCommandWithPermission, Guid>> Logger =
         NullLogger<AuthorizationBehavior<TestCommandWithPermission, Guid>>.Instance;
@@ -381,7 +382,7 @@ public sealed class AuthorizationBehaviorTests
             .Setup(r =>
                 r.GetByIdWithPermissionsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())
             )
-            .ReturnsAsync((OrganizationMemberRole?)null);
+            .ReturnsAsync((OrganizationRole?)null);
         _cacheMock
             .Setup(c =>
                 c.GetOrCreateAsync<HashSet<string>>(
@@ -425,7 +426,7 @@ public sealed class AuthorizationBehaviorTests
             .ReturnsAsync(RoleId);
 
         // TestPermission = "organizations.manage" → FeatureCode="organizations", Code="manage"
-        var role = new OrganizationMemberRole(OrgId, "admin", "Администратор");
+        var role = new OrganizationRole(OrgId, "admin", "Администратор");
         role.AddPermission(new Permission("organizations", "manage", "Управление"));
         _roleRepoMock
             .Setup(r =>

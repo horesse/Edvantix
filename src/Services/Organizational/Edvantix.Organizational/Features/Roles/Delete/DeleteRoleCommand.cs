@@ -1,5 +1,5 @@
 using Edvantix.Chassis.CQRS;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.Delete;
@@ -10,7 +10,7 @@ public sealed record DeleteRoleCommand(Guid Id) : ICommand;
 
 internal sealed class DeleteRoleCommandHandler(
     ITenantContext tenantContext,
-    IOrganizationMemberRoleRepository repository
+    IOrganizationRoleRepository repository
 ) : ICommandHandler<DeleteRoleCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -21,7 +21,7 @@ internal sealed class DeleteRoleCommandHandler(
         var role = await repository.GetByIdAsync(command.Id, cancellationToken);
 
         if (role is null || role.OrganizationId != tenantContext.OrganizationId)
-            throw NotFoundException.For<OrganizationMemberRole>(command.Id);
+            throw NotFoundException.For<OrganizationRole>(command.Id);
 
         role.Delete();
 

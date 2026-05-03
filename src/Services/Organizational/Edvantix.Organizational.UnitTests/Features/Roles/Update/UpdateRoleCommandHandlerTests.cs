@@ -1,9 +1,11 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+
 namespace Edvantix.Organizational.UnitTests.Features.Roles.Update;
 
 public sealed class UpdateRoleCommandHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
-    private readonly Mock<IOrganizationMemberRoleRepository> _repoMock = new();
+    private readonly Mock<IOrganizationRoleRepository> _repoMock = new();
     private readonly Mock<IPermissionRepository> _permRepoMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly UpdateRoleCommandHandler _handler;
@@ -46,7 +48,7 @@ public sealed class UpdateRoleCommandHandlerTests
 
         _repoMock
             .Setup(r => r.GetByIdAsync(roleId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((OrganizationMemberRole?)null);
+            .ReturnsAsync((OrganizationRole?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler.Handle(command, CancellationToken.None).AsTask()
@@ -145,12 +147,7 @@ public sealed class UpdateRoleCommandHandlerTests
     [Test]
     public async Task GivenOwnerRole_WhenUpdatingWithPermissions_ThenPermissionsShouldNotBeReassigned()
     {
-        var role = new OrganizationMemberRole(
-            _organizationId,
-            "Владелец",
-            isSystem: true,
-            isOwner: true
-        );
+        var role = new OrganizationRole(_organizationId, "Владелец", isSystem: true, isOwner: true);
         var existingPerm = CreatePermission("View");
         role.AddPermission(existingPerm);
 
@@ -170,7 +167,7 @@ public sealed class UpdateRoleCommandHandlerTests
         role.Permissions[0].ShouldBe(existingPerm);
     }
 
-    private void SetupRepo(OrganizationMemberRole role)
+    private void SetupRepo(OrganizationRole role)
     {
         _repoMock
             .Setup(r => r.GetByIdAsync(role.Id, It.IsAny<CancellationToken>()))
@@ -189,7 +186,7 @@ public sealed class UpdateRoleCommandHandlerTests
             .ReturnsAsync(permissions);
     }
 
-    private static OrganizationMemberRole CreateRole(Guid orgId) =>
+    private static OrganizationRole CreateRole(Guid orgId) =>
         new(orgId, "Менеджер", "Управление проектами");
 
     private static Permission CreatePermission(string code) =>

@@ -7,11 +7,11 @@ namespace Edvantix.Organizational.Domain.EventHandlers;
 /// Инвалидирует кеш связки «участник → роль» после смены роли.
 /// Кеш разрешений самой роли остаётся актуальным — участник просто получит новую роль при следующем обращении.
 /// </summary>
-internal sealed class OrganizationMemberRoleChangedDomainEventHandler(IHybridCache cache)
-    : INotificationHandler<OrganizationMemberRoleChangedDomainEvent>
+internal sealed class OrganizationRoleChangedDomainEventHandler(IHybridCache cache)
+    : INotificationHandler<OrganizationRoleChangedDomainEvent>
 {
     public async ValueTask Handle(
-        OrganizationMemberRoleChangedDomainEvent notification,
+        OrganizationRoleChangedDomainEvent notification,
         CancellationToken cancellationToken
     )
     {

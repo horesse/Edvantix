@@ -25,7 +25,7 @@ public sealed class OrganizationMemberAggregateTests
 
         member.OrganizationId.ShouldBe(ValidOrgId);
         member.ProfileId.ShouldBe(ValidProfileId);
-        member.OrganizationMemberRoleId.ShouldBe(ValidRoleId);
+        member.OrganizationRoleId.ShouldBe(ValidRoleId);
         member.StartDate.ShouldBe(ValidStartDate);
         member.EndDate.ShouldBe(endDate);
         member.Status.ShouldBe(OrganizationStatus.Active);
@@ -84,14 +84,14 @@ public sealed class OrganizationMemberAggregateTests
     }
 
     [Test]
-    public void GivenValidRoleId_WhenChangingRole_ThenShouldUpdateOrganizationMemberRoleId()
+    public void GivenValidRoleId_WhenChangingRole_ThenShouldUpdateOrganizationRoleId()
     {
         var member = CreateValidMember();
         var newRoleId = Guid.CreateVersion7();
 
         member.ChangeRole(newRoleId);
 
-        member.OrganizationMemberRoleId.ShouldBe(newRoleId);
+        member.OrganizationRoleId.ShouldBe(newRoleId);
     }
 
     [Test]

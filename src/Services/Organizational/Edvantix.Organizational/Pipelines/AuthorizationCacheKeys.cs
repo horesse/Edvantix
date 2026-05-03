@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 namespace Edvantix.Organizational.Pipelines;
 
@@ -14,7 +15,7 @@ internal static class AuthorizationCacheKeys
         $"{nameof(OrganizationMember)}:{organizationId}:{profileId}";
 
     /// <summary>Ключ L2 и тег: набор разрешений роли. Используется как ключ кеша и как тег инвалидации.</summary>
-    public static string RolePerms(Guid roleId) => $"{nameof(OrganizationMemberRole)}:{roleId}";
+    public static string RolePerms(Guid roleId) => $"{nameof(OrganizationRole)}:{roleId}";
 
     /// <summary>Тег для массовой инвалидации всего кеша авторизации организации.</summary>
     public static string OrgPermsTag(Guid organizationId) =>

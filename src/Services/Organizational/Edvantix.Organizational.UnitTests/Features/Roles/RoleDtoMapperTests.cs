@@ -1,10 +1,12 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+
 namespace Edvantix.Organizational.UnitTests.Features.Roles;
 
 public sealed class RoleDtoMapperTests
 {
     private static readonly Guid ValidOrgId = Guid.CreateVersion7();
 
-    private static OrganizationMemberRole CreateRole(string name = "Менеджер") =>
+    private static OrganizationRole CreateRole(string name = "Менеджер") =>
         new(ValidOrgId, name, "Описание");
 
     [Test]
@@ -27,12 +29,7 @@ public sealed class RoleDtoMapperTests
     [Test]
     public void GivenSystemOwnerRole_WhenMappingToRoleDto_ThenFlagsShouldBeSet()
     {
-        var role = new OrganizationMemberRole(
-            ValidOrgId,
-            "Владелец",
-            isSystem: true,
-            isOwner: true
-        );
+        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true, isOwner: true);
         var mapper = new RoleDtoMapper();
 
         var result = mapper.Map(role);
@@ -44,7 +41,7 @@ public sealed class RoleDtoMapperTests
     [Test]
     public void GivenRoleWithNullDescription_WhenMappingToRoleDto_ThenDescriptionShouldBeNull()
     {
-        var role = new OrganizationMemberRole(ValidOrgId, "Администратор");
+        var role = new OrganizationRole(ValidOrgId, "Администратор");
         var mapper = new RoleDtoMapper();
 
         var result = mapper.Map(role);
@@ -72,12 +69,7 @@ public sealed class RoleDtoMapperTests
     [Test]
     public void GivenSystemOwnerRole_WhenMappingToRoleDetailDto_ThenFlagsShouldBeSet()
     {
-        var role = new OrganizationMemberRole(
-            ValidOrgId,
-            "Владелец",
-            isSystem: true,
-            isOwner: true
-        );
+        var role = new OrganizationRole(ValidOrgId, "Владелец", isSystem: true, isOwner: true);
         var mapper = new RoleDetailDtoMapper();
 
         var result = mapper.Map(role);

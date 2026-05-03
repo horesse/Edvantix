@@ -1,13 +1,12 @@
 using Edvantix.Chassis.EF.Configurations;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Organizational.Infrastructure.Configurations;
 
-internal sealed class OrganizationMemberRoleConfiguration
-    : IEntityTypeConfiguration<OrganizationMemberRole>
+internal sealed class OrganizationRoleConfiguration : IEntityTypeConfiguration<OrganizationRole>
 {
-    public void Configure(EntityTypeBuilder<OrganizationMemberRole> builder)
+    public void Configure(EntityTypeBuilder<OrganizationRole> builder)
     {
         builder.ConfigureSoftDeletable();
 
@@ -19,7 +18,7 @@ internal sealed class OrganizationMemberRoleConfiguration
 
         builder
             .HasMany(r => r.Permissions)
-            .WithMany(p => p.OrganizationMemberRoles)
-            .UsingEntity<OrganizationMemberRolePermission>();
+            .WithMany(p => p.OrganizationRoles)
+            .UsingEntity<OrganizationRolePermission>();
     }
 }

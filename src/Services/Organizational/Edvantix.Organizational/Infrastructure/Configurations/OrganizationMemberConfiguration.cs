@@ -1,5 +1,6 @@
 using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Organizational.Infrastructure.Configurations;
@@ -19,9 +20,9 @@ internal sealed class OrganizationMemberConfiguration : IEntityTypeConfiguration
         builder.HasIndex(m => new { m.OrganizationId, m.ProfileId });
 
         builder
-            .HasOne<OrganizationMemberRole>(m => m.Role)
+            .HasOne<OrganizationRole>(m => m.Role)
             .WithMany()
-            .HasForeignKey(m => m.OrganizationMemberRoleId)
+            .HasForeignKey(m => m.OrganizationRoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Navigation(m => m.Role).AutoInclude();

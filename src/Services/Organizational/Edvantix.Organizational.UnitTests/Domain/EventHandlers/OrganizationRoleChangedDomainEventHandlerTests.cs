@@ -3,15 +3,15 @@ using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
-public sealed class OrganizationMemberRoleChangedDomainEventHandlerTests
+public sealed class OrganizationRoleChangedDomainEventHandlerTests
 {
     private readonly Mock<IHybridCache> _cacheMock = new();
-    private readonly OrganizationMemberRoleChangedDomainEventHandler _handler;
+    private readonly OrganizationRoleChangedDomainEventHandler _handler;
 
     private static readonly Guid OrgId = Guid.CreateVersion7();
     private static readonly Guid ProfileId = Guid.CreateVersion7();
 
-    public OrganizationMemberRoleChangedDomainEventHandlerTests()
+    public OrganizationRoleChangedDomainEventHandlerTests()
     {
         _cacheMock
             .Setup(c => c.RemoveAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -23,7 +23,7 @@ public sealed class OrganizationMemberRoleChangedDomainEventHandlerTests
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldRemoveCacheEntryWithCorrectKey()
     {
-        var @event = new OrganizationMemberRoleChangedDomainEvent(OrgId, ProfileId);
+        var @event = new OrganizationRoleChangedDomainEvent(OrgId, ProfileId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
@@ -40,7 +40,7 @@ public sealed class OrganizationMemberRoleChangedDomainEventHandlerTests
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldNotRemoveOtherCacheEntries()
     {
-        var @event = new OrganizationMemberRoleChangedDomainEvent(OrgId, ProfileId);
+        var @event = new OrganizationRoleChangedDomainEvent(OrgId, ProfileId);
 
         await _handler.Handle(@event, CancellationToken.None);
 
@@ -59,7 +59,7 @@ public sealed class OrganizationMemberRoleChangedDomainEventHandlerTests
     {
         var anotherOrgId = Guid.CreateVersion7();
         var anotherProfileId = Guid.CreateVersion7();
-        var @event = new OrganizationMemberRoleChangedDomainEvent(anotherOrgId, anotherProfileId);
+        var @event = new OrganizationRoleChangedDomainEvent(anotherOrgId, anotherProfileId);
 
         await _handler.Handle(@event, CancellationToken.None);
 

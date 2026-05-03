@@ -1,5 +1,5 @@
 using Edvantix.Chassis.CQRS;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
@@ -16,7 +16,7 @@ public sealed record UpdateRoleCommand(
 
 internal sealed class UpdateRoleCommandHandler(
     ITenantContext tenantContext,
-    IOrganizationMemberRoleRepository repository,
+    IOrganizationRoleRepository repository,
     IPermissionRepository permissionRepository
 ) : ICommandHandler<UpdateRoleCommand>
 {
@@ -28,7 +28,7 @@ internal sealed class UpdateRoleCommandHandler(
         var role = await repository.GetByIdAsync(command.Id, cancellationToken);
 
         if (role is null || role.OrganizationId != tenantContext.OrganizationId)
-            throw NotFoundException.For<OrganizationMemberRole>(command.Id);
+            throw NotFoundException.For<OrganizationRole>(command.Id);
 
         role.Update(command.Name, command.Description);
 

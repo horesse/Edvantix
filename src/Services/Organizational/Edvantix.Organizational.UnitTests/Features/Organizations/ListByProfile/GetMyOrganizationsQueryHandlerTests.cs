@@ -1,4 +1,5 @@
 using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Features.Organizations.ListByProfile;
 
@@ -200,7 +201,7 @@ public sealed class GetMyOrganizationsQueryHandlerTests
     private static OrganizationMember CreateMember(
         Guid orgId,
         Guid profileId,
-        OrganizationMemberRole role
+        OrganizationRole role
     )
     {
         var member = new OrganizationMember(
@@ -217,7 +218,7 @@ public sealed class GetMyOrganizationsQueryHandlerTests
         return member;
     }
 
-    private static OrganizationMemberRole CreateRole(
+    private static OrganizationRole CreateRole(
         Guid orgId,
         string code,
         string? description = null

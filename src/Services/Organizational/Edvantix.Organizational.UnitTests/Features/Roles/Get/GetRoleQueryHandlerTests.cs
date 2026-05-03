@@ -1,12 +1,14 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+
 namespace Edvantix.Organizational.UnitTests.Features.Roles.Get;
 
 public sealed class GetRoleQueryHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
-    private readonly Mock<IOrganizationMemberRoleRepository> _repoMock = new();
+    private readonly Mock<IOrganizationRoleRepository> _repoMock = new();
     private readonly Mock<IPermissionRepository> _permissionRepoMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
-    private readonly Mock<IMapper<OrganizationMemberRole, RoleDetailDto>> _mapperMock = new();
+    private readonly Mock<IMapper<OrganizationRole, RoleDetailDto>> _mapperMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetRoleQueryHandler _handler;
 
@@ -70,7 +72,7 @@ public sealed class GetRoleQueryHandlerTests
         var roleId = Guid.CreateVersion7();
         _repoMock
             .Setup(r => r.GetByIdWithPermissionsAsync(roleId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((OrganizationMemberRole?)null);
+            .ReturnsAsync((OrganizationRole?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler.Handle(new GetRoleQuery(roleId), CancellationToken.None).AsTask()
@@ -133,7 +135,7 @@ public sealed class GetRoleQueryHandlerTests
         featureDto.Permissions.Single(p => p.Code == "Edit").IsActive.ShouldBeFalse();
     }
 
-    private static OrganizationMemberRole CreateRole(Guid orgId) =>
+    private static OrganizationRole CreateRole(Guid orgId) =>
         new(orgId, "Менеджер", "Управление проектами");
 
     private static RoleDetailDto CreateDetailDto(Guid id, Guid orgId) =>

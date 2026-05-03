@@ -1,12 +1,14 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+
 namespace Edvantix.Organizational.UnitTests.Features.Roles.List;
 
 public sealed class GetRolesQueryHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
-    private readonly Mock<IOrganizationMemberRoleRepository> _repoMock = new();
+    private readonly Mock<IOrganizationRoleRepository> _repoMock = new();
     private readonly Mock<IPermissionRepository> _permissionRepoMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
-    private readonly Mock<IMapper<OrganizationMemberRole, RoleDto>> _mapperMock = new();
+    private readonly Mock<IMapper<OrganizationRole, RoleDto>> _mapperMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetRolesQueryHandler _handler;
 
@@ -41,7 +43,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.ListAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -49,7 +51,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.CountAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -72,7 +74,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.ListAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -80,7 +82,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.CountAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -100,7 +102,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.ListAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -108,7 +110,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.CountAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -127,7 +129,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.ListAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -135,7 +137,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.CountAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -156,7 +158,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.ListAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -164,7 +166,7 @@ public sealed class GetRolesQueryHandlerTests
         _repoMock
             .Setup(r =>
                 r.CountAsync(
-                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<ISpecification<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
@@ -188,7 +190,7 @@ public sealed class GetRolesQueryHandlerTests
         result[0].MembersCount.ShouldBe(5);
     }
 
-    private static OrganizationMemberRole CreateRole(Guid orgId) =>
+    private static OrganizationRole CreateRole(Guid orgId) =>
         new(orgId, "Менеджер", "Управление проектами");
 
     private static RoleDto CreateDto(Guid id, Guid orgId) =>

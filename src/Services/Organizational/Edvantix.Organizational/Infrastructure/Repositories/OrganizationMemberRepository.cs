@@ -1,6 +1,7 @@
 using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
 
@@ -59,7 +60,7 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
                 && m.Status == OrganizationStatus.Active
                 && !m.IsDeleted
             )
-            .Select(m => (Guid?)m.OrganizationMemberRoleId)
+            .Select(m => (Guid?)m.OrganizationRoleId)
             .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<HashSet<string>> GetActivePermissionsAsync(
@@ -70,10 +71,9 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
     {
         var permissions = await (
             from member in context.OrganizationMembers
-            join role in context.OrganizationMemberRoles
-                on member.OrganizationMemberRoleId equals role.Id
-            join rp in context.Set<OrganizationMemberRolePermission>()
-                on role.Id equals rp.OrganizationMemberRoleId
+            join role in context.OrganizationRoles on member.OrganizationRoleId equals role.Id
+            join rp in context.Set<OrganizationRolePermission>()
+                on role.Id equals rp.OrganizationRoleId
             join perm in context.Permissions on rp.PermissionId equals perm.Id
             where
                 member.OrganizationId == organizationId
@@ -97,7 +97,7 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
             .OrganizationMembers.AsNoTracking()
             .CountAsync(
                 m =>
-                    m.OrganizationMemberRoleId == roleId
+                    m.OrganizationRoleId == roleId
                     && m.Status == OrganizationStatus.Active
                     && !m.IsDeleted,
                 cancellationToken
@@ -111,11 +111,11 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
         var counts = await context
             .OrganizationMembers.AsNoTracking()
             .Where(m =>
-                roleIds.Contains(m.OrganizationMemberRoleId)
+                roleIds.Contains(m.OrganizationRoleId)
                 && m.Status == OrganizationStatus.Active
                 && !m.IsDeleted
             )
-            .GroupBy(m => m.OrganizationMemberRoleId)
+            .GroupBy(m => m.OrganizationRoleId)
             .Select(g => new { RoleId = g.Key, Count = g.Count() })
             .ToListAsync(cancellationToken);
 

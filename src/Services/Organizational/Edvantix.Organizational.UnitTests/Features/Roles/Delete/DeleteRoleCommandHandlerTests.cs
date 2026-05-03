@@ -1,9 +1,11 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+
 namespace Edvantix.Organizational.UnitTests.Features.Roles.Delete;
 
 public sealed class DeleteRoleCommandHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
-    private readonly Mock<IOrganizationMemberRoleRepository> _repoMock = new();
+    private readonly Mock<IOrganizationRoleRepository> _repoMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly DeleteRoleCommandHandler _handler;
 
@@ -41,7 +43,7 @@ public sealed class DeleteRoleCommandHandlerTests
         var roleId = Guid.CreateVersion7();
         _repoMock
             .Setup(r => r.GetByIdAsync(roleId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((OrganizationMemberRole?)null);
+            .ReturnsAsync((OrganizationRole?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler.Handle(new DeleteRoleCommand(roleId), CancellationToken.None).AsTask()
@@ -61,6 +63,5 @@ public sealed class DeleteRoleCommandHandlerTests
         );
     }
 
-    private static OrganizationMemberRole CreateRole(Guid orgId) =>
-        new(orgId, "manager", "Менеджер");
+    private static OrganizationRole CreateRole(Guid orgId) => new(orgId, "manager", "Менеджер");
 }

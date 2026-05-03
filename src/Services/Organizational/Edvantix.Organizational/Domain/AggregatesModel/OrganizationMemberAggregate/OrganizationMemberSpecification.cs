@@ -48,7 +48,7 @@ public sealed class OrganizationMemberSpecification : Specification<Organization
 
         if (roleId.HasValue)
         {
-            query.Where(m => m.OrganizationMemberRoleId == roleId.Value);
+            query.Where(m => m.OrganizationRoleId == roleId.Value);
         }
     }
 }

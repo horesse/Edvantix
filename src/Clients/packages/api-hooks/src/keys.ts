@@ -27,6 +27,10 @@ export const companyKeys = {
   membersKpi: (orgId: string) =>
     [...companyKeys.all, "members", orgId, "kpi"] as const,
   member: (id: string) => [...companyKeys.all, "member", id] as const,
+  roles: (orgId: string, query?: unknown) =>
+    [...companyKeys.all, "roles", orgId, query] as const,
+  role: (orgId: string, roleId: string) =>
+    [...companyKeys.all, "roles", orgId, roleId] as const,
 };
 
 export const notificationKeys = {

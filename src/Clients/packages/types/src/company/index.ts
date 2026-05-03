@@ -230,3 +230,62 @@ export type OrganizationMembersKpiDto = {
   readonly archived: number;
   readonly deleted: number;
 };
+
+// --- Roles ---
+
+/** Краткая сводка роли (используется в списке). */
+export type RoleDto = {
+  readonly id: string;
+  readonly organizationId: string;
+  readonly name: string;
+  readonly description: string | null;
+  readonly isSystem: boolean;
+  readonly isOwner: boolean;
+  readonly permissionsCount: number;
+  readonly totalPermissionsCount: number;
+  readonly membersCount: number;
+};
+
+/** Одно право в рамках функциональной группы. */
+export type PermissionDto = {
+  readonly id: string;
+  readonly code: string;
+  readonly name: string;
+  readonly isActive: boolean;
+};
+
+/** Функциональная группа прав (e.g. «Студенты», «Курсы»). */
+export type FeatureDto = {
+  readonly code: string;
+  readonly name: string;
+  readonly permissions: readonly PermissionDto[];
+};
+
+/** Детальное представление роли со списком прав. */
+export type RoleDetailDto = {
+  readonly id: string;
+  readonly organizationId: string;
+  readonly name: string;
+  readonly description: string | null;
+  readonly isSystem: boolean;
+  readonly isOwner: boolean;
+  readonly features: readonly FeatureDto[];
+  readonly totalPermissionsCount: number;
+  readonly membersCount: number;
+};
+
+export type RolesQuery = {
+  readonly pageIndex?: number;
+  readonly pageSize?: number;
+  readonly search?: string;
+};
+
+export type CreateRoleRequest = {
+  readonly name: string;
+  readonly description?: string | null;
+};
+
+export type UpdateRoleRequest = {
+  readonly name: string;
+  readonly description?: string | null;
+};

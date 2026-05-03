@@ -1,6 +1,7 @@
 import type {
   CreateOrganizationMemberRequest,
   CreateOrganizationRequest,
+  CreateRoleRequest,
   OrganizationDetailDto,
   OrganizationDto,
   OrganizationMemberDto,
@@ -8,8 +9,12 @@ import type {
   OrganizationMembersQuery,
   OrganizationWithRoleDto,
   OrganizationsQuery,
+  RoleDetailDto,
+  RoleDto,
+  RolesQuery,
   UpdateOrganizationMemberRequest,
   UpdateOrganizationRequest,
+  UpdateRoleRequest,
 } from "@workspace/types/company";
 import type { PagedResult } from "@workspace/types/shared";
 
@@ -193,6 +198,68 @@ class CompanyApiClient {
    */
   public async removeMember(id: string): Promise<void> {
     await this.client.delete<void>(`${BASE}/members/${id}`, orgConfig());
+  }
+
+  // --- Roles ---
+
+  /**
+   * Получить постраничный список ролей текущей организации.
+   * Организация определяется заголовком X-Organization-Id из localStorage.
+   */
+  public async getRoles(query?: RolesQuery): Promise<PagedResult<RoleDto>> {
+    const response = await this.client.get<RoleDto[]>(
+      `${BASE}/roles`,
+      orgConfig({ params: query }),
+    );
+    return parsePagedResponse(response);
+  }
+
+  /**
+   * Получить детальную информацию о роли по ID.
+   * Организация определяется заголовком X-Organization-Id из localStorage.
+   */
+  public async getRole(id: string): Promise<RoleDetailDto> {
+    const response = await this.client.get<RoleDetailDto>(
+      `${BASE}/roles/${id}`,
+      orgConfig(),
+    );
+    return response.data;
+  }
+
+  /**
+   * Создать новую роль в организации. Возвращает ID созданной роли.
+   * Организация определяется заголовком X-Organization-Id из localStorage.
+   */
+  public async createRole(request: CreateRoleRequest): Promise<string> {
+    const response = await this.client.post<string>(
+      `${BASE}/roles`,
+      request,
+      orgConfig(),
+    );
+    return response.data;
+  }
+
+  /**
+   * Обновить название и описание роли.
+   * Организация определяется заголовком X-Organization-Id из localStorage.
+   */
+  public async updateRole(
+    id: string,
+    request: UpdateRoleRequest,
+  ): Promise<void> {
+    await this.client.put<void>(
+      `${BASE}/roles/${id}`,
+      { id, ...request },
+      orgConfig(),
+    );
+  }
+
+  /**
+   * Удалить роль из организации.
+   * Организация определяется заголовком X-Organization-Id из localStorage.
+   */
+  public async deleteRole(id: string): Promise<void> {
+    await this.client.delete<void>(`${BASE}/roles/${id}`, orgConfig());
   }
 }
 

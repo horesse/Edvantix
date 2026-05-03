@@ -20,6 +20,7 @@ internal sealed class OrganizationMemberRoleRepository(OrganizationalDbContext c
     ) =>
         await context
             .OrganizationMemberRoles.AsTracking()
+            .Include(r => r.Permissions)
             .FirstOrDefaultAsync(r => r.Id == id && !r.IsDeleted, cancellationToken);
 
     public async Task<OrganizationMemberRole?> GetByIdWithPermissionsAsync(

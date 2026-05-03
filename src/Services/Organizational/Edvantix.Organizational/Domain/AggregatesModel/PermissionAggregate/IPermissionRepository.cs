@@ -8,6 +8,12 @@ public interface IPermissionRepository : IRepository<Permission>
     /// <summary>Возвращает все разрешения из базы данных.</summary>
     Task<List<Permission>> GetAllAsync(CancellationToken cancellationToken = default);
 
+    /// <summary>Возвращает разрешения по заданному набору идентификаторов.</summary>
+    Task<List<Permission>> GetByIdsAsync(
+        IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default
+    );
+
     /// <summary>
     /// Возвращает все разрешения с загруженной навигацией <see cref="Permission.Feature"/>.
     /// Используется там, где нужно отображать разрешен��я сгруппированными по функциональной области.

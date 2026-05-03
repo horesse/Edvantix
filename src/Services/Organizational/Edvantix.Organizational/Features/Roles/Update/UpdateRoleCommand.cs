@@ -1,16 +1,23 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.Update;
 
 [Transactional]
 [RequirePermission(OrganizationPermissions.Roles)]
-public sealed record UpdateRoleCommand(Guid Id, string Name, string? Description) : ICommand;
+public sealed record UpdateRoleCommand(
+    Guid Id,
+    string Name,
+    string? Description,
+    IReadOnlyList<Guid> PermissionIds
+) : ICommand;
 
 internal sealed class UpdateRoleCommandHandler(
     ITenantContext tenantContext,
-    IOrganizationMemberRoleRepository repository
+    IOrganizationMemberRoleRepository repository,
+    IPermissionRepository permissionRepository
 ) : ICommandHandler<UpdateRoleCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -24,6 +31,15 @@ internal sealed class UpdateRoleCommandHandler(
             throw NotFoundException.For<OrganizationMemberRole>(command.Id);
 
         role.Update(command.Name, command.Description);
+
+        if (!role.IsOwner)
+        {
+            var permissions = await permissionRepository.GetByIdsAsync(
+                command.PermissionIds,
+                cancellationToken
+            );
+            role.AssignPermissions(permissions);
+        }
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

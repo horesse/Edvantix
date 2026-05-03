@@ -61,19 +61,19 @@
     <!-- gRPC -->
     <PackageVersion Include="Grpc.AspNetCore.HealthChecks" Version="$(GrpcVersion)" />
     <PackageVersion Include="Grpc.AspNetCore.Server.ClientFactory" Version="$(GrpcVersion)" />
-    <PackageVersion Include="Grpc.Tools" Version="2.80.0" PrivateAssets="All" />
-    <PackageVersion Include="Grpc.Core.Api" Version="2.76.0" />
+    <PackageVersion Include="Grpc.Tools" Version="$(GrpcVersion)" PrivateAssets="All" />
+    <PackageVersion Include="Grpc.Core.Api" Version="$(GrpcVersion)" />
     <!-- WolverineFx -->
     <PackageVersion Include="WolverineFx" Version="$(WolverineVersion)" />
     <PackageVersion Include="WolverineFx.Kafka" Version="$(WolverineVersion)" />
-    <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="$(WolverineVersion)" />
-    <PackageVersion Include="WolverineFx.Postgresql" Version="$(WolverineVersion)" />
+    <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="5.36.2" />
+    <PackageVersion Include="WolverineFx.Postgresql" Version="5.36.2" />
     <!-- Quartz -->
     <PackageVersion Include="Quartz.Plugins" Version="$(QuartzVersion)" />
     <PackageVersion Include="Quartz.Dashboard" Version="$(QuartzVersion)" />
     <PackageVersion Include="Quartz.AspNetCore" Version="$(QuartzVersion)" />
     <PackageVersion Include="Quartz.Plugins.TimeZoneConverter" Version="$(QuartzVersion)" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Quartz" Version="1.15.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Quartz" Version="1.15.1-beta.1" />
     <!-- Email & Messaging -->
     <PackageVersion Include="AspNetCore.HealthChecks.SendGrid" Version="$(HealthChecksVersion)" />
     <PackageVersion Include="MailKit" Version="4.16.0" />

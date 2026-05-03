@@ -4,10 +4,10 @@
     <AspireVersion>13.2.4</AspireVersion>
     <AspireUnstableVersion>13.2.4-preview.1.26224.4</AspireUnstableVersion>
     <DotnetPackagesVersion>10.0.7</DotnetPackagesVersion>
-    <GrpcVersion>2.76.0</GrpcVersion>
+    <GrpcVersion>2.80.0</GrpcVersion>
     <!-- Integration Libraries -->
-    <WolverineVersion>5.36.0</WolverineVersion>
-    <TUnitVersion>1.43.2</TUnitVersion>
+    <WolverineVersion>5.36.2</WolverineVersion>
+    <TUnitVersion>1.43.11</TUnitVersion>
     <QuartzVersion>3.18.1</QuartzVersion>
     <!-- Microsoft Packages -->
     <MsExtVersion>10.5.0</MsExtVersion>

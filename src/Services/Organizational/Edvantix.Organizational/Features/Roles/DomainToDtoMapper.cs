@@ -1,30 +1,22 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 namespace Edvantix.Organizational.Features.Roles;
 
-public sealed class RoleDtoMapper : Mapper<OrganizationMemberRole, RoleDto>
+public sealed class RoleDtoMapper : Mapper<OrganizationRole, RoleDto>
 {
-    public override RoleDto Map(OrganizationMemberRole source) =>
+    public override RoleDto Map(OrganizationRole source) =>
         new(
             source.Id,
             source.OrganizationId,
             source.Name,
             source.Description,
             source.IsSystem,
-            source.IsOwner,
             source.Permissions.Count
         );
 }
 
-public sealed class RoleDetailDtoMapper : Mapper<OrganizationMemberRole, RoleDetailDto>
+public sealed class RoleDetailDtoMapper : Mapper<OrganizationRole, RoleDetailDto>
 {
-    public override RoleDetailDto Map(OrganizationMemberRole source) =>
-        new(
-            source.Id,
-            source.OrganizationId,
-            source.Name,
-            source.Description,
-            source.IsSystem,
-            source.IsOwner
-        );
+    public override RoleDetailDto Map(OrganizationRole source) =>
+        new(source.Id, source.OrganizationId, source.Name, source.Description, source.IsSystem);
 }

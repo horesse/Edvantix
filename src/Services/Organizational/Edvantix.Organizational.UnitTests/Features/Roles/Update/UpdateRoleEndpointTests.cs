@@ -8,7 +8,7 @@ public sealed class UpdateRoleEndpointTests
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldReturnNoContent()
     {
-        var command = new UpdateRoleCommand(Guid.CreateVersion7(), "admin", null);
+        var command = new UpdateRoleCommand(Guid.CreateVersion7(), "admin", null, []);
         _senderMock
             .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
             .ReturnsAsync(Unit.Value);
@@ -21,7 +21,7 @@ public sealed class UpdateRoleEndpointTests
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldCallSenderOnce()
     {
-        var command = new UpdateRoleCommand(Guid.CreateVersion7(), "manager", "Менеджер");
+        var command = new UpdateRoleCommand(Guid.CreateVersion7(), "manager", "Менеджер", []);
         _senderMock
             .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
             .ReturnsAsync(Unit.Value);

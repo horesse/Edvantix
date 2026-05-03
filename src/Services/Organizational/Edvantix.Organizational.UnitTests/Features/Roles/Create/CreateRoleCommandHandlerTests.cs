@@ -1,9 +1,11 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+
 namespace Edvantix.Organizational.UnitTests.Features.Roles.Create;
 
 public sealed class CreateRoleCommandHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
-    private readonly Mock<IOrganizationMemberRoleRepository> _repoMock = new();
+    private readonly Mock<IOrganizationRoleRepository> _repoMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly CreateRoleCommandHandler _handler;
 
@@ -19,9 +21,7 @@ public sealed class CreateRoleCommandHandlerTests
         var command = new CreateRoleCommand("Менеджер", "Управление проектами");
 
         _repoMock
-            .Setup(r =>
-                r.AddAsync(It.IsAny<OrganizationMemberRole>(), It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.AddAsync(It.IsAny<OrganizationRole>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _repoMock
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
@@ -31,7 +31,7 @@ public sealed class CreateRoleCommandHandlerTests
 
         result.ShouldNotBe(Guid.Empty);
         _repoMock.Verify(
-            r => r.AddAsync(It.IsAny<OrganizationMemberRole>(), It.IsAny<CancellationToken>()),
+            r => r.AddAsync(It.IsAny<OrganizationRole>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
@@ -42,9 +42,7 @@ public sealed class CreateRoleCommandHandlerTests
         var command = new CreateRoleCommand("Читатель", null);
 
         _repoMock
-            .Setup(r =>
-                r.AddAsync(It.IsAny<OrganizationMemberRole>(), It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.AddAsync(It.IsAny<OrganizationRole>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _repoMock
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
@@ -61,14 +59,12 @@ public sealed class CreateRoleCommandHandlerTests
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenRoleShouldBelongToCurrentOrganization()
     {
-        OrganizationMemberRole? capturedRole = null;
+        OrganizationRole? capturedRole = null;
         var command = new CreateRoleCommand("Администратор", "Операционное управление");
 
         _repoMock
-            .Setup(r =>
-                r.AddAsync(It.IsAny<OrganizationMemberRole>(), It.IsAny<CancellationToken>())
-            )
-            .Callback<OrganizationMemberRole, CancellationToken>((role, _) => capturedRole = role)
+            .Setup(r => r.AddAsync(It.IsAny<OrganizationRole>(), It.IsAny<CancellationToken>()))
+            .Callback<OrganizationRole, CancellationToken>((role, _) => capturedRole = role)
             .Returns(Task.CompletedTask);
         _repoMock
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))

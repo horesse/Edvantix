@@ -3,7 +3,7 @@ using Edvantix.SharedKernel.SeedWork;
 namespace Edvantix.Organizational.Domain.Events;
 
 /// <summary>Вызывается при смене роли участника организации.</summary>
-public sealed class OrganizationMemberRoleChangedDomainEvent(Guid organizationId, Guid profileId)
+public sealed class OrganizationRoleChangedDomainEvent(Guid organizationId, Guid profileId)
     : DomainEvent
 {
     public Guid OrganizationId { get; } = organizationId;

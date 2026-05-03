@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Events;
 
@@ -9,7 +10,7 @@ namespace Edvantix.Organizational.Domain.EventHandlers;
 /// Выполняется в той же транзакционной области после сохранения агрегата Organization.
 /// </summary>
 internal sealed class OrganizationCreatedDomainEventHandler(
-    IOrganizationMemberRoleRepository memberRoleRepository,
+    IOrganizationRoleRepository roleRepository,
     IOrganizationMemberRepository memberRepository,
     IPermissionRepository permissionRepository
 ) : INotificationHandler<OrganizationCreatedDomainEvent>
@@ -26,9 +27,9 @@ internal sealed class OrganizationCreatedDomainEventHandler(
             allPermissions
         );
 
-        await memberRoleRepository.AddRangeAsync(orgRoles, cancellationToken);
+        await roleRepository.AddRangeAsync(orgRoles, cancellationToken);
 
-        var ownerRole = orgRoles.First(r => r.IsOwner);
+        var ownerRole = orgRoles.First(r => r.IsSystem);
         var ownerMember = new OrganizationMember(
             notification.OrganizationId,
             notification.OwnerProfileId,

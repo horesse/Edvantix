@@ -29,7 +29,7 @@ public sealed class UpdateOrganizationMemberCommandHandlerTests
 
         await _handler.Handle(command, CancellationToken.None);
 
-        member.OrganizationMemberRoleId.ShouldBe(newRoleId);
+        member.OrganizationRoleId.ShouldBe(newRoleId);
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once

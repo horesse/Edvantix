@@ -2,7 +2,7 @@ using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 /// <summary>
 /// Роль участника организации с набором разрешений (<see cref="Permission"/>).
@@ -10,7 +10,7 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggre
 /// Системные роли создаются автоматически при создании организации.
 /// Роль «Владелец» дополнительно помечается флагом <see cref="IsOwner"/> и не может быть изменена.
 /// </summary>
-public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDelete, ITenanted
+public sealed class OrganizationRole() : Entity, IAggregateRoot, ISoftDelete, ITenanted
 {
     private readonly List<Permission> _permissions = [];
 
@@ -18,13 +18,11 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
     /// <param name="name">Отображаемое название роли (например, «Преподаватель»).</param>
     /// <param name="description">Краткое описание: кому назначается эта роль.</param>
     /// <param name="isSystem">Признак системной роли (создана платформой, не удаляется).</param>
-    /// <param name="isOwner">Признак роли владельца организации (полный доступ, не редактируется).</param>
-    public OrganizationMemberRole(
+    public OrganizationRole(
         Guid organizationId,
         string name,
         string? description = null,
-        bool isSystem = false,
-        bool isOwner = false
+        bool isSystem = false
     )
         : this()
     {
@@ -41,7 +39,6 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
         Name = name.Trim();
         Description = description?.Trim();
         IsSystem = isSystem;
-        IsOwner = isOwner;
         IsDeleted = false;
     }
 
@@ -56,12 +53,6 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
 
     /// <summary>Признак системной роли (создана платформой, не удаляется).</summary>
     public bool IsSystem { get; private init; }
-
-    /// <summary>
-    /// Признак роли владельца организации.
-    /// Владелец имеет полный доступ ко всем разделам; роль не может быть изменена или удалена.
-    /// </summary>
-    public bool IsOwner { get; private init; }
 
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
@@ -116,8 +107,8 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
     public void Delete() => IsDeleted = true;
 }
 
-internal sealed class OrganizationMemberRolePermission
+internal sealed class OrganizationRolePermission
 {
-    public Guid OrganizationMemberRoleId { get; set; }
+    public Guid OrganizationRoleId { get; set; }
     public Guid PermissionId { get; set; }
 }

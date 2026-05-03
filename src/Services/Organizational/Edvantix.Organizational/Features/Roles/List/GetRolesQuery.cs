@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
@@ -18,10 +19,10 @@ public sealed record GetRolesQuery(
 
 internal sealed class GetRolesQueryHandler(
     ITenantContext tenantContext,
-    IOrganizationMemberRoleRepository repository,
+    IOrganizationRoleRepository repository,
     IPermissionRepository permissionRepository,
     IOrganizationMemberRepository memberRepository,
-    IMapper<OrganizationMemberRole, RoleDto> mapper
+    IMapper<OrganizationRole, RoleDto> mapper
 ) : IQueryHandler<GetRolesQuery, PagedResult<RoleDto>>
 {
     public async ValueTask<PagedResult<RoleDto>> Handle(
@@ -38,16 +39,17 @@ internal sealed class GetRolesQueryHandler(
         var organizationId = tenantContext.OrganizationId;
         var search = string.IsNullOrWhiteSpace(request.Search) ? null : request.Search.Trim();
 
-        var listSpec = new RoleListSpecification(organizationId, offset, clamped.PageSize, search);
+        var listSpec = new OrganizationRoleSpecification(
+            organizationId,
+            offset,
+            clamped.PageSize,
+            search
+        );
         var countSpec = new RoleCountSpecification(organizationId, search);
 
-        var rolesTask = repository.ListAsync(listSpec, cancellationToken);
-        var totalCountTask = repository.CountAsync(countSpec, cancellationToken);
-        var totalPermissionsCountTask = permissionRepository.CountAsync(cancellationToken);
-
-        var roles = await rolesTask;
-        var totalCount = await totalCountTask;
-        var totalPermissionsCount = await totalPermissionsCountTask;
+        var roles = await repository.ListAsync(listSpec, cancellationToken);
+        var totalCount = await repository.CountAsync(countSpec, cancellationToken);
+        var totalPermissionsCount = await permissionRepository.CountAsync(cancellationToken);
 
         var roleIds = roles.Select(r => r.Id).ToList();
         var memberCounts =

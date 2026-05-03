@@ -1,7 +1,7 @@
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 /// <summary>
 /// Фабрика стандартного набора ролей организации.
@@ -12,11 +12,11 @@ public static class OrganizationDefaultRolesFactory
 {
     /// <summary>
     /// Создаёт стандартный набор ролей для организации.
-    /// Первая роль в возвращаемом списке — всегда «Владелец» (<see cref="OrganizationMemberRole.IsOwner"/> = <see langword="true"/>).
+    /// Первая роль в возвращаемом списке — всегда «Владелец» (<see cref="OrganizationRole.IsOwner"/> = <see langword="true"/>).
     /// </summary>
     /// <param name="organizationId">Идентификатор организации.</param>
     /// <param name="availablePermissions">Все доступные разрешения из базы данных.</param>
-    public static IReadOnlyList<OrganizationMemberRole> CreateFor(
+    public static IReadOnlyList<OrganizationRole> CreateFor(
         Guid organizationId,
         IReadOnlyList<Permission> availablePermissions
     )
@@ -39,21 +39,19 @@ public static class OrganizationDefaultRolesFactory
 
         // Владелец: полный доступ ко всем разделам, включая биллинг и удаление.
         // Роль защищена от изменений (IsOwner = true).
-        var owner = new OrganizationMemberRole(
+        var owner = new OrganizationRole(
             organizationId,
             "Владелец",
             "Полный доступ ко всем разделам, включая удаление организации",
-            isSystem: true,
-            isOwner: true
+            isSystem: true
         );
         owner.AssignPermissions(Resolve(AllOrgPermissions.Concat(AllGroupPermissions).ToArray()));
 
         // Директор: управление всеми разделами, кроме биллинга и удаления организации.
-        var director = new OrganizationMemberRole(
+        var director = new OrganizationRole(
             organizationId,
             "Директор",
-            "Управление всеми разделами, кроме биллинга и удаления",
-            isSystem: true
+            "Управление всеми разделами, кроме биллинга и удаления"
         );
         director.AssignPermissions(
             Resolve([
@@ -68,11 +66,10 @@ public static class OrganizationDefaultRolesFactory
         );
 
         // Преподаватель: ведение занятий и просмотр учебных материалов своих групп.
-        var teacher = new OrganizationMemberRole(
+        var teacher = new OrganizationRole(
             organizationId,
             "Преподаватель",
-            "Ведение занятий и журнала своих групп",
-            isSystem: true
+            "Ведение занятий и журнала своих групп"
         );
         teacher.AssignPermissions(
             Resolve(
@@ -84,7 +81,7 @@ public static class OrganizationDefaultRolesFactory
         );
 
         // Администратор: операционное управление участниками, ролями и группами.
-        var admin = new OrganizationMemberRole(
+        var admin = new OrganizationRole(
             organizationId,
             "Администратор",
             "Операционное управление: участники, роли, группы"
@@ -102,7 +99,7 @@ public static class OrganizationDefaultRolesFactory
         );
 
         // Методист: курсы, программы и учебные группы.
-        var methodist = new OrganizationMemberRole(
+        var methodist = new OrganizationRole(
             organizationId,
             "Методист",
             "Курсы, программы и учебные материалы"
@@ -121,7 +118,7 @@ public static class OrganizationDefaultRolesFactory
         );
 
         // Куратор групп: сопровождение студентов, управление участниками групп.
-        var curator = new OrganizationMemberRole(
+        var curator = new OrganizationRole(
             organizationId,
             "Куратор групп",
             "Сопровождение студентов и коммуникация с участниками"
@@ -136,7 +133,7 @@ public static class OrganizationDefaultRolesFactory
         );
 
         // Бухгалтер: финансы, аналитика, выгрузки.
-        var accountant = new OrganizationMemberRole(
+        var accountant = new OrganizationRole(
             organizationId,
             "Бухгалтер",
             "Финансы, договоры, выгрузки"

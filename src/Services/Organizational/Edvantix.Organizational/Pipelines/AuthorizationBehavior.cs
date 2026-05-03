@@ -1,6 +1,7 @@
 using System.Reflection;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using IMessage = Mediator.IMessage;
 
 namespace Edvantix.Organizational.Pipelines;
@@ -18,7 +19,7 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
     ClaimsPrincipal claims,
     ITenantContext tenantContext,
     IOrganizationMemberRepository memberRepository,
-    IOrganizationMemberRoleRepository roleRepository,
+    IOrganizationRoleRepository roleRepository,
     IHybridCache cache,
     ILogger<AuthorizationBehavior<TMessage, TResponse>> logger
 ) : MessagePreProcessor<TMessage, TResponse>

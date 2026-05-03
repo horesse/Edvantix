@@ -355,9 +355,9 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("organization_id");
 
-                    b.Property<Guid>("OrganizationMemberRoleId")
+                    b.Property<Guid>("OrganizationRoleId")
                         .HasColumnType("uuid")
-                        .HasColumnName("organization_member_role_id");
+                        .HasColumnName("organization_role_id");
 
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uuid")
@@ -376,8 +376,8 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_organization_members");
 
-                    b.HasIndex("OrganizationMemberRoleId")
-                        .HasDatabaseName("ix_organization_members_organization_member_role_id");
+                    b.HasIndex("OrganizationRoleId")
+                        .HasDatabaseName("ix_organization_members_organization_role_id");
 
                     b.HasIndex("OrganizationId", "ProfileId")
                         .HasDatabaseName("ix_organization_members_organization_id_profile_id");
@@ -385,7 +385,7 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                     b.ToTable("organization_members", (string)null);
                 });
 
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMemberRole", b =>
+            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate.OrganizationRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -403,10 +403,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnName("is_deleted")
                         .HasComment("Признак удаленной записи");
 
-                    b.Property<bool>("IsOwner")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_owner");
-
                     b.Property<bool>("IsSystem")
                         .HasColumnType("boolean")
                         .HasColumnName("is_system");
@@ -422,32 +418,32 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnName("organization_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_organization_member_roles");
+                        .HasName("pk_organization_roles");
 
                     b.HasIndex("OrganizationId", "Name")
                         .IsUnique()
-                        .HasDatabaseName("ix_organization_member_roles_organization_id_name");
+                        .HasDatabaseName("ix_organization_roles_organization_id_name");
 
-                    b.ToTable("organization_member_roles", (string)null);
+                    b.ToTable("organization_roles", (string)null);
                 });
 
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMemberRolePermission", b =>
+            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate.OrganizationRolePermission", b =>
                 {
-                    b.Property<Guid>("OrganizationMemberRoleId")
+                    b.Property<Guid>("OrganizationRoleId")
                         .HasColumnType("uuid")
-                        .HasColumnName("organization_member_role_id");
+                        .HasColumnName("organization_role_id");
 
                     b.Property<Guid>("PermissionId")
                         .HasColumnType("uuid")
                         .HasColumnName("permission_id");
 
-                    b.HasKey("OrganizationMemberRoleId", "PermissionId")
-                        .HasName("pk_organization_member_role_permission");
+                    b.HasKey("OrganizationRoleId", "PermissionId")
+                        .HasName("pk_organization_role_permission");
 
                     b.HasIndex("PermissionId")
-                        .HasDatabaseName("ix_organization_member_role_permission_permission_id");
+                        .HasDatabaseName("ix_organization_role_permission_permission_id");
 
-                    b.ToTable("organization_member_role_permission", (string)null);
+                    b.ToTable("organization_role_permission", (string)null);
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Feature", b =>
@@ -637,31 +633,31 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMember", b =>
                 {
-                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMemberRole", "Role")
+                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate.OrganizationRole", "Role")
                         .WithMany()
-                        .HasForeignKey("OrganizationMemberRoleId")
+                        .HasForeignKey("OrganizationRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_organization_members_organization_member_roles_organization");
+                        .HasConstraintName("fk_organization_members_organization_roles_organization_role_id");
 
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMemberRolePermission", b =>
+            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate.OrganizationRolePermission", b =>
                 {
-                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.OrganizationMemberRole", null)
+                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate.OrganizationRole", null)
                         .WithMany()
-                        .HasForeignKey("OrganizationMemberRoleId")
+                        .HasForeignKey("OrganizationRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_organization_member_role_permission_organization_member_rol");
+                        .HasConstraintName("fk_organization_role_permission_organization_roles_organizatio");
 
                     b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Permission", null)
                         .WithMany()
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_organization_member_role_permission_permissions_permission_");
+                        .HasConstraintName("fk_organization_role_permission_permissions_permission_id");
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Permission", b =>

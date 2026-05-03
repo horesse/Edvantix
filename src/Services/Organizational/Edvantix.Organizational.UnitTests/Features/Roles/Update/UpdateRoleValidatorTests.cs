@@ -8,7 +8,22 @@ public sealed class UpdateRoleValidatorTests
     public void GivenValidCommand_WhenValidating_ThenShouldNotHaveAnyErrors()
     {
         var result = _validator.TestValidate(
-            new UpdateRoleCommand(Guid.CreateVersion7(), "Менеджер", "Управление проектами")
+            new UpdateRoleCommand(Guid.CreateVersion7(), "Менеджер", "Управление проектами", [])
+        );
+
+        result.ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Test]
+    public void GivenValidCommandWithPermissions_WhenValidating_ThenShouldNotHaveAnyErrors()
+    {
+        var result = _validator.TestValidate(
+            new UpdateRoleCommand(
+                Guid.CreateVersion7(),
+                "Менеджер",
+                null,
+                [Guid.CreateVersion7(), Guid.CreateVersion7()]
+            )
         );
 
         result.ShouldNotHaveAnyValidationErrors();
@@ -17,7 +32,9 @@ public sealed class UpdateRoleValidatorTests
     [Test]
     public void GivenEmptyId_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(new UpdateRoleCommand(Guid.Empty, "Менеджер", null));
+        var result = _validator.TestValidate(
+            new UpdateRoleCommand(Guid.Empty, "Менеджер", null, [])
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Id);
     }
@@ -29,7 +46,7 @@ public sealed class UpdateRoleValidatorTests
     public void GivenEmptyName_WhenValidating_ThenShouldHaveError(string? name)
     {
         var result = _validator.TestValidate(
-            new UpdateRoleCommand(Guid.CreateVersion7(), name!, null)
+            new UpdateRoleCommand(Guid.CreateVersion7(), name!, null, [])
         );
 
         result.ShouldHaveValidationErrorFor(x => x.Name);

@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
@@ -53,8 +53,7 @@ public sealed class Permission() : Entity, IAggregateRoot
         Name = name.Trim();
     }
 
-    internal IReadOnlyList<OrganizationMemberRole> OrganizationMemberRoles =>
-        _organizationMemberRoles;
+    internal IReadOnlyList<OrganizationRole> OrganizationRoles => _organizationRoles;
 
-    private readonly List<OrganizationMemberRole> _organizationMemberRoles = [];
+    private readonly List<OrganizationRole> _organizationRoles = [];
 }

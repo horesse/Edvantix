@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
@@ -13,13 +14,13 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
 {
     /// <param name="organizationId">Идентификатор организации.</param>
     /// <param name="profileId">Идентификатор пользователя из Profile Service.</param>
-    /// <param name="organizationMemberRoleId">Идентификатор кастомной роли участника.</param>
+    /// <param name="organizationRoleId">Идентификатор кастомной роли участника.</param>
     /// <param name="startDate">Дата начала участия.</param>
     /// <param name="endDate">Дата окончания участия; null означает, что участие актуально.</param>
     public OrganizationMember(
         Guid organizationId,
         Guid profileId,
-        Guid organizationMemberRoleId,
+        Guid organizationRoleId,
         DateOnly startDate,
         DateOnly? endDate = null
     )
@@ -36,10 +37,10 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
                 "Идентификатор профиля не может быть пустым.",
                 nameof(profileId)
             );
-        if (organizationMemberRoleId == Guid.Empty)
+        if (organizationRoleId == Guid.Empty)
             throw new ArgumentException(
                 "Идентификатор роли не может быть пустым.",
-                nameof(organizationMemberRoleId)
+                nameof(organizationRoleId)
             );
 
         if (endDate.HasValue && endDate.Value < startDate)
@@ -52,7 +53,7 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
 
         OrganizationId = organizationId;
         ProfileId = profileId;
-        OrganizationMemberRoleId = organizationMemberRoleId;
+        OrganizationRoleId = organizationRoleId;
         StartDate = startDate;
         EndDate = endDate;
         Status = OrganizationStatus.Active;
@@ -68,10 +69,10 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
     public Guid ProfileId { get; private set; }
 
     /// <summary>Идентификатор кастомной роли участника в организации.</summary>
-    public Guid OrganizationMemberRoleId { get; private set; }
+    public Guid OrganizationRoleId { get; private set; }
 
     /// <summary>Роль участника в организации.</summary>
-    public OrganizationMemberRole? Role { get; private set; }
+    public OrganizationRole? Role { get; private set; }
 
     /// <summary>Текущий статус участника.</summary>
     public OrganizationStatus Status { get; private set; }
@@ -94,10 +95,8 @@ public sealed class OrganizationMember() : Entity, IAggregateRoot, ISoftDelete, 
                 nameof(organizationMemberRoleId)
             );
 
-        OrganizationMemberRoleId = organizationMemberRoleId;
-        RegisterDomainEvent(
-            new OrganizationMemberRoleChangedDomainEvent(OrganizationId, ProfileId)
-        );
+        OrganizationRoleId = organizationMemberRoleId;
+        RegisterDomainEvent(new OrganizationRoleChangedDomainEvent(OrganizationId, ProfileId));
     }
 
     /// <summary>Завершает участие в организации с указанием даты.</summary>

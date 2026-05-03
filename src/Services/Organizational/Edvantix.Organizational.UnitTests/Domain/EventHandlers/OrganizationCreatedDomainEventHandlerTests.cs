@@ -1,8 +1,10 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
 public sealed class OrganizationCreatedDomainEventHandlerTests
 {
-    private readonly Mock<IOrganizationMemberRoleRepository> _memberRoleRepoMock = new();
+    private readonly Mock<IOrganizationRoleRepository> _memberRoleRepoMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
     private readonly Mock<IPermissionRepository> _permissionRepoMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
@@ -38,7 +40,7 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
         _memberRoleRepoMock.Verify(
             r =>
                 r.AddRangeAsync(
-                    It.Is<IReadOnlyList<OrganizationMemberRole>>(roles => roles.Count == 7),
+                    It.Is<IReadOnlyList<OrganizationRole>>(roles => roles.Count == 7),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -67,15 +69,15 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldAssignOwnerRoleToMember()
     {
-        IReadOnlyList<OrganizationMemberRole>? capturedRoles = null;
+        IReadOnlyList<OrganizationRole>? capturedRoles = null;
         _memberRoleRepoMock
             .Setup(r =>
                 r.AddRangeAsync(
-                    It.IsAny<IReadOnlyList<OrganizationMemberRole>>(),
+                    It.IsAny<IReadOnlyList<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<IReadOnlyList<OrganizationMemberRole>, CancellationToken>(
+            .Callback<IReadOnlyList<OrganizationRole>, CancellationToken>(
                 (roles, _) => capturedRoles = roles
             );
 
@@ -88,8 +90,8 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
 
         await _handler.Handle(@event, CancellationToken.None);
 
-        var ownerRole = capturedRoles!.Single(r => r.IsOwner);
-        capturedMember!.OrganizationMemberRoleId.ShouldBe(ownerRole.Id);
+        var ownerRole = capturedRoles!.Single(r => r.IsSystem);
+        capturedMember!.OrganizationRoleId.ShouldBe(ownerRole.Id);
     }
 
     [Test]
@@ -115,15 +117,15 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenAllRolesBelongToOrganization()
     {
-        IReadOnlyList<OrganizationMemberRole>? capturedOrgRoles = null;
+        IReadOnlyList<OrganizationRole>? capturedOrgRoles = null;
         _memberRoleRepoMock
             .Setup(r =>
                 r.AddRangeAsync(
-                    It.IsAny<IReadOnlyList<OrganizationMemberRole>>(),
+                    It.IsAny<IReadOnlyList<OrganizationRole>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<IReadOnlyList<OrganizationMemberRole>, CancellationToken>(
+            .Callback<IReadOnlyList<OrganizationRole>, CancellationToken>(
                 (roles, _) => capturedOrgRoles = roles
             );
 

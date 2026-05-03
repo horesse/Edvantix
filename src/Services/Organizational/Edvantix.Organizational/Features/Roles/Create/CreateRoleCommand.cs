@@ -1,5 +1,5 @@
 using Edvantix.Chassis.CQRS;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.Create;
@@ -10,7 +10,7 @@ public sealed record CreateRoleCommand(string Name, string? Description) : IComm
 
 internal sealed class CreateRoleCommandHandler(
     ITenantContext tenantContext,
-    IOrganizationMemberRoleRepository repository
+    IOrganizationRoleRepository repository
 ) : ICommandHandler<CreateRoleCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
@@ -18,7 +18,7 @@ internal sealed class CreateRoleCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var role = new OrganizationMemberRole(
+        var role = new OrganizationRole(
             tenantContext.OrganizationId,
             command.Name,
             command.Description

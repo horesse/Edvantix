@@ -16,7 +16,7 @@ public sealed class CreateRoleCommandHandlerTests
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldAddRoleAndReturnId()
     {
-        var command = new CreateRoleCommand("manager", "Менеджер");
+        var command = new CreateRoleCommand("Менеджер", "Управление проектами");
 
         _repoMock
             .Setup(r =>
@@ -39,7 +39,7 @@ public sealed class CreateRoleCommandHandlerTests
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldSaveChanges()
     {
-        var command = new CreateRoleCommand("viewer", null);
+        var command = new CreateRoleCommand("Читатель", null);
 
         _repoMock
             .Setup(r =>
@@ -62,7 +62,7 @@ public sealed class CreateRoleCommandHandlerTests
     public async Task GivenValidCommand_WhenHandling_ThenRoleShouldBelongToCurrentOrganization()
     {
         OrganizationMemberRole? capturedRole = null;
-        var command = new CreateRoleCommand("admin", "Администратор");
+        var command = new CreateRoleCommand("Администратор", "Операционное управление");
 
         _repoMock
             .Setup(r =>
@@ -78,7 +78,7 @@ public sealed class CreateRoleCommandHandlerTests
 
         capturedRole.ShouldNotBeNull();
         capturedRole.OrganizationId.ShouldBe(_organizationId);
-        capturedRole.Code.ShouldBe("admin");
-        capturedRole.Description.ShouldBe("Администратор");
+        capturedRole.Name.ShouldBe("Администратор");
+        capturedRole.Description.ShouldBe("Операционное управление");
     }
 }

@@ -6,7 +6,7 @@ namespace Edvantix.Organizational.Features.Roles.Create;
 
 [Transactional]
 [RequirePermission(OrganizationPermissions.Roles)]
-public sealed record CreateRoleCommand(string Code, string? Description) : ICommand<Guid>;
+public sealed record CreateRoleCommand(string Name, string? Description) : ICommand<Guid>;
 
 internal sealed class CreateRoleCommandHandler(
     ITenantContext tenantContext,
@@ -20,7 +20,7 @@ internal sealed class CreateRoleCommandHandler(
     {
         var role = new OrganizationMemberRole(
             tenantContext.OrganizationId,
-            command.Code,
+            command.Name,
             command.Description
         );
 

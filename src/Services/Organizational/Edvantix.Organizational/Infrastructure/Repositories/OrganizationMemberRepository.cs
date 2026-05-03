@@ -88,4 +88,37 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
 
         return [.. permissions];
     }
+
+    public async Task<int> CountByRoleAsync(
+        Guid roleId,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context
+            .OrganizationMembers.AsNoTracking()
+            .CountAsync(
+                m =>
+                    m.OrganizationMemberRoleId == roleId
+                    && m.Status == OrganizationStatus.Active
+                    && !m.IsDeleted,
+                cancellationToken
+            );
+
+    public async Task<IReadOnlyDictionary<Guid, int>> GetMemberCountsByRolesAsync(
+        IReadOnlyCollection<Guid> roleIds,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var counts = await context
+            .OrganizationMembers.AsNoTracking()
+            .Where(m =>
+                roleIds.Contains(m.OrganizationMemberRoleId)
+                && m.Status == OrganizationStatus.Active
+                && !m.IsDeleted
+            )
+            .GroupBy(m => m.OrganizationMemberRoleId)
+            .Select(g => new { RoleId = g.Key, Count = g.Count() })
+            .ToListAsync(cancellationToken);
+
+        return counts.ToDictionary(x => x.RoleId, x => x.Count);
+    }
 }

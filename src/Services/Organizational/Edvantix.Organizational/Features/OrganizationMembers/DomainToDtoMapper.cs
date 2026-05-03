@@ -5,5 +5,5 @@ namespace Edvantix.Organizational.Features.OrganizationMembers;
 public sealed class OrganizationMemberDtoMapper : Mapper<OrganizationMember, OrganizationMemberDto>
 {
     public override OrganizationMemberDto Map(OrganizationMember source) =>
-        new(source.Id, source.ProfileId, source.Role?.Code ?? string.Empty, source.Status);
+        new(source.Id, source.ProfileId, source.Role?.Name ?? string.Empty, source.Status);
 }

@@ -5,21 +5,27 @@ public sealed class OrganizationMemberRoleTests
     private static readonly Guid ValidOrgId = Guid.CreateVersion7();
 
     private static OrganizationMemberRole CreateValidRole(
-        string code = "manager",
-        string? description = "Менеджер"
-    ) => new(ValidOrgId, code, description);
+        string name = "Менеджер",
+        string? description = "Управление проектами"
+    ) => new(ValidOrgId, name, description);
 
     private static Permission CreatePermission(string code = "View") =>
-        new("organizational", "Organization", "Организация", code, $"Отображаемое название {code}");
+        new("Organization", code, $"Отображаемое название {code}");
 
     [Test]
     public void GivenValidData_WhenCreatingOrganizationMemberRole_ThenShouldInitializePropertiesCorrectly()
     {
-        var role = new OrganizationMemberRole(ValidOrgId, "admin", "Администратор");
+        var role = new OrganizationMemberRole(
+            ValidOrgId,
+            "Администратор",
+            "Операционное управление"
+        );
 
         role.OrganizationId.ShouldBe(ValidOrgId);
-        role.Code.ShouldBe("admin");
-        role.Description.ShouldBe("Администратор");
+        role.Name.ShouldBe("Администратор");
+        role.Description.ShouldBe("Операционное управление");
+        role.IsSystem.ShouldBeFalse();
+        role.IsOwner.ShouldBeFalse();
         role.IsDeleted.ShouldBeFalse();
         role.Permissions.ShouldBeEmpty();
     }
@@ -27,7 +33,7 @@ public sealed class OrganizationMemberRoleTests
     [Test]
     public void GivenNullDescription_WhenCreatingOrganizationMemberRole_ThenDescriptionShouldBeNull()
     {
-        var role = new OrganizationMemberRole(ValidOrgId, "student");
+        var role = new OrganizationMemberRole(ValidOrgId, "Студент");
 
         role.Description.ShouldBeNull();
     }
@@ -35,7 +41,7 @@ public sealed class OrganizationMemberRoleTests
     [Test]
     public void GivenEmptyOrganizationId_WhenCreatingOrganizationMemberRole_ThenShouldThrowArgumentException()
     {
-        var act = () => new OrganizationMemberRole(Guid.Empty, "admin");
+        var act = () => new OrganizationMemberRole(Guid.Empty, "Администратор");
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -44,23 +50,37 @@ public sealed class OrganizationMemberRoleTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenNullOrWhiteSpaceCode_WhenCreatingOrganizationMemberRole_ThenShouldThrowArgumentException(
-        string? code
+    public void GivenNullOrWhiteSpaceName_WhenCreatingOrganizationMemberRole_ThenShouldThrowArgumentException(
+        string? name
     )
     {
-        var act = () => new OrganizationMemberRole(ValidOrgId, code!);
+        var act = () => new OrganizationMemberRole(ValidOrgId, name!);
 
         act.ShouldThrow<ArgumentException>();
     }
 
     [Test]
-    public void GivenValidData_WhenUpdating_ThenShouldUpdateCodeAndDescription()
+    public void GivenSystemOwnerFlags_WhenCreatingOrganizationMemberRole_ThenFlagsShouldBeSet()
+    {
+        var role = new OrganizationMemberRole(
+            ValidOrgId,
+            "Владелец",
+            isSystem: true,
+            isOwner: true
+        );
+
+        role.IsSystem.ShouldBeTrue();
+        role.IsOwner.ShouldBeTrue();
+    }
+
+    [Test]
+    public void GivenValidData_WhenUpdating_ThenShouldUpdateNameAndDescription()
     {
         var role = CreateValidRole();
 
-        role.Update("owner", "Владелец организации");
+        role.Update("Владелец", "Владелец организации");
 
-        role.Code.ShouldBe("owner");
+        role.Name.ShouldBe("Владелец");
         role.Description.ShouldBe("Владелец организации");
     }
 
@@ -69,7 +89,7 @@ public sealed class OrganizationMemberRoleTests
     {
         var role = CreateValidRole();
 
-        role.Update("owner", null);
+        role.Update("Владелец", null);
 
         role.Description.ShouldBeNull();
     }
@@ -147,11 +167,11 @@ public sealed class OrganizationMemberRoleTests
     }
 
     [Test]
-    public void GivenCodeWithLeadingSpaces_WhenCreatingOrganizationMemberRole_ThenCodeShouldBeTrimmed()
+    public void GivenNameWithLeadingSpaces_WhenCreatingOrganizationMemberRole_ThenNameShouldBeTrimmed()
     {
-        var role = new OrganizationMemberRole(ValidOrgId, "  admin  ", "  Описание  ");
+        var role = new OrganizationMemberRole(ValidOrgId, "  Администратор  ", "  Описание  ");
 
-        role.Code.ShouldBe("admin");
+        role.Name.ShouldBe("Администратор");
         role.Description.ShouldBe("Описание");
     }
 }

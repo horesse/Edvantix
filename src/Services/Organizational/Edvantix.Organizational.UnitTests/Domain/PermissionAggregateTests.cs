@@ -2,40 +2,17 @@ namespace Edvantix.Organizational.UnitTests.Domain;
 
 public sealed class PermissionAggregateTests
 {
-    // ─── Constructor – valid data ──────────────────────────────────────────────
+    // ─── Constructor ───────────────────────────────────────────────────────────
 
     [Test]
-    public void GivenValidData_WhenCreatingPermission_ThenShouldInitializeAllPropertiesCorrectly()
+    public void GivenValidData_WhenCreatingPermission_ThenShouldInitializePropertiesCorrectly()
     {
-        var permission = new Permission(
-            "organizational",
-            "Organization",
-            "Организация",
-            "View",
-            "Просмотр"
-        );
+        var permission = new Permission("Organization", "View", "Просмотр");
 
-        permission.ServiceCode.ShouldBe("organizational");
         permission.FeatureCode.ShouldBe("Organization");
-        permission.FeatureName.ShouldBe("Организация");
         permission.Code.ShouldBe("View");
         permission.Name.ShouldBe("Просмотр");
-    }
-
-    // ─── Constructor – Guard validations ──────────────────────────────────────
-
-    [Test]
-    [Arguments(null)]
-    [Arguments("")]
-    [Arguments("   ")]
-    public void GivenNullOrWhiteSpaceServiceCode_WhenCreatingPermission_ThenShouldThrowArgumentException(
-        string? serviceCode
-    )
-    {
-        var act = () =>
-            new Permission(serviceCode!, "Organization", "Организация", "View", "Просмотр");
-
-        act.ShouldThrow<ArgumentException>();
+        permission.FullCode.ShouldBe("Organization.View");
     }
 
     [Test]
@@ -46,22 +23,7 @@ public sealed class PermissionAggregateTests
         string? featureCode
     )
     {
-        var act = () =>
-            new Permission("organizational", featureCode!, "Организация", "View", "Просмотр");
-
-        act.ShouldThrow<ArgumentException>();
-    }
-
-    [Test]
-    [Arguments(null)]
-    [Arguments("")]
-    [Arguments("   ")]
-    public void GivenNullOrWhiteSpaceFeatureName_WhenCreatingPermission_ThenShouldThrowArgumentException(
-        string? featureName
-    )
-    {
-        var act = () =>
-            new Permission("organizational", "Organization", featureName!, "View", "Просмотр");
+        var act = () => new Permission(featureCode!, "View", "Просмотр");
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -74,8 +36,7 @@ public sealed class PermissionAggregateTests
         string? code
     )
     {
-        var act = () =>
-            new Permission("organizational", "Organization", "Организация", code!, "Просмотр");
+        var act = () => new Permission("Organization", code!, "Просмотр");
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -88,28 +49,17 @@ public sealed class PermissionAggregateTests
         string? name
     )
     {
-        var act = () =>
-            new Permission("organizational", "Organization", "Организация", "View", name!);
+        var act = () => new Permission("Organization", "View", name!);
 
         act.ShouldThrow<ArgumentException>();
     }
 
-    // ─── Constructor – trim whitespace ────────────────────────────────────────
-
     [Test]
-    public void GivenDataWithLeadingAndTrailingSpaces_WhenCreatingPermission_ThenShouldTrimAllStringValues()
+    public void GivenDataWithLeadingAndTrailingSpaces_WhenCreatingPermission_ThenShouldTrimAllValues()
     {
-        var permission = new Permission(
-            "  organizational  ",
-            "  Organization  ",
-            "  Организация  ",
-            "  View  ",
-            "  Просмотр  "
-        );
+        var permission = new Permission("  Organization  ", "  View  ", "  Просмотр  ");
 
-        permission.ServiceCode.ShouldBe("organizational");
         permission.FeatureCode.ShouldBe("Organization");
-        permission.FeatureName.ShouldBe("Организация");
         permission.Code.ShouldBe("View");
         permission.Name.ShouldBe("Просмотр");
     }
@@ -117,23 +67,9 @@ public sealed class PermissionAggregateTests
     // ─── FullCode ──────────────────────────────────────────────────────────────
 
     [Test]
-    public void GivenValidPermission_WhenAccessingFullCode_ThenShouldReturnFeatureCodeDotCode()
+    public void GivenDifferentFeatureAndCode_WhenAccessingFullCode_ThenShouldCombineWithDot()
     {
-        var permission = CreateValidPermission();
-
-        permission.FullCode.ShouldBe("Organization.View");
-    }
-
-    [Test]
-    public void GivenDifferentFeatureAndCode_WhenAccessingFullCode_ThenShouldCombineCorrectly()
-    {
-        var permission = new Permission(
-            "organizational",
-            "Member",
-            "Участник",
-            "Delete",
-            "Удаление"
-        );
+        var permission = new Permission("Member", "Delete", "Удаление");
 
         permission.FullCode.ShouldBe("Member.Delete");
     }
@@ -141,52 +77,35 @@ public sealed class PermissionAggregateTests
     // ─── Update ───────────────────────────────────────────────────────────────
 
     [Test]
-    public void GivenValidData_WhenUpdating_ThenShouldUpdateFeatureNameAndName()
+    public void GivenNewName_WhenUpdating_ThenShouldUpdateName()
     {
         var permission = CreateValidPermission();
 
-        permission.Update("Новая область", "Новое название");
+        permission.Update("Новое название");
 
-        permission.FeatureName.ShouldBe("Новая область");
         permission.Name.ShouldBe("Новое название");
     }
 
     [Test]
-    public void GivenUpdateWithSpaces_WhenUpdating_ThenShouldTrimValues()
+    public void GivenUpdateWithSpaces_WhenUpdating_ThenShouldTrimName()
     {
         var permission = CreateValidPermission();
 
-        permission.Update("  Область  ", "  Название  ");
+        permission.Update("  Название  ");
 
-        permission.FeatureName.ShouldBe("Область");
         permission.Name.ShouldBe("Название");
     }
 
     [Test]
-    public void GivenUpdateDoesNotChangeCodeOrServiceCode_WhenUpdating_ThenShouldPreserveOtherProperties()
+    public void GivenUpdate_WhenUpdating_ThenShouldPreserveOtherProperties()
     {
         var permission = CreateValidPermission();
 
-        permission.Update("Другая область", "Другое название");
+        permission.Update("Другое название");
 
-        permission.ServiceCode.ShouldBe("organizational");
         permission.FeatureCode.ShouldBe("Organization");
         permission.Code.ShouldBe("View");
-    }
-
-    [Test]
-    [Arguments(null)]
-    [Arguments("")]
-    [Arguments("   ")]
-    public void GivenNullOrWhiteSpaceFeatureName_WhenUpdating_ThenShouldThrowArgumentException(
-        string? featureName
-    )
-    {
-        var permission = CreateValidPermission();
-
-        var act = () => permission.Update(featureName!, "Название");
-
-        act.ShouldThrow<ArgumentException>();
+        permission.FullCode.ShouldBe("Organization.View");
     }
 
     [Test]
@@ -199,7 +118,7 @@ public sealed class PermissionAggregateTests
     {
         var permission = CreateValidPermission();
 
-        var act = () => permission.Update("Область", name!);
+        var act = () => permission.Update(name!);
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -209,18 +128,14 @@ public sealed class PermissionAggregateTests
     [Test]
     public void GivenDefaultConstructor_WhenCreatingPermission_ThenShouldInitializeWithEmptyStrings()
     {
-        // Parameterless constructor is required by EF Core; access it via Activator since it's public
         var permission = Activator.CreateInstance<Permission>();
 
-        permission.ServiceCode.ShouldBe(string.Empty);
         permission.FeatureCode.ShouldBe(string.Empty);
-        permission.FeatureName.ShouldBe(string.Empty);
         permission.Code.ShouldBe(string.Empty);
         permission.Name.ShouldBe(string.Empty);
     }
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
-    private static Permission CreateValidPermission() =>
-        new("organizational", "Organization", "Организация", "View", "Просмотр");
+    private static Permission CreateValidPermission() => new("Organization", "View", "Просмотр");
 }

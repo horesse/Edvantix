@@ -7,7 +7,9 @@ public sealed class CreateRoleValidatorTests
     [Test]
     public void GivenValidCommand_WhenValidating_ThenShouldNotHaveAnyErrors()
     {
-        var result = _validator.TestValidate(new CreateRoleCommand("manager", "Менеджер"));
+        var result = _validator.TestValidate(
+            new CreateRoleCommand("Менеджер", "Управление проектами")
+        );
 
         result.ShouldNotHaveAnyValidationErrors();
     }
@@ -15,7 +17,7 @@ public sealed class CreateRoleValidatorTests
     [Test]
     public void GivenValidCommandWithNullDescription_WhenValidating_ThenShouldNotHaveAnyErrors()
     {
-        var result = _validator.TestValidate(new CreateRoleCommand("viewer", null));
+        var result = _validator.TestValidate(new CreateRoleCommand("Читатель", null));
 
         result.ShouldNotHaveAnyValidationErrors();
     }
@@ -24,10 +26,10 @@ public sealed class CreateRoleValidatorTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenEmptyCode_WhenValidating_ThenShouldHaveError(string? code)
+    public void GivenEmptyName_WhenValidating_ThenShouldHaveError(string? name)
     {
-        var result = _validator.TestValidate(new CreateRoleCommand(code!, null));
+        var result = _validator.TestValidate(new CreateRoleCommand(name!, null));
 
-        result.ShouldHaveValidationErrorFor(x => x.Code);
+        result.ShouldHaveValidationErrorFor(x => x.Name);
     }
 }

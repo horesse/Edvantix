@@ -5,17 +5,27 @@ using Edvantix.SharedKernel.SeedWork;
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 
 /// <summary>
-/// Кастомная роль участника организации, управляемая набором разрешений (<see cref="Permission"/>).
-/// Организация создаёт собственные роли с произвольными кодами и назначает им нужные разрешения.
+/// Роль участника организации с набором разрешений (<see cref="Permission"/>).
+/// Организация создаёт роли с отображаемыми именами и назначает им нужные разрешения.
+/// Системные роли создаются автоматически при создании организации.
+/// Роль «Владелец» дополнительно помечается флагом <see cref="IsOwner"/> и не может быть изменена.
 /// </summary>
 public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDelete, ITenanted
 {
     private readonly List<Permission> _permissions = [];
 
     /// <param name="organizationId">Идентификатор организации-владельца роли.</param>
-    /// <param name="code">Уникальный код роли в рамках организации.</param>
-    /// <param name="description">Описание роли и её полномочий.</param>
-    public OrganizationMemberRole(Guid organizationId, string code, string? description = null)
+    /// <param name="name">Отображаемое название роли (например, «Преподаватель»).</param>
+    /// <param name="description">Краткое описание: кому назначается эта роль.</param>
+    /// <param name="isSystem">Признак системной роли (создана платформой, не удаляется).</param>
+    /// <param name="isOwner">Признак роли владельца организации (полный доступ, не редактируется).</param>
+    public OrganizationMemberRole(
+        Guid organizationId,
+        string name,
+        string? description = null,
+        bool isSystem = false,
+        bool isOwner = false
+    )
         : this()
     {
         Id = Guid.CreateVersion7();
@@ -25,22 +35,33 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
                 nameof(organizationId)
             );
 
-        Guard.Against.NullOrWhiteSpace(code, nameof(code));
+        Guard.Against.NullOrWhiteSpace(name, nameof(name));
 
         OrganizationId = organizationId;
-        Code = code.Trim();
+        Name = name.Trim();
         Description = description?.Trim();
+        IsSystem = isSystem;
+        IsOwner = isOwner;
         IsDeleted = false;
     }
 
     /// <inheritdoc />
     public Guid OrganizationId { get; private set; }
 
-    /// <summary>Уникальный код роли в рамках организации.</summary>
-    public string Code { get; private set; } = string.Empty;
+    /// <summary>Отображаемое название роли (например, «Преподаватель»).</summary>
+    public string Name { get; private set; } = string.Empty;
 
-    /// <summary>Описание роли и её полномочий.</summary>
+    /// <summary>Краткое описание: кому назначается эта роль.</summary>
     public string? Description { get; private set; }
+
+    /// <summary>Признак системной роли (создана платформой, не удаляется).</summary>
+    public bool IsSystem { get; private init; }
+
+    /// <summary>
+    /// Признак роли владельца организации.
+    /// Владелец имеет полный доступ ко всем разделам; роль не может быть изменена или удалена.
+    /// </summary>
+    public bool IsOwner { get; private init; }
 
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
@@ -48,11 +69,11 @@ public sealed class OrganizationMemberRole() : Entity, IAggregateRoot, ISoftDele
     /// <summary>Разрешения, связанные с ролью.</summary>
     public IReadOnlyList<Permission> Permissions => _permissions;
 
-    /// <summary>Обновляет код и описание роли.</summary>
-    public void Update(string code, string? description)
+    /// <summary>Обновляет название и описание роли.</summary>
+    public void Update(string name, string? description)
     {
-        Guard.Against.NullOrWhiteSpace(code, nameof(code));
-        Code = code.Trim();
+        Guard.Against.NullOrWhiteSpace(name, nameof(name));
+        Name = name.Trim();
         Description = description?.Trim();
     }
 

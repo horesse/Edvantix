@@ -4,6 +4,8 @@ public sealed class GetRolesQueryHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IOrganizationMemberRoleRepository> _repoMock = new();
+    private readonly Mock<IPermissionRepository> _permissionRepoMock = new();
+    private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
     private readonly Mock<IMapper<OrganizationMemberRole, RoleDto>> _mapperMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetRolesQueryHandler _handler;
@@ -11,7 +13,22 @@ public sealed class GetRolesQueryHandlerTests
     public GetRolesQueryHandlerTests()
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
-        _handler = new(_tenantMock.Object, _repoMock.Object, _mapperMock.Object);
+        _permissionRepoMock.Setup(r => r.CountAsync(It.IsAny<CancellationToken>())).ReturnsAsync(0);
+        _memberRepoMock
+            .Setup(r =>
+                r.GetMemberCountsByRolesAsync(
+                    It.IsAny<IReadOnlyCollection<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, int>());
+        _handler = new(
+            _tenantMock.Object,
+            _repoMock.Object,
+            _permissionRepoMock.Object,
+            _memberRepoMock.Object,
+            _mapperMock.Object
+        );
     }
 
     [Test]
@@ -129,8 +146,51 @@ public sealed class GetRolesQueryHandlerTests
         result.PageSize.ShouldBe(100);
     }
 
-    private static OrganizationMemberRole CreateRole(Guid orgId) =>
-        new(orgId, "manager", "Менеджер");
+    [Test]
+    public async Task GivenRolesAndPermissions_WhenHandling_ThenShouldEnrichTotalPermissionsCount()
+    {
+        var role = CreateRole(_organizationId);
+        var dto = CreateDto(role.Id, _organizationId);
+        var query = new GetRolesQuery();
 
-    private static RoleDto CreateDto(Guid id, Guid orgId) => new(id, orgId, "manager", "Менеджер");
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync([role]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationMemberRole>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(1);
+        _permissionRepoMock
+            .Setup(r => r.CountAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(42);
+        _memberRepoMock
+            .Setup(r =>
+                r.GetMemberCountsByRolesAsync(
+                    It.IsAny<IReadOnlyCollection<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, int> { [role.Id] = 5 });
+        _mapperMock.Setup(m => m.Map(role)).Returns(dto);
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result[0].TotalPermissionsCount.ShouldBe(42);
+        result[0].MembersCount.ShouldBe(5);
+    }
+
+    private static OrganizationMemberRole CreateRole(Guid orgId) =>
+        new(orgId, "Менеджер", "Управление проектами");
+
+    private static RoleDto CreateDto(Guid id, Guid orgId) =>
+        new(id, orgId, "Менеджер", "Управление проектами", false, false, 0);
 }

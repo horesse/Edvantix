@@ -4,8 +4,8 @@ public sealed class RoleDtoMapperTests
 {
     private static readonly Guid ValidOrgId = Guid.CreateVersion7();
 
-    private static OrganizationMemberRole CreateRole(string code = "manager") =>
-        new(ValidOrgId, code, "Описание");
+    private static OrganizationMemberRole CreateRole(string name = "Менеджер") =>
+        new(ValidOrgId, name, "Описание");
 
     [Test]
     public void GivenRole_WhenMappingToRoleDto_ThenShouldMapAllFields()
@@ -17,14 +17,34 @@ public sealed class RoleDtoMapperTests
 
         result.Id.ShouldBe(role.Id);
         result.OrganizationId.ShouldBe(role.OrganizationId);
-        result.Code.ShouldBe(role.Code);
+        result.Name.ShouldBe(role.Name);
         result.Description.ShouldBe(role.Description);
+        result.IsSystem.ShouldBeFalse();
+        result.IsOwner.ShouldBeFalse();
+        result.PermissionsCount.ShouldBe(0);
+    }
+
+    [Test]
+    public void GivenSystemOwnerRole_WhenMappingToRoleDto_ThenFlagsShouldBeSet()
+    {
+        var role = new OrganizationMemberRole(
+            ValidOrgId,
+            "Владелец",
+            isSystem: true,
+            isOwner: true
+        );
+        var mapper = new RoleDtoMapper();
+
+        var result = mapper.Map(role);
+
+        result.IsSystem.ShouldBeTrue();
+        result.IsOwner.ShouldBeTrue();
     }
 
     [Test]
     public void GivenRoleWithNullDescription_WhenMappingToRoleDto_ThenDescriptionShouldBeNull()
     {
-        var role = new OrganizationMemberRole(ValidOrgId, "admin");
+        var role = new OrganizationMemberRole(ValidOrgId, "Администратор");
         var mapper = new RoleDtoMapper();
 
         var result = mapper.Map(role);
@@ -33,40 +53,36 @@ public sealed class RoleDtoMapperTests
     }
 
     [Test]
-    public void GivenRole_WhenMappingToRoleDetailDto_ThenShouldMapPermissions()
+    public void GivenRole_WhenMappingToRoleDetailDto_ThenShouldMapAllFields()
     {
         var role = CreateRole();
-        var permission = new Permission(
-            "organizational",
-            "Organization",
-            "Организация",
-            "View",
-            "Просмотр организации"
-        )
-        {
-            Id = Guid.CreateVersion7(),
-        };
-        role.AddPermission(permission);
         var mapper = new RoleDetailDtoMapper();
 
         var result = mapper.Map(role);
 
-        result.Permissions.ShouldHaveSingleItem();
-        result.Permissions[0].Id.ShouldBe(permission.Id);
-        result.Permissions[0].Feature.Code.ShouldBe("Organization");
-        result.Permissions[0].Feature.Name.ShouldBe("Организация");
-        result.Permissions[0].Code.ShouldBe("View");
-        result.Permissions[0].Name.ShouldBe("Просмотр организации");
+        result.Id.ShouldBe(role.Id);
+        result.OrganizationId.ShouldBe(role.OrganizationId);
+        result.Name.ShouldBe(role.Name);
+        result.Description.ShouldBe(role.Description);
+        result.IsSystem.ShouldBeFalse();
+        result.IsOwner.ShouldBeFalse();
+        result.Features.ShouldBeEmpty();
     }
 
     [Test]
-    public void GivenRoleWithoutPermissions_WhenMappingToRoleDetailDto_ThenPermissionsShouldBeEmpty()
+    public void GivenSystemOwnerRole_WhenMappingToRoleDetailDto_ThenFlagsShouldBeSet()
     {
-        var role = CreateRole();
+        var role = new OrganizationMemberRole(
+            ValidOrgId,
+            "Владелец",
+            isSystem: true,
+            isOwner: true
+        );
         var mapper = new RoleDetailDtoMapper();
 
         var result = mapper.Map(role);
 
-        result.Permissions.ShouldBeEmpty();
+        result.IsSystem.ShouldBeTrue();
+        result.IsOwner.ShouldBeTrue();
     }
 }

@@ -4,16 +4,15 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 
 /// <summary>
-/// Фабрика для создания стандартного набора ролей организации на основе матрицы прав.
-/// Создаёт 5 ролей уровня организации и назначает каждой соответствующие разрешения
-/// из переданного списка.
+/// Фабрика стандартного набора ролей организации.
+/// Создаёт 7 ролей согласно матрице прав платформы и назначает каждой доступные разрешения
+/// из переданного списка. Недоступные разрешения (ещё не зарегистрированные) пропускаются.
 /// </summary>
 public static class OrganizationDefaultRolesFactory
 {
     /// <summary>
     /// Создаёт стандартный набор ролей для организации.
-    /// Разрешения подбираются из <paramref name="availablePermissions"/> по полному коду (<c>Permission.FullCode</c>).
-    /// Отсутствующие разрешения пропускаются без ошибки.
+    /// Первая роль в возвращаемом списке — всегда «Владелец» (<see cref="OrganizationMemberRole.IsOwner"/> = <see langword="true"/>).
     /// </summary>
     /// <param name="organizationId">Идентификатор организации.</param>
     /// <param name="availablePermissions">Все доступные разрешения из базы данных.</param>
@@ -38,50 +37,137 @@ public static class OrganizationDefaultRolesFactory
         Permission[] Resolve(params string[] fullCodes) =>
             fullCodes.Select(c => byFullCode.GetValueOrDefault(c)).OfType<Permission>().ToArray();
 
-        // --- Роли уровня организации (матрица прав 5.1) ---
+        // Владелец: полный доступ ко всем разделам, включая биллинг и удаление.
+        // Роль защищена от изменений (IsOwner = true).
+        var owner = new OrganizationMemberRole(
+            organizationId,
+            "Владелец",
+            "Полный доступ ко всем разделам, включая удаление организации",
+            isSystem: true,
+            isOwner: true
+        );
+        owner.AssignPermissions(Resolve(AllOrgPermissions.Concat(AllGroupPermissions).ToArray()));
 
-        var owner = new OrganizationMemberRole(organizationId, "owner", "Владелец");
-        owner.AssignPermissions(
-            Resolve(
+        // Директор: управление всеми разделами, кроме биллинга и удаления организации.
+        var director = new OrganizationMemberRole(
+            organizationId,
+            "Директор",
+            "Управление всеми разделами, кроме биллинга и удаления",
+            isSystem: true
+        );
+        director.AssignPermissions(
+            Resolve([
                 OrganizationPermissions.View,
                 OrganizationPermissions.Edit,
-                OrganizationPermissions.Delete,
                 OrganizationPermissions.Members,
                 OrganizationPermissions.Roles,
                 OrganizationPermissions.Groups,
                 OrganizationPermissions.Analytics,
-                OrganizationPermissions.Subscription
+                .. AllGroupPermissions,
+            ])
+        );
+
+        // Преподаватель: ведение занятий и просмотр учебных материалов своих групп.
+        var teacher = new OrganizationMemberRole(
+            organizationId,
+            "Преподаватель",
+            "Ведение занятий и журнала своих групп",
+            isSystem: true
+        );
+        teacher.AssignPermissions(
+            Resolve(
+                OrganizationPermissions.View,
+                GroupPermissions.View,
+                GroupPermissions.Content,
+                GroupPermissions.Schedule
             )
         );
 
-        var admin = new OrganizationMemberRole(organizationId, "admin", "Администратор");
+        // Администратор: операционное управление участниками, ролями и группами.
+        var admin = new OrganizationMemberRole(
+            organizationId,
+            "Администратор",
+            "Операционное управление: участники, роли, группы"
+        );
         admin.AssignPermissions(
-            Resolve(
+            Resolve([
                 OrganizationPermissions.View,
                 OrganizationPermissions.Edit,
                 OrganizationPermissions.Members,
                 OrganizationPermissions.Roles,
                 OrganizationPermissions.Groups,
-                OrganizationPermissions.Analytics
+                OrganizationPermissions.Analytics,
+                .. AllGroupPermissions,
+            ])
+        );
+
+        // Методист: курсы, программы и учебные группы.
+        var methodist = new OrganizationMemberRole(
+            organizationId,
+            "Методист",
+            "Курсы, программы и учебные материалы"
+        );
+        methodist.AssignPermissions(
+            Resolve(
+                OrganizationPermissions.View,
+                OrganizationPermissions.Groups,
+                GroupPermissions.Create,
+                GroupPermissions.View,
+                GroupPermissions.Edit,
+                GroupPermissions.Members,
+                GroupPermissions.Content,
+                GroupPermissions.Schedule
             )
         );
 
-        var manager = new OrganizationMemberRole(organizationId, "manager", "Менеджер");
-        manager.AssignPermissions(
+        // Куратор групп: сопровождение студентов, управление участниками групп.
+        var curator = new OrganizationMemberRole(
+            organizationId,
+            "Куратор групп",
+            "Сопровождение студентов и коммуникация с участниками"
+        );
+        curator.AssignPermissions(
             Resolve(
                 OrganizationPermissions.View,
                 OrganizationPermissions.Members,
-                OrganizationPermissions.Groups,
-                OrganizationPermissions.Analytics
+                GroupPermissions.View,
+                GroupPermissions.Members
             )
         );
 
-        var teacher = new OrganizationMemberRole(organizationId, "teacher", "Преподаватель");
-        teacher.AssignPermissions(Resolve(OrganizationPermissions.View));
+        // Бухгалтер: финансы, аналитика, выгрузки.
+        var accountant = new OrganizationMemberRole(
+            organizationId,
+            "Бухгалтер",
+            "Финансы, договоры, выгрузки"
+        );
+        accountant.AssignPermissions(
+            Resolve(OrganizationPermissions.View, OrganizationPermissions.Analytics)
+        );
 
-        var student = new OrganizationMemberRole(organizationId, "student", "Студент");
-        student.AssignPermissions(Resolve(OrganizationPermissions.View));
-
-        return [owner, admin, manager, teacher, student];
+        return [owner, director, teacher, admin, methodist, curator, accountant];
     }
+
+    private static readonly string[] AllOrgPermissions =
+    [
+        OrganizationPermissions.View,
+        OrganizationPermissions.Edit,
+        OrganizationPermissions.Delete,
+        OrganizationPermissions.Members,
+        OrganizationPermissions.Roles,
+        OrganizationPermissions.Groups,
+        OrganizationPermissions.Analytics,
+        OrganizationPermissions.Subscription,
+    ];
+
+    private static readonly string[] AllGroupPermissions =
+    [
+        GroupPermissions.Create,
+        GroupPermissions.View,
+        GroupPermissions.Edit,
+        GroupPermissions.Delete,
+        GroupPermissions.Members,
+        GroupPermissions.Content,
+        GroupPermissions.Schedule,
+    ];
 }

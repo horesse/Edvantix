@@ -3,6 +3,7 @@ using System;
 using Edvantix.Organizational.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Organizational.Infrastructure.Migrations
 {
     [DbContext(typeof(OrganizationalDbContext))]
-    partial class OrganizationalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260503075909_Add_IsOwner_to_Role")]
+    partial class Add_IsOwner_to_Role
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -450,41 +453,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                     b.ToTable("organization_member_role_permission", (string)null);
                 });
 
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Feature", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("ServiceCode")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("service_code");
-
-                    b.HasKey("Id")
-                        .HasName("pk_features");
-
-                    b.HasAlternateKey("Code")
-                        .HasName("ak_features_code");
-
-                    b.ToTable("features", (string)null);
-                });
-
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Permission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -495,28 +463,40 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasColumnName("code");
 
                     b.Property<string>("FeatureCode")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasColumnName("feature_code");
+
+                    b.Property<string>("FeatureName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("feature_name");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
                         .HasColumnName("name");
+
+                    b.Property<string>("ServiceCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("service_code");
 
                     b.HasKey("Id")
                         .HasName("pk_permissions");
 
-                    b.HasIndex("FeatureCode", "Code")
+                    b.HasIndex("ServiceCode", "FeatureCode", "Code")
                         .IsUnique()
-                        .HasDatabaseName("ix_permissions_feature_code_code");
+                        .HasDatabaseName("ix_permissions_service_code_feature_code_code");
 
                     b.ToTable("permissions", (string)null);
                 });
@@ -662,19 +642,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_organization_member_role_permission_permissions_permission_");
-                });
-
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Permission", b =>
-                {
-                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Feature", "Feature")
-                        .WithMany()
-                        .HasForeignKey("FeatureCode")
-                        .HasPrincipalKey("Code")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_permissions_features_feature_code");
-
-                    b.Navigation("Feature");
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.Group", b =>

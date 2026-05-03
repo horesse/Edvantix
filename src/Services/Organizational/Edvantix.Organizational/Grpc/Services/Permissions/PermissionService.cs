@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.RateLimiting;
 
 namespace Edvantix.Organizational.Grpc.Services.Permissions;
 
-internal sealed class PermissionService(IPermissionRepository permissionRepository)
-    : PermissionGrpcService.PermissionGrpcServiceBase
+internal sealed class PermissionService(
+    IPermissionRepository permissionRepository,
+    IFeatureRepository featureRepository
+) : PermissionGrpcService.PermissionGrpcServiceBase
 {
     [Authorize]
     [EnableRateLimiting("PerUserRateLimit")]
@@ -19,7 +21,8 @@ internal sealed class PermissionService(IPermissionRepository permissionReposito
     }
 
     /// <summary>
-    /// Синхронизирует разрешения для конкретной функциональной области сервиса.
+    /// Синхронизирует функциональную область и её разрешения.
+    /// Апсертит Feature, затем апсертит/удаляет Permission.
     /// Идемпотентен: безопасно вызывать при каждом старте сервиса.
     /// </summary>
     public override async Task<SyncFeaturePermissionsResponse> SyncFeaturePermissions(
@@ -31,10 +34,40 @@ internal sealed class PermissionService(IPermissionRepository permissionReposito
         Guard.Against.NullOrWhiteSpace(request.FeatureCode, nameof(request.FeatureCode));
         Guard.Against.NullOrWhiteSpace(request.FeatureName, nameof(request.FeatureName));
 
-        var all = await permissionRepository.GetAllAsync(context.CancellationToken);
+        await UpsertFeatureAsync(request, context.CancellationToken);
+        var (added, removed) = await SyncPermissionsAsync(request, context.CancellationToken);
+
+        await permissionRepository.UnitOfWork.SaveChangesAsync(context.CancellationToken);
+
+        return new SyncFeaturePermissionsResponse { Added = added, Removed = removed };
+    }
+
+    private async Task UpsertFeatureAsync(
+        SyncFeaturePermissionsRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var feature = await featureRepository.GetByCodeAsync(
+            request.FeatureCode,
+            cancellationToken
+        );
+
+        if (feature is null)
+            featureRepository.Add(
+                new Feature(request.ServiceCode, request.FeatureCode, request.FeatureName)
+            );
+        else if (feature.Name != request.FeatureName)
+            feature.Update(request.FeatureName);
+    }
+
+    private async Task<(int Added, int Removed)> SyncPermissionsAsync(
+        SyncFeaturePermissionsRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var all = await permissionRepository.GetAllAsync(cancellationToken);
         var existing = all.Where(p =>
-                p.ServiceCode.Equals(request.ServiceCode, StringComparison.OrdinalIgnoreCase)
-                && p.FeatureCode.Equals(request.FeatureCode, StringComparison.OrdinalIgnoreCase)
+                p.FeatureCode.Equals(request.FeatureCode, StringComparison.OrdinalIgnoreCase)
             )
             .ToList();
 
@@ -54,26 +87,16 @@ internal sealed class PermissionService(IPermissionRepository permissionReposito
         {
             var code = entry.Code.Trim();
             if (existingByCode.TryGetValue(code, out var perm))
-            {
-                perm.Update(request.FeatureName, entry.Name.Trim());
-            }
+                perm.Update(entry.Name.Trim());
             else
             {
                 permissionRepository.Add(
-                    new Permission(
-                        request.ServiceCode,
-                        request.FeatureCode,
-                        request.FeatureName,
-                        code,
-                        entry.Name.Trim()
-                    )
+                    new Permission(request.FeatureCode, code, entry.Name.Trim())
                 );
                 added++;
             }
         }
 
-        await permissionRepository.UnitOfWork.SaveChangesAsync(context.CancellationToken);
-
-        return new SyncFeaturePermissionsResponse { Added = added, Removed = toRemove.Count };
+        return (added, toRemove.Count);
     }
 }

@@ -11,10 +11,11 @@ internal sealed class OrganizationMemberRoleConfiguration
     {
         builder.ConfigureSoftDeletable();
 
-        builder.Property(r => r.Code).IsRequired().HasMaxLength(DataSchemaLength.Medium);
+        builder.Property(r => r.Name).IsRequired().HasMaxLength(DataSchemaLength.Medium);
         builder.Property(r => r.Description).HasMaxLength(DataSchemaLength.Large);
+        builder.Property(r => r.IsOwner);
 
-        builder.HasIndex(r => new { r.OrganizationId, r.Code }).IsUnique();
+        builder.HasIndex(r => new { r.OrganizationId, r.Name }).IsUnique();
 
         builder
             .HasMany(r => r.Permissions)

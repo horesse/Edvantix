@@ -18,10 +18,9 @@ internal sealed class OrganizationMemberRoleRepository(OrganizationalDbContext c
         Guid id,
         CancellationToken cancellationToken = default
     ) =>
-        await context.OrganizationMemberRoles.FirstOrDefaultAsync(
-            r => r.Id == id && !r.IsDeleted,
-            cancellationToken
-        );
+        await context
+            .OrganizationMemberRoles.AsTracking()
+            .FirstOrDefaultAsync(r => r.Id == id && !r.IsDeleted, cancellationToken);
 
     public async Task<OrganizationMemberRole?> GetByIdWithPermissionsAsync(
         Guid id,

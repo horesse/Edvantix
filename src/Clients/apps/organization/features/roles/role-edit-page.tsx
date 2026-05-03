@@ -173,27 +173,25 @@ export function RoleEditPage({ roleId }: Readonly<RoleEditPageProps>) {
     : { bg: "#f1f5f9", fg: "#475569" };
   const readonly = !canManage || role?.isOwner;
 
+  const header = isLoading ? (
+    <RoleEditHeaderSkeleton />
+  ) : role ? (
+    <RoleEditHeader
+      role={role}
+      name={name}
+      totalGranted={totalGranted}
+      totalPerms={allPermIds.length}
+      pct={pct}
+      colors={colors}
+      canManage={canManage ?? false}
+      onBack={() => router.push("/organization/roles")}
+      onDeleteOpen={() => setDeleteOpen(true)}
+    />
+  ) : null;
+
   return (
     <>
-      <PageLayout
-        header={
-          isLoading ? (
-            <RoleEditHeaderSkeleton />
-          ) : role ? (
-            <RoleEditHeader
-              role={role}
-              name={name}
-              totalGranted={totalGranted}
-              totalPerms={allPermIds.length}
-              pct={pct}
-              colors={colors}
-              canManage={canManage ?? false}
-              onBack={() => router.push("/organization/roles")}
-              onDeleteOpen={() => setDeleteOpen(true)}
-            />
-          ) : null
-        }
-      >
+      <PageLayout header={header}>
         {isLoading && (
           <div className="space-y-5">
             <Skeleton className="h-36 w-full rounded-2xl" />
@@ -230,7 +228,7 @@ export function RoleEditPage({ roleId }: Readonly<RoleEditPageProps>) {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="role-desc">
-                    Описание
+                    Описание{" "}
                     <span className="text-muted-foreground ml-1 text-xs">
                       — кому назначается эта роль
                     </span>

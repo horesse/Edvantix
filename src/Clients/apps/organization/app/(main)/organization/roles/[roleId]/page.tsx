@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-  params: Promise<{ roleId: string }>;
+  readonly params: Promise<{ readonly roleId: string }>;
 }
 
 export default async function Page({ params }: Props) {

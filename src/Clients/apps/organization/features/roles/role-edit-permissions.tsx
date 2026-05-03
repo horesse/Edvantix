@@ -165,19 +165,22 @@ function FeatureToggle({
   someOn,
   disabled,
   onChange,
-}: {
+}: Readonly<{
   allOn: boolean;
   someOn: boolean;
   disabled: boolean;
   onChange: () => void;
-}) {
-  const bg = disabled
-    ? "#e2e8f0"
-    : allOn
-      ? "#4f46e5"
-      : someOn
-        ? "#818cf8"
-        : "#cbd5e1";
+}>) {
+  let bg: string;
+  if (disabled) {
+    bg = "#e2e8f0";
+  } else if (allOn) {
+    bg = "#4f46e5";
+  } else if (someOn) {
+    bg = "#818cf8";
+  } else {
+    bg = "#cbd5e1";
+  }
 
   return (
     <button
@@ -210,14 +213,23 @@ function PermCheckbox({
   checked,
   disabled,
   onChange,
-}: {
+}: Readonly<{
   checked: boolean;
   disabled: boolean;
   onChange: () => void;
-}) {
+}>) {
   return (
     <span
+      role="checkbox"
+      aria-checked={checked}
+      tabIndex={disabled ? -1 : 0}
       onClick={disabled ? undefined : onChange}
+      onKeyDown={(e) => {
+        if (!disabled && (e.key === " " || e.key === "Enter")) {
+          e.preventDefault();
+          onChange();
+        }
+      }}
       className="inline-flex shrink-0 items-center justify-center rounded transition-colors"
       style={{
         width: 18,

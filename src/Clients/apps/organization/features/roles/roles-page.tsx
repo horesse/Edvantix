@@ -69,8 +69,11 @@ export function RolesPage() {
       {/* List */}
       <div className="flex flex-col gap-3">
         {isLoading
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-20 w-full rounded-2xl" />
+          ? Array.from({ length: 4 }, (_, i) => (
+              <Skeleton
+                key={`skeleton-${i}`}
+                className="h-20 w-full rounded-2xl"
+              />
             ))
           : roles.map((role) => (
               <RoleCard key={role.id} role={role} orgId={currentOrg.id} />

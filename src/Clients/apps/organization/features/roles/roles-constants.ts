@@ -59,7 +59,7 @@ const ROLE_PALETTES: ReadonlyArray<{ bg: string; fg: string }> = [
 function hashString(s: string): number {
   let hash = 0;
   for (let i = 0; i < s.length; i++) {
-    hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
+    hash = (hash * 31 + (s.codePointAt(i) ?? 0)) >>> 0;
   }
 
   return hash;
@@ -67,7 +67,12 @@ function hashString(s: string): number {
 
 /** Возвращает детерминированную цветовую пару bg/fg по имени роли. */
 export function getRoleAvatarColors(name: string): { bg: string; fg: string } {
-  return ROLE_PALETTES[hashString(name) % ROLE_PALETTES.length]!;
+  return (
+    ROLE_PALETTES[hashString(name) % ROLE_PALETTES.length] ?? {
+      bg: "#f1f5f9",
+      fg: "#475569",
+    }
+  );
 }
 
 /** Склонение слова «участник» по числу. */

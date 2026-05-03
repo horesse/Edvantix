@@ -38,7 +38,7 @@ export function SaveBar({
           <Button size="sm" onClick={onSave} disabled={saving}>
             {saving ? (
               <>
-                <span className="size-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white" />
+                <span className="size-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white" />{" "}
                 Сохранение…
               </>
             ) : (

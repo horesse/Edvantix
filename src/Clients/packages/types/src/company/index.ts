@@ -288,4 +288,5 @@ export type CreateRoleRequest = {
 export type UpdateRoleRequest = {
   readonly name: string;
   readonly description?: string | null;
+  readonly permissionIds: readonly string[];
 };

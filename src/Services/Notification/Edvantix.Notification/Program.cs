@@ -28,8 +28,6 @@ app.UseDefaultCors();
 
 app.UseKeycloakTokenIntrospection();
 
-app.UseAuthorization();
-
 var apiVersionSet = app.NewApiVersionSet()
     .HasApiVersion(ApiVersions.V1)
     .ReportApiVersions()

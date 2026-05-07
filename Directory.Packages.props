@@ -64,10 +64,9 @@
     <PackageVersion Include="Grpc.Tools" Version="$(GrpcVersion)" PrivateAssets="All" />
     <PackageVersion Include="Grpc.Core.Api" Version="$(GrpcVersion)" />
     <!-- WolverineFx -->
-    <PackageVersion Include="WolverineFx" Version="$(WolverineVersion)" />
     <PackageVersion Include="WolverineFx.Kafka" Version="$(WolverineVersion)" />
-    <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="5.36.2" />
-    <PackageVersion Include="WolverineFx.Postgresql" Version="5.36.2" />
+    <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="$(WolverineVersion)" />
+    <PackageVersion Include="WolverineFx.Postgresql" Version="$(WolverineVersion)" />
     <!-- Quartz -->
     <PackageVersion Include="Quartz.Plugins" Version="$(QuartzVersion)" />
     <PackageVersion Include="Quartz.Dashboard" Version="$(QuartzVersion)" />
@@ -80,7 +79,6 @@
     <PackageVersion Include="Mjml.Net" Version="4.11.0" />
     <PackageVersion Include="SendGrid" Version="9.29.3" />
     <!-- Other Integrations -->
-    <PackageVersion Include="CloudNative.CloudEvents.SystemTextJson" Version="2.8.0" />
     <PackageVersion Include="ZiggyCreatures.FusionCache.Locking.Distributed.Redis" Version="2.6.0" />
   </ItemGroup>
   <ItemGroup Label="Testing">

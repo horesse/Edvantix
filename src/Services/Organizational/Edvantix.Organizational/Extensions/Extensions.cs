@@ -1,14 +1,11 @@
 ﻿using System.Text.Json;
+using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
 using Edvantix.Organizational.Grpc;
-using Edvantix.Organizational.IntegrationEvents;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
-using Wolverine.EntityFrameworkCore;
-using Wolverine.Persistence;
-using Wolverine.Postgresql;
 
 namespace Edvantix.Organizational.Extensions;
 
@@ -52,22 +49,11 @@ internal static class Extensions
 
         services.AddMapper(typeof(IOrganizationalApiMarker));
 
-        services.AddEventBus(
-            typeof(IOrganizationalApiMarker),
-            options =>
-            {
-                var connectionString = builder.Configuration.GetRequiredConnectionString(
-                    Components.Database.Organizational
-                );
-
-                options.PersistMessagesWithPostgresql(connectionString);
-                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
-
-                options.Policies.AutoApplyTransactions();
-
-                options.AddEvents();
-            }
-        );
+        builder.AddEventBus(opts =>
+        {
+            opts.Discovery.IncludeAssembly(typeof(IOrganizationalApiMarker).Assembly);
+            opts.ListenToIntegrationEventsIn(typeof(IOrganizationalApiMarker).Assembly);
+        });
 
         builder.AddGrpcServices();
     }

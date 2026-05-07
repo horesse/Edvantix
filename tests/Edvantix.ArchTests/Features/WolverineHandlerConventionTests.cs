@@ -22,9 +22,9 @@ public sealed class WolverineHandlerConventionTests : ArchUnitBaseTest
             .And()
             .HaveNameEndingWith("Handler")
             .Should()
-            .BePublic()
+            .BeInternal()
             .Because(
-                "Wolverine only discovers public handler types. A non-public handler is silently skipped during startup scanning."
+                "Wolverine discovers only public handler types. Internal or non-public handlers are skipped during startup scanning."
             )
             .Check(Architecture);
     }

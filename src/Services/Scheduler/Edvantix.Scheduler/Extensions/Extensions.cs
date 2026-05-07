@@ -12,14 +12,10 @@ internal static class Extensions
         {
             var services = builder.Services;
 
-            services.AddEventBus(
-                typeof(ISchedulerApiMarker),
-                options =>
-                {
-                    options.AddEvents();
-                }
-            );
-
+            builder.AddEventBus(opts =>
+            {
+                opts.Discovery.IncludeAssembly(typeof(ISchedulerApiMarker).Assembly);
+            });
             services.AddAntiforgery();
 
             services.Configure<QuartzOptions>(options =>

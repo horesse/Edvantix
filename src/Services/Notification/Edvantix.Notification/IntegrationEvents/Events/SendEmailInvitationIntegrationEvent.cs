@@ -1,9 +1,8 @@
+using Wolverine.Attributes;
+
 namespace Edvantix.Contracts;
 
-/// <summary>
-/// Интеграционное событие для отправки email-приглашения в организацию.
-/// Публикуется Organizational-сервисом; потребляется Notification-сервисом через Wolverine.
-/// </summary>
+[MessageIdentity("Edvantix.Contracts.SendEmailInvitationIntegrationEvent")]
 public sealed record SendEmailInvitationIntegrationEvent : IntegrationEvent
 {
     /// <summary>Идентификатор приглашения — для идемпотентности.</summary>

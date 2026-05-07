@@ -1,4 +1,5 @@
 ﻿using Edvantix.Chassis.EF;
+using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Utilities.Configurations;
@@ -62,24 +63,11 @@ internal static class Extensions
             builder.AddEmailOutbox();
             builder.AddInAppSender();
 
-            services.AddEventBus(
-                typeof(INotificationApiMarker),
-                options =>
-                {
-                    var connectionString = builder.Configuration.GetRequiredConnectionString(
-                        Components.Database.Notification
-                    );
-
-                    options.PersistMessagesWithPostgresql(connectionString);
-                    options.UseEntityFrameworkCoreTransactions(
-                        TransactionMiddlewareMode.Lightweight
-                    );
-
-                    options.Policies.AutoApplyTransactions();
-
-                    options.AddEvents();
-                }
-            );
+            builder.AddEventBus(opts =>
+            {
+                opts.Discovery.IncludeAssembly(typeof(INotificationApiMarker).Assembly);
+                opts.ListenToIntegrationEventsIn(typeof(INotificationApiMarker).Assembly);
+            });
         }
     }
 }

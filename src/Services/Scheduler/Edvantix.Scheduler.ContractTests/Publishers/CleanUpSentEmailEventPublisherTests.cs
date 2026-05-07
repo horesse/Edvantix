@@ -8,8 +8,10 @@ public sealed class CleanUpSentEmailEventPublisherTests
     [Test]
     public async Task GivenCleanUpSentEmailIntegrationEvent_WhenPublished_ThenShouldMatchContract()
     {
+        // Arrange
         var @event = new CleanUpSentEmailIntegrationEvent();
 
-        await SnapshotTestHelper.Verify(@event);
+        // Assert
+        await SnapshotTestHelper.VerifyCloudEvent(@event);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Edvantix.Contracts;
+﻿using Wolverine.Attributes;
 
-/// <summary>
-/// Интеграционное событие для блокировки учётной записи Keycloak.
-/// Публикуется при блокировке профиля; потребляется Identity-сервисом.
-/// </summary>
+namespace Edvantix.Contracts;
+
+[MessageIdentity("Edvantix.Contracts.DisableKeycloakUserIntegrationEvent")]
 public sealed record DisableKeycloakUserIntegrationEvent(Guid AccountId) : IntegrationEvent;

@@ -8,29 +8,26 @@ namespace Edvantix.Scheduler.UnitTests;
 
 public sealed class CleanUpSentEmailJobTests
 {
-    private readonly Mock<IMessageBus> _busMock = new();
-    private readonly Mock<ILogger<CleanUpSentEmailJob>> _loggerMock = new();
-    private readonly CleanUpSentEmailJob _job;
-
-    public CleanUpSentEmailJobTests()
-    {
-        _job = new(_busMock.Object, _loggerMock.Object);
-    }
-
     [Test]
     public async Task GivenValidDependencies_WhenExecutingJob_ThenShouldPublishExactlyOneEvent()
     {
+        // Arrange
+        var busMock = new Mock<IMessageBus>();
+        var logger = Mock.Of<ILogger<CleanUpSentEmailJob>>();
+        var job = new CleanUpSentEmailJob(busMock.Object, logger);
         var context = Mock.Of<IJobExecutionContext>(c =>
             c.CancellationToken == CancellationToken.None
         );
 
-        await _job.Execute(context);
+        // Act
+        await job.Execute(context);
 
-        _busMock.Verify(
-            b =>
-                b.PublishAsync(
+        // Assert
+        busMock.Verify(
+            x =>
+                x.PublishAsync(
                     It.IsAny<CleanUpSentEmailIntegrationEvent>(),
-                    It.IsAny<DeliveryOptions?>()
+                    It.IsAny<DeliveryOptions>()
                 ),
             Times.Once
         );
@@ -39,23 +36,29 @@ public sealed class CleanUpSentEmailJobTests
     [Test]
     public async Task GivenMultipleExecutions_WhenExecutingJobConcurrently_ThenShouldHandleEachExecutionIndependently()
     {
+        // Arrange
+        var busMock = new Mock<IMessageBus>();
+        var logger = Mock.Of<ILogger<CleanUpSentEmailJob>>();
+        var job = new CleanUpSentEmailJob(busMock.Object, logger);
         var context = Mock.Of<IJobExecutionContext>(c =>
             c.CancellationToken == CancellationToken.None
         );
         const int numberOfExecutions = 3;
 
+        // Act
         var tasks = Enumerable
             .Range(0, numberOfExecutions)
-            .Select(_ => _job.Execute(context))
+            .Select(_ => job.Execute(context))
             .ToArray();
 
         await Task.WhenAll(tasks);
 
-        _busMock.Verify(
-            b =>
-                b.PublishAsync(
+        // Assert
+        busMock.Verify(
+            x =>
+                x.PublishAsync(
                     It.IsAny<CleanUpSentEmailIntegrationEvent>(),
-                    It.IsAny<DeliveryOptions?>()
+                    It.IsAny<DeliveryOptions>()
                 ),
             Times.Exactly(numberOfExecutions)
         );
@@ -64,21 +67,27 @@ public sealed class CleanUpSentEmailJobTests
     [Test]
     public async Task GivenPublishThrows_WhenExecutingJob_ThenShouldWrapInJobExecutionException()
     {
+        // Arrange
+        var busMock = new Mock<IMessageBus>();
+        var loggerMock = new Mock<ILogger<CleanUpSentEmailJob>>();
+        var job = new CleanUpSentEmailJob(busMock.Object, loggerMock.Object);
         var context = Mock.Of<IJobExecutionContext>(c =>
             c.CancellationToken == CancellationToken.None
         );
 
-        _busMock
+        busMock
             .Setup(x =>
                 x.PublishAsync(
                     It.IsAny<CleanUpSentEmailIntegrationEvent>(),
-                    It.IsAny<DeliveryOptions?>()
+                    It.IsAny<DeliveryOptions>()
                 )
             )
             .ThrowsAsync(new InvalidOperationException("Bus failure"));
 
-        var exception = await Should.ThrowAsync<JobExecutionException>(() => _job.Execute(context));
+        // Act
+        var exception = await Should.ThrowAsync<JobExecutionException>(() => job.Execute(context));
 
+        // Assert
         exception.InnerException.ShouldBeOfType<InvalidOperationException>();
         exception.InnerException!.Message.ShouldBe("Bus failure");
     }

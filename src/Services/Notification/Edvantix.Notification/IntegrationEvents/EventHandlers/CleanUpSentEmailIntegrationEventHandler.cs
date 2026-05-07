@@ -2,13 +2,14 @@
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-public static class CleanUpSentEmailIntegrationEventHandler
+internal sealed class CleanUpSentEmailIntegrationEventHandler(
+    ILogger<CleanUpSentEmailIntegrationEventHandler> logger,
+    GlobalLogBuffer logBuffer,
+    IOutboxRepository repository
+)
 {
-    public static async Task Handle(
+    public async Task Handle(
         CleanUpSentEmailIntegrationEvent @event,
-        ILogger logger,
-        GlobalLogBuffer logBuffer,
-        IOutboxRepository repository,
         CancellationToken cancellationToken
     )
     {

@@ -3,11 +3,12 @@ using Edvantix.Identity.Infrastructure.Keycloak;
 
 namespace Edvantix.Identity.IntegrationEvents.EventHandlers;
 
-public static class DisableKeycloakUserIntegrationEventHandler
+internal sealed class DisableKeycloakUserIntegrationEventHandler(
+    IKeycloakAdminService keycloakAdminService
+)
 {
-    public static async Task Handle(
+    public async Task Handle(
         DisableKeycloakUserIntegrationEvent @event,
-        IKeycloakAdminService keycloakAdminService,
         CancellationToken cancellationToken
     )
     {

@@ -1,12 +1,10 @@
 using System.Text.Json;
 using Edvantix.Audit.Configurations;
+using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
-using Wolverine.EntityFrameworkCore;
-using Wolverine.Persistence;
-using Wolverine.Postgresql;
 
 namespace Edvantix.Audit.Extensions;
 
@@ -48,19 +46,10 @@ internal static class Extensions
 
         services.AddMapper(typeof(IAuditApiMarker));
 
-        services.AddEventBus(
-            typeof(IAuditApiMarker),
-            options =>
-            {
-                var connectionString = builder.Configuration.GetRequiredConnectionString(
-                    Components.Database.Audit
-                );
-
-                options.PersistMessagesWithPostgresql(connectionString);
-                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
-
-                options.Policies.AutoApplyTransactions();
-            }
-        );
+        builder.AddEventBus(opts =>
+        {
+            opts.Discovery.IncludeAssembly(typeof(IAuditApiMarker).Assembly);
+            opts.ListenToIntegrationEventsIn(typeof(IAuditApiMarker).Assembly);
+        });
     }
 }

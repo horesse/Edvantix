@@ -8,9 +8,8 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
     <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
-    <PackageReference Include="CloudNative.CloudEvents.SystemTextJson" />
     <PackageReference Include="Scrutor" />
-    <PackageReference Include="WolverineFx" />
+    <PackageReference Include="WolverineFx.Postgresql" />
     <PackageReference Include="WolverineFx.Kafka" />
   </ItemGroup>
   <ItemGroup Label="Telemetry">

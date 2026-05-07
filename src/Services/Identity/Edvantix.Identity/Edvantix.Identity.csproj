@@ -14,4 +14,10 @@
   <ItemGroup>
     <Protobuf Include="Grpc\Protos\identity\v1\identity.proto" GrpcService="Server" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).ContractTests" />
+  </ItemGroup>
 </Project>

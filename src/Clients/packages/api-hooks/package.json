@@ -11,7 +11,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.100.8"
+    "@tanstack/react-query": "^5.100.9"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
@@ -20,7 +20,7 @@
     "@workspace/types": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "eslint": "^10.3.0",
-    "react": "^19.2.5"
+    "react": "^19.2.6"
   },
   "peerDependencies": {
     "@workspace/api-client": "workspace:*",

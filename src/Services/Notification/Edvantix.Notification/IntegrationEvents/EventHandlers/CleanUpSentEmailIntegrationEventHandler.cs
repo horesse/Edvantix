@@ -2,7 +2,7 @@
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-internal sealed class CleanUpSentEmailIntegrationEventHandler(
+public sealed class CleanUpSentEmailIntegrationEventHandler(
     ILogger<CleanUpSentEmailIntegrationEventHandler> logger,
     GlobalLogBuffer logBuffer,
     IOutboxRepository repository

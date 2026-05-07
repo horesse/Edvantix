@@ -3,7 +3,7 @@ using Edvantix.Identity.Infrastructure.Keycloak;
 
 namespace Edvantix.Identity.IntegrationEvents.EventHandlers;
 
-internal sealed class DisableKeycloakUserIntegrationEventHandler(
+public sealed class DisableKeycloakUserIntegrationEventHandler(
     IKeycloakAdminService keycloakAdminService
 )
 {

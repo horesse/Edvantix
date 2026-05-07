@@ -7,7 +7,7 @@ namespace Edvantix.Identity.IntegrationEvents.EventHandlers;
 /// Обрабатывает событие <see cref="LinkKeycloakProfileIntegrationEvent"/>:
 /// привязывает profileId к учётной записи Keycloak.
 /// </summary>
-internal sealed class LinkKeycloakProfileIntegrationEventHandler(
+public sealed class LinkKeycloakProfileIntegrationEventHandler(
     IKeycloakAdminService keycloakAdminService
 )
 {

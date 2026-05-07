@@ -7,7 +7,7 @@ namespace Edvantix.Identity.IntegrationEvents.EventHandlers;
 /// Обрабатывает событие <see cref="EnableKeycloakUserIntegrationEvent"/>:
 /// включает учётную запись Keycloak.
 /// </summary>
-internal sealed class EnableKeycloakUserIntegrationEventHandler(
+public sealed class EnableKeycloakUserIntegrationEventHandler(
     IKeycloakAdminService keycloakAdminService
 )
 {

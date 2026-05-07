@@ -3,7 +3,7 @@ using ISender = Edvantix.Notification.Infrastructure.Senders.ISender;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-internal sealed class SendEmailInvitationIntegrationEventHandler(
+public sealed class SendEmailInvitationIntegrationEventHandler(
     IRenderer renderer,
     ISender sender,
     IConfiguration configuration

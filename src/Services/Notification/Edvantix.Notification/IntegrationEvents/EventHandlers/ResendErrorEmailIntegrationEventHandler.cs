@@ -2,7 +2,7 @@
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-internal sealed class ResendErrorEmailIntegrationEventHandler(
+public sealed class ResendErrorEmailIntegrationEventHandler(
     ILogger<ResendErrorEmailIntegrationEventHandler> logger,
     GlobalLogBuffer logBuffer,
     IOutboxRepository repository,

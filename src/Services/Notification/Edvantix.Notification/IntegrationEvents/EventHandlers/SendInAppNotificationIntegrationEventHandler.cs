@@ -3,7 +3,7 @@ using Edvantix.Notification.Infrastructure.Senders.InApp;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-internal sealed class SendInAppNotificationIntegrationEventHandler(IInAppSender sender)
+public sealed class SendInAppNotificationIntegrationEventHandler(IInAppSender sender)
 {
     public async Task Handle(
         SendInAppNotificationIntegrationEvent @event,

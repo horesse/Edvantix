@@ -10,19 +10,18 @@ namespace Edvantix.Notification.UnitTests.Handlers;
 
 public sealed class SendEmailInvitationIntegrationEventHandlerTests
 {
-    private readonly Mock<IConfiguration> _configurationMock = new();
-    private readonly Mock<IRenderer> _rendererMock = new();
-    private readonly Mock<ISender> _senderMock = new();
-
     [Test]
     public async Task GivenInvitationEvent_WhenHandling_ThenShouldRenderInvitationTemplateAndSendEmail()
     {
+        var configurationMock = new Mock<IConfiguration>();
+        var rendererMock = new Mock<IRenderer>();
+        var senderMock = new Mock<ISender>();
         var integrationEvent = CreateEvent();
         InvitationEmailModel? renderedModel = null;
         MimeMessage? sentMessage = null;
 
-        _configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns("https://app.edvantix.test");
-        _rendererMock
+        configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns("https://app.edvantix.test");
+        rendererMock
             .Setup(x =>
                 x.RenderAsync(
                     It.IsAny<InvitationEmailModel>(),
@@ -34,18 +33,16 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
                 (model, _, _) => renderedModel = model
             )
             .ReturnsAsync("<html>Invitation body</html>");
-        _senderMock
+        senderMock
             .Setup(x => x.SendAsync(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>()))
             .Callback<MimeMessage, CancellationToken>((message, _) => sentMessage = message)
             .Returns(Task.CompletedTask);
 
-        await SendEmailInvitationIntegrationEventHandler.Handle(
-            integrationEvent,
-            _rendererMock.Object,
-            _senderMock.Object,
-            _configurationMock.Object,
-            CancellationToken.None
-        );
+        await new SendEmailInvitationIntegrationEventHandler(
+            rendererMock.Object,
+            senderMock.Object,
+            configurationMock.Object
+        ).Handle(integrationEvent, CancellationToken.None);
 
         renderedModel.ShouldNotBeNull();
         renderedModel.Email.ShouldBe(integrationEvent.Email);
@@ -61,7 +58,7 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
         sentMessage.To.Mailboxes.Single().Address.ShouldBe(integrationEvent.Email);
         sentMessage.Subject.ShouldBe("Вас пригласили в организацию — Edvantix");
         sentMessage.HtmlBody.ShouldBe("<html>Invitation body</html>");
-        _senderMock.Verify(
+        senderMock.Verify(
             x => x.SendAsync(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
@@ -70,22 +67,23 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
     [Test]
     public async Task GivenMissingFrontendBaseUrl_WhenHandling_ThenShouldFlushLogBufferAndThrow()
     {
+        var configurationMock = new Mock<IConfiguration>();
+        var rendererMock = new Mock<IRenderer>();
+        var senderMock = new Mock<ISender>();
         var integrationEvent = CreateEvent();
 
-        _configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns((string?)null);
+        configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns((string?)null);
 
         var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
-            SendEmailInvitationIntegrationEventHandler.Handle(
-                integrationEvent,
-                _rendererMock.Object,
-                _senderMock.Object,
-                _configurationMock.Object,
-                CancellationToken.None
-            )
+            new SendEmailInvitationIntegrationEventHandler(
+                rendererMock.Object,
+                senderMock.Object,
+                configurationMock.Object
+            ).Handle(integrationEvent, CancellationToken.None)
         );
 
         exception.Message.ShouldBe("Конфигурация Frontend:BaseUrl не задана.");
-        _rendererMock.Verify(
+        rendererMock.Verify(
             x =>
                 x.RenderAsync(
                     It.IsAny<InvitationEmailModel>(),
@@ -94,7 +92,7 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
                 ),
             Times.Never
         );
-        _senderMock.Verify(
+        senderMock.Verify(
             x => x.SendAsync(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>()),
             Times.Never
         );
@@ -103,11 +101,14 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
     [Test]
     public async Task GivenSenderThrows_WhenHandling_ThenShouldFlushLogBufferAndRethrow()
     {
+        var configurationMock = new Mock<IConfiguration>();
+        var rendererMock = new Mock<IRenderer>();
+        var senderMock = new Mock<ISender>();
         var integrationEvent = CreateEvent();
         var expectedException = new InvalidOperationException("SMTP unavailable");
 
-        _configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns("https://app.edvantix.test");
-        _rendererMock
+        configurationMock.Setup(x => x["Frontend:BaseUrl"]).Returns("https://app.edvantix.test");
+        rendererMock
             .Setup(x =>
                 x.RenderAsync(
                     It.IsAny<InvitationEmailModel>(),
@@ -116,18 +117,16 @@ public sealed class SendEmailInvitationIntegrationEventHandlerTests
                 )
             )
             .ReturnsAsync("<html>Invitation body</html>");
-        _senderMock
+        senderMock
             .Setup(x => x.SendAsync(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(expectedException);
 
         var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
-            SendEmailInvitationIntegrationEventHandler.Handle(
-                integrationEvent,
-                _rendererMock.Object,
-                _senderMock.Object,
-                _configurationMock.Object,
-                CancellationToken.None
-            )
+            new SendEmailInvitationIntegrationEventHandler(
+                rendererMock.Object,
+                senderMock.Object,
+                configurationMock.Object
+            ).Handle(integrationEvent, CancellationToken.None)
         );
 
         exception.ShouldBeSameAs(expectedException);

@@ -3,15 +3,10 @@ using Edvantix.Notification.Infrastructure.Senders.InApp;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-/// <summary>
-/// Обрабатывает событие <see cref="SendInAppNotificationIntegrationEvent"/>:
-/// создаёт in-app уведомление через <see cref="IInAppSender"/>.
-/// </summary>
-public static class SendInAppNotificationIntegrationEventHandler
+public sealed class SendInAppNotificationIntegrationEventHandler(IInAppSender sender)
 {
-    public static async Task Handle(
+    public async Task Handle(
         SendInAppNotificationIntegrationEvent @event,
-        IInAppSender sender,
         CancellationToken cancellationToken
     )
     {

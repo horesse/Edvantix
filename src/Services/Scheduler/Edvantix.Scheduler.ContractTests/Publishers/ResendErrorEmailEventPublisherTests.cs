@@ -8,8 +8,10 @@ public sealed class ResendErrorEmailEventPublisherTests
     [Test]
     public async Task GivenResendErrorEmailIntegrationEvent_WhenPublished_ThenShouldMatchContract()
     {
+        // Arrange
         var @event = new ResendErrorEmailIntegrationEvent();
 
-        await SnapshotTestHelper.Verify(@event);
+        // Assert
+        await SnapshotTestHelper.VerifyCloudEvent(@event);
     }
 }

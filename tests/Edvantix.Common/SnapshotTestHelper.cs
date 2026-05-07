@@ -1,10 +1,34 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Net.Mime;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Text.RegularExpressions;
+using Edvantix.Chassis.EventBus;
+using Wolverine.Attributes;
 
 namespace Edvantix.Common;
 
 public static partial class SnapshotTestHelper
 {
+    private static readonly JsonSerializerOptions _webJsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    };
+
+    /// <summary>
+    ///     Verifies the JSON representation of an object against a snapshot, scrubbing out variable data
+    ///     like GUIDs and DateTime values to ensure deterministic snapshots. Use this for simple objects
+    ///     or collections that don't need to be wrapped in a CloudEvents envelope. For messages that
+    ///     represent integration events or commands, prefer the VerifyCloudEvent(s) methods to
+    ///     assert the exact wire format consumed by downstream services.
+    /// </summary>
+    /// <param name="target">The object to serialize to JSON and verify as a snapshot.</param>
+    /// <param name="sourceFilePath">
+    ///     The caller file path is used to determine the snapshot directory. It is automatically
+    ///     populated by the compiler, so you don't need to provide it when calling this method.
+    /// </param>
     public static Task Verify(object target, [CallerFilePath] string sourceFilePath = "")
     {
         return Verifier
@@ -27,6 +51,87 @@ public static partial class SnapshotTestHelper
                 builder.Append(scrubbedContent);
             })
             .UseSnapshotDirectory(sourceFilePath);
+    }
+
+    public static Task VerifyCloudEvent(object message, [CallerFilePath] string sourceFilePath = "")
+    {
+        return VerifyJson(BuildCloudEventJson(message), sourceFilePath);
+    }
+
+    public static Task VerifyCloudEvents(
+        IEnumerable<object?> messages,
+        [CallerFilePath] string sourceFilePath = ""
+    )
+    {
+        var envelopes = messages
+            .Where(m => m is not null)
+            .Select(m => JsonSerializer.Deserialize<JsonElement>(BuildCloudEventJson(m!)))
+            .ToList();
+        return VerifyJson(JsonSerializer.Serialize(envelopes, _webJsonOptions), sourceFilePath);
+    }
+
+    private static string BuildCloudEventJson(object message)
+    {
+        var type = message.GetType();
+        var messageType =
+            type.GetCustomAttribute<MessageIdentityAttribute>()?.Alias
+            ?? type.FullName
+            ?? type.Name;
+
+        var assemblyName = type.Assembly.GetName().Name ?? string.Empty;
+        var source = $"urn:edvantix:{ToKebabCase(assemblyName)}";
+
+        Guid id;
+        DateTimeOffset time;
+        if (message is IntegrationEvent ie)
+        {
+            id = ie.Id;
+            time = new(ie.CreationDate, TimeSpan.Zero);
+        }
+        else
+        {
+            id = Guid.CreateVersion7();
+            time = DateTimeOffset.UtcNow;
+        }
+
+        var data = JsonSerializer.Deserialize<JsonElement>(
+            JsonSerializer.Serialize(message, type, _webJsonOptions)
+        );
+
+        return JsonSerializer.Serialize(
+            new
+            {
+                specversion = "1.0",
+                id,
+                type = messageType,
+                source,
+                time,
+                datacontenttype = MediaTypeNames.Application.Json,
+                data,
+            },
+            _webJsonOptions
+        );
+    }
+
+    private static Task VerifyJson(string json, string sourceFilePath)
+    {
+        return Verifier
+            .Verify(json, "json")
+            .AddScrubber(builder =>
+            {
+                var content = builder.ToString();
+                var scrubbedContent = GuidRegex().Replace(content, "Guid_Scrubbed");
+                scrubbedContent = DateTimeRegex().Replace(scrubbedContent, "DateTime_Scrubbed");
+                scrubbedContent = TraceIdRegex().Replace(scrubbedContent, "TraceId_Scrubbed");
+                builder.Clear();
+                builder.Append(scrubbedContent);
+            })
+            .UseSnapshotDirectory(sourceFilePath);
+    }
+
+    private static string ToKebabCase(string input)
+    {
+        return KebabCaseRegex().Replace(input.Replace(".", "-"), "-$1").ToLowerInvariant();
     }
 
     private static SettingsTask UseSnapshotDirectory(
@@ -83,4 +188,7 @@ public static partial class SnapshotTestHelper
 
     [GeneratedRegex(@"\b[0-9a-fA-F]{2}-[0-9a-fA-F]{32}-[0-9a-fA-F]{16}-[0-9a-fA-F]{2}\b")]
     private static partial Regex TraceIdRegex();
+
+    [GeneratedRegex(@"(?<=[a-z0-9])([A-Z])")]
+    private static partial Regex KebabCaseRegex();
 }

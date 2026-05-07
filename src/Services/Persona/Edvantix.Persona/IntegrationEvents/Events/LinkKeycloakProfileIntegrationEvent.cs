@@ -1,8 +1,7 @@
-﻿namespace Edvantix.Contracts;
+﻿using Wolverine.Attributes;
 
-/// <summary>
-/// Интеграционное событие для привязки profileId к аккаунту Keycloak.
-/// Публикуется при регистрации профиля; потребляется Identity-сервисом.
-/// </summary>
+namespace Edvantix.Contracts;
+
+[MessageIdentity("Edvantix.Contracts.LinkKeycloakProfileIntegrationEvent")]
 public sealed record LinkKeycloakProfileIntegrationEvent(Guid AccountId, Guid ProfileId)
     : IntegrationEvent;

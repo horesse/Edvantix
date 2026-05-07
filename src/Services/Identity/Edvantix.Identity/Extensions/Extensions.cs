@@ -1,11 +1,8 @@
-﻿using Edvantix.Chassis.Security.Extensions;
+﻿using Edvantix.Chassis.EventBus.Wolverine;
+using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Identity.Configurations;
 using Edvantix.Identity.Infrastructure.Keycloak;
-using Edvantix.Identity.IntegrationEvents;
-using Wolverine.EntityFrameworkCore;
-using Wolverine.Persistence;
-using Wolverine.Postgresql;
 
 namespace Edvantix.Identity.Extensions;
 
@@ -33,22 +30,11 @@ internal static class Extensions
 
         services.AddScoped<IKeycloakAdminService, KeycloakAdminService>();
 
-        services.AddEventBus(
-            typeof(IIdentityApiMarker),
-            options =>
-            {
-                var connectionString = builder.Configuration.GetRequiredConnectionString(
-                    Components.Database.Identity
-                );
-
-                options.PersistMessagesWithPostgresql(connectionString);
-                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
-
-                options.Policies.AutoApplyTransactions();
-
-                options.AddEvents();
-            }
-        );
+        builder.AddEventBus(opts =>
+        {
+            opts.Discovery.IncludeAssembly(typeof(IIdentityApiMarker).Assembly);
+            opts.ListenToIntegrationEventsIn(typeof(IIdentityApiMarker).Assembly);
+        });
 
         services.AddKeycloakTokenIntrospection();
     }

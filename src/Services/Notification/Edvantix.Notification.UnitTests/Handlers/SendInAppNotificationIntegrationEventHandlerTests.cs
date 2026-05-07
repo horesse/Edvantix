@@ -7,15 +7,14 @@ namespace Edvantix.Notification.UnitTests.Handlers;
 
 public sealed class SendInAppNotificationIntegrationEventHandlerTests
 {
-    private readonly Mock<IInAppSender> _senderMock = new();
-
     [Test]
     public async Task GivenNotificationEvent_WhenHandling_ThenShouldSendMappedInAppMessage()
     {
+        var senderMock = new Mock<IInAppSender>();
         var integrationEvent = CreateEvent();
         InAppNotificationMessage? sentMessage = null;
 
-        _senderMock
+        senderMock
             .Setup(x =>
                 x.SendAsync(It.IsAny<InAppNotificationMessage>(), It.IsAny<CancellationToken>())
             )
@@ -24,9 +23,8 @@ public sealed class SendInAppNotificationIntegrationEventHandlerTests
             )
             .Returns(Task.CompletedTask);
 
-        await SendInAppNotificationIntegrationEventHandler.Handle(
+        await new SendInAppNotificationIntegrationEventHandler(senderMock.Object).Handle(
             integrationEvent,
-            _senderMock.Object,
             CancellationToken.None
         );
 
@@ -36,7 +34,7 @@ public sealed class SendInAppNotificationIntegrationEventHandlerTests
         sentMessage.Title.ShouldBe(integrationEvent.Title);
         sentMessage.Message.ShouldBe(integrationEvent.MessageText);
         sentMessage.Metadata.ShouldBe(integrationEvent.Metadata);
-        _senderMock.Verify(
+        senderMock.Verify(
             x => x.SendAsync(It.IsAny<InAppNotificationMessage>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
@@ -45,19 +43,19 @@ public sealed class SendInAppNotificationIntegrationEventHandlerTests
     [Test]
     public async Task GivenSenderThrows_WhenHandling_ThenShouldFlushLogBufferAndRethrow()
     {
+        var senderMock = new Mock<IInAppSender>();
         var integrationEvent = CreateEvent();
         var expectedException = new InvalidOperationException("Storage unavailable");
 
-        _senderMock
+        senderMock
             .Setup(x =>
                 x.SendAsync(It.IsAny<InAppNotificationMessage>(), It.IsAny<CancellationToken>())
             )
             .ThrowsAsync(expectedException);
 
         var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
-            SendInAppNotificationIntegrationEventHandler.Handle(
+            new SendInAppNotificationIntegrationEventHandler(senderMock.Object).Handle(
                 integrationEvent,
-                _senderMock.Object,
                 CancellationToken.None
             )
         );

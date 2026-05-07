@@ -5,22 +5,20 @@ namespace Edvantix.Identity.UnitTests.IntegrationEvents.EventHandlers;
 
 public sealed class EnableKeycloakUserIntegrationEventHandlerTests
 {
-    private readonly Mock<IKeycloakAdminService> _keycloakMock = new();
-
     [Test]
     public async Task GivenValidEvent_WhenHandling_ThenShouldCallEnableUserAsync()
     {
+        var keycloakMock = new Mock<IKeycloakAdminService>();
         var accountId = Guid.CreateVersion7();
         var @event = new EnableKeycloakUserIntegrationEvent(accountId);
 
-        await EnableKeycloakUserIntegrationEventHandler.Handle(
+        await new EnableKeycloakUserIntegrationEventHandler(keycloakMock.Object).Handle(
             @event,
-            _keycloakMock.Object,
             CancellationToken.None
         );
 
-        _keycloakMock.Verify(
-            k => k.EnableUserAsync(accountId, It.IsAny<CancellationToken>()),
+        keycloakMock.Verify(
+            x => x.EnableUserAsync(accountId, It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
@@ -28,16 +26,16 @@ public sealed class EnableKeycloakUserIntegrationEventHandlerTests
     [Test]
     public async Task GivenKeycloakThrows_WhenHandling_ThenShouldFlushLogBufferAndRethrow()
     {
+        var keycloakMock = new Mock<IKeycloakAdminService>();
         var @event = new EnableKeycloakUserIntegrationEvent(Guid.CreateVersion7());
 
-        _keycloakMock
-            .Setup(k => k.EnableUserAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        keycloakMock
+            .Setup(x => x.EnableUserAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new HttpRequestException("Keycloak unavailable"));
 
         await Should.ThrowAsync<HttpRequestException>(() =>
-            EnableKeycloakUserIntegrationEventHandler.Handle(
+            new EnableKeycloakUserIntegrationEventHandler(keycloakMock.Object).Handle(
                 @event,
-                _keycloakMock.Object,
                 CancellationToken.None
             )
         );

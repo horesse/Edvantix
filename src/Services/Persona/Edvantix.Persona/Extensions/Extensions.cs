@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.EventBus.Dispatcher;
+using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Security.Extensions;
 using Edvantix.Chassis.Security.Keycloak;
@@ -107,22 +108,11 @@ internal static class Extensions
         services.AddScoped<IEventMapper, EventMapper>();
         services.AddEventDispatcher();
 
-        services.AddEventBus(
-            typeof(IPersonaApiMarker),
-            options =>
-            {
-                var connectionString = builder.Configuration.GetRequiredConnectionString(
-                    Components.Database.Persona
-                );
-
-                options.PersistMessagesWithPostgresql(connectionString);
-                options.UseEntityFrameworkCoreTransactions(TransactionMiddlewareMode.Lightweight);
-
-                options.Policies.AutoApplyTransactions();
-
-                options.AddEvents();
-            }
-        );
+        builder.AddEventBus(opts =>
+        {
+            opts.Discovery.IncludeAssembly(typeof(IPersonaApiMarker).Assembly);
+            opts.ListenToIntegrationEventsIn(typeof(IPersonaApiMarker).Assembly);
+        });
 
         services.AddKeycloakTokenIntrospection();
 

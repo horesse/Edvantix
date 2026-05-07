@@ -1,10 +1,8 @@
-﻿namespace Edvantix.Contracts;
+﻿using Wolverine.Attributes;
 
-/// <summary>
-/// Интеграционное событие для создания in-app уведомления.
-/// Публикуется другими сервисами (Organizational, Blog и т.д.);
-/// потребляется Notification-сервисом через Wolverine.
-/// </summary>
+namespace Edvantix.Contracts;
+
+[MessageIdentity("Edvantix.Contracts.SendInAppNotificationIntegrationEvent")]
 public sealed record SendInAppNotificationIntegrationEvent : IntegrationEvent
 {
     /// <summary>Идентификатор профиля получателя (Profile.Id).</summary>

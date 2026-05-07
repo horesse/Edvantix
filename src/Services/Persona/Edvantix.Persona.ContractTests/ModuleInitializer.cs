@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Edvantix.Persona.ContractTests;
 
@@ -8,5 +9,18 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         VerifyWolverine.Initialize();
+        RegisterOtelListener();
+    }
+
+    private static void RegisterOtelListener()
+    {
+        var listener = new ActivityListener
+        {
+            ShouldListenTo = _ => true,
+            Sample = (ref _) => ActivitySamplingResult.AllDataAndRecorded,
+            SampleUsingParentId = (ref _) => ActivitySamplingResult.AllDataAndRecorded,
+        };
+
+        ActivitySource.AddActivityListener(listener);
     }
 }

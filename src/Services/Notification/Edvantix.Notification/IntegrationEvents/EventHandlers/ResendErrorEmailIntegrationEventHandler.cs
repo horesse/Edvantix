@@ -2,14 +2,15 @@
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-public static class ResendErrorEmailIntegrationEventHandler
+public sealed class ResendErrorEmailIntegrationEventHandler(
+    ILogger<ResendErrorEmailIntegrationEventHandler> logger,
+    GlobalLogBuffer logBuffer,
+    IOutboxRepository repository,
+    ISender sender
+)
 {
-    public static async Task Handle(
+    public async Task Handle(
         ResendErrorEmailIntegrationEvent @event,
-        ILogger logger,
-        GlobalLogBuffer logBuffer,
-        IOutboxRepository repository,
-        ISender sender,
         CancellationToken cancellationToken
     )
     {

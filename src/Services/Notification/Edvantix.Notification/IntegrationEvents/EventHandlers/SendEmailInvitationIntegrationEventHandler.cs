@@ -3,18 +3,14 @@ using ISender = Edvantix.Notification.Infrastructure.Senders.ISender;
 
 namespace Edvantix.Notification.IntegrationEvents.EventHandlers;
 
-/// <summary>
-/// Обрабатывает <see cref="SendEmailInvitationIntegrationEvent"/>:
-/// рендерит MJML-шаблон приглашения и отправляет письмо через <see cref="ISender"/>.
-/// Ссылки принятия/отклонения содержат plaintext-токен и формируются на основе конфигурации фронтенда.
-/// </summary>
-public static class SendEmailInvitationIntegrationEventHandler
+public sealed class SendEmailInvitationIntegrationEventHandler(
+    IRenderer renderer,
+    ISender sender,
+    IConfiguration configuration
+)
 {
-    public static async Task Handle(
+    public async Task Handle(
         SendEmailInvitationIntegrationEvent @event,
-        IRenderer renderer,
-        ISender sender,
-        IConfiguration configuration,
         CancellationToken cancellationToken
     )
     {

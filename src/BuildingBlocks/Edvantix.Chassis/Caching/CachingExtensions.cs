@@ -26,9 +26,10 @@ public static class CachingExtensions
         public void AddCaching(Action<IFusionCacheBuilder>? configure = null)
         {
             var services = builder.Services;
-            var provider = services.BuildServiceProvider();
 
             builder.Configure<CachingOptions>(CachingOptions.ConfigurationSection);
+
+            var provider = services.BuildServiceProvider();
 
             var cachingOptions = provider.GetRequiredService<CachingOptions>();
 

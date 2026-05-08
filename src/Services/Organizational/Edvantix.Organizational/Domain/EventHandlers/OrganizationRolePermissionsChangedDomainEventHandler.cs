@@ -1,5 +1,6 @@
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.Organizational.Pipelines;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
@@ -7,7 +8,7 @@ namespace Edvantix.Organizational.Domain.EventHandlers;
 /// Инвалидирует кеш разрешений конкретной роли после изменения её набора разрешений.
 /// Затрагивает только участников с данной ролью, не трогая кеш остальных ролей организации.
 /// </summary>
-internal sealed class OrganizationRolePermissionsChangedDomainEventHandler(IHybridCache cache)
+internal sealed class OrganizationRolePermissionsChangedDomainEventHandler(IFusionCache cache)
     : INotificationHandler<OrganizationRolePermissionsChangedDomainEvent>
 {
     public async ValueTask Handle(
@@ -17,7 +18,7 @@ internal sealed class OrganizationRolePermissionsChangedDomainEventHandler(IHybr
     {
         await cache.RemoveByTagAsync(
             AuthorizationCacheKeys.RolePerms(notification.RoleId),
-            cancellationToken
+            token: cancellationToken
         );
     }
 }

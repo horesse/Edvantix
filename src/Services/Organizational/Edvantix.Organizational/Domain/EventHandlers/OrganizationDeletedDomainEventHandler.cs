@@ -1,12 +1,13 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.Events;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 
 /// <summary>
 /// Инвалидирует запись организации в кэше после удаления.
 /// </summary>
-internal sealed class OrganizationDeletedDomainEventHandler(IHybridCache cache)
+internal sealed class OrganizationDeletedDomainEventHandler(IFusionCache cache)
     : INotificationHandler<OrganizationDeletedDomainEvent>
 {
     public async ValueTask Handle(
@@ -15,6 +16,6 @@ internal sealed class OrganizationDeletedDomainEventHandler(IHybridCache cache)
     )
     {
         var key = $"{nameof(Organization).ToLowerInvariant()}:{notification.OrganizationId}";
-        await cache.RemoveAsync(key, cancellationToken);
+        await cache.RemoveAsync(key, token: cancellationToken);
     }
 }

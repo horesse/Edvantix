@@ -2,6 +2,7 @@ using System.Reflection;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+using ZiggyCreatures.Caching.Fusion;
 using IMessage = Mediator.IMessage;
 
 namespace Edvantix.Organizational.Pipelines;
@@ -20,7 +21,7 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
     ITenantContext tenantContext,
     IOrganizationMemberRepository memberRepository,
     IOrganizationRoleRepository roleRepository,
-    IHybridCache cache,
+    IFusionCache cache,
     ILogger<AuthorizationBehavior<TMessage, TResponse>> logger
 ) : MessagePreProcessor<TMessage, TResponse>
     where TMessage : IMessage
@@ -48,13 +49,13 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
         var organizationId = tenantContext.OrganizationId;
 
         // Уровень 1: получаем roleId участника. Guid.Empty — сигнал об отсутствии активного членства.
-        var roleId = await cache.GetOrCreateAsync(
+        var roleId = await cache.GetOrSetAsync(
             AuthorizationCacheKeys.MemberRole(organizationId, profileId),
             async ct =>
                 await memberRepository.GetActiveMemberRoleIdAsync(organizationId, profileId, ct)
                 ?? Guid.Empty,
-            [AuthorizationCacheKeys.OrgPermsTag(organizationId)],
-            cancellationToken
+            tags: [AuthorizationCacheKeys.OrgPermsTag(organizationId)],
+            token: cancellationToken
         );
 
         if (roleId == Guid.Empty)
@@ -68,7 +69,7 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
         }
 
         // Уровень 2: разрешения роли — общий кеш для всех участников с одинаковой ролью.
-        var permissions = await cache.GetOrCreateAsync<HashSet<string>>(
+        var permissions = await cache.GetOrSetAsync<HashSet<string>>(
             AuthorizationCacheKeys.RolePerms(roleId),
             async ct =>
             {
@@ -79,11 +80,12 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
                         .Permissions.Select(p => p.FullCode)
                         .ToHashSet(StringComparer.OrdinalIgnoreCase);
             },
+            tags:
             [
                 AuthorizationCacheKeys.RolePerms(roleId),
                 AuthorizationCacheKeys.OrgPermsTag(organizationId),
             ],
-            cancellationToken
+            token: cancellationToken
         );
 
         if (!permissions.Contains(attr.Permission, StringComparer.OrdinalIgnoreCase))

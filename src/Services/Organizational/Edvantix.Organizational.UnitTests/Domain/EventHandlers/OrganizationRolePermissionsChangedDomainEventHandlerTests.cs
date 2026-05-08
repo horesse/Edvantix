@@ -1,11 +1,10 @@
-using Edvantix.Chassis.Caching;
 using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
 public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
 {
-    private readonly Mock<IHybridCache> _cacheMock = new();
+    private readonly Mock<IFusionCache> _cacheMock = new();
     private readonly OrganizationRolePermissionsChangedDomainEventHandler _handler;
 
     private static readonly Guid OrgId = Guid.CreateVersion7();
@@ -14,7 +13,13 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
     public OrganizationRolePermissionsChangedDomainEventHandlerTests()
     {
         _cacheMock
-            .Setup(c => c.RemoveByTagAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Setup(c =>
+                c.RemoveByTagAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .Returns(ValueTask.CompletedTask);
 
         _handler = new(_cacheMock.Object);
@@ -31,6 +36,7 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
             c =>
                 c.RemoveByTagAsync(
                     AuthorizationCacheKeys.RolePerms(RoleId),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -48,6 +54,7 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
             c =>
                 c.RemoveByTagAsync(
                     It.Is<string>(t => t != AuthorizationCacheKeys.RolePerms(RoleId)),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -62,7 +69,12 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
         await _handler.Handle(@event, CancellationToken.None);
 
         _cacheMock.Verify(
-            c => c.RemoveAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
+            c =>
+                c.RemoveAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Never
         );
     }
@@ -79,6 +91,7 @@ public sealed class OrganizationRolePermissionsChangedDomainEventHandlerTests
             c =>
                 c.RemoveByTagAsync(
                     AuthorizationCacheKeys.RolePerms(anotherRoleId),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once

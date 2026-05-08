@@ -4,13 +4,17 @@
   </ItemGroup>
   <ItemGroup Label="Integration">
     <PackageReference Include="Aspire.Keycloak.Authentication" />
-    <PackageReference Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
-    <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="Scrutor" />
     <PackageReference Include="WolverineFx.Postgresql" />
     <PackageReference Include="WolverineFx.Kafka" />
+  </ItemGroup>
+  <ItemGroup Label="Data">
+    <PackageReference Include="EFCore.NamingConventions" />
+    <PackageReference Include="Aspire.Azure.Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+    <PackageReference Include="ZiggyCreatures.FusionCache.OpenTelemetry" />
+    <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson" />
   </ItemGroup>
   <ItemGroup Label="Telemetry">
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Middleware" />

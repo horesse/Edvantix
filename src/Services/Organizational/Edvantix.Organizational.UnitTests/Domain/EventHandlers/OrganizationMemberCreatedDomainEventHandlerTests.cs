@@ -1,11 +1,10 @@
-using Edvantix.Chassis.Caching;
 using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
 public sealed class OrganizationMemberCreatedDomainEventHandlerTests
 {
-    private readonly Mock<IHybridCache> _cacheMock = new();
+    private readonly Mock<IFusionCache> _cacheMock = new();
     private readonly OrganizationMemberCreatedDomainEventHandler _handler;
 
     private static readonly Guid OrgId = Guid.CreateVersion7();
@@ -14,7 +13,13 @@ public sealed class OrganizationMemberCreatedDomainEventHandlerTests
     public OrganizationMemberCreatedDomainEventHandlerTests()
     {
         _cacheMock
-            .Setup(c => c.RemoveAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Setup(c =>
+                c.RemoveAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .Returns(ValueTask.CompletedTask);
 
         _handler = new(_cacheMock.Object);
@@ -31,6 +36,7 @@ public sealed class OrganizationMemberCreatedDomainEventHandlerTests
             c =>
                 c.RemoveAsync(
                     AuthorizationCacheKeys.MemberRole(OrgId, ProfileId),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once
@@ -48,6 +54,7 @@ public sealed class OrganizationMemberCreatedDomainEventHandlerTests
             c =>
                 c.RemoveAsync(
                     It.Is<string>(k => k != AuthorizationCacheKeys.MemberRole(OrgId, ProfileId)),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -67,6 +74,7 @@ public sealed class OrganizationMemberCreatedDomainEventHandlerTests
             c =>
                 c.RemoveAsync(
                     AuthorizationCacheKeys.MemberRole(anotherOrgId, anotherProfileId),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once

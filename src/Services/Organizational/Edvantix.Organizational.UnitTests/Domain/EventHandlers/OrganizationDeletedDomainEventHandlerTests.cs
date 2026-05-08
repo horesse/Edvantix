@@ -1,16 +1,20 @@
-using Edvantix.Chassis.Caching;
-
 namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
 public sealed class OrganizationDeletedDomainEventHandlerTests
 {
-    private readonly Mock<IHybridCache> _cacheMock = new();
+    private readonly Mock<IFusionCache> _cacheMock = new();
     private readonly OrganizationDeletedDomainEventHandler _handler;
 
     public OrganizationDeletedDomainEventHandlerTests()
     {
         _cacheMock
-            .Setup(c => c.RemoveAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Setup(c =>
+                c.RemoveAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .Returns(ValueTask.CompletedTask);
 
         _handler = new(_cacheMock.Object);
@@ -25,7 +29,12 @@ public sealed class OrganizationDeletedDomainEventHandlerTests
         await _handler.Handle(@event, CancellationToken.None);
 
         _cacheMock.Verify(
-            c => c.RemoveAsync($"organization:{orgId}", It.IsAny<CancellationToken>()),
+            c =>
+                c.RemoveAsync(
+                    $"organization:{orgId}",
+                    It.IsAny<FusionCacheEntryOptions?>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -42,6 +51,7 @@ public sealed class OrganizationDeletedDomainEventHandlerTests
             c =>
                 c.RemoveAsync(
                     It.Is<string>(k => k != $"organization:{orgId}"),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never

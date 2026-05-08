@@ -2,18 +2,13 @@
 using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.OpenTelemetry;
 using Edvantix.Chassis.Repository;
-using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Notification.Infrastructure;
 using Edvantix.Notification.Infrastructure.Senders.InApp;
 using Edvantix.Notification.Infrastructure.Senders.MailKit;
 using Edvantix.Notification.Infrastructure.Senders.Outbox;
 using Edvantix.Notification.Infrastructure.Senders.SendGrid;
-using Edvantix.Notification.IntegrationEvents;
 using Edvantix.ServiceDefaults.Cors;
-using Wolverine.EntityFrameworkCore;
-using Wolverine.Persistence;
-using Wolverine.Postgresql;
 
 namespace Edvantix.Notification.Extensions;
 

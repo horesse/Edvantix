@@ -25,12 +25,12 @@ internal sealed class GetOrganizationQueryHandler(
                 var organization = await repository.GetByIdAsync(query.Id, ctx);
                 Guard.Against.NotFound(organization, query.Id);
 
-                return mapper.Map(organization);
+                return organization;
             },
             tags: [tag],
             token: cancellationToken
         );
 
-        return organization;
+        return mapper.Map(organization);
     }
 }

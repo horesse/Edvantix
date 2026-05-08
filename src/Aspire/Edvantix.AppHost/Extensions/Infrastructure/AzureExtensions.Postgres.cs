@@ -10,12 +10,17 @@ internal static partial class AzureExtensions
         public IResourceBuilder<AzurePostgresFlexibleServerResource> RunAsLocalContainer()
         {
             builder.RunAsContainer(cfg =>
+            {
                 cfg.WithPgAdmin()
-                    .WithDataVolume()
+                    // Issue: https://github.com/dotnet/aspire/issues/11710
+                    .WithVolume(
+                        VolumeNameGenerator.Generate(builder, "data"),
+                        "/var/lib/postgresql/18/docker"
+                    )
                     .WithImageTag("18.3")
                     .WithImagePullPolicy(ImagePullPolicy.Always)
-                    .WithLifetime(ContainerLifetime.Persistent)
-            );
+                    .WithLifetime(ContainerLifetime.Persistent);
+            });
 
             return builder;
         }

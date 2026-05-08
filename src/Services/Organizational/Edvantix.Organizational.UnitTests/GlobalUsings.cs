@@ -38,5 +38,5 @@ global using FluentValidation.TestHelper;
 global using Mediator;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.Routing;
-global using Microsoft.Extensions.Caching.Hybrid;
 global using Microsoft.Extensions.Logging;
+global using ZiggyCreatures.Caching.Fusion;

@@ -1,12 +1,10 @@
-using Edvantix.Chassis.Caching;
-
 namespace Edvantix.Organizational.UnitTests.Features.Organizations.Get;
 
-public sealed class GetOrganizationQueryHandlerTests
+public sealed class GetOrganizationQueryHandlerTests : IDisposable
 {
     private readonly Mock<IOrganizationRepository> _repoMock = new();
     private readonly Mock<IMapper<Organization, OrganizationDetailDto>> _mapperMock = new();
-    private readonly Mock<IHybridCache> _cacheMock = new();
+    private readonly IFusionCache _cache = new FusionCache(new FusionCacheOptions());
     private readonly GetOrganizationQueryHandler _handler;
 
     private static readonly Guid ValidCountryId = Guid.CreateVersion7();
@@ -14,25 +12,7 @@ public sealed class GetOrganizationQueryHandlerTests
 
     public GetOrganizationQueryHandlerTests()
     {
-        _cacheMock
-            .Setup(c =>
-                c.GetOrCreateAsync(
-                    It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<OrganizationDetailDto>>>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Returns(
-                (
-                    string _,
-                    Func<CancellationToken, ValueTask<OrganizationDetailDto>> factory,
-                    IEnumerable<string>? _,
-                    CancellationToken ct
-                ) => factory(ct)
-            );
-
-        _handler = new(_cacheMock.Object, _repoMock.Object, _mapperMock.Object);
+        _handler = new(_cache, _repoMock.Object, _mapperMock.Object);
     }
 
     [Test]
@@ -81,6 +61,8 @@ public sealed class GetOrganizationQueryHandlerTests
             _handler.Handle(new GetOrganizationQuery(orgId), CancellationToken.None).AsTask()
         );
     }
+
+    public void Dispose() => _cache.Dispose();
 
     private static Organization CreateOrganization(Guid id) =>
         new Organization(

@@ -1,4 +1,3 @@
-using Edvantix.Chassis.Caching;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
@@ -19,7 +18,7 @@ public sealed class AuthorizationBehaviorTests
     private readonly Mock<ITenantContext> _tenantContextMock = new();
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
     private readonly Mock<IOrganizationRoleRepository> _roleRepoMock = new();
-    private readonly Mock<IHybridCache> _cacheMock = new();
+    private readonly Mock<IFusionCache> _cacheMock = new();
     private static readonly ILogger<AuthorizationBehavior<TestCommandWithPermission, Guid>> Logger =
         NullLogger<AuthorizationBehavior<TestCommandWithPermission, Guid>>.Instance;
 
@@ -53,9 +52,17 @@ public sealed class AuthorizationBehaviorTests
         nextCalled.ShouldBeTrue();
         _cacheMock.Verify(
             c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 ),
@@ -111,9 +118,17 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -175,19 +190,29 @@ public sealed class AuthorizationBehaviorTests
         string? capturedKey = null;
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Callback<
                 string,
-                Func<CancellationToken, ValueTask<Guid>>,
+                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
+                MaybeValue<Guid>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >((key, _, _, _) => capturedKey = key)
+            >((key, _, _, _, _, _) => capturedKey = key)
             .ReturnsAsync(Guid.Empty);
 
         await Should.ThrowAsync<ForbiddenException>(() =>
@@ -209,9 +234,17 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -221,19 +254,33 @@ public sealed class AuthorizationBehaviorTests
         string? capturedKey = null;
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
+                c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<HashSet<string>>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Callback<
                 string,
-                Func<CancellationToken, ValueTask<HashSet<string>>>,
+                Func<
+                    FusionCacheFactoryExecutionContext<HashSet<string>>,
+                    CancellationToken,
+                    Task<HashSet<string>>
+                >,
+                MaybeValue<HashSet<string>>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >((key, _, _, _) => capturedKey = key)
+            >((key, _, _, _, _, _) => capturedKey = key)
             .ReturnsAsync(new HashSet<string> { TestPermission });
 
         await BuildBehavior(ProfileId)
@@ -283,19 +330,29 @@ public sealed class AuthorizationBehaviorTests
             .ReturnsAsync((Guid?)null);
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Returns<
                 string,
-                Func<CancellationToken, ValueTask<Guid>>,
+                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
+                MaybeValue<Guid>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >(async (_, factory, _, ct) => await factory(ct));
+            >((_, factory, _, _, _, ct) => new ValueTask<Guid>(factory(null!, ct)));
 
         await Should.ThrowAsync<ForbiddenException>(() =>
             BuildBehavior(ProfileId)
@@ -323,24 +380,42 @@ public sealed class AuthorizationBehaviorTests
             .ReturnsAsync(RoleId);
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Returns<
                 string,
-                Func<CancellationToken, ValueTask<Guid>>,
+                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
+                MaybeValue<Guid>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >(async (_, factory, _, ct) => await factory(ct));
+            >((_, factory, _, _, _, ct) => new ValueTask<Guid>(factory(null!, ct)));
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
+                c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<HashSet<string>>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -370,9 +445,17 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -385,19 +468,33 @@ public sealed class AuthorizationBehaviorTests
             .ReturnsAsync((OrganizationRole?)null);
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
+                c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<HashSet<string>>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Returns<
                 string,
-                Func<CancellationToken, ValueTask<HashSet<string>>>,
+                Func<
+                    FusionCacheFactoryExecutionContext<HashSet<string>>,
+                    CancellationToken,
+                    Task<HashSet<string>>
+                >,
+                MaybeValue<HashSet<string>>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >(async (_, factory, _, ct) => await factory(ct));
+            >((_, factory, _, _, _, ct) => new ValueTask<HashSet<string>>(factory(null!, ct)));
 
         await Should.ThrowAsync<ForbiddenException>(() =>
             BuildBehavior(ProfileId)
@@ -416,9 +513,17 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -435,19 +540,33 @@ public sealed class AuthorizationBehaviorTests
             .ReturnsAsync(role);
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
+                c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<HashSet<string>>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Returns<
                 string,
-                Func<CancellationToken, ValueTask<HashSet<string>>>,
+                Func<
+                    FusionCacheFactoryExecutionContext<HashSet<string>>,
+                    CancellationToken,
+                    Task<HashSet<string>>
+                >,
+                MaybeValue<HashSet<string>>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >(async (_, factory, _, ct) => await factory(ct));
+            >((_, factory, _, _, _, ct) => new ValueTask<HashSet<string>>(factory(null!, ct)));
 
         var nextCalled = false;
         await BuildBehavior(ProfileId)
@@ -474,19 +593,29 @@ public sealed class AuthorizationBehaviorTests
         IEnumerable<string>? capturedTags = null;
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Callback<
                 string,
-                Func<CancellationToken, ValueTask<Guid>>,
+                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
+                MaybeValue<Guid>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >((_, _, tags, _) => capturedTags = tags)
+            >((_, _, _, _, tags, _) => capturedTags = tags)
             .ReturnsAsync(Guid.Empty);
 
         await Should.ThrowAsync<ForbiddenException>(() =>
@@ -509,9 +638,17 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -521,19 +658,33 @@ public sealed class AuthorizationBehaviorTests
         IEnumerable<string>? capturedTags = null;
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
+                c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<HashSet<string>>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .Callback<
                 string,
-                Func<CancellationToken, ValueTask<HashSet<string>>>,
+                Func<
+                    FusionCacheFactoryExecutionContext<HashSet<string>>,
+                    CancellationToken,
+                    Task<HashSet<string>>
+                >,
+                MaybeValue<HashSet<string>>,
+                FusionCacheEntryOptions?,
                 IEnumerable<string>?,
                 CancellationToken
-            >((_, _, tags, _) => capturedTags = tags)
+            >((_, _, _, _, tags, _) => capturedTags = tags)
             .ReturnsAsync(new HashSet<string> { TestPermission });
 
         await BuildBehavior(ProfileId)
@@ -559,9 +710,17 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<Guid>(
+                c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<Guid>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -569,9 +728,17 @@ public sealed class AuthorizationBehaviorTests
             .ReturnsAsync(RoleId);
         _cacheMock
             .Setup(c =>
-                c.GetOrCreateAsync<HashSet<string>>(
+                c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<CancellationToken, ValueTask<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
+                    It.IsAny<MaybeValue<HashSet<string>>>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )

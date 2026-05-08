@@ -1,11 +1,12 @@
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Edvantix.Organizational.Features.Organizations.Get;
 
 public sealed record GetOrganizationQuery(Guid Id) : IQuery<OrganizationDetailDto>;
 
 internal sealed class GetOrganizationQueryHandler(
-    IHybridCache cache,
+    IFusionCache cache,
     IOrganizationRepository repository,
     IMapper<Organization, OrganizationDetailDto> mapper
 ) : IQueryHandler<GetOrganizationQuery, OrganizationDetailDto>
@@ -17,7 +18,7 @@ internal sealed class GetOrganizationQueryHandler(
     {
         var tag = nameof(Organization).ToLowerInvariant();
 
-        var organization = await cache.GetOrCreateAsync(
+        var organization = await cache.GetOrSetAsync(
             $"{tag}:{query.Id}",
             async ctx =>
             {
@@ -26,8 +27,8 @@ internal sealed class GetOrganizationQueryHandler(
 
                 return mapper.Map(organization);
             },
-            [tag],
-            cancellationToken
+            tags: [tag],
+            token: cancellationToken
         );
 
         return organization;

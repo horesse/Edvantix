@@ -1,5 +1,4 @@
-﻿using Edvantix.Scheduler.IntegrationEvents;
-using OpenTelemetry.Trace;
+﻿using OpenTelemetry.Trace;
 using Quartz.AspNetCore;
 
 namespace Edvantix.Scheduler.Extensions;

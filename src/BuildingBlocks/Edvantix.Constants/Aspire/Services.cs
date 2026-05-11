@@ -11,6 +11,7 @@ public static class Services
     public static readonly string Identity = nameof(Identity).ToLowerInvariant();
     public static readonly string Scheduler = nameof(Scheduler).ToLowerInvariant();
     public static readonly string Audit = nameof(Audit).ToLowerInvariant();
+    public static readonly string Curriculum = nameof(Curriculum).ToLowerInvariant();
 
     public static string ToClientName(string application, string? suffix = null)
     {

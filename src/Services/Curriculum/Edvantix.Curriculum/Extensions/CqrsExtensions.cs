@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Chassis.OpenTelemetry;
+using Edvantix.Curriculum.Infrastructure.Services;
 
 namespace Edvantix.Curriculum.Extensions;
 
@@ -26,6 +27,7 @@ internal static class CqrsExtensions
             services.AddActivityScope().AddCommandHandlerMetrics().AddQueryHandlerMetrics();
 
             services.AddEventDispatcher();
+            services.AddScoped<IEventMapper, EventMapper>();
         }
     }
 }

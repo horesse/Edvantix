@@ -4,6 +4,7 @@ using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Wolverine.EntityFrameworkCore;
 
 namespace Edvantix.Organizational.Infrastructure;
@@ -26,6 +27,9 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
     // Group aggregate
     public DbSet<Group> Groups => Set<Group>();
     public DbSet<GroupMember> GroupMembers => Set<GroupMember>();
+
+    // Room aggregate
+    public DbSet<Room> Rooms => Set<Room>();
 
     // Invitation aggregate
     public DbSet<Invitation> Invitations => Set<Invitation>();

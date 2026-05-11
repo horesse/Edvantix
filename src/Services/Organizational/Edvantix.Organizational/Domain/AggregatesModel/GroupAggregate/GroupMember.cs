@@ -1,19 +1,25 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 
 /// <summary>
 /// Текущий факт участия пользователя в учебной группе.
-/// Один пользователь может одновременно быть членом нескольких групп с разными ролями.
+/// Один пользователь может одновременно состоять в нескольких группах с разными ролями.
 /// </summary>
 public sealed class GroupMember() : Entity, ITenanted
 {
     /// <param name="organizationId">Идентификатор организации (для мультиарендности).</param>
     /// <param name="groupId">Идентификатор группы.</param>
     /// <param name="profileId">Идентификатор пользователя из Profile Service.</param>
+    /// <param name="role">Роль участника внутри группы.</param>
     /// <param name="joinedAt">Дата вступления в группу.</param>
-    public GroupMember(Guid organizationId, Guid groupId, Guid profileId, DateOnly joinedAt)
+    public GroupMember(
+        Guid organizationId,
+        Guid groupId,
+        Guid profileId,
+        GroupMemberRole role,
+        DateOnly joinedAt
+    )
         : this()
     {
         if (organizationId == Guid.Empty)
@@ -35,7 +41,7 @@ public sealed class GroupMember() : Entity, ITenanted
         OrganizationId = organizationId;
         GroupId = groupId;
         ProfileId = profileId;
-        Status = OrganizationStatus.Active;
+        Role = role;
         JoinedAt = joinedAt;
     }
 
@@ -48,15 +54,15 @@ public sealed class GroupMember() : Entity, ITenanted
     /// <summary>Идентификатор пользователя из Profile Service.</summary>
     public Guid ProfileId { get; private set; }
 
-    /// <summary>Текущий статус участника группы.</summary>
-    public OrganizationStatus Status { get; private set; }
+    /// <summary>Роль участника внутри группы.</summary>
+    public GroupMemberRole Role { get; private set; }
 
     /// <summary>Дата вступления участника в группу.</summary>
     public DateOnly JoinedAt { get; private set; }
 
     /// <summary>
     /// Дата выхода участника из группы.
-    /// null означает, что участник всё ещё состоит в группе.
+    /// <c>null</c> означает, что участник всё ещё состоит в группе.
     /// </summary>
     public DateOnly? ExitedAt { get; private set; }
 
@@ -70,7 +76,5 @@ public sealed class GroupMember() : Entity, ITenanted
     {
         ExitedAt = exitedAt;
         ExitReason = exitReason;
-
-        Status = OrganizationStatus.Archived;
     }
 }

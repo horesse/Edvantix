@@ -10,14 +10,15 @@ internal sealed class GroupMemberConfiguration : IEntityTypeConfiguration<GroupM
     {
         builder.UseDefaultConfiguration();
 
-        builder.Property(h => h.ExitReason).HasMaxLength(DataSchemaLength.ExtraLarge);
-
         builder
-            .Property(m => m.Status)
+            .Property(m => m.Role)
             .IsRequired()
             .HasMaxLength(DataSchemaLength.Small)
             .HasConversion<string>();
 
+        builder.Property(h => h.ExitReason).HasMaxLength(DataSchemaLength.ExtraLarge);
+
+        // Активные участники — у которых нет даты выхода
         builder.HasQueryFilter(x => x.ExitedAt == null);
     }
 }

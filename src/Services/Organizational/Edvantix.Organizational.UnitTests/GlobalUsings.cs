@@ -6,6 +6,7 @@ global using Edvantix.Chassis.Security.Tenant;
 global using Edvantix.Chassis.Specification;
 global using Edvantix.Constants.Core;
 global using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+global using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;

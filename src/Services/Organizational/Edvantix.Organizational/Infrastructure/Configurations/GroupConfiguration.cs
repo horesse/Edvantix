@@ -54,7 +54,10 @@ internal sealed class GroupConfiguration : IEntityTypeConfiguration<Group>
             .HasConversion<string>();
 
         // Уникальный код в рамках организации (только среди не удалённых)
-        builder.HasIndex(g => new { g.OrganizationId, g.Code }).IsUnique().HasFilter("is_deleted = false");
+        builder
+            .HasIndex(g => new { g.OrganizationId, g.Code })
+            .IsUnique()
+            .HasFilter("is_deleted = false");
 
         builder.HasIndex(g => new { g.OrganizationId, g.Status });
         builder.HasIndex(g => g.TeacherMemberId);

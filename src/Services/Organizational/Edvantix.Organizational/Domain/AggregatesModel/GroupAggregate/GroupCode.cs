@@ -33,10 +33,7 @@ public sealed record GroupCode
         var trimmed = value.Trim().ToUpperInvariant();
 
         if (trimmed.Length > 32)
-            throw new ArgumentException(
-                "Код группы не может превышать 32 символа.",
-                nameof(value)
-            );
+            throw new ArgumentException("Код группы не может превышать 32 символа.", nameof(value));
 
         if (!FormatPattern.IsMatch(trimmed))
             throw new ArgumentException(

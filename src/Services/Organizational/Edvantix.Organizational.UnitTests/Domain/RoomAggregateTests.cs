@@ -6,8 +6,7 @@ public sealed class RoomAggregateTests
 {
     private static readonly Guid ValidOrgId = Guid.CreateVersion7();
 
-    private static Room CreateValidRoom() =>
-        new(ValidOrgId, "Каб. 204", floor: 2, seats: 20);
+    private static Room CreateValidRoom() => new(ValidOrgId, "Каб. 204", floor: 2, seats: 20);
 
     [Test]
     public void GivenValidData_WhenCreatingRoom_ThenShouldInitializePropertiesCorrectly()

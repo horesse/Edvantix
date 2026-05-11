@@ -46,10 +46,10 @@ public sealed class GroupCodeTests
     }
 
     [Test]
-    [Arguments("en b1")]          // пробел
-    [Arguments("EN_B1")]          // нижнее подчёркивание
-    [Arguments("ЕН-B1")]          // кириллица
-    [Arguments("EN.B1")]          // точка
+    [Arguments("en b1")] // пробел
+    [Arguments("EN_B1")] // нижнее подчёркивание
+    [Arguments("ЕН-B1")] // кириллица
+    [Arguments("EN.B1")] // точка
     public void GivenInvalidCharacters_WhenCreatingGroupCode_ThenShouldThrowArgumentException(
         string value
     )

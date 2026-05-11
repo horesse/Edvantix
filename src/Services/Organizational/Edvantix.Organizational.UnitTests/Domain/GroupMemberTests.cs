@@ -36,7 +36,13 @@ public sealed class GroupMemberTests
     public void GivenEmptyOrganizationId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
     {
         var act = () =>
-            new GroupMember(Guid.Empty, ValidGroupId, ValidProfileId, GroupMemberRole.Student, ValidJoinDate);
+            new GroupMember(
+                Guid.Empty,
+                ValidGroupId,
+                ValidProfileId,
+                GroupMemberRole.Student,
+                ValidJoinDate
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -45,7 +51,13 @@ public sealed class GroupMemberTests
     public void GivenEmptyGroupId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
     {
         var act = () =>
-            new GroupMember(ValidOrgId, Guid.Empty, ValidProfileId, GroupMemberRole.Student, ValidJoinDate);
+            new GroupMember(
+                ValidOrgId,
+                Guid.Empty,
+                ValidProfileId,
+                GroupMemberRole.Student,
+                ValidJoinDate
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -54,7 +66,13 @@ public sealed class GroupMemberTests
     public void GivenEmptyProfileId_WhenCreatingGroupMember_ThenShouldThrowArgumentException()
     {
         var act = () =>
-            new GroupMember(ValidOrgId, ValidGroupId, Guid.Empty, GroupMemberRole.Student, ValidJoinDate);
+            new GroupMember(
+                ValidOrgId,
+                ValidGroupId,
+                Guid.Empty,
+                GroupMemberRole.Student,
+                ValidJoinDate
+            );
 
         act.ShouldThrow<ArgumentException>();
     }

@@ -13,7 +13,7 @@ namespace Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate;
 ///   <item>Архивированный курс нельзя редактировать.</item>
 /// </list>
 /// </summary>
-public sealed class Course() : Entity, IAggregateRoot, ISoftDelete, ITenanted
+public sealed class Course() : AuditableEntity, IAggregateRoot, ISoftDelete, ITenanted
 {
     /// <param name="organizationId">Идентификатор организации-владельца.</param>
     /// <param name="code">Уникальный код курса (напр. <c>EN-GEN-B1</c>).</param>
@@ -59,8 +59,7 @@ public sealed class Course() : Entity, IAggregateRoot, ISoftDelete, ITenanted
         OwnerMemberId = ownerMemberId;
         Description = description?.Trim();
         Status = CourseStatus.Draft;
-        CreatedAt = DateTimeHelper.UtcNow();
-        UpdatedAt = CreatedAt;
+        LastModifiedAt = CreatedAt;
     }
 
     /// <inheritdoc />
@@ -96,12 +95,6 @@ public sealed class Course() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
-    /// <summary>Дата создания.</summary>
-    public DateTime CreatedAt { get; private set; }
-
-    /// <summary>Дата последнего обновления.</summary>
-    public DateTime UpdatedAt { get; private set; }
-
     /// <summary>
     /// Публикует курс, переводя его в статус <see cref="CourseStatus.Active"/>.
     /// </summary>
@@ -111,7 +104,7 @@ public sealed class Course() : Entity, IAggregateRoot, ISoftDelete, ITenanted
             throw new InvalidOperationException("Нельзя опубликовать архивированный курс.");
 
         Status = CourseStatus.Active;
-        UpdatedAt = DateTimeHelper.UtcNow();
+        LastModifiedAt = DateTimeHelper.UtcNow();
     }
 
     /// <inheritdoc />
@@ -119,6 +112,6 @@ public sealed class Course() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     {
         IsDeleted = true;
         Status = CourseStatus.Archived;
-        UpdatedAt = DateTimeHelper.UtcNow();
+        LastModifiedAt = DateTimeHelper.UtcNow();
     }
 }

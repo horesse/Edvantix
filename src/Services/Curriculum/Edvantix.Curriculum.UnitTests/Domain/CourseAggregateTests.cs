@@ -280,29 +280,29 @@ public sealed class CourseAggregateTests
         var course = CreateValidCourse();
 
         course.CreatedAt.ShouldBeGreaterThan(before);
-        course.UpdatedAt.ShouldBe(course.CreatedAt);
+        course.LastModifiedAt.ShouldBe(course.CreatedAt);
     }
 
     [Test]
-    public void GivenPublishedCourse_WhenPublishing_ThenUpdatedAtShouldBeRefreshed()
+    public void GivenPublishedCourse_WhenPublishing_ThenLastModifiedAtShouldBeRefreshed()
     {
         var course = CreateValidCourse();
         var createdAt = course.CreatedAt;
 
         course.Publish();
 
-        course.UpdatedAt.ShouldBeGreaterThanOrEqualTo(createdAt);
+        course.LastModifiedAt!.Value.ShouldBeGreaterThanOrEqualTo(createdAt);
     }
 
     [Test]
-    public void GivenDeletedCourse_WhenDeleting_ThenUpdatedAtShouldBeRefreshed()
+    public void GivenDeletedCourse_WhenDeleting_ThenLastModifiedAtShouldBeRefreshed()
     {
         var course = CreateValidCourse();
         var createdAt = course.CreatedAt;
 
         course.Delete();
 
-        course.UpdatedAt.ShouldBeGreaterThanOrEqualTo(createdAt);
+        course.LastModifiedAt!.Value.ShouldBeGreaterThanOrEqualTo(createdAt);
     }
 
     [Test]

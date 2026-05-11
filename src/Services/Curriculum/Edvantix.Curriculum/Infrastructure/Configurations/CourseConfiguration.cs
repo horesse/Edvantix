@@ -49,7 +49,8 @@ internal sealed class CourseConfiguration : IEntityTypeConfiguration<Course>
             .HasConversion<string>();
 
         builder.Property(e => e.CreatedAt).HasDefaultValueSql(DateTimeHelper.SqlUtcNow);
-        builder.Property(e => e.UpdatedAt).HasDefaultValueSql(DateTimeHelper.SqlUtcNow);
+        builder.Property(e => e.LastModifiedAt).HasDefaultValueSql(DateTimeHelper.SqlUtcNow);
+        builder.Property(e => e.RowVersion).IsRowVersion();
 
         // Уникальный код курса в рамках организации
         builder.HasIndex(e => new { e.OrganizationId, e.Code }).IsUnique();

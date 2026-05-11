@@ -103,15 +103,16 @@ public sealed class CourseAggregateTests
     [Test]
     public void GivenEmptyOrganizationId_WhenCreatingCourse_ThenShouldThrowArgumentException()
     {
-        var act = () => new Course(
-            Guid.Empty,
-            "EN-B1",
-            "Курс",
-            CourseSubject.English,
-            "B1",
-            durationWeeks: 8,
-            ValidOwnerId
-        );
+        var act = () =>
+            new Course(
+                Guid.Empty,
+                "EN-B1",
+                "Курс",
+                CourseSubject.English,
+                "B1",
+                durationWeeks: 8,
+                ValidOwnerId
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -119,15 +120,16 @@ public sealed class CourseAggregateTests
     [Test]
     public void GivenEmptyOwnerMemberId_WhenCreatingCourse_ThenShouldThrowArgumentException()
     {
-        var act = () => new Course(
-            ValidOrgId,
-            "EN-B1",
-            "Курс",
-            CourseSubject.English,
-            "B1",
-            durationWeeks: 8,
-            Guid.Empty
-        );
+        var act = () =>
+            new Course(
+                ValidOrgId,
+                "EN-B1",
+                "Курс",
+                CourseSubject.English,
+                "B1",
+                durationWeeks: 8,
+                Guid.Empty
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -140,15 +142,16 @@ public sealed class CourseAggregateTests
         string? code
     )
     {
-        var act = () => new Course(
-            ValidOrgId,
-            code!,
-            "Курс",
-            CourseSubject.English,
-            "B1",
-            durationWeeks: 8,
-            ValidOwnerId
-        );
+        var act = () =>
+            new Course(
+                ValidOrgId,
+                code!,
+                "Курс",
+                CourseSubject.English,
+                "B1",
+                durationWeeks: 8,
+                ValidOwnerId
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -161,15 +164,16 @@ public sealed class CourseAggregateTests
         string? name
     )
     {
-        var act = () => new Course(
-            ValidOrgId,
-            "EN-B1",
-            name!,
-            CourseSubject.English,
-            "B1",
-            durationWeeks: 8,
-            ValidOwnerId
-        );
+        var act = () =>
+            new Course(
+                ValidOrgId,
+                "EN-B1",
+                name!,
+                CourseSubject.English,
+                "B1",
+                durationWeeks: 8,
+                ValidOwnerId
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -182,15 +186,16 @@ public sealed class CourseAggregateTests
         string? level
     )
     {
-        var act = () => new Course(
-            ValidOrgId,
-            "EN-B1",
-            "Курс",
-            CourseSubject.English,
-            level!,
-            durationWeeks: 8,
-            ValidOwnerId
-        );
+        var act = () =>
+            new Course(
+                ValidOrgId,
+                "EN-B1",
+                "Курс",
+                CourseSubject.English,
+                level!,
+                durationWeeks: 8,
+                ValidOwnerId
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -203,15 +208,16 @@ public sealed class CourseAggregateTests
         short durationWeeks
     )
     {
-        var act = () => new Course(
-            ValidOrgId,
-            "EN-B1",
-            "Курс",
-            CourseSubject.English,
-            "B1",
-            durationWeeks,
-            ValidOwnerId
-        );
+        var act = () =>
+            new Course(
+                ValidOrgId,
+                "EN-B1",
+                "Курс",
+                CourseSubject.English,
+                "B1",
+                durationWeeks,
+                ValidOwnerId
+            );
 
         act.ShouldThrow<ArgumentException>();
     }

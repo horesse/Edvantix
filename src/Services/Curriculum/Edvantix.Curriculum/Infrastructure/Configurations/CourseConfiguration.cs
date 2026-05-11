@@ -13,28 +13,15 @@ internal sealed class CourseConfiguration : IEntityTypeConfiguration<Course>
 
         builder.Property(p => p.Id).HasDefaultValueSql(UniqueIdentifierHelper.NewUuidV7);
 
-        builder
-            .Property(e => e.Code)
-            .IsRequired()
-            .HasMaxLength(DataSchemaLength.Small);
+        builder.Property(e => e.Code).IsRequired().HasMaxLength(DataSchemaLength.Small);
 
-        builder
-            .Property(e => e.Name)
-            .IsRequired()
-            .HasMaxLength(DataSchemaLength.Large);
+        builder.Property(e => e.Name).IsRequired().HasMaxLength(DataSchemaLength.Large);
 
-        builder
-            .Property(e => e.Level)
-            .IsRequired()
-            .HasMaxLength(DataSchemaLength.Small);
+        builder.Property(e => e.Level).IsRequired().HasMaxLength(DataSchemaLength.Small);
 
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(DataSchemaLength.SuperLarge);
+        builder.Property(e => e.Description).HasMaxLength(DataSchemaLength.SuperLarge);
 
-        builder
-            .Property(e => e.CoverInitials)
-            .HasMaxLength(4);
+        builder.Property(e => e.CoverInitials).HasMaxLength(4);
 
         builder
             .Property(e => e.Subject)
@@ -54,6 +41,11 @@ internal sealed class CourseConfiguration : IEntityTypeConfiguration<Course>
 
         // Уникальный код курса в рамках организации
         builder.HasIndex(e => new { e.OrganizationId, e.Code }).IsUnique();
-        builder.HasIndex(e => new { e.OrganizationId, e.Subject, e.Status });
+        builder.HasIndex(e => new
+        {
+            e.OrganizationId,
+            e.Subject,
+            e.Status,
+        });
     }
 }

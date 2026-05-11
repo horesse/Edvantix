@@ -38,17 +38,26 @@ public sealed class Course() : AuditableEntity, IAggregateRoot, ISoftDelete, ITe
         Id = Guid.CreateVersion7();
 
         if (organizationId == Guid.Empty)
-            throw new ArgumentException("Идентификатор организации не может быть пустым.", nameof(organizationId));
+            throw new ArgumentException(
+                "Идентификатор организации не может быть пустым.",
+                nameof(organizationId)
+            );
 
         if (ownerMemberId == Guid.Empty)
-            throw new ArgumentException("Идентификатор владельца не может быть пустым.", nameof(ownerMemberId));
+            throw new ArgumentException(
+                "Идентификатор владельца не может быть пустым.",
+                nameof(ownerMemberId)
+            );
 
         Guard.Against.NullOrWhiteSpace(code, nameof(code));
         Guard.Against.NullOrWhiteSpace(name, nameof(name));
         Guard.Against.NullOrWhiteSpace(level, nameof(level));
 
         if (durationWeeks <= 0)
-            throw new ArgumentException("Продолжительность курса должна быть больше нуля.", nameof(durationWeeks));
+            throw new ArgumentException(
+                "Продолжительность курса должна быть больше нуля.",
+                nameof(durationWeeks)
+            );
 
         OrganizationId = organizationId;
         Code = code.Trim().ToUpperInvariant();

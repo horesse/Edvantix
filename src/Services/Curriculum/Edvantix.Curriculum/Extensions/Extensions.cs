@@ -1,8 +1,8 @@
 using System.Text.Json;
+using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Curriculum.Configurations;
-using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 
@@ -41,7 +41,9 @@ internal static class Extensions
         services.AddVersioning();
         services.AddEndpoints(typeof(ICurriculumApiMarker));
         services.AddDefaultOpenApi(options =>
-            options.AddDocumentTransformer<OpenApiInfoDefinitionsTransformer<CurriculumAppSettings>>()
+            options.AddDocumentTransformer<
+                OpenApiInfoDefinitionsTransformer<CurriculumAppSettings>
+            >()
         );
 
         services.AddMapper(typeof(ICurriculumApiMarker));

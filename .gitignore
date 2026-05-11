@@ -408,5 +408,6 @@ FodyWeavers.xsd
 # Claude
 settings.local.json
 /nul
+.claude/worktrees
 
 templates/

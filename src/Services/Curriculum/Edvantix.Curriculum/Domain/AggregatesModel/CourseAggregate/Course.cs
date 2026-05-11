@@ -94,7 +94,7 @@ public sealed class Course() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     public CourseStatus Status { get; private set; }
 
     /// <inheritdoc />
-    public bool IsDeleted { get; private set; }
+    public bool IsDeleted { get; set; }
 
     /// <summary>Дата создания.</summary>
     public DateTime CreatedAt { get; private set; }
@@ -114,10 +114,8 @@ public sealed class Course() : Entity, IAggregateRoot, ISoftDelete, ITenanted
         UpdatedAt = DateTimeHelper.UtcNow();
     }
 
-    /// <summary>
-    /// Архивирует курс — он более не доступен для новых групп.
-    /// </summary>
-    public void Archive()
+    /// <inheritdoc />
+    public void Delete()
     {
         IsDeleted = true;
         Status = CourseStatus.Archived;

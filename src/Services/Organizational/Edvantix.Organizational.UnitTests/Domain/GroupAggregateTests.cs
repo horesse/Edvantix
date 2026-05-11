@@ -3,91 +3,264 @@ namespace Edvantix.Organizational.UnitTests.Domain;
 public sealed class GroupAggregateTests
 {
     private static readonly Guid ValidOrgId = Guid.CreateVersion7();
+    private static readonly Guid ValidCourseId = Guid.CreateVersion7();
+    private static readonly Guid ValidTeacherId = Guid.CreateVersion7();
+    private static readonly Guid ValidRoomId = Guid.CreateVersion7();
+    private static readonly GroupCode ValidCode = GroupCode.From("EN-B1-12");
     private static readonly DateOnly ValidStartDate = new(2024, 9, 1);
     private static readonly DateOnly ValidEndDate = new(2025, 6, 30);
 
-    private static Group CreateValidGroup() =>
+    private static Group CreateValidOfflineGroup() =>
         new(
             ValidOrgId,
-            "Группа А-1",
-            "Группа первого курса факультета А",
+            ValidCode,
+            "Английский B1 — группа 12",
+            "Курс английского языка уровня B1",
+            GroupLevel.B1,
+            ValidCourseId,
+            ValidTeacherId,
+            GroupFormat.Offline,
+            ValidRoomId,
+            null,
+            15,
+            ValidStartDate,
+            ValidEndDate
+        );
+
+    private static Group CreateValidOnlineGroup() =>
+        new(
+            ValidOrgId,
+            ValidCode,
+            "Английский B1 — онлайн",
+            "Онлайн-группа уровня B1",
+            GroupLevel.B1,
+            ValidCourseId,
+            ValidTeacherId,
+            GroupFormat.Online,
+            null,
+            OnlinePlatform.Zoom,
+            15,
             ValidStartDate,
             ValidEndDate
         );
 
     [Test]
-    public void GivenValidData_WhenCreatingGroup_ThenShouldInitializePropertiesCorrectly()
+    public void GivenValidOfflineData_WhenCreatingGroup_ThenShouldInitializePropertiesCorrectly()
+    {
+        var group = CreateValidOfflineGroup();
+
+        group.OrganizationId.ShouldBe(ValidOrgId);
+        group.Code.ShouldBe(ValidCode);
+        group.Name.ShouldBe("Английский B1 — группа 12");
+        group.Level.ShouldBe(GroupLevel.B1);
+        group.CourseId.ShouldBe(ValidCourseId);
+        group.TeacherMemberId.ShouldBe(ValidTeacherId);
+        group.Format.ShouldBe(GroupFormat.Offline);
+        group.RoomId.ShouldBe(ValidRoomId);
+        group.Platform.ShouldBeNull();
+        group.Capacity.ShouldBe(15);
+        group.StartDate.ShouldBe(ValidStartDate);
+        group.EndDate.ShouldBe(ValidEndDate);
+        group.Status.ShouldBe(GroupStatus.Recruiting);
+        group.IsDeleted.ShouldBeFalse();
+        group.Members.ShouldBeEmpty();
+    }
+
+    [Test]
+    public void GivenOnlineFormat_WhenCreatingGroup_ThenRoomIdShouldBeNullAndPlatformSet()
+    {
+        var group = CreateValidOnlineGroup();
+
+        group.Format.ShouldBe(GroupFormat.Online);
+        group.RoomId.ShouldBeNull();
+        group.Platform.ShouldBe(OnlinePlatform.Zoom);
+    }
+
+    [Test]
+    public void GivenMixedFormat_WhenCreatingGroup_ThenBothRoomAndPlatformRequired()
     {
         var group = new Group(
             ValidOrgId,
-            "Группа А-1",
-            "Группа первого курса факультета А",
+            ValidCode,
+            "Смешанный формат",
+            "Описание",
+            GroupLevel.A1,
+            ValidCourseId,
+            ValidTeacherId,
+            GroupFormat.Mixed,
+            ValidRoomId,
+            OnlinePlatform.GoogleMeet,
+            10,
             ValidStartDate,
             ValidEndDate
         );
 
-        group.OrganizationId.ShouldBe(ValidOrgId);
-        group.Name.ShouldBe("Группа А-1");
-        group.Description.ShouldBe("Группа первого курса факультета А");
-        group.StartDate.ShouldBe(ValidStartDate);
-        group.EndDate.ShouldBe(ValidEndDate);
-        group.Status.ShouldBe(OrganizationStatus.Active);
-        group.IsDeleted.ShouldBeFalse();
-        group.Members.ShouldBeEmpty();
+        group.RoomId.ShouldBe(ValidRoomId);
+        group.Platform.ShouldBe(OnlinePlatform.GoogleMeet);
     }
 
     [Test]
     public void GivenEmptyOrganizationId_WhenCreatingGroup_ThenShouldThrowArgumentException()
     {
         var act = () =>
-            new Group(Guid.Empty, "Группа А-1", "Описание", ValidStartDate, ValidEndDate);
+            new Group(
+                Guid.Empty,
+                ValidCode,
+                "Группа А-1",
+                "Описание",
+                GroupLevel.A1,
+                ValidCourseId,
+                ValidTeacherId,
+                GroupFormat.Offline,
+                ValidRoomId,
+                null,
+                10,
+                ValidStartDate,
+                ValidEndDate
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
 
     [Test]
-    [Arguments(null)]
-    [Arguments("")]
-    [Arguments("   ")]
-    public void GivenNullOrWhiteSpaceName_WhenCreatingGroup_ThenShouldThrowArgumentException(
-        string? name
-    )
+    public void GivenEmptyCourseId_WhenCreatingGroup_ThenShouldThrowArgumentException()
     {
-        var act = () => new Group(ValidOrgId, name!, "Описание", ValidStartDate, ValidEndDate);
+        var act = () =>
+            new Group(
+                ValidOrgId,
+                ValidCode,
+                "Группа А-1",
+                "Описание",
+                GroupLevel.A1,
+                Guid.Empty,
+                ValidTeacherId,
+                GroupFormat.Offline,
+                ValidRoomId,
+                null,
+                10,
+                ValidStartDate,
+                ValidEndDate
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
 
     [Test]
-    [Arguments(null)]
-    [Arguments("")]
-    [Arguments("   ")]
-    public void GivenNullOrWhiteSpaceDescription_WhenCreatingGroup_ThenShouldThrowArgumentException(
-        string? description
+    public void GivenEmptyTeacherId_WhenCreatingGroup_ThenShouldThrowArgumentException()
+    {
+        var act = () =>
+            new Group(
+                ValidOrgId,
+                ValidCode,
+                "Группа А-1",
+                "Описание",
+                GroupLevel.A1,
+                ValidCourseId,
+                Guid.Empty,
+                GroupFormat.Offline,
+                ValidRoomId,
+                null,
+                10,
+                ValidStartDate,
+                ValidEndDate
+            );
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    public void GivenOfflineFormatWithoutRoom_WhenCreatingGroup_ThenShouldThrowArgumentException()
+    {
+        var act = () =>
+            new Group(
+                ValidOrgId,
+                ValidCode,
+                "Группа",
+                "Описание",
+                GroupLevel.B1,
+                ValidCourseId,
+                ValidTeacherId,
+                GroupFormat.Offline,
+                null, // нет кабинета
+                null,
+                10,
+                ValidStartDate,
+                ValidEndDate
+            );
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    public void GivenOnlineFormatWithoutPlatform_WhenCreatingGroup_ThenShouldThrowArgumentException()
+    {
+        var act = () =>
+            new Group(
+                ValidOrgId,
+                ValidCode,
+                "Группа",
+                "Описание",
+                GroupLevel.B1,
+                ValidCourseId,
+                ValidTeacherId,
+                GroupFormat.Online,
+                null,
+                null, // нет платформы
+                10,
+                ValidStartDate,
+                ValidEndDate
+            );
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments(0)]
+    [Arguments(-1)]
+    [Arguments(51)]
+    public void GivenInvalidCapacity_WhenCreatingGroup_ThenShouldThrowArgumentOutOfRangeException(
+        int capacity
     )
     {
         var act = () =>
-            new Group(ValidOrgId, "Группа А-1", description!, ValidStartDate, ValidEndDate);
+            new Group(
+                ValidOrgId,
+                ValidCode,
+                "Группа",
+                "Описание",
+                GroupLevel.B1,
+                ValidCourseId,
+                ValidTeacherId,
+                GroupFormat.Offline,
+                ValidRoomId,
+                null,
+                capacity,
+                ValidStartDate,
+                ValidEndDate
+            );
 
-        act.ShouldThrow<ArgumentException>();
+        act.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Test]
     public void GivenEndDateBeforeStartDate_WhenCreatingGroup_ThenShouldThrowArgumentException()
     {
-        var endDateBeforeStart = ValidStartDate.AddDays(-1);
-
         var act = () =>
-            new Group(ValidOrgId, "Группа А-1", "Описание", ValidStartDate, endDateBeforeStart);
-
-        act.ShouldThrow<ArgumentException>();
-    }
-
-    [Test]
-    public void GivenEndDateEqualToStartDate_WhenCreatingGroup_ThenShouldThrowArgumentException()
-    {
-        var act = () =>
-            new Group(ValidOrgId, "Группа А-1", "Описание", ValidStartDate, ValidStartDate);
+            new Group(
+                ValidOrgId,
+                ValidCode,
+                "Группа",
+                "Описание",
+                GroupLevel.B1,
+                ValidCourseId,
+                ValidTeacherId,
+                GroupFormat.Offline,
+                ValidRoomId,
+                null,
+                10,
+                ValidStartDate,
+                ValidStartDate.AddDays(-1)
+            );
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -95,46 +268,84 @@ public sealed class GroupAggregateTests
     [Test]
     public void GivenActiveGroup_WhenUpdating_ThenShouldUpdateProperties()
     {
-        var group = CreateValidGroup();
+        var group = CreateValidOfflineGroup();
         var newEndDate = ValidEndDate.AddMonths(3);
+        var newTeacherId = Guid.CreateVersion7();
 
-        group.Update("Группа Б-2", "Обновлённое описание", newEndDate);
+        group.Update(
+            "Обновлённое название",
+            "Обновлённое описание",
+            GroupLevel.B2,
+            ValidCourseId,
+            newTeacherId,
+            GroupFormat.Offline,
+            ValidRoomId,
+            null,
+            20,
+            newEndDate
+        );
 
-        group.Name.ShouldBe("Группа Б-2");
+        group.Name.ShouldBe("Обновлённое название");
         group.Description.ShouldBe("Обновлённое описание");
+        group.Level.ShouldBe(GroupLevel.B2);
+        group.TeacherMemberId.ShouldBe(newTeacherId);
+        group.Capacity.ShouldBe(20);
         group.EndDate.ShouldBe(newEndDate);
     }
 
     [Test]
     public void GivenArchivedGroup_WhenUpdating_ThenShouldThrowInvalidOperationException()
     {
-        var group = CreateValidGroup();
+        var group = CreateValidOfflineGroup();
         group.Archive();
 
-        var act = () => group.Update("Группа Б-2", "Описание", ValidEndDate.AddMonths(1));
+        var act = () =>
+            group.Update(
+                "Название",
+                "Описание",
+                GroupLevel.B1,
+                ValidCourseId,
+                ValidTeacherId,
+                GroupFormat.Offline,
+                ValidRoomId,
+                null,
+                10,
+                ValidEndDate.AddMonths(1)
+            );
 
         act.ShouldThrow<InvalidOperationException>();
     }
 
     [Test]
-    public void GivenEndDateBeforeStartDate_WhenUpdating_ThenShouldThrowArgumentException()
+    public void GivenActiveGroup_WhenChangingStatus_ThenStatusShouldBeUpdated()
     {
-        var group = CreateValidGroup();
-        var endDateBeforeStart = ValidStartDate.AddDays(-1);
+        var group = CreateValidOfflineGroup();
 
-        var act = () => group.Update("Группа А-1", "Описание", endDateBeforeStart);
+        group.ChangeStatus(GroupStatus.Active);
 
-        act.ShouldThrow<ArgumentException>();
+        group.Status.ShouldBe(GroupStatus.Active);
+    }
+
+    [Test]
+    public void GivenArchivedGroup_WhenChangingStatus_ThenShouldThrowInvalidOperationException()
+    {
+        var group = CreateValidOfflineGroup();
+        group.Archive();
+
+        var act = () => group.ChangeStatus(GroupStatus.Active);
+
+        act.ShouldThrow<InvalidOperationException>();
     }
 
     [Test]
     public void GivenActiveGroup_WhenAddingMember_ThenShouldAddToMembers()
     {
-        var group = CreateValidGroup();
+        var group = CreateValidOfflineGroup();
         var member = new GroupMember(
             ValidOrgId,
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
+            GroupMemberRole.Student,
             ValidStartDate
         );
 
@@ -147,12 +358,13 @@ public sealed class GroupAggregateTests
     [Test]
     public void GivenArchivedGroup_WhenAddingMember_ThenShouldThrowInvalidOperationException()
     {
-        var group = CreateValidGroup();
+        var group = CreateValidOfflineGroup();
         group.Archive();
         var member = new GroupMember(
             ValidOrgId,
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
+            GroupMemberRole.Student,
             ValidStartDate
         );
 
@@ -164,7 +376,7 @@ public sealed class GroupAggregateTests
     [Test]
     public void GivenNullMember_WhenAddingMember_ThenShouldThrowArgumentNullException()
     {
-        var group = CreateValidGroup();
+        var group = CreateValidOfflineGroup();
 
         var act = () => group.AddMember(null!);
 
@@ -174,23 +386,23 @@ public sealed class GroupAggregateTests
     [Test]
     public void GivenActiveGroup_WhenArchiving_ThenStatusShouldBeArchived()
     {
-        var group = CreateValidGroup();
+        var group = CreateValidOfflineGroup();
 
         group.Archive();
 
-        group.Status.ShouldBe(OrganizationStatus.Archived);
+        group.Status.ShouldBe(GroupStatus.Archived);
         group.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
-    public void GivenActiveGroup_WhenDeleting_ThenShouldMarkAsDeletedAndSetDeletedStatus()
+    public void GivenActiveGroup_WhenDeleting_ThenShouldMarkAsDeletedAndSetArchivedStatus()
     {
-        var group = CreateValidGroup();
+        var group = CreateValidOfflineGroup();
 
         group.Delete();
 
         group.IsDeleted.ShouldBeTrue();
-        group.Status.ShouldBe(OrganizationStatus.Deleted);
+        group.Status.ShouldBe(GroupStatus.Archived);
     }
 
     [Test]
@@ -198,8 +410,16 @@ public sealed class GroupAggregateTests
     {
         var group = new Group(
             ValidOrgId,
+            ValidCode,
             "  Группа А-1  ",
             "  Описание  ",
+            GroupLevel.A1,
+            ValidCourseId,
+            ValidTeacherId,
+            GroupFormat.Offline,
+            ValidRoomId,
+            null,
+            10,
             ValidStartDate,
             ValidEndDate
         );

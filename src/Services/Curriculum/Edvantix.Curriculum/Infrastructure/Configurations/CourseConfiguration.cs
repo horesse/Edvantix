@@ -16,7 +16,7 @@ internal sealed class CourseConfiguration : IEntityTypeConfiguration<Course>
         builder
             .Property(e => e.Code)
             .IsRequired()
-            .HasMaxLength(DataSchemaLength.Short);
+            .HasMaxLength(DataSchemaLength.Small);
 
         builder
             .Property(e => e.Name)
@@ -26,7 +26,7 @@ internal sealed class CourseConfiguration : IEntityTypeConfiguration<Course>
         builder
             .Property(e => e.Level)
             .IsRequired()
-            .HasMaxLength(DataSchemaLength.Short);
+            .HasMaxLength(DataSchemaLength.Small);
 
         builder
             .Property(e => e.Description)

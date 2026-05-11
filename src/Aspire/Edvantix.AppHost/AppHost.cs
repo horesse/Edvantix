@@ -40,6 +40,7 @@ var identityDb = postgres.AddDatabase(Components.Database.Identity);
 var notificationDb = postgres.AddDatabase(Components.Database.Notification);
 var organizationalDb = postgres.AddDatabase(Components.Database.Organizational);
 var auditDb = postgres.AddDatabase(Components.Database.Audit);
+var curriculumDb = postgres.AddDatabase(Components.Database.Curriculum);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
@@ -85,6 +86,16 @@ var auditApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+var curriculumApi = builder
+    .AddProject<Edvantix_Curriculum>(Services.Curriculum)
+    .WithKeycloak(keycloak)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithReference(curriculumDb)
+    .WaitFor(curriculumDb)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls();
+
 var organizationalApi = builder
     .AddProject<Edvantix_Organizational>(Services.Organisational)
     .WithKeycloak(keycloak)
@@ -113,6 +124,7 @@ var gateway = builder
     .WithService(notificationApi, true)
     .WithService(organizationalApi, true)
     .WithService(auditApi, true)
+    .WithService(curriculumApi, true)
     .Build();
 
 var turbo = builder
@@ -181,7 +193,8 @@ if (builder.ExecutionContext.IsRunMode)
         .WithOpenAPI(personaApi)
         .WithOpenAPI(notificationApi)
         .WithOpenAPI(organizationalApi)
-        .WithOpenAPI(auditApi);
+        .WithOpenAPI(auditApi)
+        .WithOpenAPI(curriculumApi);
 
     builder.AddK6(gateway);
 }
@@ -193,6 +206,7 @@ else
     organizationalApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
     notificationApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
     auditApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
+    curriculumApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
 }
 
 await builder.Build().RunAsync();

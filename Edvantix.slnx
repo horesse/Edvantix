@@ -26,6 +26,10 @@
     <Project Path="src/Services/Audit/Edvantix.Audit.UnitTests/Edvantix.Audit.UnitTests.csproj" />
     <Project Path="src/Services/Audit/Edvantix.Audit/Edvantix.Audit.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Curriculum/">
+    <Project Path="src/Services/Curriculum/Edvantix.Curriculum/Edvantix.Curriculum.csproj" />
+    <Project Path="src/Services/Curriculum/Edvantix.Curriculum.UnitTests/Edvantix.Curriculum.UnitTests.csproj" />
+  </Folder>
   <Folder Name="/src/Services/Identity/">
     <Project Path="src/Services/Identity/Edvantix.Identity.UnitTests/Edvantix.Identity.UnitTests.csproj" />
     <Project Path="src/Services/Identity/Edvantix.Identity/Edvantix.Identity.csproj" />

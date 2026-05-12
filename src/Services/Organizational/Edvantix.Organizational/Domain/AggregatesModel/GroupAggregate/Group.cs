@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
@@ -97,6 +98,8 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
         EndDate = endDate;
         Status = GroupStatus.Recruiting;
         IsDeleted = false;
+
+        RegisterDomainEvent(new GroupCreatedDomainEvent(Id, organizationId, startDate));
     }
 
     /// <inheritdoc />

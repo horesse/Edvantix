@@ -30,6 +30,8 @@ public static class Components
         public static readonly string Audit = $"{nameof(Audit).ToLowerInvariant()}{Suffix}";
         public static readonly string Curriculum =
             $"{nameof(Curriculum).ToLowerInvariant()}{Suffix}";
+
+        public static readonly string Schedule = $"{nameof(Schedule).ToLowerInvariant()}{Suffix}";
     }
 
     public static class Azure

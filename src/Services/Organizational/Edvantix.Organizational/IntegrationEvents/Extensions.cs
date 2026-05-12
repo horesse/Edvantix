@@ -19,6 +19,11 @@ public static class Extensions
                 .PublishMessage<SendInAppNotificationIntegrationEvent>()
                 .ToKafkaTopic(Topics.Notification)
                 .InteropWithCloudEvents();
+
+            options
+                .PublishMessage<GroupCreatedIntegrationEvent>()
+                .ToKafkaTopic(Topics.Schedule)
+                .InteropWithCloudEvents();
         }
     }
 }

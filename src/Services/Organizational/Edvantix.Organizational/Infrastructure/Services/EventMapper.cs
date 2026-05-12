@@ -2,6 +2,7 @@
 using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Constants.Other;
 using Edvantix.Contracts;
+using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
@@ -16,6 +17,9 @@ public class EventMapper : IEventMapper
         {
             InvitationCreatedDomainEvent invitationCreatedDomainEvent =>
                 SendEmailInvitationIntegrationEvent(invitationCreatedDomainEvent),
+            GroupCreatedDomainEvent groupCreatedDomainEvent => MapGroupCreatedIntegrationEvent(
+                groupCreatedDomainEvent
+            ),
             _ => throw new ArgumentOutOfRangeException(nameof(@event), @event, null),
         };
     }
@@ -38,6 +42,16 @@ public class EventMapper : IEventMapper
             _ => throw new ArgumentOutOfRangeException(nameof(@event), @event, null),
         };
     }
+
+    private static GroupCreatedIntegrationEvent MapGroupCreatedIntegrationEvent(
+        GroupCreatedDomainEvent @event
+    ) =>
+        new()
+        {
+            GroupId = @event.GroupId,
+            OrganizationId = @event.OrganizationId,
+            StartDate = @event.StartDate,
+        };
 
     private static SendInAppNotificationIntegrationEvent CreateInAppEvent(
         InvitationCreatedDomainEvent @event

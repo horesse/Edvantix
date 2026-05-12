@@ -1,6 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Schedule.Domain.AggregatesModel.HolidayAggregate;
-using Edvantix.Schedule.Features.Holidays.Specifications;
+using Edvantix.Schedule.Domain.AggregatesModel.HolidayAggregate.Specifications;
 
 namespace Edvantix.Schedule.Features.Holidays.Get;
 

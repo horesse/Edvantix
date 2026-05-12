@@ -18,6 +18,9 @@ internal sealed class RegenerateOccurrencesEndpoint
                 ) => await HandleAsync(request with { GroupId = groupId }, sender)
             )
             .ProducesPost<object>()
+            .WithName("RegenerateOccurrences")
+            .WithTags("Расписание групп")
+            .WithSummary("Пересоздать занятия расписания группы")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

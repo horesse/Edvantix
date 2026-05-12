@@ -1,7 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Mapper;
 using Edvantix.Schedule.Domain.AggregatesModel.LessonOccurrenceAggregate;
-using Edvantix.Schedule.Features.LessonOccurrences.Specifications;
+using Edvantix.Schedule.Domain.AggregatesModel.LessonOccurrenceAggregate.Specifications;
 
 namespace Edvantix.Schedule.Features.LessonOccurrences.Get;
 

@@ -13,6 +13,9 @@ internal sealed class GetHolidaysEndpoint
                     await HandleAsync((countryCode, year), sender)
             )
             .ProducesGet<IReadOnlyList<HolidayDto>>()
+            .WithName("GetHolidays")
+            .WithTags("Праздники")
+            .WithSummary("Получить список праздников")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

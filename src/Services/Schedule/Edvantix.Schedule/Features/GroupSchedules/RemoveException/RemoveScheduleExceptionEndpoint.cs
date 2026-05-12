@@ -13,6 +13,9 @@ internal sealed class RemoveScheduleExceptionEndpoint
                     await HandleAsync((groupId, exceptionId), sender)
             )
             .ProducesDelete()
+            .WithName("RemoveScheduleException")
+            .WithTags("Исключения расписания")
+            .WithSummary("Удалить исключение из расписания группы")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

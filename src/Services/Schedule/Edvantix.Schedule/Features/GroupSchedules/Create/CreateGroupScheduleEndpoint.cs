@@ -28,6 +28,9 @@ internal sealed class CreateGroupScheduleEndpoint
                     )
             )
             .ProducesPost<Guid>()
+            .WithName("CreateGroupSchedule")
+            .WithTags("Расписание групп")
+            .WithSummary("Создать расписание группы")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

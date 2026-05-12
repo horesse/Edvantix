@@ -1,6 +1,4 @@
-using Edvantix.Schedule.Domain.AggregatesModel.HolidayAggregate;
-
-namespace Edvantix.Schedule.Features.Holidays.Specifications;
+namespace Edvantix.Schedule.Domain.AggregatesModel.HolidayAggregate.Specifications;
 
 internal sealed class HolidaysByCountryAndYearSpec : Specification<Holiday>
 {

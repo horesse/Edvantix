@@ -1,6 +1,4 @@
-using Edvantix.Schedule.Domain.AggregatesModel.LessonOccurrenceAggregate;
-
-namespace Edvantix.Schedule.Features.LessonOccurrences.Specifications;
+namespace Edvantix.Schedule.Domain.AggregatesModel.LessonOccurrenceAggregate.Specifications;
 
 internal sealed class LessonOccurrencesByGroupIdAndDateRangeSpec : Specification<LessonOccurrence>
 {

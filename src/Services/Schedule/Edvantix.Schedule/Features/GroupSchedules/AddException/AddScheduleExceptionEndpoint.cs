@@ -18,6 +18,9 @@ internal sealed class AddScheduleExceptionEndpoint
                 ) => await HandleAsync(request with { GroupId = groupId }, sender)
             )
             .ProducesPost<Guid>()
+            .WithName("AddScheduleException")
+            .WithTags("Исключения расписания")
+            .WithSummary("Добавить исключение в расписание группы")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

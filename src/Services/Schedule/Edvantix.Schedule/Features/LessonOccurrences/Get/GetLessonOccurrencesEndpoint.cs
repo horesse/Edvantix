@@ -22,6 +22,9 @@ internal sealed class GetLessonOccurrencesEndpoint
                 ) => await HandleAsync((groupId, from, to), sender)
             )
             .ProducesGet<IReadOnlyList<LessonOccurrenceDto>>()
+            .WithName("GetLessonOccurrences")
+            .WithTags("Занятия расписания")
+            .WithSummary("Получить занятия расписания группы")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

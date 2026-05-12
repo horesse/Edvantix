@@ -12,6 +12,9 @@ internal sealed class GetGroupScheduleEndpoint : IEndpoint<Ok<GroupScheduleDto>,
                     await HandleAsync(groupId, sender)
             )
             .ProducesGet<GroupScheduleDto>()
+            .WithName("GetGroupSchedule")
+            .WithTags("Расписание групп")
+            .WithSummary("Получить расписание группы")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

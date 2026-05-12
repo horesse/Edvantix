@@ -20,6 +20,9 @@ internal sealed class UpdateGroupScheduleSettingsEndpoint
                 ) => await HandleAsync(request with { GroupId = groupId }, sender)
             )
             .ProducesPut()
+            .WithName("UpdateGroupScheduleSettings")
+            .WithTags("Расписание групп")
+            .WithSummary("Обновить настройки расписания группы")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization();
     }

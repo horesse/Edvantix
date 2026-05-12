@@ -1,4 +1,5 @@
 using Edvantix.Curriculum.Grpc.Services;
+using Edvantix.Curriculum.Grpc.Services.Curriculum;
 using Edvantix.Curriculum.UnitTests.Grpc.Context;
 using Grpc.Core;
 

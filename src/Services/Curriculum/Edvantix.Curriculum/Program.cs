@@ -1,6 +1,7 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Curriculum.Extensions;
 using Edvantix.Curriculum.Grpc.Services;
+using Edvantix.Curriculum.Grpc.Services.Curriculum;
 using Edvantix.ServiceDefaults.Cors;
 
 var builder = WebApplication.CreateBuilder(args);

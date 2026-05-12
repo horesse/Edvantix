@@ -3,7 +3,7 @@ using Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Specifications;
 using Grpc.Core;
 using Microsoft.AspNetCore.RateLimiting;
 
-namespace Edvantix.Curriculum.Grpc.Services;
+namespace Edvantix.Curriculum.Grpc.Services.Curriculum;
 
 /// <summary>
 /// gRPC-сервис каталога программ.

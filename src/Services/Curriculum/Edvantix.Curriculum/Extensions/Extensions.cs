@@ -30,6 +30,14 @@ internal static class Extensions
 
         services.AddCqrsInfrastructure();
 
+        services.AddGrpc(options =>
+        {
+            options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+            options.Interceptors.Add<GrpcExceptionInterceptor>();
+        });
+
+        services.AddGrpcHealthChecks();
+
         services.AddSingleton(
             new JsonSerializerOptions { Converters = { DecimalJsonConverter.Instance } }
         );

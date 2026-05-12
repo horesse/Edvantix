@@ -8,8 +8,11 @@ public sealed class GetCourseOptionsEndpoint
     {
         app.MapGet(
                 "/courses/options",
-                async (string? search, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(new GetCourseOptionsQuery(search), sender, cancellationToken)
+                async (
+                    [AsParameters] GetCourseOptionsQuery query,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(query, sender, cancellationToken)
             )
             .WithName("GetCourseOptions")
             .WithTags("Курсы")

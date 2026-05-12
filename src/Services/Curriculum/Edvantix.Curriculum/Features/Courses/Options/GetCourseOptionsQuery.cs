@@ -1,5 +1,5 @@
 using Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate;
-using Edvantix.Curriculum.Domain.Enums;
+using Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Specifications;
 
 namespace Edvantix.Curriculum.Features.Courses.Options;
 
@@ -12,7 +12,7 @@ public sealed record GetCourseOptionsQuery(string? Search = null)
 
 internal sealed class GetCourseOptionsQueryHandler(
     ITenantContext tenantContext,
-    CurriculumDbContext context
+    ICourseRepository repository
 ) : IQueryHandler<GetCourseOptionsQuery, IReadOnlyList<CourseOptionDto>>
 {
     public async ValueTask<IReadOnlyList<CourseOptionDto>> Handle(
@@ -20,21 +20,9 @@ internal sealed class GetCourseOptionsQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var q = context
-            .Courses.AsNoTracking()
-            .Where(c =>
-                c.OrganizationId == tenantContext.OrganizationId && c.Status == CourseStatus.Active
-            );
+        var spec = new CourseOptionsSpecification(tenantContext.OrganizationId, query.Search);
+        var courses = await repository.ListAsync(spec, cancellationToken);
 
-        if (!string.IsNullOrWhiteSpace(query.Search))
-            q = q.Where(c =>
-                c.Name.Contains(query.Search) || c.Code.Contains(query.Search.ToUpperInvariant())
-            );
-
-        var options = await q.OrderBy(c => c.Code)
-            .Select(c => new CourseOptionDto(c.Id, c.Code, c.Name, c.Level, c.Subject))
-            .ToListAsync(cancellationToken);
-
-        return options;
+        return [.. courses.Select(c => new CourseOptionDto(c.Id, c.Code, c.Name, c.Level, c.Subject))];
     }
 }

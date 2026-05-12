@@ -1,4 +1,5 @@
 using Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate;
+using Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Specifications;
 using Edvantix.Curriculum.Domain.Enums;
 
 namespace Edvantix.Curriculum.Features.Courses.List;

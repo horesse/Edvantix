@@ -1,5 +1,5 @@
 using Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate;
-using Edvantix.Curriculum.Domain.Enums;
+using Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Specifications;
 using Grpc.Core;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -75,17 +75,3 @@ internal sealed class CurriculumCatalogService(ICourseRepository repository)
     }
 }
 
-/// <summary>Спецификация для gRPC: активные курсы организации (лёгкое представление).</summary>
-internal sealed class CourseOptionsSpecification : Specification<Course>
-{
-    public CourseOptionsSpecification(Guid organizationId, string? search)
-    {
-        Query
-            .AsNoTracking()
-            .Where(c => c.OrganizationId == organizationId && c.Status == CourseStatus.Active)
-            .OrderBy(c => c.Code);
-
-        if (!string.IsNullOrWhiteSpace(search))
-            Query.Where(c => c.Name.Contains(search) || c.Code.Contains(search.ToUpperInvariant()));
-    }
-}

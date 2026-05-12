@@ -7,9 +7,8 @@ namespace Edvantix.Schedule.Features.Holidays.Get;
 public sealed record GetHolidaysQuery(string CountryCode, int Year)
     : IQuery<IReadOnlyList<HolidayDto>>;
 
-internal sealed class GetHolidaysQueryHandler(
-    IHolidayRepository repository
-) : IQueryHandler<GetHolidaysQuery, IReadOnlyList<HolidayDto>>
+internal sealed class GetHolidaysQueryHandler(IHolidayRepository repository)
+    : IQueryHandler<GetHolidaysQuery, IReadOnlyList<HolidayDto>>
 {
     public async ValueTask<IReadOnlyList<HolidayDto>> Handle(
         GetHolidaysQuery query,

@@ -9,7 +9,8 @@ builder.AddApplicationServices();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment()) app.UseHsts();
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 app.UseDefaultCors();

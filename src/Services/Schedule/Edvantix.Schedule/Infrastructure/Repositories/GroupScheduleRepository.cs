@@ -20,6 +20,5 @@ internal sealed class GroupScheduleRepository(ScheduleDbContext context) : IGrou
     public async Task AddAsync(
         GroupSchedule schedule,
         CancellationToken cancellationToken = default
-    ) =>
-        await context.GroupSchedules.AddAsync(schedule, cancellationToken);
+    ) => await context.GroupSchedules.AddAsync(schedule, cancellationToken);
 }

@@ -6,9 +6,8 @@ namespace Edvantix.Schedule.Features.GroupSchedules.RemoveException;
 [Transactional]
 public sealed record RemoveScheduleExceptionCommand(Guid GroupId, Guid ExceptionId) : ICommand;
 
-internal sealed class RemoveScheduleExceptionCommandHandler(
-    IGroupScheduleRepository repository
-) : ICommandHandler<RemoveScheduleExceptionCommand>
+internal sealed class RemoveScheduleExceptionCommandHandler(IGroupScheduleRepository repository)
+    : ICommandHandler<RemoveScheduleExceptionCommand>
 {
     public async ValueTask<Unit> Handle(
         RemoveScheduleExceptionCommand command,

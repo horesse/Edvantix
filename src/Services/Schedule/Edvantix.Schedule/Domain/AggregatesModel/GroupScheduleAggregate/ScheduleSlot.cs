@@ -16,10 +16,16 @@ public sealed class ScheduleSlot : Entity
     public ScheduleSlot(Guid scheduleId, int weekday, int startMinutes)
     {
         if (weekday is < 0 or > 6)
-            throw new ArgumentOutOfRangeException(nameof(weekday), "День недели должен быть от 0 до 6.");
+            throw new ArgumentOutOfRangeException(
+                nameof(weekday),
+                "День недели должен быть от 0 до 6."
+            );
 
         if (startMinutes is < 0 or > 1439)
-            throw new ArgumentOutOfRangeException(nameof(startMinutes), "Минуты начала должны быть от 0 до 1439.");
+            throw new ArgumentOutOfRangeException(
+                nameof(startMinutes),
+                "Минуты начала должны быть от 0 до 1439."
+            );
 
         Id = Guid.CreateVersion7();
         ScheduleId = scheduleId;

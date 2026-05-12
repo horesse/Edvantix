@@ -9,12 +9,7 @@ internal sealed class RemoveScheduleExceptionEndpoint
     {
         app.MapDelete(
                 "/organizations/{organizationId:guid}/groups/{groupId:guid}/schedule/exceptions/{exceptionId:guid}",
-                async (
-                    Guid organizationId,
-                    Guid groupId,
-                    Guid exceptionId,
-                    ISender sender
-                ) =>
+                async (Guid organizationId, Guid groupId, Guid exceptionId, ISender sender) =>
                     await HandleAsync((groupId, exceptionId), sender)
             )
             .ProducesDelete()

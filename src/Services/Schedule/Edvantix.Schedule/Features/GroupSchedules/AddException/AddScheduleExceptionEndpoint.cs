@@ -15,8 +15,7 @@ internal sealed class AddScheduleExceptionEndpoint
                     Guid groupId,
                     [FromBody] AddScheduleExceptionRequest request,
                     ISender sender
-                ) =>
-                    await HandleAsync(request with { GroupId = groupId }, sender)
+                ) => await HandleAsync(request with { GroupId = groupId }, sender)
             )
             .ProducesPost<Guid>()
             .MapToApiVersion(ApiVersions.V1)

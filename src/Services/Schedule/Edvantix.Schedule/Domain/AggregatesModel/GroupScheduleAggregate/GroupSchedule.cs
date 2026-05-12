@@ -48,13 +48,22 @@ public sealed class GroupSchedule() : Entity, IAggregateRoot, ITenanted
         : this()
     {
         if (groupId == Guid.Empty)
-            throw new ArgumentException("Идентификатор группы не может быть пустым.", nameof(groupId));
+            throw new ArgumentException(
+                "Идентификатор группы не может быть пустым.",
+                nameof(groupId)
+            );
 
         if (organizationId == Guid.Empty)
-            throw new ArgumentException("Идентификатор организации не может быть пустым.", nameof(organizationId));
+            throw new ArgumentException(
+                "Идентификатор организации не может быть пустым.",
+                nameof(organizationId)
+            );
 
         if (lessonDurationMinutes <= 0)
-            throw new ArgumentOutOfRangeException(nameof(lessonDurationMinutes), "Длительность занятия должна быть больше нуля.");
+            throw new ArgumentOutOfRangeException(
+                nameof(lessonDurationMinutes),
+                "Длительность занятия должна быть больше нуля."
+            );
 
         ValidateEndMode(endMode, endDate, lessonCount, startDate);
         ValidateBiweeklyParity(recurrence, biweeklyParity);
@@ -136,7 +145,10 @@ public sealed class GroupSchedule() : Entity, IAggregateRoot, ITenanted
     )
     {
         if (lessonDurationMinutes <= 0)
-            throw new ArgumentOutOfRangeException(nameof(lessonDurationMinutes), "Длительность занятия должна быть больше нуля.");
+            throw new ArgumentOutOfRangeException(
+                nameof(lessonDurationMinutes),
+                "Длительность занятия должна быть больше нуля."
+            );
 
         ValidateEndMode(endMode, endDate, lessonCount, StartDate);
         ValidateBiweeklyParity(recurrence, biweeklyParity);
@@ -201,7 +213,11 @@ public sealed class GroupSchedule() : Entity, IAggregateRoot, ITenanted
     /// <summary>
     /// Создаёт пустое расписание без слотов. Используется при автоматическом создании при появлении группы.
     /// </summary>
-    public static GroupSchedule CreateEmpty(Guid groupId, Guid organizationId, DateOnly startDate) =>
+    public static GroupSchedule CreateEmpty(
+        Guid groupId,
+        Guid organizationId,
+        DateOnly startDate
+    ) =>
         new(
             groupId,
             organizationId,
@@ -226,9 +242,7 @@ public sealed class GroupSchedule() : Entity, IAggregateRoot, ITenanted
         if (_slots.Count == 0)
             return [];
 
-        var holidayDates = SkipHolidays
-            ? holidays.Select(h => h.Date).ToHashSet()
-            : [];
+        var holidayDates = SkipHolidays ? holidays.Select(h => h.Date).ToHashSet() : [];
 
         var exceptionDates = _exceptions.Select(e => e.ExceptionDate).ToHashSet();
 
@@ -244,9 +258,8 @@ public sealed class GroupSchedule() : Entity, IAggregateRoot, ITenanted
         };
 
         // Определяем дату отсечки
-        var endCutoff = EndMode == EndMode.Date && EndDate.HasValue
-            ? EndDate.Value
-            : DateOnly.MaxValue;
+        var endCutoff =
+            EndMode == EndMode.Date && EndDate.HasValue ? EndDate.Value : DateOnly.MaxValue;
 
         while (current <= endCutoff && count < limit)
         {
@@ -300,16 +313,25 @@ public sealed class GroupSchedule() : Entity, IAggregateRoot, ITenanted
         if (endMode == EndMode.Date)
         {
             if (!endDate.HasValue)
-                throw new ArgumentException("При EndMode.Date необходимо указать дату окончания.", nameof(endDate));
+                throw new ArgumentException(
+                    "При EndMode.Date необходимо указать дату окончания.",
+                    nameof(endDate)
+                );
 
             if (endDate.Value <= startDate)
-                throw new ArgumentException("Дата окончания должна быть позже даты начала.", nameof(endDate));
+                throw new ArgumentException(
+                    "Дата окончания должна быть позже даты начала.",
+                    nameof(endDate)
+                );
         }
 
         if (endMode == EndMode.Count)
         {
             if (!lessonCount.HasValue || lessonCount.Value <= 0)
-                throw new ArgumentException("При EndMode.Count необходимо указать положительное число занятий.", nameof(lessonCount));
+                throw new ArgumentException(
+                    "При EndMode.Count необходимо указать положительное число занятий.",
+                    nameof(lessonCount)
+                );
         }
     }
 
@@ -326,7 +348,8 @@ public sealed class GroupSchedule() : Entity, IAggregateRoot, ITenanted
     private static int GetIso8601WeekNumber(DateOnly date)
     {
         var dateTime = date.ToDateTime(TimeOnly.MinValue);
-        var day = (int)System.Globalization.CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(dateTime);
+        var day = (int)
+            System.Globalization.CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(dateTime);
         dateTime = dateTime.AddDays(4 - (day == 0 ? 7 : day));
         return (dateTime.DayOfYear - 1) / 7 + 1;
     }

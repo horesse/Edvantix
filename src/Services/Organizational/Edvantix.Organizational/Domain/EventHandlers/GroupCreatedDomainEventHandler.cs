@@ -13,6 +13,5 @@ internal sealed class GroupCreatedDomainEventHandler(IEventDispatcher dispatcher
     public async ValueTask Handle(
         GroupCreatedDomainEvent notification,
         CancellationToken cancellationToken
-    ) =>
-        await dispatcher.DispatchAsync(notification, cancellationToken);
+    ) => await dispatcher.DispatchAsync(notification, cancellationToken);
 }

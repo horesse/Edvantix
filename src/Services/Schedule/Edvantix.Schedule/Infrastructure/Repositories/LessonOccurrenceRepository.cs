@@ -21,8 +21,7 @@ internal sealed class LessonOccurrenceRepository(ScheduleDbContext context)
     public async Task AddRangeAsync(
         IEnumerable<LessonOccurrence> occurrences,
         CancellationToken cancellationToken = default
-    ) =>
-        await context.LessonOccurrences.AddRangeAsync(occurrences, cancellationToken);
+    ) => await context.LessonOccurrences.AddRangeAsync(occurrences, cancellationToken);
 
     public async Task DeleteByScheduleIdAsync(
         Guid scheduleId,

@@ -10,10 +10,8 @@ namespace Edvantix.Schedule.Features.GroupSchedules.Regenerate;
 /// Используется после изменения настроек расписания.
 /// </summary>
 [Transactional]
-public sealed record RegenerateOccurrencesCommand(
-    Guid GroupId,
-    string? HolidayCountryCode
-) : ICommand;
+public sealed record RegenerateOccurrencesCommand(Guid GroupId, string? HolidayCountryCode)
+    : ICommand;
 
 internal sealed class RegenerateOccurrencesCommandHandler(
     IGroupScheduleRepository scheduleRepository,
@@ -38,9 +36,14 @@ internal sealed class RegenerateOccurrencesCommandHandler(
             return Unit.Value;
         }
 
-        var holidays = command is { HolidayCountryCode: not null } && schedule.SkipHolidays
-            ? await LoadHolidays(command.HolidayCountryCode, schedule.StartDate.Year, cancellationToken)
-            : [];
+        var holidays =
+            command is { HolidayCountryCode: not null } && schedule.SkipHolidays
+                ? await LoadHolidays(
+                    command.HolidayCountryCode,
+                    schedule.StartDate.Year,
+                    cancellationToken
+                )
+                : [];
 
         var occurrences = schedule.Materialize(holidays);
         if (occurrences.Count > 0)
@@ -66,6 +69,6 @@ internal sealed class RegenerateOccurrencesCommandHandler(
             year + 1,
             cancellationToken
         );
-        return [..current, ..next];
+        return [.. current, .. next];
     }
 }

@@ -6,11 +6,8 @@ namespace Edvantix.Organizational.Domain.Events;
 /// Вызывается при создании новой учебной группы.
 /// Используется для инициализации пустого расписания в Schedule-сервисе.
 /// </summary>
-public sealed class GroupCreatedDomainEvent(
-    Guid groupId,
-    Guid organizationId,
-    DateOnly startDate
-) : DomainEvent
+public sealed class GroupCreatedDomainEvent(Guid groupId, Guid organizationId, DateOnly startDate)
+    : DomainEvent
 {
     public Guid GroupId { get; } = groupId;
     public Guid OrganizationId { get; } = organizationId;

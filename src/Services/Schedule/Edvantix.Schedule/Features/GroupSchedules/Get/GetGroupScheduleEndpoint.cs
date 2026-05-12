@@ -2,8 +2,7 @@ using Edvantix.Chassis.Endpoints;
 
 namespace Edvantix.Schedule.Features.GroupSchedules.Get;
 
-internal sealed class GetGroupScheduleEndpoint
-    : IEndpoint<Ok<GroupScheduleDto>, Guid, ISender>
+internal sealed class GetGroupScheduleEndpoint : IEndpoint<Ok<GroupScheduleDto>, Guid, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

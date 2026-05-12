@@ -19,9 +19,8 @@ public sealed record UpdateGroupScheduleSettingsCommand(
     IReadOnlyList<SlotRequest> Slots
 ) : ICommand;
 
-internal sealed class UpdateGroupScheduleSettingsCommandHandler(
-    IGroupScheduleRepository repository
-) : ICommandHandler<UpdateGroupScheduleSettingsCommand>
+internal sealed class UpdateGroupScheduleSettingsCommandHandler(IGroupScheduleRepository repository)
+    : ICommandHandler<UpdateGroupScheduleSettingsCommand>
 {
     public async ValueTask<Unit> Handle(
         UpdateGroupScheduleSettingsCommand command,

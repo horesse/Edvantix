@@ -15,8 +15,7 @@ internal sealed class RegenerateOccurrencesEndpoint
                     Guid groupId,
                     [FromBody] RegenerateOccurrencesRequest request,
                     ISender sender
-                ) =>
-                    await HandleAsync(request with { GroupId = groupId }, sender)
+                ) => await HandleAsync(request with { GroupId = groupId }, sender)
             )
             .ProducesPost<object>()
             .MapToApiVersion(ApiVersions.V1)
@@ -38,7 +37,4 @@ internal sealed class RegenerateOccurrencesEndpoint
     }
 }
 
-public sealed record RegenerateOccurrencesRequest(
-    Guid GroupId,
-    string? HolidayCountryCode
-);
+public sealed record RegenerateOccurrencesRequest(Guid GroupId, string? HolidayCountryCode);

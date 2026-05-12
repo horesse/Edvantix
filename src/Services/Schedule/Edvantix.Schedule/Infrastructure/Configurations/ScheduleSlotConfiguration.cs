@@ -14,7 +14,12 @@ internal sealed class ScheduleSlotConfiguration : IEntityTypeConfiguration<Sched
         builder.Property(s => s.StartMinutes).IsRequired();
 
         builder
-            .HasIndex(s => new { s.ScheduleId, s.Weekday, s.StartMinutes })
+            .HasIndex(s => new
+            {
+                s.ScheduleId,
+                s.Weekday,
+                s.StartMinutes,
+            })
             .IsUnique();
     }
 }

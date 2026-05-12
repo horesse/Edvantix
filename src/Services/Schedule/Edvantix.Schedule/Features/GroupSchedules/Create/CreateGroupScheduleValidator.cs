@@ -27,10 +27,11 @@ internal sealed class CreateGroupScheduleValidator : AbstractValidator<CreateGro
             .WithMessage("BiweeklyParity должен быть 0 или 1.")
             .When(c => c.Recurrence == RecurrenceType.Biweekly);
 
-        RuleForEach(c => c.Slots).ChildRules(slot =>
-        {
-            slot.RuleFor(s => s.Weekday).InclusiveBetween(0, 6);
-            slot.RuleFor(s => s.StartMinutes).InclusiveBetween(0, 1439);
-        });
+        RuleForEach(c => c.Slots)
+            .ChildRules(slot =>
+            {
+                slot.RuleFor(s => s.Weekday).InclusiveBetween(0, 6);
+                slot.RuleFor(s => s.StartMinutes).InclusiveBetween(0, 1439);
+            });
     }
 }

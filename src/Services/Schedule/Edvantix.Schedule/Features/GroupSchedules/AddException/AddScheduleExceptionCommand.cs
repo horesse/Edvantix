@@ -10,9 +10,8 @@ public sealed record AddScheduleExceptionCommand(
     string? Reason
 ) : ICommand<Guid>;
 
-internal sealed class AddScheduleExceptionCommandHandler(
-    IGroupScheduleRepository repository
-) : ICommandHandler<AddScheduleExceptionCommand, Guid>
+internal sealed class AddScheduleExceptionCommandHandler(IGroupScheduleRepository repository)
+    : ICommandHandler<AddScheduleExceptionCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
         AddScheduleExceptionCommand command,

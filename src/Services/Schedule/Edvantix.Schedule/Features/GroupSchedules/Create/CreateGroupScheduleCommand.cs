@@ -71,7 +71,11 @@ internal sealed class CreateGroupScheduleCommandHandler(
         if (schedule.Slots.Count > 0)
         {
             var holidays = command is { SkipHolidays: true, HolidayCountryCode: not null }
-                ? await LoadHolidays(command.HolidayCountryCode, command.StartDate.Year, cancellationToken)
+                ? await LoadHolidays(
+                    command.HolidayCountryCode,
+                    command.StartDate.Year,
+                    cancellationToken
+                )
                 : [];
 
             var occurrences = schedule.Materialize(holidays);
@@ -100,6 +104,6 @@ internal sealed class CreateGroupScheduleCommandHandler(
             year + 1,
             cancellationToken
         );
-        return [..current, ..next];
+        return [.. current, .. next];
     }
 }

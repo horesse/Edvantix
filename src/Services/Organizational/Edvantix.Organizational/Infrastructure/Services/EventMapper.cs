@@ -2,10 +2,10 @@
 using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Constants.Other;
 using Edvantix.Contracts;
+using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
-using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 
 namespace Edvantix.Organizational.Infrastructure.Services;
 
@@ -17,8 +17,9 @@ public class EventMapper : IEventMapper
         {
             InvitationCreatedDomainEvent invitationCreatedDomainEvent =>
                 SendEmailInvitationIntegrationEvent(invitationCreatedDomainEvent),
-            GroupCreatedDomainEvent groupCreatedDomainEvent =>
-                MapGroupCreatedIntegrationEvent(groupCreatedDomainEvent),
+            GroupCreatedDomainEvent groupCreatedDomainEvent => MapGroupCreatedIntegrationEvent(
+                groupCreatedDomainEvent
+            ),
             _ => throw new ArgumentOutOfRangeException(nameof(@event), @event, null),
         };
     }

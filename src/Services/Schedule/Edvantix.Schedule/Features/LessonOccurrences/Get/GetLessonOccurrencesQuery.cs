@@ -5,11 +5,8 @@ using Edvantix.Schedule.Features.LessonOccurrences.Specifications;
 
 namespace Edvantix.Schedule.Features.LessonOccurrences.Get;
 
-public sealed record GetLessonOccurrencesQuery(
-    Guid GroupId,
-    DateOnly From,
-    DateOnly To
-) : IQuery<IReadOnlyList<LessonOccurrenceDto>>;
+public sealed record GetLessonOccurrencesQuery(Guid GroupId, DateOnly From, DateOnly To)
+    : IQuery<IReadOnlyList<LessonOccurrenceDto>>;
 
 internal sealed class GetLessonOccurrencesQueryHandler(
     ILessonOccurrenceRepository repository,
@@ -21,7 +18,11 @@ internal sealed class GetLessonOccurrencesQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var spec = new LessonOccurrencesByGroupIdAndDateRangeSpec(query.GroupId, query.From, query.To);
+        var spec = new LessonOccurrencesByGroupIdAndDateRangeSpec(
+            query.GroupId,
+            query.From,
+            query.To
+        );
         var occurrences = await repository.ListAsync(spec, cancellationToken);
 
         return occurrences.Select(mapper.Map).ToList();

@@ -3,7 +3,11 @@ using Edvantix.Chassis.Endpoints;
 namespace Edvantix.Schedule.Features.LessonOccurrences.Get;
 
 internal sealed class GetLessonOccurrencesEndpoint
-    : IEndpoint<Ok<IReadOnlyList<LessonOccurrenceDto>>, (Guid GroupId, DateOnly From, DateOnly To), ISender>
+    : IEndpoint<
+        Ok<IReadOnlyList<LessonOccurrenceDto>>,
+        (Guid GroupId, DateOnly From, DateOnly To),
+        ISender
+    >
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -15,8 +19,7 @@ internal sealed class GetLessonOccurrencesEndpoint
                     DateOnly from,
                     DateOnly to,
                     ISender sender
-                ) =>
-                    await HandleAsync((groupId, from, to), sender)
+                ) => await HandleAsync((groupId, from, to), sender)
             )
             .ProducesGet<IReadOnlyList<LessonOccurrenceDto>>()
             .MapToApiVersion(ApiVersions.V1)

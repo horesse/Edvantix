@@ -17,8 +17,7 @@ internal sealed class UpdateGroupScheduleSettingsEndpoint
                     Guid groupId,
                     [FromBody] UpdateGroupScheduleSettingsRequest request,
                     ISender sender
-                ) =>
-                    await HandleAsync(request with { GroupId = groupId }, sender)
+                ) => await HandleAsync(request with { GroupId = groupId }, sender)
             )
             .ProducesPut()
             .MapToApiVersion(ApiVersions.V1)

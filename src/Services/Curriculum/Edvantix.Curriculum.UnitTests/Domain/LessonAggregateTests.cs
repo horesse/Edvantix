@@ -125,4 +125,138 @@ public sealed class LessonAggregateTests
 
         act.ShouldThrow<ArgumentException>();
     }
+
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    [Arguments("   ")]
+    public void GivenNullOrWhiteSpaceTitle_WhenAddingLesson_ThenShouldThrowArgumentException(
+        string? title
+    )
+    {
+        var course = CreateCourseWithModule(out var module);
+
+        var act = () => course.AddLesson(module.Id, title!, LessonType.Lecture, minutes: 45, []);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    public void GivenNullObjectives_WhenAddingLesson_ThenObjectivesShouldBeEmptyArray()
+    {
+        var course = CreateCourseWithModule(out var module);
+
+        var lesson = course.AddLesson(module.Id, "Урок", LessonType.Lecture, minutes: 45, null!);
+
+        lesson.Objectives.ShouldBeEmpty();
+    }
+
+    // ─── Lesson constructor (direct) ──────────────────────────────────────────
+
+    [Test]
+    public void GivenEmptyModuleId_WhenCreatingLesson_ThenShouldThrowArgumentException()
+    {
+        var act = () => new Lesson(Guid.Empty, 1, "Урок", LessonType.Lecture, 45, []);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments((short)0)]
+    [Arguments((short)-1)]
+    public void GivenInvalidPosition_WhenCreatingLesson_ThenShouldThrowArgumentException(
+        short position
+    )
+    {
+        var act = () =>
+            new Lesson(Guid.CreateVersion7(), position, "Урок", LessonType.Lecture, 45, []);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    // ─── Lesson.Move (direct) ─────────────────────────────────────────────────
+
+    [Test]
+    public void GivenValidPosition_WhenMovingLesson_ThenPositionShouldUpdate()
+    {
+        var course = CreateCourseWithModule(out var module);
+        var lesson = course.AddLesson(module.Id, "Урок", LessonType.Lecture, minutes: 45, []);
+
+        lesson.Move(3);
+
+        lesson.Position.ShouldBe((short)3);
+    }
+
+    [Test]
+    [Arguments((short)0)]
+    [Arguments((short)-1)]
+    public void GivenZeroOrNegativePosition_WhenMovingLesson_ThenShouldThrowArgumentException(
+        short position
+    )
+    {
+        var course = CreateCourseWithModule(out var module);
+        var lesson = course.AddLesson(module.Id, "Урок", LessonType.Lecture, minutes: 45, []);
+
+        var act = () => lesson.Move(position);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    // ─── Lesson.Update (direct) ───────────────────────────────────────────────
+
+    [Test]
+    public void GivenValidData_WhenUpdatingLesson_ThenShouldUpdateFields()
+    {
+        var course = CreateCourseWithModule(out var module);
+        var lesson = course.AddLesson(module.Id, "Старое название", LessonType.Lecture, 45, []);
+
+        lesson.Update("  Новое название  ", LessonType.Practice, 90, ["Цель 1"]);
+
+        lesson.Title.ShouldBe("Новое название");
+        lesson.Type.ShouldBe(LessonType.Practice);
+        lesson.Minutes.ShouldBe((short)90);
+        lesson.Objectives.Length.ShouldBe(1);
+    }
+
+    [Test]
+    public void GivenNullObjectives_WhenUpdatingLesson_ThenObjectivesShouldBeEmptyArray()
+    {
+        var course = CreateCourseWithModule(out var module);
+        var lesson = course.AddLesson(module.Id, "Урок", LessonType.Lecture, 45, ["Цель"]);
+
+        lesson.Update("Урок", LessonType.Lecture, 45, null!);
+
+        lesson.Objectives.ShouldBeEmpty();
+    }
+
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    [Arguments("   ")]
+    public void GivenNullOrWhiteSpaceTitle_WhenUpdatingLesson_ThenShouldThrowArgumentException(
+        string? title
+    )
+    {
+        var course = CreateCourseWithModule(out var module);
+        var lesson = course.AddLesson(module.Id, "Урок", LessonType.Lecture, 45, []);
+
+        var act = () => lesson.Update(title!, LessonType.Lecture, 45, []);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments((short)0)]
+    [Arguments((short)-1)]
+    public void GivenZeroOrNegativeMinutes_WhenUpdatingLesson_ThenShouldThrowArgumentException(
+        short minutes
+    )
+    {
+        var course = CreateCourseWithModule(out var module);
+        var lesson = course.AddLesson(module.Id, "Урок", LessonType.Lecture, 45, []);
+
+        var act = () => lesson.Update("Урок", LessonType.Lecture, minutes, []);
+
+        act.ShouldThrow<ArgumentException>();
+    }
 }

@@ -78,10 +78,7 @@ public sealed class GetCoursesQueryHandlerTests
     {
         var handler = CreateHandler();
 
-        var result = await handler.Handle(
-            new GetCoursesQuery(PageSize: 0),
-            CancellationToken.None
-        );
+        var result = await handler.Handle(new GetCoursesQuery(PageSize: 0), CancellationToken.None);
 
         result.PageSize.ShouldBe(1);
     }

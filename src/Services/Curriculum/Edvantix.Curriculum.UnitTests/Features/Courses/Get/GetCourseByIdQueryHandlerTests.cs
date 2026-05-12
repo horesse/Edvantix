@@ -24,7 +24,10 @@ public sealed class GetCourseByIdQueryHandlerTests
         _mapperMock.Setup(m => m.Map(course)).Returns(dto);
         var handler = CreateHandler();
 
-        var result = await handler.Handle(new GetCourseByIdQuery(course.Id), CancellationToken.None);
+        var result = await handler.Handle(
+            new GetCourseByIdQuery(course.Id),
+            CancellationToken.None
+        );
 
         result.ShouldBe(dto);
     }

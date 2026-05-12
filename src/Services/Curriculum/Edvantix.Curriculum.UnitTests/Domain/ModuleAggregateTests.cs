@@ -94,4 +94,104 @@ public sealed class ModuleAggregateTests
 
         act.ShouldThrow<ArgumentException>();
     }
+
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    [Arguments("   ")]
+    public void GivenNullOrWhiteSpaceName_WhenAddingModule_ThenShouldThrowArgumentException(
+        string? name
+    )
+    {
+        var course = CreateValidCourse();
+
+        var act = () => course.AddModule(name!, null, weeks: 2);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    // ─── Module.Update (direct) ───────────────────────────────────────────────
+
+    [Test]
+    public void GivenValidData_WhenUpdatingModule_ThenShouldUpdateFields()
+    {
+        var course = CreateValidCourse();
+        var module = course.AddModule("Старое название", "Старое описание", weeks: 2);
+
+        module.Update("Новое название", "Новое описание", 4);
+
+        module.Name.ShouldBe("Новое название");
+        module.Summary.ShouldBe("Новое описание");
+        module.Weeks.ShouldBe((short)4);
+    }
+
+    [Test]
+    public void GivenNullSummary_WhenUpdatingModule_ThenSummaryShouldBeNull()
+    {
+        var course = CreateValidCourse();
+        var module = course.AddModule("Название", "Описание", weeks: 2);
+
+        module.Update("Название", null, 3);
+
+        module.Summary.ShouldBeNull();
+    }
+
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    [Arguments("   ")]
+    public void GivenNullOrWhiteSpaceName_WhenUpdatingModule_ThenShouldThrowArgumentException(
+        string? name
+    )
+    {
+        var course = CreateValidCourse();
+        var module = course.AddModule("Название", null, weeks: 2);
+
+        var act = () => module.Update(name!, null, 2);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments((short)0)]
+    [Arguments((short)-1)]
+    public void GivenZeroOrNegativeWeeks_WhenUpdatingModule_ThenShouldThrowArgumentException(
+        short weeks
+    )
+    {
+        var course = CreateValidCourse();
+        var module = course.AddModule("Название", null, weeks: 2);
+
+        var act = () => module.Update("Название", null, weeks);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    // ─── Module.SetPosition (direct) ─────────────────────────────────────────
+
+    [Test]
+    [Arguments((short)0)]
+    [Arguments((short)-1)]
+    public void GivenZeroOrNegativePosition_WhenSettingModulePosition_ThenShouldThrowArgumentException(
+        short position
+    )
+    {
+        var course = CreateValidCourse();
+        var module = course.AddModule("Название", null, weeks: 2);
+
+        var act = () => module.SetPosition(position);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    public void GivenValidPosition_WhenSettingModulePosition_ThenPositionShouldUpdate()
+    {
+        var course = CreateValidCourse();
+        var module = course.AddModule("Название", null, weeks: 2);
+
+        module.SetPosition(5);
+
+        module.Position.ShouldBe((short)5);
+    }
 }

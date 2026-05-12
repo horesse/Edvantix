@@ -74,6 +74,7 @@ public sealed class CourseDomainToDtoMapperTests
         var moduleDto = dto.Modules[0];
         moduleDto.Id.ShouldBe(module.Id);
         moduleDto.Name.ShouldBe(module.Name);
+        moduleDto.Summary.ShouldBe(module.Summary);
         moduleDto.Position.ShouldBe(module.Position);
         moduleDto.Weeks.ShouldBe(module.Weeks);
         moduleDto.Lessons.ShouldHaveSingleItem();
@@ -82,5 +83,33 @@ public sealed class CourseDomainToDtoMapperTests
         moduleDto.Lessons[0].Type.ShouldBe(lesson.Type);
         moduleDto.Lessons[0].Status.ShouldBe(lesson.Status);
         moduleDto.Lessons[0].Minutes.ShouldBe(lesson.Minutes);
+    }
+
+    [Test]
+    public void GivenCourseWithGoals_WhenMappingDetail_ThenShouldMapGoalsCorrectly()
+    {
+        var course = CurriculumTestData.CreateCourse();
+        course.AddGoal("Первая цель");
+        course.AddGoal("Вторая цель");
+
+        var dto = _detailMapper.Map(course);
+
+        dto.Goals.Count.ShouldBe(2);
+        dto.Goals[0].Position.ShouldBe((short)1);
+        dto.Goals[0].Text.ShouldBe("Первая цель");
+        dto.Goals[1].Position.ShouldBe((short)2);
+        dto.Goals[1].Text.ShouldBe("Вторая цель");
+    }
+
+    [Test]
+    public void GivenCourseWithGoals_WhenMappingDetail_ThenGoalIdsShouldBeMapped()
+    {
+        var course = CurriculumTestData.CreateCourse();
+        var goal = course.AddGoal("Цель");
+
+        var dto = _detailMapper.Map(course);
+
+        dto.Goals.ShouldHaveSingleItem();
+        dto.Goals[0].Id.ShouldBe(goal.Id);
     }
 }

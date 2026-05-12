@@ -331,4 +331,172 @@ public sealed class CourseAggregateTests
 
         course.Subject.ShouldBe(subject);
     }
+
+    // ─── Archive ──────────────────────────────────────────────────────────────
+
+    [Test]
+    public void GivenActiveCourse_WhenArchiving_ThenStatusShouldBeArchived()
+    {
+        var course = CreateValidCourse();
+        course.Publish();
+
+        course.Archive();
+
+        course.Status.ShouldBe(CourseStatus.Archived);
+        course.IsDeleted.ShouldBeFalse();
+    }
+
+    [Test]
+    public void GivenDeletedCourse_WhenArchiving_ThenShouldThrowInvalidOperationException()
+    {
+        var course = CreateValidCourse();
+        course.Delete();
+
+        var act = () => course.Archive();
+
+        act.ShouldThrow<InvalidOperationException>();
+    }
+
+    // ─── Update ───────────────────────────────────────────────────────────────
+
+    [Test]
+    public void GivenValidData_WhenUpdatingCourse_ThenShouldUpdateAllFields()
+    {
+        var course = CreateValidCourse();
+
+        course.Update("Новое название", "Новое описание", "B2", 16, "EN");
+
+        course.Name.ShouldBe("Новое название");
+        course.Description.ShouldBe("Новое описание");
+        course.Level.ShouldBe("B2");
+        course.DurationWeeks.ShouldBe((short)16);
+        course.CoverInitials.ShouldBe("EN");
+    }
+
+    [Test]
+    public void GivenNullDescription_WhenUpdatingCourse_ThenDescriptionShouldBeNull()
+    {
+        var course = CreateValidCourse();
+
+        course.Update("Название", null, "B1", 12);
+
+        course.Description.ShouldBeNull();
+    }
+
+    [Test]
+    public void GivenNullCoverInitials_WhenUpdatingCourse_ThenCoverInitialsShouldBeNull()
+    {
+        var course = CreateValidCourse();
+
+        course.Update("Название", null, "B1", 12, null);
+
+        course.CoverInitials.ShouldBeNull();
+    }
+
+    [Test]
+    public void GivenDeletedCourse_WhenUpdating_ThenShouldThrowInvalidOperationException()
+    {
+        var course = CreateValidCourse();
+        course.Delete();
+
+        var act = () => course.Update("Название", null, "B1", 12);
+
+        act.ShouldThrow<InvalidOperationException>();
+    }
+
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    [Arguments("   ")]
+    public void GivenNullOrWhiteSpaceName_WhenUpdatingCourse_ThenShouldThrowArgumentException(
+        string? name
+    )
+    {
+        var course = CreateValidCourse();
+
+        var act = () => course.Update(name!, null, "B1", 12);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    [Arguments("   ")]
+    public void GivenNullOrWhiteSpaceLevel_WhenUpdatingCourse_ThenShouldThrowArgumentException(
+        string? level
+    )
+    {
+        var course = CreateValidCourse();
+
+        var act = () => course.Update("Название", null, level!, 12);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments((short)0)]
+    [Arguments((short)-1)]
+    public void GivenZeroOrNegativeDurationWeeks_WhenUpdatingCourse_ThenShouldThrowArgumentException(
+        short durationWeeks
+    )
+    {
+        var course = CreateValidCourse();
+
+        var act = () => course.Update("Название", null, "B1", durationWeeks);
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    // ─── AddGoal ──────────────────────────────────────────────────────────────
+
+    [Test]
+    public void GivenValidCourse_WhenAddingGoal_ThenGoalShouldBeCreatedWithCorrectPosition()
+    {
+        var course = CreateValidCourse();
+
+        var goal1 = course.AddGoal("Первая цель");
+        var goal2 = course.AddGoal("Вторая цель");
+
+        course.Goals.Count.ShouldBe(2);
+        goal1.Position.ShouldBe((short)1);
+        goal1.Text.ShouldBe("Первая цель");
+        goal2.Position.ShouldBe((short)2);
+    }
+
+    [Test]
+    public void GivenDeletedCourse_WhenAddingGoal_ThenShouldThrowInvalidOperationException()
+    {
+        var course = CreateValidCourse();
+        course.Delete();
+
+        var act = () => course.AddGoal("Цель");
+
+        act.ShouldThrow<InvalidOperationException>();
+    }
+
+    // ─── ReorderModules (additional) ──────────────────────────────────────────
+
+    [Test]
+    public void GivenDeletedCourse_WhenReorderingModules_ThenShouldThrowInvalidOperationException()
+    {
+        var course = CreateValidCourse();
+        var m1 = course.AddModule("Модуль 1", null, weeks: 2);
+        course.Delete();
+
+        var act = () => course.ReorderModules([m1.Id]);
+
+        act.ShouldThrow<InvalidOperationException>();
+    }
+
+    [Test]
+    public void GivenUnknownModuleId_WhenReorderingModules_ThenShouldThrowArgumentException()
+    {
+        var course = CreateValidCourse();
+        course.AddModule("Модуль 1", null, weeks: 2);
+
+        var act = () => course.ReorderModules([Guid.CreateVersion7()]);
+
+        act.ShouldThrow<ArgumentException>();
+    }
 }

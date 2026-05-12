@@ -23,6 +23,9 @@ internal sealed class GetCourseOptionsQueryHandler(
         var spec = new CourseOptionsSpecification(tenantContext.OrganizationId, query.Search);
         var courses = await repository.ListAsync(spec, cancellationToken);
 
-        return [.. courses.Select(c => new CourseOptionDto(c.Id, c.Code, c.Name, c.Level, c.Subject))];
+        return
+        [
+            .. courses.Select(c => new CourseOptionDto(c.Id, c.Code, c.Name, c.Level, c.Subject)),
+        ];
     }
 }

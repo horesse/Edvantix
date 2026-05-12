@@ -74,4 +74,3 @@ internal sealed class CurriculumCatalogService(ICourseRepository repository)
         };
     }
 }
-

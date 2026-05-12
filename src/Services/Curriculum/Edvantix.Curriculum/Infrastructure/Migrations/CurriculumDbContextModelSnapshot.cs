@@ -118,6 +118,132 @@ namespace Edvantix.Curriculum.Infrastructure.Migrations
                     b.ToTable("courses", (string)null);
                 });
 
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.CourseGoal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("course_id");
+
+                    b.Property<short>("Position")
+                        .HasColumnType("smallint")
+                        .HasColumnName("position");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("text");
+
+                    b.HasKey("Id")
+                        .HasName("pk_course_goals");
+
+                    b.HasIndex("CourseId", "Position")
+                        .IsUnique()
+                        .HasDatabaseName("ix_course_goals_course_id_position");
+
+                    b.ToTable("course_goals", (string)null);
+                });
+
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Lesson", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<short>("Minutes")
+                        .HasColumnType("smallint")
+                        .HasColumnName("minutes");
+
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("module_id");
+
+                    b.PrimitiveCollection<string[]>("Objectives")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("objectives");
+
+                    b.Property<short>("Position")
+                        .HasColumnType("smallint")
+                        .HasColumnName("position");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("title");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_lessons");
+
+                    b.HasIndex("ModuleId", "Position")
+                        .IsUnique()
+                        .HasDatabaseName("ix_lessons_module_id_position");
+
+                    b.HasIndex("ModuleId", "Status")
+                        .HasDatabaseName("ix_lessons_module_id_status");
+
+                    b.ToTable("lessons", (string)null);
+                });
+
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Module", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("course_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<short>("Position")
+                        .HasColumnType("smallint")
+                        .HasColumnName("position");
+
+                    b.Property<string>("Summary")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("summary");
+
+                    b.Property<short>("Weeks")
+                        .HasColumnType("smallint")
+                        .HasColumnName("weeks");
+
+                    b.HasKey("Id")
+                        .HasName("pk_modules");
+
+                    b.HasIndex("CourseId", "Position")
+                        .IsUnique()
+                        .HasDatabaseName("ix_modules_course_id_position");
+
+                    b.ToTable("modules", (string)null);
+                });
+
             modelBuilder.Entity("Wolverine.EntityFrameworkCore.Internals.IncomingMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -210,6 +336,48 @@ namespace Edvantix.Curriculum.Infrastructure.Migrations
                         {
                             t.ExcludeFromMigrations();
                         });
+                });
+
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.CourseGoal", b =>
+                {
+                    b.HasOne("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Course", null)
+                        .WithMany("Goals")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_course_goals_courses_course_id");
+                });
+
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Lesson", b =>
+                {
+                    b.HasOne("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Module", null)
+                        .WithMany("Lessons")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_lessons_modules_module_id");
+                });
+
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Module", b =>
+                {
+                    b.HasOne("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Course", null)
+                        .WithMany("Modules")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_modules_courses_course_id");
+                });
+
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Course", b =>
+                {
+                    b.Navigation("Goals");
+
+                    b.Navigation("Modules");
+                });
+
+            modelBuilder.Entity("Edvantix.Curriculum.Domain.AggregatesModel.CourseAggregate.Module", b =>
+                {
+                    b.Navigation("Lessons");
                 });
 #pragma warning restore 612, 618
         }

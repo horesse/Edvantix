@@ -6,6 +6,9 @@ namespace Edvantix.Curriculum.Infrastructure;
 public sealed class CurriculumDbContext(DbContextOptions options) : DbContext(options), IUnitOfWork
 {
     public DbSet<Course> Courses => Set<Course>();
+    public DbSet<Module> Modules => Set<Module>();
+    public DbSet<Lesson> Lessons => Set<Lesson>();
+    public DbSet<CourseGoal> CourseGoals => Set<CourseGoal>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

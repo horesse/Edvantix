@@ -1,0 +1,52 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Curriculum.Grpc.Services";
+
+package curriculum.v1;
+
+/// Сервис каталога учебных программ.
+/// Используется сервисом Organizational для валидации course_id при создании групп.
+service CurriculumGrpcService {
+  /// Возвращает список активных курсов организации (лёгкое представление для выпадающих списков).
+  rpc GetCoursesForOrganization (GetCoursesForOrganizationRequest) returns (GetCoursesForOrganizationResponse);
+
+  /// Возвращает детальную информацию о курсе по идентификатору.
+  rpc GetCourseById (GetCourseByIdRequest) returns (GetCourseByIdResponse);
+}
+
+message GetCoursesForOrganizationRequest {
+  string organization_id = 1;
+  string search = 2;
+}
+
+message CourseOption {
+  string id = 1;
+  string code = 2;
+  string name = 3;
+  string level = 4;
+  string subject = 5;
+}
+
+message GetCoursesForOrganizationResponse {
+  repeated CourseOption courses = 1;
+}
+
+message GetCourseByIdRequest {
+  string course_id = 1;
+}
+
+message CourseInfo {
+  string id = 1;
+  string organization_id = 2;
+  string code = 3;
+  string name = 4;
+  string subject = 5;
+  string level = 6;
+  int32 duration_weeks = 7;
+  string status = 8;
+}
+
+message GetCourseByIdResponse {
+  CourseInfo course = 1;
+  bool found = 2;
+}

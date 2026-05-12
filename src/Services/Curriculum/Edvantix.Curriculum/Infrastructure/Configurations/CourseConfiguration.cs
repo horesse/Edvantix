@@ -47,5 +47,19 @@ internal sealed class CourseConfiguration : IEntityTypeConfiguration<Course>
             e.Subject,
             e.Status,
         });
+
+        builder.HasQueryFilter(e => !e.IsDeleted);
+
+        builder
+            .HasMany(e => e.Goals)
+            .WithOne()
+            .HasForeignKey(g => g.CourseId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(e => e.Modules)
+            .WithOne()
+            .HasForeignKey(m => m.CourseId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

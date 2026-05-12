@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Curriculum.Extensions;
+using Edvantix.Curriculum.Grpc.Services;
 using Edvantix.ServiceDefaults.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,10 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
+
+app.MapGrpcService<CurriculumCatalogService>();
+
+app.MapGrpcHealthChecksService();
 
 app.MapDefaultEndpoints();
 

@@ -18,8 +18,8 @@ public sealed class GetTeachersEndpoint
             .WithSummary("Получить список преподавателей организации")
             .WithDescription(
                 "Возвращает активных участников организации для выбора преподавателя группы. "
-                + "Профильные данные обогащаются из сервиса Persona. "
-                + "Поддерживает поиск по имени через параметр search."
+                    + "Профильные данные обогащаются из сервиса Persona. "
+                    + "Поддерживает поиск по имени через параметр search."
             )
             .Produces<IReadOnlyCollection<TeacherDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)

@@ -13,8 +13,7 @@ namespace Edvantix.Organizational.Features.OrganizationMembers.Teachers;
 /// </remarks>
 [RequirePermission(OrganizationPermissions.View)]
 public sealed record GetTeachersQuery(
-    [property: Description("Поисковая строка по имени преподавателя")]
-    string? Search = null
+    [property: Description("Поисковая строка по имени преподавателя")] string? Search = null
 ) : IQuery<IReadOnlyCollection<TeacherDto>>;
 
 internal sealed class GetTeachersQueryHandler(
@@ -31,7 +30,10 @@ internal sealed class GetTeachersQueryHandler(
         var organizationId = tenantContext.OrganizationId;
 
         // Загружаем всех активных участников; Role подтягивается через AutoInclude.
-        var spec = new OrganizationMemberSpecification(organizationId, status: OrganizationStatus.Active);
+        var spec = new OrganizationMemberSpecification(
+            organizationId,
+            status: OrganizationStatus.Active
+        );
         var members = await repository.ListAsync(spec, cancellationToken);
 
         if (members.Count == 0)

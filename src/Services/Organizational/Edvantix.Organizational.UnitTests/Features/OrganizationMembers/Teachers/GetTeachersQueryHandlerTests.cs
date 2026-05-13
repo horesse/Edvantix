@@ -248,13 +248,21 @@ public sealed class GetTeachersQueryHandlerTests
                 }
             );
 
-        var result = await _handler.Handle(new GetTeachersQuery(Search: null), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetTeachersQuery(Search: null),
+            CancellationToken.None
+        );
 
         result.Count.ShouldBe(2);
     }
 
     private OrganizationMember CreateMember() =>
-        new(_organizationId, Guid.CreateVersion7(), Guid.CreateVersion7(), new DateOnly(2025, 1, 1));
+        new(
+            _organizationId,
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            new DateOnly(2025, 1, 1)
+        );
 
     private void SetupRepo(IReadOnlyCollection<OrganizationMember> members) =>
         _repoMock

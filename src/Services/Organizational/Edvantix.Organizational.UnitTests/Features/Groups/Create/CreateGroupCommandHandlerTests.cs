@@ -4,26 +4,22 @@ public sealed class CreateGroupCommandHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IGroupRepository> _repoMock = new();
+    private readonly Mock<ICurriculumService> _curriculumMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly CreateGroupCommandHandler _handler;
 
     public CreateGroupCommandHandlerTests()
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
-        _handler = new(_tenantMock.Object, _repoMock.Object);
+        _handler = new(_tenantMock.Object, _repoMock.Object, _curriculumMock.Object);
     }
 
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldAddGroup()
     {
         var command = BuildCommand();
-
-        _repoMock
-            .Setup(r => r.AddAsync(It.IsAny<Group>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        _repoMock
-            .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
+        SetupCurriculumFound(command.CourseId);
+        SetupRepoPersist();
 
         await _handler.Handle(command, CancellationToken.None);
 
@@ -37,13 +33,8 @@ public sealed class CreateGroupCommandHandlerTests
     public async Task GivenValidCommand_WhenHandling_ThenShouldSaveChanges()
     {
         var command = BuildCommand();
-
-        _repoMock
-            .Setup(r => r.AddAsync(It.IsAny<Group>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        _repoMock
-            .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
+        SetupCurriculumFound(command.CourseId);
+        SetupRepoPersist();
 
         await _handler.Handle(command, CancellationToken.None);
 
@@ -61,13 +52,8 @@ public sealed class CreateGroupCommandHandlerTests
             roomId: null,
             platform: OnlinePlatform.Zoom
         );
-
-        _repoMock
-            .Setup(r => r.AddAsync(It.IsAny<Group>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        _repoMock
-            .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
+        SetupCurriculumFound(command.CourseId);
+        SetupRepoPersist();
 
         var act = async () => await _handler.Handle(command, CancellationToken.None);
 
@@ -78,10 +64,52 @@ public sealed class CreateGroupCommandHandlerTests
     public async Task GivenOfflineFormatWithoutRoom_WhenHandling_ThenShouldThrow()
     {
         var command = BuildCommand(format: GroupFormat.Offline, roomId: null, platform: null);
+        SetupCurriculumFound(command.CourseId);
 
         var act = async () => await _handler.Handle(command, CancellationToken.None);
 
         await act.ShouldThrowAsync<ArgumentException>();
+    }
+
+    [Test]
+    public async Task GivenCourseNotFound_WhenHandling_ThenShouldThrowNotFoundException()
+    {
+        var command = BuildCommand();
+        _curriculumMock
+            .Setup(s => s.GetCourseByIdAsync(command.CourseId.ToString(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((CourseInfo?)null);
+
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        await act.ShouldThrowAsync<NotFoundException>();
+    }
+
+    [Test]
+    public async Task GivenCourseFromDifferentOrganization_WhenHandling_ThenShouldThrowForbiddenException()
+    {
+        var command = BuildCommand();
+        _curriculumMock
+            .Setup(s => s.GetCourseByIdAsync(command.CourseId.ToString(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new CourseInfo { OrganizationId = Guid.CreateVersion7().ToString() });
+
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        await act.ShouldThrowAsync<ForbiddenException>();
+    }
+
+    private void SetupCurriculumFound(Guid courseId) =>
+        _curriculumMock
+            .Setup(s => s.GetCourseByIdAsync(courseId.ToString(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new CourseInfo { OrganizationId = _organizationId.ToString() });
+
+    private void SetupRepoPersist()
+    {
+        _repoMock
+            .Setup(r => r.AddAsync(It.IsAny<Group>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        _repoMock
+            .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
     }
 
     private static CreateGroupCommand BuildCommand(

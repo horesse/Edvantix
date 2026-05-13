@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Organizational.Grpc.Services.Courses;
 
 namespace Edvantix.Organizational.Features.Groups.Create;
 
@@ -23,7 +24,8 @@ public sealed record CreateGroupCommand(
 
 internal sealed class CreateGroupCommandHandler(
     ITenantContext tenantContext,
-    IGroupRepository repository
+    IGroupRepository repository,
+    ICurriculumService curriculumService
 ) : ICommandHandler<CreateGroupCommand, Guid>
 {
     public async ValueTask<Guid> Handle(
@@ -31,6 +33,14 @@ internal sealed class CreateGroupCommandHandler(
         CancellationToken cancellationToken
     )
     {
+        var courseId = command.CourseId.ToString();
+        var course =
+            await curriculumService.GetCourseByIdAsync(courseId, cancellationToken)
+            ?? throw new NotFoundException($"Course {courseId} not found.");
+
+        if (course.OrganizationId != tenantContext.OrganizationId.ToString())
+            throw new ForbiddenException("Курс не принадлежит текущей организации.");
+
         var code = GroupCode.From(command.Code);
 
         var group = new Group(

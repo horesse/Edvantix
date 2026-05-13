@@ -2,7 +2,8 @@ using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 
 namespace Edvantix.Organizational.Features.Groups.SuggestCode;
 
-public sealed class SuggestGroupCodeEndpoint : IEndpoint<Ok<string>, GetSuggestedGroupCodeQuery, ISender>
+public sealed class SuggestGroupCodeEndpoint
+    : IEndpoint<Ok<string>, GetSuggestedGroupCodeQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

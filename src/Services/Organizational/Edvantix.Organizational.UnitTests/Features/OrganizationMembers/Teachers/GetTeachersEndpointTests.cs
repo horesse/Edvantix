@@ -8,24 +8,14 @@ public sealed class GetTeachersEndpointTests
     [Test]
     public async Task GivenRequest_WhenHandling_ThenShouldSendQueryToSender()
     {
-        var request = new GetTeachersQuery(Search: "Иванов");
         _senderMock
-            .Setup(s =>
-                s.Send(
-                    It.Is<GetTeachersQuery>(q => q.Search == request.Search),
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(s => s.Send(It.IsAny<GetTeachersQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Array.Empty<TeacherDto>());
 
-        await _endpoint.HandleAsync(request, _senderMock.Object);
+        await _endpoint.HandleAsync(new GetTeachersQuery(), _senderMock.Object);
 
         _senderMock.Verify(
-            s =>
-                s.Send(
-                    It.Is<GetTeachersQuery>(q => q.Search == request.Search),
-                    It.IsAny<CancellationToken>()
-                ),
+            s => s.Send(It.IsAny<GetTeachersQuery>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

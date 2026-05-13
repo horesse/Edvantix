@@ -7,7 +7,9 @@ public sealed class CreateRoomValidatorTests
     [Test]
     public void GivenValidCommand_WhenValidating_ThenShouldNotHaveAnyErrors()
     {
-        var result = _validator.TestValidate(new CreateRoomCommand("Каб. 204", Floor: 2, Seats: 20));
+        var result = _validator.TestValidate(
+            new CreateRoomCommand("Каб. 204", Floor: 2, Seats: 20)
+        );
 
         result.ShouldNotHaveAnyValidationErrors();
     }
@@ -49,7 +51,9 @@ public sealed class CreateRoomValidatorTests
     [Arguments((short)201)]
     public void GivenInvalidSeats_WhenValidating_ThenShouldHaveError(short seats)
     {
-        var result = _validator.TestValidate(new CreateRoomCommand("Зал А", Floor: 1, Seats: seats));
+        var result = _validator.TestValidate(
+            new CreateRoomCommand("Зал А", Floor: 1, Seats: seats)
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Seats);
     }
@@ -59,7 +63,9 @@ public sealed class CreateRoomValidatorTests
     [Arguments((short)200)]
     public void GivenBoundarySeats_WhenValidating_ThenShouldNotHaveError(short seats)
     {
-        var result = _validator.TestValidate(new CreateRoomCommand("Зал А", Floor: 1, Seats: seats));
+        var result = _validator.TestValidate(
+            new CreateRoomCommand("Зал А", Floor: 1, Seats: seats)
+        );
 
         result.ShouldNotHaveValidationErrorFor(x => x.Seats);
     }

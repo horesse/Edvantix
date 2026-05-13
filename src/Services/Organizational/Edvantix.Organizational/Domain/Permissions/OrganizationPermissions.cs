@@ -30,4 +30,7 @@ public static class OrganizationPermissions
 
     /// <summary>Управление подпиской.</summary>
     public const string Subscription = "Organization.Subscription";
+
+    /// <summary>Управление кабинетами.</summary>
+    public const string Rooms = "Organization.Rooms";
 }

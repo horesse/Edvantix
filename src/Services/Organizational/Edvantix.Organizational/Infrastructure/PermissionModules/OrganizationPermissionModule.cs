@@ -18,5 +18,6 @@ internal sealed class OrganizationPermissionModule : PermissionModule
             new("Groups", "Управление группами"),
             new("Analytics", "Просмотр аналитики"),
             new("Subscription", "Управление подпиской"),
+            new("Rooms", "Управление кабинетами"),
         ];
 }

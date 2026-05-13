@@ -14,6 +14,11 @@
       Link="Grpc\Protos\persona\v1\profile.proto"
       GrpcServices="Client"
     />
+    <Protobuf
+      Include="..\..\Curriculum\Edvantix.Curriculum\Grpc\Protos\curriculum\v1\curriculum.proto"
+      Link="Grpc\Protos\curriculum\v1\curriculum.proto"
+      GrpcServices="Client"
+    />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />

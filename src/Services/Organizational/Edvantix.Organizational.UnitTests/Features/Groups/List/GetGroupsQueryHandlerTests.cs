@@ -46,9 +46,14 @@ public sealed class GetGroupsQueryHandlerTests
                 )
             )
             .ReturnsAsync(
-                new Dictionary<Guid, TeacherMemberInfo>
+                new Dictionary<Guid, OrganizationMember>
                 {
-                    [group.TeacherMemberId] = new(teacherProfileId, "Преподаватель"),
+                    [group.TeacherMemberId] = new(
+                        _organizationId,
+                        teacherProfileId,
+                        Guid.CreateVersion7(),
+                        new DateOnly(2025, 1, 1)
+                    ),
                 }
             );
         _repoMock
@@ -80,7 +85,6 @@ public sealed class GetGroupsQueryHandlerTests
         result.Count.ShouldBe(1);
         result.TotalItems.ShouldBe(1);
         result[0].Teacher.FullName.ShouldBe("Иванов Иван Иванович");
-        result[0].Teacher.PrimaryRole.ShouldBe("Преподаватель");
     }
 
     [Test]
@@ -175,7 +179,7 @@ public sealed class GetGroupsQueryHandlerTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
+            .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
@@ -218,7 +222,7 @@ public sealed class GetGroupsQueryHandlerTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
+            .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())

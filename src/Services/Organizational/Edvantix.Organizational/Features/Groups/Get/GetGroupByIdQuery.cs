@@ -46,11 +46,11 @@ internal sealed class GetGroupByIdQueryHandler(
             cancellationToken
         );
 
-        if (!memberInfo.TryGetValue(teacherMemberId, out var info))
+        if (!memberInfo.TryGetValue(teacherMemberId, out var member))
             return dto;
 
         var response = await profileService.GetProfilesByIdsAsync(
-            [info.ProfileId.ToString()],
+            [member.ProfileId.ToString()],
             cancellationToken
         );
 
@@ -64,7 +64,7 @@ internal sealed class GetGroupByIdQueryHandler(
             Teacher = new TeacherDto(
                 MemberId: teacherMemberId,
                 FullName: profile.FullName,
-                PrimaryRole: info.RoleName,
+                PrimaryRole: member.Role?.Name ?? string.Empty,
                 AvatarUrl: profile.HasAvatarUrl ? profile.AvatarUrl : null
             ),
         };

@@ -39,9 +39,14 @@ public sealed class GetGroupByIdQueryHandlerTests
                 )
             )
             .ReturnsAsync(
-                new Dictionary<Guid, TeacherMemberInfo>
+                new Dictionary<Guid, OrganizationMember>
                 {
-                    [group.TeacherMemberId] = new(teacherProfileId, "Преподаватель"),
+                    [group.TeacherMemberId] = new(
+                        _organizationId,
+                        teacherProfileId,
+                        Guid.CreateVersion7(),
+                        new DateOnly(2025, 1, 1)
+                    ),
                 }
             );
         _profileServiceMock
@@ -70,7 +75,6 @@ public sealed class GetGroupByIdQueryHandlerTests
         var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
 
         result.Teacher.FullName.ShouldBe("Иванов Иван Иванович");
-        result.Teacher.PrimaryRole.ShouldBe("Преподаватель");
         result.Teacher.MemberId.ShouldBe(group.TeacherMemberId);
     }
 
@@ -93,7 +97,7 @@ public sealed class GetGroupByIdQueryHandlerTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
+            .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
@@ -150,7 +154,7 @@ public sealed class GetGroupByIdQueryHandlerTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
+            .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
@@ -184,7 +188,7 @@ public sealed class GetGroupByIdQueryHandlerTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
+            .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())

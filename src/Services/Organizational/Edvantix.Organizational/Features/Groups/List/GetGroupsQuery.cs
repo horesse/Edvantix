@@ -89,7 +89,7 @@ internal sealed class GetGroupsQueryHandler(
         if (memberInfo.Count == 0)
             return;
 
-        var profileIds = memberInfo.Values.Select(i => i.ProfileId.ToString()).Distinct().ToArray();
+        var profileIds = memberInfo.Values.Select(m => m.ProfileId.ToString()).Distinct().ToArray();
         var response = await profileService.GetProfilesByIdsAsync(profileIds, cancellationToken);
 
         if (response is null)
@@ -102,8 +102,8 @@ internal sealed class GetGroupsQueryHandler(
             var teacherMemberId = groups[i].TeacherMemberId;
 
             if (
-                !memberInfo.TryGetValue(teacherMemberId, out var info)
-                || !profiles.TryGetValue(info.ProfileId.ToString(), out var profile)
+                !memberInfo.TryGetValue(teacherMemberId, out var member)
+                || !profiles.TryGetValue(member.ProfileId.ToString(), out var profile)
             )
                 continue;
 
@@ -112,7 +112,7 @@ internal sealed class GetGroupsQueryHandler(
                 Teacher = new TeacherDto(
                     MemberId: teacherMemberId,
                     FullName: profile.FullName,
-                    PrimaryRole: info.RoleName,
+                    PrimaryRole: member.Role?.Name ?? string.Empty,
                     AvatarUrl: profile.HasAvatarUrl ? profile.AvatarUrl : null
                 ),
             };

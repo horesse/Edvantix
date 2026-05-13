@@ -76,7 +76,9 @@ public sealed class CreateGroupCommandHandlerTests
     {
         var command = BuildCommand();
         _curriculumMock
-            .Setup(s => s.GetCourseByIdAsync(command.CourseId.ToString(), It.IsAny<CancellationToken>()))
+            .Setup(s =>
+                s.GetCourseByIdAsync(command.CourseId.ToString(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((CourseInfo?)null);
 
         var act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -89,7 +91,9 @@ public sealed class CreateGroupCommandHandlerTests
     {
         var command = BuildCommand();
         _curriculumMock
-            .Setup(s => s.GetCourseByIdAsync(command.CourseId.ToString(), It.IsAny<CancellationToken>()))
+            .Setup(s =>
+                s.GetCourseByIdAsync(command.CourseId.ToString(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(new CourseInfo { OrganizationId = Guid.CreateVersion7().ToString() });
 
         var act = async () => await _handler.Handle(command, CancellationToken.None);

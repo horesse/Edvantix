@@ -18,7 +18,12 @@ internal sealed class CreateRoomCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var room = new Room(tenantContext.OrganizationId, command.Label, command.Floor, command.Seats);
+        var room = new Room(
+            tenantContext.OrganizationId,
+            command.Label,
+            command.Floor,
+            command.Seats
+        );
 
         await repository.AddAsync(room, cancellationToken);
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

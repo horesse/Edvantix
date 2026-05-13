@@ -47,7 +47,10 @@ internal sealed class GetAvailableRoomsQueryHandler(
                     && minCapacity is not null
                     && r.Seats < (int)Math.Ceiling(minCapacity.Value * 1.3);
 
-                return mapper.Map(r) with { FitsTight = fitsTight };
+                return mapper.Map(r) with
+                {
+                    FitsTight = fitsTight,
+                };
             })
             .OrderByDescending(r => minCapacity is null || r.Seats >= minCapacity.Value)
             .ThenBy(r => r.Seats)

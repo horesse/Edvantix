@@ -47,7 +47,10 @@ public sealed class UpdateRoomCommandHandlerTests
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler
-                .Handle(new UpdateRoomCommand(roomId, "Зал", Floor: 1, Seats: 20), CancellationToken.None)
+                .Handle(
+                    new UpdateRoomCommand(roomId, "Зал", Floor: 1, Seats: 20),
+                    CancellationToken.None
+                )
                 .AsTask()
         );
     }
@@ -70,6 +73,5 @@ public sealed class UpdateRoomCommandHandlerTests
         );
     }
 
-    private static Room CreateRoom(Guid orgId) =>
-        new(orgId, "Каб. 101", floor: 1, seats: 15);
+    private static Room CreateRoom(Guid orgId) => new(orgId, "Каб. 101", floor: 1, seats: 15);
 }

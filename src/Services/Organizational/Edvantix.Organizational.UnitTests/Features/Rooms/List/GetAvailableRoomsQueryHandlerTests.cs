@@ -4,8 +4,7 @@ public sealed class GetAvailableRoomsQueryHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IRoomRepository> _repoMock = new();
-    private readonly Mock<IMapper<Room, RoomDto>> _mapperMock =
-        new();
+    private readonly Mock<IMapper<Room, RoomDto>> _mapperMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetAvailableRoomsQueryHandler _handler;
 
@@ -23,15 +22,11 @@ public sealed class GetAvailableRoomsQueryHandlerTests
         var room20 = CreateRoom(_organizationId, "Каб. 2", seats: 20);
 
         _repoMock
-            .Setup(r =>
-                r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync([room30, room10, room20]);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<Room>()))
-            .Returns<Room>(r =>
-                new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats)
-            );
+            .Returns<Room>(r => new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats));
 
         var result = await _handler.Handle(new GetAvailableRoomsQuery(), CancellationToken.None);
 
@@ -48,15 +43,11 @@ public sealed class GetAvailableRoomsQueryHandlerTests
         var room30 = CreateRoom(_organizationId, "Большой", seats: 30);
 
         _repoMock
-            .Setup(r =>
-                r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync([room10, room30]);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<Room>()))
-            .Returns<Room>(r =>
-                new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats)
-            );
+            .Returns<Room>(r => new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats));
 
         var result = await _handler.Handle(
             new GetAvailableRoomsQuery(MinCapacity: 20),
@@ -74,15 +65,11 @@ public sealed class GetAvailableRoomsQueryHandlerTests
         var roomTight = CreateRoom(_organizationId, "Тесный", seats: 20);
 
         _repoMock
-            .Setup(r =>
-                r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync([roomTight]);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<Room>()))
-            .Returns<Room>(r =>
-                new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats)
-            );
+            .Returns<Room>(r => new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats));
 
         // 20 мест и требуется 18 → запас менее 30%, должен быть fitsTight
         var result = await _handler.Handle(
@@ -99,15 +86,11 @@ public sealed class GetAvailableRoomsQueryHandlerTests
         var roomAmple = CreateRoom(_organizationId, "Просторный", seats: 50);
 
         _repoMock
-            .Setup(r =>
-                r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync([roomAmple]);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<Room>()))
-            .Returns<Room>(r =>
-                new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats)
-            );
+            .Returns<Room>(r => new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats));
 
         // 50 мест и требуется 10 → запас более 30%, не тесный
         var result = await _handler.Handle(
@@ -124,15 +107,11 @@ public sealed class GetAvailableRoomsQueryHandlerTests
         var roomSmall = CreateRoom(_organizationId, "Слишком маленький", seats: 5);
 
         _repoMock
-            .Setup(r =>
-                r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync([roomSmall]);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<Room>()))
-            .Returns<Room>(r =>
-                new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats)
-            );
+            .Returns<Room>(r => new RoomDto(r.Id, r.OrganizationId, r.Label, r.Floor, r.Seats));
 
         var result = await _handler.Handle(
             new GetAvailableRoomsQuery(MinCapacity: 20),
@@ -146,9 +125,7 @@ public sealed class GetAvailableRoomsQueryHandlerTests
     public async Task GivenNoRooms_WhenHandling_ThenShouldReturnEmptyList()
     {
         _repoMock
-            .Setup(r =>
-                r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.ListByOrganizationAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync([]);
 
         var result = await _handler.Handle(new GetAvailableRoomsQuery(), CancellationToken.None);
@@ -156,9 +133,6 @@ public sealed class GetAvailableRoomsQueryHandlerTests
         result.ShouldBeEmpty();
     }
 
-    private static Room CreateRoom(
-        Guid orgId,
-        string label,
-        short seats
-    ) => new(orgId, label, floor: 1, seats: seats);
+    private static Room CreateRoom(Guid orgId, string label, short seats) =>
+        new(orgId, label, floor: 1, seats: seats);
 }

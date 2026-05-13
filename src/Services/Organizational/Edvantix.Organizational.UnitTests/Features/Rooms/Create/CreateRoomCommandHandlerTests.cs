@@ -19,12 +19,7 @@ public sealed class CreateRoomCommandHandlerTests
         var command = new CreateRoomCommand("Зал А", Floor: 1, Seats: 50);
 
         _repoMock
-            .Setup(r =>
-                r.AddAsync(
-                    It.IsAny<Room>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(r => r.AddAsync(It.IsAny<Room>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _repoMock
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
@@ -45,15 +40,8 @@ public sealed class CreateRoomCommandHandlerTests
         var command = new CreateRoomCommand("Лекционный зал", Floor: 3, Seats: 100);
 
         _repoMock
-            .Setup(r =>
-                r.AddAsync(
-                    It.IsAny<Room>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Callback<Room, CancellationToken>(
-                (room, _) => capturedRoom = room
-            )
+            .Setup(r => r.AddAsync(It.IsAny<Room>(), It.IsAny<CancellationToken>()))
+            .Callback<Room, CancellationToken>((room, _) => capturedRoom = room)
             .Returns(Task.CompletedTask);
         _repoMock
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))

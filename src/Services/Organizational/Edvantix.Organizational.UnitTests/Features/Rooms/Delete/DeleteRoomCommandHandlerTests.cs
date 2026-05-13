@@ -61,6 +61,5 @@ public sealed class DeleteRoomCommandHandlerTests
         );
     }
 
-    private static Room CreateRoom(Guid orgId) =>
-        new(orgId, "Каб. 204", floor: 2, seats: 20);
+    private static Room CreateRoom(Guid orgId) => new(orgId, "Каб. 204", floor: 2, seats: 20);
 }

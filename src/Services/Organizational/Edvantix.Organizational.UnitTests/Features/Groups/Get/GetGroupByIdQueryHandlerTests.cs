@@ -33,13 +33,16 @@ public sealed class GetGroupByIdQueryHandlerTests
         _mapperMock.Setup(m => m.Map(group)).Returns(dto);
         _repoMock
             .Setup(r =>
-                r.GetTeacherProfileIdsAsync(
+                r.GetTeacherMemberInfoAsync(
                     It.IsAny<IEnumerable<Guid>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .ReturnsAsync(
-                new Dictionary<Guid, Guid> { [group.TeacherMemberId] = teacherProfileId }
+                new Dictionary<Guid, TeacherMemberInfo>
+                {
+                    [group.TeacherMemberId] = new(teacherProfileId, "Преподаватель"),
+                }
             );
         _profileServiceMock
             .Setup(p =>
@@ -66,7 +69,9 @@ public sealed class GetGroupByIdQueryHandlerTests
 
         var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
 
-        result.TeacherFullName.ShouldBe("Иванов Иван Иванович");
+        result.Teacher.FullName.ShouldBe("Иванов Иван Иванович");
+        result.Teacher.PrimaryRole.ShouldBe("Преподаватель");
+        result.Teacher.MemberId.ShouldBe(group.TeacherMemberId);
     }
 
     [Test]
@@ -83,12 +88,12 @@ public sealed class GetGroupByIdQueryHandlerTests
         _mapperMock.Setup(m => m.Map(group)).Returns(dto);
         _repoMock
             .Setup(r =>
-                r.GetTeacherProfileIdsAsync(
+                r.GetTeacherMemberInfoAsync(
                     It.IsAny<IEnumerable<Guid>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, Guid>());
+            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
@@ -140,12 +145,12 @@ public sealed class GetGroupByIdQueryHandlerTests
         _mapperMock.Setup(m => m.Map(group)).Returns(dto);
         _repoMock
             .Setup(r =>
-                r.GetTeacherProfileIdsAsync(
+                r.GetTeacherMemberInfoAsync(
                     It.IsAny<IEnumerable<Guid>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, Guid>());
+            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
@@ -154,7 +159,7 @@ public sealed class GetGroupByIdQueryHandlerTests
 
         var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
 
-        result.TeacherFullName.ShouldBe(string.Empty);
+        result.Teacher.FullName.ShouldBe(string.Empty);
         _profileServiceMock.Verify(
             p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()),
             Times.Never
@@ -174,12 +179,12 @@ public sealed class GetGroupByIdQueryHandlerTests
         _mapperMock.Setup(m => m.Map(group)).Returns(dto);
         _repoMock
             .Setup(r =>
-                r.GetTeacherProfileIdsAsync(
+                r.GetTeacherMemberInfoAsync(
                     It.IsAny<IEnumerable<Guid>>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, Guid>());
+            .ReturnsAsync(new Dictionary<Guid, TeacherMemberInfo>());
         _repoMock
             .Setup(r =>
                 r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
@@ -239,8 +244,7 @@ public sealed class GetGroupByIdQueryHandlerTests
             new DateOnly(2025, 9, 1),
             new DateOnly(2026, 6, 30),
             Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
-            string.Empty,
+            Teacher: new TeacherDto(Guid.CreateVersion7(), string.Empty, string.Empty, null),
             null,
             null,
             OnlinePlatform.Zoom

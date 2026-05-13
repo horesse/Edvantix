@@ -58,16 +58,22 @@ internal sealed class GroupRepository(OrganizationalDbContext context) : IGroupR
         return codes.Select(c => c.Value).ToList();
     }
 
-    public async Task<IReadOnlyDictionary<Guid, Guid>> GetTeacherProfileIdsAsync(
+    public async Task<IReadOnlyDictionary<Guid, TeacherMemberInfo>> GetTeacherMemberInfoAsync(
         IEnumerable<Guid> teacherMemberIds,
         CancellationToken cancellationToken = default
     )
     {
         var ids = teacherMemberIds.ToList();
 
-        return await context
+        // Role подтягивается через AutoInclude из OrganizationMemberConfiguration.
+        var members = await context
             .OrganizationMembers.Where(m => ids.Contains(m.Id) && !m.IsDeleted)
-            .ToDictionaryAsync(m => m.Id, m => m.ProfileId, cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        return members.ToDictionary(
+            m => m.Id,
+            m => new TeacherMemberInfo(m.ProfileId, m.Role?.Name ?? string.Empty)
+        );
     }
 
     public async Task<IReadOnlyDictionary<Guid, Room>> GetRoomsByIdsAsync(

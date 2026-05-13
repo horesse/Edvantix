@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Organizational.Features.OrganizationMembers;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.Groups.List;
@@ -63,13 +64,13 @@ internal sealed class GetGroupsQueryHandler(
 
         var items = groups.Select(mapper.Map).ToList();
 
-        await EnrichWithTeacherNamesAsync(items, groups.ToList(), cancellationToken);
+        await EnrichWithTeachersAsync(items, groups.ToList(), cancellationToken);
         await EnrichWithRoomLabelsAsync(items, groups.ToList(), cancellationToken);
 
         return new PagedResult<GroupListItemDto>(items, pageIndex, pageSize, totalCount);
     }
 
-    private async Task EnrichWithTeacherNamesAsync(
+    private async Task EnrichWithTeachersAsync(
         List<GroupListItemDto> items,
         List<Group> groups,
         CancellationToken cancellationToken
@@ -80,15 +81,15 @@ internal sealed class GetGroupsQueryHandler(
 
         var teacherMemberIds = groups.Select(g => g.TeacherMemberId).Distinct().ToList();
 
-        var memberToProfile = await repository.GetTeacherProfileIdsAsync(
+        var memberInfo = await repository.GetTeacherMemberInfoAsync(
             teacherMemberIds,
             cancellationToken
         );
 
-        if (memberToProfile.Count == 0)
+        if (memberInfo.Count == 0)
             return;
 
-        var profileIds = memberToProfile.Values.Select(p => p.ToString()).Distinct().ToArray();
+        var profileIds = memberInfo.Values.Select(i => i.ProfileId.ToString()).Distinct().ToArray();
         var response = await profileService.GetProfilesByIdsAsync(profileIds, cancellationToken);
 
         if (response is null)
@@ -101,12 +102,20 @@ internal sealed class GetGroupsQueryHandler(
             var teacherMemberId = groups[i].TeacherMemberId;
 
             if (
-                !memberToProfile.TryGetValue(teacherMemberId, out var profileId)
-                || !profiles.TryGetValue(profileId.ToString(), out var profile)
+                !memberInfo.TryGetValue(teacherMemberId, out var info)
+                || !profiles.TryGetValue(info.ProfileId.ToString(), out var profile)
             )
                 continue;
 
-            items[i] = items[i] with { TeacherFullName = profile.FullName };
+            items[i] = items[i] with
+            {
+                Teacher = new TeacherDto(
+                    MemberId: teacherMemberId,
+                    FullName: profile.FullName,
+                    PrimaryRole: info.RoleName,
+                    AvatarUrl: profile.HasAvatarUrl ? profile.AvatarUrl : null
+                ),
+            };
         }
     }
 

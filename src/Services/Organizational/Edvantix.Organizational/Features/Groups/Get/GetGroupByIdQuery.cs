@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Organizational.Features.OrganizationMembers;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.Groups.Get;
@@ -28,34 +29,45 @@ internal sealed class GetGroupByIdQueryHandler(
 
         var dto = mapper.Map(group);
 
-        dto = await EnrichWithTeacherNameAsync(dto, group.TeacherMemberId, cancellationToken);
+        dto = await EnrichWithTeacherAsync(dto, group.TeacherMemberId, cancellationToken);
         dto = await EnrichWithRoomLabelAsync(dto, group.RoomId, cancellationToken);
 
         return dto;
     }
 
-    private async Task<GroupDetailDto> EnrichWithTeacherNameAsync(
+    private async Task<GroupDetailDto> EnrichWithTeacherAsync(
         GroupDetailDto dto,
         Guid teacherMemberId,
         CancellationToken cancellationToken
     )
     {
-        var memberToProfile = await repository.GetTeacherProfileIdsAsync(
+        var memberInfo = await repository.GetTeacherMemberInfoAsync(
             [teacherMemberId],
             cancellationToken
         );
 
-        if (!memberToProfile.TryGetValue(teacherMemberId, out var profileId))
+        if (!memberInfo.TryGetValue(teacherMemberId, out var info))
             return dto;
 
         var response = await profileService.GetProfilesByIdsAsync(
-            [profileId.ToString()],
+            [info.ProfileId.ToString()],
             cancellationToken
         );
 
         var profile = response?.Profiles.FirstOrDefault();
 
-        return profile is not null ? dto with { TeacherFullName = profile.FullName } : dto;
+        if (profile is null)
+            return dto;
+
+        return dto with
+        {
+            Teacher = new TeacherDto(
+                MemberId: teacherMemberId,
+                FullName: profile.FullName,
+                PrimaryRole: info.RoleName,
+                AvatarUrl: profile.HasAvatarUrl ? profile.AvatarUrl : null
+            ),
+        };
     }
 
     private async Task<GroupDetailDto> EnrichWithRoomLabelAsync(

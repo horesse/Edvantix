@@ -2,6 +2,11 @@ using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 
+/// <summary>Проекция данных участника-преподавателя, возвращаемая репозиторием для обогащения DTO.</summary>
+/// <param name="ProfileId">Идентификатор профиля в Persona.</param>
+/// <param name="RoleName">Название роли участника в организации.</param>
+public sealed record TeacherMemberInfo(Guid ProfileId, string RoleName);
+
 /// <summary>Репозиторий агрегата <see cref="Group"/>.</summary>
 public interface IGroupRepository : IRepository<Group>
 {
@@ -39,10 +44,10 @@ public interface IGroupRepository : IRepository<Group>
     );
 
     /// <summary>
-    /// Возвращает словарь &lt;OrganizationMemberId, ProfileId&gt; для указанных участников-преподавателей.
-    /// Используется для обогащения DTO именем преподавателя через Persona gRPC.
+    /// Возвращает словарь &lt;OrganizationMemberId, TeacherMemberInfo&gt; для указанных участников-преподавателей.
+    /// Используется для обогащения DTO данными преподавателя (ProfileId + RoleName) через Persona gRPC.
     /// </summary>
-    Task<IReadOnlyDictionary<Guid, Guid>> GetTeacherProfileIdsAsync(
+    Task<IReadOnlyDictionary<Guid, TeacherMemberInfo>> GetTeacherMemberInfoAsync(
         IEnumerable<Guid> teacherMemberIds,
         CancellationToken cancellationToken = default
     );

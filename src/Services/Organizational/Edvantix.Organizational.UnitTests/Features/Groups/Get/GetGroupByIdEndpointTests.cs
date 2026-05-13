@@ -53,8 +53,7 @@ public sealed class GetGroupByIdEndpointTests
             new DateOnly(2025, 9, 1),
             new DateOnly(2026, 6, 30),
             Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
-            string.Empty,
+            Teacher: new TeacherDto(Guid.CreateVersion7(), string.Empty, string.Empty, null),
             null,
             null,
             OnlinePlatform.Zoom

@@ -15,10 +15,7 @@ public sealed class GetGroupsEndpointTests
 
         await _endpoint.HandleAsync(query, _senderMock.Object);
 
-        _senderMock.Verify(
-            s => s.Send(query, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _senderMock.Verify(s => s.Send(query, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]

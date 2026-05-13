@@ -19,10 +19,7 @@ public sealed class GetGroupByIdEndpointTests
         await _endpoint.HandleAsync(id, _senderMock.Object);
 
         _senderMock.Verify(
-            s => s.Send(
-                It.Is<GetGroupByIdQuery>(q => q.Id == id),
-                It.IsAny<CancellationToken>()
-            ),
+            s => s.Send(It.Is<GetGroupByIdQuery>(q => q.Id == id), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

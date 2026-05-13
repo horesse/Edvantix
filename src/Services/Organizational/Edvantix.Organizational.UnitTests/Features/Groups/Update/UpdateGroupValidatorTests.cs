@@ -32,7 +32,10 @@ public sealed class UpdateGroupValidatorTests
     public void GivenEmptyDescription_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(
-            BuildValidCommand() with { Description = string.Empty }
+            BuildValidCommand() with
+            {
+                Description = string.Empty,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.Description);
@@ -50,7 +53,10 @@ public sealed class UpdateGroupValidatorTests
     public void GivenEmptyTeacherMemberId_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(
-            BuildValidCommand() with { TeacherMemberId = Guid.Empty }
+            BuildValidCommand() with
+            {
+                TeacherMemberId = Guid.Empty,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.TeacherMemberId);

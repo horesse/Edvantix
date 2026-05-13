@@ -106,7 +106,10 @@ public sealed class CreateGroupValidatorTests
     public void GivenEmptyDescription_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(
-            BuildValidCommand() with { Description = string.Empty }
+            BuildValidCommand() with
+            {
+                Description = string.Empty,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.Description);
@@ -116,7 +119,10 @@ public sealed class CreateGroupValidatorTests
     public void GivenEmptyTeacherMemberId_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(
-            BuildValidCommand() with { TeacherMemberId = Guid.Empty }
+            BuildValidCommand() with
+            {
+                TeacherMemberId = Guid.Empty,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.TeacherMemberId);
@@ -126,7 +132,10 @@ public sealed class CreateGroupValidatorTests
     public void GivenCodeExceedingMaxLength_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(
-            BuildValidCommand() with { Code = new string('A', 33) }
+            BuildValidCommand() with
+            {
+                Code = new string('A', 33),
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.Code);

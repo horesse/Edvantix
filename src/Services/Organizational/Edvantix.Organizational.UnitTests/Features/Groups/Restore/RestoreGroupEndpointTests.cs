@@ -16,10 +16,7 @@ public sealed class RestoreGroupEndpointTests
         await _endpoint.HandleAsync(id, _senderMock.Object);
 
         _senderMock.Verify(
-            s => s.Send(
-                It.Is<RestoreGroupCommand>(c => c.Id == id),
-                It.IsAny<CancellationToken>()
-            ),
+            s => s.Send(It.Is<RestoreGroupCommand>(c => c.Id == id), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

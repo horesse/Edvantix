@@ -56,8 +56,7 @@ public sealed class UpdateGroupCommandHandlerTests
             .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(group);
 
-        var act = async () =>
-            await _handler.Handle(BuildCommand(group.Id), CancellationToken.None);
+        var act = async () => await _handler.Handle(BuildCommand(group.Id), CancellationToken.None);
 
         await act.ShouldThrowAsync<ForbiddenException>();
     }
@@ -71,8 +70,7 @@ public sealed class UpdateGroupCommandHandlerTests
             .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(group);
 
-        var act = async () =>
-            await _handler.Handle(BuildCommand(group.Id), CancellationToken.None);
+        var act = async () => await _handler.Handle(BuildCommand(group.Id), CancellationToken.None);
 
         await act.ShouldThrowAsync<InvalidOperationException>();
     }

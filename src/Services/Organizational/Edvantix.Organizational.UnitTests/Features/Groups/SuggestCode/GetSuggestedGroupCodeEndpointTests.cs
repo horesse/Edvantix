@@ -9,25 +9,18 @@ public sealed class GetSuggestedGroupCodeEndpointTests
     public async Task GivenValidQuery_WhenHandling_ThenShouldCallSenderOnce()
     {
         var query = new GetSuggestedGroupCodeQuery(GroupLevel.B1);
-        _senderMock
-            .Setup(s => s.Send(query, It.IsAny<CancellationToken>()))
-            .ReturnsAsync("B1-01");
+        _senderMock.Setup(s => s.Send(query, It.IsAny<CancellationToken>())).ReturnsAsync("B1-01");
 
         await _endpoint.HandleAsync(query, _senderMock.Object);
 
-        _senderMock.Verify(
-            s => s.Send(query, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _senderMock.Verify(s => s.Send(query, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
     public async Task GivenValidQuery_WhenHandling_ThenShouldReturnOkWithCode()
     {
         var query = new GetSuggestedGroupCodeQuery(GroupLevel.B1);
-        _senderMock
-            .Setup(s => s.Send(query, It.IsAny<CancellationToken>()))
-            .ReturnsAsync("B1-01");
+        _senderMock.Setup(s => s.Send(query, It.IsAny<CancellationToken>())).ReturnsAsync("B1-01");
 
         var result = await _endpoint.HandleAsync(query, _senderMock.Object);
 

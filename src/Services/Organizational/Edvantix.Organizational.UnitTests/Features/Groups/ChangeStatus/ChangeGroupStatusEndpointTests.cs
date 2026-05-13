@@ -15,10 +15,7 @@ public sealed class ChangeGroupStatusEndpointTests
 
         await _endpoint.HandleAsync(command, _senderMock.Object);
 
-        _senderMock.Verify(
-            s => s.Send(command, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _senderMock.Verify(s => s.Send(command, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]

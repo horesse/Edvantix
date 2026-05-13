@@ -83,7 +83,6 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
                 nameof(endDate)
             );
 
-        Id = Guid.CreateVersion7();
         OrganizationId = organizationId;
         Code = code;
         Name = name.Trim();

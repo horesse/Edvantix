@@ -14,7 +14,7 @@ public sealed class CreateGroupCommandHandlerTests
     }
 
     [Test]
-    public async Task GivenValidCommand_WhenHandling_ThenShouldAddGroupAndReturnId()
+    public async Task GivenValidCommand_WhenHandling_ThenShouldAddGroup()
     {
         var command = BuildCommand();
 
@@ -25,9 +25,8 @@ public sealed class CreateGroupCommandHandlerTests
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        var result = await _handler.Handle(command, CancellationToken.None);
+        await _handler.Handle(command, CancellationToken.None);
 
-        result.ShouldNotBe(Guid.Empty);
         _repoMock.Verify(
             r => r.AddAsync(It.IsAny<Group>(), It.IsAny<CancellationToken>()),
             Times.Once

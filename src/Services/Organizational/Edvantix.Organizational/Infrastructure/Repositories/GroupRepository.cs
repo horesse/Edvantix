@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
@@ -58,16 +59,19 @@ internal sealed class GroupRepository(OrganizationalDbContext context) : IGroupR
         return codes.Select(c => c.Value).ToList();
     }
 
-    public async Task<IReadOnlyDictionary<Guid, Guid>> GetTeacherProfileIdsAsync(
+    public async Task<IReadOnlyDictionary<Guid, OrganizationMember>> GetTeacherMemberInfoAsync(
         IEnumerable<Guid> teacherMemberIds,
         CancellationToken cancellationToken = default
     )
     {
         var ids = teacherMemberIds.ToList();
 
-        return await context
+        // Role подтягивается через AutoInclude из OrganizationMemberConfiguration.
+        var members = await context
             .OrganizationMembers.Where(m => ids.Contains(m.Id) && !m.IsDeleted)
-            .ToDictionaryAsync(m => m.Id, m => m.ProfileId, cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        return members.ToDictionary(m => m.Id);
     }
 
     public async Task<IReadOnlyDictionary<Guid, Room>> GetRoomsByIdsAsync(

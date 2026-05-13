@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Features.OrganizationMembers;
 
 namespace Edvantix.Organizational.Features.Groups;
 
@@ -17,8 +18,7 @@ public sealed class GroupListItemDtoMapper : Mapper<Group, GroupListItemDto>
             source.Members.Count(m => m.ExitedAt is null),
             source.StartDate,
             source.EndDate,
-            source.TeacherMemberId,
-            TeacherFullName: string.Empty,
+            Teacher: new TeacherDto(source.TeacherMemberId, string.Empty, string.Empty, null),
             source.RoomId,
             RoomLabel: null,
             source.CourseId
@@ -42,8 +42,7 @@ public sealed class GroupDetailDtoMapper : Mapper<Group, GroupDetailDto>
             source.StartDate,
             source.EndDate,
             source.CourseId,
-            source.TeacherMemberId,
-            TeacherFullName: string.Empty,
+            Teacher: new TeacherDto(source.TeacherMemberId, string.Empty, string.Empty, null),
             source.RoomId,
             RoomLabel: null,
             source.Platform

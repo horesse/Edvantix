@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Features.OrganizationMembers;
 
 namespace Edvantix.Organizational.Features.Groups;
 
@@ -14,8 +15,7 @@ public sealed record GroupListItemDto(
     [property: Description("Количество активных участников")] int MemberCount,
     [property: Description("Дата начала")] DateOnly StartDate,
     [property: Description("Дата окончания")] DateOnly EndDate,
-    [property: Description("Идентификатор участника-преподавателя")] Guid TeacherMemberId,
-    [property: Description("Полное имя преподавателя")] string TeacherFullName,
+    [property: Description("Преподаватель группы")] TeacherDto Teacher,
     [property: Description("Идентификатор кабинета")] Guid? RoomId,
     [property: Description("Метка кабинета")] string? RoomLabel,
     [property: Description("Идентификатор курса")] Guid CourseId
@@ -35,8 +35,7 @@ public sealed record GroupDetailDto(
     [property: Description("Дата начала")] DateOnly StartDate,
     [property: Description("Дата окончания")] DateOnly EndDate,
     [property: Description("Идентификатор курса")] Guid CourseId,
-    [property: Description("Идентификатор участника-преподавателя")] Guid TeacherMemberId,
-    [property: Description("Полное имя преподавателя")] string TeacherFullName,
+    [property: Description("Преподаватель группы")] TeacherDto Teacher,
     [property: Description("Идентификатор кабинета")] Guid? RoomId,
     [property: Description("Метка кабинета")] string? RoomLabel,
     [property: Description("Онлайн-платформа")] OnlinePlatform? Platform

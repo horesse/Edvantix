@@ -21,8 +21,10 @@ public sealed class GroupDtoMapperTests
         dto.Status.ShouldBe(GroupStatus.Recruiting);
         dto.Capacity.ShouldBe(group.Capacity);
         dto.CourseId.ShouldBe(group.CourseId);
-        dto.TeacherMemberId.ShouldBe(group.TeacherMemberId);
-        dto.TeacherFullName.ShouldBe(string.Empty);
+        dto.Teacher.MemberId.ShouldBe(group.TeacherMemberId);
+        dto.Teacher.FullName.ShouldBe(string.Empty);
+        dto.Teacher.PrimaryRole.ShouldBe(string.Empty);
+        dto.Teacher.AvatarUrl.ShouldBeNull();
         dto.RoomId.ShouldBeNull();
         dto.RoomLabel.ShouldBeNull();
     }
@@ -43,7 +45,8 @@ public sealed class GroupDtoMapperTests
         dto.Platform.ShouldBe(group.Platform);
         dto.Capacity.ShouldBe(group.Capacity);
         dto.CourseId.ShouldBe(group.CourseId);
-        dto.TeacherFullName.ShouldBe(string.Empty);
+        dto.Teacher.MemberId.ShouldBe(group.TeacherMemberId);
+        dto.Teacher.FullName.ShouldBe(string.Empty);
     }
 
     [Test]

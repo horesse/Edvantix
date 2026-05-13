@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
@@ -39,10 +40,10 @@ public interface IGroupRepository : IRepository<Group>
     );
 
     /// <summary>
-    /// Возвращает словарь &lt;OrganizationMemberId, ProfileId&gt; для указанных участников-преподавателей.
-    /// Используется для обогащения DTO именем преподавателя через Persona gRPC.
+    /// Возвращает словарь &lt;OrganizationMemberId, OrganizationMember&gt; для указанных участников-преподавателей.
+    /// Используется для обогащения DTO данными преподавателя через Persona gRPC.
     /// </summary>
-    Task<IReadOnlyDictionary<Guid, Guid>> GetTeacherProfileIdsAsync(
+    Task<IReadOnlyDictionary<Guid, OrganizationMember>> GetTeacherMemberInfoAsync(
         IEnumerable<Guid> teacherMemberIds,
         CancellationToken cancellationToken = default
     );

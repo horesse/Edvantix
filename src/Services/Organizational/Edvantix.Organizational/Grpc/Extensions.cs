@@ -1,4 +1,6 @@
 ﻿using Edvantix.Chassis.Utilities.Configurations;
+using Edvantix.Curriculum.Grpc.Services;
+using Edvantix.Organizational.Grpc.Services.Courses;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 using Edvantix.Persona.Grpc.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -26,6 +28,16 @@ internal static class Extensions
             HealthStatus.Degraded
         );
 
+        services.AddGrpcServiceReference<CurriculumGrpcService.CurriculumGrpcServiceClient>(
+            HttpUtilities
+                .AsUrlBuilder()
+                .WithScheme(builder.GetScheme())
+                .WithHost(Constants.Aspire.Services.Curriculum)
+                .Build(),
+            HealthStatus.Degraded
+        );
+
         services.AddSingleton<IProfileService, ProfileService>();
+        services.AddSingleton<ICurriculumService, CurriculumService>();
     }
 }

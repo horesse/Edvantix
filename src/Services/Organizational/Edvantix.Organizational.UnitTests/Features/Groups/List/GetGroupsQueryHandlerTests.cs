@@ -33,18 +33,12 @@ public sealed class GetGroupsQueryHandlerTests
 
         _repoMock
             .Setup(r =>
-                r.ListAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync([group]);
         _repoMock
             .Setup(r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(1);
         _repoMock
@@ -54,13 +48,12 @@ public sealed class GetGroupsQueryHandlerTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(new Dictionary<Guid, Guid> { [group.TeacherMemberId] = teacherProfileId });
+            .ReturnsAsync(
+                new Dictionary<Guid, Guid> { [group.TeacherMemberId] = teacherProfileId }
+            );
         _repoMock
             .Setup(r =>
-                r.GetRoomsByIdsAsync(
-                    It.IsAny<IEnumerable<Guid>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(new Dictionary<Guid, Room>());
         _mapperMock.Setup(m => m.Map(group)).Returns(dto);
@@ -96,18 +89,12 @@ public sealed class GetGroupsQueryHandlerTests
 
         _repoMock
             .Setup(r =>
-                r.ListAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync([]);
         _repoMock
             .Setup(r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(0);
 
@@ -128,18 +115,12 @@ public sealed class GetGroupsQueryHandlerTests
 
         _repoMock
             .Setup(r =>
-                r.ListAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync([]);
         _repoMock
             .Setup(r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(0);
 

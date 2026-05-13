@@ -70,7 +70,10 @@ internal sealed class GetGroupByIdQueryHandler(
         var rooms = await repository.GetRoomsByIdsAsync([roomId.Value], cancellationToken);
 
         return rooms.TryGetValue(roomId.Value, out var room)
-            ? dto with { RoomLabel = room.Label }
+            ? dto with
+            {
+                RoomLabel = room.Label,
+            }
             : dto;
     }
 }

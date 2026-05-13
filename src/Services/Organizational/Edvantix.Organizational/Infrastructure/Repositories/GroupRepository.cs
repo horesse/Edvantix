@@ -9,7 +9,10 @@ internal sealed class GroupRepository(OrganizationalDbContext context) : IGroupR
     public IUnitOfWork UnitOfWork => context;
     private static SpecificationEvaluator Specification => SpecificationEvaluator.Instance;
 
-    public async Task<Group?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+    public async Task<Group?> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    ) =>
         await context
             .Groups.AsTracking()
             .Include(g => g.Members)

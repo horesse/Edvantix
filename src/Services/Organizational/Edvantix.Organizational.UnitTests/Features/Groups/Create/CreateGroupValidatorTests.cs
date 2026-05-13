@@ -39,9 +39,7 @@ public sealed class CreateGroupValidatorTests
     [Test]
     public void GivenEmptyCourseId_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(
-            BuildValidCommand() with { CourseId = Guid.Empty }
-        );
+        var result = _validator.TestValidate(BuildValidCommand() with { CourseId = Guid.Empty });
 
         result.ShouldHaveValidationErrorFor(x => x.CourseId);
     }
@@ -66,7 +64,10 @@ public sealed class CreateGroupValidatorTests
     public void GivenEndDateBeforeStartDate_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(
-            BuildValidCommand() with { EndDate = new DateOnly(2025, 1, 1) }
+            BuildValidCommand() with
+            {
+                EndDate = new DateOnly(2025, 1, 1),
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.EndDate);

@@ -6,9 +6,7 @@ internal sealed class UpdateGroupValidator : AbstractValidator<UpdateGroupComman
 {
     public UpdateGroupValidator()
     {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("Идентификатор группы обязателен");
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Идентификатор группы обязателен");
 
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -22,9 +20,7 @@ internal sealed class UpdateGroupValidator : AbstractValidator<UpdateGroupComman
             .MaximumLength(1024)
             .WithMessage("Описание группы не может превышать 1024 символа");
 
-        RuleFor(x => x.CourseId)
-            .NotEmpty()
-            .WithMessage("Идентификатор курса обязателен");
+        RuleFor(x => x.CourseId).NotEmpty().WithMessage("Идентификатор курса обязателен");
 
         RuleFor(x => x.TeacherMemberId)
             .NotEmpty()

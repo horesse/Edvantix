@@ -48,11 +48,7 @@ public sealed class GetGroupStatsQueryHandlerTests
         await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>()),
             Times.Exactly(6)
         );
     }
@@ -68,10 +64,7 @@ public sealed class GetGroupStatsQueryHandlerTests
     {
         _repoMock
             .SetupSequence(r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Group>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(total)
             .ReturnsAsync(active)

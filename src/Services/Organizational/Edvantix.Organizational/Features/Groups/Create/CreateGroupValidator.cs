@@ -12,7 +12,9 @@ internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupComman
             .MaximumLength(32)
             .WithMessage("Код группы не может превышать 32 символа")
             .Matches(@"^[A-Z0-9\-]+$")
-            .WithMessage("Код группы должен содержать только заглавные латинские буквы, цифры и дефисы");
+            .WithMessage(
+                "Код группы должен содержать только заглавные латинские буквы, цифры и дефисы"
+            );
 
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -26,9 +28,7 @@ internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupComman
             .MaximumLength(1024)
             .WithMessage("Описание группы не может превышать 1024 символа");
 
-        RuleFor(x => x.CourseId)
-            .NotEmpty()
-            .WithMessage("Идентификатор курса обязателен");
+        RuleFor(x => x.CourseId).NotEmpty().WithMessage("Идентификатор курса обязателен");
 
         RuleFor(x => x.TeacherMemberId)
             .NotEmpty()

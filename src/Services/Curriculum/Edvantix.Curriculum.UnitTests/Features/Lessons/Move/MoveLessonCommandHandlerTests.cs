@@ -76,9 +76,7 @@ public sealed class MoveLessonCommandHandlerTests
         var handler = CreateHandler();
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            handler
-                .Handle(new MoveLessonCommand(lesson.Id, 1), CancellationToken.None)
-                .AsTask()
+            handler.Handle(new MoveLessonCommand(lesson.Id, 1), CancellationToken.None).AsTask()
         );
     }
 

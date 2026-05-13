@@ -12,12 +12,7 @@ public sealed class MoveLessonEndpoint : IEndpoint<NoContent, MoveLessonCommand,
                     MoveLessonCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) =>
-                    await HandleAsync(
-                        command with { LessonId = id },
-                        sender,
-                        cancellationToken
-                    )
+                ) => await HandleAsync(command with { LessonId = id }, sender, cancellationToken)
             )
             .WithTags("Уроки")
             .WithSummary("Переместить урок на новую позицию")

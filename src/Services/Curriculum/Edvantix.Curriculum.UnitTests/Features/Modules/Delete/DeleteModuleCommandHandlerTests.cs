@@ -26,10 +26,7 @@ public sealed class DeleteModuleCommandHandlerTests
             .ReturnsAsync(course);
         var handler = CreateHandler();
 
-        await handler.Handle(
-            new DeleteModuleCommand(course.Id, module.Id),
-            CancellationToken.None
-        );
+        await handler.Handle(new DeleteModuleCommand(course.Id, module.Id), CancellationToken.None);
 
         course.Modules.ShouldBeEmpty();
     }
@@ -43,10 +40,7 @@ public sealed class DeleteModuleCommandHandlerTests
             .ReturnsAsync(course);
         var handler = CreateHandler();
 
-        await handler.Handle(
-            new DeleteModuleCommand(course.Id, module.Id),
-            CancellationToken.None
-        );
+        await handler.Handle(new DeleteModuleCommand(course.Id, module.Id), CancellationToken.None);
 
         _unitOfWorkMock.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }

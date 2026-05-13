@@ -31,7 +31,13 @@ internal sealed class UpdateLessonCommandHandler(
         if (course.OrganizationId != tenantContext.OrganizationId)
             throw NotFoundException.For<Lesson>(command.LessonId);
 
-        course.UpdateLesson(command.LessonId, command.Title, command.Type, command.Minutes, command.Objectives);
+        course.UpdateLesson(
+            command.LessonId,
+            command.Title,
+            command.Type,
+            command.Minutes,
+            command.Objectives
+        );
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
         return Unit.Value;

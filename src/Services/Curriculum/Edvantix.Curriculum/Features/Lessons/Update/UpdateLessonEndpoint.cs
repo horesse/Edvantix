@@ -12,12 +12,7 @@ public sealed class UpdateLessonEndpoint : IEndpoint<NoContent, UpdateLessonComm
                     UpdateLessonCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) =>
-                    await HandleAsync(
-                        command with { LessonId = id },
-                        sender,
-                        cancellationToken
-                    )
+                ) => await HandleAsync(command with { LessonId = id }, sender, cancellationToken)
             )
             .WithTags("Уроки")
             .WithSummary("Обновить урок")

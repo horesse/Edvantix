@@ -27,7 +27,13 @@ public sealed class UpdateLessonCommandHandlerTests
         var handler = CreateHandler();
 
         await handler.Handle(
-            new UpdateLessonCommand(lesson.Id, "Updated Title", LessonType.Practice, 60, ["New objective"]),
+            new UpdateLessonCommand(
+                lesson.Id,
+                "Updated Title",
+                LessonType.Practice,
+                60,
+                ["New objective"]
+            ),
             CancellationToken.None
         );
 
@@ -62,7 +68,13 @@ public sealed class UpdateLessonCommandHandlerTests
         await Should.ThrowAsync<NotFoundException>(() =>
             handler
                 .Handle(
-                    new UpdateLessonCommand(Guid.CreateVersion7(), "Title", LessonType.Lecture, 45, []),
+                    new UpdateLessonCommand(
+                        Guid.CreateVersion7(),
+                        "Title",
+                        LessonType.Lecture,
+                        45,
+                        []
+                    ),
                     CancellationToken.None
                 )
                 .AsTask()

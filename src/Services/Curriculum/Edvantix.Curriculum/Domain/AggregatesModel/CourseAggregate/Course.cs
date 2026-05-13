@@ -269,6 +269,78 @@ public sealed class Course() : AuditableEntity, IAggregateRoot, ISoftDelete, ITe
     }
 
     /// <summary>
+    /// Удаляет модуль из курса и переиндексирует оставшиеся модули.
+    /// </summary>
+    public void DeleteModule(Guid moduleId)
+    {
+        if (IsDeleted)
+            throw new InvalidOperationException("Нельзя редактировать архивированный курс.");
+
+        var module =
+            _modules.FirstOrDefault(m => m.Id == moduleId)
+            ?? throw NotFoundException.For<Module>(moduleId);
+
+        _modules.Remove(module);
+
+        for (var i = 0; i < _modules.Count; i++)
+            _modules[i].SetPosition((short)(i + 1));
+
+        LastModifiedAt = DateTimeHelper.UtcNow();
+    }
+
+    /// <summary>
+    /// Обновляет поля урока.
+    /// </summary>
+    public void UpdateLesson(
+        Guid lessonId,
+        string title,
+        LessonType type,
+        short minutes,
+        string[] objectives
+    )
+    {
+        if (IsDeleted)
+            throw new InvalidOperationException("Нельзя редактировать архивированный курс.");
+
+        foreach (var module in _modules)
+        {
+            var lesson = module.Lessons.FirstOrDefault(l => l.Id == lessonId);
+
+            if (lesson is null)
+                continue;
+
+            lesson.Update(title, type, minutes, objectives);
+            LastModifiedAt = DateTimeHelper.UtcNow();
+            return;
+        }
+
+        throw NotFoundException.For<Lesson>(lessonId);
+    }
+
+    /// <summary>
+    /// Перемещает урок на новую позицию в рамках его модуля.
+    /// </summary>
+    public void MoveLesson(Guid lessonId, short newPosition)
+    {
+        if (IsDeleted)
+            throw new InvalidOperationException("Нельзя редактировать архивированный курс.");
+
+        foreach (var module in _modules)
+        {
+            var lesson = module.Lessons.FirstOrDefault(l => l.Id == lessonId);
+
+            if (lesson is null)
+                continue;
+
+            module.MoveLesson(lessonId, newPosition);
+            LastModifiedAt = DateTimeHelper.UtcNow();
+            return;
+        }
+
+        throw NotFoundException.For<Lesson>(lessonId);
+    }
+
+    /// <summary>
     /// Публикует урок в указанном модуле.
     /// </summary>
     public void PublishLesson(Guid lessonId)

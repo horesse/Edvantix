@@ -96,4 +96,26 @@ public sealed class Module() : Entity
 
         Position = position;
     }
+
+    /// <summary>
+    /// Перемещает урок на новую позицию в рамках модуля и переиндексирует остальные уроки.
+    /// </summary>
+    internal void MoveLesson(Guid lessonId, short newPosition)
+    {
+        if (newPosition <= 0 || newPosition > _lessons.Count)
+            throw new ArgumentOutOfRangeException(
+                nameof(newPosition),
+                $"Позиция должна быть в диапазоне 1..{_lessons.Count}."
+            );
+
+        var lesson =
+            _lessons.FirstOrDefault(l => l.Id == lessonId)
+            ?? throw new NotFoundException($"Урок {lessonId} не принадлежит модулю.");
+
+        _lessons.Remove(lesson);
+        _lessons.Insert(newPosition - 1, lesson);
+
+        for (var i = 0; i < _lessons.Count; i++)
+            _lessons[i].Move((short)(i + 1));
+    }
 }

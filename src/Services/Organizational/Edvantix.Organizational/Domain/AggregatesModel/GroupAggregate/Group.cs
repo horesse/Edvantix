@@ -83,6 +83,7 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
                 nameof(endDate)
             );
 
+        Id = Guid.CreateVersion7();
         OrganizationId = organizationId;
         Code = code;
         Name = name.Trim();
@@ -241,6 +242,11 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
 
     /// <summary>Архивирует группу. Архивированные группы нельзя редактировать.</summary>
     public void Archive() => Status = GroupStatus.Archived;
+
+    /// <summary>
+    /// Восстанавливает архивированную группу, возвращая её в статус <see cref="GroupStatus.Recruiting"/>.
+    /// </summary>
+    public void Restore() => Status = GroupStatus.Recruiting;
 
     /// <inheritdoc />
     public void Delete()

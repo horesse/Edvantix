@@ -21,6 +21,8 @@ global using Edvantix.Organizational.Features.Groups.List;
 global using Edvantix.Organizational.Features.Groups.Restore;
 global using Edvantix.Organizational.Features.Groups.Stats;
 global using Edvantix.Organizational.Features.Groups.SuggestCode;
+global using Edvantix.Organizational.Grpc.Services.Profiles;
+global using Edvantix.Persona.Grpc.Services;
 global using Edvantix.Organizational.Features.Groups.Update;
 global using Edvantix.Organizational.Features.Invitations;
 global using Edvantix.Organizational.Features.OrganizationMembers;

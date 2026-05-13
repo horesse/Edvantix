@@ -1,0 +1,248 @@
+namespace Edvantix.Organizational.UnitTests.Features.Groups.Get;
+
+public sealed class GetGroupByIdQueryHandlerTests
+{
+    private readonly Mock<ITenantContext> _tenantMock = new();
+    private readonly Mock<IGroupRepository> _repoMock = new();
+    private readonly Mock<IMapper<Group, GroupDetailDto>> _mapperMock = new();
+    private readonly Mock<IProfileService> _profileServiceMock = new();
+    private readonly Guid _organizationId = Guid.CreateVersion7();
+    private readonly GetGroupByIdQueryHandler _handler;
+
+    public GetGroupByIdQueryHandlerTests()
+    {
+        _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _handler = new(
+            _tenantMock.Object,
+            _repoMock.Object,
+            _mapperMock.Object,
+            _profileServiceMock.Object
+        );
+    }
+
+    [Test]
+    public async Task GivenExistingGroup_WhenHandling_ThenShouldReturnDtoEnrichedWithTeacherName()
+    {
+        var group = CreateGroup();
+        var teacherProfileId = Guid.CreateVersion7();
+        var dto = CreateDto(group.Id);
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherProfileIdsAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(
+                new Dictionary<Guid, Guid> { [group.TeacherMemberId] = teacherProfileId }
+            );
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(
+                new GetProfilesResponse
+                {
+                    Profiles =
+                    {
+                        new GetProfileResponse
+                        {
+                            Id = teacherProfileId.ToString(),
+                            FullName = "Иванов Иван Иванович",
+                        },
+                    },
+                }
+            );
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+
+        var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        result.TeacherFullName.ShouldBe("Иванов Иван Иванович");
+    }
+
+    [Test]
+    public async Task GivenGroupWithRoom_WhenHandling_ThenShouldReturnDtoEnrichedWithRoomLabel()
+    {
+        var roomId = Guid.CreateVersion7();
+        var group = CreateGroupWithRoom(roomId);
+        var room = new Room(_organizationId, "Каб. 101", 1, 20);
+        var dto = CreateDto(group.Id) with { RoomId = roomId };
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherProfileIdsAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, Guid>());
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room> { [roomId] = room });
+
+        var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        result.RoomLabel.ShouldBe("Каб. 101");
+    }
+
+    [Test]
+    public async Task GivenGroupNotFound_WhenHandling_ThenShouldThrowNotFoundException()
+    {
+        var id = Guid.CreateVersion7();
+        _repoMock
+            .Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Group?)null);
+
+        var act = async () =>
+            await _handler.Handle(new GetGroupByIdQuery(id), CancellationToken.None);
+
+        await act.ShouldThrowAsync<NotFoundException>();
+    }
+
+    [Test]
+    public async Task GivenGroupOfDifferentOrganization_WhenHandling_ThenShouldThrowForbiddenException()
+    {
+        var group = CreateGroup(organizationId: Guid.CreateVersion7());
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+
+        var act = async () =>
+            await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        await act.ShouldThrowAsync<ForbiddenException>();
+    }
+
+    [Test]
+    public async Task GivenTeacherProfileNotFound_WhenHandling_ThenShouldReturnDtoWithEmptyTeacherName()
+    {
+        var group = CreateGroup();
+        var dto = CreateDto(group.Id);
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherProfileIdsAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, Guid>());
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+
+        var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        result.TeacherFullName.ShouldBe(string.Empty);
+        _profileServiceMock.Verify(
+            p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
+    }
+
+    [Test]
+    public async Task GivenRoomNotFound_WhenHandling_ThenShouldReturnDtoWithNullRoomLabel()
+    {
+        var roomId = Guid.CreateVersion7();
+        var group = CreateGroupWithRoom(roomId);
+        var dto = CreateDto(group.Id) with { RoomId = roomId };
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherProfileIdsAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, Guid>());
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+
+        var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        result.RoomLabel.ShouldBeNull();
+    }
+
+    private Group CreateGroup(Guid? organizationId = null) =>
+        new(
+            organizationId ?? _organizationId,
+            GroupCode.From("B1-01"),
+            "Английский B1",
+            "Описание",
+            GroupLevel.B1,
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            GroupFormat.Online,
+            null,
+            OnlinePlatform.Zoom,
+            10,
+            new DateOnly(2025, 9, 1),
+            new DateOnly(2026, 6, 30)
+        );
+
+    private Group CreateGroupWithRoom(Guid roomId) =>
+        new(
+            _organizationId,
+            GroupCode.From("B1-02"),
+            "Английский B1 очный",
+            "Описание",
+            GroupLevel.B1,
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            GroupFormat.Offline,
+            roomId,
+            null,
+            10,
+            new DateOnly(2025, 9, 1),
+            new DateOnly(2026, 6, 30)
+        );
+
+    private static GroupDetailDto CreateDto(Guid id) =>
+        new(
+            id,
+            "B1-01",
+            "Английский B1",
+            "Описание",
+            GroupLevel.B1,
+            GroupFormat.Online,
+            GroupStatus.Recruiting,
+            10,
+            0,
+            new DateOnly(2025, 9, 1),
+            new DateOnly(2026, 6, 30),
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            string.Empty,
+            null,
+            null,
+            OnlinePlatform.Zoom
+        );
+}

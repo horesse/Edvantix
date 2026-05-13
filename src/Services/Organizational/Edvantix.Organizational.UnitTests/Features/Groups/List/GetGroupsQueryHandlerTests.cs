@@ -1,6 +1,3 @@
-using Edvantix.Organizational.Grpc.Services.Profiles;
-using Edvantix.Persona.Grpc.Services;
-
 namespace Edvantix.Organizational.UnitTests.Features.Groups.List;
 
 public sealed class GetGroupsQueryHandlerTests
@@ -128,6 +125,124 @@ public sealed class GetGroupsQueryHandlerTests
 
         result.PageIndex.ShouldBe(1);
     }
+
+    [Test]
+    public async Task GivenPageSizeAbove100_WhenHandling_ThenShouldClampTo100()
+    {
+        var query = new GetGroupsQuery(PageIndex: 1, PageSize: 999);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(0);
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result.PageSize.ShouldBe(100);
+    }
+
+    [Test]
+    public async Task GivenGroupsWithNoTeacherProfiles_WhenHandling_ThenShouldNotCallProfileService()
+    {
+        var group = CreateGroup();
+        var dto = CreateDto(group.Id);
+        var query = new GetGroupsQuery(PageIndex: 1, PageSize: 10);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([group]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(1);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherProfileIdsAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, Guid>());
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result[0].TeacherFullName.ShouldBe(string.Empty);
+        _profileServiceMock.Verify(
+            p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
+    }
+
+    [Test]
+    public async Task GivenGroupWithRoom_WhenHandling_ThenShouldEnrichRoomLabel()
+    {
+        var roomId = Guid.CreateVersion7();
+        var group = CreateGroupWithRoom(roomId);
+        var dto = CreateDto(group.Id);
+        var room = new Room(_organizationId, "Каб. 205", 2, 30);
+        var query = new GetGroupsQuery(PageIndex: 1, PageSize: 10);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([group]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(1);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherProfileIdsAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, Guid>());
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room> { [roomId] = room });
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result[0].RoomLabel.ShouldBe("Каб. 205");
+    }
+
+    private Group CreateGroupWithRoom(Guid roomId) =>
+        new(
+            _organizationId,
+            GroupCode.From("B1-02"),
+            "Английский B1 очный",
+            "Описание",
+            GroupLevel.B1,
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            GroupFormat.Offline,
+            roomId,
+            null,
+            10,
+            new DateOnly(2025, 9, 1),
+            new DateOnly(2026, 6, 30)
+        );
 
     private Group CreateGroup() =>
         new(

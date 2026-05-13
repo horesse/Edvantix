@@ -1,8 +1,8 @@
-namespace Edvantix.Organizational.UnitTests.Features.Groups.Create;
+namespace Edvantix.Organizational.UnitTests.Features.Groups.Update;
 
-public sealed class CreateGroupValidatorTests
+public sealed class UpdateGroupValidatorTests
 {
-    private readonly CreateGroupValidator _validator = new();
+    private readonly UpdateGroupValidator _validator = new();
 
     [Test]
     public void GivenValidCommand_WhenValidating_ThenShouldNotHaveAnyErrors()
@@ -13,19 +13,11 @@ public sealed class CreateGroupValidatorTests
     }
 
     [Test]
-    public void GivenEmptyCode_WhenValidating_ThenShouldHaveError()
+    public void GivenEmptyId_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(BuildValidCommand() with { Code = string.Empty });
+        var result = _validator.TestValidate(BuildValidCommand() with { Id = Guid.Empty });
 
-        result.ShouldHaveValidationErrorFor(x => x.Code);
-    }
-
-    [Test]
-    public void GivenInvalidCodeFormat_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(BuildValidCommand() with { Code = "b1-01" });
-
-        result.ShouldHaveValidationErrorFor(x => x.Code);
+        result.ShouldHaveValidationErrorFor(x => x.Id);
     }
 
     [Test]
@@ -37,11 +29,31 @@ public sealed class CreateGroupValidatorTests
     }
 
     [Test]
+    public void GivenEmptyDescription_WhenValidating_ThenShouldHaveError()
+    {
+        var result = _validator.TestValidate(
+            BuildValidCommand() with { Description = string.Empty }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.Description);
+    }
+
+    [Test]
     public void GivenEmptyCourseId_WhenValidating_ThenShouldHaveError()
     {
         var result = _validator.TestValidate(BuildValidCommand() with { CourseId = Guid.Empty });
 
         result.ShouldHaveValidationErrorFor(x => x.CourseId);
+    }
+
+    [Test]
+    public void GivenEmptyTeacherMemberId_WhenValidating_ThenShouldHaveError()
+    {
+        var result = _validator.TestValidate(
+            BuildValidCommand() with { TeacherMemberId = Guid.Empty }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.TeacherMemberId);
     }
 
     [Test]
@@ -58,19 +70,6 @@ public sealed class CreateGroupValidatorTests
         var result = _validator.TestValidate(BuildValidCommand() with { Capacity = 51 });
 
         result.ShouldHaveValidationErrorFor(x => x.Capacity);
-    }
-
-    [Test]
-    public void GivenEndDateBeforeStartDate_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(
-            BuildValidCommand() with
-            {
-                EndDate = new DateOnly(2025, 1, 1),
-            }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.EndDate);
     }
 
     [Test]
@@ -100,36 +99,6 @@ public sealed class CreateGroupValidatorTests
         );
 
         result.ShouldHaveValidationErrorFor(x => x.Platform);
-    }
-
-    [Test]
-    public void GivenEmptyDescription_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(
-            BuildValidCommand() with { Description = string.Empty }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.Description);
-    }
-
-    [Test]
-    public void GivenEmptyTeacherMemberId_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(
-            BuildValidCommand() with { TeacherMemberId = Guid.Empty }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.TeacherMemberId);
-    }
-
-    [Test]
-    public void GivenCodeExceedingMaxLength_WhenValidating_ThenShouldHaveError()
-    {
-        var result = _validator.TestValidate(
-            BuildValidCommand() with { Code = new string('A', 33) }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.Code);
     }
 
     [Test]
@@ -177,9 +146,9 @@ public sealed class CreateGroupValidatorTests
         result.ShouldNotHaveAnyValidationErrors();
     }
 
-    private static CreateGroupCommand BuildValidCommand() =>
+    private static UpdateGroupCommand BuildValidCommand() =>
         new(
-            Code: "B1-01",
+            Id: Guid.CreateVersion7(),
             Name: "Английский B1",
             Description: "Описание группы",
             Level: GroupLevel.B1,
@@ -189,7 +158,6 @@ public sealed class CreateGroupValidatorTests
             RoomId: null,
             Platform: OnlinePlatform.Zoom,
             Capacity: 12,
-            StartDate: new DateOnly(2025, 9, 1),
             EndDate: new DateOnly(2026, 6, 30)
         );
 }

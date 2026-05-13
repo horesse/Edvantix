@@ -1,13 +1,13 @@
 namespace Edvantix.Organizational.UnitTests.Features.Groups.SuggestCode;
 
-public sealed class SuggestGroupCodeQueryHandlerTests
+public sealed class GetSuggestedGroupCodeQueryHandlerTests
 {
     private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Mock<IGroupRepository> _repoMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
-    private readonly SuggestGroupCodeQueryHandler _handler;
+    private readonly GetSuggestedGroupCodeQueryHandler _handler;
 
-    public SuggestGroupCodeQueryHandlerTests()
+    public GetSuggestedGroupCodeQueryHandlerTests()
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
         _handler = new(_tenantMock.Object, _repoMock.Object);
@@ -23,7 +23,7 @@ public sealed class SuggestGroupCodeQueryHandlerTests
             .ReturnsAsync([]);
 
         var result = await _handler.Handle(
-            new SuggestGroupCodeQuery(GroupLevel.B1),
+            new GetSuggestedGroupCodeQuery(GroupLevel.B1),
             CancellationToken.None
         );
 
@@ -40,7 +40,7 @@ public sealed class SuggestGroupCodeQueryHandlerTests
             .ReturnsAsync(["B1-01", "B1-02", "B1-03"]);
 
         var result = await _handler.Handle(
-            new SuggestGroupCodeQuery(GroupLevel.B1),
+            new GetSuggestedGroupCodeQuery(GroupLevel.B1),
             CancellationToken.None
         );
 
@@ -57,7 +57,7 @@ public sealed class SuggestGroupCodeQueryHandlerTests
             .ReturnsAsync(["A1-01", "A1-02"]);
 
         var result = await _handler.Handle(
-            new SuggestGroupCodeQuery(GroupLevel.B1),
+            new GetSuggestedGroupCodeQuery(GroupLevel.B1),
             CancellationToken.None
         );
 
@@ -74,7 +74,7 @@ public sealed class SuggestGroupCodeQueryHandlerTests
             .ReturnsAsync(["B1-09"]);
 
         var result = await _handler.Handle(
-            new SuggestGroupCodeQuery(GroupLevel.B1),
+            new GetSuggestedGroupCodeQuery(GroupLevel.B1),
             CancellationToken.None
         );
 

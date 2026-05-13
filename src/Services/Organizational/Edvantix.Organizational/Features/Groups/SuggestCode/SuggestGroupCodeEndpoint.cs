@@ -2,19 +2,19 @@ using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 
 namespace Edvantix.Organizational.Features.Groups.SuggestCode;
 
-public sealed class SuggestGroupCodeEndpoint : IEndpoint<Ok<string>, SuggestGroupCodeQuery, ISender>
+public sealed class SuggestGroupCodeEndpoint : IEndpoint<Ok<string>, GetSuggestedGroupCodeQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(
                 "/groups/suggest-code",
                 async (
-                    [AsParameters] SuggestGroupCodeQuery request,
+                    [AsParameters] GetSuggestedGroupCodeQuery request,
                     ISender sender,
                     CancellationToken cancellationToken
                 ) => await HandleAsync(request, sender, cancellationToken)
             )
-            .WithName("SuggestGroupCode")
+            .WithName("GetSuggestedGroupCode")
             .WithTags("Группы")
             .WithSummary("Предложить уникальный код для новой группы")
             .WithDescription(
@@ -27,7 +27,7 @@ public sealed class SuggestGroupCodeEndpoint : IEndpoint<Ok<string>, SuggestGrou
     }
 
     public async Task<Ok<string>> HandleAsync(
-        SuggestGroupCodeQuery request,
+        GetSuggestedGroupCodeQuery request,
         ISender sender,
         CancellationToken cancellationToken = default
     )

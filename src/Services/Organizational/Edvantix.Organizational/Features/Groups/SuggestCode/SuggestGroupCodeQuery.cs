@@ -5,15 +5,15 @@ using Edvantix.Organizational.Domain.Permissions;
 namespace Edvantix.Organizational.Features.Groups.SuggestCode;
 
 [RequirePermission(GroupPermissions.View)]
-public sealed record SuggestGroupCodeQuery(GroupLevel Level) : IQuery<string>;
+public sealed record GetSuggestedGroupCodeQuery(GroupLevel Level) : IQuery<string>;
 
-internal sealed class SuggestGroupCodeQueryHandler(
+internal sealed class GetSuggestedGroupCodeQueryHandler(
     ITenantContext tenantContext,
     IGroupRepository repository
-) : IQueryHandler<SuggestGroupCodeQuery, string>
+) : IQueryHandler<GetSuggestedGroupCodeQuery, string>
 {
     public async ValueTask<string> Handle(
-        SuggestGroupCodeQuery query,
+        GetSuggestedGroupCodeQuery query,
         CancellationToken cancellationToken
     )
     {

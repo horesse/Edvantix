@@ -105,7 +105,12 @@ public sealed class GetTeachersQueryHandlerTests
     }
 
     private OrganizationMember CreateMember() =>
-        new(_organizationId, Guid.CreateVersion7(), Guid.CreateVersion7(), new DateOnly(2025, 1, 1));
+        new(
+            _organizationId,
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            new DateOnly(2025, 1, 1)
+        );
 
     private void SetupRepo(IReadOnlyCollection<OrganizationMember> members) =>
         _repoMock

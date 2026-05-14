@@ -11,7 +11,14 @@ public sealed class LevelTests
     [Test]
     public void GivenValidParameters_WhenConstructing_ThenLevelIsCreated()
     {
-        var level = new Level(ValidOrgId, ValidCode, "Beginner", "Начальный уровень", LevelTone.Blue, sortOrder: 1);
+        var level = new Level(
+            ValidOrgId,
+            ValidCode,
+            "Beginner",
+            "Начальный уровень",
+            LevelTone.Blue,
+            sortOrder: 1
+        );
 
         level.OrganizationId.ShouldBe(ValidOrgId);
         level.Code.ShouldBe(ValidCode);
@@ -57,7 +64,8 @@ public sealed class LevelTests
     {
         var description = new string('X', 257); // 257 symbols, max is 256
 
-        var act = () => new Level(ValidOrgId, ValidCode, "Beginner", description, LevelTone.Blue, 1);
+        var act = () =>
+            new Level(ValidOrgId, ValidCode, "Beginner", description, LevelTone.Blue, 1);
 
         act.ShouldThrow<ArgumentException>();
     }

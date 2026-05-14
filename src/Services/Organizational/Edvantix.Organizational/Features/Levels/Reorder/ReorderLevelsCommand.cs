@@ -45,14 +45,10 @@ internal sealed class ReorderLevelsCommandHandler(
         }
 
         // Проверить уникальность SortOrder в переданных данных
-        var hasDuplicateSortOrder = command.Items
-            .GroupBy(i => i.SortOrder)
-            .Any(g => g.Count() > 1);
+        var hasDuplicateSortOrder = command.Items.GroupBy(i => i.SortOrder).Any(g => g.Count() > 1);
 
         if (hasDuplicateSortOrder)
-            throw new InvalidOperationException(
-                "Переданные порядковые номера содержат дубликаты."
-            );
+            throw new InvalidOperationException("Переданные порядковые номера содержат дубликаты.");
 
         var levelMap = levels.ToDictionary(l => l.Id);
 

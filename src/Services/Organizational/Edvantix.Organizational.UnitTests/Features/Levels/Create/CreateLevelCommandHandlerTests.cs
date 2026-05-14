@@ -70,9 +70,7 @@ public sealed class CreateLevelCommandHandlerTests
         var command = BuildCommand();
 
         _repoMock
-            .Setup(r =>
-                r.ExistsWithCodeAsync(_organizationId, "A1", It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.ExistsWithCodeAsync(_organizationId, "A1", It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         await Should.ThrowAsync<InvalidOperationException>(() =>

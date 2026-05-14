@@ -10,8 +10,7 @@ namespace Edvantix.Organizational.Features.Levels.List;
 /// <param name="IncludeInactive">Включать ли деактивированные уровни. По умолчанию — нет.</param>
 [RequirePermission(LevelPermissions.View)]
 public sealed record GetLevelsQuery(
-    [property: Description("Включить деактивированные уровни")]
-        bool IncludeInactive = false
+    [property: Description("Включить деактивированные уровни")] bool IncludeInactive = false
 ) : IQuery<IReadOnlyList<LevelDto>>;
 
 internal sealed class GetLevelsQueryHandler(

@@ -14,10 +14,7 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
             .Levels.AsTracking()
             .FirstOrDefaultAsync(l => l.Id == id && !l.IsDeleted, cancellationToken);
 
-    public async Task<bool> ExistsAsync(
-        Guid id,
-        CancellationToken cancellationToken = default
-    ) =>
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default) =>
         await context.Levels.AnyAsync(l => l.Id == id && !l.IsDeleted, cancellationToken);
 
     public async Task<IReadOnlyCollection<Level>> GetByIdsAsync(

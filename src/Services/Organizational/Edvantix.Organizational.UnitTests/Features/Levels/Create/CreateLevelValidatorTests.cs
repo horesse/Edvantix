@@ -72,21 +72,31 @@ public sealed class CreateLevelValidatorTests
     public async Task GivenTooLongDescription_WhenValidating_ThenShouldFail()
     {
         var description = new string('X', 257);
-        var command = new CreateLevelCommand("A1", "Beginner", description, LevelTone.Blue, SortOrder: 1);
+        var command = new CreateLevelCommand(
+            "A1",
+            "Beginner",
+            description,
+            LevelTone.Blue,
+            SortOrder: 1
+        );
 
         var result = await _validator.ValidateAsync(command);
 
         result.IsValid.ShouldBeFalse();
-        result.Errors.ShouldContain(e =>
-            e.PropertyName == nameof(CreateLevelCommand.Description)
-        );
+        result.Errors.ShouldContain(e => e.PropertyName == nameof(CreateLevelCommand.Description));
     }
 
     [Test]
     public async Task GivenMaxLengthDescription_WhenValidating_ThenShouldPass()
     {
         var description = new string('X', 256);
-        var command = new CreateLevelCommand("A1", "Beginner", description, LevelTone.Blue, SortOrder: 1);
+        var command = new CreateLevelCommand(
+            "A1",
+            "Beginner",
+            description,
+            LevelTone.Blue,
+            SortOrder: 1
+        );
 
         var result = await _validator.ValidateAsync(command);
 

@@ -1,6 +1,7 @@
 namespace Edvantix.Organizational.Features.Levels.List;
 
-public sealed class GetLevelsEndpoint : IEndpoint<Ok<IReadOnlyList<LevelDto>>, GetLevelsQuery, ISender>
+public sealed class GetLevelsEndpoint
+    : IEndpoint<Ok<IReadOnlyList<LevelDto>>, GetLevelsQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

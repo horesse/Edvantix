@@ -130,6 +130,72 @@ public sealed class BulkAddGroupMembersCommandHandlerTests
         );
     }
 
+    [Test]
+    public async Task GivenGroupOfDifferentOrganization_WhenHandling_ThenShouldThrowForbiddenException()
+    {
+        var group = CreateGroup(orgId: Guid.CreateVersion7());
+        SetupGroupRepo(group);
+
+        var act = async () =>
+            await _handler.Handle(
+                new BulkAddGroupMembersCommand(
+                    group.Id,
+                    [new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1))]
+                ),
+                CancellationToken.None
+            );
+
+        await act.ShouldThrowAsync<ForbiddenException>();
+    }
+
+    [Test]
+    public async Task GivenJoinedAtBeforeGroupStartDate_WhenHandling_ThenShouldAddToFailed()
+    {
+        var group = CreateGroup();
+        var profileId = Guid.CreateVersion7();
+
+        SetupGroupRepo(group);
+        SetupMemberRepo(profileId, Guid.CreateVersion7());
+
+        var result = await _handler.Handle(
+            new BulkAddGroupMembersCommand(
+                group.Id,
+                [new BulkAddItem(profileId, GroupMemberRole.Student, new DateOnly(2025, 8, 31))]
+            ),
+            CancellationToken.None
+        );
+
+        result.Added.ShouldBeEmpty();
+        result.Failed.Count.ShouldBe(1);
+        result.Failed[0].ProfileId.ShouldBe(profileId);
+    }
+
+    [Test]
+    public async Task GivenDuplicateActiveMember_WhenHandling_ThenShouldAddToFailed()
+    {
+        var group = CreateGroup();
+        var profileId = Guid.CreateVersion7();
+        var joinedAt = new DateOnly(2025, 9, 1);
+
+        var existing = new GroupMember(_organizationId, group.Id, profileId, GroupMemberRole.Student, joinedAt);
+        group.AddMember(existing);
+
+        SetupGroupRepo(group);
+        SetupMemberRepo(profileId, Guid.CreateVersion7());
+
+        var result = await _handler.Handle(
+            new BulkAddGroupMembersCommand(
+                group.Id,
+                [new BulkAddItem(profileId, GroupMemberRole.Student, joinedAt)]
+            ),
+            CancellationToken.None
+        );
+
+        result.Added.ShouldBeEmpty();
+        result.Failed.Count.ShouldBe(1);
+        result.Failed[0].ProfileId.ShouldBe(profileId);
+    }
+
     private void SetupGroupRepo(Group group)
     {
         _groupRepoMock
@@ -153,10 +219,10 @@ public sealed class BulkAddGroupMembersCommandHandlerTests
             .ReturnsAsync(roleId);
     }
 
-    private Group CreateGroup()
+    private Group CreateGroup(Guid? orgId = null)
     {
         var group = new Group(
-            _organizationId,
+            orgId ?? _organizationId,
             GroupCode.From("B1-01"),
             "Английский B1",
             "Описание",

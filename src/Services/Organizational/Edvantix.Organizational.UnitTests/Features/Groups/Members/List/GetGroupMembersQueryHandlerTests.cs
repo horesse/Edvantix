@@ -123,6 +123,170 @@ public sealed class GetGroupMembersQueryHandlerTests
         await act.ShouldThrowAsync<ForbiddenException>();
     }
 
+    [Test]
+    public async Task GivenEmptyGroup_WhenHandling_ThenShouldReturnEmptyResult()
+    {
+        var group = CreateGroup();
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+
+        var result = await _handler.Handle(new GetGroupMembersQuery(group.Id), CancellationToken.None);
+
+        result.TotalItems.ShouldBe(0);
+        result.ShouldBeEmpty();
+    }
+
+    [Test]
+    public async Task GivenMemberWithMatchingProfile_WhenHandling_ThenShouldEnrichFullName()
+    {
+        const string fullName = "Иванов Иван Иванович";
+        var group = CreateGroupWithMembers(activeCount: 1, exitedCount: 0);
+        var member = group.Members.First();
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _profileServiceMock
+            .Setup(p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(
+                new GetProfilesResponse
+                {
+                    Profiles =
+                    {
+                        new GetProfileResponse { Id = member.ProfileId.ToString(), FullName = fullName },
+                    },
+                }
+            );
+        _mapperMock
+            .Setup(m => m.Map(It.IsAny<GroupMember>()))
+            .Returns(
+                (GroupMember m) =>
+                    new GroupMemberDto(m.Id, m.ProfileId, string.Empty, null, m.Role, m.JoinedAt, m.ExitedAt, m.ExitReason)
+            );
+
+        var result = await _handler.Handle(new GetGroupMembersQuery(group.Id), CancellationToken.None);
+
+        result[0].FullName.ShouldBe(fullName);
+        result[0].AvatarUrl.ShouldBeNull();
+    }
+
+    [Test]
+    public async Task GivenMemberWithProfileAndAvatar_WhenHandling_ThenShouldEnrichAvatarUrl()
+    {
+        const string avatarUrl = "https://cdn.example.com/avatar.jpg";
+        var group = CreateGroupWithMembers(activeCount: 1, exitedCount: 0);
+        var member = group.Members.First();
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _profileServiceMock
+            .Setup(p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(
+                new GetProfilesResponse
+                {
+                    Profiles =
+                    {
+                        new GetProfileResponse
+                        {
+                            Id = member.ProfileId.ToString(),
+                            FullName = "Иванов Иван",
+                            AvatarUrl = avatarUrl,
+                        },
+                    },
+                }
+            );
+        _mapperMock
+            .Setup(m => m.Map(It.IsAny<GroupMember>()))
+            .Returns(
+                (GroupMember m) =>
+                    new GroupMemberDto(m.Id, m.ProfileId, string.Empty, null, m.Role, m.JoinedAt, m.ExitedAt, m.ExitReason)
+            );
+
+        var result = await _handler.Handle(new GetGroupMembersQuery(group.Id), CancellationToken.None);
+
+        result[0].AvatarUrl.ShouldBe(avatarUrl);
+    }
+
+    [Test]
+    public async Task GivenNullProfilesResponse_WhenHandling_ThenShouldReturnEmptyFullName()
+    {
+        var group = CreateGroupWithMembers(activeCount: 1, exitedCount: 0);
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _profileServiceMock
+            .Setup(p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((GetProfilesResponse?)null);
+        _mapperMock
+            .Setup(m => m.Map(It.IsAny<GroupMember>()))
+            .Returns(
+                (GroupMember m) =>
+                    new GroupMemberDto(m.Id, m.ProfileId, string.Empty, null, m.Role, m.JoinedAt, m.ExitedAt, m.ExitReason)
+            );
+
+        var result = await _handler.Handle(new GetGroupMembersQuery(group.Id), CancellationToken.None);
+
+        result[0].FullName.ShouldBe(string.Empty);
+        result[0].AvatarUrl.ShouldBeNull();
+    }
+
+    [Test]
+    public async Task GivenPageSizeAboveMaximum_WhenHandling_ThenShouldClampToHundred()
+    {
+        var group = CreateGroupWithMembers(activeCount: 2, exitedCount: 0);
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _profileServiceMock
+            .Setup(p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetProfilesResponse());
+        _mapperMock
+            .Setup(m => m.Map(It.IsAny<GroupMember>()))
+            .Returns(
+                (GroupMember m) =>
+                    new GroupMemberDto(m.Id, m.ProfileId, string.Empty, null, m.Role, m.JoinedAt, m.ExitedAt, m.ExitReason)
+            );
+
+        var result = await _handler.Handle(
+            new GetGroupMembersQuery(group.Id, PageSize: 500),
+            CancellationToken.None
+        );
+
+        result.PageSize.ShouldBe(100);
+    }
+
+    [Test]
+    public async Task GivenPageIndexZero_WhenHandling_ThenShouldTreatAsPageOne()
+    {
+        var group = CreateGroupWithMembers(activeCount: 2, exitedCount: 0);
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _profileServiceMock
+            .Setup(p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetProfilesResponse());
+        _mapperMock
+            .Setup(m => m.Map(It.IsAny<GroupMember>()))
+            .Returns(
+                (GroupMember m) =>
+                    new GroupMemberDto(m.Id, m.ProfileId, string.Empty, null, m.Role, m.JoinedAt, m.ExitedAt, m.ExitReason)
+            );
+
+        var result = await _handler.Handle(
+            new GetGroupMembersQuery(group.Id, PageIndex: 0),
+            CancellationToken.None
+        );
+
+        result.PageIndex.ShouldBe(1);
+        result.TotalItems.ShouldBe(2);
+    }
+
     private Group CreateGroupWithMembers(int activeCount, int exitedCount)
     {
         var group = CreateGroup();

@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup Label="Package Versions">
     <!-- Core Libraries -->
-    <AspireVersion>13.2.4</AspireVersion>
+    <AspireVersion>13.3.0</AspireVersion>
     <AspireUnstableVersion>13.2.4-preview.1.26224.4</AspireUnstableVersion>
     <DotnetPackagesVersion>10.0.7</DotnetPackagesVersion>
     <GrpcVersion>2.80.0</GrpcVersion>

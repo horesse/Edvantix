@@ -1,5 +1,6 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Schedule.Extensions;
+using Edvantix.Schedule.Grpc.Services;
 using Edvantix.ServiceDefaults.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
+app.MapGrpcService<ScheduleQueryGrpcService>();
+app.MapGrpcHealthChecksService();
 app.MapDefaultEndpoints();
 app.UseDefaultOpenApi();
 app.UseAuthorization();

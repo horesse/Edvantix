@@ -1,5 +1,6 @@
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Features.OrganizationMembers;
+using Edvantix.Organizational.Grpc.Services.Schedules;
 
 namespace Edvantix.Organizational.Features.Groups;
 
@@ -18,7 +19,8 @@ public sealed record GroupListItemDto(
     [property: Description("Преподаватель группы")] TeacherDto Teacher,
     [property: Description("Идентификатор кабинета")] Guid? RoomId,
     [property: Description("Метка кабинета")] string? RoomLabel,
-    [property: Description("Идентификатор курса")] Guid CourseId
+    [property: Description("Идентификатор курса")] Guid CourseId,
+    [property: Description("Сводка расписания группы")] ScheduleSummaryDto? ScheduleSummary
 );
 
 /// <summary>DTO детальной карточки группы (Group Create preview / Group Edit).</summary>

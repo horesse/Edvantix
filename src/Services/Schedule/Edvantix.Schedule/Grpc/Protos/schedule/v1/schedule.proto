@@ -1,0 +1,62 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Schedule.Grpc.Services";
+
+package schedule.v1;
+
+/// Сервис расписаний учебных групп.
+service ScheduleGrpcService {
+  /// Возвращает сводки расписаний для N групп одним запросом.
+  rpc GetScheduleSummariesByGroupIds (GetScheduleSummariesRequest) returns (GetScheduleSummariesResponse);
+
+  /// Возвращает полное расписание группы (Task 8).
+  rpc GetScheduleByGroupId (GetScheduleByGroupIdRequest) returns (GetScheduleByGroupIdResponse);
+
+  /// Возвращает ближайшие занятия группы (Task 8).
+  rpc GetUpcomingLessons (GetUpcomingLessonsRequest) returns (GetUpcomingLessonsResponse);
+}
+
+message GetScheduleSummariesRequest {
+  repeated string group_ids = 1;
+}
+
+message GetScheduleSummariesResponse {
+  repeated ScheduleSummary summaries = 1;
+}
+
+message ScheduleSummary {
+  string group_id = 1;
+
+  /// Человекочитаемая строка расписания, например "Пн / Ср · 18:00–19:30".
+  string summary_text = 2;
+
+  int32 lesson_duration_minutes = 3;
+
+  /// Дата ближайшего занятия ISO yyyy-MM-dd; пусто если нет.
+  string next_lesson_date = 4;
+
+  /// Общее число материализованных занятий.
+  int32 lesson_count_total = 5;
+
+  /// Число предстоящих занятий (будущих).
+  int32 lesson_count_remaining = 6;
+}
+
+// ── Task 8 stubs ──────────────────────────────────────────────────────────────
+
+message GetScheduleByGroupIdRequest {
+  string group_id = 1;
+}
+
+message GetScheduleByGroupIdResponse {
+  bool found = 1;
+}
+
+message GetUpcomingLessonsRequest {
+  string group_id = 1;
+  int32 count = 2;
+}
+
+message GetUpcomingLessonsResponse {
+  repeated string lesson_dates = 1;
+}

@@ -21,7 +21,8 @@ public sealed class GroupListItemDtoMapper : Mapper<Group, GroupListItemDto>
             Teacher: new TeacherDto(source.TeacherMemberId, string.Empty, string.Empty, null),
             source.RoomId,
             RoomLabel: null,
-            source.CourseId
+            source.CourseId,
+            ScheduleSummary: null
         );
 }
 

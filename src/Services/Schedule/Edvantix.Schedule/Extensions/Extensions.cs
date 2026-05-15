@@ -3,6 +3,7 @@ using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Schedule.Configurations;
+using Edvantix.Schedule.Grpc;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
 
@@ -29,6 +30,8 @@ internal static class Extensions
         services.AddProblemDetails();
 
         services.AddCqrsInfrastructure();
+
+        builder.AddGrpcServices();
 
         services.AddSingleton(
             new JsonSerializerOptions { Converters = { DateOnlyJsonConverter.Instance } }

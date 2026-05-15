@@ -17,6 +17,16 @@ internal sealed class GroupScheduleRepository(ScheduleDbContext context) : IGrou
             .Include(s => s.Exceptions)
             .FirstOrDefaultAsync(s => s.GroupId == groupId, cancellationToken);
 
+    public async Task<IReadOnlyList<GroupSchedule>> GetByGroupIdsAsync(
+        IEnumerable<Guid> groupIds,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context
+            .GroupSchedules.Where(s => groupIds.Contains(s.GroupId))
+            .Include(s => s.Slots)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
     public async Task AddAsync(
         GroupSchedule schedule,
         CancellationToken cancellationToken = default

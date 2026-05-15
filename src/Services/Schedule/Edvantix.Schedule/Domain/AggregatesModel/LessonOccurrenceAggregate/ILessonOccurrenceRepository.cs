@@ -17,4 +17,14 @@ public interface ILessonOccurrenceRepository : IRepository<LessonOccurrence>
     );
 
     Task DeleteByScheduleIdAsync(Guid scheduleId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Возвращает агрегированные счётчики занятий для нескольких групп одним запросом.
+    /// Группы без занятий в результирующий словарь не включаются.
+    /// </summary>
+    Task<IReadOnlyDictionary<Guid, OccurrenceSummary>> GetSummariesByGroupIdsAsync(
+        IEnumerable<Guid> groupIds,
+        DateOnly today,
+        CancellationToken cancellationToken = default
+    );
 }

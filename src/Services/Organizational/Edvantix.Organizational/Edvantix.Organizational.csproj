@@ -19,6 +19,11 @@
       Link="Grpc\Protos\curriculum\v1\curriculum.proto"
       GrpcServices="Client"
     />
+    <Protobuf
+      Include="..\..\Schedule\Edvantix.Schedule\Grpc\Protos\schedule\v1\schedule.proto"
+      Link="Grpc\Protos\schedule\v1\schedule.proto"
+      GrpcServices="Client"
+    />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />

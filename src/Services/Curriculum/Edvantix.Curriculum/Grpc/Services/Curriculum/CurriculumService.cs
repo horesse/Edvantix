@@ -9,7 +9,7 @@ namespace Edvantix.Curriculum.Grpc.Services.Curriculum;
 /// gRPC-сервис каталога программ.
 /// Используется Organizational-сервисом для валидации и отображения курсов при создании групп.
 /// </summary>
-internal sealed class CurriculumCatalogService(ICourseRepository repository)
+internal sealed class CurriculumService(ICourseRepository repository)
     : CurriculumGrpcService.CurriculumGrpcServiceBase
 {
     [EnableRateLimiting("PerUserRateLimit")]

@@ -9,7 +9,7 @@ public sealed class CurriculumGrpcServiceTests
 {
     private readonly Mock<ICourseRepository> _repoMock = new();
 
-    private CurriculumCatalogService CreateService() => new(_repoMock.Object);
+    private CurriculumService CreateService() => new(_repoMock.Object);
 
     private static TestServerCallContext CreateContext() => new();
 

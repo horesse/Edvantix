@@ -162,7 +162,10 @@ internal sealed class GetGroupsQueryHandler(
 
         var groupIds = groups.Select(g => g.Id).Distinct().ToList();
 
-        var summaries = await scheduleService.GetScheduleSummariesAsync(groupIds, cancellationToken);
+        var summaries = await scheduleService.GetScheduleSummariesAsync(
+            groupIds,
+            cancellationToken
+        );
 
         if (summaries.Count == 0)
             return;

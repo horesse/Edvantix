@@ -28,7 +28,11 @@ internal sealed class ScheduleQueryGrpcService(
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var (schedules, occurrenceSummaries) = await FetchDataAsync(groupIds, today, context.CancellationToken);
+        var (schedules, occurrenceSummaries) = await FetchDataAsync(
+            groupIds,
+            today,
+            context.CancellationToken
+        );
 
         var scheduleByGroupId = schedules.ToDictionary(s => s.GroupId);
 

@@ -48,8 +48,7 @@ internal sealed class LessonOccurrenceRepository(ScheduleDbContext context)
                 GroupId = g.Key,
                 Total = g.Count(),
                 Remaining = g.Count(o => o.LessonDate >= today),
-                NextLessonDate = g
-                    .Where(o => o.LessonDate >= today)
+                NextLessonDate = g.Where(o => o.LessonDate >= today)
                     .OrderBy(o => o.LessonDate)
                     .Select(o => (DateOnly?)o.LessonDate)
                     .FirstOrDefault(),

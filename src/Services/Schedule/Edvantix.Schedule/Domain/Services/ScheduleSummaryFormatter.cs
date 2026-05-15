@@ -25,7 +25,10 @@ public static class ScheduleSummaryFormatter
     /// <returns>
     /// Строка вида "Пн / Ср · 18:00–19:30", или пустая строка если слотов нет.
     /// </returns>
-    public static string Format(IEnumerable<(int Weekday, int StartMinutes)> slots, int durationMinutes)
+    public static string Format(
+        IEnumerable<(int Weekday, int StartMinutes)> slots,
+        int durationMinutes
+    )
     {
         var sorted = slots.OrderBy(s => s.Weekday).ThenBy(s => s.StartMinutes).ToList();
 

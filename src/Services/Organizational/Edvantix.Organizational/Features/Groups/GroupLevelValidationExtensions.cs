@@ -8,28 +8,33 @@ internal static class GroupLevelValidationExtensions
     /// Проверяет, что уровень существует, принадлежит текущей организации и активен.
     /// Выполняет один запрос к БД для всех трёх проверок.
     /// </summary>
-    internal static IRuleBuilderOptionsConditions<T, Guid> MustBeActiveLevelOfCurrentOrganization<T>(
+    internal static IRuleBuilderOptionsConditions<
+        T,
+        Guid
+    > MustBeActiveLevelOfCurrentOrganization<T>(
         this IRuleBuilder<T, Guid> ruleBuilder,
         ILevelRepository levelRepository,
         ITenantContext tenantContext
     ) =>
-        ruleBuilder.CustomAsync(async (levelId, context, ct) =>
-        {
-            var level = await levelRepository.GetByIdAsync(levelId, ct);
-
-            if (level is null || level.IsDeleted)
+        ruleBuilder.CustomAsync(
+            async (levelId, context, ct) =>
             {
-                context.AddFailure("Указанный уровень не найден");
-                return;
-            }
+                var level = await levelRepository.GetByIdAsync(levelId, ct);
 
-            if (level.OrganizationId != tenantContext.OrganizationId)
-            {
-                context.AddFailure("Уровень не принадлежит текущей организации");
-                return;
-            }
+                if (level is null || level.IsDeleted)
+                {
+                    context.AddFailure("Указанный уровень не найден");
+                    return;
+                }
 
-            if (!level.IsActive)
-                context.AddFailure("Уровень неактивен и не может быть назначен группе");
-        });
+                if (level.OrganizationId != tenantContext.OrganizationId)
+                {
+                    context.AddFailure("Уровень не принадлежит текущей организации");
+                    return;
+                }
+
+                if (!level.IsActive)
+                    context.AddFailure("Уровень неактивен и не может быть назначен группе");
+            }
+        );
 }

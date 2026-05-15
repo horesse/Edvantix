@@ -1,5 +1,3 @@
-using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
-
 namespace Edvantix.Organizational.Features.Groups.Members.Add;
 
 public sealed class AddGroupMemberEndpoint
@@ -11,18 +9,13 @@ public sealed class AddGroupMemberEndpoint
                 "/groups/{groupId:guid}/members",
                 async (
                     Guid groupId,
-                    AddGroupMemberRequest body,
+                    AddGroupMemberCommand command,
                     ISender sender,
                     LinkGenerator linker,
                     CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
-                        new AddGroupMemberCommand(
-                            groupId,
-                            body.ProfileId,
-                            body.Role,
-                            body.JoinedAt
-                        ),
+                        command with { GroupId = groupId },
                         sender,
                         linker,
                         cancellationToken
@@ -56,10 +49,3 @@ public sealed class AddGroupMemberEndpoint
         return TypedResults.Created(location, id);
     }
 }
-
-/// <summary>Тело запроса для добавления участника в группу.</summary>
-public sealed record AddGroupMemberRequest(
-    [property: Description("Идентификатор профиля пользователя")] Guid ProfileId,
-    [property: Description("Роль в группе")] GroupMemberRole Role,
-    [property: Description("Дата вступления")] DateOnly JoinedAt
-);

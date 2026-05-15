@@ -8,21 +8,10 @@ public sealed class GetGroupMembersEndpoint
         app.MapGet(
                 "/groups/{groupId:guid}/members",
                 async (
-                    Guid groupId,
-                    [AsParameters] GetGroupMembersQueryParams query,
+                    [AsParameters] GetGroupMembersQuery query,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) =>
-                    await HandleAsync(
-                        new GetGroupMembersQuery(
-                            groupId,
-                            query.IncludeExited,
-                            query.PageIndex,
-                            query.PageSize
-                        ),
-                        sender,
-                        cancellationToken
-                    )
+                ) => await HandleAsync(query, sender, cancellationToken)
             )
             .WithName("GetGroupMembers")
             .WithTags("Участники группы")
@@ -45,11 +34,3 @@ public sealed class GetGroupMembersEndpoint
         return TypedResults.Ok(result);
     }
 }
-
-/// <summary>Query-параметры для получения списка участников группы.</summary>
-public sealed record GetGroupMembersQueryParams(
-    [property: Description("Включить выбывших участников")] bool IncludeExited = false,
-    [property: Description("Индекс страницы")] int PageIndex = Pagination.DefaultPageIndex,
-    [property: Description("Количество элементов на странице")]
-        int PageSize = Pagination.DefaultPageSize
-);

@@ -10,12 +10,12 @@ public sealed class RemoveGroupMemberEndpoint
                 async (
                     Guid groupId,
                     Guid memberId,
-                    RemoveGroupMemberRequest body,
+                    RemoveGroupMemberCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
-                        new RemoveGroupMemberCommand(groupId, memberId, body.ExitedAt, body.Reason),
+                        command with { GroupId = groupId, MemberId = memberId },
                         sender,
                         cancellationToken
                     )
@@ -41,9 +41,3 @@ public sealed class RemoveGroupMemberEndpoint
         return TypedResults.NoContent();
     }
 }
-
-/// <summary>Тело запроса для удаления участника из группы.</summary>
-public sealed record RemoveGroupMemberRequest(
-    [property: Description("Дата выхода участника из группы")] DateOnly ExitedAt,
-    [property: Description("Причина выхода")] string? Reason
-);

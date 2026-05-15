@@ -9,12 +9,12 @@ public sealed class BulkAddGroupMembersEndpoint
                 "/groups/{groupId:guid}/members/bulk",
                 async (
                     Guid groupId,
-                    BulkAddGroupMembersRequest body,
+                    BulkAddGroupMembersCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
-                        new BulkAddGroupMembersCommand(groupId, body.Items),
+                        command with { GroupId = groupId },
                         sender,
                         cancellationToken
                     )
@@ -48,8 +48,3 @@ public sealed class BulkAddGroupMembersEndpoint
             : TypedResults.Ok(result);
     }
 }
-
-/// <summary>Тело запроса для пакетного добавления участников в группу.</summary>
-public sealed record BulkAddGroupMembersRequest(
-    [property: Description("Список участников для добавления")] IReadOnlyList<BulkAddItem> Items
-);

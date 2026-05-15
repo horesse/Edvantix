@@ -33,7 +33,11 @@ public sealed class BulkAddGroupMembersValidatorTests
     {
         var items = Enumerable
             .Range(0, 101)
-            .Select(_ => new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1)))
+            .Select(_ => new BulkAddItem(
+                Guid.CreateVersion7(),
+                GroupMemberRole.Student,
+                new DateOnly(2025, 9, 1)
+            ))
             .ToList();
 
         var result = _validator.TestValidate(BuildValidCommand() with { Items = items });
@@ -46,7 +50,11 @@ public sealed class BulkAddGroupMembersValidatorTests
     {
         var items = Enumerable
             .Range(0, 100)
-            .Select(_ => new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1)))
+            .Select(_ => new BulkAddItem(
+                Guid.CreateVersion7(),
+                GroupMemberRole.Student,
+                new DateOnly(2025, 9, 1)
+            ))
             .ToList();
 
         var result = _validator.TestValidate(BuildValidCommand() with { Items = items });
@@ -85,7 +93,11 @@ public sealed class BulkAddGroupMembersValidatorTests
     {
         var items = new[]
         {
-            new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1)),
+            new BulkAddItem(
+                Guid.CreateVersion7(),
+                GroupMemberRole.Student,
+                new DateOnly(2025, 9, 1)
+            ),
             new BulkAddItem(Guid.Empty, GroupMemberRole.Teacher, new DateOnly(2025, 9, 1)),
         };
 
@@ -98,6 +110,12 @@ public sealed class BulkAddGroupMembersValidatorTests
     private static BulkAddGroupMembersCommand BuildValidCommand() =>
         new(
             Guid.CreateVersion7(),
-            [new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1))]
+            [
+                new BulkAddItem(
+                    Guid.CreateVersion7(),
+                    GroupMemberRole.Student,
+                    new DateOnly(2025, 9, 1)
+                ),
+            ]
         );
 }

@@ -140,7 +140,13 @@ public sealed class BulkAddGroupMembersCommandHandlerTests
             await _handler.Handle(
                 new BulkAddGroupMembersCommand(
                     group.Id,
-                    [new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1))]
+                    [
+                        new BulkAddItem(
+                            Guid.CreateVersion7(),
+                            GroupMemberRole.Student,
+                            new DateOnly(2025, 9, 1)
+                        ),
+                    ]
                 ),
                 CancellationToken.None
             );
@@ -177,7 +183,13 @@ public sealed class BulkAddGroupMembersCommandHandlerTests
         var profileId = Guid.CreateVersion7();
         var joinedAt = new DateOnly(2025, 9, 1);
 
-        var existing = new GroupMember(_organizationId, group.Id, profileId, GroupMemberRole.Student, joinedAt);
+        var existing = new GroupMember(
+            _organizationId,
+            group.Id,
+            profileId,
+            GroupMemberRole.Student,
+            joinedAt
+        );
         group.AddMember(existing);
 
         SetupGroupRepo(group);

@@ -15,7 +15,10 @@ public sealed class AddGroupMemberEndpoint
                     CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
-                        command with { GroupId = groupId },
+                        command with
+                        {
+                            GroupId = groupId,
+                        },
                         sender,
                         linker,
                         cancellationToken

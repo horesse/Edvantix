@@ -13,11 +13,7 @@ public sealed class BulkAddGroupMembersEndpoint
                     ISender sender,
                     CancellationToken cancellationToken
                 ) =>
-                    await HandleAsync(
-                        command with { GroupId = groupId },
-                        sender,
-                        cancellationToken
-                    )
+                    await HandleAsync(command with { GroupId = groupId }, sender, cancellationToken)
             )
             .WithName("BulkAddGroupMembers")
             .WithTags("Участники группы")

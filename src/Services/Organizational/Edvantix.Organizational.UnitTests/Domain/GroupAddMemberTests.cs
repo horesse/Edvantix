@@ -16,7 +16,7 @@ public sealed class GroupAddMemberTests
             ValidCode,
             "Тестовая группа",
             "Описание",
-            GroupLevel.B1,
+            Guid.CreateVersion7(),
             ValidCourseId,
             ValidTeacherId,
             GroupFormat.Online,

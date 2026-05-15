@@ -44,7 +44,11 @@ public sealed class AddGroupMemberEndpointTests
         await _endpoint.HandleAsync(command, _senderMock.Object, _linkerMock.Object);
 
         _senderMock.Verify(
-            s => s.Send(It.Is<AddGroupMemberCommand>(c => c == command), It.IsAny<CancellationToken>()),
+            s =>
+                s.Send(
+                    It.Is<AddGroupMemberCommand>(c => c == command),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

@@ -24,7 +24,12 @@ public sealed class GetGroupMembersEndpointTests
     [Test]
     public async Task GivenValidQuery_WhenHandling_ThenShouldSendQueryToSender()
     {
-        var query = new GetGroupMembersQuery(Guid.CreateVersion7(), IncludeExited: true, PageIndex: 2, PageSize: 25);
+        var query = new GetGroupMembersQuery(
+            Guid.CreateVersion7(),
+            IncludeExited: true,
+            PageIndex: 2,
+            PageSize: 25
+        );
 
         _senderMock
             .Setup(s => s.Send(It.IsAny<GetGroupMembersQuery>(), It.IsAny<CancellationToken>()))
@@ -33,7 +38,8 @@ public sealed class GetGroupMembersEndpointTests
         await _endpoint.HandleAsync(query, _senderMock.Object);
 
         _senderMock.Verify(
-            s => s.Send(It.Is<GetGroupMembersQuery>(q => q == query), It.IsAny<CancellationToken>()),
+            s =>
+                s.Send(It.Is<GetGroupMembersQuery>(q => q == query), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

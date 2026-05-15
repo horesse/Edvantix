@@ -7,19 +7,14 @@ namespace Edvantix.Organizational.Features.Groups.Members.BulkAdd;
 
 [Transactional]
 [RequirePermission(GroupPermissions.Members)]
-public sealed record BulkAddGroupMembersCommand(
-    Guid GroupId,
-    IReadOnlyList<BulkAddItem> Items
-) : ICommand<BulkAddResult>;
+public sealed record BulkAddGroupMembersCommand(Guid GroupId, IReadOnlyList<BulkAddItem> Items)
+    : ICommand<BulkAddResult>;
 
 /// <summary>Элемент пакетного запроса на добавление участника.</summary>
 public sealed record BulkAddItem(Guid ProfileId, GroupMemberRole Role, DateOnly JoinedAt);
 
 /// <summary>Результат пакетного добавления участников.</summary>
-public sealed record BulkAddResult(
-    IReadOnlyList<Guid> Added,
-    IReadOnlyList<BulkAddFailure> Failed
-);
+public sealed record BulkAddResult(IReadOnlyList<Guid> Added, IReadOnlyList<BulkAddFailure> Failed);
 
 /// <summary>Информация о неудачном добавлении участника в пакетной операции.</summary>
 public sealed record BulkAddFailure(Guid ProfileId, string Reason);

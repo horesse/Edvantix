@@ -87,7 +87,10 @@ public sealed class BulkAddGroupMembersCommandHandlerTests
 
         var act = async () =>
             await _handler.Handle(
-                new BulkAddGroupMembersCommand(id, [new(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1))]),
+                new BulkAddGroupMembersCommand(
+                    id,
+                    [new(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1))]
+                ),
                 CancellationToken.None
             );
 

@@ -40,10 +40,11 @@ internal sealed class GetGroupMembersQueryHandler(
         var pageIndex = Math.Max(request.PageIndex, 1);
         var pageSize = Math.Clamp(request.PageSize, 1, 100);
 
-        var filtered = (request.IncludeExited
+        var filtered = (
+            request.IncludeExited
                 ? group.Members.AsEnumerable()
-                : group.Members.Where(m => m.ExitedAt is null))
-            .ToList();
+                : group.Members.Where(m => m.ExitedAt is null)
+        ).ToList();
 
         var totalCount = filtered.Count;
         var page = filtered.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();

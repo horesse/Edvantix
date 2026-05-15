@@ -50,5 +50,6 @@ public sealed class GetGroupMembersEndpoint
 public sealed record GetGroupMembersQueryParams(
     [property: Description("Включить выбывших участников")] bool IncludeExited = false,
     [property: Description("Индекс страницы")] int PageIndex = Pagination.DefaultPageIndex,
-    [property: Description("Количество элементов на странице")] int PageSize = Pagination.DefaultPageSize
+    [property: Description("Количество элементов на странице")]
+        int PageSize = Pagination.DefaultPageSize
 );

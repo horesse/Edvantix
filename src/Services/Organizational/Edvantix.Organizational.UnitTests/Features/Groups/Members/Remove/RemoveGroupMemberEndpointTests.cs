@@ -41,7 +41,11 @@ public sealed class RemoveGroupMemberEndpointTests
         await _endpoint.HandleAsync(command, _senderMock.Object);
 
         _senderMock.Verify(
-            s => s.Send(It.Is<RemoveGroupMemberCommand>(c => c == command), It.IsAny<CancellationToken>()),
+            s =>
+                s.Send(
+                    It.Is<RemoveGroupMemberCommand>(c => c == command),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

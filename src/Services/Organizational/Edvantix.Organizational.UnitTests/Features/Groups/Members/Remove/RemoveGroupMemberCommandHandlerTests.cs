@@ -49,7 +49,12 @@ public sealed class RemoveGroupMemberCommandHandlerTests
 
         var act = async () =>
             await _handler.Handle(
-                new RemoveGroupMemberCommand(id, Guid.CreateVersion7(), new DateOnly(2025, 11, 1), null),
+                new RemoveGroupMemberCommand(
+                    id,
+                    Guid.CreateVersion7(),
+                    new DateOnly(2025, 11, 1),
+                    null
+                ),
                 CancellationToken.None
             );
 
@@ -83,7 +88,12 @@ public sealed class RemoveGroupMemberCommandHandlerTests
 
         var act = async () =>
             await _handler.Handle(
-                new RemoveGroupMemberCommand(group.Id, Guid.CreateVersion7(), new DateOnly(2025, 11, 1), null),
+                new RemoveGroupMemberCommand(
+                    group.Id,
+                    Guid.CreateVersion7(),
+                    new DateOnly(2025, 11, 1),
+                    null
+                ),
                 CancellationToken.None
             );
 

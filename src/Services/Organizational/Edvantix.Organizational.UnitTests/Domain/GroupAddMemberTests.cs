@@ -45,8 +45,7 @@ public sealed class GroupAddMemberTests
 
         var act = () => group.AddMember(CreateStudentMember());
 
-        act.ShouldThrow<InvalidOperationException>()
-            .Message.ShouldContain("вместимости");
+        act.ShouldThrow<InvalidOperationException>().Message.ShouldContain("вместимости");
     }
 
     [Test]
@@ -58,8 +57,7 @@ public sealed class GroupAddMemberTests
 
         var act = () => group.AddMember(CreateStudentMember(profileId));
 
-        act.ShouldThrow<InvalidOperationException>()
-            .Message.ShouldContain("активным участником");
+        act.ShouldThrow<InvalidOperationException>().Message.ShouldContain("активным участником");
     }
 
     [Test]
@@ -157,8 +155,7 @@ public sealed class GroupAddMemberTests
 
         var act = () => group.RemoveMember(Guid.CreateVersion7(), StartDate.AddMonths(1));
 
-        act.ShouldThrow<InvalidOperationException>()
-            .Message.ShouldContain("не найден");
+        act.ShouldThrow<InvalidOperationException>().Message.ShouldContain("не найден");
     }
 
     [Test]
@@ -171,7 +168,6 @@ public sealed class GroupAddMemberTests
 
         var act = () => group.RemoveMember(member.Id, StartDate.AddMonths(2));
 
-        act.ShouldThrow<InvalidOperationException>()
-            .Message.ShouldContain("не найден");
+        act.ShouldThrow<InvalidOperationException>().Message.ShouldContain("не найден");
     }
 }

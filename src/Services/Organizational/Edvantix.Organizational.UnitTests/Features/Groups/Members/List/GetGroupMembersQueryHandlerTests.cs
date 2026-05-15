@@ -29,12 +29,24 @@ public sealed class GetGroupMembersQueryHandlerTests
             .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(group);
         _profileServiceMock
-            .Setup(p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(new GetProfilesResponse());
         _mapperMock
             .Setup(m => m.Map(It.IsAny<GroupMember>()))
-            .Returns((GroupMember m) =>
-                new GroupMemberDto(m.Id, m.ProfileId, string.Empty, null, m.Role, m.JoinedAt, m.ExitedAt, m.ExitReason)
+            .Returns(
+                (GroupMember m) =>
+                    new GroupMemberDto(
+                        m.Id,
+                        m.ProfileId,
+                        string.Empty,
+                        null,
+                        m.Role,
+                        m.JoinedAt,
+                        m.ExitedAt,
+                        m.ExitReason
+                    )
             );
 
         var result = await _handler.Handle(
@@ -55,12 +67,24 @@ public sealed class GetGroupMembersQueryHandlerTests
             .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(group);
         _profileServiceMock
-            .Setup(p => p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(new GetProfilesResponse());
         _mapperMock
             .Setup(m => m.Map(It.IsAny<GroupMember>()))
-            .Returns((GroupMember m) =>
-                new GroupMemberDto(m.Id, m.ProfileId, string.Empty, null, m.Role, m.JoinedAt, m.ExitedAt, m.ExitReason)
+            .Returns(
+                (GroupMember m) =>
+                    new GroupMemberDto(
+                        m.Id,
+                        m.ProfileId,
+                        string.Empty,
+                        null,
+                        m.Role,
+                        m.JoinedAt,
+                        m.ExitedAt,
+                        m.ExitReason
+                    )
             );
 
         var result = await _handler.Handle(
@@ -80,10 +104,7 @@ public sealed class GetGroupMembersQueryHandlerTests
             .ReturnsAsync((Group?)null);
 
         var act = async () =>
-            await _handler.Handle(
-                new GetGroupMembersQuery(id),
-                CancellationToken.None
-            );
+            await _handler.Handle(new GetGroupMembersQuery(id), CancellationToken.None);
 
         await act.ShouldThrowAsync<NotFoundException>();
     }
@@ -97,10 +118,7 @@ public sealed class GetGroupMembersQueryHandlerTests
             .ReturnsAsync(group);
 
         var act = async () =>
-            await _handler.Handle(
-                new GetGroupMembersQuery(group.Id),
-                CancellationToken.None
-            );
+            await _handler.Handle(new GetGroupMembersQuery(group.Id), CancellationToken.None);
 
         await act.ShouldThrowAsync<ForbiddenException>();
     }
@@ -113,7 +131,13 @@ public sealed class GetGroupMembersQueryHandlerTests
         for (var i = 0; i < activeCount; i++)
         {
             group.AddMember(
-                new GroupMember(_organizationId, group.Id, Guid.CreateVersion7(), GroupMemberRole.Student, start)
+                new GroupMember(
+                    _organizationId,
+                    group.Id,
+                    Guid.CreateVersion7(),
+                    GroupMemberRole.Student,
+                    start
+                )
             );
         }
 

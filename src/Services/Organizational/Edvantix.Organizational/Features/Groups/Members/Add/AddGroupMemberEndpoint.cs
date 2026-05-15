@@ -17,7 +17,12 @@ public sealed class AddGroupMemberEndpoint
                     CancellationToken cancellationToken
                 ) =>
                     await HandleAsync(
-                        new AddGroupMemberCommand(groupId, body.ProfileId, body.Role, body.JoinedAt),
+                        new AddGroupMemberCommand(
+                            groupId,
+                            body.ProfileId,
+                            body.Role,
+                            body.JoinedAt
+                        ),
                         sender,
                         linker,
                         cancellationToken

@@ -13,7 +13,13 @@ public sealed class BulkAddGroupMembersEndpointTests
         var groupId = Guid.CreateVersion7();
         var command = new BulkAddGroupMembersCommand(
             groupId,
-            [new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1))]
+            [
+                new BulkAddItem(
+                    Guid.CreateVersion7(),
+                    GroupMemberRole.Student,
+                    new DateOnly(2025, 9, 1)
+                ),
+            ]
         );
         var bulkResult = new BulkAddResult([Guid.CreateVersion7()], []);
 
@@ -33,8 +39,16 @@ public sealed class BulkAddGroupMembersEndpointTests
         var command = new BulkAddGroupMembersCommand(
             groupId,
             [
-                new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1)),
-                new BulkAddItem(Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1)),
+                new BulkAddItem(
+                    Guid.CreateVersion7(),
+                    GroupMemberRole.Student,
+                    new DateOnly(2025, 9, 1)
+                ),
+                new BulkAddItem(
+                    Guid.CreateVersion7(),
+                    GroupMemberRole.Student,
+                    new DateOnly(2025, 9, 1)
+                ),
             ]
         );
         var bulkResult = new BulkAddResult(

@@ -62,7 +62,12 @@ public sealed class AddGroupMemberCommandHandlerTests
 
         var act = async () =>
             await _handler.Handle(
-                new AddGroupMemberCommand(id, Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1)),
+                new AddGroupMemberCommand(
+                    id,
+                    Guid.CreateVersion7(),
+                    GroupMemberRole.Student,
+                    new DateOnly(2025, 9, 1)
+                ),
                 CancellationToken.None
             );
 
@@ -79,7 +84,12 @@ public sealed class AddGroupMemberCommandHandlerTests
 
         var act = async () =>
             await _handler.Handle(
-                new AddGroupMemberCommand(group.Id, Guid.CreateVersion7(), GroupMemberRole.Student, new DateOnly(2025, 9, 1)),
+                new AddGroupMemberCommand(
+                    group.Id,
+                    Guid.CreateVersion7(),
+                    GroupMemberRole.Student,
+                    new DateOnly(2025, 9, 1)
+                ),
                 CancellationToken.None
             );
 
@@ -128,7 +138,12 @@ public sealed class AddGroupMemberCommandHandlerTests
 
         var act = async () =>
             await _handler.Handle(
-                new AddGroupMemberCommand(group.Id, profileId, GroupMemberRole.Student, new DateOnly(2025, 9, 1)),
+                new AddGroupMemberCommand(
+                    group.Id,
+                    profileId,
+                    GroupMemberRole.Student,
+                    new DateOnly(2025, 9, 1)
+                ),
                 CancellationToken.None
             );
 

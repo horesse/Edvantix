@@ -12,15 +12,16 @@ internal sealed class BulkAddGroupMembersValidator : AbstractValidator<BulkAddGr
             .Must(items => items.Count <= 100)
             .WithMessage("Нельзя добавить более 100 участников за один запрос");
 
-        RuleForEach(x => x.Items).ChildRules(item =>
-        {
-            item.RuleFor(x => x.ProfileId)
-                .NotEmpty()
-                .WithMessage("Идентификатор профиля обязателен");
+        RuleForEach(x => x.Items)
+            .ChildRules(item =>
+            {
+                item.RuleFor(x => x.ProfileId)
+                    .NotEmpty()
+                    .WithMessage("Идентификатор профиля обязателен");
 
-            item.RuleFor(x => x.JoinedAt)
-                .NotEqual(default(DateOnly))
-                .WithMessage("Дата вступления обязательна");
-        });
+                item.RuleFor(x => x.JoinedAt)
+                    .NotEqual(default(DateOnly))
+                    .WithMessage("Дата вступления обязательна");
+            });
     }
 }

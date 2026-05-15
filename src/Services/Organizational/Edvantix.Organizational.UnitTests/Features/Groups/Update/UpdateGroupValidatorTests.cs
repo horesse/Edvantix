@@ -26,7 +26,12 @@ public sealed class UpdateGroupValidatorTests
     [Test]
     public async Task GivenEmptyId_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { Id = Guid.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Id = Guid.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Id);
     }
@@ -34,7 +39,12 @@ public sealed class UpdateGroupValidatorTests
     [Test]
     public async Task GivenEmptyName_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { Name = string.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Name = string.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Name);
     }
@@ -55,7 +65,12 @@ public sealed class UpdateGroupValidatorTests
     [Test]
     public async Task GivenEmptyLevelId_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { LevelId = Guid.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                LevelId = Guid.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.LevelId);
     }
@@ -63,7 +78,12 @@ public sealed class UpdateGroupValidatorTests
     [Test]
     public async Task GivenEmptyCourseId_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { CourseId = Guid.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                CourseId = Guid.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.CourseId);
     }

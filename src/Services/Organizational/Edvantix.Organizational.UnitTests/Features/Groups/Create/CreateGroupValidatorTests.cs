@@ -26,7 +26,12 @@ public sealed class CreateGroupValidatorTests
     [Test]
     public async Task GivenEmptyCode_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { Code = string.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Code = string.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Code);
     }
@@ -34,7 +39,12 @@ public sealed class CreateGroupValidatorTests
     [Test]
     public async Task GivenInvalidCodeFormat_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { Code = "b1-01" });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Code = "b1-01",
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Code);
     }
@@ -42,7 +52,12 @@ public sealed class CreateGroupValidatorTests
     [Test]
     public async Task GivenEmptyName_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { Name = string.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Name = string.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Name);
     }
@@ -50,7 +65,12 @@ public sealed class CreateGroupValidatorTests
     [Test]
     public async Task GivenEmptyLevelId_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { LevelId = Guid.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                LevelId = Guid.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.LevelId);
     }
@@ -58,7 +78,12 @@ public sealed class CreateGroupValidatorTests
     [Test]
     public async Task GivenEmptyCourseId_WhenValidating_ThenShouldHaveError()
     {
-        var result = await _validator.TestValidateAsync(BuildValidCommand() with { CourseId = Guid.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                CourseId = Guid.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.CourseId);
     }
@@ -224,7 +249,10 @@ public sealed class CreateGroupValidatorTests
             .ReturnsAsync(inactiveLevel);
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { LevelId = inactiveLevelId }
+            BuildValidCommand() with
+            {
+                LevelId = inactiveLevelId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.LevelId);
@@ -247,7 +275,10 @@ public sealed class CreateGroupValidatorTests
             .ReturnsAsync(foreignLevel);
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { LevelId = foreignLevelId }
+            BuildValidCommand() with
+            {
+                LevelId = foreignLevelId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.LevelId);

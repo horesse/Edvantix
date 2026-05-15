@@ -65,7 +65,12 @@ internal sealed class GroupConfiguration : IEntityTypeConfiguration<Group>
             .IsUnique()
             .HasFilter("is_deleted = false");
 
-        builder.HasIndex(g => new { g.OrganizationId, g.LevelId, g.Status });
+        builder.HasIndex(g => new
+        {
+            g.OrganizationId,
+            g.LevelId,
+            g.Status,
+        });
         builder.HasIndex(g => g.TeacherMemberId);
         builder.HasIndex(g => g.CourseId);
 

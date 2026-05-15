@@ -123,10 +123,7 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
             );
 
             // Шаг 5: Удаляем старый строковый столбец level.
-            migrationBuilder.DropIndex(
-                name: "ix_groups_organization_id_status",
-                table: "groups"
-            );
+            migrationBuilder.DropIndex(name: "ix_groups_organization_id_status", table: "groups");
 
             migrationBuilder.DropColumn(name: "level", table: "groups");
 

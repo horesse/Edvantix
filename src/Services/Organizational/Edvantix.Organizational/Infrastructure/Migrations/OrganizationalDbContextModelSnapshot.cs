@@ -66,11 +66,9 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasColumnName("is_deleted")
                         .HasComment("Признак удаленной записи");
 
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("level");
+                    b.Property<Guid>("LevelId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("level_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -119,8 +117,11 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasDatabaseName("ix_groups_organization_id_code")
                         .HasFilter("is_deleted = false");
 
-                    b.HasIndex("OrganizationId", "Status")
-                        .HasDatabaseName("ix_groups_organization_id_status");
+                    b.HasIndex("LevelId")
+                        .HasDatabaseName("ix_groups_level_id");
+
+                    b.HasIndex("OrganizationId", "LevelId", "Status")
+                        .HasDatabaseName("ix_groups_organization_id_level_id_status");
 
                     b.ToTable("groups", (string)null);
                 });
@@ -770,6 +771,18 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         {
                             t.ExcludeFromMigrations();
                         });
+                });
+
+            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.Group", b =>
+                {
+                    b.HasOne("Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_groups_levels_level_id");
+
+                    b.Navigation("Level");
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate.GroupMember", b =>

@@ -11,7 +11,7 @@ public sealed class CreateGroupEndpointTests
             Code: "B1-01",
             Name: "Английский B1",
             Description: "Группа уровня B1",
-            Level: GroupLevel.B1,
+            LevelId: Guid.CreateVersion7(),
             CourseId: Guid.CreateVersion7(),
             TeacherMemberId: Guid.CreateVersion7(),
             Format: GroupFormat.Online,

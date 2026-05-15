@@ -39,7 +39,7 @@ public sealed class UpdateGroupEndpointTests
             Id: Guid.CreateVersion7(),
             Name: "Английский B1",
             Description: "Описание",
-            Level: GroupLevel.B1,
+            LevelId: Guid.CreateVersion7(),
             CourseId: Guid.CreateVersion7(),
             TeacherMemberId: Guid.CreateVersion7(),
             Format: GroupFormat.Online,

@@ -79,7 +79,7 @@ public sealed class ChangeGroupStatusCommandHandlerTests
             GroupCode.From("B1-01"),
             "Английский B1",
             "Описание",
-            GroupLevel.B1,
+            Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             GroupFormat.Online,

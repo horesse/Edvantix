@@ -16,7 +16,7 @@ public sealed record GetGroupsQuery(
     [property: DefaultValue(Pagination.DefaultPageSize)]
         int PageSize = Pagination.DefaultPageSize,
     [property: Description("Текстовый поиск по названию")] string? Search = null,
-    [property: Description("Фильтр по уровням")] GroupLevel[]? Levels = null,
+    [property: Description("Фильтр по идентификаторам уровней")] Guid[]? LevelIds = null,
     [property: Description("Фильтр по статусам")] GroupStatus[]? Statuses = null,
     [property: Description("Фильтр по форматам")] GroupFormat[]? Formats = null
 ) : IQuery<PagedResult<GroupListItemDto>>;
@@ -39,7 +39,7 @@ internal sealed class GetGroupsQueryHandler(
         var offset = (pageIndex - 1) * pageSize;
         var organizationId = tenantContext.OrganizationId;
 
-        var levels = request.Levels?.Length > 0 ? request.Levels : null;
+        var levelIds = request.LevelIds?.Length > 0 ? request.LevelIds : null;
         var statuses = request.Statuses?.Length > 0 ? request.Statuses : null;
         var formats = request.Formats?.Length > 0 ? request.Formats : null;
 
@@ -48,7 +48,7 @@ internal sealed class GetGroupsQueryHandler(
             offset,
             pageSize,
             request.Search,
-            levels,
+            levelIds,
             statuses,
             formats
         );
@@ -56,7 +56,7 @@ internal sealed class GetGroupsQueryHandler(
         var countSpec = new GroupListSpecification(
             organizationId,
             request.Search,
-            levels,
+            levelIds,
             statuses,
             formats
         );

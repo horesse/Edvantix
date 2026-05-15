@@ -11,7 +11,7 @@ public sealed class GroupListSpecification : Specification<Group>
         int offset,
         int limit,
         string? search = null,
-        IReadOnlyCollection<GroupLevel>? levels = null,
+        IReadOnlyCollection<Guid>? levelIds = null,
         IReadOnlyCollection<GroupStatus>? statuses = null,
         IReadOnlyCollection<GroupFormat>? formats = null
     )
@@ -22,26 +22,26 @@ public sealed class GroupListSpecification : Specification<Group>
             .Skip(offset)
             .Take(limit);
 
-        ApplyFilters(Query, search, levels, statuses, formats);
+        ApplyFilters(Query, search, levelIds, statuses, formats);
     }
 
     /// <summary>Конструктор для подсчёта (без пагинации).</summary>
     public GroupListSpecification(
         Guid organizationId,
         string? search = null,
-        IReadOnlyCollection<GroupLevel>? levels = null,
+        IReadOnlyCollection<Guid>? levelIds = null,
         IReadOnlyCollection<GroupStatus>? statuses = null,
         IReadOnlyCollection<GroupFormat>? formats = null
     )
     {
         Query.Where(g => g.OrganizationId == organizationId && !g.IsDeleted);
-        ApplyFilters(Query, search, levels, statuses, formats);
+        ApplyFilters(Query, search, levelIds, statuses, formats);
     }
 
     private static void ApplyFilters(
         ISpecificationBuilder<Group> query,
         string? search,
-        IReadOnlyCollection<GroupLevel>? levels,
+        IReadOnlyCollection<Guid>? levelIds,
         IReadOnlyCollection<GroupStatus>? statuses,
         IReadOnlyCollection<GroupFormat>? formats
     )
@@ -52,8 +52,8 @@ public sealed class GroupListSpecification : Specification<Group>
             query.Where(g => g.Name.ToLower().Contains(term));
         }
 
-        if (levels?.Count > 0)
-            query.Where(g => levels.Contains(g.Level));
+        if (levelIds?.Count > 0)
+            query.Where(g => levelIds.Contains(g.LevelId));
 
         if (statuses?.Count > 0)
             query.Where(g => statuses.Contains(g.Status));

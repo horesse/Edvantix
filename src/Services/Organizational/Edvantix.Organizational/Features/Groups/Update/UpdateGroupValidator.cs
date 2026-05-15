@@ -1,10 +1,11 @@
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 
 namespace Edvantix.Organizational.Features.Groups.Update;
 
 internal sealed class UpdateGroupValidator : AbstractValidator<UpdateGroupCommand>
 {
-    public UpdateGroupValidator()
+    public UpdateGroupValidator(ILevelRepository levelRepository, ITenantContext tenantContext)
     {
         RuleFor(x => x.Id).NotEmpty().WithMessage("Идентификатор группы обязателен");
 
@@ -19,6 +20,37 @@ internal sealed class UpdateGroupValidator : AbstractValidator<UpdateGroupComman
             .WithMessage("Описание группы обязательно")
             .MaximumLength(1024)
             .WithMessage("Описание группы не может превышать 1024 символа");
+
+        RuleFor(x => x.LevelId)
+            .NotEmpty()
+            .WithMessage("Идентификатор уровня обязателен");
+
+        When(x => x.LevelId != Guid.Empty, () =>
+        {
+            RuleFor(x => x.LevelId)
+                .MustAsync(async (levelId, ct) =>
+                {
+                    var level = await levelRepository.GetByIdAsync(levelId, ct);
+                    return level is not null && !level.IsDeleted;
+                })
+                .WithMessage("Указанный уровень не найден");
+
+            RuleFor(x => x.LevelId)
+                .MustAsync(async (levelId, ct) =>
+                {
+                    var level = await levelRepository.GetByIdAsync(levelId, ct);
+                    return level?.OrganizationId == tenantContext.OrganizationId;
+                })
+                .WithMessage("Уровень не принадлежит текущей организации");
+
+            RuleFor(x => x.LevelId)
+                .MustAsync(async (levelId, ct) =>
+                {
+                    var level = await levelRepository.GetByIdAsync(levelId, ct);
+                    return level?.IsActive == true;
+                })
+                .WithMessage("Уровень неактивен и не может быть назначен группе");
+        });
 
         RuleFor(x => x.CourseId).NotEmpty().WithMessage("Идентификатор курса обязателен");
 

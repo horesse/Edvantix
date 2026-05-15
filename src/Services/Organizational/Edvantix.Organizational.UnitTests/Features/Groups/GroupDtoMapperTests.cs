@@ -16,7 +16,7 @@ public sealed class GroupDtoMapperTests
         dto.Id.ShouldBe(group.Id);
         dto.Code.ShouldBe(group.Code.Value);
         dto.Name.ShouldBe(group.Name);
-        dto.Level.ShouldBe(group.Level);
+        dto.LevelId.ShouldBe(group.LevelId);
         dto.Format.ShouldBe(group.Format);
         dto.Status.ShouldBe(GroupStatus.Recruiting);
         dto.Capacity.ShouldBe(group.Capacity);
@@ -40,7 +40,7 @@ public sealed class GroupDtoMapperTests
         dto.Code.ShouldBe(group.Code.Value);
         dto.Name.ShouldBe(group.Name);
         dto.Description.ShouldBe(group.Description);
-        dto.Level.ShouldBe(group.Level);
+        dto.LevelId.ShouldBe(group.LevelId);
         dto.Format.ShouldBe(group.Format);
         dto.Platform.ShouldBe(group.Platform);
         dto.Capacity.ShouldBe(group.Capacity);
@@ -85,7 +85,7 @@ public sealed class GroupDtoMapperTests
             GroupCode.From("B1-01"),
             "Английский B1",
             "Описание группы",
-            GroupLevel.B1,
+            Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             GroupFormat.Online,

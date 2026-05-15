@@ -6,17 +6,27 @@ public sealed class GetGroupsQueryHandlerTests
     private readonly Mock<IGroupRepository> _repoMock = new();
     private readonly Mock<IMapper<Group, GroupListItemDto>> _mapperMock = new();
     private readonly Mock<IProfileService> _profileServiceMock = new();
+    private readonly Mock<IScheduleService> _scheduleServiceMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetGroupsQueryHandler _handler;
 
     public GetGroupsQueryHandlerTests()
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _scheduleServiceMock
+            .Setup(s =>
+                s.GetScheduleSummariesAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, ScheduleSummaryDto>());
         _handler = new(
             _tenantMock.Object,
             _repoMock.Object,
             _mapperMock.Object,
-            _profileServiceMock.Object
+            _profileServiceMock.Object,
+            _scheduleServiceMock.Object
         );
     }
 
@@ -284,6 +294,7 @@ public sealed class GetGroupsQueryHandlerTests
             Teacher: new TeacherDto(Guid.CreateVersion7(), string.Empty, string.Empty, null),
             null,
             null,
-            Guid.CreateVersion7()
+            Guid.CreateVersion7(),
+            ScheduleSummary: null
         );
 }

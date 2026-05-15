@@ -34,10 +34,8 @@ public sealed class ReorderLevelsEndpointTests
     }
 
     private static ReorderLevelsCommand BuildValidCommand() =>
-        new(
-            [
-                new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 1),
-                new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 2),
-            ]
-        );
+        new([
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 1),
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 2),
+        ]);
 }

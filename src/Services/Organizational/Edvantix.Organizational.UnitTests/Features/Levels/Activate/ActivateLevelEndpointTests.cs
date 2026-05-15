@@ -18,10 +18,7 @@ public sealed class ActivateLevelEndpointTests
 
         _senderMock.Verify(
             s =>
-                s.Send(
-                    It.Is<ActivateLevelCommand>(c => c.Id == id),
-                    It.IsAny<CancellationToken>()
-                ),
+                s.Send(It.Is<ActivateLevelCommand>(c => c.Id == id), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

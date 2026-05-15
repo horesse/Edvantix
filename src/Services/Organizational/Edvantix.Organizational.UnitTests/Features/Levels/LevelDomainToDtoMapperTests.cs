@@ -8,7 +8,14 @@ public sealed class LevelDomainToDtoMapperTests
     [Test]
     public void GivenActiveLevel_WhenMapping_ThenAllFieldsAreMapped()
     {
-        var level = new Level(ValidOrgId, LevelCode.From("B1"), "Intermediate", "Средний", LevelTone.Teal, sortOrder: 2);
+        var level = new Level(
+            ValidOrgId,
+            LevelCode.From("B1"),
+            "Intermediate",
+            "Средний",
+            LevelTone.Teal,
+            sortOrder: 2
+        );
 
         var dto = _mapper.Map(level);
 
@@ -25,7 +32,14 @@ public sealed class LevelDomainToDtoMapperTests
     [Test]
     public void GivenLevelWithNullDescription_WhenMapping_ThenDescriptionIsNull()
     {
-        var level = new Level(ValidOrgId, LevelCode.From("A1"), "Beginner", null, LevelTone.Blue, sortOrder: 1);
+        var level = new Level(
+            ValidOrgId,
+            LevelCode.From("A1"),
+            "Beginner",
+            null,
+            LevelTone.Blue,
+            sortOrder: 1
+        );
 
         var dto = _mapper.Map(level);
 
@@ -35,7 +49,14 @@ public sealed class LevelDomainToDtoMapperTests
     [Test]
     public void GivenDeactivatedLevel_WhenMapping_ThenIsActiveFalse()
     {
-        var level = new Level(ValidOrgId, LevelCode.From("A1"), "Beginner", null, LevelTone.Blue, sortOrder: 1);
+        var level = new Level(
+            ValidOrgId,
+            LevelCode.From("A1"),
+            "Beginner",
+            null,
+            LevelTone.Blue,
+            sortOrder: 1
+        );
         level.Deactivate();
 
         var dto = _mapper.Map(level);
@@ -47,7 +68,14 @@ public sealed class LevelDomainToDtoMapperTests
     public void GivenLevel_WhenMapping_ThenUsageCountIsZeroPlaceholder()
     {
         // UsageCount is a placeholder (0) until Group.LevelId FK is implemented
-        var level = new Level(ValidOrgId, LevelCode.From("C1"), "Advanced", null, LevelTone.Violet, sortOrder: 3);
+        var level = new Level(
+            ValidOrgId,
+            LevelCode.From("C1"),
+            "Advanced",
+            null,
+            LevelTone.Violet,
+            sortOrder: 3
+        );
 
         var dto = _mapper.Map(level);
 
@@ -58,7 +86,14 @@ public sealed class LevelDomainToDtoMapperTests
     public void GivenLevelWithLowerCaseCode_WhenMapping_ThenCodeIsNormalisedToUpperCase()
     {
         // LevelCode.From normalises to upper-case before storing
-        var level = new Level(ValidOrgId, LevelCode.From("a1"), "Beginner", null, LevelTone.Blue, sortOrder: 1);
+        var level = new Level(
+            ValidOrgId,
+            LevelCode.From("a1"),
+            "Beginner",
+            null,
+            LevelTone.Blue,
+            sortOrder: 1
+        );
 
         var dto = _mapper.Map(level);
 

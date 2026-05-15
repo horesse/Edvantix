@@ -29,9 +29,7 @@ public sealed class GetLevelsEndpointTests
             new(Guid.CreateVersion7(), "B1", "Intermediate", null, LevelTone.Teal, 2, true, 0),
         };
 
-        _senderMock
-            .Setup(s => s.Send(query, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(levels);
+        _senderMock.Setup(s => s.Send(query, It.IsAny<CancellationToken>())).ReturnsAsync(levels);
 
         var result = await _endpoint.HandleAsync(query, _senderMock.Object);
 

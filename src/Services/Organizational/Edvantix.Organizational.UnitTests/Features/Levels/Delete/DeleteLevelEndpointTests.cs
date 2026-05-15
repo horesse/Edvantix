@@ -17,11 +17,7 @@ public sealed class DeleteLevelEndpointTests
         await _endpoint.HandleAsync(id, _senderMock.Object);
 
         _senderMock.Verify(
-            s =>
-                s.Send(
-                    It.Is<DeleteLevelCommand>(c => c.Id == id),
-                    It.IsAny<CancellationToken>()
-                ),
+            s => s.Send(It.Is<DeleteLevelCommand>(c => c.Id == id), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

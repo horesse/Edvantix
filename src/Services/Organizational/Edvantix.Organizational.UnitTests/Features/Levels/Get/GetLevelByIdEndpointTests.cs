@@ -42,5 +42,14 @@ public sealed class GetLevelByIdEndpointTests
     }
 
     private static LevelDto CreateDto(Guid id) =>
-        new(id, "A1", "Beginner", null, LevelTone.Blue, SortOrder: 1, IsActive: true, UsageCount: 0);
+        new(
+            id,
+            "A1",
+            "Beginner",
+            null,
+            LevelTone.Blue,
+            SortOrder: 1,
+            IsActive: true,
+            UsageCount: 0
+        );
 }

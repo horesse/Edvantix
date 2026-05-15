@@ -51,12 +51,7 @@ public sealed class GetLevelsQueryHandlerTests
         await _handler.Handle(new GetLevelsQuery(IncludeInactive: false), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.ListByOrganizationAsync(
-                    _organizationId,
-                    false,
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.ListByOrganizationAsync(_organizationId, false, It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
@@ -69,12 +64,7 @@ public sealed class GetLevelsQueryHandlerTests
         await _handler.Handle(new GetLevelsQuery(IncludeInactive: true), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.ListByOrganizationAsync(
-                    _organizationId,
-                    true,
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.ListByOrganizationAsync(_organizationId, true, It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

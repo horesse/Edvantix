@@ -65,5 +65,14 @@ public sealed class GetLevelByIdQueryHandlerTests
         new(orgId, LevelCode.From("B2"), "Intermediate", null, LevelTone.Teal, sortOrder: 2);
 
     private static LevelDto CreateDto(Guid id) =>
-        new(id, "B2", "Intermediate", null, LevelTone.Teal, SortOrder: 2, IsActive: true, UsageCount: 0);
+        new(
+            id,
+            "B2",
+            "Intermediate",
+            null,
+            LevelTone.Teal,
+            SortOrder: 2,
+            IsActive: true,
+            UsageCount: 0
+        );
 }

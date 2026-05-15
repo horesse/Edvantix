@@ -23,9 +23,7 @@ public sealed class ReorderLevelsValidatorTests
     [Test]
     public void GivenItemWithEmptyId_WhenValidating_ThenShouldHaveError()
     {
-        var command = new ReorderLevelsCommand(
-            [new LevelOrderItem(Guid.Empty, SortOrder: 1)]
-        );
+        var command = new ReorderLevelsCommand([new LevelOrderItem(Guid.Empty, SortOrder: 1)]);
 
         var result = _validator.TestValidate(command);
 
@@ -35,9 +33,9 @@ public sealed class ReorderLevelsValidatorTests
     [Test]
     public void GivenItemWithNegativeSortOrder_WhenValidating_ThenShouldHaveError()
     {
-        var command = new ReorderLevelsCommand(
-            [new LevelOrderItem(Guid.CreateVersion7(), SortOrder: -1)]
-        );
+        var command = new ReorderLevelsCommand([
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: -1),
+        ]);
 
         var result = _validator.TestValidate(command);
 
@@ -47,9 +45,9 @@ public sealed class ReorderLevelsValidatorTests
     [Test]
     public void GivenItemWithZeroSortOrder_WhenValidating_ThenShouldNotHaveError()
     {
-        var command = new ReorderLevelsCommand(
-            [new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 0)]
-        );
+        var command = new ReorderLevelsCommand([
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 0),
+        ]);
 
         var result = _validator.TestValidate(command);
 
@@ -59,13 +57,11 @@ public sealed class ReorderLevelsValidatorTests
     [Test]
     public void GivenMultipleValidItems_WhenValidating_ThenShouldNotHaveAnyErrors()
     {
-        var command = new ReorderLevelsCommand(
-            [
-                new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 1),
-                new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 2),
-                new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 3),
-            ]
-        );
+        var command = new ReorderLevelsCommand([
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 1),
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 2),
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 3),
+        ]);
 
         var result = _validator.TestValidate(command);
 
@@ -73,10 +69,8 @@ public sealed class ReorderLevelsValidatorTests
     }
 
     private static ReorderLevelsCommand BuildValidCommand() =>
-        new(
-            [
-                new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 1),
-                new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 2),
-            ]
-        );
+        new([
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 1),
+            new LevelOrderItem(Guid.CreateVersion7(), SortOrder: 2),
+        ]);
 }

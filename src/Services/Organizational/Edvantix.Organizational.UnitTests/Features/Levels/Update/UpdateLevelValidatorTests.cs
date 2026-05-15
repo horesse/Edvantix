@@ -56,7 +56,10 @@ public sealed class UpdateLevelValidatorTests
         var description = new string('X', 257); // max is 256
 
         var result = _validator.TestValidate(
-            BuildValidCommand() with { Description = description }
+            BuildValidCommand() with
+            {
+                Description = description,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.Description);
@@ -68,7 +71,10 @@ public sealed class UpdateLevelValidatorTests
         var description = new string('X', 256);
 
         var result = _validator.TestValidate(
-            BuildValidCommand() with { Description = description }
+            BuildValidCommand() with
+            {
+                Description = description,
+            }
         );
 
         result.ShouldNotHaveValidationErrorFor(x => x.Description);

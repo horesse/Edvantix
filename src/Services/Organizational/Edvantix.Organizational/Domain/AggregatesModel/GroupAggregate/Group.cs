@@ -229,14 +229,56 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
 
     /// <summary>
     /// Добавляет участника в группу.
-    /// Архивированные группы не принимают новых участников.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Если группа архивирована.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///   Если группа архивирована,
+    ///   или <see cref="GroupMember.ProfileId"/> уже является активным участником,
+    ///   или для роли <see cref="GroupMemberRole.Student"/> превышена вместимость.
+    /// </exception>
     public void AddMember(GroupMember member)
     {
         EnsureNotArchived();
         ArgumentNullException.ThrowIfNull(member);
+
+        if (_members.Any(m => m.ProfileId == member.ProfileId && m.ExitedAt is null))
+            throw new InvalidOperationException(
+                $"Профиль {member.ProfileId} уже является активным участником группы."
+            );
+
+        if (member.Role == GroupMemberRole.Student)
+        {
+            var activeStudents = _members.Count(m =>
+                m.Role == GroupMemberRole.Student && m.ExitedAt is null
+            );
+            if (activeStudents >= Capacity)
+                throw new InvalidOperationException(
+                    $"Группа достигла максимальной вместимости ({Capacity} студентов)."
+                );
+        }
+
         _members.Add(member);
+    }
+
+    /// <summary>
+    /// Фиксирует выход участника из группы через <see cref="GroupMember.Exit"/>.
+    /// </summary>
+    /// <param name="memberId">Идентификатор участника (<see cref="GroupMember.Id"/>).</param>
+    /// <param name="exitedAt">Дата выхода.</param>
+    /// <param name="reason">Причина выхода (опционально).</param>
+    /// <exception cref="InvalidOperationException">
+    ///   Если группа архивирована или активный участник с таким идентификатором не найден.
+    /// </exception>
+    public void RemoveMember(Guid memberId, DateOnly exitedAt, string? reason = null)
+    {
+        EnsureNotArchived();
+
+        var member = _members.FirstOrDefault(m => m.Id == memberId && m.ExitedAt is null);
+        if (member is null)
+            throw new InvalidOperationException(
+                $"Активный участник {memberId} не найден в группе."
+            );
+
+        member.Exit(exitedAt, reason);
     }
 
     /// <summary>Архивирует группу. Архивированные группы нельзя редактировать.</summary>

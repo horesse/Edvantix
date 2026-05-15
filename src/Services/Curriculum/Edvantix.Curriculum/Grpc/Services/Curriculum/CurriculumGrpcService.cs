@@ -96,7 +96,10 @@ internal sealed class CurriculumCatalogService(ICourseRepository repository)
         {
             if (!Guid.TryParse(rawId, out var id))
                 throw new RpcException(
-                    new Status(StatusCode.InvalidArgument, $"Некорректный идентификатор курса: '{rawId}'.")
+                    new Status(
+                        StatusCode.InvalidArgument,
+                        $"Некорректный идентификатор курса: '{rawId}'."
+                    )
                 );
 
             ids.Add(id);

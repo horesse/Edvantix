@@ -45,7 +45,10 @@ internal sealed class CurriculumService(CurriculumGrpcService.CurriculumGrpcServ
         var request = new GetCoursesByIdsRequest();
         request.CourseIds.AddRange(ids.Select(id => id.ToString()));
 
-        var response = await client.GetCoursesByIdsAsync(request, cancellationToken: cancellationToken);
+        var response = await client.GetCoursesByIdsAsync(
+            request,
+            cancellationToken: cancellationToken
+        );
 
         return response.Courses.ToDictionary(
             c => Guid.Parse(c.Id),

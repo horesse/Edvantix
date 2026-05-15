@@ -126,7 +126,9 @@ public sealed class CurriculumGrpcServiceTests
         var course1 = CurriculumTestData.CreateCourse();
         var course2 = CurriculumTestData.CreateCourse();
         _repoMock
-            .Setup(r => r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([course1, course2]);
         var request = new GetCoursesByIdsRequest();
         request.CourseIds.Add(course1.Id.ToString());
@@ -135,15 +137,21 @@ public sealed class CurriculumGrpcServiceTests
         var response = await CreateService().GetCoursesByIds(request, CreateContext());
 
         response.Courses.Count.ShouldBe(2);
-        response.Courses.ShouldContain(c => c.Id == course1.Id.ToString() && c.Code == course1.Code && c.Name == course1.Name);
-        response.Courses.ShouldContain(c => c.Id == course2.Id.ToString() && c.Code == course2.Code && c.Name == course2.Name);
+        response.Courses.ShouldContain(c =>
+            c.Id == course1.Id.ToString() && c.Code == course1.Code && c.Name == course1.Name
+        );
+        response.Courses.ShouldContain(c =>
+            c.Id == course2.Id.ToString() && c.Code == course2.Code && c.Name == course2.Name
+        );
     }
 
     [Test]
     public async Task GivenMoreThan200Ids_WhenGetCoursesByIds_ThenThrowsInvalidArgument()
     {
         var request = new GetCoursesByIdsRequest();
-        request.CourseIds.AddRange(Enumerable.Range(0, 201).Select(_ => Guid.CreateVersion7().ToString()));
+        request.CourseIds.AddRange(
+            Enumerable.Range(0, 201).Select(_ => Guid.CreateVersion7().ToString())
+        );
 
         var ex = await Should.ThrowAsync<RpcException>(() =>
             CreateService().GetCoursesByIds(request, CreateContext())
@@ -158,7 +166,9 @@ public sealed class CurriculumGrpcServiceTests
         var activeCourse = CurriculumTestData.CreateCourse();
         // Репозиторий применяет глобальный фильтр IsDeleted — возвращает только активный курс.
         _repoMock
-            .Setup(r => r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync([activeCourse]);
         var deletedId = Guid.CreateVersion7();
         var request = new GetCoursesByIdsRequest();

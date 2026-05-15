@@ -36,4 +36,20 @@ internal sealed class CurriculumService(CurriculumGrpcService.CurriculumGrpcServ
 
         return [.. response.Courses];
     }
+
+    public async Task<IReadOnlyDictionary<Guid, CourseRefDto>> GetCoursesByIdsAsync(
+        IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var request = new GetCoursesByIdsRequest();
+        request.CourseIds.AddRange(ids.Select(id => id.ToString()));
+
+        var response = await client.GetCoursesByIdsAsync(request, cancellationToken: cancellationToken);
+
+        return response.Courses.ToDictionary(
+            c => Guid.Parse(c.Id),
+            c => new CourseRefDto(Guid.Parse(c.Id), c.Code, c.Name)
+        );
+    }
 }

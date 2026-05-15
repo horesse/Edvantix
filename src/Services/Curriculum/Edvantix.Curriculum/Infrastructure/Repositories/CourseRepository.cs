@@ -78,4 +78,13 @@ internal sealed class CourseRepository(CurriculumDbContext context) : ICourseRep
         var query = Specification.GetQuery(context.Courses.AsQueryable(), specification);
         return await query.CountAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Course>> GetByIdsAsync(
+        IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context
+            .Courses.AsNoTracking()
+            .Where(c => ids.Contains(c.Id))
+            .ToListAsync(cancellationToken);
 }

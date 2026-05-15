@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Edvantix.Curriculum\Edvantix.Curriculum.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Edvantix.Curriculum.Grpc.Services" />
+    <Using Include="Shouldly" />
+    <Using Include="TUnit" />
+  </ItemGroup>
+</Project>

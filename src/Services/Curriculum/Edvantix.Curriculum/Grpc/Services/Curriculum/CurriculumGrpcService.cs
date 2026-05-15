@@ -73,4 +73,47 @@ internal sealed class CurriculumCatalogService(ICourseRepository repository)
             },
         };
     }
+
+    private const int MaxBatchSize = 200;
+
+    [EnableRateLimiting("PerUserRateLimit")]
+    public override async Task<GetCoursesByIdsResponse> GetCoursesByIds(
+        GetCoursesByIdsRequest request,
+        ServerCallContext context
+    )
+    {
+        if (request.CourseIds.Count > MaxBatchSize)
+            throw new RpcException(
+                new Status(
+                    StatusCode.InvalidArgument,
+                    $"Количество идентификаторов превышает допустимый лимит в {MaxBatchSize}."
+                )
+            );
+
+        var ids = new List<Guid>(request.CourseIds.Count);
+
+        foreach (var rawId in request.CourseIds)
+        {
+            if (!Guid.TryParse(rawId, out var id))
+                throw new RpcException(
+                    new Status(StatusCode.InvalidArgument, $"Некорректный идентификатор курса: '{rawId}'.")
+                );
+
+            ids.Add(id);
+        }
+
+        var courses = await repository.GetByIdsAsync(ids, context.CancellationToken);
+
+        var response = new GetCoursesByIdsResponse();
+        response.Courses.AddRange(
+            courses.Select(c => new CourseRef
+            {
+                Id = c.Id.ToString(),
+                Code = c.Code,
+                Name = c.Name,
+            })
+        );
+
+        return response;
+    }
 }

@@ -1,10 +1,12 @@
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
+using Edvantix.Organizational.Features.Groups;
 
 namespace Edvantix.Organizational.Features.Groups.Create;
 
 internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupCommand>
 {
-    public CreateGroupValidator()
+    public CreateGroupValidator(ILevelRepository levelRepository, ITenantContext tenantContext)
     {
         RuleFor(x => x.Code)
             .NotEmpty()
@@ -27,6 +29,12 @@ internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupComman
             .WithMessage("Описание группы обязательно")
             .MaximumLength(1024)
             .WithMessage("Описание группы не может превышать 1024 символа");
+
+        RuleFor(x => x.LevelId).NotEmpty().WithMessage("Идентификатор уровня обязателен");
+
+        RuleFor(x => x.LevelId)
+            .MustBeActiveLevelOfCurrentOrganization(levelRepository, tenantContext)
+            .When(x => x.LevelId != Guid.Empty);
 
         RuleFor(x => x.CourseId).NotEmpty().WithMessage("Идентификатор курса обязателен");
 

@@ -6,6 +6,7 @@ public sealed class GroupAggregateTests
     private static readonly Guid ValidCourseId = Guid.CreateVersion7();
     private static readonly Guid ValidTeacherId = Guid.CreateVersion7();
     private static readonly Guid ValidRoomId = Guid.CreateVersion7();
+    private static readonly Guid ValidLevelId = Guid.CreateVersion7();
     private static readonly GroupCode ValidCode = GroupCode.From("EN-B1-12");
     private static readonly DateOnly ValidStartDate = new(2024, 9, 1);
     private static readonly DateOnly ValidEndDate = new(2025, 6, 30);
@@ -16,7 +17,7 @@ public sealed class GroupAggregateTests
             ValidCode,
             "Английский B1 — группа 12",
             "Курс английского языка уровня B1",
-            GroupLevel.B1,
+            ValidLevelId,
             ValidCourseId,
             ValidTeacherId,
             GroupFormat.Offline,
@@ -33,7 +34,7 @@ public sealed class GroupAggregateTests
             ValidCode,
             "Английский B1 — онлайн",
             "Онлайн-группа уровня B1",
-            GroupLevel.B1,
+            ValidLevelId,
             ValidCourseId,
             ValidTeacherId,
             GroupFormat.Online,
@@ -52,7 +53,7 @@ public sealed class GroupAggregateTests
         group.OrganizationId.ShouldBe(ValidOrgId);
         group.Code.ShouldBe(ValidCode);
         group.Name.ShouldBe("Английский B1 — группа 12");
-        group.Level.ShouldBe(GroupLevel.B1);
+        group.LevelId.ShouldBe(ValidLevelId);
         group.CourseId.ShouldBe(ValidCourseId);
         group.TeacherMemberId.ShouldBe(ValidTeacherId);
         group.Format.ShouldBe(GroupFormat.Offline);
@@ -84,7 +85,7 @@ public sealed class GroupAggregateTests
             ValidCode,
             "Смешанный формат",
             "Описание",
-            GroupLevel.A1,
+            ValidLevelId,
             ValidCourseId,
             ValidTeacherId,
             GroupFormat.Mixed,
@@ -108,7 +109,30 @@ public sealed class GroupAggregateTests
                 ValidCode,
                 "Группа А-1",
                 "Описание",
-                GroupLevel.A1,
+                ValidLevelId,
+                ValidCourseId,
+                ValidTeacherId,
+                GroupFormat.Offline,
+                ValidRoomId,
+                null,
+                10,
+                ValidStartDate,
+                ValidEndDate
+            );
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Test]
+    public void GivenEmptyLevelId_WhenCreatingGroup_ThenShouldThrowArgumentException()
+    {
+        var act = () =>
+            new Group(
+                ValidOrgId,
+                ValidCode,
+                "Группа А-1",
+                "Описание",
+                Guid.Empty,
                 ValidCourseId,
                 ValidTeacherId,
                 GroupFormat.Offline,
@@ -131,7 +155,7 @@ public sealed class GroupAggregateTests
                 ValidCode,
                 "Группа А-1",
                 "Описание",
-                GroupLevel.A1,
+                ValidLevelId,
                 Guid.Empty,
                 ValidTeacherId,
                 GroupFormat.Offline,
@@ -154,7 +178,7 @@ public sealed class GroupAggregateTests
                 ValidCode,
                 "Группа А-1",
                 "Описание",
-                GroupLevel.A1,
+                ValidLevelId,
                 ValidCourseId,
                 Guid.Empty,
                 GroupFormat.Offline,
@@ -177,7 +201,7 @@ public sealed class GroupAggregateTests
                 ValidCode,
                 "Группа",
                 "Описание",
-                GroupLevel.B1,
+                ValidLevelId,
                 ValidCourseId,
                 ValidTeacherId,
                 GroupFormat.Offline,
@@ -200,7 +224,7 @@ public sealed class GroupAggregateTests
                 ValidCode,
                 "Группа",
                 "Описание",
-                GroupLevel.B1,
+                ValidLevelId,
                 ValidCourseId,
                 ValidTeacherId,
                 GroupFormat.Online,
@@ -228,7 +252,7 @@ public sealed class GroupAggregateTests
                 ValidCode,
                 "Группа",
                 "Описание",
-                GroupLevel.B1,
+                ValidLevelId,
                 ValidCourseId,
                 ValidTeacherId,
                 GroupFormat.Offline,
@@ -251,7 +275,7 @@ public sealed class GroupAggregateTests
                 ValidCode,
                 "Группа",
                 "Описание",
-                GroupLevel.B1,
+                ValidLevelId,
                 ValidCourseId,
                 ValidTeacherId,
                 GroupFormat.Offline,
@@ -271,11 +295,12 @@ public sealed class GroupAggregateTests
         var group = CreateValidOfflineGroup();
         var newEndDate = ValidEndDate.AddMonths(3);
         var newTeacherId = Guid.CreateVersion7();
+        var newLevelId = Guid.CreateVersion7();
 
         group.Update(
             "Обновлённое название",
             "Обновлённое описание",
-            GroupLevel.B2,
+            newLevelId,
             ValidCourseId,
             newTeacherId,
             GroupFormat.Offline,
@@ -287,7 +312,7 @@ public sealed class GroupAggregateTests
 
         group.Name.ShouldBe("Обновлённое название");
         group.Description.ShouldBe("Обновлённое описание");
-        group.Level.ShouldBe(GroupLevel.B2);
+        group.LevelId.ShouldBe(newLevelId);
         group.TeacherMemberId.ShouldBe(newTeacherId);
         group.Capacity.ShouldBe(20);
         group.EndDate.ShouldBe(newEndDate);
@@ -303,7 +328,7 @@ public sealed class GroupAggregateTests
             group.Update(
                 "Название",
                 "Описание",
-                GroupLevel.B1,
+                ValidLevelId,
                 ValidCourseId,
                 ValidTeacherId,
                 GroupFormat.Offline,
@@ -413,7 +438,7 @@ public sealed class GroupAggregateTests
             ValidCode,
             "  Группа А-1  ",
             "  Описание  ",
-            GroupLevel.A1,
+            ValidLevelId,
             ValidCourseId,
             ValidTeacherId,
             GroupFormat.Offline,

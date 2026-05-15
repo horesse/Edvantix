@@ -1,15 +1,17 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
 namespace Edvantix.Organizational.Features.Groups.SuggestCode;
 
 [RequirePermission(GroupPermissions.View)]
-public sealed record GetSuggestedGroupCodeQuery(GroupLevel Level) : IQuery<string>;
+public sealed record GetSuggestedGroupCodeQuery(Guid LevelId) : IQuery<string>;
 
 internal sealed class GetSuggestedGroupCodeQueryHandler(
     ITenantContext tenantContext,
-    IGroupRepository repository
+    IGroupRepository repository,
+    ILevelRepository levelRepository
 ) : IQueryHandler<GetSuggestedGroupCodeQuery, string>
 {
     public async ValueTask<string> Handle(
@@ -17,12 +19,16 @@ internal sealed class GetSuggestedGroupCodeQueryHandler(
         CancellationToken cancellationToken
     )
     {
+        var level =
+            await levelRepository.GetByIdAsync(query.LevelId, cancellationToken)
+            ?? throw new NotFoundException($"Уровень {query.LevelId} не найден.");
+
         var codes = await repository.GetCodesByOrganizationAsync(
             tenantContext.OrganizationId,
             cancellationToken
         );
 
-        var levelCode = query.Level.ToString().ToUpperInvariant();
+        var levelCode = level.Code.Value;
 
         // Ищем коды с паттерном {LEVEL}-{N} или {LEVEL}-{N} в любом месте
         var maxNumber = codes

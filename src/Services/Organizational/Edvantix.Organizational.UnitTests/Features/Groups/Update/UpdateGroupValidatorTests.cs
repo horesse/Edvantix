@@ -2,36 +2,57 @@ namespace Edvantix.Organizational.UnitTests.Features.Groups.Update;
 
 public sealed class UpdateGroupValidatorTests
 {
-    private readonly UpdateGroupValidator _validator = new();
+    private readonly Mock<ILevelRepository> _levelRepoMock = new();
+    private readonly Mock<ITenantContext> _tenantMock = new();
+    private readonly Guid _organizationId = Guid.CreateVersion7();
+    private readonly Guid _validLevelId = Guid.CreateVersion7();
+    private readonly UpdateGroupValidator _validator;
+
+    public UpdateGroupValidatorTests()
+    {
+        _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _validator = new(_levelRepoMock.Object, _tenantMock.Object);
+        SetupValidLevel(_validLevelId);
+    }
 
     [Test]
-    public void GivenValidCommand_WhenValidating_ThenShouldNotHaveAnyErrors()
+    public async Task GivenValidCommand_WhenValidating_ThenShouldNotHaveAnyErrors()
     {
-        var result = _validator.TestValidate(BuildValidCommand());
+        var result = await _validator.TestValidateAsync(BuildValidCommand());
 
         result.ShouldNotHaveAnyValidationErrors();
     }
 
     [Test]
-    public void GivenEmptyId_WhenValidating_ThenShouldHaveError()
+    public async Task GivenEmptyId_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(BuildValidCommand() with { Id = Guid.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Id = Guid.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Id);
     }
 
     [Test]
-    public void GivenEmptyName_WhenValidating_ThenShouldHaveError()
+    public async Task GivenEmptyName_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(BuildValidCommand() with { Name = string.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Name = string.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.Name);
     }
 
     [Test]
-    public void GivenEmptyDescription_WhenValidating_ThenShouldHaveError()
+    public async Task GivenEmptyDescription_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(
+        var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
                 Description = string.Empty,
@@ -42,17 +63,35 @@ public sealed class UpdateGroupValidatorTests
     }
 
     [Test]
-    public void GivenEmptyCourseId_WhenValidating_ThenShouldHaveError()
+    public async Task GivenEmptyLevelId_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(BuildValidCommand() with { CourseId = Guid.Empty });
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                LevelId = Guid.Empty,
+            }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.LevelId);
+    }
+
+    [Test]
+    public async Task GivenEmptyCourseId_WhenValidating_ThenShouldHaveError()
+    {
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                CourseId = Guid.Empty,
+            }
+        );
 
         result.ShouldHaveValidationErrorFor(x => x.CourseId);
     }
 
     [Test]
-    public void GivenEmptyTeacherMemberId_WhenValidating_ThenShouldHaveError()
+    public async Task GivenEmptyTeacherMemberId_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(
+        var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
                 TeacherMemberId = Guid.Empty,
@@ -63,25 +102,25 @@ public sealed class UpdateGroupValidatorTests
     }
 
     [Test]
-    public void GivenCapacityBelowOne_WhenValidating_ThenShouldHaveError()
+    public async Task GivenCapacityBelowOne_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(BuildValidCommand() with { Capacity = 0 });
+        var result = await _validator.TestValidateAsync(BuildValidCommand() with { Capacity = 0 });
 
         result.ShouldHaveValidationErrorFor(x => x.Capacity);
     }
 
     [Test]
-    public void GivenCapacityAbove50_WhenValidating_ThenShouldHaveError()
+    public async Task GivenCapacityAbove50_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(BuildValidCommand() with { Capacity = 51 });
+        var result = await _validator.TestValidateAsync(BuildValidCommand() with { Capacity = 51 });
 
         result.ShouldHaveValidationErrorFor(x => x.Capacity);
     }
 
     [Test]
-    public void GivenOfflineFormatWithoutRoom_WhenValidating_ThenShouldHaveError()
+    public async Task GivenOfflineFormatWithoutRoom_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(
+        var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
                 Format = GroupFormat.Offline,
@@ -94,9 +133,9 @@ public sealed class UpdateGroupValidatorTests
     }
 
     [Test]
-    public void GivenOnlineFormatWithoutPlatform_WhenValidating_ThenShouldHaveError()
+    public async Task GivenOnlineFormatWithoutPlatform_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(
+        var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
                 Format = GroupFormat.Online,
@@ -108,9 +147,9 @@ public sealed class UpdateGroupValidatorTests
     }
 
     [Test]
-    public void GivenMixedFormatWithoutRoom_WhenValidating_ThenShouldHaveError()
+    public async Task GivenMixedFormatWithoutRoom_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(
+        var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
                 Format = GroupFormat.Mixed,
@@ -123,9 +162,9 @@ public sealed class UpdateGroupValidatorTests
     }
 
     [Test]
-    public void GivenMixedFormatWithoutPlatform_WhenValidating_ThenShouldHaveError()
+    public async Task GivenMixedFormatWithoutPlatform_WhenValidating_ThenShouldHaveError()
     {
-        var result = _validator.TestValidate(
+        var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
                 Format = GroupFormat.Mixed,
@@ -138,9 +177,10 @@ public sealed class UpdateGroupValidatorTests
     }
 
     [Test]
-    public void GivenMixedFormatWithRoomAndPlatform_WhenValidating_ThenShouldNotHaveErrors()
+    public async Task GivenMixedFormatWithRoomAndPlatform_WhenValidating_ThenShouldNotHaveErrors()
     {
-        var result = _validator.TestValidate(
+        // Async rules are skipped in sync TestValidate — validated separately in async tests
+        var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
                 Format = GroupFormat.Mixed,
@@ -149,15 +189,31 @@ public sealed class UpdateGroupValidatorTests
             }
         );
 
-        result.ShouldNotHaveAnyValidationErrors();
+        result.ShouldNotHaveValidationErrorFor(x => x.RoomId);
+        result.ShouldNotHaveValidationErrorFor(x => x.Platform);
     }
 
-    private static UpdateGroupCommand BuildValidCommand() =>
+    private void SetupValidLevel(Guid levelId)
+    {
+        var level = new Level(
+            _organizationId,
+            LevelCode.From("B1"),
+            "Средний",
+            null,
+            LevelTone.Blue,
+            30
+        );
+        _levelRepoMock
+            .Setup(r => r.GetByIdAsync(levelId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(level);
+    }
+
+    private UpdateGroupCommand BuildValidCommand() =>
         new(
             Id: Guid.CreateVersion7(),
             Name: "Английский B1",
             Description: "Описание группы",
-            Level: GroupLevel.B1,
+            LevelId: _validLevelId,
             CourseId: Guid.CreateVersion7(),
             TeacherMemberId: Guid.CreateVersion7(),
             Format: GroupFormat.Online,

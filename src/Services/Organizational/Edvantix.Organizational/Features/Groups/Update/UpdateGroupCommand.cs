@@ -11,7 +11,7 @@ public sealed record UpdateGroupCommand(
     Guid Id,
     string Name,
     string Description,
-    GroupLevel Level,
+    Guid LevelId,
     Guid CourseId,
     Guid TeacherMemberId,
     GroupFormat Format,
@@ -53,7 +53,7 @@ internal sealed class UpdateGroupCommandHandler(
         group.Update(
             command.Name,
             command.Description,
-            command.Level,
+            command.LevelId,
             command.CourseId,
             command.TeacherMemberId,
             command.Format,

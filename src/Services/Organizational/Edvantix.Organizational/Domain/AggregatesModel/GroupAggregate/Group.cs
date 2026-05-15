@@ -1,3 +1,4 @@
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 using Edvantix.Organizational.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
@@ -26,7 +27,7 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     /// <param name="code">Уникальный код группы в рамках организации (напр. <c>EN-B1-12</c>).</param>
     /// <param name="name">Наименование группы.</param>
     /// <param name="description">Описание группы.</param>
-    /// <param name="level">Уровень сложности.</param>
+    /// <param name="levelId">Идентификатор уровня сложности (<c>Level.Id</c>).</param>
     /// <param name="courseId">Идентификатор курса из Curriculum-сервиса (логическая FK).</param>
     /// <param name="teacherMemberId">Идентификатор преподавателя — <c>OrganizationMember.Id</c>.</param>
     /// <param name="format">Формат занятий.</param>
@@ -40,7 +41,7 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
         GroupCode code,
         string name,
         string description,
-        GroupLevel level,
+        Guid levelId,
         Guid courseId,
         Guid teacherMemberId,
         GroupFormat format,
@@ -56,6 +57,12 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
             throw new ArgumentException(
                 "Идентификатор организации не может быть пустым.",
                 nameof(organizationId)
+            );
+
+        if (levelId == Guid.Empty)
+            throw new ArgumentException(
+                "Идентификатор уровня не может быть пустым.",
+                nameof(levelId)
             );
 
         if (courseId == Guid.Empty)
@@ -87,7 +94,7 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
         Code = code;
         Name = name.Trim();
         Description = description.Trim();
-        Level = level;
+        LevelId = levelId;
         CourseId = courseId;
         TeacherMemberId = teacherMemberId;
         Format = format;
@@ -114,8 +121,11 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     /// <summary>Описание группы.</summary>
     public string Description { get; private set; } = string.Empty;
 
-    /// <summary>Уровень сложности / целевая аудитория.</summary>
-    public GroupLevel Level { get; private set; }
+    /// <summary>Идентификатор уровня сложности (FK → levels.id).</summary>
+    public Guid LevelId { get; private set; }
+
+    /// <summary>Уровень сложности (navigation property, загружается через AutoInclude).</summary>
+    public Level Level { get; private set; } = null!;
 
     /// <summary>
     /// Идентификатор курса в Curriculum-сервисе.
@@ -171,7 +181,7 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     public void Update(
         string name,
         string description,
-        GroupLevel level,
+        Guid levelId,
         Guid courseId,
         Guid teacherMemberId,
         GroupFormat format,
@@ -184,6 +194,12 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
         EnsureNotArchived();
         Guard.Against.NullOrWhiteSpace(name, nameof(name));
         Guard.Against.NullOrWhiteSpace(description, nameof(description));
+
+        if (levelId == Guid.Empty)
+            throw new ArgumentException(
+                "Идентификатор уровня не может быть пустым.",
+                nameof(levelId)
+            );
 
         if (courseId == Guid.Empty)
             throw new ArgumentException(
@@ -208,7 +224,7 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
 
         Name = name.Trim();
         Description = description.Trim();
-        Level = level;
+        LevelId = levelId;
         CourseId = courseId;
         TeacherMemberId = teacherMemberId;
         Format = format;

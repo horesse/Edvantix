@@ -11,30 +11,29 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "ix_groups_organization_id_status",
-                table: "groups");
+            migrationBuilder.DropIndex(name: "ix_groups_organization_id_status", table: "groups");
 
-            migrationBuilder.DropColumn(
-                name: "level",
-                table: "groups");
+            migrationBuilder.DropColumn(name: "level", table: "groups");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "level_id",
                 table: "groups",
                 type: "uuid",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000")
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_groups_level_id",
                 table: "groups",
-                column: "level_id");
+                column: "level_id"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_groups_organization_id_level_id_status",
                 table: "groups",
-                columns: new[] { "organization_id", "level_id", "status" });
+                columns: new[] { "organization_id", "level_id", "status" }
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "fk_groups_levels_level_id",
@@ -42,27 +41,23 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 column: "level_id",
                 principalTable: "levels",
                 principalColumn: "id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Restrict
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "fk_groups_levels_level_id",
-                table: "groups");
+            migrationBuilder.DropForeignKey(name: "fk_groups_levels_level_id", table: "groups");
 
-            migrationBuilder.DropIndex(
-                name: "ix_groups_level_id",
-                table: "groups");
+            migrationBuilder.DropIndex(name: "ix_groups_level_id", table: "groups");
 
             migrationBuilder.DropIndex(
                 name: "ix_groups_organization_id_level_id_status",
-                table: "groups");
+                table: "groups"
+            );
 
-            migrationBuilder.DropColumn(
-                name: "level_id",
-                table: "groups");
+            migrationBuilder.DropColumn(name: "level_id", table: "groups");
 
             migrationBuilder.AddColumn<string>(
                 name: "level",
@@ -70,12 +65,14 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 type: "character varying(20)",
                 maxLength: 20,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: ""
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_groups_organization_id_status",
                 table: "groups",
-                columns: new[] { "organization_id", "status" });
+                columns: new[] { "organization_id", "status" }
+            );
         }
     }
 }

@@ -32,4 +32,13 @@ public interface ICourseRepository : IRepository<Course>
         Specification<Course> specification,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>
+    /// Возвращает список не удалённых курсов по набору идентификаторов (AsNoTracking).
+    /// Используется gRPC-эндпойнтом GetCoursesByIds для массового обогащения данных.
+    /// </summary>
+    Task<IReadOnlyList<Course>> GetByIdsAsync(
+        IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default
+    );
 }

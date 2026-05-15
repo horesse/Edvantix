@@ -12,6 +12,10 @@ service CurriculumGrpcService {
 
   /// Возвращает детальную информацию о курсе по идентификатору.
   rpc GetCourseById (GetCourseByIdRequest) returns (GetCourseByIdResponse);
+
+  /// Возвращает краткую информацию (id, code, name) по набору идентификаторов курсов.
+  /// Лимит: не более 200 идентификаторов за один вызов.
+  rpc GetCoursesByIds (GetCoursesByIdsRequest) returns (GetCoursesByIdsResponse);
 }
 
 message GetCoursesForOrganizationRequest {
@@ -49,4 +53,18 @@ message CourseInfo {
 message GetCourseByIdResponse {
   CourseInfo course = 1;
   bool found = 2;
+}
+
+message GetCoursesByIdsRequest {
+  repeated string course_ids = 1;
+}
+
+message CourseRef {
+  string id = 1;
+  string code = 2;
+  string name = 3;
+}
+
+message GetCoursesByIdsResponse {
+  repeated CourseRef courses = 1;
 }

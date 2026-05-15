@@ -38,7 +38,7 @@ var apiVersionSet = app.NewApiVersionSet()
 
 app.MapEndpoints(apiVersionSet);
 
-app.MapGrpcService<CurriculumCatalogService>();
+app.MapGrpcService<CurriculumService>();
 
 app.MapGrpcHealthChecksService();
 

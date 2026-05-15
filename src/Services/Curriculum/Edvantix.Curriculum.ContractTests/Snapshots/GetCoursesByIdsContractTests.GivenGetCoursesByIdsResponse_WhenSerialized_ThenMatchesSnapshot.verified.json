@@ -1,0 +1,20 @@
+{
+  "Courses": [
+    {
+      "Id": "Guid_1",
+      "HasId": true,
+      "Code": "EN-GEN-B1",
+      "HasCode": true,
+      "Name": "English General B1",
+      "HasName": true
+    },
+    {
+      "Id": "Guid_2",
+      "HasId": true,
+      "Code": "EN-GEN-B2",
+      "HasCode": true,
+      "Name": "English General B2",
+      "HasName": true
+    }
+  ]
+}

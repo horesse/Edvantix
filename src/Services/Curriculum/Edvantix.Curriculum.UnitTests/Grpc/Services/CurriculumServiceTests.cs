@@ -9,7 +9,7 @@ public sealed class CurriculumGrpcServiceTests
 {
     private readonly Mock<ICourseRepository> _repoMock = new();
 
-    private CurriculumCatalogService CreateService() => new(_repoMock.Object);
+    private CurriculumService CreateService() => new(_repoMock.Object);
 
     private static TestServerCallContext CreateContext() => new();
 
@@ -116,5 +116,68 @@ public sealed class CurriculumGrpcServiceTests
         response.Course.Level.ShouldBe(course.Level);
         response.Course.DurationWeeks.ShouldBe(course.DurationWeeks);
         response.Course.Status.ShouldBe(course.Status.ToString());
+    }
+
+    // ─── GetCoursesByIds ───────────────────────────────────────────────────────
+
+    [Test]
+    public async Task GivenIds_WhenGetCoursesByIds_ThenReturnsMatching()
+    {
+        var course1 = CurriculumTestData.CreateCourse();
+        var course2 = CurriculumTestData.CreateCourse();
+        _repoMock
+            .Setup(r =>
+                r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([course1, course2]);
+        var request = new GetCoursesByIdsRequest();
+        request.CourseIds.Add(course1.Id.ToString());
+        request.CourseIds.Add(course2.Id.ToString());
+
+        var response = await CreateService().GetCoursesByIds(request, CreateContext());
+
+        response.Courses.Count.ShouldBe(2);
+        response.Courses.ShouldContain(c =>
+            c.Id == course1.Id.ToString() && c.Code == course1.Code && c.Name == course1.Name
+        );
+        response.Courses.ShouldContain(c =>
+            c.Id == course2.Id.ToString() && c.Code == course2.Code && c.Name == course2.Name
+        );
+    }
+
+    [Test]
+    public async Task GivenMoreThan200Ids_WhenGetCoursesByIds_ThenThrowsInvalidArgument()
+    {
+        var request = new GetCoursesByIdsRequest();
+        request.CourseIds.AddRange(
+            Enumerable.Range(0, 201).Select(_ => Guid.CreateVersion7().ToString())
+        );
+
+        var ex = await Should.ThrowAsync<RpcException>(() =>
+            CreateService().GetCoursesByIds(request, CreateContext())
+        );
+
+        ex.StatusCode.ShouldBe(StatusCode.InvalidArgument);
+    }
+
+    [Test]
+    public async Task GivenDeletedCourseInList_WhenGetCoursesByIds_ThenItIsExcluded()
+    {
+        var activeCourse = CurriculumTestData.CreateCourse();
+        // Репозиторий применяет глобальный фильтр IsDeleted — возвращает только активный курс.
+        _repoMock
+            .Setup(r =>
+                r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([activeCourse]);
+        var deletedId = Guid.CreateVersion7();
+        var request = new GetCoursesByIdsRequest();
+        request.CourseIds.Add(activeCourse.Id.ToString());
+        request.CourseIds.Add(deletedId.ToString());
+
+        var response = await CreateService().GetCoursesByIds(request, CreateContext());
+
+        response.Courses.ShouldHaveSingleItem();
+        response.Courses[0].Id.ShouldBe(activeCourse.Id.ToString());
     }
 }

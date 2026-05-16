@@ -26,9 +26,12 @@ public sealed record GroupListItemDto(
     [property: Description("Метка кабинета")] string? RoomLabel,
     // Format
     [property: Description("Формат занятий")] GroupFormat Format,
-    [property: Description("Онлайн-платформа (только для Online-формата)")] OnlinePlatform? Platform,
+    [property: Description("Онлайн-платформа (только для Online-формата)")]
+        OnlinePlatform? Platform,
     // Schedule summary — заполняется в Task 7 (пока null)
-    [property: Description("Сводка расписания, напр. Пн / Ср · 18:00–19:30")] string? ScheduleSummary,
+    [property: Description(
+        "Сводка расписания, напр. Пн / Ср · 18:00–19:30"
+    )] string? ScheduleSummary,
     // Members
     [property: Description("Максимальная вместимость")] int Capacity,
     [property: Description("Количество активных участников")] int MemberCount,
@@ -60,7 +63,8 @@ public sealed record GroupDetailDto(
     [property: Description("Метка кабинета")] string? RoomLabel,
     // Format
     [property: Description("Формат занятий")] GroupFormat Format,
-    [property: Description("Онлайн-платформа (только для Online-формата)")] OnlinePlatform? Platform,
+    [property: Description("Онлайн-платформа (только для Online-формата)")]
+        OnlinePlatform? Platform,
     // Schedule details — заполняется в Task 8
     [property: Description("Детали расписания")] ScheduleDetailDto? Schedule,
     [property: Description("Ближайшие занятия")] IReadOnlyList<UpcomingLessonDto> UpcomingLessons,

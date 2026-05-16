@@ -446,13 +446,28 @@ public sealed class ScheduleServiceTests
     {
         var response = new GetUpcomingLessonsResponse();
         response.Lessons.Add(
-            new UpcomingLessonProto { Date = "2025-09-01", StartMinutes = 1080, DurationMinutes = 90 }
+            new UpcomingLessonProto
+            {
+                Date = "2025-09-01",
+                StartMinutes = 1080,
+                DurationMinutes = 90,
+            }
         );
         response.Lessons.Add(
-            new UpcomingLessonProto { Date = "2025-09-03", StartMinutes = 1080, DurationMinutes = 90 }
+            new UpcomingLessonProto
+            {
+                Date = "2025-09-03",
+                StartMinutes = 1080,
+                DurationMinutes = 90,
+            }
         );
         response.Lessons.Add(
-            new UpcomingLessonProto { Date = "2025-09-08", StartMinutes = 1080, DurationMinutes = 90 }
+            new UpcomingLessonProto
+            {
+                Date = "2025-09-08",
+                StartMinutes = 1080,
+                DurationMinutes = 90,
+            }
         );
 
         _clientMock

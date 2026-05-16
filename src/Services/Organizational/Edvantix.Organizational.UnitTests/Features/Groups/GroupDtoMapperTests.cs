@@ -94,13 +94,103 @@ public sealed class GroupDtoMapperTests
         dto.MemberCount.ShouldBe(1);
     }
 
+    [Test]
+    public void GivenGroupWithOfflineFormat_WhenMappingToListItem_ThenPlatformShouldBeNull()
+    {
+        var group = CreateGroupWithLevel(GroupFormat.Offline, roomId: Guid.CreateVersion7(), platform: null);
+
+        var dto = _listMapper.Map(group);
+
+        dto.Format.ShouldBe(GroupFormat.Offline);
+        dto.Platform.ShouldBeNull();
+    }
+
+    [Test]
+    public void GivenGroupWithOnlineFormat_WhenMappingToListItem_ThenStartDateEndDateAndPlatformAreMapped()
+    {
+        var group = CreateGroupWithLevel();
+
+        var dto = _listMapper.Map(group);
+
+        dto.Platform.ShouldBe(OnlinePlatform.Zoom);
+        dto.StartDate.ShouldBe(new DateOnly(2025, 9, 1));
+        dto.EndDate.ShouldBe(new DateOnly(2026, 6, 30));
+    }
+
+    [Test]
+    public void GivenGroupDetailMapper_WhenMapping_ThenStatusStartDateAndEndDateAreMapped()
+    {
+        var group = CreateGroupWithLevel();
+
+        var dto = _detailMapper.Map(group);
+
+        dto.Status.ShouldBe(GroupStatus.Recruiting);
+        dto.StartDate.ShouldBe(new DateOnly(2025, 9, 1));
+        dto.EndDate.ShouldBe(new DateOnly(2026, 6, 30));
+    }
+
+    [Test]
+    public void GivenGroupWithNoMembers_WhenMappingToDetail_ThenMemberCountIsZero()
+    {
+        var group = CreateGroupWithLevel();
+
+        var dto = _detailMapper.Map(group);
+
+        dto.MemberCount.ShouldBe(0);
+    }
+
+    [Test]
+    public void GivenGroupDetailMapper_WhenMapping_ThenScheduleAndUpcomingLessonsArePlaceholders()
+    {
+        var group = CreateGroupWithLevel();
+
+        var dto = _detailMapper.Map(group);
+
+        dto.Schedule.ShouldBeNull();
+        dto.UpcomingLessons.ShouldBeEmpty();
+    }
+
+    [Test]
+    public void GivenGroupWithMembers_WhenMappingToDetail_ThenShouldCountOnlyActiveMembers()
+    {
+        var group = CreateGroupWithLevel();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var activeMember = new GroupMember(
+            _organizationId,
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            GroupMemberRole.Student,
+            today
+        );
+        var exitedMember = new GroupMember(
+            _organizationId,
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            GroupMemberRole.Student,
+            today.AddDays(-30)
+        );
+
+        exitedMember.Exit(today);
+        group.AddMember(activeMember);
+        group.AddMember(exitedMember);
+
+        var dto = _detailMapper.Map(group);
+
+        dto.MemberCount.ShouldBe(1);
+    }
+
     /// <summary>
     /// Создаёт Group с заполненным navigation property Level через reflection.
     /// В production Level всегда подгружается EF через AutoInclude.
     /// Entity.Id по умолчанию Guid.Empty, поэтому устанавливаем Id Level-а через reflection
     /// перед тем, как передать его в конструктор Group.
     /// </summary>
-    private Group CreateGroupWithLevel()
+    private Group CreateGroupWithLevel(
+        GroupFormat format = GroupFormat.Online,
+        Guid? roomId = null,
+        OnlinePlatform? platform = OnlinePlatform.Zoom
+    )
     {
         var levelId = Guid.CreateVersion7();
 
@@ -126,9 +216,9 @@ public sealed class GroupDtoMapperTests
             levelId,
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
-            GroupFormat.Online,
-            null,
-            OnlinePlatform.Zoom,
+            format,
+            roomId,
+            platform,
             15,
             new DateOnly(2025, 9, 1),
             new DateOnly(2026, 6, 30)

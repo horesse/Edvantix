@@ -225,6 +225,101 @@ public sealed class GetGroupByIdQueryHandlerTests
         result.RoomLabel.ShouldBeNull();
     }
 
+    [Test]
+    public async Task GivenGroupWithNullRoom_WhenHandling_ThenShouldNotCallGetRoomsByIdsAsync()
+    {
+        var group = CreateGroup();
+        var dto = CreateDto(group.Id);
+
+        SetupBaseGroupMocks(group, dto);
+
+        await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        _repoMock.Verify(
+            r => r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
+    }
+
+    [Test]
+    public async Task GivenCourseNotFoundInCurriculumService_WhenHandling_ThenCourseFieldsRemainEmpty()
+    {
+        var courseId = Guid.CreateVersion7();
+        var group = CreateGroup(courseId: courseId);
+        var dto = CreateDto(group.Id, courseId: courseId);
+
+        SetupBaseGroupMocks(group, dto);
+        _curriculumServiceMock
+            .Setup(c =>
+                c.GetCoursesByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, CourseRefDto>());
+
+        var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        result.CourseCode.ShouldBe(string.Empty);
+        result.CourseName.ShouldBe(string.Empty);
+    }
+
+    [Test]
+    public async Task GivenTeacherWithAvatarUrl_WhenHandling_ThenShouldReturnDtoWithAvatarUrl()
+    {
+        var group = CreateGroup();
+        var teacherProfileId = Guid.CreateVersion7();
+        var dto = CreateDto(group.Id);
+        const string avatarUrl = "https://cdn.example.com/avatars/ivanov.jpg";
+
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherMemberInfoAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(
+                new Dictionary<Guid, OrganizationMember>
+                {
+                    [group.TeacherMemberId] = new(
+                        _organizationId,
+                        teacherProfileId,
+                        Guid.CreateVersion7(),
+                        new DateOnly(2025, 1, 1)
+                    ),
+                }
+            );
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(
+                new GetProfilesResponse
+                {
+                    Profiles =
+                    {
+                        new GetProfileResponse
+                        {
+                            Id = teacherProfileId.ToString(),
+                            FullName = "Иванов Иван",
+                            AvatarUrl = avatarUrl,
+                        },
+                    },
+                }
+            );
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+
+        var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        result.Teacher.AvatarUrl.ShouldBe(avatarUrl);
+    }
+
     private void SetupBaseGroupMocks(Group group, GroupDetailDto dto)
     {
         _repoMock

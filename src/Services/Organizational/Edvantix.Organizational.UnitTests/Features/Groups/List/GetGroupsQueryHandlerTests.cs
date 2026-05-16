@@ -293,6 +293,151 @@ public sealed class GetGroupsQueryHandlerTests
         result[0].RoomLabel.ShouldBe("Каб. 205");
     }
 
+    [Test]
+    public async Task GivenGroupsWithNoRooms_WhenHandling_ThenShouldNotCallGetRoomsByIdsAsync()
+    {
+        var group = CreateGroup();
+        var dto = CreateDto(group.Id);
+        var query = new GetGroupsQuery(PageIndex: 1, PageSize: 10);
+
+        SetupEmptyGroupLists(group, dto);
+
+        await _handler.Handle(query, CancellationToken.None);
+
+        _repoMock.Verify(
+            r => r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>()),
+            Times.Never
+        );
+    }
+
+    [Test]
+    public async Task GivenProfileServiceReturnsNull_WhenHandling_ThenShouldReturnDtoWithEmptyTeacher()
+    {
+        var group = CreateGroup();
+        var teacherProfileId = Guid.CreateVersion7();
+        var dto = CreateDto(group.Id);
+        var query = new GetGroupsQuery(PageIndex: 1, PageSize: 10);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([group]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(1);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherMemberInfoAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(
+                new Dictionary<Guid, OrganizationMember>
+                {
+                    [group.TeacherMemberId] = new(
+                        _organizationId,
+                        teacherProfileId,
+                        Guid.CreateVersion7(),
+                        new DateOnly(2025, 1, 1)
+                    ),
+                }
+            );
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        _profileServiceMock
+            .Setup(p =>
+                p.GetProfilesByIdsAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync((GetProfilesResponse?)null);
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result[0].Teacher.FullName.ShouldBe(string.Empty);
+    }
+
+    [Test]
+    public async Task GivenMultipleGroupsWithSameCourse_WhenHandling_ThenBothDtosShouldBeEnrichedWithCourseData()
+    {
+        var courseId = Guid.CreateVersion7();
+        var group1 = CreateGroup(courseId: courseId);
+        var group2 = CreateGroup(courseId: courseId);
+        var dto1 = CreateDto(group1.Id, courseId: courseId);
+        var dto2 = CreateDto(group2.Id, courseId: courseId);
+        var query = new GetGroupsQuery(PageIndex: 1, PageSize: 10);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([group1, group2]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(2);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherMemberInfoAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+        _mapperMock.Setup(m => m.Map(group1)).Returns(dto1);
+        _mapperMock.Setup(m => m.Map(group2)).Returns(dto2);
+        _curriculumServiceMock
+            .Setup(c =>
+                c.GetCoursesByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(
+                new Dictionary<Guid, CourseRefDto>
+                {
+                    [courseId] = new(courseId, "EN-GEN-B1", "Английский Общий B1"),
+                }
+            );
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result[0].CourseCode.ShouldBe("EN-GEN-B1");
+        result[0].CourseName.ShouldBe("Английский Общий B1");
+        result[1].CourseCode.ShouldBe("EN-GEN-B1");
+        result[1].CourseName.ShouldBe("Английский Общий B1");
+    }
+
+    [Test]
+    public async Task GivenPageSizeBelowOne_WhenHandling_ThenShouldClampToOne()
+    {
+        var query = new GetGroupsQuery(PageIndex: 1, PageSize: 0);
+
+        _repoMock
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync([]);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Group>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(0);
+
+        var result = await _handler.Handle(query, CancellationToken.None);
+
+        result.PageSize.ShouldBe(1);
+    }
+
     /// <summary>
     /// Настраивает репозиторий и маппер для сценария с одной группой без учителя, кабинета
     /// и данных о профиле. Использовать в тестах, ориентированных на course-enrichment.

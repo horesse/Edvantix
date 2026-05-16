@@ -56,7 +56,10 @@ internal sealed class ScheduleService(
         if (!Guid.TryParse(request.GroupId, out var groupId))
             return new GetScheduleByGroupIdResponse { Found = false };
 
-        var schedule = await scheduleRepository.GetByGroupIdAsync(groupId, context.CancellationToken);
+        var schedule = await scheduleRepository.GetByGroupIdAsync(
+            groupId,
+            context.CancellationToken
+        );
 
         if (schedule is null)
             return new GetScheduleByGroupIdResponse { Found = false };

@@ -360,9 +360,7 @@ public sealed class GetGroupByIdQueryHandlerTests
 
         SetupBaseGroupMocks(group, dto);
         _scheduleServiceMock
-            .Setup(s =>
-                s.GetScheduleByGroupIdAsync(group.Id, It.IsAny<CancellationToken>())
-            )
+            .Setup(s => s.GetScheduleByGroupIdAsync(group.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(schedule);
 
         var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
@@ -381,9 +379,7 @@ public sealed class GetGroupByIdQueryHandlerTests
 
         SetupBaseGroupMocks(group, dto);
         _scheduleServiceMock
-            .Setup(s =>
-                s.GetScheduleByGroupIdAsync(group.Id, It.IsAny<CancellationToken>())
-            )
+            .Setup(s => s.GetScheduleByGroupIdAsync(group.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync((ScheduleDetailDto?)null);
 
         var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
@@ -404,9 +400,7 @@ public sealed class GetGroupByIdQueryHandlerTests
 
         SetupBaseGroupMocks(group, dto);
         _scheduleServiceMock
-            .Setup(s =>
-                s.GetUpcomingLessonsAsync(group.Id, 5, It.IsAny<CancellationToken>())
-            )
+            .Setup(s => s.GetUpcomingLessonsAsync(group.Id, 5, It.IsAny<CancellationToken>()))
             .ReturnsAsync(lessons);
 
         var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
@@ -428,13 +422,11 @@ public sealed class GetGroupByIdQueryHandlerTests
         await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
 
         _scheduleServiceMock.Verify(
-            s =>
-                s.GetScheduleByGroupIdAsync(group.Id, It.IsAny<CancellationToken>()),
+            s => s.GetScheduleByGroupIdAsync(group.Id, It.IsAny<CancellationToken>()),
             Times.Once
         );
         _scheduleServiceMock.Verify(
-            s =>
-                s.GetUpcomingLessonsAsync(group.Id, 5, It.IsAny<CancellationToken>()),
+            s => s.GetUpcomingLessonsAsync(group.Id, 5, It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

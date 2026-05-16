@@ -135,11 +135,7 @@ public sealed class GroupDtoSnapshotTests
             EndDate: new DateOnly(2026, 6, 30),
             LessonCount: null,
             SkipHolidays: false,
-            Slots:
-            [
-                new ScheduleSlotDto(1, 1080),
-                new ScheduleSlotDto(3, 1080),
-            ],
+            Slots: [new ScheduleSlotDto(1, 1080), new ScheduleSlotDto(3, 1080)],
             Exceptions: [new ScheduleExceptionDto(new DateOnly(2025, 11, 4), "Праздник")],
             SummaryText: "Пн / Ср · 18:00–19:30"
         );

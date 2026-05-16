@@ -59,11 +59,9 @@ internal sealed class ScheduleService(ScheduleGrpcService.ScheduleGrpcServiceCli
             EndDate: s.HasEndDate ? DateOnly.Parse(s.EndDate) : null,
             LessonCount: s.HasLessonCount ? (short)s.LessonCount : null,
             SkipHolidays: s.SkipHolidays,
-            Slots: s.Slots
-                .Select(slot => new ScheduleSlotDto(slot.Weekday, slot.StartMinutes))
+            Slots: s.Slots.Select(slot => new ScheduleSlotDto(slot.Weekday, slot.StartMinutes))
                 .ToList(),
-            Exceptions: s.Exceptions
-                .Select(ex => new ScheduleExceptionDto(
+            Exceptions: s.Exceptions.Select(ex => new ScheduleExceptionDto(
                     DateOnly.Parse(ex.Date),
                     string.IsNullOrEmpty(ex.Reason) ? null : ex.Reason
                 ))
@@ -78,19 +76,15 @@ internal sealed class ScheduleService(ScheduleGrpcService.ScheduleGrpcServiceCli
         CancellationToken cancellationToken = default
     )
     {
-        var request = new GetUpcomingLessonsRequest
-        {
-            GroupId = groupId.ToString(),
-            Count = count,
-        };
+        var request = new GetUpcomingLessonsRequest { GroupId = groupId.ToString(), Count = count };
 
         var response = await client.GetUpcomingLessonsAsync(
             request,
             cancellationToken: cancellationToken
         );
 
-        return response.Lessons
-            .Select(l =>
+        return response
+            .Lessons.Select(l =>
             {
                 var startTime = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(l.StartMinutes));
                 var endTime = TimeOnly.FromTimeSpan(

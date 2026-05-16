@@ -4,7 +4,8 @@ namespace Edvantix.Organizational.Grpc.Services.Schedules;
 public sealed record ScheduleDetailDto(
     [property: Description("Идентификатор расписания")] Guid Id,
     [property: Description("Тип рекуррентности: Weekly / Biweekly / Custom")] string Recurrence,
-    [property: Description("Чётность недели (0 или 1) для Biweekly; null для остальных")] int? BiweeklyParity,
+    [property: Description("Чётность недели (0 или 1) для Biweekly; null для остальных")]
+        int? BiweeklyParity,
     [property: Description("Длительность занятия в минутах")] short LessonDurationMinutes,
     [property: Description("Дата начала расписания")] DateOnly StartDate,
     [property: Description("Способ определения конца: Date / Count")] string EndMode,
@@ -12,8 +13,10 @@ public sealed record ScheduleDetailDto(
     [property: Description("Число занятий (при EndMode=Count)")] short? LessonCount,
     [property: Description("Автопропуск государственных праздников")] bool SkipHolidays,
     [property: Description("Недельные временны́е слоты")] IReadOnlyList<ScheduleSlotDto> Slots,
-    [property: Description("Ручные исключения (пропуски)")] IReadOnlyList<ScheduleExceptionDto> Exceptions,
-    [property: Description("Человекочитаемая сводка, напр. Пн / Ср · 18:00–19:30")] string SummaryText
+    [property: Description("Ручные исключения (пропуски)")]
+        IReadOnlyList<ScheduleExceptionDto> Exceptions,
+    [property: Description("Человекочитаемая сводка, напр. Пн / Ср · 18:00–19:30")]
+        string SummaryText
 );
 
 /// <summary>Временно́й слот в недельной сетке расписания.</summary>

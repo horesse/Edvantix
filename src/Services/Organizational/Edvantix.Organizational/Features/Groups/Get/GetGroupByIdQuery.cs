@@ -36,7 +36,10 @@ internal sealed class GetGroupByIdQueryHandler(
         // Параллельный fan-out: данные для учителя, кабинета, курса и расписания запрашиваются одновременно.
         var teacherTask = FetchTeacherDtoAsync(group.TeacherMemberId, cancellationToken);
         var roomLabelTask = FetchRoomLabelAsync(group.RoomId, cancellationToken);
-        var coursesTask = curriculumService.GetCoursesByIdsAsync([group.CourseId], cancellationToken);
+        var coursesTask = curriculumService.GetCoursesByIdsAsync(
+            [group.CourseId],
+            cancellationToken
+        );
         var scheduleTask = scheduleService.GetScheduleByGroupIdAsync(group.Id, cancellationToken);
         var upcomingTask = scheduleService.GetUpcomingLessonsAsync(
             group.Id,
@@ -59,11 +62,7 @@ internal sealed class GetGroupByIdQueryHandler(
         if (courses.TryGetValue(group.CourseId, out var course))
             dto = dto with { CourseCode = course.Code, CourseName = course.Name };
 
-        dto = dto with
-        {
-            Schedule = await scheduleTask,
-            UpcomingLessons = await upcomingTask,
-        };
+        dto = dto with { Schedule = await scheduleTask, UpcomingLessons = await upcomingTask };
 
         return dto;
     }

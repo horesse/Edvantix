@@ -25,7 +25,7 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
-app.MapGrpcService<ScheduleQueryGrpcService>();
+app.MapGrpcService<ScheduleService>();
 app.MapGrpcHealthChecksService();
 app.MapDefaultEndpoints();
 app.UseDefaultOpenApi();

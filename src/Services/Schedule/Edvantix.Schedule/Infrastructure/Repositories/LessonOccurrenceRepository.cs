@@ -61,4 +61,18 @@ internal sealed class LessonOccurrenceRepository(ScheduleDbContext context)
             r => new OccurrenceSummary(r.Total, r.Remaining, r.NextLessonDate)
         );
     }
+
+    public async Task<IReadOnlyList<LessonOccurrence>> GetUpcomingByGroupIdAsync(
+        Guid groupId,
+        DateOnly from,
+        int count,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context
+            .LessonOccurrences.Where(o => o.GroupId == groupId && o.LessonDate >= from)
+            .OrderBy(o => o.LessonDate)
+            .ThenBy(o => o.StartMinutes)
+            .Take(count)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
 }

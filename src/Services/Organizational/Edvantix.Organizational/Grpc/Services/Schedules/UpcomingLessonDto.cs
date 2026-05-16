@@ -1,7 +1,8 @@
 namespace Edvantix.Organizational.Grpc.Services.Schedules;
 
-/// <summary>
-/// Предстоящее занятие — заполняется при маппинге в Task 8 (Schedule gRPC).
-/// Пока список <see cref="Features.Groups.GroupDetailDto.UpcomingLessons"/> всегда пуст.
-/// </summary>
-public sealed record UpcomingLessonDto;
+/// <summary>Предстоящее занятие группы.</summary>
+public sealed record UpcomingLessonDto(
+    [property: Description("Дата занятия")] DateOnly Date,
+    [property: Description("Время начала занятия")] TimeOnly StartTime,
+    [property: Description("Время окончания занятия")] TimeOnly EndTime
+);

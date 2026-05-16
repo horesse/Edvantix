@@ -27,4 +27,15 @@ public interface ILessonOccurrenceRepository : IRepository<LessonOccurrence>
         DateOnly today,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>
+    /// Возвращает первые <paramref name="count"/> предстоящих занятий группы начиная с <paramref name="from"/>,
+    /// отсортированных по дате и времени начала.
+    /// </summary>
+    Task<IReadOnlyList<LessonOccurrence>> GetUpcomingByGroupIdAsync(
+        Guid groupId,
+        DateOnly from,
+        int count,
+        CancellationToken cancellationToken = default
+    );
 }

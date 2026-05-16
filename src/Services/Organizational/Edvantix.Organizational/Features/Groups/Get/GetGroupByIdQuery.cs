@@ -4,6 +4,7 @@ using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Features.OrganizationMembers;
 using Edvantix.Organizational.Grpc.Services.Courses;
 using Edvantix.Organizational.Grpc.Services.Profiles;
+using Edvantix.Organizational.Grpc.Services.Schedules;
 
 namespace Edvantix.Organizational.Features.Groups.Get;
 
@@ -15,7 +16,8 @@ internal sealed class GetGroupByIdQueryHandler(
     IGroupRepository repository,
     IMapper<Group, GroupDetailDto> mapper,
     IProfileService profileService,
-    ICurriculumService curriculumService
+    ICurriculumService curriculumService,
+    IScheduleService scheduleService
 ) : IQueryHandler<GetGroupByIdQuery, GroupDetailDto>
 {
     public async ValueTask<GroupDetailDto> Handle(
@@ -31,15 +33,18 @@ internal sealed class GetGroupByIdQueryHandler(
 
         var dto = mapper.Map(group);
 
-        // Параллельный fan-out: данные для учителя, кабинета и курса запрашиваются одновременно.
+        // Параллельный fan-out: данные для учителя, кабинета, курса и расписания запрашиваются одновременно.
         var teacherTask = FetchTeacherDtoAsync(group.TeacherMemberId, cancellationToken);
         var roomLabelTask = FetchRoomLabelAsync(group.RoomId, cancellationToken);
-        var coursesTask = curriculumService.GetCoursesByIdsAsync(
-            [group.CourseId],
+        var coursesTask = curriculumService.GetCoursesByIdsAsync([group.CourseId], cancellationToken);
+        var scheduleTask = scheduleService.GetScheduleByGroupIdAsync(group.Id, cancellationToken);
+        var upcomingTask = scheduleService.GetUpcomingLessonsAsync(
+            group.Id,
+            count: 5,
             cancellationToken
         );
 
-        await Task.WhenAll(teacherTask, roomLabelTask, coursesTask);
+        await Task.WhenAll(teacherTask, roomLabelTask, coursesTask, scheduleTask, upcomingTask);
 
         // Последовательное применение — каждое with {} работает с актуальным dto.
         var teacher = await teacherTask;
@@ -53,6 +58,12 @@ internal sealed class GetGroupByIdQueryHandler(
         var courses = await coursesTask;
         if (courses.TryGetValue(group.CourseId, out var course))
             dto = dto with { CourseCode = course.Code, CourseName = course.Name };
+
+        dto = dto with
+        {
+            Schedule = await scheduleTask,
+            UpcomingLessons = await upcomingTask,
+        };
 
         return dto;
     }

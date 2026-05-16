@@ -1,0 +1,24 @@
+﻿{
+  Id: Guid_1,
+  Code: B1-01,
+  Name: Английский B1,
+  Description: Группа для уровня B1,
+  LevelId: Guid_2,
+  LevelCode: B1,
+  LevelName: B1 — Средний,
+  LevelTone: Blue,
+  CourseId: Guid_3,
+  CourseCode: EN-GEN-B1,
+  CourseName: Английский Общий B1,
+  Teacher: {
+    MemberId: Guid_4,
+    FullName: Иванова Мария,
+    PrimaryRole: Преподаватель
+  },
+  Format: Online,
+  Platform: Zoom,
+  Capacity: 12,
+  MemberCount: 8,
+  StartDate: Date_1,
+  EndDate: Date_2
+}

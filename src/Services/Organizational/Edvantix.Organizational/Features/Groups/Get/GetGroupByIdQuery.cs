@@ -2,6 +2,7 @@ using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Features.OrganizationMembers;
+using Edvantix.Organizational.Grpc.Services.Courses;
 using Edvantix.Organizational.Grpc.Services.Profiles;
 
 namespace Edvantix.Organizational.Features.Groups.Get;
@@ -13,7 +14,8 @@ internal sealed class GetGroupByIdQueryHandler(
     ITenantContext tenantContext,
     IGroupRepository repository,
     IMapper<Group, GroupDetailDto> mapper,
-    IProfileService profileService
+    IProfileService profileService,
+    ICurriculumService curriculumService
 ) : IQueryHandler<GetGroupByIdQuery, GroupDetailDto>
 {
     public async ValueTask<GroupDetailDto> Handle(
@@ -29,14 +31,36 @@ internal sealed class GetGroupByIdQueryHandler(
 
         var dto = mapper.Map(group);
 
-        dto = await EnrichWithTeacherAsync(dto, group.TeacherMemberId, cancellationToken);
-        dto = await EnrichWithRoomLabelAsync(dto, group.RoomId, cancellationToken);
+        // Параллельный fan-out: данные для учителя, кабинета и курса запрашиваются одновременно.
+        var teacherTask = FetchTeacherDtoAsync(group.TeacherMemberId, cancellationToken);
+        var roomLabelTask = FetchRoomLabelAsync(group.RoomId, cancellationToken);
+        var coursesTask = curriculumService.GetCoursesByIdsAsync(
+            [group.CourseId],
+            cancellationToken
+        );
+
+        await Task.WhenAll(teacherTask, roomLabelTask, coursesTask);
+
+        // Последовательное применение — каждое with {} работает с актуальным dto.
+        var teacher = await teacherTask;
+        if (teacher is not null)
+            dto = dto with { Teacher = teacher };
+
+        var roomLabel = await roomLabelTask;
+        if (roomLabel is not null)
+            dto = dto with { RoomLabel = roomLabel };
+
+        var courses = await coursesTask;
+        if (courses.TryGetValue(group.CourseId, out var course))
+            dto = dto with { CourseCode = course.Code, CourseName = course.Name };
 
         return dto;
     }
 
-    private async Task<GroupDetailDto> EnrichWithTeacherAsync(
-        GroupDetailDto dto,
+    /// <summary>
+    /// Возвращает <see cref="TeacherDto"/> с именем и ролью или <c>null</c>, если профиль не найден.
+    /// </summary>
+    private async Task<TeacherDto?> FetchTeacherDtoAsync(
         Guid teacherMemberId,
         CancellationToken cancellationToken
     )
@@ -47,7 +71,7 @@ internal sealed class GetGroupByIdQueryHandler(
         );
 
         if (!memberInfo.TryGetValue(teacherMemberId, out var member))
-            return dto;
+            return null;
 
         var response = await profileService.GetProfilesByIdsAsync(
             [member.ProfileId.ToString()],
@@ -57,35 +81,29 @@ internal sealed class GetGroupByIdQueryHandler(
         var profile = response?.Profiles.FirstOrDefault();
 
         if (profile is null)
-            return dto;
+            return null;
 
-        return dto with
-        {
-            Teacher = new TeacherDto(
-                MemberId: teacherMemberId,
-                FullName: profile.FullName,
-                PrimaryRole: member.Role?.Name ?? string.Empty,
-                AvatarUrl: profile.HasAvatarUrl ? profile.AvatarUrl : null
-            ),
-        };
+        return new TeacherDto(
+            MemberId: teacherMemberId,
+            FullName: profile.FullName,
+            PrimaryRole: member.Role?.Name ?? string.Empty,
+            AvatarUrl: profile.HasAvatarUrl ? profile.AvatarUrl : null
+        );
     }
 
-    private async Task<GroupDetailDto> EnrichWithRoomLabelAsync(
-        GroupDetailDto dto,
+    /// <summary>
+    /// Возвращает метку кабинета или <c>null</c>, если кабинет не задан или не найден.
+    /// </summary>
+    private async Task<string?> FetchRoomLabelAsync(
         Guid? roomId,
         CancellationToken cancellationToken
     )
     {
         if (roomId is null)
-            return dto;
+            return null;
 
         var rooms = await repository.GetRoomsByIdsAsync([roomId.Value], cancellationToken);
 
-        return rooms.TryGetValue(roomId.Value, out var room)
-            ? dto with
-            {
-                RoomLabel = room.Label,
-            }
-            : dto;
+        return rooms.TryGetValue(roomId.Value, out var room) ? room.Label : null;
     }
 }

@@ -2,8 +2,8 @@ using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Features.OrganizationMembers;
+using Edvantix.Organizational.Grpc.Services.Courses;
 using Edvantix.Organizational.Grpc.Services.Profiles;
-using Edvantix.Organizational.Grpc.Services.Schedules;
 
 namespace Edvantix.Organizational.Features.Groups.List;
 
@@ -26,7 +26,7 @@ internal sealed class GetGroupsQueryHandler(
     IGroupRepository repository,
     IMapper<Group, GroupListItemDto> mapper,
     IProfileService profileService,
-    IScheduleService scheduleService
+    ICurriculumService curriculumService
 ) : IQueryHandler<GetGroupsQuery, PagedResult<GroupListItemDto>>
 {
     public async ValueTask<PagedResult<GroupListItemDto>> Handle(
@@ -66,14 +66,38 @@ internal sealed class GetGroupsQueryHandler(
 
         var items = groups.Select(mapper.Map).ToList();
 
-        // Параллельное обогащение: учителя, кабинеты и расписания запрашиваются одновременно.
+        // Параллельный fan-out: курсы, учителя и кабинеты запрашиваются одновременно.
         await Task.WhenAll(
+            EnrichWithCoursesAsync(items, groups.ToList(), cancellationToken),
             EnrichWithTeachersAsync(items, groups.ToList(), cancellationToken),
-            EnrichWithRoomLabelsAsync(items, groups.ToList(), cancellationToken),
-            EnrichWithScheduleSummariesAsync(items, groups.ToList(), cancellationToken)
+            EnrichWithRoomLabelsAsync(items, groups.ToList(), cancellationToken)
         );
 
         return new PagedResult<GroupListItemDto>(items, pageIndex, pageSize, totalCount);
+    }
+
+    private async Task EnrichWithCoursesAsync(
+        List<GroupListItemDto> items,
+        List<Group> groups,
+        CancellationToken cancellationToken
+    )
+    {
+        if (items.Count == 0)
+            return;
+
+        var courseIds = groups.Select(g => g.CourseId).Distinct();
+        var courses = await curriculumService.GetCoursesByIdsAsync(courseIds, cancellationToken);
+
+        if (courses.Count == 0)
+            return;
+
+        for (var i = 0; i < items.Count; i++)
+        {
+            if (courses.TryGetValue(groups[i].CourseId, out var course))
+            {
+                items[i] = items[i] with { CourseCode = course.Code, CourseName = course.Name };
+            }
+        }
     }
 
     private async Task EnrichWithTeachersAsync(
@@ -147,34 +171,6 @@ internal sealed class GetGroupsQueryHandler(
             if (groups[i].RoomId is { } roomId && rooms.TryGetValue(roomId, out var room))
             {
                 items[i] = items[i] with { RoomLabel = room.Label };
-            }
-        }
-    }
-
-    private async Task EnrichWithScheduleSummariesAsync(
-        List<GroupListItemDto> items,
-        List<Group> groups,
-        CancellationToken cancellationToken
-    )
-    {
-        if (items.Count == 0)
-            return;
-
-        var groupIds = groups.Select(g => g.Id).Distinct().ToList();
-
-        var summaries = await scheduleService.GetScheduleSummariesAsync(
-            groupIds,
-            cancellationToken
-        );
-
-        if (summaries.Count == 0)
-            return;
-
-        for (var i = 0; i < items.Count; i++)
-        {
-            if (summaries.TryGetValue(groups[i].Id, out var summary))
-            {
-                items[i] = items[i] with { ScheduleSummary = summary };
             }
         }
     }

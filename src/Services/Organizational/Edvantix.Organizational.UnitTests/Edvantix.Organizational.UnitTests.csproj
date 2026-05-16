@@ -8,6 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Moq" />
+    <PackageReference Include="Verify.TUnit" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Moq" />

@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace Edvantix.Organizational.UnitTests.Features.Groups;
 
 public sealed class GroupDtoMapperTests
@@ -9,7 +11,7 @@ public sealed class GroupDtoMapperTests
     [Test]
     public void GivenGroup_WhenMappingToListItem_ThenShouldMapAllFields()
     {
-        var group = CreateGroup();
+        var group = CreateGroupWithLevel();
 
         var dto = _listMapper.Map(group);
 
@@ -17,22 +19,28 @@ public sealed class GroupDtoMapperTests
         dto.Code.ShouldBe(group.Code.Value);
         dto.Name.ShouldBe(group.Name);
         dto.LevelId.ShouldBe(group.LevelId);
+        dto.LevelCode.ShouldBe(group.Level.Code.Value);
+        dto.LevelName.ShouldBe(group.Level.Name);
+        dto.LevelTone.ShouldBe(group.Level.Tone);
+        dto.CourseId.ShouldBe(group.CourseId);
+        dto.CourseCode.ShouldBe(string.Empty);
+        dto.CourseName.ShouldBe(string.Empty);
         dto.Format.ShouldBe(group.Format);
         dto.Status.ShouldBe(GroupStatus.Recruiting);
         dto.Capacity.ShouldBe(group.Capacity);
-        dto.CourseId.ShouldBe(group.CourseId);
         dto.Teacher.MemberId.ShouldBe(group.TeacherMemberId);
         dto.Teacher.FullName.ShouldBe(string.Empty);
         dto.Teacher.PrimaryRole.ShouldBe(string.Empty);
         dto.Teacher.AvatarUrl.ShouldBeNull();
         dto.RoomId.ShouldBeNull();
         dto.RoomLabel.ShouldBeNull();
+        dto.ScheduleSummary.ShouldBeNull();
     }
 
     [Test]
     public void GivenGroup_WhenMappingToDetail_ThenShouldMapAllFields()
     {
-        var group = CreateGroup();
+        var group = CreateGroupWithLevel();
 
         var dto = _detailMapper.Map(group);
 
@@ -41,18 +49,25 @@ public sealed class GroupDtoMapperTests
         dto.Name.ShouldBe(group.Name);
         dto.Description.ShouldBe(group.Description);
         dto.LevelId.ShouldBe(group.LevelId);
+        dto.LevelCode.ShouldBe(group.Level.Code.Value);
+        dto.LevelName.ShouldBe(group.Level.Name);
+        dto.LevelTone.ShouldBe(group.Level.Tone);
+        dto.CourseId.ShouldBe(group.CourseId);
+        dto.CourseCode.ShouldBe(string.Empty);
+        dto.CourseName.ShouldBe(string.Empty);
         dto.Format.ShouldBe(group.Format);
         dto.Platform.ShouldBe(group.Platform);
         dto.Capacity.ShouldBe(group.Capacity);
-        dto.CourseId.ShouldBe(group.CourseId);
         dto.Teacher.MemberId.ShouldBe(group.TeacherMemberId);
         dto.Teacher.FullName.ShouldBe(string.Empty);
+        dto.Schedule.ShouldBeNull();
+        dto.UpcomingLessons.ShouldBeEmpty();
     }
 
     [Test]
     public void GivenGroupWithMembers_WhenMappingMemberCount_ThenShouldCountOnlyActiveMembers()
     {
-        var group = CreateGroup();
+        var group = CreateGroupWithLevel();
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var activeMember = new GroupMember(
@@ -79,13 +94,36 @@ public sealed class GroupDtoMapperTests
         dto.MemberCount.ShouldBe(1);
     }
 
-    private Group CreateGroup() =>
-        new(
+    /// <summary>
+    /// Создаёт Group с заполненным navigation property Level через reflection.
+    /// В production Level всегда подгружается EF через AutoInclude.
+    /// Entity.Id по умолчанию Guid.Empty, поэтому устанавливаем Id Level-а через reflection
+    /// перед тем, как передать его в конструктор Group.
+    /// </summary>
+    private Group CreateGroupWithLevel()
+    {
+        var levelId = Guid.CreateVersion7();
+
+        var level = new Level(
+            _organizationId,
+            LevelCode.From("B1"),
+            "B1 — Средний",
+            null,
+            LevelTone.Blue,
+            2
+        );
+
+        // Entity.Id — Guid.Empty без EF; устанавливаем вручную.
+        typeof(Level)
+            .GetProperty(nameof(Level.Id), BindingFlags.Instance | BindingFlags.Public)!
+            .SetValue(level, levelId);
+
+        var group = new Group(
             _organizationId,
             GroupCode.From("B1-01"),
             "Английский B1",
             "Описание группы",
-            Guid.CreateVersion7(),
+            levelId,
             Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             GroupFormat.Online,
@@ -95,4 +133,12 @@ public sealed class GroupDtoMapperTests
             new DateOnly(2025, 9, 1),
             new DateOnly(2026, 6, 30)
         );
+
+        // Level подгружается EF через AutoInclude; в unit-тестах устанавливаем через reflection.
+        typeof(Group)
+            .GetProperty(nameof(Group.Level), BindingFlags.Instance | BindingFlags.Public)!
+            .SetValue(group, level);
+
+        return group;
+    }
 }

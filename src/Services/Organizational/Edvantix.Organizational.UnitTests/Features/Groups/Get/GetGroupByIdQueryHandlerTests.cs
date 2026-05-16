@@ -6,17 +6,24 @@ public sealed class GetGroupByIdQueryHandlerTests
     private readonly Mock<IGroupRepository> _repoMock = new();
     private readonly Mock<IMapper<Group, GroupDetailDto>> _mapperMock = new();
     private readonly Mock<IProfileService> _profileServiceMock = new();
+    private readonly Mock<ICurriculumService> _curriculumServiceMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly GetGroupByIdQueryHandler _handler;
 
     public GetGroupByIdQueryHandlerTests()
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
+        _curriculumServiceMock
+            .Setup(c =>
+                c.GetCoursesByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, CourseRefDto>());
         _handler = new(
             _tenantMock.Object,
             _repoMock.Object,
             _mapperMock.Object,
-            _profileServiceMock.Object
+            _profileServiceMock.Object,
+            _curriculumServiceMock.Object
         );
     }
 
@@ -76,6 +83,32 @@ public sealed class GetGroupByIdQueryHandlerTests
 
         result.Teacher.FullName.ShouldBe("Иванов Иван Иванович");
         result.Teacher.MemberId.ShouldBe(group.TeacherMemberId);
+    }
+
+    [Test]
+    public async Task GivenGroupWithCourse_WhenHandling_ThenShouldReturnDtoEnrichedWithCourseName()
+    {
+        var courseId = Guid.CreateVersion7();
+        var group = CreateGroup(courseId: courseId);
+        var dto = CreateDto(group.Id, courseId: courseId);
+
+        SetupBaseGroupMocks(group, dto);
+        _curriculumServiceMock
+            .Setup(c =>
+                c.GetCoursesByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(
+                new Dictionary<Guid, CourseRefDto>
+                {
+                    [courseId] = new(courseId, "EN-GEN-B1", "Английский Общий B1"),
+                }
+            );
+
+        var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
+
+        result.CourseId.ShouldBe(courseId);
+        result.CourseCode.ShouldBe("EN-GEN-B1");
+        result.CourseName.ShouldBe("Английский Общий B1");
     }
 
     [Test]
@@ -143,10 +176,7 @@ public sealed class GetGroupByIdQueryHandlerTests
         var group = CreateGroup();
         var dto = CreateDto(group.Id);
 
-        _repoMock
-            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(group);
-        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        SetupBaseGroupMocks(group, dto);
         _repoMock
             .Setup(r =>
                 r.GetTeacherMemberInfoAsync(
@@ -155,11 +185,6 @@ public sealed class GetGroupByIdQueryHandlerTests
                 )
             )
             .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
-        _repoMock
-            .Setup(r =>
-                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
-            )
-            .ReturnsAsync(new Dictionary<Guid, Room>());
 
         var result = await _handler.Handle(new GetGroupByIdQuery(group.Id), CancellationToken.None);
 
@@ -200,14 +225,35 @@ public sealed class GetGroupByIdQueryHandlerTests
         result.RoomLabel.ShouldBeNull();
     }
 
-    private Group CreateGroup(Guid? organizationId = null) =>
+    private void SetupBaseGroupMocks(Group group, GroupDetailDto dto)
+    {
+        _repoMock
+            .Setup(r => r.GetByIdAsync(group.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(group);
+        _mapperMock.Setup(m => m.Map(group)).Returns(dto);
+        _repoMock
+            .Setup(r =>
+                r.GetTeacherMemberInfoAsync(
+                    It.IsAny<IEnumerable<Guid>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(new Dictionary<Guid, OrganizationMember>());
+        _repoMock
+            .Setup(r =>
+                r.GetRoomsByIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(new Dictionary<Guid, Room>());
+    }
+
+    private Group CreateGroup(Guid? organizationId = null, Guid? courseId = null) =>
         new(
             organizationId ?? _organizationId,
             GroupCode.From("B1-01"),
             "Английский B1",
             "Описание",
             Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
+            courseId ?? Guid.CreateVersion7(),
             Guid.CreateVersion7(),
             GroupFormat.Online,
             null,
@@ -234,23 +280,30 @@ public sealed class GetGroupByIdQueryHandlerTests
             new DateOnly(2026, 6, 30)
         );
 
-    private static GroupDetailDto CreateDto(Guid id) =>
+    private static GroupDetailDto CreateDto(Guid id, Guid? courseId = null) =>
         new(
             id,
             "B1-01",
             "Английский B1",
             "Описание",
-            Guid.CreateVersion7(),
-            GroupFormat.Online,
-            GroupStatus.Recruiting,
-            10,
-            0,
-            new DateOnly(2025, 9, 1),
-            new DateOnly(2026, 6, 30),
-            Guid.CreateVersion7(),
+            LevelId: Guid.CreateVersion7(),
+            LevelCode: "B1",
+            LevelName: "B1 — Средний",
+            LevelTone: LevelTone.Blue,
+            CourseId: courseId ?? Guid.CreateVersion7(),
+            CourseCode: string.Empty,
+            CourseName: string.Empty,
             Teacher: new TeacherDto(Guid.CreateVersion7(), string.Empty, string.Empty, null),
-            null,
-            null,
-            OnlinePlatform.Zoom
+            RoomId: null,
+            RoomLabel: null,
+            Format: GroupFormat.Online,
+            Platform: OnlinePlatform.Zoom,
+            Schedule: null,
+            UpcomingLessons: [],
+            Capacity: 10,
+            MemberCount: 0,
+            Status: GroupStatus.Recruiting,
+            StartDate: new DateOnly(2025, 9, 1),
+            EndDate: new DateOnly(2026, 6, 30)
         );
 }

@@ -2,7 +2,6 @@ using Edvantix.Schedule.Grpc.Services;
 
 namespace Edvantix.Organizational.Grpc.Services.Schedules;
 
-[ExcludeFromCodeCoverage]
 internal sealed class ScheduleService(ScheduleGrpcService.ScheduleGrpcServiceClient client)
     : IScheduleService
 {

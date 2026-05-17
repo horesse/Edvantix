@@ -43,6 +43,19 @@ internal sealed class GroupRepository(OrganizationalDbContext context) : IGroupR
             .GetQuery(context.Groups.AsQueryable(), specification)
             .CountAsync(cancellationToken);
 
+    public async Task<IReadOnlyList<GroupStatRow>> GetStatsProjectionAsync(
+        Guid organizationId,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context
+            .Groups.Where(g => g.OrganizationId == organizationId && !g.IsDeleted)
+            .Select(g => new GroupStatRow(
+                g.Status,
+                g.Capacity,
+                g.Members.Count(m => m.ExitedAt == null)
+            ))
+            .ToListAsync(cancellationToken);
+
     public async Task AddAsync(Group group, CancellationToken cancellationToken = default) =>
         await context.Groups.AddAsync(group, cancellationToken);
 

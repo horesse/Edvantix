@@ -19,21 +19,39 @@ internal sealed class GetGroupStatsQueryHandler(
     {
         var organizationId = tenantContext.OrganizationId;
 
-        var totalSpec = new GroupStatsSpecification(organizationId);
-        var activeSpec = new GroupStatsSpecification(organizationId, GroupStatus.Active);
-        var recruitingSpec = new GroupStatsSpecification(organizationId, GroupStatus.Recruiting);
-        var pausedSpec = new GroupStatsSpecification(organizationId, GroupStatus.Paused);
-        var finishedSpec = new GroupStatsSpecification(organizationId, GroupStatus.Finished);
-        var archivedSpec = new GroupStatsSpecification(organizationId, GroupStatus.Archived);
+        // Один SQL-запрос: проекция статус + вместимость + активные участники на группу.
+        var rows = await repository.GetStatsProjectionAsync(organizationId, cancellationToken);
 
-        // Последовательное выполнение: DbContext не поддерживает параллельные запросы в одном скоупе.
-        var total = await repository.CountAsync(totalSpec, cancellationToken);
-        var active = await repository.CountAsync(activeSpec, cancellationToken);
-        var recruiting = await repository.CountAsync(recruitingSpec, cancellationToken);
-        var paused = await repository.CountAsync(pausedSpec, cancellationToken);
-        var finished = await repository.CountAsync(finishedSpec, cancellationToken);
-        var archived = await repository.CountAsync(archivedSpec, cancellationToken);
+        var total = rows.Count;
+        var active = rows.Count(r => r.Status == GroupStatus.Active);
+        var recruiting = rows.Count(r => r.Status == GroupStatus.Recruiting);
+        var paused = rows.Count(r => r.Status == GroupStatus.Paused);
+        var finished = rows.Count(r => r.Status == GroupStatus.Finished);
+        var archived = rows.Count(r => r.Status == GroupStatus.Archived);
 
-        return new GroupStatsDto(total, active, recruiting, paused, finished, archived);
+        var totalActiveStudents = rows.Where(r => r.Status == GroupStatus.Active)
+            .Sum(r => r.ActiveMemberCount);
+
+        var nonArchived = rows.Where(r => r.Status != GroupStatus.Archived).ToList();
+        var totalCapacity = nonArchived.Sum(r => r.Capacity);
+        var totalFilledSeats = nonArchived.Sum(r => r.ActiveMemberCount);
+
+        var fillRatePercent =
+            totalCapacity == 0
+                ? 0
+                : (int)Math.Round((double)totalFilledSeats * 100 / totalCapacity);
+
+        return new GroupStatsDto(
+            total,
+            active,
+            recruiting,
+            paused,
+            finished,
+            archived,
+            totalActiveStudents,
+            totalCapacity,
+            totalFilledSeats,
+            fillRatePercent
+        );
     }
 }

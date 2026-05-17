@@ -1,22 +1,16 @@
 namespace Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 
 /// <summary>
-/// Спецификация для подсчёта групп по статусу.
-/// Используется для формирования KPI-карточек на странице групп.
+/// Базовый фильтр групп организации для спецификаций.
+/// Используется как основа для подсчётов без материализации сущностей.
+/// Агрегаты по участникам (MemberCount, Capacity) вычисляются через
+/// <see cref="IGroupRepository.GetStatsProjectionAsync"/> единым SQL-запросом.
 /// </summary>
 public sealed class GroupStatsSpecification : Specification<Group>
 {
-    /// <summary>Подсчитывает все активные (не удалённые) группы организации.</summary>
+    /// <summary>Все активные (не удалённые) группы организации.</summary>
     public GroupStatsSpecification(Guid organizationId)
     {
         Query.Where(g => g.OrganizationId == organizationId && !g.IsDeleted);
-    }
-
-    /// <summary>Подсчитывает группы организации с заданным статусом.</summary>
-    public GroupStatsSpecification(Guid organizationId, GroupStatus status)
-    {
-        Query
-            .Where(g => g.OrganizationId == organizationId && !g.IsDeleted)
-            .Where(g => g.Status == status);
     }
 }

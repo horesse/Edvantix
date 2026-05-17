@@ -11,7 +11,7 @@ public sealed class GetGroupStatsEndpointTests
         var query = new GetGroupStatsQuery();
         _senderMock
             .Setup(s => s.Send(It.IsAny<GetGroupStatsQuery>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new GroupStatsDto(0, 0, 0, 0, 0, 0));
+            .ReturnsAsync(new GroupStatsDto(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
         await _endpoint.HandleAsync(query, _senderMock.Object);
 
@@ -25,7 +25,18 @@ public sealed class GetGroupStatsEndpointTests
     public async Task GivenRequest_WhenHandling_ThenShouldReturnOkWithStats()
     {
         var query = new GetGroupStatsQuery();
-        var stats = new GroupStatsDto(10, 3, 4, 1, 1, 1);
+        var stats = new GroupStatsDto(
+            Total: 7,
+            Active: 3,
+            Recruiting: 1,
+            Paused: 1,
+            Finished: 1,
+            Archived: 1,
+            TotalActiveStudents: 10,
+            TotalCapacity: 56,
+            TotalFilledSeats: 15,
+            FillRatePercent: 27
+        );
         _senderMock
             .Setup(s => s.Send(It.IsAny<GetGroupStatsQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(stats);

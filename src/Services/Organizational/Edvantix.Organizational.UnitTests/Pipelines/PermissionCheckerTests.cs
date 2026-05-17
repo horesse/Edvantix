@@ -270,6 +270,29 @@ public sealed class PermissionCheckerTests
         capturedTags.ShouldContain(AuthorizationCacheKeys.OrgPermsTag(OrgId));
     }
 
+    // ─── L1 factory: member found ─────────────────────────────────────────────
+
+    [Test]
+    public async Task GivenMemberFoundInRepository_WhenL1CacheFactoryInvoked_ThenShouldReturnPermissionCheck()
+    {
+        _memberRepoMock
+            .Setup(r =>
+                r.GetActiveMemberRoleIdAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync((Guid?)RoleId);
+        SetupL1CacheCallsFactory();
+        SetupL2Cache([Permission]);
+
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+
+        result.ShouldBe(true);
+    }
+
     // ─── L2 factory invocation ────────────────────────────────────────────────
 
     [Test]

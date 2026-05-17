@@ -199,6 +199,36 @@ public sealed class AuthorizationBehaviorTests
         capturedProfile.ShouldBe(ProfileId);
     }
 
+    [Test]
+    public async Task GivenCheckerReturnsTrue_WhenHandling_ThenCheckerShouldReceiveCorrectPermission()
+    {
+        SetupTenant();
+        string? capturedPermission = null;
+
+        _checkerMock
+            .Setup(c =>
+                c.CheckAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .Callback<Guid, Guid, string, CancellationToken>(
+                (_, _, perm, _) => capturedPermission = perm
+            )
+            .ReturnsAsync(true);
+
+        await BuildBehavior(ProfileId)
+            .Handle(
+                new TestCommandWithPermission(),
+                (_, _) => ValueTask.FromResult(Guid.Empty),
+                CancellationToken.None
+            );
+
+        capturedPermission.ShouldBe(TestPermission);
+    }
+
     private void SetupTenant()
     {
         _tenantContextMock.Setup(t => t.IsResolved).Returns(true);

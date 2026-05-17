@@ -18,6 +18,7 @@ internal static class CqrsExtensions
                 .ApplyLoggingBehavior()
                 .ApplyActivityBehavior()
                 .ApplyValidationBehavior()
+                .ApplyAuthorizationBehavior()
                 .ApplyTransactionBehavior<GroupsDbContext>();
 
             services.AddValidatorsFromAssemblyContaining<IGroupsApiMarker>(

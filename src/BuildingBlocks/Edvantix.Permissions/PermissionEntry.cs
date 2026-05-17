@@ -1,4 +1,4 @@
-namespace Edvantix.Chassis.Permissions;
+namespace Edvantix.Permissions;
 
 /// <summary>
 /// Описание одного разрешения: машиночитаемый код и отображаемое название.

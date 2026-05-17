@@ -1,14 +1,9 @@
-namespace Edvantix.Chassis.Permissions;
+namespace Edvantix.Permissions;
 
 /// <summary>
 /// Декларативный модуль разрешений для одной функциональной области сервиса.
 /// Наследники регистрируются в DI и используются <c>PermissionsDbSeeder</c>
 /// для синхронизации разрешений в базе данных при старте приложения.
-/// <para>
-/// Для подключения разрешений из внешнего сервиса наследник регистрируется в DI
-/// того сервиса, после чего разрешения синхронизируются через gRPC-эндпоинт
-/// <c>PermissionGrpcService.SyncFeaturePermissions</c>.
-/// </para>
 /// </summary>
 /// <example>
 /// <code>

@@ -7,6 +7,13 @@
     <PackageReference Include="Grpc.Tools" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
+    <Protobuf
+      Include="..\..\Organizational\Edvantix.Organizational\Grpc\Protos\permission\v1\permission.proto"
+      Link="Grpc\Protos\organisational\v1\permission.proto"
+      GrpcServices="Client"
+    />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />
   </ItemGroup>
   <ItemGroup>

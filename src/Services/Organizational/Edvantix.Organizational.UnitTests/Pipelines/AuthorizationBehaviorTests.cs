@@ -1,6 +1,5 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Security.Keycloak;
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Pipelines;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -16,15 +15,12 @@ public sealed class AuthorizationBehaviorTests
     internal const string TestPermission = "organizations.manage";
 
     private readonly Mock<ITenantContext> _tenantContextMock = new();
-    private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
-    private readonly Mock<IOrganizationRoleRepository> _roleRepoMock = new();
-    private readonly Mock<IFusionCache> _cacheMock = new();
+    private readonly Mock<IPermissionChecker> _checkerMock = new();
     private static readonly ILogger<AuthorizationBehavior<TestCommandWithPermission, Guid>> Logger =
         NullLogger<AuthorizationBehavior<TestCommandWithPermission, Guid>>.Instance;
 
     private static readonly Guid OrgId = Guid.CreateVersion7();
     private static readonly Guid ProfileId = Guid.CreateVersion7();
-    private static readonly Guid RoleId = Guid.CreateVersion7();
 
     [Test]
     public async Task GivenMessageWithoutRequirePermissionAttribute_WhenHandling_ThenShouldCallNext()
@@ -32,9 +28,7 @@ public sealed class AuthorizationBehaviorTests
         var behavior = new AuthorizationBehavior<TestCommandWithoutPermission, Guid>(
             BuildClaims(ProfileId),
             _tenantContextMock.Object,
-            _memberRepoMock.Object,
-            _roleRepoMock.Object,
-            _cacheMock.Object,
+            _checkerMock.Object,
             NullLogger<AuthorizationBehavior<TestCommandWithoutPermission, Guid>>.Instance
         );
 
@@ -50,20 +44,12 @@ public sealed class AuthorizationBehaviorTests
         );
 
         nextCalled.ShouldBeTrue();
-        _cacheMock.Verify(
+        _checkerMock.Verify(
             c =>
-                c.GetOrSetAsync<Guid>(
+                c.CheckAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<Guid>(),
                     It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 ),
             Times.Never
@@ -95,9 +81,7 @@ public sealed class AuthorizationBehaviorTests
         var behavior = new AuthorizationBehavior<TestCommandWithPermission, Guid>(
             new ClaimsPrincipal(new ClaimsIdentity()),
             _tenantContextMock.Object,
-            _memberRepoMock.Object,
-            _roleRepoMock.Object,
-            _cacheMock.Object,
+            _checkerMock.Object,
             Logger
         );
 
@@ -113,27 +97,19 @@ public sealed class AuthorizationBehaviorTests
     }
 
     [Test]
-    public async Task GivenMemberNotActive_WhenL1CacheReturnsEmptyGuid_ThenShouldThrowForbiddenException()
+    public async Task GivenCheckerReturnsNull_WhenHandling_ThenShouldThrowForbiddenException()
     {
         SetupTenant();
-        _cacheMock
+        _checkerMock
             .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
+                c.CheckAsync(
+                    OrgId,
+                    ProfileId,
+                    TestPermission,
                     It.IsAny<CancellationToken>()
                 )
             )
-            .ReturnsAsync(Guid.Empty);
+            .ReturnsAsync((bool?)null);
 
         await Should.ThrowAsync<ForbiddenException>(() =>
             BuildBehavior(ProfileId)
@@ -147,9 +123,45 @@ public sealed class AuthorizationBehaviorTests
     }
 
     [Test]
-    public async Task GivenMessageWithPermissionAttribute_WhenPermissionPresent_ThenShouldCallNext()
+    public async Task GivenCheckerReturnsFalse_WhenHandling_ThenShouldThrowForbiddenException()
     {
-        SetupActiveRoleWithPermissions(new HashSet<string> { TestPermission });
+        SetupTenant();
+        _checkerMock
+            .Setup(c =>
+                c.CheckAsync(
+                    OrgId,
+                    ProfileId,
+                    TestPermission,
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(false);
+
+        await Should.ThrowAsync<ForbiddenException>(() =>
+            BuildBehavior(ProfileId)
+                .Handle(
+                    new TestCommandWithPermission(),
+                    (_, _) => ValueTask.FromResult(Guid.Empty),
+                    CancellationToken.None
+                )
+                .AsTask()
+        );
+    }
+
+    [Test]
+    public async Task GivenCheckerReturnsTrue_WhenHandling_ThenShouldCallNext()
+    {
+        SetupTenant();
+        _checkerMock
+            .Setup(c =>
+                c.CheckAsync(
+                    OrgId,
+                    ProfileId,
+                    TestPermission,
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(true);
 
         var nextCalled = false;
         await BuildBehavior(ProfileId)
@@ -167,121 +179,27 @@ public sealed class AuthorizationBehaviorTests
     }
 
     [Test]
-    public async Task GivenMessageWithPermissionAttribute_WhenPermissionAbsent_ThenShouldThrowForbiddenException()
-    {
-        SetupActiveRoleWithPermissions(new HashSet<string> { "other.permission" });
-
-        await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
-                )
-                .AsTask()
-        );
-    }
-
-    [Test]
-    public async Task GivenMessageWithPermissionAttribute_WhenHandling_ThenL1CacheKeyShouldContainOrgAndProfile()
+    public async Task GivenCheckerReturnsTrue_WhenHandling_ThenCheckerShouldReceiveCorrectOrgAndProfile()
     {
         SetupTenant();
+        Guid? capturedOrg = null;
+        Guid? capturedProfile = null;
 
-        string? capturedKey = null;
-        _cacheMock
+        _checkerMock
             .Setup(c =>
-                c.GetOrSetAsync<Guid>(
+                c.CheckAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<Guid>(),
                     It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<
-                string,
-                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
-                MaybeValue<Guid>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((key, _, _, _, _, _) => capturedKey = key)
-            .ReturnsAsync(Guid.Empty);
-
-        await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
-                )
-                .AsTask()
-        );
-
-        capturedKey.ShouldBe(AuthorizationCacheKeys.MemberRole(OrgId, ProfileId));
-    }
-
-    [Test]
-    public async Task GivenActiveMember_WhenHandling_ThenL2CacheKeyShouldContainRoleId()
-    {
-        SetupTenant();
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(RoleId);
-
-        string? capturedKey = null;
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<HashSet<string>>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<HashSet<string>>,
-                            CancellationToken,
-                            Task<HashSet<string>>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<HashSet<string>>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Callback<
-                string,
-                Func<
-                    FusionCacheFactoryExecutionContext<HashSet<string>>,
-                    CancellationToken,
-                    Task<HashSet<string>>
-                >,
-                MaybeValue<HashSet<string>>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((key, _, _, _, _, _) => capturedKey = key)
-            .ReturnsAsync(new HashSet<string> { TestPermission });
+            .Callback<Guid, Guid, string, CancellationToken>((org, profile, _, _) =>
+            {
+                capturedOrg = org;
+                capturedProfile = profile;
+            })
+            .ReturnsAsync(true);
 
         await BuildBehavior(ProfileId)
             .Handle(
@@ -290,413 +208,8 @@ public sealed class AuthorizationBehaviorTests
                 CancellationToken.None
             );
 
-        capturedKey.ShouldBe(AuthorizationCacheKeys.RolePerms(RoleId));
-    }
-
-    [Test]
-    public async Task GivenMessageWithPermissionAttribute_WhenPermissionPresentWithDifferentCase_ThenShouldCallNext()
-    {
-        SetupActiveRoleWithPermissions(new HashSet<string> { TestPermission.ToUpperInvariant() });
-
-        var nextCalled = false;
-        await BuildBehavior(ProfileId)
-            .Handle(
-                new TestCommandWithPermission(),
-                (_, _) =>
-                {
-                    nextCalled = true;
-                    return ValueTask.FromResult(Guid.Empty);
-                },
-                CancellationToken.None
-            );
-
-        nextCalled.ShouldBeTrue();
-    }
-
-    // ─── L1 factory invocation ─────────────────────────────────────────────────
-
-    [Test]
-    public async Task GivenMemberNotFoundInRepository_WhenL1CacheFactoryInvoked_ThenShouldThrowForbiddenException()
-    {
-        SetupTenant();
-        _memberRepoMock
-            .Setup(r =>
-                r.GetActiveMemberRoleIdAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync((Guid?)null);
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Returns<
-                string,
-                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
-                MaybeValue<Guid>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((_, factory, _, _, _, ct) => new ValueTask<Guid>(factory(null!, ct)));
-
-        await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
-                )
-                .AsTask()
-        );
-    }
-
-    [Test]
-    public async Task GivenMemberFoundInRepository_WhenL1CacheFactoryInvoked_ThenShouldPassRoleIdToL2Cache()
-    {
-        SetupTenant();
-        _memberRepoMock
-            .Setup(r =>
-                r.GetActiveMemberRoleIdAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(RoleId);
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Returns<
-                string,
-                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
-                MaybeValue<Guid>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((_, factory, _, _, _, ct) => new ValueTask<Guid>(factory(null!, ct)));
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<HashSet<string>>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<HashSet<string>>,
-                            CancellationToken,
-                            Task<HashSet<string>>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<HashSet<string>>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(new HashSet<string> { TestPermission });
-
-        var nextCalled = false;
-        await BuildBehavior(ProfileId)
-            .Handle(
-                new TestCommandWithPermission(),
-                (_, _) =>
-                {
-                    nextCalled = true;
-                    return ValueTask.FromResult(Guid.Empty);
-                },
-                CancellationToken.None
-            );
-
-        nextCalled.ShouldBeTrue();
-    }
-
-    // ─── L2 factory invocation ─────────────────────────────────────────────────
-
-    [Test]
-    public async Task GivenRoleNotFoundInRepository_WhenL2CacheFactoryInvoked_ThenShouldThrowForbiddenException()
-    {
-        SetupTenant();
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(RoleId);
-        _roleRepoMock
-            .Setup(r =>
-                r.GetByIdWithPermissionsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())
-            )
-            .ReturnsAsync((OrganizationRole?)null);
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<HashSet<string>>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<HashSet<string>>,
-                            CancellationToken,
-                            Task<HashSet<string>>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<HashSet<string>>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Returns<
-                string,
-                Func<
-                    FusionCacheFactoryExecutionContext<HashSet<string>>,
-                    CancellationToken,
-                    Task<HashSet<string>>
-                >,
-                MaybeValue<HashSet<string>>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((_, factory, _, _, _, ct) => new ValueTask<HashSet<string>>(factory(null!, ct)));
-
-        await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
-                )
-                .AsTask()
-        );
-    }
-
-    [Test]
-    public async Task GivenRoleFoundWithPermission_WhenL2CacheFactoryInvoked_ThenShouldCallNext()
-    {
-        SetupTenant();
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(RoleId);
-
-        // TestPermission = "organizations.manage" → FeatureCode="organizations", Code="manage"
-        var role = new OrganizationRole(OrgId, "admin", "Администратор");
-        role.AddPermission(new Permission("organizations", "manage", "Управление"));
-        _roleRepoMock
-            .Setup(r =>
-                r.GetByIdWithPermissionsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())
-            )
-            .ReturnsAsync(role);
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<HashSet<string>>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<HashSet<string>>,
-                            CancellationToken,
-                            Task<HashSet<string>>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<HashSet<string>>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Returns<
-                string,
-                Func<
-                    FusionCacheFactoryExecutionContext<HashSet<string>>,
-                    CancellationToken,
-                    Task<HashSet<string>>
-                >,
-                MaybeValue<HashSet<string>>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((_, factory, _, _, _, ct) => new ValueTask<HashSet<string>>(factory(null!, ct)));
-
-        var nextCalled = false;
-        await BuildBehavior(ProfileId)
-            .Handle(
-                new TestCommandWithPermission(),
-                (_, _) =>
-                {
-                    nextCalled = true;
-                    return ValueTask.FromResult(Guid.Empty);
-                },
-                CancellationToken.None
-            );
-
-        nextCalled.ShouldBeTrue();
-    }
-
-    // ─── Cache tag verification ────────────────────────────────────────────────
-
-    [Test]
-    public async Task GivenActiveMember_WhenHandling_ThenL1CacheTagShouldIncludeOrgPermsTag()
-    {
-        SetupTenant();
-
-        IEnumerable<string>? capturedTags = null;
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Callback<
-                string,
-                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
-                MaybeValue<Guid>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((_, _, _, _, tags, _) => capturedTags = tags)
-            .ReturnsAsync(Guid.Empty);
-
-        await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
-                )
-                .AsTask()
-        );
-
-        capturedTags.ShouldNotBeNull();
-        capturedTags.ShouldContain(AuthorizationCacheKeys.OrgPermsTag(OrgId));
-    }
-
-    [Test]
-    public async Task GivenActiveMember_WhenHandling_ThenL2CacheTagsShouldIncludeRolePermsAndOrgPermsTag()
-    {
-        SetupTenant();
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(RoleId);
-
-        IEnumerable<string>? capturedTags = null;
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<HashSet<string>>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<HashSet<string>>,
-                            CancellationToken,
-                            Task<HashSet<string>>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<HashSet<string>>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .Callback<
-                string,
-                Func<
-                    FusionCacheFactoryExecutionContext<HashSet<string>>,
-                    CancellationToken,
-                    Task<HashSet<string>>
-                >,
-                MaybeValue<HashSet<string>>,
-                FusionCacheEntryOptions?,
-                IEnumerable<string>?,
-                CancellationToken
-            >((_, _, _, _, tags, _) => capturedTags = tags)
-            .ReturnsAsync(new HashSet<string> { TestPermission });
-
-        await BuildBehavior(ProfileId)
-            .Handle(
-                new TestCommandWithPermission(),
-                (_, _) => ValueTask.FromResult(Guid.Empty),
-                CancellationToken.None
-            );
-
-        capturedTags.ShouldNotBeNull();
-        capturedTags.ShouldContain(AuthorizationCacheKeys.RolePerms(RoleId));
-        capturedTags.ShouldContain(AuthorizationCacheKeys.OrgPermsTag(OrgId));
+        capturedOrg.ShouldBe(OrgId);
+        capturedProfile.ShouldBe(ProfileId);
     }
 
     private void SetupTenant()
@@ -705,54 +218,11 @@ public sealed class AuthorizationBehaviorTests
         _tenantContextMock.Setup(t => t.OrganizationId).Returns(OrgId);
     }
 
-    private void SetupActiveRoleWithPermissions(HashSet<string> permissions)
-    {
-        SetupTenant();
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<Guid>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<Guid>,
-                            CancellationToken,
-                            Task<Guid>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<Guid>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(RoleId);
-        _cacheMock
-            .Setup(c =>
-                c.GetOrSetAsync<HashSet<string>>(
-                    It.IsAny<string>(),
-                    It.IsAny<
-                        Func<
-                            FusionCacheFactoryExecutionContext<HashSet<string>>,
-                            CancellationToken,
-                            Task<HashSet<string>>
-                        >
-                    >(),
-                    It.IsAny<MaybeValue<HashSet<string>>>(),
-                    It.IsAny<FusionCacheEntryOptions?>(),
-                    It.IsAny<IEnumerable<string>?>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync(permissions);
-    }
-
     private AuthorizationBehavior<TestCommandWithPermission, Guid> BuildBehavior(Guid profileId) =>
         new(
             BuildClaims(profileId),
             _tenantContextMock.Object,
-            _memberRepoMock.Object,
-            _roleRepoMock.Object,
-            _cacheMock.Object,
+            _checkerMock.Object,
             Logger
         );
 

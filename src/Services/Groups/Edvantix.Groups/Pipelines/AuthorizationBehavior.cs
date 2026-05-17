@@ -1,18 +1,19 @@
 using System.Reflection;
 using Edvantix.Chassis.CQRS;
+using Edvantix.Groups.Grpc.Services;
 using IMessage = Mediator.IMessage;
 
-namespace Edvantix.Organizational.Pipelines;
+namespace Edvantix.Groups.Pipelines;
 
 /// <summary>
 /// Пре-процессор Mediator: проверяет, что профиль является активным участником организации
-/// и имеет разрешение, указанное в <see cref="RequirePermissionAttribute"/> на команде или запросе.
-/// Логика резолва прав (L1/L2-кеш) делегирована <see cref="IPermissionChecker"/>.
+/// и имеет разрешение, указанное в <see cref="RequirePermissionAttribute"/>.
+/// Проверка выполняется через gRPC-вызов к Organizational (с локальным кешем в <see cref="IPermissionService"/>).
 /// </summary>
 internal sealed class AuthorizationBehavior<TMessage, TResponse>(
     ClaimsPrincipal claims,
     ITenantContext tenantContext,
-    IPermissionChecker permissionChecker,
+    IPermissionService permissionService,
     ILogger<AuthorizationBehavior<TMessage, TResponse>> logger
 ) : MessagePreProcessor<TMessage, TResponse>
     where TMessage : IMessage
@@ -26,8 +27,6 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
             return;
         }
 
-        var profileId = claims.GetProfileIdOrError();
-
         if (!tenantContext.IsResolved)
         {
             logger.LogWarning(
@@ -38,25 +37,16 @@ internal sealed class AuthorizationBehavior<TMessage, TResponse>(
         }
 
         var organizationId = tenantContext.OrganizationId;
+        var profileId = claims.GetProfileIdOrError();
 
-        var result = await permissionChecker.CheckAsync(
+        var hasPermission = await permissionService.CheckPermissionAsync(
             organizationId,
             profileId,
             attr.Permission,
             cancellationToken
         );
 
-        if (result is null)
-        {
-            logger.LogWarning(
-                "[AuthorizationBehavior] Profile {ProfileId} is not an active member of org {OrgId}",
-                profileId,
-                organizationId
-            );
-            throw new ForbiddenException("Профиль не является активным участником организации.");
-        }
-
-        if (!result.Value)
+        if (!hasPermission)
         {
             logger.LogWarning(
                 "[AuthorizationBehavior] Profile {ProfileId} denied permission {Permission} in org {OrgId}",

@@ -1,5 +1,7 @@
 global using Edvantix.Chassis.Exceptions;
 global using Edvantix.Chassis.Mapper;
+global using Edvantix.Contracts;
+global using Edvantix.Groups.IntegrationEvents.EventHandlers;
 global using Edvantix.Chassis.Repository;
 global using Edvantix.Chassis.Security.Tenant;
 global using Edvantix.Chassis.Specification;

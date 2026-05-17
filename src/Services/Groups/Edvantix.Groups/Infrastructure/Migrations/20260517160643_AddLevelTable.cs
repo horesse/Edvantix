@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Edvantix.Groups.Migrations
+namespace Edvantix.Groups.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddLevelTable : Migration

@@ -3,20 +3,17 @@ using System;
 using Edvantix.Groups.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Edvantix.Groups.Migrations
+namespace Edvantix.Groups.Infrastructure.Migrations
 {
     [DbContext(typeof(GroupsDbContext))]
-    [Migration("20260517160643_AddLevelTable")]
-    partial class AddLevelTable
+    partial class GroupsDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -20,6 +20,8 @@ public class EventMapper : IEventMapper
             GroupCreatedDomainEvent groupCreatedDomainEvent => MapGroupCreatedIntegrationEvent(
                 groupCreatedDomainEvent
             ),
+            OrganizationCreatedDomainEvent organizationCreatedDomainEvent =>
+                MapOrganizationCreatedIntegrationEvent(organizationCreatedDomainEvent),
             _ => throw new ArgumentOutOfRangeException(nameof(@event), @event, null),
         };
     }
@@ -52,6 +54,10 @@ public class EventMapper : IEventMapper
             OrganizationId = @event.OrganizationId,
             StartDate = @event.StartDate,
         };
+
+    private static OrganizationCreatedIntegrationEvent MapOrganizationCreatedIntegrationEvent(
+        OrganizationCreatedDomainEvent @event
+    ) => new() { OrganizationId = @event.OrganizationId, OwnerProfileId = @event.OwnerProfileId };
 
     private static SendInAppNotificationIntegrationEvent CreateInAppEvent(
         InvitationCreatedDomainEvent @event

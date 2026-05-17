@@ -13,6 +13,8 @@ public sealed class GetGroupStatsQueryHandlerTests
         _handler = new(_tenantMock.Object, _repoMock.Object);
     }
 
+    // ── happy path ─────────────────────────────────────────────────────────
+
     [Test]
     public async Task GivenMixedGroups_WhenGetStats_ThenAllMetricsCorrect()
     {
@@ -52,6 +54,139 @@ public sealed class GetGroupStatsQueryHandlerTests
         result.FillRatePercent.ShouldBe(27);
     }
 
+    // ── status counts (каждый статус в изоляции) ────────────────────────────
+
+    [Test]
+    [Arguments(GroupStatus.Active)]
+    [Arguments(GroupStatus.Recruiting)]
+    [Arguments(GroupStatus.Paused)]
+    [Arguments(GroupStatus.Finished)]
+    [Arguments(GroupStatus.Archived)]
+    public async Task GivenSingleGroupWithStatus_WhenGetStats_ThenOnlyThatStatusCountIsOne(
+        GroupStatus status
+    )
+    {
+        SetupProjection([new(status, Capacity: 10, ActiveMemberCount: 0)]);
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        result.Total.ShouldBe(1);
+        result.Active.ShouldBe(status == GroupStatus.Active ? 1 : 0);
+        result.Recruiting.ShouldBe(status == GroupStatus.Recruiting ? 1 : 0);
+        result.Paused.ShouldBe(status == GroupStatus.Paused ? 1 : 0);
+        result.Finished.ShouldBe(status == GroupStatus.Finished ? 1 : 0);
+        result.Archived.ShouldBe(status == GroupStatus.Archived ? 1 : 0);
+    }
+
+    // ── TotalActiveStudents ──────────────────────────────────────────────────
+
+    [Test]
+    public async Task GivenRecruitingGroupsWithMembers_WhenGetStats_ThenTotalActiveStudentsIsZero()
+    {
+        // Recruiting-группы с участниками не входят в TotalActiveStudents
+        SetupProjection(
+            [
+                new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 8),
+                new(GroupStatus.Paused, Capacity: 10, ActiveMemberCount: 5),
+                new(GroupStatus.Finished, Capacity: 10, ActiveMemberCount: 3),
+            ]
+        );
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        result.TotalActiveStudents.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task GivenActiveGroupsAmongOthers_WhenGetStats_ThenTotalActiveStudentsOnlyCountsActive()
+    {
+        SetupProjection(
+            [
+                new(GroupStatus.Active, Capacity: 10, ActiveMemberCount: 7),
+                new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 9),
+                new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 10),
+            ]
+        );
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        result.TotalActiveStudents.ShouldBe(7);
+    }
+
+    // ── TotalCapacity и TotalFilledSeats ─────────────────────────────────────
+
+    [Test]
+    public async Task GivenArchivedGroupsExcluded_WhenGetStats_ThenCapacityIgnoresArchived()
+    {
+        SetupProjection(
+            [
+                new(GroupStatus.Active, Capacity: 20, ActiveMemberCount: 10),
+                new(GroupStatus.Archived, Capacity: 100, ActiveMemberCount: 80),
+            ]
+        );
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        // Archived не входит в TotalCapacity и TotalFilledSeats
+        result.TotalCapacity.ShouldBe(20);
+        result.TotalFilledSeats.ShouldBe(10);
+    }
+
+    [Test]
+    public async Task GivenAllNonArchivedStatuses_WhenGetStats_ThenFilledSeatsIncludesAll()
+    {
+        // Recruiting, Paused и Finished тоже входят в TotalFilledSeats
+        SetupProjection(
+            [
+                new(GroupStatus.Active, Capacity: 10, ActiveMemberCount: 3),
+                new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 2),
+                new(GroupStatus.Paused, Capacity: 10, ActiveMemberCount: 1),
+                new(GroupStatus.Finished, Capacity: 10, ActiveMemberCount: 4),
+            ]
+        );
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        result.TotalCapacity.ShouldBe(40);
+        result.TotalFilledSeats.ShouldBe(10);
+    }
+
+    // ── FillRatePercent / округление ────────────────────────────────────────
+
+    [Test]
+    public async Task GivenOneThirdFilled_WhenGetStats_ThenFillRateRoundsDown()
+    {
+        // 1/3 * 100 = 33.33... → 33
+        SetupProjection([new(GroupStatus.Active, Capacity: 3, ActiveMemberCount: 1)]);
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        result.FillRatePercent.ShouldBe(33);
+    }
+
+    [Test]
+    public async Task GivenTwoThirdsFilled_WhenGetStats_ThenFillRateRoundsUp()
+    {
+        // 2/3 * 100 = 66.66... → 67
+        SetupProjection([new(GroupStatus.Active, Capacity: 3, ActiveMemberCount: 2)]);
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        result.FillRatePercent.ShouldBe(67);
+    }
+
+    [Test]
+    public async Task GivenFullCapacity_WhenGetStats_ThenFillRateIsHundred()
+    {
+        SetupProjection([new(GroupStatus.Active, Capacity: 10, ActiveMemberCount: 10)]);
+
+        var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
+
+        result.FillRatePercent.ShouldBe(100);
+    }
+
+    // ── граничные случаи ─────────────────────────────────────────────────────
+
     [Test]
     public async Task GivenZeroCapacity_WhenGetStats_ThenFillRateIsZero()
     {
@@ -85,10 +220,12 @@ public sealed class GetGroupStatsQueryHandlerTests
     [Test]
     public async Task GivenOnlyArchivedGroups_WhenGetStats_ThenCapacityAndFilledSeatsAreZero()
     {
-        SetupProjection([
-            new(GroupStatus.Archived, Capacity: 20, ActiveMemberCount: 15),
-            new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 8),
-        ]);
+        SetupProjection(
+            [
+                new(GroupStatus.Archived, Capacity: 20, ActiveMemberCount: 15),
+                new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 8),
+            ]
+        );
 
         var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
@@ -99,6 +236,8 @@ public sealed class GetGroupStatsQueryHandlerTests
         result.TotalFilledSeats.ShouldBe(0);
         result.FillRatePercent.ShouldBe(0);
     }
+
+    // ── инфраструктура ───────────────────────────────────────────────────────
 
     [Test]
     public async Task GivenQuery_WhenHandling_ThenShouldCallProjectionOnce()
@@ -115,6 +254,8 @@ public sealed class GetGroupStatsQueryHandlerTests
 
     private void SetupProjection(IReadOnlyList<GroupStatRow> rows) =>
         _repoMock
-            .Setup(r => r.GetStatsProjectionAsync(_organizationId, It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.GetStatsProjectionAsync(_organizationId, It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(rows);
 }

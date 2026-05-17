@@ -84,13 +84,11 @@ public sealed class GetGroupStatsQueryHandlerTests
     public async Task GivenRecruitingGroupsWithMembers_WhenGetStats_ThenTotalActiveStudentsIsZero()
     {
         // Recruiting-группы с участниками не входят в TotalActiveStudents
-        SetupProjection(
-            [
-                new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 8),
-                new(GroupStatus.Paused, Capacity: 10, ActiveMemberCount: 5),
-                new(GroupStatus.Finished, Capacity: 10, ActiveMemberCount: 3),
-            ]
-        );
+        SetupProjection([
+            new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 8),
+            new(GroupStatus.Paused, Capacity: 10, ActiveMemberCount: 5),
+            new(GroupStatus.Finished, Capacity: 10, ActiveMemberCount: 3),
+        ]);
 
         var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
@@ -100,13 +98,11 @@ public sealed class GetGroupStatsQueryHandlerTests
     [Test]
     public async Task GivenActiveGroupsAmongOthers_WhenGetStats_ThenTotalActiveStudentsOnlyCountsActive()
     {
-        SetupProjection(
-            [
-                new(GroupStatus.Active, Capacity: 10, ActiveMemberCount: 7),
-                new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 9),
-                new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 10),
-            ]
-        );
+        SetupProjection([
+            new(GroupStatus.Active, Capacity: 10, ActiveMemberCount: 7),
+            new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 9),
+            new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 10),
+        ]);
 
         var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
@@ -118,12 +114,10 @@ public sealed class GetGroupStatsQueryHandlerTests
     [Test]
     public async Task GivenArchivedGroupsExcluded_WhenGetStats_ThenCapacityIgnoresArchived()
     {
-        SetupProjection(
-            [
-                new(GroupStatus.Active, Capacity: 20, ActiveMemberCount: 10),
-                new(GroupStatus.Archived, Capacity: 100, ActiveMemberCount: 80),
-            ]
-        );
+        SetupProjection([
+            new(GroupStatus.Active, Capacity: 20, ActiveMemberCount: 10),
+            new(GroupStatus.Archived, Capacity: 100, ActiveMemberCount: 80),
+        ]);
 
         var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
@@ -136,14 +130,12 @@ public sealed class GetGroupStatsQueryHandlerTests
     public async Task GivenAllNonArchivedStatuses_WhenGetStats_ThenFilledSeatsIncludesAll()
     {
         // Recruiting, Paused и Finished тоже входят в TotalFilledSeats
-        SetupProjection(
-            [
-                new(GroupStatus.Active, Capacity: 10, ActiveMemberCount: 3),
-                new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 2),
-                new(GroupStatus.Paused, Capacity: 10, ActiveMemberCount: 1),
-                new(GroupStatus.Finished, Capacity: 10, ActiveMemberCount: 4),
-            ]
-        );
+        SetupProjection([
+            new(GroupStatus.Active, Capacity: 10, ActiveMemberCount: 3),
+            new(GroupStatus.Recruiting, Capacity: 10, ActiveMemberCount: 2),
+            new(GroupStatus.Paused, Capacity: 10, ActiveMemberCount: 1),
+            new(GroupStatus.Finished, Capacity: 10, ActiveMemberCount: 4),
+        ]);
 
         var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
@@ -220,12 +212,10 @@ public sealed class GetGroupStatsQueryHandlerTests
     [Test]
     public async Task GivenOnlyArchivedGroups_WhenGetStats_ThenCapacityAndFilledSeatsAreZero()
     {
-        SetupProjection(
-            [
-                new(GroupStatus.Archived, Capacity: 20, ActiveMemberCount: 15),
-                new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 8),
-            ]
-        );
+        SetupProjection([
+            new(GroupStatus.Archived, Capacity: 20, ActiveMemberCount: 15),
+            new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 8),
+        ]);
 
         var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
@@ -254,8 +244,6 @@ public sealed class GetGroupStatsQueryHandlerTests
 
     private void SetupProjection(IReadOnlyList<GroupStatRow> rows) =>
         _repoMock
-            .Setup(r =>
-                r.GetStatsProjectionAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.GetStatsProjectionAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(rows);
 }

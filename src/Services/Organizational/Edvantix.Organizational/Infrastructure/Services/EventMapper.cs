@@ -57,12 +57,7 @@ public class EventMapper : IEventMapper
 
     private static OrganizationCreatedIntegrationEvent MapOrganizationCreatedIntegrationEvent(
         OrganizationCreatedDomainEvent @event
-    ) =>
-        new()
-        {
-            OrganizationId = @event.OrganizationId,
-            OwnerProfileId = @event.OwnerProfileId,
-        };
+    ) => new() { OrganizationId = @event.OrganizationId, OwnerProfileId = @event.OwnerProfileId };
 
     private static SendInAppNotificationIntegrationEvent CreateInAppEvent(
         InvitationCreatedDomainEvent @event

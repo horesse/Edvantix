@@ -41,8 +41,14 @@ internal static class GroupValidationExtensions
         ILevelRepository levels,
         ITenantContext tenantContext
     ) =>
-        rule.MustAsync(async (id, ct) =>
-                await levels.ExistsAsync(id, tenantContext.OrganizationId, requireActive: true, ct)
+        rule.MustAsync(
+                async (id, ct) =>
+                    await levels.ExistsAsync(
+                        id,
+                        tenantContext.OrganizationId,
+                        requireActive: true,
+                        ct
+                    )
             )
             .WithMessage("Уровень не найден или деактивирован.");
 
@@ -55,8 +61,8 @@ internal static class GroupValidationExtensions
         IOrganizationMemberRepository members,
         ITenantContext tenantContext
     ) =>
-        rule.MustAsync(async (id, ct) =>
-                await members.ExistsAsync(id, tenantContext.OrganizationId, ct)
+        rule.MustAsync(
+                async (id, ct) => await members.ExistsAsync(id, tenantContext.OrganizationId, ct)
             )
             .WithMessage("Преподаватель не найден.");
 
@@ -70,8 +76,9 @@ internal static class GroupValidationExtensions
         IRoomRepository rooms,
         ITenantContext tenantContext
     ) =>
-        rule.MustAsync(async (id, ct) =>
-                await rooms.ExistsAsync(id!.Value, tenantContext.OrganizationId, ct)
+        rule.MustAsync(
+                async (id, ct) =>
+                    await rooms.ExistsAsync(id!.Value, tenantContext.OrganizationId, ct)
             )
             .WithMessage("Кабинет не найден.");
 }

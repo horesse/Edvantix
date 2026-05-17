@@ -112,17 +112,15 @@ public sealed class CreateGroupValidatorTests
         var unknownLevelId = Guid.CreateVersion7();
         _levelRepoMock
             .Setup(r =>
-                r.ExistsAsync(
-                    unknownLevelId,
-                    _organizationId,
-                    true,
-                    It.IsAny<CancellationToken>()
-                )
+                r.ExistsAsync(unknownLevelId, _organizationId, true, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(false);
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { LevelId = unknownLevelId }
+            BuildValidCommand() with
+            {
+                LevelId = unknownLevelId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.LevelId);
@@ -134,17 +132,15 @@ public sealed class CreateGroupValidatorTests
         var inactiveLevelId = Guid.CreateVersion7();
         _levelRepoMock
             .Setup(r =>
-                r.ExistsAsync(
-                    inactiveLevelId,
-                    _organizationId,
-                    true,
-                    It.IsAny<CancellationToken>()
-                )
+                r.ExistsAsync(inactiveLevelId, _organizationId, true, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(false);
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { LevelId = inactiveLevelId }
+            BuildValidCommand() with
+            {
+                LevelId = inactiveLevelId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.LevelId);
@@ -156,17 +152,15 @@ public sealed class CreateGroupValidatorTests
         var foreignLevelId = Guid.CreateVersion7();
         _levelRepoMock
             .Setup(r =>
-                r.ExistsAsync(
-                    foreignLevelId,
-                    _organizationId,
-                    true,
-                    It.IsAny<CancellationToken>()
-                )
+                r.ExistsAsync(foreignLevelId, _organizationId, true, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(false);
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { LevelId = foreignLevelId }
+            BuildValidCommand() with
+            {
+                LevelId = foreignLevelId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.LevelId);
@@ -191,15 +185,15 @@ public sealed class CreateGroupValidatorTests
         var unknownCourseId = Guid.CreateVersion7();
         _curriculumMock
             .Setup(s =>
-                s.GetCourseByIdAsync(
-                    unknownCourseId.ToString(),
-                    It.IsAny<CancellationToken>()
-                )
+                s.GetCourseByIdAsync(unknownCourseId.ToString(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync((CourseInfo?)null);
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { CourseId = unknownCourseId }
+            BuildValidCommand() with
+            {
+                CourseId = unknownCourseId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.CourseId);
@@ -211,15 +205,15 @@ public sealed class CreateGroupValidatorTests
         var foreignCourseId = Guid.CreateVersion7();
         _curriculumMock
             .Setup(s =>
-                s.GetCourseByIdAsync(
-                    foreignCourseId.ToString(),
-                    It.IsAny<CancellationToken>()
-                )
+                s.GetCourseByIdAsync(foreignCourseId.ToString(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(new CourseInfo { OrganizationId = Guid.CreateVersion7().ToString() });
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { CourseId = foreignCourseId }
+            BuildValidCommand() with
+            {
+                CourseId = foreignCourseId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.CourseId);
@@ -249,7 +243,10 @@ public sealed class CreateGroupValidatorTests
             .ReturnsAsync(false);
 
         var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with { TeacherMemberId = foreignMemberId }
+            BuildValidCommand() with
+            {
+                TeacherMemberId = foreignMemberId,
+            }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.TeacherMemberId);

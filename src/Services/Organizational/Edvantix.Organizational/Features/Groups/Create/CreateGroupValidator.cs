@@ -36,12 +36,14 @@ internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupComman
 
         RuleFor(x => x.CourseId).NotEmpty().WithMessage("Идентификатор курса обязателен");
         RuleFor(x => x.CourseId)
-            .MustAsync(async (id, ct) =>
-            {
-                var course = await curriculum.GetCourseByIdAsync(id.ToString(), ct);
-                return course is not null
-                    && course.OrganizationId == tenantContext.OrganizationId.ToString();
-            })
+            .MustAsync(
+                async (id, ct) =>
+                {
+                    var course = await curriculum.GetCourseByIdAsync(id.ToString(), ct);
+                    return course is not null
+                        && course.OrganizationId == tenantContext.OrganizationId.ToString();
+                }
+            )
             .WithMessage("Курс не найден или принадлежит другой организации.")
             .When(x => x.CourseId != Guid.Empty);
 

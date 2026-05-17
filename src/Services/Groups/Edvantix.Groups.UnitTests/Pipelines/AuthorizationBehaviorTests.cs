@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Chassis.Security.Tenant;
@@ -5,7 +6,6 @@ using Edvantix.Groups.Grpc.Services;
 using Edvantix.Groups.Pipelines;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using System.Security.Claims;
 
 namespace Edvantix.Groups.UnitTests.Pipelines;
 
@@ -142,11 +142,13 @@ public sealed class AuthorizationBehaviorTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<Guid, Guid, string, CancellationToken>((org, profile, _, _) =>
-            {
-                capturedOrg = org;
-                capturedProfile = profile;
-            })
+            .Callback<Guid, Guid, string, CancellationToken>(
+                (org, profile, _, _) =>
+                {
+                    capturedOrg = org;
+                    capturedProfile = profile;
+                }
+            )
             .ReturnsAsync(true);
 
         await InvokeBehavior(ProfileId, new TestCommandWithPermission());
@@ -170,10 +172,12 @@ public sealed class AuthorizationBehaviorTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<Guid, Guid, string, CancellationToken>((_, _, perm, _) =>
-            {
-                capturedPermission = perm;
-            })
+            .Callback<Guid, Guid, string, CancellationToken>(
+                (_, _, perm, _) =>
+                {
+                    capturedPermission = perm;
+                }
+            )
             .ReturnsAsync(true);
 
         await InvokeBehavior(ProfileId, new TestCommandWithPermission());
@@ -189,15 +193,16 @@ public sealed class AuthorizationBehaviorTests
 
     private Task InvokeBehavior(Guid profileId, TestCommandWithPermission command) =>
         ((IPipelineBehavior<TestCommandWithPermission, Guid>)BuildBehavior(profileId))
-            .Handle(
-                command,
-                (_, _) => ValueTask.FromResult(Guid.Empty),
-                CancellationToken.None
-            )
+            .Handle(command, (_, _) => ValueTask.FromResult(Guid.Empty), CancellationToken.None)
             .AsTask();
 
     private AuthorizationBehavior<TestCommandWithPermission, Guid> BuildBehavior(Guid profileId) =>
-        new(BuildClaims(profileId), _tenantContextMock.Object, _permissionServiceMock.Object, Logger);
+        new(
+            BuildClaims(profileId),
+            _tenantContextMock.Object,
+            _permissionServiceMock.Object,
+            Logger
+        );
 
     private static ClaimsPrincipal BuildClaims(Guid profileId) =>
         new(new ClaimsIdentity([new Claim(KeycloakClaimTypes.Profile, profileId.ToString())]));

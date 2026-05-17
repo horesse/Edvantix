@@ -1,343 +1,141 @@
 using Edvantix.Organizational.Grpc.Services;
 using Edvantix.Organizational.Grpc.Services.Permissions;
+using Edvantix.Organizational.Pipelines;
 using Edvantix.Organizational.UnitTests.Grpc.Context;
+using Grpc.Core;
 
 namespace Edvantix.Organizational.UnitTests.Grpc.Services;
 
 public sealed class PermissionServiceTests
 {
-    private readonly Mock<IPermissionRepository> _repoMock = new();
-    private readonly Mock<IFeatureRepository> _featureRepoMock = new();
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<IPermissionChecker> _checkerMock = new();
 
-    public PermissionServiceTests()
-    {
-        _repoMock.Setup(r => r.UnitOfWork).Returns(_unitOfWorkMock.Object);
-        _unitOfWorkMock
-            .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(1);
-        _featureRepoMock
-            .Setup(r => r.GetByCodeAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Feature?)null);
-    }
-
-    private PermissionService CreateService() => new(_repoMock.Object, _featureRepoMock.Object);
+    private PermissionService CreateService() => new(_checkerMock.Object);
 
     private static TestServerCallContext CreateContext() => new();
 
     // ─── CheckPermission ───────────────────────────────────────────────────────
 
     [Test]
-    public async Task GivenCheckPermissionCalled_WhenHandled_ThenShouldThrowNotImplementedException()
+    public async Task GivenInvalidOrganizationId_WhenCheckPermission_ThenShouldThrowRpcInvalidArgument()
     {
-        var service = CreateService();
-        var context = CreateContext();
-
-        await Should.ThrowAsync<NotImplementedException>(() =>
-            service.CheckPermission(new CheckPermissionRequest(), context)
-        );
-    }
-
-    // ─── SyncFeaturePermissions – Guard validations ────────────────────────────
-
-    [Test]
-    [Arguments("")]
-    [Arguments("   ")]
-    public async Task GivenEmptyOrWhiteSpaceServiceCode_WhenSyncFeaturePermissions_ThenShouldThrowArgumentException(
-        string serviceCode
-    )
-    {
-        var request = new SyncFeaturePermissionsRequest
+        var request = new CheckPermissionRequest
         {
-            ServiceCode = serviceCode,
-            FeatureCode = "Organization",
-            FeatureName = "Организация",
+            OrganizationId = "not-a-guid",
+            ProfileId = Guid.CreateVersion7().ToString(),
+            Permission = "Organization.View",
         };
 
-        await Should.ThrowAsync<ArgumentException>(() =>
-            CreateService().SyncFeaturePermissions(request, CreateContext())
+        var ex = await Should.ThrowAsync<RpcException>(() =>
+            CreateService().CheckPermission(request, CreateContext())
         );
+        ex.StatusCode.ShouldBe(StatusCode.InvalidArgument);
     }
 
     [Test]
-    [Arguments("")]
-    [Arguments("   ")]
-    public async Task GivenEmptyOrWhiteSpaceFeatureCode_WhenSyncFeaturePermissions_ThenShouldThrowArgumentException(
-        string featureCode
-    )
+    public async Task GivenInvalidProfileId_WhenCheckPermission_ThenShouldThrowRpcInvalidArgument()
     {
-        var request = new SyncFeaturePermissionsRequest
+        var request = new CheckPermissionRequest
         {
-            ServiceCode = "organizational",
-            FeatureCode = featureCode,
-            FeatureName = "Организация",
+            OrganizationId = Guid.CreateVersion7().ToString(),
+            ProfileId = "not-a-guid",
+            Permission = "Organization.View",
         };
 
-        await Should.ThrowAsync<ArgumentException>(() =>
-            CreateService().SyncFeaturePermissions(request, CreateContext())
+        var ex = await Should.ThrowAsync<RpcException>(() =>
+            CreateService().CheckPermission(request, CreateContext())
         );
+        ex.StatusCode.ShouldBe(StatusCode.InvalidArgument);
     }
 
     [Test]
-    [Arguments("")]
-    [Arguments("   ")]
-    public async Task GivenEmptyOrWhiteSpaceFeatureName_WhenSyncFeaturePermissions_ThenShouldThrowArgumentException(
-        string featureName
-    )
+    public async Task GivenEmptyPermission_WhenCheckPermission_ThenShouldThrowRpcInvalidArgument()
     {
-        var request = new SyncFeaturePermissionsRequest
+        var request = new CheckPermissionRequest
         {
-            ServiceCode = "organizational",
-            FeatureCode = "Organization",
-            FeatureName = featureName,
+            OrganizationId = Guid.CreateVersion7().ToString(),
+            ProfileId = Guid.CreateVersion7().ToString(),
+            Permission = "   ",
         };
 
-        await Should.ThrowAsync<ArgumentException>(() =>
-            CreateService().SyncFeaturePermissions(request, CreateContext())
+        var ex = await Should.ThrowAsync<RpcException>(() =>
+            CreateService().CheckPermission(request, CreateContext())
         );
-    }
-
-    // ─── SyncFeaturePermissions – Add new permissions ─────────────────────────
-
-    [Test]
-    public async Task GivenNoExistingPermissions_WhenSyncFeaturePermissionsWithNewEntries_ThenShouldAddAllAndReturnAddedCount()
-    {
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
-
-        var request = BuildRequest([
-            new PermissionEntry { Code = "View", Name = "Просмотр" },
-            new PermissionEntry { Code = "Edit", Name = "Редактирование" },
-        ]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(2);
-        response.Removed.ShouldBe(0);
-        _repoMock.Verify(r => r.Add(It.IsAny<Permission>()), Times.Exactly(2));
-    }
-
-    // ─── SyncFeaturePermissions – Remove obsolete permissions ─────────────────
-
-    [Test]
-    public async Task GivenExistingPermissionsNotInRequest_WhenSyncFeaturePermissions_ThenShouldRemoveObsoleteAndReturnRemovedCount()
-    {
-        var existing = new List<Permission>
-        {
-            CreatePermission("View"),
-            CreatePermission("Delete"),
-        };
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(existing);
-
-        var request = BuildRequest([new PermissionEntry { Code = "View", Name = "Просмотр" }]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(0);
-        response.Removed.ShouldBe(1);
-        _repoMock.Verify(r => r.Remove(It.Is<Permission>(p => p.Code == "Delete")), Times.Once);
-        _repoMock.Verify(r => r.Remove(It.Is<Permission>(p => p.Code == "View")), Times.Never);
-    }
-
-    // ─── SyncFeaturePermissions – Update existing permissions ─────────────────
-
-    [Test]
-    public async Task GivenExistingPermissionsInRequest_WhenSyncFeaturePermissions_ThenShouldUpdateNamesAndReturnZeroCounts()
-    {
-        var existing = new List<Permission> { CreatePermission("View", "Старое название") };
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(existing);
-
-        var request = BuildRequest(
-            [new PermissionEntry { Code = "View", Name = "Новое название" }],
-            featureName: "Новая область"
-        );
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(0);
-        response.Removed.ShouldBe(0);
-        existing[0].Name.ShouldBe("Новое название");
-    }
-
-    // ─── SyncFeaturePermissions – Mixed scenario ──────────────────────────────
-
-    [Test]
-    public async Task GivenMixedPermissions_WhenSyncFeaturePermissions_ThenShouldAddRemoveAndUpdateCorrectly()
-    {
-        var existing = new List<Permission>
-        {
-            CreatePermission("View"),
-            CreatePermission("Delete"),
-        };
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(existing);
-
-        var request = BuildRequest([
-            new PermissionEntry { Code = "View", Name = "Обновлено" },
-            new PermissionEntry { Code = "Create", Name = "Создание" },
-        ]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(1);
-        response.Removed.ShouldBe(1);
-        _repoMock.Verify(r => r.Add(It.Is<Permission>(p => p.Code == "Create")), Times.Once);
-        _repoMock.Verify(r => r.Remove(It.Is<Permission>(p => p.Code == "Delete")), Times.Once);
-    }
-
-    // ─── SyncFeaturePermissions – Empty request removes all ───────────────────
-
-    [Test]
-    public async Task GivenEmptyPermissionsList_WhenSyncFeaturePermissions_ThenShouldRemoveAllExistingAndReturnRemovedCount()
-    {
-        var existing = new List<Permission> { CreatePermission("View"), CreatePermission("Edit") };
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(existing);
-
-        var request = BuildRequest([]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(0);
-        response.Removed.ShouldBe(2);
-        _repoMock.Verify(r => r.Remove(It.IsAny<Permission>()), Times.Exactly(2));
-    }
-
-    // ─── SyncFeaturePermissions – Isolation by FeatureCode ────────────────────
-
-    [Test]
-    public async Task GivenPermissionsForDifferentFeatureCode_WhenSyncFeaturePermissions_ThenShouldNotModifyOtherFeatures()
-    {
-        var otherFeature = CreatePermission("View", featureCode: "Member");
-        _repoMock
-            .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync([otherFeature]);
-
-        var request = BuildRequest([]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Removed.ShouldBe(0);
-        _repoMock.Verify(r => r.Remove(It.IsAny<Permission>()), Times.Never);
-    }
-
-    // ─── SyncFeaturePermissions – Case-insensitive code matching ─────────────
-
-    [Test]
-    public async Task GivenExistingPermissionWithUpperCaseCode_WhenSyncFeaturePermissionsWithLowerCase_ThenShouldUpdateInsteadOfAdd()
-    {
-        var existing = new List<Permission> { CreatePermission("VIEW") };
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(existing);
-
-        var request = BuildRequest([new PermissionEntry { Code = "view", Name = "Просмотр" }]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(0);
-        response.Removed.ShouldBe(0);
-        _repoMock.Verify(r => r.Add(It.IsAny<Permission>()), Times.Never);
-    }
-
-    // ─── SyncFeaturePermissions – Skip blank codes in request ─────────────────
-
-    [Test]
-    public async Task GivenPermissionEntriesWithEmptyCode_WhenSyncFeaturePermissions_ThenShouldSkipBlankEntries()
-    {
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
-
-        var request = BuildRequest([
-            new PermissionEntry { Code = "", Name = "Пустой" },
-            new PermissionEntry { Code = "   ", Name = "Пробелы" },
-            new PermissionEntry { Code = "View", Name = "Просмотр" },
-        ]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(1);
-        _repoMock.Verify(r => r.Add(It.Is<Permission>(p => p.Code == "View")), Times.Once);
-    }
-
-    // ─── SyncFeaturePermissions – Trim whitespace in codes and names ──────────
-
-    [Test]
-    public async Task GivenPermissionEntryWithWhitespacePaddedCode_WhenSyncFeaturePermissions_ThenShouldTrimCodeBeforeAdding()
-    {
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
-
-        var request = BuildRequest([
-            new PermissionEntry { Code = "  View  ", Name = "  Просмотр  " },
-        ]);
-
-        var response = await CreateService().SyncFeaturePermissions(request, CreateContext());
-
-        response.Added.ShouldBe(1);
-        _repoMock.Verify(r => r.Add(It.Is<Permission>(p => p.Code == "View")), Times.Once);
-    }
-
-    // ─── SyncFeaturePermissions – SaveChanges always called ───────────────────
-
-    [Test]
-    public async Task GivenAnyValidRequest_WhenSyncFeaturePermissions_ThenShouldAlwaysCallSaveChanges()
-    {
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
-
-        await CreateService().SyncFeaturePermissions(BuildRequest([]), CreateContext());
-
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-    }
-
-    // ─── SyncFeaturePermissions – Feature upsert ──────────────────────────────
-
-    [Test]
-    public async Task GivenNoExistingFeature_WhenSyncFeaturePermissions_ThenShouldAddNewFeature()
-    {
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
-        _featureRepoMock
-            .Setup(r => r.GetByCodeAsync("Organization", It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Feature?)null);
-
-        await CreateService().SyncFeaturePermissions(BuildRequest([]), CreateContext());
-
-        _featureRepoMock.Verify(
-            r => r.Add(It.Is<Feature>(f => f.Code == "Organization" && f.Name == "Организация")),
-            Times.Once
-        );
+        ex.StatusCode.ShouldBe(StatusCode.InvalidArgument);
     }
 
     [Test]
-    public async Task GivenExistingFeatureWithDifferentName_WhenSyncFeaturePermissions_ThenShouldUpdateFeatureName()
+    public async Task GivenCheckerReturnsNull_WhenCheckPermission_ThenHasPermissionShouldBeFalse()
     {
-        var existingFeature = new Feature("organizational", "Organization", "Старое название");
-        _repoMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync([]);
-        _featureRepoMock
-            .Setup(r => r.GetByCodeAsync("Organization", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(existingFeature);
+        var orgId = Guid.CreateVersion7();
+        var profileId = Guid.CreateVersion7();
+        _checkerMock
+            .Setup(c =>
+                c.CheckAsync(orgId, profileId, "Organization.View", It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync((bool?)null);
 
-        await CreateService().SyncFeaturePermissions(BuildRequest([]), CreateContext());
+        var response = await CreateService()
+            .CheckPermission(
+                new CheckPermissionRequest
+                {
+                    OrganizationId = orgId.ToString(),
+                    ProfileId = profileId.ToString(),
+                    Permission = "Organization.View",
+                },
+                CreateContext()
+            );
 
-        existingFeature.Name.ShouldBe("Организация");
-        _featureRepoMock.Verify(r => r.Add(It.IsAny<Feature>()), Times.Never);
+        response.HasPermission.ShouldBeFalse();
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
-
-    private static SyncFeaturePermissionsRequest BuildRequest(
-        IEnumerable<PermissionEntry> entries,
-        string serviceCode = "organizational",
-        string featureCode = "Organization",
-        string featureName = "Организация"
-    )
+    [Test]
+    public async Task GivenCheckerReturnsFalse_WhenCheckPermission_ThenHasPermissionShouldBeFalse()
     {
-        var request = new SyncFeaturePermissionsRequest
-        {
-            ServiceCode = serviceCode,
-            FeatureCode = featureCode,
-            FeatureName = featureName,
-        };
-        request.Permissions.AddRange(entries);
-        return request;
+        var orgId = Guid.CreateVersion7();
+        var profileId = Guid.CreateVersion7();
+        _checkerMock
+            .Setup(c =>
+                c.CheckAsync(orgId, profileId, "Organization.View", It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(false);
+
+        var response = await CreateService()
+            .CheckPermission(
+                new CheckPermissionRequest
+                {
+                    OrganizationId = orgId.ToString(),
+                    ProfileId = profileId.ToString(),
+                    Permission = "Organization.View",
+                },
+                CreateContext()
+            );
+
+        response.HasPermission.ShouldBeFalse();
     }
 
-    private static Permission CreatePermission(
-        string code,
-        string name = "Название",
-        string featureCode = "Organization"
-    ) => new(featureCode, code, name);
+    [Test]
+    public async Task GivenCheckerReturnsTrue_WhenCheckPermission_ThenHasPermissionShouldBeTrue()
+    {
+        var orgId = Guid.CreateVersion7();
+        var profileId = Guid.CreateVersion7();
+        _checkerMock
+            .Setup(c =>
+                c.CheckAsync(orgId, profileId, "Organization.View", It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(true);
+
+        var response = await CreateService()
+            .CheckPermission(
+                new CheckPermissionRequest
+                {
+                    OrganizationId = orgId.ToString(),
+                    ProfileId = profileId.ToString(),
+                    Permission = "Organization.View",
+                },
+                CreateContext()
+            );
+
+        response.HasPermission.ShouldBeTrue();
+    }
 }

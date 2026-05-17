@@ -1,9 +1,13 @@
+using System.Security.Claims;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Security.Keycloak;
-using Edvantix.Organizational.Pipelines;
+using Edvantix.Chassis.Security.Tenant;
+using Edvantix.Groups.Grpc.Services;
+using Edvantix.Groups.Pipelines;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Edvantix.Organizational.UnitTests.Pipelines;
+namespace Edvantix.Groups.UnitTests.Pipelines;
 
 [RequirePermission(AuthorizationBehaviorTests.TestPermission)]
 internal sealed record TestCommandWithPermission : ICommand<Guid>;
@@ -12,10 +16,10 @@ internal sealed record TestCommandWithoutPermission : ICommand<Guid>;
 
 public sealed class AuthorizationBehaviorTests
 {
-    internal const string TestPermission = "organizations.manage";
+    internal const string TestPermission = "Group.Manage";
 
     private readonly Mock<ITenantContext> _tenantContextMock = new();
-    private readonly Mock<IPermissionChecker> _checkerMock = new();
+    private readonly Mock<IPermissionService> _permissionServiceMock = new();
     private static readonly ILogger<AuthorizationBehavior<TestCommandWithPermission, Guid>> Logger =
         NullLogger<AuthorizationBehavior<TestCommandWithPermission, Guid>>.Instance;
 
@@ -23,30 +27,24 @@ public sealed class AuthorizationBehaviorTests
     private static readonly Guid ProfileId = Guid.CreateVersion7();
 
     [Test]
-    public async Task GivenMessageWithoutRequirePermissionAttribute_WhenHandling_ThenShouldCallNext()
+    public async Task GivenMessageWithoutRequirePermissionAttribute_WhenHandling_ThenShouldNotCallService()
     {
         var behavior = new AuthorizationBehavior<TestCommandWithoutPermission, Guid>(
             BuildClaims(ProfileId),
             _tenantContextMock.Object,
-            _checkerMock.Object,
+            _permissionServiceMock.Object,
             NullLogger<AuthorizationBehavior<TestCommandWithoutPermission, Guid>>.Instance
         );
 
-        var nextCalled = false;
-        await behavior.Handle(
+        await ((IPipelineBehavior<TestCommandWithoutPermission, Guid>)behavior).Handle(
             new TestCommandWithoutPermission(),
-            (_, _) =>
-            {
-                nextCalled = true;
-                return ValueTask.FromResult(Guid.Empty);
-            },
+            (_, _) => ValueTask.FromResult(Guid.Empty),
             CancellationToken.None
         );
 
-        nextCalled.ShouldBeTrue();
-        _checkerMock.Verify(
-            c =>
-                c.CheckAsync(
+        _permissionServiceMock.Verify(
+            s =>
+                s.CheckPermissionAsync(
                     It.IsAny<Guid>(),
                     It.IsAny<Guid>(),
                     It.IsAny<string>(),
@@ -62,13 +60,7 @@ public sealed class AuthorizationBehaviorTests
         _tenantContextMock.Setup(t => t.IsResolved).Returns(false);
 
         await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
-                )
-                .AsTask()
+            InvokeBehavior(ProfileId, new TestCommandWithPermission())
         );
     }
 
@@ -81,12 +73,12 @@ public sealed class AuthorizationBehaviorTests
         var behavior = new AuthorizationBehavior<TestCommandWithPermission, Guid>(
             new ClaimsPrincipal(new ClaimsIdentity()),
             _tenantContextMock.Object,
-            _checkerMock.Object,
+            _permissionServiceMock.Object,
             Logger
         );
 
         await Should.ThrowAsync<Exception>(() =>
-            behavior
+            ((IPipelineBehavior<TestCommandWithPermission, Guid>)behavior)
                 .Handle(
                     new TestCommandWithPermission(),
                     (_, _) => ValueTask.FromResult(Guid.Empty),
@@ -97,82 +89,53 @@ public sealed class AuthorizationBehaviorTests
     }
 
     [Test]
-    public async Task GivenCheckerReturnsNull_WhenHandling_ThenShouldThrowForbiddenException()
+    public async Task GivenServiceReturnsFalse_WhenHandling_ThenShouldThrowForbiddenException()
     {
         SetupTenant();
-        _checkerMock
-            .Setup(c =>
-                c.CheckAsync(OrgId, ProfileId, TestPermission, It.IsAny<CancellationToken>())
-            )
-            .ReturnsAsync((bool?)null);
-
-        await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
+        _permissionServiceMock
+            .Setup(s =>
+                s.CheckPermissionAsync(
+                    OrgId,
+                    ProfileId,
+                    TestPermission,
+                    It.IsAny<CancellationToken>()
                 )
-                .AsTask()
-        );
-    }
-
-    [Test]
-    public async Task GivenCheckerReturnsFalse_WhenHandling_ThenShouldThrowForbiddenException()
-    {
-        SetupTenant();
-        _checkerMock
-            .Setup(c =>
-                c.CheckAsync(OrgId, ProfileId, TestPermission, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(false);
 
         await Should.ThrowAsync<ForbiddenException>(() =>
-            BuildBehavior(ProfileId)
-                .Handle(
-                    new TestCommandWithPermission(),
-                    (_, _) => ValueTask.FromResult(Guid.Empty),
-                    CancellationToken.None
-                )
-                .AsTask()
+            InvokeBehavior(ProfileId, new TestCommandWithPermission())
         );
     }
 
     [Test]
-    public async Task GivenCheckerReturnsTrue_WhenHandling_ThenShouldCallNext()
+    public async Task GivenServiceReturnsTrue_WhenHandling_ThenShouldNotThrow()
     {
         SetupTenant();
-        _checkerMock
-            .Setup(c =>
-                c.CheckAsync(OrgId, ProfileId, TestPermission, It.IsAny<CancellationToken>())
+        _permissionServiceMock
+            .Setup(s =>
+                s.CheckPermissionAsync(
+                    OrgId,
+                    ProfileId,
+                    TestPermission,
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(true);
 
-        var nextCalled = false;
-        await BuildBehavior(ProfileId)
-            .Handle(
-                new TestCommandWithPermission(),
-                (_, _) =>
-                {
-                    nextCalled = true;
-                    return ValueTask.FromResult(Guid.Empty);
-                },
-                CancellationToken.None
-            );
-
-        nextCalled.ShouldBeTrue();
+        await InvokeBehavior(ProfileId, new TestCommandWithPermission());
     }
 
     [Test]
-    public async Task GivenCheckerReturnsTrue_WhenHandling_ThenCheckerShouldReceiveCorrectOrgAndProfile()
+    public async Task GivenServiceReturnsTrue_WhenHandling_ThenShouldPassCorrectOrgAndProfile()
     {
         SetupTenant();
         Guid? capturedOrg = null;
         Guid? capturedProfile = null;
 
-        _checkerMock
-            .Setup(c =>
-                c.CheckAsync(
+        _permissionServiceMock
+            .Setup(s =>
+                s.CheckPermissionAsync(
                     It.IsAny<Guid>(),
                     It.IsAny<Guid>(),
                     It.IsAny<string>(),
@@ -188,26 +151,21 @@ public sealed class AuthorizationBehaviorTests
             )
             .ReturnsAsync(true);
 
-        await BuildBehavior(ProfileId)
-            .Handle(
-                new TestCommandWithPermission(),
-                (_, _) => ValueTask.FromResult(Guid.Empty),
-                CancellationToken.None
-            );
+        await InvokeBehavior(ProfileId, new TestCommandWithPermission());
 
         capturedOrg.ShouldBe(OrgId);
         capturedProfile.ShouldBe(ProfileId);
     }
 
     [Test]
-    public async Task GivenCheckerReturnsTrue_WhenHandling_ThenCheckerShouldReceiveCorrectPermission()
+    public async Task GivenServiceReturnsTrue_WhenHandling_ThenShouldPassCorrectPermission()
     {
         SetupTenant();
         string? capturedPermission = null;
 
-        _checkerMock
-            .Setup(c =>
-                c.CheckAsync(
+        _permissionServiceMock
+            .Setup(s =>
+                s.CheckPermissionAsync(
                     It.IsAny<Guid>(),
                     It.IsAny<Guid>(),
                     It.IsAny<string>(),
@@ -215,16 +173,14 @@ public sealed class AuthorizationBehaviorTests
                 )
             )
             .Callback<Guid, Guid, string, CancellationToken>(
-                (_, _, perm, _) => capturedPermission = perm
+                (_, _, perm, _) =>
+                {
+                    capturedPermission = perm;
+                }
             )
             .ReturnsAsync(true);
 
-        await BuildBehavior(ProfileId)
-            .Handle(
-                new TestCommandWithPermission(),
-                (_, _) => ValueTask.FromResult(Guid.Empty),
-                CancellationToken.None
-            );
+        await InvokeBehavior(ProfileId, new TestCommandWithPermission());
 
         capturedPermission.ShouldBe(TestPermission);
     }
@@ -235,8 +191,18 @@ public sealed class AuthorizationBehaviorTests
         _tenantContextMock.Setup(t => t.OrganizationId).Returns(OrgId);
     }
 
+    private Task InvokeBehavior(Guid profileId, TestCommandWithPermission command) =>
+        ((IPipelineBehavior<TestCommandWithPermission, Guid>)BuildBehavior(profileId))
+            .Handle(command, (_, _) => ValueTask.FromResult(Guid.Empty), CancellationToken.None)
+            .AsTask();
+
     private AuthorizationBehavior<TestCommandWithPermission, Guid> BuildBehavior(Guid profileId) =>
-        new(BuildClaims(profileId), _tenantContextMock.Object, _checkerMock.Object, Logger);
+        new(
+            BuildClaims(profileId),
+            _tenantContextMock.Object,
+            _permissionServiceMock.Object,
+            Logger
+        );
 
     private static ClaimsPrincipal BuildClaims(Guid profileId) =>
         new(new ClaimsIdentity([new Claim(KeycloakClaimTypes.Profile, profileId.ToString())]));

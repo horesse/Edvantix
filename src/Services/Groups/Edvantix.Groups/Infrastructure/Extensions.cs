@@ -6,7 +6,7 @@ namespace Edvantix.Groups.Infrastructure;
 public static class Extensions
 {
     /// <summary>
-    /// Регистрирует контекст базы данных PostgreSQL и репозитории для сервиса групп.
+    /// Регистрирует контекст базы данных PostgreSQL, репозитории и инфраструктурные сервисы сервиса групп.
     /// </summary>
     public static void AddPersistenceServices(this IHostApplicationBuilder builder)
     {

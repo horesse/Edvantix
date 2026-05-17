@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Infrastructure.PermissionModules;
 

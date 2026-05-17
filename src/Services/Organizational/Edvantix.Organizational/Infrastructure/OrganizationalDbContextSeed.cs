@@ -1,5 +1,5 @@
-using Edvantix.Chassis.Permissions;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Infrastructure;
 

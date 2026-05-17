@@ -19,6 +19,8 @@ internal static class Extensions
 
         builder.AddSecurityServices();
 
+        services.AddMemoryCache();
+
         services.AddTenantContext();
 
         services.AddValidationExceptionHandler();

@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Edvantix.Permissions\Edvantix.Permissions.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />

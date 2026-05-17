@@ -48,6 +48,10 @@
     <Project Path="src/Services/Persona/Edvantix.Persona.UnitTests/Edvantix.Persona.UnitTests.csproj" />
     <Project Path="src/Services/Persona/Edvantix.Persona/Edvantix.Persona.csproj" />
   </Folder>
+  <Folder Name="/src/Services/Groups/">
+    <Project Path="src/Services/Groups/Edvantix.Groups.UnitTests/Edvantix.Groups.UnitTests.csproj" />
+    <Project Path="src/Services/Groups/Edvantix.Groups/Edvantix.Groups.csproj" />
+  </Folder>
   <Folder Name="/src/Services/Schedule/">
     <Project Path="src/Services/Schedule/Edvantix.Schedule.UnitTests/Edvantix.Schedule.UnitTests.csproj" />
     <Project Path="src/Services/Schedule/Edvantix.Schedule/Edvantix.Schedule.csproj" />

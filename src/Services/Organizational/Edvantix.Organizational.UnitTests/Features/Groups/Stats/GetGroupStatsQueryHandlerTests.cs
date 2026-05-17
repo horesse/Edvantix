@@ -85,12 +85,10 @@ public sealed class GetGroupStatsQueryHandlerTests
     [Test]
     public async Task GivenOnlyArchivedGroups_WhenGetStats_ThenCapacityAndFilledSeatsAreZero()
     {
-        SetupProjection(
-            [
-                new(GroupStatus.Archived, Capacity: 20, ActiveMemberCount: 15),
-                new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 8),
-            ]
-        );
+        SetupProjection([
+            new(GroupStatus.Archived, Capacity: 20, ActiveMemberCount: 15),
+            new(GroupStatus.Archived, Capacity: 10, ActiveMemberCount: 8),
+        ]);
 
         var result = await _handler.Handle(new GetGroupStatsQuery(), CancellationToken.None);
 
@@ -117,8 +115,6 @@ public sealed class GetGroupStatsQueryHandlerTests
 
     private void SetupProjection(IReadOnlyList<GroupStatRow> rows) =>
         _repoMock
-            .Setup(r =>
-                r.GetStatsProjectionAsync(_organizationId, It.IsAny<CancellationToken>())
-            )
+            .Setup(r => r.GetStatsProjectionAsync(_organizationId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(rows);
 }

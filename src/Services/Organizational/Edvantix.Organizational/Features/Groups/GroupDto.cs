@@ -85,8 +85,11 @@ public sealed record GroupStatsDto(
     [property: Description("Группы на паузе")] int Paused,
     [property: Description("Завершённые группы")] int Finished,
     [property: Description("Архивированные группы")] int Archived,
-    [property: Description("Сумма активных участников по группам со статусом Active")] int TotalActiveStudents,
-    [property: Description("Сумма вместимости по всем НЕ-архивированным группам")] int TotalCapacity,
-    [property: Description("Сумма активных участников по всем НЕ-архивированным группам")] int TotalFilledSeats,
+    [property: Description("Сумма активных участников по группам со статусом Active")]
+        int TotalActiveStudents,
+    [property: Description("Сумма вместимости по всем НЕ-архивированным группам")]
+        int TotalCapacity,
+    [property: Description("Сумма активных участников по всем НЕ-архивированным группам")]
+        int TotalFilledSeats,
     [property: Description("Процент заполненности (0 если TotalCapacity = 0)")] int FillRatePercent
 );

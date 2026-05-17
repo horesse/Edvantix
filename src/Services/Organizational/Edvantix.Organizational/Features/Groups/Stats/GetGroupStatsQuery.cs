@@ -29,8 +29,7 @@ internal sealed class GetGroupStatsQueryHandler(
         var finished = rows.Count(r => r.Status == GroupStatus.Finished);
         var archived = rows.Count(r => r.Status == GroupStatus.Archived);
 
-        var totalActiveStudents = rows
-            .Where(r => r.Status == GroupStatus.Active)
+        var totalActiveStudents = rows.Where(r => r.Status == GroupStatus.Active)
             .Sum(r => r.ActiveMemberCount);
 
         var nonArchived = rows.Where(r => r.Status != GroupStatus.Archived).ToList();

@@ -5,8 +5,8 @@ public sealed class RemoveGroupMemberEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete(
-                "/groups/{groupId:guid}/members/{memberId:guid}",
+        app.MapPost(
+                "/groups/{groupId:guid}/members/{memberId:guid}/remove",
                 async (
                     Guid groupId,
                     Guid memberId,

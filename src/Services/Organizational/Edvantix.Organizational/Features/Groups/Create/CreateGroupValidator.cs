@@ -1,12 +1,20 @@
 using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
-using Edvantix.Organizational.Features.Groups;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+using Edvantix.Organizational.Grpc.Services.Courses;
 
 namespace Edvantix.Organizational.Features.Groups.Create;
 
 internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupCommand>
 {
-    public CreateGroupValidator(ILevelRepository levelRepository, ITenantContext tenantContext)
+    public CreateGroupValidator(
+        ILevelRepository levels,
+        IOrganizationMemberRepository members,
+        IRoomRepository rooms,
+        ICurriculumService curriculum,
+        ITenantContext tenantContext
+    )
     {
         RuleFor(x => x.Code)
             .NotEmpty()
@@ -33,14 +41,34 @@ internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupComman
         RuleFor(x => x.LevelId).NotEmpty().WithMessage("Идентификатор уровня обязателен");
 
         RuleFor(x => x.LevelId)
-            .MustBeActiveLevelOfCurrentOrganization(levelRepository, tenantContext)
+            .MustAsync(async (id, ct) =>
+                await levels.ExistsAsync(id, tenantContext.OrganizationId, requireActive: true, ct)
+            )
+            .WithMessage("Уровень не найден или деактивирован.")
             .When(x => x.LevelId != Guid.Empty);
 
         RuleFor(x => x.CourseId).NotEmpty().WithMessage("Идентификатор курса обязателен");
 
+        RuleFor(x => x.CourseId)
+            .MustAsync(async (id, ct) =>
+            {
+                var course = await curriculum.GetCourseByIdAsync(id.ToString(), ct);
+                return course is not null
+                    && course.OrganizationId == tenantContext.OrganizationId.ToString();
+            })
+            .WithMessage("Курс не найден или принадлежит другой организации.")
+            .When(x => x.CourseId != Guid.Empty);
+
         RuleFor(x => x.TeacherMemberId)
             .NotEmpty()
             .WithMessage("Идентификатор преподавателя обязателен");
+
+        RuleFor(x => x.TeacherMemberId)
+            .MustAsync(async (id, ct) =>
+                await members.ExistsAsync(id, tenantContext.OrganizationId, ct)
+            )
+            .WithMessage("Преподаватель не найден.")
+            .When(x => x.TeacherMemberId != Guid.Empty);
 
         RuleFor(x => x.Capacity)
             .InclusiveBetween(1, 50)
@@ -54,6 +82,13 @@ internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupComman
             .NotEmpty()
             .WithMessage("Кабинет обязателен при очном или смешанном формате")
             .When(x => x.Format is GroupFormat.Offline or GroupFormat.Mixed);
+
+        RuleFor(x => x.RoomId)
+            .MustAsync(async (id, ct) =>
+                await rooms.ExistsAsync(id!.Value, tenantContext.OrganizationId, ct)
+            )
+            .WithMessage("Кабинет не найден.")
+            .When(x => x.Format != GroupFormat.Online && x.RoomId.HasValue);
 
         RuleFor(x => x.Platform)
             .NotNull()

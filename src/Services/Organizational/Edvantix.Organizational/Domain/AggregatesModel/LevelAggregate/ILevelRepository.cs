@@ -9,6 +9,17 @@ public interface ILevelRepository : IRepository<Level>
     /// <summary>Проверяет существование уровня по идентификатору.</summary>
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Проверяет, что уровень существует, принадлежит указанной организации и не удалён.
+    /// Если <paramref name="requireActive"/> равно <c>true</c>, дополнительно проверяет активность.
+    /// </summary>
+    Task<bool> ExistsAsync(
+        Guid id,
+        Guid organizationId,
+        bool requireActive,
+        CancellationToken cancellationToken = default
+    );
+
     /// <summary>Возвращает уровни по набору идентификаторов.</summary>
     Task<IReadOnlyCollection<Level>> GetByIdsAsync(
         IEnumerable<Guid> ids,

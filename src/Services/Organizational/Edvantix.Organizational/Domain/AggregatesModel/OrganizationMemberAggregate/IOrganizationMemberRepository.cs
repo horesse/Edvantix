@@ -22,6 +22,15 @@ public interface IOrganizationMemberRepository : IRepository<OrganizationMember>
     Task AddAsync(OrganizationMember member, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Проверяет, что участник с указанным идентификатором принадлежит организации и не удалён.
+    /// </summary>
+    Task<bool> ExistsAsync(
+        Guid id,
+        Guid organizationId,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>
     /// Возвращает идентификатор роли активного участника организации.
     /// Возвращает <see langword="null"/>, если участник не найден или не активен.
     /// </summary>

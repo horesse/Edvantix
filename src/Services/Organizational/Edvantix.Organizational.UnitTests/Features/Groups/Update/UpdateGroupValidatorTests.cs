@@ -3,6 +3,8 @@ namespace Edvantix.Organizational.UnitTests.Features.Groups.Update;
 public sealed class UpdateGroupValidatorTests
 {
     private readonly Mock<ILevelRepository> _levelRepoMock = new();
+    private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
+    private readonly Mock<IRoomRepository> _roomRepoMock = new();
     private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
     private readonly Guid _validLevelId = Guid.CreateVersion7();
@@ -11,8 +13,31 @@ public sealed class UpdateGroupValidatorTests
     public UpdateGroupValidatorTests()
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
-        _validator = new(_levelRepoMock.Object, _tenantMock.Object);
-        SetupValidLevel(_validLevelId);
+
+        _levelRepoMock
+            .Setup(r =>
+                r.ExistsAsync(_validLevelId, _organizationId, true, It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(true);
+
+        _memberRepoMock
+            .Setup(r =>
+                r.ExistsAsync(It.IsAny<Guid>(), _organizationId, It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(true);
+
+        _roomRepoMock
+            .Setup(r =>
+                r.ExistsAsync(It.IsAny<Guid>(), _organizationId, It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(true);
+
+        _validator = new(
+            _levelRepoMock.Object,
+            _memberRepoMock.Object,
+            _roomRepoMock.Object,
+            _tenantMock.Object
+        );
     }
 
     [Test]
@@ -76,6 +101,72 @@ public sealed class UpdateGroupValidatorTests
     }
 
     [Test]
+    public async Task GivenNonExistentLevelId_WhenValidating_ThenShouldHaveError()
+    {
+        var unknownLevelId = Guid.CreateVersion7();
+        _levelRepoMock
+            .Setup(r =>
+                r.ExistsAsync(
+                    unknownLevelId,
+                    _organizationId,
+                    true,
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(false);
+
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with { LevelId = unknownLevelId }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.LevelId);
+    }
+
+    [Test]
+    public async Task GivenInactiveLevelId_WhenValidating_ThenShouldHaveError()
+    {
+        var inactiveLevelId = Guid.CreateVersion7();
+        _levelRepoMock
+            .Setup(r =>
+                r.ExistsAsync(
+                    inactiveLevelId,
+                    _organizationId,
+                    true,
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(false);
+
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with { LevelId = inactiveLevelId }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.LevelId);
+    }
+
+    [Test]
+    public async Task GivenLevelFromAnotherOrganization_WhenValidating_ThenShouldHaveError()
+    {
+        var foreignLevelId = Guid.CreateVersion7();
+        _levelRepoMock
+            .Setup(r =>
+                r.ExistsAsync(
+                    foreignLevelId,
+                    _organizationId,
+                    true,
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(false);
+
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with { LevelId = foreignLevelId }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.LevelId);
+    }
+
+    [Test]
     public async Task GivenEmptyCourseId_WhenValidating_ThenShouldHaveError()
     {
         var result = await _validator.TestValidateAsync(
@@ -96,6 +187,23 @@ public sealed class UpdateGroupValidatorTests
             {
                 TeacherMemberId = Guid.Empty,
             }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.TeacherMemberId);
+    }
+
+    [Test]
+    public async Task GivenTeacherMemberFromAnotherOrganization_WhenValidating_ThenShouldHaveError()
+    {
+        var foreignMemberId = Guid.CreateVersion7();
+        _memberRepoMock
+            .Setup(r =>
+                r.ExistsAsync(foreignMemberId, _organizationId, It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(false);
+
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with { TeacherMemberId = foreignMemberId }
         );
 
         result.ShouldHaveValidationErrorFor(x => x.TeacherMemberId);
@@ -130,6 +238,43 @@ public sealed class UpdateGroupValidatorTests
         );
 
         result.ShouldHaveValidationErrorFor(x => x.RoomId);
+    }
+
+    [Test]
+    public async Task GivenOfflineFormatWithRoomFromAnotherOrganization_WhenValidating_ThenShouldHaveError()
+    {
+        var foreignRoomId = Guid.CreateVersion7();
+        _roomRepoMock
+            .Setup(r =>
+                r.ExistsAsync(foreignRoomId, _organizationId, It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(false);
+
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Format = GroupFormat.Offline,
+                RoomId = foreignRoomId,
+                Platform = null,
+            }
+        );
+
+        result.ShouldHaveValidationErrorFor(x => x.RoomId);
+    }
+
+    [Test]
+    public async Task GivenOnlineFormatWithNullRoom_WhenValidating_ThenShouldNotHaveRoomError()
+    {
+        var result = await _validator.TestValidateAsync(
+            BuildValidCommand() with
+            {
+                Format = GroupFormat.Online,
+                RoomId = null,
+                Platform = OnlinePlatform.Zoom,
+            }
+        );
+
+        result.ShouldNotHaveValidationErrorFor(x => x.RoomId);
     }
 
     [Test]
@@ -179,7 +324,6 @@ public sealed class UpdateGroupValidatorTests
     [Test]
     public async Task GivenMixedFormatWithRoomAndPlatform_WhenValidating_ThenShouldNotHaveErrors()
     {
-        // Async rules are skipped in sync TestValidate — validated separately in async tests
         var result = await _validator.TestValidateAsync(
             BuildValidCommand() with
             {
@@ -191,21 +335,6 @@ public sealed class UpdateGroupValidatorTests
 
         result.ShouldNotHaveValidationErrorFor(x => x.RoomId);
         result.ShouldNotHaveValidationErrorFor(x => x.Platform);
-    }
-
-    private void SetupValidLevel(Guid levelId)
-    {
-        var level = new Level(
-            _organizationId,
-            LevelCode.From("B1"),
-            "Средний",
-            null,
-            LevelTone.Blue,
-            30
-        );
-        _levelRepoMock
-            .Setup(r => r.GetByIdAsync(levelId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(level);
     }
 
     private UpdateGroupCommand BuildValidCommand() =>

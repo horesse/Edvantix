@@ -17,6 +17,23 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default) =>
         await context.Levels.AnyAsync(l => l.Id == id && !l.IsDeleted, cancellationToken);
 
+    public async Task<bool> ExistsAsync(
+        Guid id,
+        Guid organizationId,
+        bool requireActive,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = context.Levels.Where(l =>
+            l.Id == id && l.OrganizationId == organizationId && !l.IsDeleted
+        );
+
+        if (requireActive)
+            query = query.Where(l => l.IsActive);
+
+        return await query.AnyAsync(cancellationToken);
+    }
+
     public async Task<IReadOnlyCollection<Level>> GetByIdsAsync(
         IEnumerable<Guid> ids,
         CancellationToken cancellationToken = default

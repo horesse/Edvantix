@@ -117,6 +117,7 @@ var organizationalApi = builder
     .WithReference(redis)
     .WaitFor(redis)
     .WithReference(personaApi)
+    .WithReference(scheduleApi)
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 

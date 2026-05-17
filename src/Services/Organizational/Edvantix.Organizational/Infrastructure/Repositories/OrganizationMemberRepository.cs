@@ -48,6 +48,16 @@ internal sealed class OrganizationMemberRepository(OrganizationalDbContext conte
         CancellationToken cancellationToken = default
     ) => await context.OrganizationMembers.AddAsync(member, cancellationToken);
 
+    public async Task<bool> ExistsAsync(
+        Guid id,
+        Guid organizationId,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context.OrganizationMembers.AnyAsync(
+            m => m.Id == id && m.OrganizationId == organizationId && !m.IsDeleted,
+            cancellationToken
+        );
+
     public async Task<Guid?> GetActiveMemberRoleIdAsync(
         Guid organizationId,
         Guid profileId,

@@ -14,4 +14,13 @@ public interface IRoomRepository : IRepository<Room>
 
     /// <summary>Добавляет новый кабинет.</summary>
     Task AddAsync(Room room, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Проверяет, что кабинет с указанным идентификатором принадлежит организации и не удалён.
+    /// </summary>
+    Task<bool> ExistsAsync(
+        Guid id,
+        Guid organizationId,
+        CancellationToken cancellationToken = default
+    );
 }

@@ -9,6 +9,16 @@ internal sealed class RoomRepository(OrganizationalDbContext context) : IRoomRep
     public async Task AddAsync(Room room, CancellationToken cancellationToken = default) =>
         await context.Rooms.AddAsync(room, cancellationToken);
 
+    public async Task<bool> ExistsAsync(
+        Guid id,
+        Guid organizationId,
+        CancellationToken cancellationToken = default
+    ) =>
+        await context.Rooms.AnyAsync(
+            r => r.Id == id && r.OrganizationId == organizationId && !r.IsDeleted,
+            cancellationToken
+        );
+
     public async Task<Room?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
         await context
             .Rooms.AsTracking()

@@ -9,10 +9,10 @@ service ScheduleGrpcService {
   /// Возвращает сводки расписаний для N групп одним запросом.
   rpc GetScheduleSummariesByGroupIds (GetScheduleSummariesRequest) returns (GetScheduleSummariesResponse);
 
-  /// Возвращает полное расписание группы (Task 8).
+  /// Возвращает полное расписание группы.
   rpc GetScheduleByGroupId (GetScheduleByGroupIdRequest) returns (GetScheduleByGroupIdResponse);
 
-  /// Возвращает ближайшие занятия группы (Task 8).
+  /// Возвращает ближайшие занятия группы.
   rpc GetUpcomingLessons (GetUpcomingLessonsRequest) returns (GetUpcomingLessonsResponse);
 }
 
@@ -42,7 +42,7 @@ message ScheduleSummary {
   int32 lesson_count_remaining = 6;
 }
 
-// ── Task 8 stubs ──────────────────────────────────────────────────────────────
+// ── GetScheduleByGroupId ───────────────────────────────────────────────────────
 
 message GetScheduleByGroupIdRequest {
   string group_id = 1;
@@ -50,13 +50,74 @@ message GetScheduleByGroupIdRequest {
 
 message GetScheduleByGroupIdResponse {
   bool found = 1;
+  ScheduleDetail schedule = 2;
 }
+
+message ScheduleDetail {
+  string id = 1;
+
+  /// "Weekly" | "Biweekly" | "Custom"
+  string recurrence = 2;
+
+  /// Чётность недели (0 или 1); присутствует только при Biweekly.
+  int32 biweekly_parity = 3 [features.field_presence = EXPLICIT];
+
+  int32 lesson_duration_minutes = 4;
+
+  /// ISO yyyy-MM-dd
+  string start_date = 5;
+
+  /// "Date" | "Count"
+  string end_mode = 6;
+
+  /// ISO yyyy-MM-dd; присутствует только при EndMode=Date.
+  string end_date = 7 [features.field_presence = EXPLICIT];
+
+  /// Число занятий; присутствует только при EndMode=Count.
+  int32 lesson_count = 8 [features.field_presence = EXPLICIT];
+
+  bool skip_holidays = 9;
+
+  repeated ScheduleSlotProto slots = 10;
+  repeated ScheduleExceptionProto exceptions = 11;
+
+  /// Человекочитаемая сводка расписания.
+  string summary_text = 12;
+}
+
+message ScheduleSlotProto {
+  int32 weekday = 1;
+  int32 start_minutes = 2;
+}
+
+message ScheduleExceptionProto {
+  /// ISO yyyy-MM-dd
+  string date = 1;
+
+  /// Пустая строка если причина не указана.
+  string reason = 2;
+}
+
+// ── GetUpcomingLessons ─────────────────────────────────────────────────────────
 
 message GetUpcomingLessonsRequest {
   string group_id = 1;
+
+  /// Максимальное число занятий в ответе.
   int32 count = 2;
 }
 
 message GetUpcomingLessonsResponse {
-  repeated string lesson_dates = 1;
+  repeated UpcomingLessonProto lessons = 1;
+}
+
+message UpcomingLessonProto {
+  /// ISO yyyy-MM-dd
+  string date = 1;
+
+  /// Начало занятия в минутах от полуночи.
+  int32 start_minutes = 2;
+
+  /// Длительность занятия в минутах.
+  int32 duration_minutes = 3;
 }

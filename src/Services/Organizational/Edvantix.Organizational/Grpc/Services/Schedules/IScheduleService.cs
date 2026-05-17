@@ -10,4 +10,21 @@ public interface IScheduleService
         IEnumerable<Guid> groupIds,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>
+    /// Возвращает полные детали расписания группы или <c>null</c>, если расписание не создано.
+    /// </summary>
+    Task<ScheduleDetailDto?> GetScheduleByGroupIdAsync(
+        Guid groupId,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>
+    /// Возвращает ближайшие <paramref name="count"/> занятий группы начиная с сегодняшней даты.
+    /// </summary>
+    Task<IReadOnlyList<UpcomingLessonDto>> GetUpcomingLessonsAsync(
+        Guid groupId,
+        int count = 5,
+        CancellationToken cancellationToken = default
+    );
 }

@@ -102,12 +102,7 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _checkerMock
             .Setup(c =>
-                c.CheckAsync(
-                    OrgId,
-                    ProfileId,
-                    TestPermission,
-                    It.IsAny<CancellationToken>()
-                )
+                c.CheckAsync(OrgId, ProfileId, TestPermission, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync((bool?)null);
 
@@ -128,12 +123,7 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _checkerMock
             .Setup(c =>
-                c.CheckAsync(
-                    OrgId,
-                    ProfileId,
-                    TestPermission,
-                    It.IsAny<CancellationToken>()
-                )
+                c.CheckAsync(OrgId, ProfileId, TestPermission, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(false);
 
@@ -154,12 +144,7 @@ public sealed class AuthorizationBehaviorTests
         SetupTenant();
         _checkerMock
             .Setup(c =>
-                c.CheckAsync(
-                    OrgId,
-                    ProfileId,
-                    TestPermission,
-                    It.IsAny<CancellationToken>()
-                )
+                c.CheckAsync(OrgId, ProfileId, TestPermission, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(true);
 
@@ -194,11 +179,13 @@ public sealed class AuthorizationBehaviorTests
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<Guid, Guid, string, CancellationToken>((org, profile, _, _) =>
-            {
-                capturedOrg = org;
-                capturedProfile = profile;
-            })
+            .Callback<Guid, Guid, string, CancellationToken>(
+                (org, profile, _, _) =>
+                {
+                    capturedOrg = org;
+                    capturedProfile = profile;
+                }
+            )
             .ReturnsAsync(true);
 
         await BuildBehavior(ProfileId)
@@ -219,12 +206,7 @@ public sealed class AuthorizationBehaviorTests
     }
 
     private AuthorizationBehavior<TestCommandWithPermission, Guid> BuildBehavior(Guid profileId) =>
-        new(
-            BuildClaims(profileId),
-            _tenantContextMock.Object,
-            _checkerMock.Object,
-            Logger
-        );
+        new(BuildClaims(profileId), _tenantContextMock.Object, _checkerMock.Object, Logger);
 
     private static ClaimsPrincipal BuildClaims(Guid profileId) =>
         new(new ClaimsIdentity([new Claim(KeycloakClaimTypes.Profile, profileId.ToString())]));

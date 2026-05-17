@@ -27,7 +27,8 @@ public sealed class PermissionCheckerTests
     {
         SetupL1Cache(Guid.Empty);
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBeNull();
     }
@@ -46,7 +47,8 @@ public sealed class PermissionCheckerTests
             .ReturnsAsync((Guid?)null);
         SetupL1CacheCallsFactory();
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBeNull();
     }
@@ -59,7 +61,8 @@ public sealed class PermissionCheckerTests
         SetupL1Cache(RoleId);
         SetupL2Cache([]);
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBe(false);
     }
@@ -70,7 +73,8 @@ public sealed class PermissionCheckerTests
         SetupL1Cache(RoleId);
         SetupL2Cache(["other.permission"]);
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBe(false);
     }
@@ -83,7 +87,8 @@ public sealed class PermissionCheckerTests
         SetupL1Cache(RoleId);
         SetupL2Cache([Permission]);
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBe(true);
     }
@@ -94,7 +99,8 @@ public sealed class PermissionCheckerTests
         SetupL1Cache(RoleId);
         SetupL2Cache([Permission.ToUpperInvariant()]);
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBe(true);
     }
@@ -109,16 +115,27 @@ public sealed class PermissionCheckerTests
             .Setup(c =>
                 c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<Guid>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<string, Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>, MaybeValue<Guid>, FusionCacheEntryOptions?, IEnumerable<string>?, CancellationToken>(
-                (key, _, _, _, _, _) => capturedKey = key
-            )
+            .Callback<
+                string,
+                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
+                MaybeValue<Guid>,
+                FusionCacheEntryOptions?,
+                IEnumerable<string>?,
+                CancellationToken
+            >((key, _, _, _, _, _) => capturedKey = key)
             .ReturnsAsync(Guid.Empty);
 
         await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
@@ -136,16 +153,27 @@ public sealed class PermissionCheckerTests
             .Setup(c =>
                 c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<Guid>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<string, Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>, MaybeValue<Guid>, FusionCacheEntryOptions?, IEnumerable<string>?, CancellationToken>(
-                (_, _, _, _, tags, _) => capturedTags = tags
-            )
+            .Callback<
+                string,
+                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
+                MaybeValue<Guid>,
+                FusionCacheEntryOptions?,
+                IEnumerable<string>?,
+                CancellationToken
+            >((_, _, _, _, tags, _) => capturedTags = tags)
             .ReturnsAsync(Guid.Empty);
 
         await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
@@ -165,16 +193,31 @@ public sealed class PermissionCheckerTests
             .Setup(c =>
                 c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<HashSet<string>>, CancellationToken, Task<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<HashSet<string>>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<string, Func<FusionCacheFactoryExecutionContext<HashSet<string>>, CancellationToken, Task<HashSet<string>>>, MaybeValue<HashSet<string>>, FusionCacheEntryOptions?, IEnumerable<string>?, CancellationToken>(
-                (key, _, _, _, _, _) => capturedKey = key
-            )
+            .Callback<
+                string,
+                Func<
+                    FusionCacheFactoryExecutionContext<HashSet<string>>,
+                    CancellationToken,
+                    Task<HashSet<string>>
+                >,
+                MaybeValue<HashSet<string>>,
+                FusionCacheEntryOptions?,
+                IEnumerable<string>?,
+                CancellationToken
+            >((key, _, _, _, _, _) => capturedKey = key)
             .ReturnsAsync(new HashSet<string> { Permission });
 
         await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
@@ -193,16 +236,31 @@ public sealed class PermissionCheckerTests
             .Setup(c =>
                 c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<HashSet<string>>, CancellationToken, Task<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<HashSet<string>>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Callback<string, Func<FusionCacheFactoryExecutionContext<HashSet<string>>, CancellationToken, Task<HashSet<string>>>, MaybeValue<HashSet<string>>, FusionCacheEntryOptions?, IEnumerable<string>?, CancellationToken>(
-                (_, _, _, _, tags, _) => capturedTags = tags
-            )
+            .Callback<
+                string,
+                Func<
+                    FusionCacheFactoryExecutionContext<HashSet<string>>,
+                    CancellationToken,
+                    Task<HashSet<string>>
+                >,
+                MaybeValue<HashSet<string>>,
+                FusionCacheEntryOptions?,
+                IEnumerable<string>?,
+                CancellationToken
+            >((_, _, _, _, tags, _) => capturedTags = tags)
             .ReturnsAsync(new HashSet<string> { Permission });
 
         await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
@@ -225,7 +283,8 @@ public sealed class PermissionCheckerTests
             .ReturnsAsync((OrganizationRole?)null);
         SetupL2CacheCallsFactory();
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBe(false);
     }
@@ -243,7 +302,8 @@ public sealed class PermissionCheckerTests
             .ReturnsAsync(role);
         SetupL2CacheCallsFactory();
 
-        var result = await BuildChecker().CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
+        var result = await BuildChecker()
+            .CheckAsync(OrgId, ProfileId, Permission, CancellationToken.None);
 
         result.ShouldBe(true);
     }
@@ -255,7 +315,13 @@ public sealed class PermissionCheckerTests
             .Setup(c =>
                 c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<Guid>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
@@ -269,23 +335,40 @@ public sealed class PermissionCheckerTests
             .Setup(c =>
                 c.GetOrSetAsync<Guid>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<Guid>,
+                            CancellationToken,
+                            Task<Guid>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<Guid>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Returns<string, Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>, MaybeValue<Guid>, FusionCacheEntryOptions?, IEnumerable<string>?, CancellationToken>(
-                (_, factory, _, _, _, ct) => new ValueTask<Guid>(factory(null!, ct))
-            );
+            .Returns<
+                string,
+                Func<FusionCacheFactoryExecutionContext<Guid>, CancellationToken, Task<Guid>>,
+                MaybeValue<Guid>,
+                FusionCacheEntryOptions?,
+                IEnumerable<string>?,
+                CancellationToken
+            >((_, factory, _, _, _, ct) => new ValueTask<Guid>(factory(null!, ct)));
 
     private void SetupL2Cache(HashSet<string> permissions) =>
         _cacheMock
             .Setup(c =>
                 c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<HashSet<string>>, CancellationToken, Task<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<HashSet<string>>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
@@ -299,14 +382,29 @@ public sealed class PermissionCheckerTests
             .Setup(c =>
                 c.GetOrSetAsync<HashSet<string>>(
                     It.IsAny<string>(),
-                    It.IsAny<Func<FusionCacheFactoryExecutionContext<HashSet<string>>, CancellationToken, Task<HashSet<string>>>>(),
+                    It.IsAny<
+                        Func<
+                            FusionCacheFactoryExecutionContext<HashSet<string>>,
+                            CancellationToken,
+                            Task<HashSet<string>>
+                        >
+                    >(),
                     It.IsAny<MaybeValue<HashSet<string>>>(),
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<IEnumerable<string>?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
-            .Returns<string, Func<FusionCacheFactoryExecutionContext<HashSet<string>>, CancellationToken, Task<HashSet<string>>>, MaybeValue<HashSet<string>>, FusionCacheEntryOptions?, IEnumerable<string>?, CancellationToken>(
-                (_, factory, _, _, _, ct) => new ValueTask<HashSet<string>>(factory(null!, ct))
-            );
+            .Returns<
+                string,
+                Func<
+                    FusionCacheFactoryExecutionContext<HashSet<string>>,
+                    CancellationToken,
+                    Task<HashSet<string>>
+                >,
+                MaybeValue<HashSet<string>>,
+                FusionCacheEntryOptions?,
+                IEnumerable<string>?,
+                CancellationToken
+            >((_, factory, _, _, _, ct) => new ValueTask<HashSet<string>>(factory(null!, ct)));
 }

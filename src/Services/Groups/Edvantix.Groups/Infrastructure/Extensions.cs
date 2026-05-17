@@ -20,6 +20,5 @@ public static class Extensions
                 services.AddRepositories(typeof(IGroupsApiMarker));
             }
         );
-
     }
 }

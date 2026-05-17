@@ -1,3 +1,6 @@
+using Edvantix.Groups.Infrastructure.PermissionModules;
+using Edvantix.Permissions;
+
 namespace Edvantix.Groups.Infrastructure;
 
 /// <summary>
@@ -11,6 +14,10 @@ public static class Extensions
     public static void AddPersistenceServices(this IHostApplicationBuilder builder)
     {
         var services = builder.Services;
+
+        // Регистрация модулей разрешений: сидер подхватывает их через DI и синкает в Organizational.
+        services.AddSingleton<PermissionModule, LevelPermissionModule>();
+
 
         builder.AddAzurePostgresDbContext<GroupsDbContext>(
             Components.Database.Groups,

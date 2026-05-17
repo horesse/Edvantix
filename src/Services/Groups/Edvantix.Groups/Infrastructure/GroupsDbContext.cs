@@ -1,3 +1,4 @@
+using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
 using Wolverine.EntityFrameworkCore;
 
 namespace Edvantix.Groups.Infrastructure;
@@ -7,6 +8,9 @@ namespace Edvantix.Groups.Infrastructure;
 /// </summary>
 public sealed class GroupsDbContext(DbContextOptions options) : DbContext(options), IUnitOfWork
 {
+    /// <summary>Справочник уровней сложности организации.</summary>
+    public DbSet<Level> Levels { get; init; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

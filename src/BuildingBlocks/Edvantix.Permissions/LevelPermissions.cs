@@ -1,4 +1,4 @@
-namespace Edvantix.Groups.Domain.Permissions;
+namespace Edvantix.Permissions;
 
 /// <summary>
 /// Полные коды разрешений функциональной области "Уровни".

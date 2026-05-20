@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.Permissions;
+namespace Edvantix.Permissions;
 
 /// <summary>
 /// Полные коды разрешений функциональной области "Группы".
@@ -22,9 +22,9 @@ public static class GroupPermissions
     /// <summary>Управление участниками группы.</summary>
     public const string Members = "Group.Members";
 
-    /// <summary>Управление контентом.</summary>
+    /// <summary>Управление учебными материалами группы.</summary>
     public const string Content = "Group.Content";
 
-    /// <summary>Управление расписанием.</summary>
+    /// <summary>Управление расписанием группы.</summary>
     public const string Schedule = "Group.Schedule";
 }

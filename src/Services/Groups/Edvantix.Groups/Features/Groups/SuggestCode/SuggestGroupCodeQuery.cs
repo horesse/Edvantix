@@ -1,7 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
-using Edvantix.Groups.Domain.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Groups.Features.Groups.SuggestCode;
 

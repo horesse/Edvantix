@@ -74,9 +74,9 @@ public static class OrganizationDefaultRolesFactory
         teacher.AssignPermissions(
             Resolve(
                 OrganizationPermissions.View,
-                GroupPermissions.View,
-                GroupPermissions.Content,
-                GroupPermissions.Schedule
+                GroupView,
+                GroupContent,
+                GroupSchedule
             )
         );
 
@@ -108,12 +108,12 @@ public static class OrganizationDefaultRolesFactory
             Resolve(
                 OrganizationPermissions.View,
                 OrganizationPermissions.Groups,
-                GroupPermissions.Create,
-                GroupPermissions.View,
-                GroupPermissions.Edit,
-                GroupPermissions.Members,
-                GroupPermissions.Content,
-                GroupPermissions.Schedule
+                GroupCreate,
+                GroupView,
+                GroupEdit,
+                GroupMembers,
+                GroupContent,
+                GroupSchedule
             )
         );
 
@@ -127,8 +127,8 @@ public static class OrganizationDefaultRolesFactory
             Resolve(
                 OrganizationPermissions.View,
                 OrganizationPermissions.Members,
-                GroupPermissions.View,
-                GroupPermissions.Members
+                GroupView,
+                GroupMembers
             )
         );
 
@@ -157,14 +157,24 @@ public static class OrganizationDefaultRolesFactory
         OrganizationPermissions.Subscription,
     ];
 
+    // Коды разрешений Groups-сервиса. Resolve() возвращает пустой массив,
+    // если разрешение не зарегистрировано в organizationaldb.
+    private const string GroupCreate = "Group.Create";
+    private const string GroupView = "Group.View";
+    private const string GroupEdit = "Group.Edit";
+    private const string GroupDelete = "Group.Delete";
+    private const string GroupMembers = "Group.Members";
+    private const string GroupContent = "Group.Content";
+    private const string GroupSchedule = "Group.Schedule";
+
     private static readonly string[] AllGroupPermissions =
     [
-        GroupPermissions.Create,
-        GroupPermissions.View,
-        GroupPermissions.Edit,
-        GroupPermissions.Delete,
-        GroupPermissions.Members,
-        GroupPermissions.Content,
-        GroupPermissions.Schedule,
+        GroupCreate,
+        GroupView,
+        GroupEdit,
+        GroupDelete,
+        GroupMembers,
+        GroupContent,
+        GroupSchedule,
     ];
 }

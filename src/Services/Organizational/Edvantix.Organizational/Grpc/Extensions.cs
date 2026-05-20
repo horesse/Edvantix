@@ -2,9 +2,7 @@
 using Edvantix.Curriculum.Grpc.Services;
 using Edvantix.Organizational.Grpc.Services.Courses;
 using Edvantix.Organizational.Grpc.Services.Profiles;
-using Edvantix.Organizational.Grpc.Services.Schedules;
 using Edvantix.Persona.Grpc.Services;
-using Edvantix.Schedule.Grpc.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Edvantix.Organizational.Grpc;
@@ -39,17 +37,7 @@ internal static class Extensions
             HealthStatus.Degraded
         );
 
-        services.AddGrpcServiceReference<ScheduleGrpcService.ScheduleGrpcServiceClient>(
-            HttpUtilities
-                .AsUrlBuilder()
-                .WithScheme(builder.GetScheme())
-                .WithHost(Constants.Aspire.Services.Schedule)
-                .Build(),
-            HealthStatus.Degraded
-        );
-
         services.AddSingleton<IProfileService, ProfileService>();
         services.AddSingleton<ICurriculumService, CurriculumService>();
-        services.AddSingleton<IScheduleService, ScheduleService>();
     }
 }

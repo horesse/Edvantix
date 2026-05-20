@@ -1,6 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.GroupAggregate;
-using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
@@ -25,15 +23,8 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
     public DbSet<OrganizationMember> OrganizationMembers => Set<OrganizationMember>();
     public DbSet<OrganizationRole> OrganizationRoles => Set<OrganizationRole>();
 
-    // Group aggregate
-    public DbSet<Group> Groups => Set<Group>();
-    public DbSet<GroupMember> GroupMembers => Set<GroupMember>();
-
     // Room aggregate
     public DbSet<Room> Rooms => Set<Room>();
-
-    // Level aggregate
-    public DbSet<Level> Levels => Set<Level>();
 
     // Invitation aggregate
     public DbSet<Invitation> Invitations => Set<Invitation>();

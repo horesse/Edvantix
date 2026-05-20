@@ -11,8 +11,6 @@ public static class Extensions
 
         // Регистрация модулей разрешений: сидер обнаруживает их через DI.
         services.AddSingleton<PermissionModule, OrganizationPermissionModule>();
-        services.AddSingleton<PermissionModule, GroupPermissionModule>();
-        services.AddSingleton<PermissionModule, LevelPermissionModule>();
 
         builder.AddAzurePostgresDbContext<OrganizationalDbContext>(
             Components.Database.Organizational,

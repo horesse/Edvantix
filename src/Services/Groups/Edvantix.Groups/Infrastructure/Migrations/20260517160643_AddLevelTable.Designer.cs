@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Edvantix.Groups.Migrations
+namespace Edvantix.Groups.Infrastructure.Migrations
 {
     [DbContext(typeof(GroupsDbContext))]
     [Migration("20260517160643_AddLevelTable")]

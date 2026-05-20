@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Edvantix.Groups.Migrations
+namespace Edvantix.Groups.Infrastructure.Migrations
 {
     [DbContext(typeof(GroupsDbContext))]
     partial class GroupsDbContextModelSnapshot : ModelSnapshot

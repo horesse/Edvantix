@@ -15,11 +15,11 @@ public sealed class GroupCodeTests
     }
 
     [Test]
-    public void GivenLowercaseInput_WhenCreatingGroupCode_ThenShouldNormalizeToUppercase()
+    public void GivenLowercaseInput_WhenCreatingGroupCode_ThenShouldThrowArgumentException()
     {
-        var code = GroupCode.From("en-b1-12");
+        var act = () => GroupCode.From("en-b1-12");
 
-        code.Value.ShouldBe("EN-B1-12");
+        act.ShouldThrow<ArgumentException>();
     }
 
     [Test]

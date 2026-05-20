@@ -1,7 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
-using Edvantix.Permissions;
 using Edvantix.Groups.Grpc.Services.Courses;
+using Edvantix.Permissions;
 
 namespace Edvantix.Groups.Features.Groups.Create;
 

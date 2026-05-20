@@ -48,13 +48,16 @@ internal sealed class LevelRepository(GroupsDbContext context) : ILevelRepositor
     }
 
     /// <summary>
-    /// Placeholder: всегда возвращает <c>false</c> до тех пор, пока агрегат Group
-    /// не получит FK-ссылку на Level (Group.LevelId).
+    /// Проверяет, используется ли уровень хотя бы одной активной (не удалённой) группой.
     /// </summary>
-    public Task<bool> IsUsedByGroupsAsync(
+    public async Task<bool> IsUsedByGroupsAsync(
         Guid levelId,
         CancellationToken cancellationToken = default
-    ) => Task.FromResult(false);
+    ) =>
+        await context.Groups.AnyAsync(
+            g => g.LevelId == levelId && !g.IsDeleted,
+            cancellationToken
+        );
 
     public async Task AddAsync(Level level, CancellationToken cancellationToken = default) =>
         await context.Levels.AddAsync(level, cancellationToken);

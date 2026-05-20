@@ -1,3 +1,4 @@
+using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
 using Wolverine.EntityFrameworkCore;
 
@@ -10,6 +11,12 @@ public sealed class GroupsDbContext(DbContextOptions options) : DbContext(option
 {
     /// <summary>Справочник уровней сложности организации.</summary>
     public DbSet<Level> Levels { get; init; } = null!;
+
+    /// <summary>Учебные группы организации.</summary>
+    public DbSet<Group> Groups { get; init; } = null!;
+
+    /// <summary>Участники учебных групп.</summary>
+    public DbSet<GroupMember> GroupMembers { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

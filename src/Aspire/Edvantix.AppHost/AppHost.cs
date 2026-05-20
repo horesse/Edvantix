@@ -108,16 +108,6 @@ var scheduleApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
-var groupsApi = builder
-    .AddProject<Edvantix_Groups>(Services.Groups)
-    .WithKeycloak(keycloak)
-    .WithReference(queue)
-    .WaitFor(queue)
-    .WithReference(groupsDb)
-    .WaitFor(groupsDb)
-    .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
-
 var organizationalApi = builder
     .AddProject<Edvantix_Organizational>(Services.Organisational)
     .WithKeycloak(keycloak)
@@ -128,6 +118,22 @@ var organizationalApi = builder
     .WithReference(redis)
     .WaitFor(redis)
     .WithReference(personaApi)
+    .WithReference(scheduleApi)
+    .WithContainerRegistry(registry)
+    .WithFriendlyUrls();
+
+var groupsApi = builder
+    .AddProject<Edvantix_Groups>(Services.Groups)
+    .WithKeycloak(keycloak)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithReference(groupsDb)
+    .WaitFor(groupsDb)
+    .WithReference(redis)
+    .WaitFor(redis)
+    .WithReference(organizationalApi)
+    .WithReference(personaApi)
+    .WithReference(curriculumApi)
     .WithReference(scheduleApi)
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
@@ -149,6 +155,7 @@ var gateway = builder
     .WithService(auditApi, true)
     .WithService(curriculumApi, true)
     .WithService(scheduleApi, true)
+    .WithService(groupsApi, true)
     .Build();
 
 var turbo = builder

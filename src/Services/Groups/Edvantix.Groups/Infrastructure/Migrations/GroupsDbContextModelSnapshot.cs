@@ -23,6 +23,157 @@ namespace Edvantix.Groups.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Edvantix.Groups.Domain.AggregatesModel.GroupAggregate.Group", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("uuidv7()");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer")
+                        .HasColumnName("capacity");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("code");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("course_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("description");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date")
+                        .HasColumnName("end_date");
+
+                    b.Property<string>("Format")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("format");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted")
+                        .HasComment("Признак удаленной записи");
+
+                    b.Property<Guid>("LevelId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("level_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("organization_id");
+
+                    b.Property<string>("Platform")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("platform");
+
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("room_id");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date")
+                        .HasColumnName("start_date");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("TeacherMemberId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("teacher_member_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_groups");
+
+                    b.HasIndex("CourseId")
+                        .HasDatabaseName("ix_groups_course_id");
+
+                    b.HasIndex("LevelId")
+                        .HasDatabaseName("ix_groups_level_id");
+
+                    b.HasIndex("TeacherMemberId")
+                        .HasDatabaseName("ix_groups_teacher_member_id");
+
+                    b.HasIndex("OrganizationId", "Code")
+                        .IsUnique()
+                        .HasDatabaseName("ix_groups_organization_id_code")
+                        .HasFilter("is_deleted = false");
+
+                    b.HasIndex("OrganizationId", "LevelId", "Status")
+                        .HasDatabaseName("ix_groups_organization_id_level_id_status");
+
+                    b.ToTable("groups", (string)null);
+                });
+
+            modelBuilder.Entity("Edvantix.Groups.Domain.AggregatesModel.GroupAggregate.GroupMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("uuidv7()");
+
+                    b.Property<string>("ExitReason")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("exit_reason");
+
+                    b.Property<DateOnly?>("ExitedAt")
+                        .HasColumnType("date")
+                        .HasColumnName("exited_at");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("group_id");
+
+                    b.Property<DateOnly>("JoinedAt")
+                        .HasColumnType("date")
+                        .HasColumnName("joined_at");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("organization_id");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("role");
+
+                    b.HasKey("Id")
+                        .HasName("pk_group_members");
+
+                    b.HasIndex("GroupId")
+                        .HasDatabaseName("ix_group_members_group_id");
+
+                    b.ToTable("group_members", (string)null);
+                });
+
             modelBuilder.Entity("Edvantix.Groups.Domain.AggregatesModel.LevelAggregate.Level", b =>
                 {
                     b.Property<Guid>("Id")
@@ -182,6 +333,33 @@ namespace Edvantix.Groups.Infrastructure.Migrations
                         {
                             t.ExcludeFromMigrations();
                         });
+                });
+
+            modelBuilder.Entity("Edvantix.Groups.Domain.AggregatesModel.GroupAggregate.Group", b =>
+                {
+                    b.HasOne("Edvantix.Groups.Domain.AggregatesModel.LevelAggregate.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_groups_levels_level_id");
+
+                    b.Navigation("Level");
+                });
+
+            modelBuilder.Entity("Edvantix.Groups.Domain.AggregatesModel.GroupAggregate.GroupMember", b =>
+                {
+                    b.HasOne("Edvantix.Groups.Domain.AggregatesModel.GroupAggregate.Group", null)
+                        .WithMany("Members")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_group_members_groups_group_id");
+                });
+
+            modelBuilder.Entity("Edvantix.Groups.Domain.AggregatesModel.GroupAggregate.Group", b =>
+                {
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

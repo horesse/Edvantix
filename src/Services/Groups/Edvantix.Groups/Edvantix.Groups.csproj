@@ -2,6 +2,7 @@
   <ItemGroup Label="Core Dependencies">
     <PackageReference Include="WolverineFx.EntityFrameworkCore" />
     <PackageReference Include="WolverineFx.Postgresql" />
+    <PackageReference Include="Aspire.Microsoft.Azure.StackExchangeRedis" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
     <PackageReference Include="Mediator.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Grpc.Tools" PrivateAssets="All" />
@@ -10,6 +11,21 @@
     <Protobuf
       Include="..\..\Organizational\Edvantix.Organizational\Grpc\Protos\permission\v1\permission.proto"
       Link="Grpc\Protos\organisational\v1\permission.proto"
+      GrpcServices="Client"
+    />
+    <Protobuf
+      Include="..\..\Persona\Edvantix.Persona\Grpc\Protos\profile\v1\profile.proto"
+      Link="Grpc\Protos\persona\v1\profile.proto"
+      GrpcServices="Client"
+    />
+    <Protobuf
+      Include="..\..\Curriculum\Edvantix.Curriculum\Grpc\Protos\curriculum\v1\curriculum.proto"
+      Link="Grpc\Protos\curriculum\v1\curriculum.proto"
+      GrpcServices="Client"
+    />
+    <Protobuf
+      Include="..\..\Schedule\Edvantix.Schedule\Grpc\Protos\schedule\v1\schedule.proto"
+      Link="Grpc\Protos\schedule\v1\schedule.proto"
       GrpcServices="Client"
     />
   </ItemGroup>

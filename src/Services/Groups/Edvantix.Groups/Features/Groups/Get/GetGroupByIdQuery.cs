@@ -1,6 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
-using Edvantix.Groups.Domain.Permissions;
+using Edvantix.Permissions;
 using Edvantix.Groups.Grpc.Services.Courses;
 using Edvantix.Groups.Grpc.Services.Schedules;
 

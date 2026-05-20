@@ -1,5 +1,6 @@
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
@@ -74,9 +75,9 @@ public static class OrganizationDefaultRolesFactory
         teacher.AssignPermissions(
             Resolve(
                 OrganizationPermissions.View,
-                GroupView,
-                GroupContent,
-                GroupSchedule
+                GroupPermissions.View,
+                GroupPermissions.Content,
+                GroupPermissions.Schedule
             )
         );
 
@@ -108,12 +109,12 @@ public static class OrganizationDefaultRolesFactory
             Resolve(
                 OrganizationPermissions.View,
                 OrganizationPermissions.Groups,
-                GroupCreate,
-                GroupView,
-                GroupEdit,
-                GroupMembers,
-                GroupContent,
-                GroupSchedule
+                GroupPermissions.Create,
+                GroupPermissions.View,
+                GroupPermissions.Edit,
+                GroupPermissions.Members,
+                GroupPermissions.Content,
+                GroupPermissions.Schedule
             )
         );
 
@@ -127,8 +128,8 @@ public static class OrganizationDefaultRolesFactory
             Resolve(
                 OrganizationPermissions.View,
                 OrganizationPermissions.Members,
-                GroupView,
-                GroupMembers
+                GroupPermissions.View,
+                GroupPermissions.Members
             )
         );
 
@@ -157,24 +158,14 @@ public static class OrganizationDefaultRolesFactory
         OrganizationPermissions.Subscription,
     ];
 
-    // Коды разрешений Groups-сервиса. Resolve() возвращает пустой массив,
-    // если разрешение не зарегистрировано в organizationaldb.
-    private const string GroupCreate = "Group.Create";
-    private const string GroupView = "Group.View";
-    private const string GroupEdit = "Group.Edit";
-    private const string GroupDelete = "Group.Delete";
-    private const string GroupMembers = "Group.Members";
-    private const string GroupContent = "Group.Content";
-    private const string GroupSchedule = "Group.Schedule";
-
     private static readonly string[] AllGroupPermissions =
     [
-        GroupCreate,
-        GroupView,
-        GroupEdit,
-        GroupDelete,
-        GroupMembers,
-        GroupContent,
-        GroupSchedule,
+        GroupPermissions.Create,
+        GroupPermissions.View,
+        GroupPermissions.Edit,
+        GroupPermissions.Delete,
+        GroupPermissions.Members,
+        GroupPermissions.Content,
+        GroupPermissions.Schedule,
     ];
 }

@@ -16,18 +16,21 @@ public sealed class CreateGroupValidatorTests
         _levelRepoMock
             .Setup(r => r.GetByIdAsync(_validLevelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(
-                new Level(_organizationId, LevelCode.From("B1"), "B1 Level", null, LevelTone.Blue, 1)
+                new Level(
+                    _organizationId,
+                    LevelCode.From("B1"),
+                    "B1 Level",
+                    null,
+                    LevelTone.Blue,
+                    1
+                )
             );
 
         _curriculumMock
             .Setup(s => s.GetCourseByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new CourseInfo { OrganizationId = _organizationId.ToString() });
 
-        _validator = new(
-            _levelRepoMock.Object,
-            _curriculumMock.Object,
-            _tenantMock.Object
-        );
+        _validator = new(_levelRepoMock.Object, _curriculumMock.Object, _tenantMock.Object);
     }
 
     [Test]

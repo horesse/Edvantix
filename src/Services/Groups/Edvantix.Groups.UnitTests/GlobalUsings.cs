@@ -38,6 +38,6 @@ global using Edvantix.Persona.Grpc.Services;
 global using Edvantix.SharedKernel.Results;
 global using FluentValidation.TestHelper;
 global using Mediator;
-global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.Routing;

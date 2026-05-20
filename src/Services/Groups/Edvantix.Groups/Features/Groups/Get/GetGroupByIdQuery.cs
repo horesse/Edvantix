@@ -31,9 +31,16 @@ internal sealed class GetGroupByIdQueryHandler(
         var dto = mapper.Map(group);
 
         // Параллельный fan-out: данные для курса и расписания запрашиваются одновременно.
-        var coursesTask = curriculumService.GetCoursesByIdsAsync([group.CourseId], cancellationToken);
+        var coursesTask = curriculumService.GetCoursesByIdsAsync(
+            [group.CourseId],
+            cancellationToken
+        );
         var scheduleTask = scheduleService.GetScheduleByGroupIdAsync(group.Id, cancellationToken);
-        var upcomingTask = scheduleService.GetUpcomingLessonsAsync(group.Id, count: 5, cancellationToken);
+        var upcomingTask = scheduleService.GetUpcomingLessonsAsync(
+            group.Id,
+            count: 5,
+            cancellationToken
+        );
 
         await Task.WhenAll(coursesTask, scheduleTask, upcomingTask);
 

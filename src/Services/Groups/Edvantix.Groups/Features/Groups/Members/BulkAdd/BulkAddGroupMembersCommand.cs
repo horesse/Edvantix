@@ -41,10 +41,12 @@ internal sealed class BulkAddGroupMembersCommandHandler(
         {
             if (item.JoinedAt < group.StartDate)
             {
-                failed.Add(new BulkAddFailure(
-                    item.ProfileId,
-                    $"Дата вступления не может быть раньше даты начала группы ({group.StartDate:dd.MM.yyyy})."
-                ));
+                failed.Add(
+                    new BulkAddFailure(
+                        item.ProfileId,
+                        $"Дата вступления не может быть раньше даты начала группы ({group.StartDate:dd.MM.yyyy})."
+                    )
+                );
                 continue;
             }
 

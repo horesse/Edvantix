@@ -54,10 +54,7 @@ internal sealed class LevelRepository(GroupsDbContext context) : ILevelRepositor
         Guid levelId,
         CancellationToken cancellationToken = default
     ) =>
-        await context.Groups.AnyAsync(
-            g => g.LevelId == levelId && !g.IsDeleted,
-            cancellationToken
-        );
+        await context.Groups.AnyAsync(g => g.LevelId == levelId && !g.IsDeleted, cancellationToken);
 
     public async Task AddAsync(Level level, CancellationToken cancellationToken = default) =>
         await context.Levels.AddAsync(level, cancellationToken);

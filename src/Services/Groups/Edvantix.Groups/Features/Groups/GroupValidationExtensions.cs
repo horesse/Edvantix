@@ -36,13 +36,15 @@ internal static class GroupValidationExtensions
         ILevelRepository levels,
         ITenantContext tenantContext
     ) =>
-        rule.MustAsync(async (id, ct) =>
-        {
-            var level = await levels.GetByIdAsync(id, ct);
-            return level is not null
-                && level.OrganizationId == tenantContext.OrganizationId
-                && level.IsActive
-                && !level.IsDeleted;
-        })
-        .WithMessage("Уровень не найден или не принадлежит текущей организации.");
+        rule.MustAsync(
+                async (id, ct) =>
+                {
+                    var level = await levels.GetByIdAsync(id, ct);
+                    return level is not null
+                        && level.OrganizationId == tenantContext.OrganizationId
+                        && level.IsActive
+                        && !level.IsDeleted;
+                }
+            )
+            .WithMessage("Уровень не найден или не принадлежит текущей организации.");
 }

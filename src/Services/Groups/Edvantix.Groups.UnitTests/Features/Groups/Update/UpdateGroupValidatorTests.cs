@@ -15,7 +15,14 @@ public sealed class UpdateGroupValidatorTests
         _levelRepoMock
             .Setup(r => r.GetByIdAsync(_validLevelId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(
-                new Level(_organizationId, LevelCode.From("B1"), "B1 Level", null, LevelTone.Blue, 1)
+                new Level(
+                    _organizationId,
+                    LevelCode.From("B1"),
+                    "B1 Level",
+                    null,
+                    LevelTone.Blue,
+                    1
+                )
             );
 
         _validator = new(_levelRepoMock.Object, _tenantMock.Object);

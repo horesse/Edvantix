@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using Edvantix.Chassis.Security.Keycloak;
+
 namespace Edvantix.Organizational.UnitTests.Features.Organizations.Update;
 
 public sealed class UpdateOrganizationCommandHandlerTests
@@ -7,6 +10,7 @@ public sealed class UpdateOrganizationCommandHandlerTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly UpdateOrganizationCommandHandler _handler;
     private readonly Guid _organizationId = Guid.CreateVersion7();
+    private readonly Guid _profileId = Guid.CreateVersion7();
 
     private static readonly Guid ValidCountryId = Guid.CreateVersion7();
     private static readonly Guid ValidCurrencyId = Guid.CreateVersion7();
@@ -19,7 +23,11 @@ public sealed class UpdateOrganizationCommandHandlerTests
             .ReturnsAsync(true);
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
 
-        _handler = new(_repoMock.Object, _tenantMock.Object);
+        var claims = new ClaimsPrincipal(
+            new ClaimsIdentity([new Claim(KeycloakClaimTypes.Profile, _profileId.ToString())])
+        );
+
+        _handler = new(_repoMock.Object, _tenantMock.Object, claims);
     }
 
     [Test]
@@ -51,6 +59,19 @@ public sealed class UpdateOrganizationCommandHandlerTests
         org.LegalForm.ShouldBe(LegalForm.Ojsc);
         org.RegistrationDate.ShouldBe(newDate);
         org.LastModifiedAt.ShouldNotBeNull();
+    }
+
+    [Test]
+    public async Task GivenExistingOrganization_WhenHandling_ThenShouldSetLastModifiedBy()
+    {
+        var org = CreateOrganization();
+        _repoMock
+            .Setup(r => r.GetByIdAsync(_organizationId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(org);
+
+        await _handler.Handle(BuildValidCommand(_organizationId), CancellationToken.None);
+
+        org.LastModifiedBy.ShouldBe(_profileId);
     }
 
     [Test]

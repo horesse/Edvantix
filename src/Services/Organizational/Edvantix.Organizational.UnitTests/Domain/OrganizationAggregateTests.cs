@@ -113,7 +113,8 @@ public sealed class OrganizationAggregateTests
             "НовНаз",
             OrganizationType.University,
             LegalForm.Ojsc,
-            newDate
+            newDate,
+            Guid.CreateVersion7()
         );
 
         org.FullLegalName.ShouldBe("АО Новое Название");
@@ -133,7 +134,8 @@ public sealed class OrganizationAggregateTests
             "НовНаз",
             OrganizationType.University,
             LegalForm.Ojsc,
-            new DateOnly(2022, 6, 1)
+            new DateOnly(2022, 6, 1),
+            Guid.CreateVersion7()
         );
 
         org.DomainEvents.ShouldHaveSingleItem();
@@ -157,7 +159,8 @@ public sealed class OrganizationAggregateTests
                 null,
                 OrganizationType.PrivateEducationalCenter,
                 LegalForm.Llc,
-                new DateOnly(2020, 1, 15)
+                new DateOnly(2020, 1, 15),
+                Guid.CreateVersion7()
             );
 
         act.ShouldThrow<ArgumentException>();

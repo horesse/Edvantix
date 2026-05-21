@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Edvantix.Chassis.CQRS;
+using Edvantix.Chassis.Utilities;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 
@@ -20,7 +22,8 @@ public sealed record UpdateOrganizationCommand(
 
 internal sealed class UpdateOrganizationCommandHandler(
     IOrganizationRepository repository,
-    ITenantContext tenantContext
+    ITenantContext tenantContext,
+    ClaimsPrincipal claims
 ) : ICommandHandler<UpdateOrganizationCommand>
 {
     public async ValueTask<Unit> Handle(
@@ -34,12 +37,15 @@ internal sealed class UpdateOrganizationCommandHandler(
         var organization = await repository.GetByIdAsync(command.Id, cancellationToken);
         Guard.Against.NotFound(organization, command.Id);
 
+        var modifiedBy = claims.GetProfileIdOrError();
+
         organization.Update(
             command.FullLegalName,
             command.ShortName,
             command.OrganizationType,
             command.LegalForm,
-            command.RegistrationDate
+            command.RegistrationDate,
+            modifiedBy
         );
 
         organization.UpdatePrimaryContact(

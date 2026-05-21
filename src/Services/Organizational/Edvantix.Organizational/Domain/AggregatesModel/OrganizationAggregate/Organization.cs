@@ -91,6 +91,9 @@ public sealed class Organization() : AuditableEntity, IAggregateRoot, ISoftDelet
     /// <summary>Текущий жизненный статус организации.</summary>
     public OrganizationStatus Status { get; private set; }
 
+    /// <summary>Идентификатор профиля пользователя, выполнившего последнее изменение.</summary>
+    public Guid? LastModifiedBy { get; private set; }
+
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
@@ -135,12 +138,14 @@ public sealed class Organization() : AuditableEntity, IAggregateRoot, ISoftDelet
     }
 
     /// <summary>Обновляет основные реквизиты организации.</summary>
+    /// <param name="modifiedBy">Идентификатор профиля пользователя, выполняющего изменение.</param>
     public void Update(
         string fullLegalName,
         string? shortName,
         OrganizationType organizationType,
         LegalForm legalForm,
-        DateOnly registrationDate
+        DateOnly registrationDate,
+        Guid modifiedBy
     )
     {
         Guard.Against.NullOrWhiteSpace(fullLegalName, nameof(fullLegalName));
@@ -150,6 +155,7 @@ public sealed class Organization() : AuditableEntity, IAggregateRoot, ISoftDelet
         LegalForm = legalForm;
         RegistrationDate = registrationDate;
         LastModifiedAt = DateTimeHelper.UtcNow();
+        LastModifiedBy = modifiedBy;
 
         RegisterDomainEvent(new OrganizationUpdatedDomainEvent(Id));
     }

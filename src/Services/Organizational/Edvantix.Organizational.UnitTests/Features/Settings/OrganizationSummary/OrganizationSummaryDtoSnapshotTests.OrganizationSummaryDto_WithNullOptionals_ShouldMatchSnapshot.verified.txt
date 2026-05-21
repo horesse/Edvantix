@@ -1,0 +1,7 @@
+﻿{
+  Id: Guid_1,
+  FullLegalName: ИП Петров,
+  OrganizationType: IndividualEntrepreneur,
+  IsLegalEntity: false,
+  LastModified: {}
+}

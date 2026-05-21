@@ -21,7 +21,7 @@ public sealed class OrganizationUpdatedDomainEventHandlerTests
     }
 
     [Test]
-    public async Task GivenValidEvent_WhenHandling_ThenShouldRemoveCacheEntryWithCorrectKey()
+    public async Task GivenValidEvent_WhenHandling_ThenShouldRemoveDetailCacheEntry()
     {
         var orgId = Guid.CreateVersion7();
         var @event = new OrganizationUpdatedDomainEvent(orgId);
@@ -40,7 +40,7 @@ public sealed class OrganizationUpdatedDomainEventHandlerTests
     }
 
     [Test]
-    public async Task GivenValidEvent_WhenHandling_ThenShouldNotRemoveOtherCacheEntries()
+    public async Task GivenValidEvent_WhenHandling_ThenShouldRemoveSummaryCacheEntry()
     {
         var orgId = Guid.CreateVersion7();
         var @event = new OrganizationUpdatedDomainEvent(orgId);
@@ -50,11 +50,30 @@ public sealed class OrganizationUpdatedDomainEventHandlerTests
         _cacheMock.Verify(
             c =>
                 c.RemoveAsync(
-                    It.Is<string>(k => k != $"organization:{orgId}"),
+                    $"org:{orgId}:summary",
                     It.IsAny<FusionCacheEntryOptions?>(),
                     It.IsAny<CancellationToken>()
                 ),
-            Times.Never
+            Times.Once
+        );
+    }
+
+    [Test]
+    public async Task GivenValidEvent_WhenHandling_ThenShouldRemoveExactlyTwoCacheEntries()
+    {
+        var orgId = Guid.CreateVersion7();
+        var @event = new OrganizationUpdatedDomainEvent(orgId);
+
+        await _handler.Handle(@event, CancellationToken.None);
+
+        _cacheMock.Verify(
+            c =>
+                c.RemoveAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<FusionCacheEntryOptions?>(),
+                    It.IsAny<CancellationToken>()
+                ),
+            Times.Exactly(2)
         );
     }
 }

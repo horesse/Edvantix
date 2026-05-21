@@ -15,7 +15,11 @@ internal sealed class OrganizationUpdatedDomainEventHandler(IFusionCache cache)
         CancellationToken cancellationToken
     )
     {
-        var key = $"{nameof(Organization).ToLowerInvariant()}:{notification.OrganizationId}";
-        await cache.RemoveAsync(key, token: cancellationToken);
+        var id = notification.OrganizationId;
+        var detailKey = $"{nameof(Organization).ToLowerInvariant()}:{id}";
+        var summaryKey = $"org:{id}:summary";
+
+        await cache.RemoveAsync(detailKey, token: cancellationToken);
+        await cache.RemoveAsync(summaryKey, token: cancellationToken);
     }
 }

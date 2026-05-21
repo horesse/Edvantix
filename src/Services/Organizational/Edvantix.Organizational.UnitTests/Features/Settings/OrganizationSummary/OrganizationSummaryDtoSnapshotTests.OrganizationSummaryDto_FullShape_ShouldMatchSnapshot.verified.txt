@@ -1,0 +1,18 @@
+﻿{
+  Id: Guid_1,
+  FullLegalName: ООО Образовательный центр «Знание»,
+  ShortName: ОЦ Знание,
+  OrganizationType: PrivateEducationalCenter,
+  IsLegalEntity: true,
+  MembersCount: 25,
+  PrimaryContact: {
+    Id: Guid_2,
+    Value: info@znanie.ru,
+    Description: Основной email,
+    IsPrimary: true
+  },
+  LastModified: {
+    At: DateTime_1,
+    ByDisplayName: Иван Иванов
+  }
+}

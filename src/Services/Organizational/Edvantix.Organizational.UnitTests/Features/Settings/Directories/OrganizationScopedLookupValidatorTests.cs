@@ -21,7 +21,12 @@ public sealed class OrganizationScopedLookupValidatorTests
         var mock = new Mock<IUniqueNameChecker>();
         mock.SetupGet(x => x.DirectoryCode).Returns("test-directory");
         mock.Setup(x =>
-                x.ExistsAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Guid?>(), It.IsAny<CancellationToken>())
+                x.ExistsAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<Guid?>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(exists);
         return (new FakeValidator(mock.Object), mock);
@@ -46,7 +51,9 @@ public sealed class OrganizationScopedLookupValidatorTests
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(OrganizationScopedLookupValidator<FakeCommand>.OrganizationIdProperty);
+        result.ShouldHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<FakeCommand>.OrganizationIdProperty
+        );
     }
 
     [Test]
@@ -60,7 +67,9 @@ public sealed class OrganizationScopedLookupValidatorTests
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(OrganizationScopedLookupValidator<FakeCommand>.NameProperty);
+        result.ShouldHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<FakeCommand>.NameProperty
+        );
     }
 
     [Test]
@@ -72,7 +81,9 @@ public sealed class OrganizationScopedLookupValidatorTests
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(OrganizationScopedLookupValidator<FakeCommand>.NameProperty);
+        result.ShouldHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<FakeCommand>.NameProperty
+        );
     }
 
     [Test]
@@ -83,7 +94,9 @@ public sealed class OrganizationScopedLookupValidatorTests
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(OrganizationScopedLookupValidator<FakeCommand>.NameProperty);
+        result.ShouldHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<FakeCommand>.NameProperty
+        );
         mock.Verify(
             x => x.ExistsAsync(OrgId, "Дубликат", null, It.IsAny<CancellationToken>()),
             Times.Once
@@ -114,7 +127,9 @@ public sealed class OrganizationScopedLookupValidatorTests
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldNotHaveValidationErrorFor(OrganizationScopedLookupValidator<FakeCommand>.NameProperty);
+        result.ShouldNotHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<FakeCommand>.NameProperty
+        );
     }
 
     [Test]
@@ -126,7 +141,13 @@ public sealed class OrganizationScopedLookupValidatorTests
         await validator.TestValidateAsync(command);
 
         mock.Verify(
-            x => x.ExistsAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Guid?>(), It.IsAny<CancellationToken>()),
+            x =>
+                x.ExistsAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<Guid?>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Never
         );
     }

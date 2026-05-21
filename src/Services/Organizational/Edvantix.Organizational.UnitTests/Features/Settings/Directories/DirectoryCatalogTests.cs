@@ -31,7 +31,11 @@ public sealed class DirectoryCatalogTests
     [Test]
     public void DirectoryCatalogAll_ShouldHaveUniqueCodes()
     {
-        DirectoryCatalog.All.Select(d => d.Code).Distinct(StringComparer.Ordinal).Count().ShouldBe(8);
+        DirectoryCatalog
+            .All.Select(d => d.Code)
+            .Distinct(StringComparer.Ordinal)
+            .Count()
+            .ShouldBe(8);
     }
 
     [Test]

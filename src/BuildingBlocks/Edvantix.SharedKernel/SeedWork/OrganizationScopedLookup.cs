@@ -12,10 +12,7 @@ namespace Edvantix.SharedKernel.SeedWork;
 ///   <item>Архивирование/восстановление — идемпотентны (повторный вызов — no-op).</item>
 /// </list>
 /// </summary>
-public abstract class OrganizationScopedLookup
-    : AuditableEntity<Guid>,
-        IAggregateRoot,
-        ITenanted
+public abstract class OrganizationScopedLookup : AuditableEntity<Guid>, IAggregateRoot, ITenanted
 {
     /// <summary>Минимальная длина имени после <c>Trim</c>.</summary>
     public const int MinNameLength = 1;

@@ -37,20 +37,8 @@ public static class DirectoryCatalog
 
     private static readonly DirectoryDescriptor[] OrderedDescriptors =
     [
-        new(
-            Levels,
-            "Уровни",
-            "Уровни обучения для групп и курсов.",
-            "Layers",
-            Badge: null
-        ),
-        new(
-            Subjects,
-            "Предметы",
-            "Учебные предметы и направления.",
-            "BookOpen",
-            Badge: null
-        ),
+        new(Levels, "Уровни", "Уровни обучения для групп и курсов.", "Layers", Badge: null),
+        new(Subjects, "Предметы", "Учебные предметы и направления.", "BookOpen", Badge: null),
         new(
             LessonTypes,
             "Типы занятий",

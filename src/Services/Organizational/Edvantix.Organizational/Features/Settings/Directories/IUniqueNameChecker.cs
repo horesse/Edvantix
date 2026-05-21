@@ -17,10 +17,5 @@ public interface IUniqueNameChecker
     /// <param name="name">Имя для проверки (уже <c>Trim</c>-нутое).</param>
     /// <param name="excludeId">Идентификатор записи, исключаемой из проверки (для сценария update).</param>
     /// <param name="ct">Токен отмены.</param>
-    Task<bool> ExistsAsync(
-        Guid organizationId,
-        string name,
-        Guid? excludeId,
-        CancellationToken ct
-    );
+    Task<bool> ExistsAsync(Guid organizationId, string name, Guid? excludeId, CancellationToken ct);
 }

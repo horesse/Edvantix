@@ -2,8 +2,7 @@ using Edvantix.Constants.Core;
 
 namespace Edvantix.Organizational.Features.Settings.OrganizationSummary;
 
-public sealed class GetOrganizationSummaryEndpoint
-    : IEndpoint<Ok<OrganizationSummaryDto>, ISender>
+public sealed class GetOrganizationSummaryEndpoint : IEndpoint<Ok<OrganizationSummaryDto>, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

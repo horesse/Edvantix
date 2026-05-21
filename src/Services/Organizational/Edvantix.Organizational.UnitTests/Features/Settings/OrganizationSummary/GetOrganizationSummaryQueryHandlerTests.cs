@@ -36,13 +36,22 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
     public async Task GivenOrganizationWithPrimaryContact_WhenQuerying_ThenShouldReturnPrimaryContact()
     {
         var org = CreateOrganization();
-        var contact = new Contact(org.Id, "info@test.ru", "Основной", ContactType.Email, isPrimary: true);
+        var contact = new Contact(
+            org.Id,
+            "info@test.ru",
+            "Основной",
+            ContactType.Email,
+            isPrimary: true
+        );
         org.AddContact(contact);
 
         SetupRepo(org);
         SetupMembersCount(5);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.PrimaryContact.ShouldNotBeNull();
         result.PrimaryContact!.Value.ShouldBe("info@test.ru");
@@ -53,13 +62,26 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
     public async Task GivenOrganizationWithMultipleContacts_WhenQuerying_ThenShouldReturnOnlyPrimary()
     {
         var org = CreateOrganization();
-        org.AddContact(new Contact(org.Id, "other@test.ru", "Вторичный", ContactType.Email, isPrimary: false));
-        org.AddContact(new Contact(org.Id, "+79001234567", "Основной телефон", ContactType.MobilePhone, isPrimary: true));
+        org.AddContact(
+            new Contact(org.Id, "other@test.ru", "Вторичный", ContactType.Email, isPrimary: false)
+        );
+        org.AddContact(
+            new Contact(
+                org.Id,
+                "+79001234567",
+                "Основной телефон",
+                ContactType.MobilePhone,
+                isPrimary: true
+            )
+        );
 
         SetupRepo(org);
         SetupMembersCount(0);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.PrimaryContact.ShouldNotBeNull();
         result.PrimaryContact!.ContactType.ShouldBe(ContactType.MobilePhone);
@@ -72,7 +94,10 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
         SetupRepo(org);
         SetupMembersCount(0);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.LastModified.ByDisplayName.ShouldBeNull();
         _profileServiceMock.Verify(
@@ -91,10 +116,15 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
 
         var profileResponse = new GetProfileResponse { FullName = "Иван Иванов" };
         _profileServiceMock
-            .Setup(p => p.GetProfileByIdAsync(profileId.ToString("D"), It.IsAny<CancellationToken>()))
+            .Setup(p =>
+                p.GetProfileByIdAsync(profileId.ToString("D"), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(profileResponse);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.LastModified.ByDisplayName.ShouldBe("Иван Иванов");
     }
@@ -108,10 +138,15 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
         SetupMembersCount(0);
 
         _profileServiceMock
-            .Setup(p => p.GetProfileByIdAsync(profileId.ToString("D"), It.IsAny<CancellationToken>()))
+            .Setup(p =>
+                p.GetProfileByIdAsync(profileId.ToString("D"), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync((GetProfileResponse?)null);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.LastModified.ByDisplayName.ShouldBe("Удалённый пользователь");
     }
@@ -123,7 +158,10 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
         SetupRepo(org);
         SetupMembersCount(0);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.MembersCount.ShouldBe(0);
     }
@@ -135,7 +173,10 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
         SetupRepo(org);
         SetupMembersCount(42);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.MembersCount.ShouldBe(42);
     }
@@ -147,7 +188,10 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
         SetupRepo(org);
         SetupMembersCount(1);
 
-        var result = await _handler.Handle(new GetOrganizationSummaryQuery(), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetOrganizationSummaryQuery(),
+            CancellationToken.None
+        );
 
         result.Id.ShouldBe(_orgId);
         result.FullLegalName.ShouldBe("ООО Тестовая Компания");
@@ -177,7 +221,12 @@ public sealed class GetOrganizationSummaryQueryHandlerTests : IDisposable
 
     private void SetupMembersCount(int count) =>
         _memberRepoMock
-            .Setup(r => r.CountAsync(It.IsAny<ISpecification<OrganizationMember>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(count);
 
     private Organization CreateOrganization() =>

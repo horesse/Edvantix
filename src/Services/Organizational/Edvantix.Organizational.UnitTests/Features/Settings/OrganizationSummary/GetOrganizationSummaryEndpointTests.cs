@@ -11,7 +11,9 @@ public sealed class GetOrganizationSummaryEndpointTests
     public async Task GivenValidRequest_WhenHandling_ThenShouldCallSenderOnce()
     {
         _senderMock
-            .Setup(s => s.Send(It.IsAny<GetOrganizationSummaryQuery>(), It.IsAny<CancellationToken>()))
+            .Setup(s =>
+                s.Send(It.IsAny<GetOrganizationSummaryQuery>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(CreateSummaryDto());
 
         await _endpoint.HandleAsync(_senderMock.Object);
@@ -27,7 +29,9 @@ public sealed class GetOrganizationSummaryEndpointTests
     {
         var dto = CreateSummaryDto();
         _senderMock
-            .Setup(s => s.Send(It.IsAny<GetOrganizationSummaryQuery>(), It.IsAny<CancellationToken>()))
+            .Setup(s =>
+                s.Send(It.IsAny<GetOrganizationSummaryQuery>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(dto);
 
         var result = await _endpoint.HandleAsync(_senderMock.Object);

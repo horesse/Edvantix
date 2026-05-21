@@ -42,10 +42,7 @@ internal sealed class GetOrganizationSummaryQueryHandler(
                 );
                 var membersCount = await memberRepository.CountAsync(countSpec, ct);
 
-                var displayName = await ResolveLastModifiedByAsync(
-                    organization.LastModifiedBy,
-                    ct
-                );
+                var displayName = await ResolveLastModifiedByAsync(organization.LastModifiedBy, ct);
 
                 var primaryContact = organization.Contacts.FirstOrDefault(c => c.IsPrimary);
 

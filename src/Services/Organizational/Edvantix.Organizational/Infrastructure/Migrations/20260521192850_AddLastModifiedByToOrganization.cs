@@ -15,15 +15,14 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                 name: "last_modified_by",
                 table: "organizations",
                 type: "uuid",
-                nullable: true);
+                nullable: true
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "last_modified_by",
-                table: "organizations");
+            migrationBuilder.DropColumn(name: "last_modified_by", table: "organizations");
         }
     }
 }

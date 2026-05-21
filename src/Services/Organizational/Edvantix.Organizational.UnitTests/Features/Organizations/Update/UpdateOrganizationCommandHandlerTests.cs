@@ -24,9 +24,7 @@ public sealed class UpdateOrganizationCommandHandlerTests
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
 
         var claims = new ClaimsPrincipal(
-            new ClaimsIdentity(
-                [new Claim(KeycloakClaimTypes.Profile, _profileId.ToString())]
-            )
+            new ClaimsIdentity([new Claim(KeycloakClaimTypes.Profile, _profileId.ToString())])
         );
 
         _handler = new(_repoMock.Object, _tenantMock.Object, claims);

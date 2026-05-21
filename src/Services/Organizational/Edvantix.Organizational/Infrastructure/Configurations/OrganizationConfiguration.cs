@@ -16,6 +16,8 @@ internal sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organ
 
         builder.Property(p => p.LastModifiedAt).HasDefaultValueSql(DateTimeHelper.SqlUtcNow);
 
+        builder.Property(p => p.LastModifiedBy);
+
         builder.Property(p => p.RowVersion).IsRowVersion();
 
         builder

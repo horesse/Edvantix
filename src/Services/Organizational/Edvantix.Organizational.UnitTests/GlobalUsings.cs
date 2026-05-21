@@ -43,6 +43,7 @@ global using Edvantix.Organizational.Features.Rooms.Update;
 global using Edvantix.Organizational.Grpc.Services.Courses;
 global using Edvantix.Organizational.Grpc.Services.Profiles;
 global using Edvantix.Persona.Grpc.Services;
+global using Edvantix.Organizational.Features.Settings.OrganizationSummary;
 global using Edvantix.SharedKernel.Results;
 global using FluentValidation.TestHelper;
 global using Mediator;

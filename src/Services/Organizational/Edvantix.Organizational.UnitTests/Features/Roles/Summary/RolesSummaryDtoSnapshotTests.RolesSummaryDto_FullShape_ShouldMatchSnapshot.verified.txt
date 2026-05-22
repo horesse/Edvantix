@@ -1,0 +1,11 @@
+{
+  TotalRoles: 7,
+  AssignedMembersCount: 5,
+  RoleNamesPreview: [
+    Владелец,
+    Директор,
+    Преподаватель,
+    Администратор,
+    Методист
+  ]
+}

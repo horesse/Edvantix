@@ -34,6 +34,7 @@ global using Edvantix.Organizational.Features.Roles.Create;
 global using Edvantix.Organizational.Features.Roles.Delete;
 global using Edvantix.Organizational.Features.Roles.Get;
 global using Edvantix.Organizational.Features.Roles.List;
+global using Edvantix.Organizational.Features.Roles.Summary;
 global using Edvantix.Organizational.Features.Roles.Update;
 global using Edvantix.Organizational.Features.Rooms;
 global using Edvantix.Organizational.Features.Rooms.Create;

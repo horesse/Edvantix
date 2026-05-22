@@ -49,8 +49,8 @@ public sealed class GetDirectoriesEndpointTests
     }
 
     private static IReadOnlyList<DirectorySummaryDto> CreateSampleCatalog() =>
-        DirectoryCatalog.All
-            .Select(d => new DirectorySummaryDto(
+        DirectoryCatalog
+            .All.Select(d => new DirectorySummaryDto(
                 d.Code,
                 d.Name,
                 d.Description,

@@ -129,8 +129,8 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
     [Test]
     public async Task GivenAllProvidersRegistered_WhenQuerying_ThenShouldReturnExactly8Items()
     {
-        var providerMocks = DirectoryCatalog.All
-            .Select(d => CreateProviderMock(d, new DirectoryStats(1, 0, null, true)))
+        var providerMocks = DirectoryCatalog
+            .All.Select(d => CreateProviderMock(d, new DirectoryStats(1, 0, null, true)))
             .ToArray();
         var handler = BuildHandler(providerMocks.Select(m => m.Object).ToList());
 
@@ -174,8 +174,7 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
     {
         var mock = new Mock<IDirectoryStatsProvider>();
         mock.Setup(p => p.Descriptor).Returns(descriptor);
-        mock.Setup(p => p.GetStatsAsync(_orgId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(stats);
+        mock.Setup(p => p.GetStatsAsync(_orgId, It.IsAny<CancellationToken>())).ReturnsAsync(stats);
         return mock;
     }
 }

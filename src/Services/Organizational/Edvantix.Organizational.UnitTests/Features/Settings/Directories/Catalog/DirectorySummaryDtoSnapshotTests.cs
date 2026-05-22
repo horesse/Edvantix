@@ -13,8 +13,8 @@ public sealed class DirectorySummaryDtoSnapshotTests
     [Test]
     public Task DirectorySummaryDto_AllStubs_ShouldMatchSnapshot()
     {
-        var items = DirectoryCatalog.All
-            .Select(d => new DirectorySummaryDto(
+        var items = DirectoryCatalog
+            .All.Select(d => new DirectorySummaryDto(
                 d.Code,
                 d.Name,
                 d.Description,

@@ -44,8 +44,8 @@ internal sealed class GetDirectoriesQueryHandler(
             StringComparer.Ordinal
         );
 
-        var tasks = DirectoryCatalog.All
-            .Select(descriptor =>
+        var tasks = DirectoryCatalog
+            .All.Select(descriptor =>
             {
                 var provider = providersByCode.TryGetValue(descriptor.Code, out var real)
                     ? real

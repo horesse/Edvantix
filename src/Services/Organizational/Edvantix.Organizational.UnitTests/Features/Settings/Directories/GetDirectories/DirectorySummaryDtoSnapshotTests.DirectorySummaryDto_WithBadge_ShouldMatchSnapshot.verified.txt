@@ -1,0 +1,9 @@
+﻿{
+  Code: student-statuses,
+  Name: Статусы студентов,
+  Description: Активный, в академе, выпускник, отчислен.,
+  Icon: UserCheck,
+  Badge: системный,
+  ActiveCount: 4,
+  IsAvailable: true
+}

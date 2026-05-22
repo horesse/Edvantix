@@ -1,0 +1,59 @@
+﻿[
+  {
+    Code: levels,
+    Name: Уровни,
+    Description: Уровни обучения для групп и курсов.,
+    Icon: Layers,
+    IsAvailable: false
+  },
+  {
+    Code: subjects,
+    Name: Предметы,
+    Description: Учебные предметы и направления.,
+    Icon: BookOpen,
+    IsAvailable: false
+  },
+  {
+    Code: lesson-types,
+    Name: Типы занятий,
+    Description: Урок, консультация, тест, мастер-класс.,
+    Icon: CalendarDays,
+    IsAvailable: false
+  },
+  {
+    Code: student-statuses,
+    Name: Статусы студентов,
+    Description: Активный, в академе, выпускник, отчислен.,
+    Icon: UserCheck,
+    Badge: системный,
+    IsAvailable: false
+  },
+  {
+    Code: rooms,
+    Name: Кабинеты,
+    Description: Помещения и аудитории школы.,
+    Icon: Building2,
+    IsAvailable: false
+  },
+  {
+    Code: sources,
+    Name: Источники привлечения,
+    Description: Откуда студенты узнают о школе.,
+    Icon: Megaphone,
+    IsAvailable: false
+  },
+  {
+    Code: payment-methods,
+    Name: Способы оплаты,
+    Description: Карта, перевод, рассрочка, материнский капитал.,
+    Icon: CreditCard,
+    IsAvailable: false
+  },
+  {
+    Code: tags,
+    Name: Теги студентов,
+    Description: Свободные метки для сегментации.,
+    Icon: Sparkles,
+    IsAvailable: false
+  }
+]

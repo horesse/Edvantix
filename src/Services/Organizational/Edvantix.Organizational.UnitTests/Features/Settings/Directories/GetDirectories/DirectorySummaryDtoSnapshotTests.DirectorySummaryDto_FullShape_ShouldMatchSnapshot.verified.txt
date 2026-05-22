@@ -1,0 +1,10 @@
+﻿{
+  Code: levels,
+  Name: Уровни,
+  Description: Уровни обучения для групп и курсов.,
+  Icon: Layers,
+  ActiveCount: 12,
+  ArchivedCount: 3,
+  LastModifiedAt: DateTimeOffset_1,
+  IsAvailable: true
+}

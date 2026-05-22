@@ -14,5 +14,12 @@ public sealed class StubDirectoryStatsProvider(DirectoryDescriptor descriptor)
 
     /// <inheritdoc />
     public Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct) =>
-        Task.FromResult(new DirectoryStats(ActiveCount: 0, ArchivedCount: 0, LastModifiedAt: null, IsAvailable: false));
+        Task.FromResult(
+            new DirectoryStats(
+                ActiveCount: 0,
+                ArchivedCount: 0,
+                LastModifiedAt: null,
+                IsAvailable: false
+            )
+        );
 }

@@ -54,8 +54,8 @@ internal sealed class GetDirectoriesQueryHandler(
             providerMap[provider.Descriptor.Code] = provider;
         }
 
-        var tasks = DirectoryCatalog.All.Select(
-            descriptor => FetchOneAsync(descriptor, providerMap, orgId, ct)
+        var tasks = DirectoryCatalog.All.Select(descriptor =>
+            FetchOneAsync(descriptor, providerMap, orgId, ct)
         );
 
         return await Task.WhenAll(tasks);

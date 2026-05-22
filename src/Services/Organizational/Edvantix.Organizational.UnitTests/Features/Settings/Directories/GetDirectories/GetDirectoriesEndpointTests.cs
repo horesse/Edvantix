@@ -63,10 +63,9 @@ public sealed class GetDirectoriesEndpointTests
     }
 
     private static IReadOnlyList<DirectorySummaryDto> CreateStubSummaries() =>
-        DirectoryCatalog.All
-            .Select(d => DirectorySummaryDto.From(
-                d,
-                new DirectoryStats(0, 0, null, IsAvailable: false)
-            ))
+        DirectoryCatalog
+            .All.Select(d =>
+                DirectorySummaryDto.From(d, new DirectoryStats(0, 0, null, IsAvailable: false))
+            )
             .ToList();
 }

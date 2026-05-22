@@ -14,7 +14,12 @@ public sealed class DirectorySummaryDtoSnapshotTests
     {
         var dto = DirectorySummaryDto.From(
             DirectoryCatalog.All[0],
-            new DirectoryStats(ActiveCount: 0, ArchivedCount: 0, LastModifiedAt: null, IsAvailable: false)
+            new DirectoryStats(
+                ActiveCount: 0,
+                ArchivedCount: 0,
+                LastModifiedAt: null,
+                IsAvailable: false
+            )
         );
 
         return Verify(dto);
@@ -43,7 +48,12 @@ public sealed class DirectorySummaryDtoSnapshotTests
         var descriptor = DirectoryCatalog.FindByCode(DirectoryCatalog.StudentStatuses)!;
         var dto = DirectorySummaryDto.From(
             descriptor,
-            new DirectoryStats(ActiveCount: 4, ArchivedCount: 0, LastModifiedAt: null, IsAvailable: true)
+            new DirectoryStats(
+                ActiveCount: 4,
+                ArchivedCount: 0,
+                LastModifiedAt: null,
+                IsAvailable: true
+            )
         );
 
         return Verify(dto);
@@ -52,11 +62,10 @@ public sealed class DirectorySummaryDtoSnapshotTests
     [Test]
     public Task DirectorySummaryDtoArray_AllStubs_ShouldMatchSnapshot()
     {
-        var dtos = DirectoryCatalog.All
-            .Select(d => DirectorySummaryDto.From(
-                d,
-                new DirectoryStats(0, 0, null, IsAvailable: false)
-            ))
+        var dtos = DirectoryCatalog
+            .All.Select(d =>
+                DirectorySummaryDto.From(d, new DirectoryStats(0, 0, null, IsAvailable: false))
+            )
             .ToList();
 
         return Verify(dtos);

@@ -56,7 +56,11 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
             .ThrowsAsync(new InvalidOperationException("DB failure"));
 
         var providers = new List<IDirectoryStatsProvider> { failingMock.Object };
-        providers.AddRange(DirectoryCatalog.All.Skip(1).Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d)));
+        providers.AddRange(
+            DirectoryCatalog
+                .All.Skip(1)
+                .Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
+        );
 
         var handler = CreateHandler(providers);
         var result = await handler.Handle(new GetDirectoriesQuery(), CancellationToken.None);
@@ -75,14 +79,20 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
             .ThrowsAsync(new InvalidOperationException("timeout"));
 
         var providers = new List<IDirectoryStatsProvider> { failingMock.Object };
-        providers.AddRange(DirectoryCatalog.All.Skip(1).Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d)));
+        providers.AddRange(
+            DirectoryCatalog
+                .All.Skip(1)
+                .Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
+        );
 
         var handler = CreateHandler(providers);
         var result = await handler.Handle(new GetDirectoriesQuery(), CancellationToken.None);
 
         result.Count.ShouldBe(8);
         // Первый — ошибка, остальные — заглушки, все IsAvailable=false, но все возвращены
-        result.Skip(1).Select(r => r.Code)
+        result
+            .Skip(1)
+            .Select(r => r.Code)
             .ShouldBe(DirectoryCatalog.All.Skip(1).Select(d => d.Code));
     }
 
@@ -103,7 +113,11 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
             .ReturnsAsync(expectedStats);
 
         var providers = new List<IDirectoryStatsProvider> { realMock.Object };
-        providers.AddRange(DirectoryCatalog.All.Skip(1).Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d)));
+        providers.AddRange(
+            DirectoryCatalog
+                .All.Skip(1)
+                .Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
+        );
 
         var handler = CreateHandler(providers);
         var result = await handler.Handle(new GetDirectoriesQuery(), CancellationToken.None);
@@ -134,7 +148,11 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
         // stub зарегистрирован первым, real — после (last-wins семантика)
         var providers = new List<IDirectoryStatsProvider>();
         providers.Add(stub);
-        providers.AddRange(DirectoryCatalog.All.Skip(1).Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d)));
+        providers.AddRange(
+            DirectoryCatalog
+                .All.Skip(1)
+                .Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
+        );
         providers.Add(realMock.Object); // real провайдер после заглушки
 
         var handler = CreateHandler(providers);
@@ -154,12 +172,16 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
             .ThrowsAsync(new OperationCanceledException());
 
         var providers = new List<IDirectoryStatsProvider> { cancellingMock.Object };
-        providers.AddRange(DirectoryCatalog.All.Skip(1).Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d)));
+        providers.AddRange(
+            DirectoryCatalog
+                .All.Skip(1)
+                .Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
+        );
 
         var handler = CreateHandler(providers);
 
-        await Should.ThrowAsync<OperationCanceledException>(
-            () => handler.Handle(new GetDirectoriesQuery(), CancellationToken.None).AsTask()
+        await Should.ThrowAsync<OperationCanceledException>(() =>
+            handler.Handle(new GetDirectoriesQuery(), CancellationToken.None).AsTask()
         );
     }
 
@@ -172,22 +194,30 @@ public sealed class GetDirectoriesQueryHandlerTests : IDisposable
             .ReturnsAsync(new DirectoryStats(1, 0, null, true));
 
         var providers = new List<IDirectoryStatsProvider> { providerMock.Object };
-        providers.AddRange(DirectoryCatalog.All.Skip(1).Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d)));
+        providers.AddRange(
+            DirectoryCatalog
+                .All.Skip(1)
+                .Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
+        );
 
         var handler = CreateHandler(providers);
         await handler.Handle(new GetDirectoriesQuery(), CancellationToken.None);
 
-        providerMock.Verify(p => p.GetStatsAsync(_orgId, It.IsAny<CancellationToken>()), Times.Once);
+        providerMock.Verify(
+            p => p.GetStatsAsync(_orgId, It.IsAny<CancellationToken>()),
+            Times.Once
+        );
     }
 
     public void Dispose() => _cache.Dispose();
 
-    private GetDirectoriesQueryHandler CreateHandler(IEnumerable<IDirectoryStatsProvider> providers) =>
-        new(_tenantMock.Object, providers, _cache, _loggerMock.Object);
+    private GetDirectoriesQueryHandler CreateHandler(
+        IEnumerable<IDirectoryStatsProvider> providers
+    ) => new(_tenantMock.Object, providers, _cache, _loggerMock.Object);
 
     private static List<IDirectoryStatsProvider> AllStubs() =>
-        DirectoryCatalog.All
-            .Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
+        DirectoryCatalog
+            .All.Select(d => (IDirectoryStatsProvider)new StubDirectoryStatsProvider(d))
             .ToList();
 
     private static Mock<IDirectoryStatsProvider> CreateProviderMock(DirectoryDescriptor descriptor)

@@ -152,10 +152,7 @@ public sealed class LessonType : OrganizationScopedLookup
             throw new ArgumentException("Цвет типа занятия не может быть пустым.", nameof(color));
 
         if (!HexColorRegex.IsMatch(color))
-            throw new ArgumentException(
-                "Цвет должен быть в формате HEX (#RRGGBB).",
-                nameof(color)
-            );
+            throw new ArgumentException("Цвет должен быть в формате HEX (#RRGGBB).", nameof(color));
     }
 
     private static void ValidateIcon(string? icon)

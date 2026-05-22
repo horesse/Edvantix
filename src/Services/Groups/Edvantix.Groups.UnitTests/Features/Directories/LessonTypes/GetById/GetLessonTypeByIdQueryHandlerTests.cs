@@ -20,9 +20,17 @@ public sealed class GetLessonTypeByIdQueryHandlerTests
     public async Task GivenExistingId_WhenGettingById_ThenReturnsDto()
     {
         var id = Guid.CreateVersion7();
-        var lessonType = new LessonType(_organizationId, "Урок", "LESSON", 45, "#3B82F6", "CalendarDays");
+        var lessonType = new LessonType(
+            _organizationId,
+            "Урок",
+            "LESSON",
+            45,
+            "#3B82F6",
+            "CalendarDays"
+        );
 
-        _repoMock.Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+        _repoMock
+            .Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(lessonType);
 
         var dto = await _handler.Handle(new GetLessonTypeByIdQuery(id), CancellationToken.None);
@@ -53,7 +61,8 @@ public sealed class GetLessonTypeByIdQueryHandlerTests
         var otherOrgId = Guid.CreateVersion7();
         var lessonType = new LessonType(otherOrgId, "Урок", "LESSON", 45, "#3B82F6", null);
 
-        _repoMock.Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+        _repoMock
+            .Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(lessonType);
 
         await Should.ThrowAsync<NotFoundException>(() =>

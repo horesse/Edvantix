@@ -75,7 +75,15 @@ public sealed class ListLessonTypesQueryHandlerTests
         );
 
         _repoMock.Verify(
-            r => r.ListAsync(_organizationId, true, null, It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()),
+            r =>
+                r.ListAsync(
+                    _organizationId,
+                    true,
+                    null,
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -85,13 +93,18 @@ public sealed class ListLessonTypesQueryHandlerTests
     {
         SetupRepo([], 0);
 
-        await _handler.Handle(
-            new ListLessonTypesQuery(Search: "урок"),
-            CancellationToken.None
-        );
+        await _handler.Handle(new ListLessonTypesQuery(Search: "урок"), CancellationToken.None);
 
         _repoMock.Verify(
-            r => r.ListAsync(_organizationId, false, "урок", It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()),
+            r =>
+                r.ListAsync(
+                    _organizationId,
+                    false,
+                    "урок",
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

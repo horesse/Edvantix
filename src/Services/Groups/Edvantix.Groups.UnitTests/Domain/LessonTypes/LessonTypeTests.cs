@@ -12,7 +12,15 @@ public sealed class LessonTypeTests
     [Test]
     public void GivenValidParameters_WhenConstructing_ThenLessonTypeIsCreated()
     {
-        var lt = new LessonType(ValidOrgId, "Урок", "LESSON", 45, "#3B82F6", "CalendarDays", order: 1);
+        var lt = new LessonType(
+            ValidOrgId,
+            "Урок",
+            "LESSON",
+            45,
+            "#3B82F6",
+            "CalendarDays",
+            order: 1
+        );
 
         lt.OrganizationId.ShouldBe(ValidOrgId);
         lt.Name.ShouldBe("Урок");
@@ -83,7 +91,7 @@ public sealed class LessonTypeTests
     }
 
     [Test]
-    [Arguments(4)]  // < 5
+    [Arguments(4)] // < 5
     [Arguments(601)] // > 600
     public void GivenOutOfRangeDuration_WhenConstructing_ThenThrowsArgumentException(int duration)
     {
@@ -104,9 +112,9 @@ public sealed class LessonTypeTests
     }
 
     [Test]
-    [Arguments("3B82F6")]   // без #
-    [Arguments("#3B82F")]   // 5 символов
-    [Arguments("#ZZZZZZ")]  // невалидные символы
+    [Arguments("3B82F6")] // без #
+    [Arguments("#3B82F")] // 5 символов
+    [Arguments("#ZZZZZZ")] // невалидные символы
     [Arguments("")]
     public void GivenInvalidColor_WhenConstructing_ThenThrowsArgumentException(string color)
     {

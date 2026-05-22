@@ -18,9 +18,8 @@ public sealed record CreateLessonTypeCommand(
     int Order = 0
 ) : ICommand<LessonTypeDto>;
 
-internal sealed class CreateLessonTypeCommandHandler(
-    ILessonTypeRepository repository
-) : ICommandHandler<CreateLessonTypeCommand, LessonTypeDto>
+internal sealed class CreateLessonTypeCommandHandler(ILessonTypeRepository repository)
+    : ICommandHandler<CreateLessonTypeCommand, LessonTypeDto>
 {
     public async ValueTask<LessonTypeDto> Handle(
         CreateLessonTypeCommand command,

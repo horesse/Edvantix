@@ -6,11 +6,7 @@ namespace Edvantix.Groups.Features.Directories.LessonTypes;
 /// <param name="ActiveCount">Количество не архивных записей.</param>
 /// <param name="ArchivedCount">Количество архивных записей.</param>
 /// <param name="LastModifiedAt">Время последнего изменения любой записи.</param>
-public sealed record LessonTypeStats(
-    int ActiveCount,
-    int ArchivedCount,
-    DateTime? LastModifiedAt
-);
+public sealed record LessonTypeStats(int ActiveCount, int ArchivedCount, DateTime? LastModifiedAt);
 
 /// <summary>
 /// Предоставляет статистику по справочнику типов занятий организации.

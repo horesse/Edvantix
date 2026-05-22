@@ -144,9 +144,7 @@ public sealed class CreateLessonTypeValidatorTests
     public async Task GivenDuplicateName_WhenValidating_ThenShouldFail()
     {
         _uniqueCheckerMock
-            .Setup(c =>
-                c.NameExistsAsync(_orgId, "Урок", null, It.IsAny<CancellationToken>())
-            )
+            .Setup(c => c.NameExistsAsync(_orgId, "Урок", null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var result = await _validator.ValidateAsync(BuildValidCommand());
@@ -159,9 +157,7 @@ public sealed class CreateLessonTypeValidatorTests
     public async Task GivenDuplicateCode_WhenValidating_ThenShouldFail()
     {
         _uniqueCheckerMock
-            .Setup(c =>
-                c.CodeExistsAsync(_orgId, "LESSON", null, It.IsAny<CancellationToken>())
-            )
+            .Setup(c => c.CodeExistsAsync(_orgId, "LESSON", null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var result = await _validator.ValidateAsync(BuildValidCommand());

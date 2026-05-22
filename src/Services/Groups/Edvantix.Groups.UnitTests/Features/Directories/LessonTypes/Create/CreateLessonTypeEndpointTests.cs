@@ -27,9 +27,7 @@ public sealed class CreateLessonTypeEndpointTests
     {
         var command = BuildValidCommand();
         var dto = BuildDto(command.OrganizationId);
-        _senderMock
-            .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(dto);
+        _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
         var result = await _endpoint.HandleAsync(command, _senderMock.Object, _linkGenerator);
 
@@ -42,9 +40,7 @@ public sealed class CreateLessonTypeEndpointTests
     {
         var command = BuildValidCommand();
         var dto = BuildDto(command.OrganizationId);
-        _senderMock
-            .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(dto);
+        _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
         var result = await _endpoint.HandleAsync(command, _senderMock.Object, _linkGenerator);
 

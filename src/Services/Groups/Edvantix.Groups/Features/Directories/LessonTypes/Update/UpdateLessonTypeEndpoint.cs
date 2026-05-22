@@ -3,7 +3,8 @@ using Edvantix.Groups.Features.Directories.LessonTypes.GetById;
 namespace Edvantix.Groups.Features.Directories.LessonTypes.Update;
 
 /// <summary>PUT /api/v1/directories/lesson-types/{id} — обновить тип занятия.</summary>
-public sealed class UpdateLessonTypeEndpoint : IEndpoint<Ok<LessonTypeDto>, UpdateLessonTypeCommand, ISender>
+public sealed class UpdateLessonTypeEndpoint
+    : IEndpoint<Ok<LessonTypeDto>, UpdateLessonTypeCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

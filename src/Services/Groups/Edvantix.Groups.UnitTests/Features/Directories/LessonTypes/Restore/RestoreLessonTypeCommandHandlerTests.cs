@@ -35,7 +35,8 @@ public sealed class RestoreLessonTypeCommandHandlerTests
         var id = Guid.CreateVersion7();
         var lessonType = new LessonType(_organizationId, "Урок", "LESSON", 45, "#3B82F6", null);
 
-        _repoMock.Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+        _repoMock
+            .Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(lessonType);
         _repoMock
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
@@ -55,10 +56,7 @@ public sealed class RestoreLessonTypeCommandHandlerTests
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler
-                .Handle(
-                    new RestoreLessonTypeCommand(Guid.CreateVersion7()),
-                    CancellationToken.None
-                )
+                .Handle(new RestoreLessonTypeCommand(Guid.CreateVersion7()), CancellationToken.None)
                 .AsTask()
         );
     }
@@ -69,7 +67,8 @@ public sealed class RestoreLessonTypeCommandHandlerTests
         var lessonType = new LessonType(_organizationId, "Урок", "LESSON", 45, "#3B82F6", null);
         lessonType.Archive(Guid.Empty);
 
-        _repoMock.Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+        _repoMock
+            .Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(lessonType);
 
         return (id, lessonType);

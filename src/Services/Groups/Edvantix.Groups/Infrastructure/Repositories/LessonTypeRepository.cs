@@ -14,8 +14,10 @@ internal sealed class LessonTypeRepository(GroupsDbContext context) : ILessonTyp
             .LessonTypes.AsTracking()
             .FirstOrDefaultAsync(lt => lt.Id == id, cancellationToken);
 
-    public async Task AddAsync(LessonType lessonType, CancellationToken cancellationToken = default) =>
-        await context.LessonTypes.AddAsync(lessonType, cancellationToken);
+    public async Task AddAsync(
+        LessonType lessonType,
+        CancellationToken cancellationToken = default
+    ) => await context.LessonTypes.AddAsync(lessonType, cancellationToken);
 
     public async Task<bool> NameExistsAsync(
         Guid organizationId,
@@ -25,9 +27,7 @@ internal sealed class LessonTypeRepository(GroupsDbContext context) : ILessonTyp
     )
     {
         var query = context.LessonTypes.Where(lt =>
-            lt.OrganizationId == organizationId
-            && !lt.IsArchived
-            && lt.Name == name
+            lt.OrganizationId == organizationId && !lt.IsArchived && lt.Name == name
         );
 
         if (excludeId.HasValue)
@@ -44,9 +44,7 @@ internal sealed class LessonTypeRepository(GroupsDbContext context) : ILessonTyp
     )
     {
         var query = context.LessonTypes.Where(lt =>
-            lt.OrganizationId == organizationId
-            && !lt.IsArchived
-            && lt.Code == code
+            lt.OrganizationId == organizationId && !lt.IsArchived && lt.Code == code
         );
 
         if (excludeId.HasValue)

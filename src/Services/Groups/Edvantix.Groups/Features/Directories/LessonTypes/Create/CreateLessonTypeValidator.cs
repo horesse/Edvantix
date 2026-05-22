@@ -11,10 +11,7 @@ internal sealed class CreateLessonTypeValidator : AbstractValidator<CreateLesson
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Имя типа занятия обязательно.")
-            .Length(
-                OrganizationScopedLookup.MinNameLength,
-                OrganizationScopedLookup.MaxNameLength
-            )
+            .Length(OrganizationScopedLookup.MinNameLength, OrganizationScopedLookup.MaxNameLength)
             .WithMessage(
                 $"Имя должно содержать от {OrganizationScopedLookup.MinNameLength} до {OrganizationScopedLookup.MaxNameLength} символов."
             );
@@ -45,34 +42,38 @@ internal sealed class CreateLessonTypeValidator : AbstractValidator<CreateLesson
             .When(x => x.Icon is not null);
 
         RuleFor(x => x)
-            .MustAsync(async (cmd, ct) =>
-            {
-                if (string.IsNullOrWhiteSpace(cmd.Name) || cmd.OrganizationId == Guid.Empty)
-                    return true;
+            .MustAsync(
+                async (cmd, ct) =>
+                {
+                    if (string.IsNullOrWhiteSpace(cmd.Name) || cmd.OrganizationId == Guid.Empty)
+                        return true;
 
-                return !await uniqueChecker.NameExistsAsync(
-                    cmd.OrganizationId,
-                    cmd.Name.Trim(),
-                    excludeId: null,
-                    ct
-                );
-            })
+                    return !await uniqueChecker.NameExistsAsync(
+                        cmd.OrganizationId,
+                        cmd.Name.Trim(),
+                        excludeId: null,
+                        ct
+                    );
+                }
+            )
             .WithName(nameof(CreateLessonTypeCommand.Name))
             .WithMessage("Тип занятия с таким именем уже существует в справочнике.");
 
         RuleFor(x => x)
-            .MustAsync(async (cmd, ct) =>
-            {
-                if (string.IsNullOrWhiteSpace(cmd.Code) || cmd.OrganizationId == Guid.Empty)
-                    return true;
+            .MustAsync(
+                async (cmd, ct) =>
+                {
+                    if (string.IsNullOrWhiteSpace(cmd.Code) || cmd.OrganizationId == Guid.Empty)
+                        return true;
 
-                return !await uniqueChecker.CodeExistsAsync(
-                    cmd.OrganizationId,
-                    cmd.Code.Trim().ToUpperInvariant(),
-                    excludeId: null,
-                    ct
-                );
-            })
+                    return !await uniqueChecker.CodeExistsAsync(
+                        cmd.OrganizationId,
+                        cmd.Code.Trim().ToUpperInvariant(),
+                        excludeId: null,
+                        ct
+                    );
+                }
+            )
             .WithName(nameof(CreateLessonTypeCommand.Code))
             .WithMessage("Тип занятия с таким кодом уже существует в справочнике.");
     }

@@ -62,7 +62,10 @@ public sealed class ListStudentStatusesQueryHandlerTests
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<StudentStatus>>()))
             .Returns(Array.Empty<StudentStatusListItemDto>());
 
-        await _handler.Handle(new ListStudentStatusesQuery(IncludeArchived: false), CancellationToken.None);
+        await _handler.Handle(
+            new ListStudentStatusesQuery(IncludeArchived: false),
+            CancellationToken.None
+        );
 
         _repoMock.Verify(
             r => r.ListAsync(_orgId, false, null, 1, 50, It.IsAny<CancellationToken>()),
@@ -79,7 +82,10 @@ public sealed class ListStudentStatusesQueryHandlerTests
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<StudentStatus>>()))
             .Returns(Array.Empty<StudentStatusListItemDto>());
 
-        await _handler.Handle(new ListStudentStatusesQuery(Search: "Актив"), CancellationToken.None);
+        await _handler.Handle(
+            new ListStudentStatusesQuery(Search: "Актив"),
+            CancellationToken.None
+        );
 
         _repoMock.Verify(
             r => r.ListAsync(_orgId, false, "Актив", 1, 50, It.IsAny<CancellationToken>()),

@@ -28,8 +28,12 @@ public sealed class StudentStatusStatsProviderTests
     [Test]
     public async Task GivenOrganizationWithStatuses_WhenGettingStats_ThenShouldReturnCorrectCounts()
     {
-        _repoMock.Setup(r => r.CountActiveAsync(_orgId, It.IsAny<CancellationToken>())).ReturnsAsync(4);
-        _repoMock.Setup(r => r.CountArchivedAsync(_orgId, It.IsAny<CancellationToken>())).ReturnsAsync(1);
+        _repoMock
+            .Setup(r => r.CountActiveAsync(_orgId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(4);
+        _repoMock
+            .Setup(r => r.CountArchivedAsync(_orgId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1);
         _repoMock
             .Setup(r => r.GetLastModifiedAtAsync(_orgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new DateTime(2026, 5, 22, 12, 0, 0, DateTimeKind.Utc));
@@ -45,8 +49,12 @@ public sealed class StudentStatusStatsProviderTests
     [Test]
     public async Task GivenOrganizationWithNoStatuses_WhenGettingStats_ThenShouldReturnZeroCounts()
     {
-        _repoMock.Setup(r => r.CountActiveAsync(_orgId, It.IsAny<CancellationToken>())).ReturnsAsync(0);
-        _repoMock.Setup(r => r.CountArchivedAsync(_orgId, It.IsAny<CancellationToken>())).ReturnsAsync(0);
+        _repoMock
+            .Setup(r => r.CountActiveAsync(_orgId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
+        _repoMock
+            .Setup(r => r.CountArchivedAsync(_orgId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
         _repoMock
             .Setup(r => r.GetLastModifiedAtAsync(_orgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((DateTime?)null);

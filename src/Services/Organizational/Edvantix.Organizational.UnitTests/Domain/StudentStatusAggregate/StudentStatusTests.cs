@@ -34,7 +34,8 @@ public sealed class StudentStatusTests
     [Test]
     public void GivenEmptyOrganizationId_WhenCreating_ThenShouldThrow()
     {
-        Action act = () => new StudentStatus(Guid.Empty, "Активный", "ACT", StudentStatusTone.Active);
+        Action act = () =>
+            new StudentStatus(Guid.Empty, "Активный", "ACT", StudentStatusTone.Active);
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -127,7 +128,12 @@ public sealed class StudentStatusTests
     [Test]
     public void GivenArchivedNonSystemStatus_WhenArchivingAgain_ThenShouldBeNoop()
     {
-        var status = new StudentStatus(OrgId, "Пользовательский", "CUSTOM", StudentStatusTone.Neutral);
+        var status = new StudentStatus(
+            OrgId,
+            "Пользовательский",
+            "CUSTOM",
+            StudentStatusTone.Neutral
+        );
         status.Archive(UserId);
         var firstModifiedAt = status.LastModifiedAt;
 
@@ -140,7 +146,12 @@ public sealed class StudentStatusTests
     [Test]
     public void GivenNonSystemArchivedStatus_WhenRestoring_ThenShouldBecomeActive()
     {
-        var status = new StudentStatus(OrgId, "Пользовательский", "CUSTOM", StudentStatusTone.Neutral);
+        var status = new StudentStatus(
+            OrgId,
+            "Пользовательский",
+            "CUSTOM",
+            StudentStatusTone.Neutral
+        );
         status.Archive(UserId);
 
         var restoredBy = Guid.CreateVersion7();
@@ -169,12 +180,7 @@ public sealed class StudentStatusTests
     [Test]
     public void GivenValidData_WhenUpdating_ThenPropertiesAreChanged()
     {
-        var status = new StudentStatus(
-            OrgId,
-            "Активный",
-            "ACTIVE",
-            StudentStatusTone.Active
-        );
+        var status = new StudentStatus(OrgId, "Активный", "ACTIVE", StudentStatusTone.Active);
 
         status.Update("Выпускник", "GRAD", StudentStatusTone.Neutral, 5, UserId);
 

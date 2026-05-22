@@ -34,7 +34,10 @@ public sealed class RestoreStudentStatusCommandHandlerTests
         await _handler.Handle(new RestoreStudentStatusCommand(status.Id), CancellationToken.None);
 
         status.IsArchived.ShouldBeFalse();
-        _repoMock.Verify(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _repoMock.Verify(
+            r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Once
+        );
     }
 
     [Test]
@@ -45,7 +48,12 @@ public sealed class RestoreStudentStatusCommandHandlerTests
             .ReturnsAsync((StudentStatus?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new RestoreStudentStatusCommand(Guid.CreateVersion7()), CancellationToken.None).AsTask()
+            _handler
+                .Handle(
+                    new RestoreStudentStatusCommand(Guid.CreateVersion7()),
+                    CancellationToken.None
+                )
+                .AsTask()
         );
     }
 
@@ -62,25 +70,40 @@ public sealed class RestoreStudentStatusCommandHandlerTests
         SetupGetById(status);
 
         await Should.ThrowAsync<InvalidOperationException>(() =>
-            _handler.Handle(new RestoreStudentStatusCommand(status.Id), CancellationToken.None).AsTask()
+            _handler
+                .Handle(new RestoreStudentStatusCommand(status.Id), CancellationToken.None)
+                .AsTask()
         );
     }
 
     [Test]
     public async Task GivenActiveStatus_WhenRestoringAgain_ThenShouldBeNoop()
     {
-        var status = new StudentStatus(_orgId, "Пользовательский", "CUSTOM", StudentStatusTone.Neutral);
+        var status = new StudentStatus(
+            _orgId,
+            "Пользовательский",
+            "CUSTOM",
+            StudentStatusTone.Neutral
+        );
         SetupGetById(status);
 
         await _handler.Handle(new RestoreStudentStatusCommand(status.Id), CancellationToken.None);
 
         status.IsArchived.ShouldBeFalse();
-        _repoMock.Verify(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _repoMock.Verify(
+            r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Once
+        );
     }
 
     private StudentStatus CreateArchivedStatus()
     {
-        var status = new StudentStatus(_orgId, "Пользовательский", "CUSTOM", StudentStatusTone.Neutral);
+        var status = new StudentStatus(
+            _orgId,
+            "Пользовательский",
+            "CUSTOM",
+            StudentStatusTone.Neutral
+        );
         status.Archive(Guid.CreateVersion7());
         return status;
     }

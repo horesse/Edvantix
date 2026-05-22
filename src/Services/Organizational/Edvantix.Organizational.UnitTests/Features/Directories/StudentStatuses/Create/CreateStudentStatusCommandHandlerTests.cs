@@ -27,14 +27,24 @@ public sealed class CreateStudentStatusCommandHandlerTests
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        _handler = new(_tenantMock.Object, _claimsMock.Object, _repoMock.Object, _mapperMock.Object);
+        _handler = new(
+            _tenantMock.Object,
+            _claimsMock.Object,
+            _repoMock.Object,
+            _mapperMock.Object
+        );
     }
 
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldSaveAndReturnDto()
     {
         var expectedDto = CreateDto();
-        var command = new CreateStudentStatusCommand("Активный", "ACTIVE", StudentStatusTone.Active, 0);
+        var command = new CreateStudentStatusCommand(
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active,
+            0
+        );
 
         _mapperMock.Setup(m => m.Map(It.IsAny<StudentStatus>())).Returns(expectedDto);
 
@@ -57,7 +67,12 @@ public sealed class CreateStudentStatusCommandHandlerTests
             .Returns(Task.CompletedTask);
         _mapperMock.Setup(m => m.Map(It.IsAny<StudentStatus>())).Returns(CreateDto());
 
-        var command = new CreateStudentStatusCommand("Активный", "ACTIVE", StudentStatusTone.Active, 0);
+        var command = new CreateStudentStatusCommand(
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active,
+            0
+        );
 
         await _handler.Handle(command, CancellationToken.None);
 

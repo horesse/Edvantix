@@ -23,10 +23,15 @@ public sealed class GetStudentStatusByIdQueryHandlerTests
     {
         var status = new StudentStatus(_orgId, "Активный", "ACTIVE", StudentStatusTone.Active);
         var expectedDto = CreateDto(status.Id);
-        _repoMock.Setup(r => r.GetByIdAsync(status.Id, It.IsAny<CancellationToken>())).ReturnsAsync(status);
+        _repoMock
+            .Setup(r => r.GetByIdAsync(status.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(status);
         _mapperMock.Setup(m => m.Map(status)).Returns(expectedDto);
 
-        var result = await _handler.Handle(new GetStudentStatusByIdQuery(status.Id), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetStudentStatusByIdQuery(status.Id),
+            CancellationToken.None
+        );
 
         result.ShouldBe(expectedDto);
     }
@@ -39,21 +44,48 @@ public sealed class GetStudentStatusByIdQueryHandlerTests
             .ReturnsAsync((StudentStatus?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new GetStudentStatusByIdQuery(Guid.CreateVersion7()), CancellationToken.None).AsTask()
+            _handler
+                .Handle(
+                    new GetStudentStatusByIdQuery(Guid.CreateVersion7()),
+                    CancellationToken.None
+                )
+                .AsTask()
         );
     }
 
     [Test]
     public async Task GivenStatusOfAnotherOrg_WhenQuerying_ThenShouldThrowNotFound()
     {
-        var status = new StudentStatus(Guid.CreateVersion7(), "Другой", "OTHER", StudentStatusTone.Neutral);
-        _repoMock.Setup(r => r.GetByIdAsync(status.Id, It.IsAny<CancellationToken>())).ReturnsAsync(status);
+        var status = new StudentStatus(
+            Guid.CreateVersion7(),
+            "Другой",
+            "OTHER",
+            StudentStatusTone.Neutral
+        );
+        _repoMock
+            .Setup(r => r.GetByIdAsync(status.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(status);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new GetStudentStatusByIdQuery(status.Id), CancellationToken.None).AsTask()
+            _handler
+                .Handle(new GetStudentStatusByIdQuery(status.Id), CancellationToken.None)
+                .AsTask()
         );
     }
 
     private static StudentStatusDto CreateDto(Guid id) =>
-        new(id, "Активный", "ACTIVE", StudentStatusTone.Active, false, false, 0, Guid.CreateVersion7(), DateTime.UtcNow, null, null, null);
+        new(
+            id,
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active,
+            false,
+            false,
+            0,
+            Guid.CreateVersion7(),
+            DateTime.UtcNow,
+            null,
+            null,
+            null
+        );
 }

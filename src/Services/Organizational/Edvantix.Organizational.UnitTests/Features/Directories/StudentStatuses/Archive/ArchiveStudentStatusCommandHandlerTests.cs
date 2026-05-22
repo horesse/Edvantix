@@ -34,7 +34,10 @@ public sealed class ArchiveStudentStatusCommandHandlerTests
         await _handler.Handle(new ArchiveStudentStatusCommand(status.Id), CancellationToken.None);
 
         status.IsArchived.ShouldBeTrue();
-        _repoMock.Verify(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _repoMock.Verify(
+            r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Once
+        );
     }
 
     [Test]
@@ -45,18 +48,30 @@ public sealed class ArchiveStudentStatusCommandHandlerTests
             .ReturnsAsync((StudentStatus?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new ArchiveStudentStatusCommand(Guid.CreateVersion7()), CancellationToken.None).AsTask()
+            _handler
+                .Handle(
+                    new ArchiveStudentStatusCommand(Guid.CreateVersion7()),
+                    CancellationToken.None
+                )
+                .AsTask()
         );
     }
 
     [Test]
     public async Task GivenStatusOfAnotherOrg_WhenArchiving_ThenShouldThrowNotFound()
     {
-        var status = new StudentStatus(Guid.CreateVersion7(), "Другой", "OTHER", StudentStatusTone.Neutral);
+        var status = new StudentStatus(
+            Guid.CreateVersion7(),
+            "Другой",
+            "OTHER",
+            StudentStatusTone.Neutral
+        );
         SetupGetById(status);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new ArchiveStudentStatusCommand(status.Id), CancellationToken.None).AsTask()
+            _handler
+                .Handle(new ArchiveStudentStatusCommand(status.Id), CancellationToken.None)
+                .AsTask()
         );
     }
 
@@ -73,7 +88,9 @@ public sealed class ArchiveStudentStatusCommandHandlerTests
         SetupGetById(status);
 
         await Should.ThrowAsync<InvalidOperationException>(() =>
-            _handler.Handle(new ArchiveStudentStatusCommand(status.Id), CancellationToken.None).AsTask()
+            _handler
+                .Handle(new ArchiveStudentStatusCommand(status.Id), CancellationToken.None)
+                .AsTask()
         );
     }
 
@@ -89,7 +106,10 @@ public sealed class ArchiveStudentStatusCommandHandlerTests
 
         // Архивирование идемпотентно — статус остаётся архивным
         status.IsArchived.ShouldBeTrue();
-        _repoMock.Verify(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _repoMock.Verify(
+            r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
+            Times.Once
+        );
     }
 
     private StudentStatus CreateStatus() =>

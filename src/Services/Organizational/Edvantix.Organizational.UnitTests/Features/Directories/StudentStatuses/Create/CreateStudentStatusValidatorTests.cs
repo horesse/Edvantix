@@ -9,10 +9,10 @@ public sealed class CreateStudentStatusValidatorTests
 {
     private static readonly Guid OrgId = Guid.CreateVersion7();
 
-    private static (CreateStudentStatusValidator validator, Mock<IStudentStatusRepository> repoMock) CreateValidator(
-        bool nameExists = false,
-        bool codeExists = false
-    )
+    private static (
+        CreateStudentStatusValidator validator,
+        Mock<IStudentStatusRepository> repoMock
+    ) CreateValidator(bool nameExists = false, bool codeExists = false)
     {
         var tenantMock = new Mock<ITenantContext>();
         tenantMock.Setup(t => t.OrganizationId).Returns(OrgId);
@@ -40,7 +40,11 @@ public sealed class CreateStudentStatusValidatorTests
             .ReturnsAsync(codeExists);
 
         var nameChecker = new StudentStatusUniqueNameChecker(repoMock.Object);
-        var validator = new CreateStudentStatusValidator(nameChecker, repoMock.Object, tenantMock.Object);
+        var validator = new CreateStudentStatusValidator(
+            nameChecker,
+            repoMock.Object,
+            tenantMock.Object
+        );
 
         return (validator, repoMock);
     }
@@ -49,7 +53,11 @@ public sealed class CreateStudentStatusValidatorTests
     public async Task GivenValidCommand_WhenValidating_ThenShouldBeValid()
     {
         var (validator, _) = CreateValidator();
-        var command = new CreateStudentStatusCommand("Активный", "ACTIVE", StudentStatusTone.Active);
+        var command = new CreateStudentStatusCommand(
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -67,29 +75,43 @@ public sealed class CreateStudentStatusValidatorTests
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(OrganizationScopedLookupValidator<CreateStudentStatusCommand>.NameProperty);
+        result.ShouldHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<CreateStudentStatusCommand>.NameProperty
+        );
     }
 
     [Test]
     public async Task GivenNameLongerThan120_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator();
-        var command = new CreateStudentStatusCommand(new string('A', 121), "ACTIVE", StudentStatusTone.Active);
+        var command = new CreateStudentStatusCommand(
+            new string('A', 121),
+            "ACTIVE",
+            StudentStatusTone.Active
+        );
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(OrganizationScopedLookupValidator<CreateStudentStatusCommand>.NameProperty);
+        result.ShouldHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<CreateStudentStatusCommand>.NameProperty
+        );
     }
 
     [Test]
     public async Task GivenDuplicateName_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator(nameExists: true);
-        var command = new CreateStudentStatusCommand("Активный", "ACTIVE", StudentStatusTone.Active);
+        var command = new CreateStudentStatusCommand(
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active
+        );
 
         var result = await validator.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(OrganizationScopedLookupValidator<CreateStudentStatusCommand>.NameProperty);
+        result.ShouldHaveValidationErrorFor(
+            OrganizationScopedLookupValidator<CreateStudentStatusCommand>.NameProperty
+        );
     }
 
     [Test]
@@ -122,7 +144,11 @@ public sealed class CreateStudentStatusValidatorTests
     public async Task GivenDuplicateCode_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator(codeExists: true);
-        var command = new CreateStudentStatusCommand("Активный", "ACTIVE", StudentStatusTone.Active);
+        var command = new CreateStudentStatusCommand(
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -133,7 +159,12 @@ public sealed class CreateStudentStatusValidatorTests
     public async Task GivenNegativeOrder_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator();
-        var command = new CreateStudentStatusCommand("Активный", "ACTIVE", StudentStatusTone.Active, Order: -1);
+        var command = new CreateStudentStatusCommand(
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active,
+            Order: -1
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -144,7 +175,12 @@ public sealed class CreateStudentStatusValidatorTests
     public async Task GivenZeroOrder_WhenValidating_ThenShouldBeValid()
     {
         var (validator, _) = CreateValidator();
-        var command = new CreateStudentStatusCommand("Активный", "ACTIVE", StudentStatusTone.Active, Order: 0);
+        var command = new CreateStudentStatusCommand(
+            "Активный",
+            "ACTIVE",
+            StudentStatusTone.Active,
+            Order: 0
+        );
 
         var result = await validator.TestValidateAsync(command);
 

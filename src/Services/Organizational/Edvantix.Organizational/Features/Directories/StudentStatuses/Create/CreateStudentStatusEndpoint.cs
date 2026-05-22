@@ -33,9 +33,6 @@ public sealed class CreateStudentStatusEndpoint
     {
         var dto = await sender.Send(command, cancellationToken);
 
-        return TypedResults.Created(
-            $"/api/v1/directories/student-statuses/{dto.Id}",
-            dto
-        );
+        return TypedResults.Created($"/api/v1/directories/student-statuses/{dto.Id}", dto);
     }
 }

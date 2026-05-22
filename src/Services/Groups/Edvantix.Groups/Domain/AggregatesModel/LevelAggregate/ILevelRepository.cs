@@ -48,4 +48,31 @@ public interface ILevelRepository : IRepository<Level>
         string code,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>
+    /// Проверяет, существует ли активный (не удалённый, не деактивированный) уровень
+    /// с данным именем в организации, исключая запись <paramref name="excludeId"/>.
+    /// </summary>
+    Task<bool> ExistsWithNameAsync(
+        Guid organizationId,
+        string name,
+        Guid? excludeId = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Постраничный список уровней для страницы справочника.</summary>
+    Task<(IReadOnlyList<Level> Items, int Total)> ListForDirectoryAsync(
+        Guid organizationId,
+        bool includeInactive,
+        string? search,
+        int pageIndex,
+        int pageSize,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Количество активных и архивных (деактивированных) уровней в организации.</summary>
+    Task<(int Active, int Archived)> GetStatsAsync(
+        Guid organizationId,
+        CancellationToken cancellationToken = default
+    );
 }

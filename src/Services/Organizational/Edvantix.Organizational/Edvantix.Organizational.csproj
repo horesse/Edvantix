@@ -19,6 +19,11 @@
       Link="Grpc\Protos\curriculum\v1\curriculum.proto"
       GrpcServices="Client"
     />
+    <Protobuf
+      Include="..\..\Groups\Edvantix.Groups\Grpc\Protos\groups\v1\groups.proto"
+      Link="Grpc\Protos\groups\v1\groups.proto"
+      GrpcServices="Client"
+    />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\Edvantix.ServiceDefaults\Edvantix.ServiceDefaults.csproj" />

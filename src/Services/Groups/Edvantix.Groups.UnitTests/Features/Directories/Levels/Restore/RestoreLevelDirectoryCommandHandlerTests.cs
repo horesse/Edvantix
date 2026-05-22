@@ -21,10 +21,7 @@ public sealed class RestoreLevelDirectoryCommandHandlerTests
         SetupLevel(level);
         SetupSave();
 
-        await _handler.Handle(
-            new RestoreLevelDirectoryCommand(level.Id),
-            CancellationToken.None
-        );
+        await _handler.Handle(new RestoreLevelDirectoryCommand(level.Id), CancellationToken.None);
 
         level.IsActive.ShouldBeTrue();
     }
@@ -37,10 +34,7 @@ public sealed class RestoreLevelDirectoryCommandHandlerTests
         SetupLevel(level);
         SetupSave();
 
-        await _handler.Handle(
-            new RestoreLevelDirectoryCommand(level.Id),
-            CancellationToken.None
-        );
+        await _handler.Handle(new RestoreLevelDirectoryCommand(level.Id), CancellationToken.None);
 
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
@@ -55,10 +49,7 @@ public sealed class RestoreLevelDirectoryCommandHandlerTests
         SetupLevel(level);
         SetupSave();
 
-        await _handler.Handle(
-            new RestoreLevelDirectoryCommand(level.Id),
-            CancellationToken.None
-        );
+        await _handler.Handle(new RestoreLevelDirectoryCommand(level.Id), CancellationToken.None);
 
         level.IsActive.ShouldBeTrue();
     }
@@ -72,9 +63,7 @@ public sealed class RestoreLevelDirectoryCommandHandlerTests
             .ReturnsAsync((Level?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new RestoreLevelDirectoryCommand(id), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new RestoreLevelDirectoryCommand(id), CancellationToken.None).AsTask()
         );
     }
 

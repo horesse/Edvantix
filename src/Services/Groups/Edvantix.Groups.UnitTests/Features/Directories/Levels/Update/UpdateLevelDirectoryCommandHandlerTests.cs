@@ -89,12 +89,7 @@ public sealed class UpdateLevelDirectoryCommandHandlerTests
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler
                 .Handle(
-                    new UpdateLevelDirectoryCommand(
-                        level.Id,
-                        "Name",
-                        Order: 1,
-                        Description: null
-                    ),
+                    new UpdateLevelDirectoryCommand(level.Id, "Name", Order: 1, Description: null),
                     CancellationToken.None
                 )
                 .AsTask()

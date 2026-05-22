@@ -20,9 +20,7 @@ public sealed class ListLevelsDirectoryEndpointTests
     public async Task GivenQuery_WhenHandling_ThenReturnsOkWithPagedResult()
     {
         var query = new ListLevelsDirectoryQuery();
-        var paged = BuildPagedResult(
-            [new(Guid.CreateVersion7(), "Beginner", 1, null, false)]
-        );
+        var paged = BuildPagedResult([new(Guid.CreateVersion7(), "Beginner", 1, null, false)]);
         SetupSender(query, paged);
 
         var result = await _endpoint.HandleAsync(query, _senderMock.Object);

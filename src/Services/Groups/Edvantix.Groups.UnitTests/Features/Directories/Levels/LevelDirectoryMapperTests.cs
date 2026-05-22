@@ -66,12 +66,5 @@ public sealed class LevelDirectoryMapperTests
     }
 
     private Level CreateLevel(string description = null!) =>
-        new(
-            _orgId,
-            LevelCode.From("A1"),
-            "Beginner",
-            description,
-            LevelTone.Blue,
-            sortOrder: 1
-        );
+        new(_orgId, LevelCode.From("A1"), "Beginner", description, LevelTone.Blue, sortOrder: 1);
 }

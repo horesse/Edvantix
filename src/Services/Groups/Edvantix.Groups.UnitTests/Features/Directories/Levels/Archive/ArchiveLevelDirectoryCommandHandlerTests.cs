@@ -62,9 +62,7 @@ public sealed class ArchiveLevelDirectoryCommandHandlerTests
             .ReturnsAsync((Level?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new ArchiveLevelDirectoryCommand(id), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new ArchiveLevelDirectoryCommand(id), CancellationToken.None).AsTask()
         );
     }
 

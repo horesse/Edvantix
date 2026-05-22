@@ -25,11 +25,7 @@ public sealed class CreateLevelDirectoryEndpointTests
         var dto = BuildDto();
         _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
-        var result = await _endpoint.HandleAsync(
-            command,
-            _senderMock.Object,
-            _linkerMock.Object
-        );
+        var result = await _endpoint.HandleAsync(command, _senderMock.Object, _linkerMock.Object);
 
         result.ShouldBeOfType<Created<LevelDirectoryDto>>();
         result.Value.ShouldBe(dto);
@@ -42,11 +38,7 @@ public sealed class CreateLevelDirectoryEndpointTests
         var dto = BuildDto();
         _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
-        var result = await _endpoint.HandleAsync(
-            command,
-            _senderMock.Object,
-            _linkerMock.Object
-        );
+        var result = await _endpoint.HandleAsync(command, _senderMock.Object, _linkerMock.Object);
 
         result.Location!.ShouldContain(dto.Id.ToString());
     }

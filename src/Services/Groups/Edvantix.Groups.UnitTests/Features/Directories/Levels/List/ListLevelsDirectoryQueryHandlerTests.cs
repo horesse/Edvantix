@@ -107,10 +107,7 @@ public sealed class ListLevelsDirectoryQueryHandlerTests
     {
         SetupRepository([], search: "Beg");
 
-        await _handler.Handle(
-            new ListLevelsDirectoryQuery(Search: "Beg"),
-            CancellationToken.None
-        );
+        await _handler.Handle(new ListLevelsDirectoryQuery(Search: "Beg"), CancellationToken.None);
 
         _repoMock.Verify(
             r =>

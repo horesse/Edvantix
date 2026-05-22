@@ -30,9 +30,7 @@ public sealed class UpdateLevelDirectoryEndpointTests
     }
 
     private void SetupSender(UpdateLevelDirectoryCommand command, LevelDirectoryDto dto) =>
-        _senderMock
-            .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(dto);
+        _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
     private static UpdateLevelDirectoryCommand BuildCommand() =>
         new(Guid.CreateVersion7(), "Beginner", Order: 1, Description: null);

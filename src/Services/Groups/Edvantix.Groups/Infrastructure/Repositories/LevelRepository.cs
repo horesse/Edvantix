@@ -89,4 +89,68 @@ internal sealed class LevelRepository(GroupsDbContext context) : ILevelRepositor
 
         return codes.Any(c => c.Value == normalizedCode);
     }
+
+    public async Task<bool> ExistsWithNameAsync(
+        Guid organizationId,
+        string name,
+        Guid? excludeId = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var trimmed = name.Trim();
+        var query = context.Levels.Where(l =>
+            l.OrganizationId == organizationId && !l.IsDeleted && l.IsActive && l.Name == trimmed
+        );
+
+        if (excludeId.HasValue)
+            query = query.Where(l => l.Id != excludeId.Value);
+
+        return await query.AnyAsync(cancellationToken);
+    }
+
+    public async Task<(IReadOnlyList<Level> Items, int Total)> ListForDirectoryAsync(
+        Guid organizationId,
+        bool includeInactive,
+        string? search,
+        int pageIndex,
+        int pageSize,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = context.Levels.Where(l => l.OrganizationId == organizationId && !l.IsDeleted);
+
+        if (!includeInactive)
+            query = query.Where(l => l.IsActive);
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(l => l.Name.Contains(search.Trim()));
+
+        var total = await query.CountAsync(cancellationToken);
+        var offset = (pageIndex - 1) * pageSize;
+        var items = await query
+            .OrderBy(l => l.SortOrder)
+            .Skip(offset)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return ([.. items], total);
+    }
+
+    public async Task<(int Active, int Archived)> GetStatsAsync(
+        Guid organizationId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var activeCount = await context.Levels.CountAsync(
+            l => l.OrganizationId == organizationId && !l.IsDeleted && l.IsActive,
+            cancellationToken
+        );
+
+        var archivedCount = await context.Levels.CountAsync(
+            l => l.OrganizationId == organizationId && !l.IsDeleted && !l.IsActive,
+            cancellationToken
+        );
+
+        return (activeCount, archivedCount);
+    }
 }

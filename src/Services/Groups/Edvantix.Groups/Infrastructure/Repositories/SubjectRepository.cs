@@ -10,9 +10,7 @@ internal sealed class SubjectRepository(GroupsDbContext context) : ISubjectRepos
         Guid id,
         CancellationToken cancellationToken = default
     ) =>
-        await context
-            .Subjects.AsTracking()
-            .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+        await context.Subjects.AsTracking().FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
 
     public async Task AddAsync(Subject subject, CancellationToken cancellationToken = default) =>
         await context.Subjects.AddAsync(subject, cancellationToken);
@@ -90,9 +88,7 @@ internal sealed class SubjectRepository(GroupsDbContext context) : ISubjectRepos
         var trimmed = name.Trim();
 
         var query = context.Subjects.Where(s =>
-            s.OrganizationId == organizationId
-            && !s.IsArchived
-            && s.Name == trimmed
+            s.OrganizationId == organizationId && !s.IsArchived && s.Name == trimmed
         );
 
         if (excludeId.HasValue)

@@ -76,12 +76,7 @@ public sealed class CreateSubjectCommandHandlerTests
 
         _repoMock
             .Setup(r =>
-                r.ExistsWithCodeAsync(
-                    _organizationId,
-                    "MATH",
-                    null,
-                    It.IsAny<CancellationToken>()
-                )
+                r.ExistsWithCodeAsync(_organizationId, "MATH", null, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(true);
 

@@ -62,9 +62,7 @@ public sealed class GetSubjectByIdQueryHandlerTests
             .ReturnsAsync(subject);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new GetSubjectByIdQuery(subject.Id), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new GetSubjectByIdQuery(subject.Id), CancellationToken.None).AsTask()
         );
     }
 
@@ -72,5 +70,15 @@ public sealed class GetSubjectByIdQueryHandlerTests
         new(orgId, "Математика", SubjectCode.From("MATH"), "#6366F1", null);
 
     private static SubjectDto BuildDto(Subject s) =>
-        new(s.Id, s.Name, s.Code.Value, s.Color, s.Description, s.Order, s.IsArchived, s.CreatedAt, s.LastModifiedAt);
+        new(
+            s.Id,
+            s.Name,
+            s.Code.Value,
+            s.Color,
+            s.Description,
+            s.Order,
+            s.IsArchived,
+            s.CreatedAt,
+            s.LastModifiedAt
+        );
 }

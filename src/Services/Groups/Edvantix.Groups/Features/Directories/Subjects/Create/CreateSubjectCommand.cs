@@ -33,12 +33,24 @@ internal sealed class CreateSubjectCommandHandler(
         var orgId = tenantContext.OrganizationId;
         var codeVo = SubjectCode.From(command.Code);
 
-        if (await repository.ExistsWithCodeAsync(orgId, codeVo.Value, cancellationToken: cancellationToken))
+        if (
+            await repository.ExistsWithCodeAsync(
+                orgId,
+                codeVo.Value,
+                cancellationToken: cancellationToken
+            )
+        )
             throw new InvalidOperationException(
                 $"Предмет с кодом '{codeVo.Value}' уже существует в организации."
             );
 
-        if (await repository.ExistsWithNameAsync(orgId, command.Name, cancellationToken: cancellationToken))
+        if (
+            await repository.ExistsWithNameAsync(
+                orgId,
+                command.Name,
+                cancellationToken: cancellationToken
+            )
+        )
             throw new InvalidOperationException(
                 $"Предмет с названием '{command.Name.Trim()}' уже существует в организации."
             );

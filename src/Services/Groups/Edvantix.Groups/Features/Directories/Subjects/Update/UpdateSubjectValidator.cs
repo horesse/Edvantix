@@ -12,9 +12,13 @@ internal sealed class UpdateSubjectValidator : AbstractValidator<UpdateSubjectCo
             .NotEmpty()
             .WithMessage("Название предмета обязательно.")
             .MinimumLength(OrganizationScopedLookup.MinNameLength)
-            .WithMessage($"Название предмета должно содержать не менее {OrganizationScopedLookup.MinNameLength} символа.")
+            .WithMessage(
+                $"Название предмета должно содержать не менее {OrganizationScopedLookup.MinNameLength} символа."
+            )
             .MaximumLength(OrganizationScopedLookup.MaxNameLength)
-            .WithMessage($"Название предмета не может превышать {OrganizationScopedLookup.MaxNameLength} символов.");
+            .WithMessage(
+                $"Название предмета не может превышать {OrganizationScopedLookup.MaxNameLength} символов."
+            );
 
         RuleFor(x => x.Code)
             .NotEmpty()
@@ -35,6 +39,8 @@ internal sealed class UpdateSubjectValidator : AbstractValidator<UpdateSubjectCo
             .WithMessage("Описание предмета не может превышать 500 символов.")
             .When(x => x.Description is not null);
 
-        RuleFor(x => x.Order).GreaterThanOrEqualTo(0).WithMessage("Порядок сортировки не может быть отрицательным.");
+        RuleFor(x => x.Order)
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("Порядок сортировки не может быть отрицательным.");
     }
 }

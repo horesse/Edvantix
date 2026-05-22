@@ -28,10 +28,7 @@ internal sealed class SubjectConfiguration : IEntityTypeConfiguration<Subject>
 
         builder.Property(s => s.Name).IsRequired().HasMaxLength(120);
 
-        builder
-            .Property(s => s.Color)
-            .IsRequired()
-            .HasMaxLength(7);
+        builder.Property(s => s.Color).IsRequired().HasMaxLength(7);
 
         builder.Property(s => s.Description).IsRequired(false).HasMaxLength(500);
 

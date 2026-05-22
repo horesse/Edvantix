@@ -65,9 +65,7 @@ public sealed class ArchiveSubjectCommandHandlerTests
         SetupSubject(subject);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new ArchiveSubjectCommand(subject.Id), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new ArchiveSubjectCommand(subject.Id), CancellationToken.None).AsTask()
         );
     }
 

@@ -67,7 +67,14 @@ internal sealed class UpdateSubjectCommandHandler(
                 $"Предмет с названием '{command.Name.Trim()}' уже существует в организации."
             );
 
-        subject.Update(command.Name, codeVo, command.Color, command.Description, command.Order, Guid.Empty);
+        subject.Update(
+            command.Name,
+            codeVo,
+            command.Color,
+            command.Description,
+            command.Order,
+            Guid.Empty
+        );
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

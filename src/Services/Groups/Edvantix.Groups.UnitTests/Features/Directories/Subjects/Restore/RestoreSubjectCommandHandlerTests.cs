@@ -64,9 +64,7 @@ public sealed class RestoreSubjectCommandHandlerTests
         SetupSubject(subject);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new RestoreSubjectCommand(subject.Id), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new RestoreSubjectCommand(subject.Id), CancellationToken.None).AsTask()
         );
     }
 

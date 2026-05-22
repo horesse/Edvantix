@@ -17,7 +17,11 @@ internal sealed class CreateLevelDirectoryCommandHandler(
     ILevelRepository repository
 ) : ICommandHandler<CreateLevelDirectoryCommand, LevelDirectoryDto>
 {
-    private static readonly Regex InvalidChars = new(@"[^A-Z0-9]", RegexOptions.Compiled);
+    private static readonly Regex InvalidChars = new(
+        @"[^A-Z0-9]",
+        RegexOptions.Compiled,
+        TimeSpan.FromSeconds(1)
+    );
 
     public async ValueTask<LevelDirectoryDto> Handle(
         CreateLevelDirectoryCommand command,

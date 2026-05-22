@@ -36,7 +36,8 @@ public sealed class CreateLevelDirectoryEndpoint
     )
     {
         var dto = await sender.Send(command, cancellationToken);
-        var location = linker.GetPathByName("GetLevelDirectoryById", new { id = dto.Id })
+        var location =
+            linker.GetPathByName("GetLevelDirectoryById", new { id = dto.Id })
             ?? $"/api/directories/levels/{dto.Id}";
 
         return TypedResults.Created(location, dto);

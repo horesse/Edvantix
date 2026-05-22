@@ -9,8 +9,7 @@ namespace Edvantix.Organizational.Features.Settings.Directories.Levels;
 public sealed class LevelDirectoryStatsProvider(IGroupsService groupsService)
     : IDirectoryStatsProvider
 {
-    public DirectoryDescriptor Descriptor =>
-        DirectoryCatalog.FindByCode(DirectoryCatalog.Levels)!;
+    public DirectoryDescriptor Descriptor => DirectoryCatalog.FindByCode(DirectoryCatalog.Levels)!;
 
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
     {

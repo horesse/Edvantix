@@ -16,14 +16,12 @@ internal sealed class LevelStatsGrpcService(ILevelRepository repository)
     )
     {
         if (!Guid.TryParse(request.OrgId, out var orgId))
-            throw new RpcException(new Status(StatusCode.InvalidArgument, "Некорректный идентификатор организации."));
+            throw new RpcException(
+                new Status(StatusCode.InvalidArgument, "Некорректный идентификатор организации.")
+            );
 
         var (active, archived) = await repository.GetStatsAsync(orgId, context.CancellationToken);
 
-        return new GetLevelStatsResponse
-        {
-            ActiveCount = active,
-            ArchivedCount = archived,
-        };
+        return new GetLevelStatsResponse { ActiveCount = active, ArchivedCount = archived };
     }
 }

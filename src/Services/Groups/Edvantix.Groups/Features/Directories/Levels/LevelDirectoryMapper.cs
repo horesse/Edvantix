@@ -16,11 +16,5 @@ internal static class LevelDirectoryMapper
         );
 
     internal static LevelDirectoryListItemDto ToListItemDto(Level level) =>
-        new(
-            level.Id,
-            level.Name,
-            level.SortOrder,
-            level.Description,
-            IsArchived: !level.IsActive
-        );
+        new(level.Id, level.Name, level.SortOrder, level.Description, IsArchived: !level.IsActive);
 }

@@ -9,11 +9,8 @@ namespace Edvantix.Groups.Features.Directories.Levels.Create;
 /// <summary>Создать запись справочника «Уровни».</summary>
 [Transactional]
 [RequirePermission(LevelPermissions.Manage)]
-public sealed record CreateLevelDirectoryCommand(
-    string Name,
-    short Order,
-    string? Description
-) : ICommand<LevelDirectoryDto>;
+public sealed record CreateLevelDirectoryCommand(string Name, short Order, string? Description)
+    : ICommand<LevelDirectoryDto>;
 
 internal sealed class CreateLevelDirectoryCommandHandler(
     ITenantContext tenantContext,
@@ -45,16 +42,10 @@ internal sealed class CreateLevelDirectoryCommandHandler(
         return LevelDirectoryMapper.ToDto(level);
     }
 
-    private async Task<string> ResolveUniqueCodeAsync(
-        string name,
-        Guid orgId,
-        CancellationToken ct
-    )
+    private async Task<string> ResolveUniqueCodeAsync(string name, Guid orgId, CancellationToken ct)
     {
         // Generate a human-readable code from the name, then ensure uniqueness.
-        var baseCode = InvalidChars
-            .Replace(name.Trim().ToUpperInvariant(), "_")
-            .Trim('_');
+        var baseCode = InvalidChars.Replace(name.Trim().ToUpperInvariant(), "_").Trim('_');
 
         baseCode = string.IsNullOrEmpty(baseCode)
             ? "LVL"

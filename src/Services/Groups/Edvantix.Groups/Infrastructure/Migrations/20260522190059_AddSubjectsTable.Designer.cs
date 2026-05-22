@@ -3,17 +3,20 @@ using System;
 using Edvantix.Groups.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Edvantix.Groups.Infrastructure.Migrations
+namespace Edvantix.Groups.Migrations
 {
     [DbContext(typeof(GroupsDbContext))]
-    partial class GroupsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260522190059_AddSubjectsTable")]
+    partial class AddSubjectsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,92 +242,6 @@ namespace Edvantix.Groups.Infrastructure.Migrations
                         .HasFilter("is_deleted = false");
 
                     b.ToTable("levels", (string)null);
-                });
-
-            modelBuilder.Entity("Edvantix.Groups.Domain.LessonTypeAggregate.LessonType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasMaxLength(7)
-                        .HasColumnType("character varying(7)")
-                        .HasColumnName("color");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_by");
-
-                    b.Property<int>("DefaultDurationMinutes")
-                        .HasColumnType("integer")
-                        .HasColumnName("default_duration_minutes");
-
-                    b.Property<string>("Icon")
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("icon");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_archived");
-
-                    b.Property<DateTime?>("LastModifiedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_at");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)")
-                        .HasColumnName("name");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer")
-                        .HasColumnName("order");
-
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("organization_id");
-
-                    b.Property<long>("RowVersion")
-                        .HasColumnType("bigint")
-                        .HasColumnName("row_version");
-
-                    b.HasKey("Id")
-                        .HasName("pk_lesson_types");
-
-                    b.HasIndex("OrganizationId", "Code")
-                        .IsUnique()
-                        .HasDatabaseName("ix_lesson_types_organization_id_code")
-                        .HasFilter("is_archived = false");
-
-                    b.HasIndex("OrganizationId", "IsArchived")
-                        .HasDatabaseName("ix_lesson_types_organization_id_is_archived");
-
-                    b.HasIndex("OrganizationId", "Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_lesson_types_organization_id_name")
-                        .HasFilter("is_archived = false");
-
-                    b.ToTable("lesson_types", (string)null);
                 });
 
             modelBuilder.Entity("Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate.Subject", b =>

@@ -1,5 +1,6 @@
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
 using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
+using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate;
 using Edvantix.Groups.Domain.LessonTypeAggregate;
 using Wolverine.EntityFrameworkCore;
 
@@ -21,6 +22,9 @@ public sealed class GroupsDbContext(DbContextOptions options) : DbContext(option
 
     /// <summary>Справочник типов занятий организации.</summary>
     public DbSet<LessonType> LessonTypes { get; init; } = null!;
+
+    /// <summary>Справочник учебных предметов организации.</summary>
+    public DbSet<Subject> Subjects { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

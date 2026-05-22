@@ -123,7 +123,9 @@ public abstract class OrganizationScopedLookup : AuditableEntity<Guid>, IAggrega
         Touch(by);
     }
 
-    private void Touch(Guid by)
+    /// <summary>Обновляет audit-поля последнего изменения. Вызывается из подклассов при изменении доменно-специфичных полей.</summary>
+    /// <param name="by">Идентификатор пользователя, выполняющего операцию.</param>
+    protected void Touch(Guid by)
     {
         LastModifiedAt = DateTimeHelper.UtcNow();
         LastModifiedBy = by == Guid.Empty ? null : by;

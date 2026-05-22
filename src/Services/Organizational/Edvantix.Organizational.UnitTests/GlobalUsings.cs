@@ -40,6 +40,7 @@ global using Edvantix.Organizational.Features.Rooms.Create;
 global using Edvantix.Organizational.Features.Rooms.Delete;
 global using Edvantix.Organizational.Features.Rooms.List;
 global using Edvantix.Organizational.Features.Rooms.Update;
+global using Edvantix.Organizational.Features.Settings.Directories.Catalog;
 global using Edvantix.Organizational.Features.Settings.OrganizationSummary;
 global using Edvantix.Organizational.Grpc.Services.Courses;
 global using Edvantix.Organizational.Grpc.Services.Profiles;

@@ -4,6 +4,7 @@ using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Wolverine.EntityFrameworkCore;
 
 namespace Edvantix.Organizational.Infrastructure;
@@ -28,6 +29,9 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
 
     // Invitation aggregate
     public DbSet<Invitation> Invitations => Set<Invitation>();
+
+    // StudentStatus directory
+    public DbSet<StudentStatus> StudentStatuses => Set<StudentStatus>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

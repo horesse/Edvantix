@@ -14,14 +14,7 @@ public sealed class RolesSummaryDtoSnapshotTests
         var dto = new RolesSummaryDto(
             TotalRoles: 7,
             AssignedMembersCount: 5,
-            RoleNamesPreview:
-            [
-                "Владелец",
-                "Директор",
-                "Преподаватель",
-                "Администратор",
-                "Методист",
-            ]
+            RoleNamesPreview: ["Владелец", "Директор", "Преподаватель", "Администратор", "Методист"]
         );
 
         return Verify(dto);
@@ -30,11 +23,7 @@ public sealed class RolesSummaryDtoSnapshotTests
     [Test]
     public Task RolesSummaryDto_EmptyOrganization_ShouldMatchSnapshot()
     {
-        var dto = new RolesSummaryDto(
-            TotalRoles: 0,
-            AssignedMembersCount: 0,
-            RoleNamesPreview: []
-        );
+        var dto = new RolesSummaryDto(TotalRoles: 0, AssignedMembersCount: 0, RoleNamesPreview: []);
 
         return Verify(dto);
     }

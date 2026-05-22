@@ -18,12 +18,7 @@ public sealed class GetRolesSummaryQueryHandlerTests : IDisposable
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_orgId);
 
-        _handler = new(
-            _tenantMock.Object,
-            _roleRepoMock.Object,
-            _memberRepoMock.Object,
-            _cache
-        );
+        _handler = new(_tenantMock.Object, _roleRepoMock.Object, _memberRepoMock.Object, _cache);
     }
 
     [Test]
@@ -114,10 +109,11 @@ public sealed class GetRolesSummaryQueryHandlerTests : IDisposable
         await _handler.Handle(new GetRolesSummaryQuery(), CancellationToken.None);
 
         _roleRepoMock.Verify(
-            r => r.CountAsync(
-                It.IsAny<ISpecification<OrganizationRole>>(),
-                It.IsAny<CancellationToken>()
-            ),
+            r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationRole>>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -126,31 +122,36 @@ public sealed class GetRolesSummaryQueryHandlerTests : IDisposable
 
     private void SetupRoleCount(int count) =>
         _roleRepoMock
-            .Setup(r => r.CountAsync(
-                It.IsAny<ISpecification<OrganizationRole>>(),
-                It.IsAny<CancellationToken>()
-            ))
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationRole>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(count);
 
     private void SetupMemberCount(int count) =>
         _memberRepoMock
-            .Setup(r => r.CountAsync(
-                It.IsAny<ISpecification<OrganizationMember>>(),
-                It.IsAny<CancellationToken>()
-            ))
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<OrganizationMember>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(count);
 
     private void SetupRolePreview(IReadOnlyCollection<OrganizationRole> roles) =>
         _roleRepoMock
-            .Setup(r => r.ListAsync(
-                It.IsAny<ISpecification<OrganizationRole>>(),
-                It.IsAny<CancellationToken>()
-            ))
+            .Setup(r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<OrganizationRole>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(roles);
 
     private static IReadOnlyCollection<OrganizationRole> CreateRoles(
         Guid orgId,
         IEnumerable<string> names
-    ) =>
-        names.Select(name => new OrganizationRole(orgId, name)).ToList();
+    ) => names.Select(name => new OrganizationRole(orgId, name)).ToList();
 }

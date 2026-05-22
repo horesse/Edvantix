@@ -1,7 +1,0 @@
-﻿{
-  Code: levels,
-  Name: Уровни,
-  Description: Уровни обучения для групп и курсов.,
-  Icon: Layers,
-  IsAvailable: false
-}

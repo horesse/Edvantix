@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.Groups.Domain.LessonTypeAggregate;
 
 namespace Edvantix.Groups.Infrastructure.Repositories;
@@ -5,6 +6,7 @@ namespace Edvantix.Groups.Infrastructure.Repositories;
 internal sealed class LessonTypeRepository(GroupsDbContext context) : ILessonTypeRepository
 {
     public IUnitOfWork UnitOfWork => context;
+    private static SpecificationEvaluator Specification => SpecificationEvaluator.Instance;
 
     public async Task<LessonType?> GetByIdAsync(
         Guid id,
@@ -19,68 +21,29 @@ internal sealed class LessonTypeRepository(GroupsDbContext context) : ILessonTyp
         CancellationToken cancellationToken = default
     ) => await context.LessonTypes.AddAsync(lessonType, cancellationToken);
 
-    public async Task<bool> NameExistsAsync(
-        Guid organizationId,
-        string name,
-        Guid? excludeId,
+    public async Task<IReadOnlyList<LessonType>> ListAsync(
+        ISpecification<LessonType> specification,
         CancellationToken cancellationToken = default
-    )
-    {
-        var query = context.LessonTypes.Where(lt =>
-            lt.OrganizationId == organizationId && !lt.IsArchived && lt.Name == name
-        );
-
-        if (excludeId.HasValue)
-            query = query.Where(lt => lt.Id != excludeId.Value);
-
-        return await query.AnyAsync(cancellationToken);
-    }
-
-    public async Task<bool> CodeExistsAsync(
-        Guid organizationId,
-        string code,
-        Guid? excludeId,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var query = context.LessonTypes.Where(lt =>
-            lt.OrganizationId == organizationId && !lt.IsArchived && lt.Code == code
-        );
-
-        if (excludeId.HasValue)
-            query = query.Where(lt => lt.Id != excludeId.Value);
-
-        return await query.AnyAsync(cancellationToken);
-    }
-
-    public async Task<(IReadOnlyList<LessonType> Items, int TotalCount)> ListAsync(
-        Guid organizationId,
-        bool includeArchived,
-        string? search,
-        int offset,
-        int limit,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var query = context.LessonTypes.Where(lt => lt.OrganizationId == organizationId);
-
-        if (!includeArchived)
-            query = query.Where(lt => !lt.IsArchived);
-
-        if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(lt => lt.Name.Contains(search));
-
-        var totalCount = await query.CountAsync(cancellationToken);
-
-        var items = await query
-            .OrderBy(lt => lt.Order)
-            .ThenBy(lt => lt.Name)
-            .Skip(offset)
-            .Take(limit)
+    ) =>
+        await Specification
+            .GetQuery(context.LessonTypes.AsQueryable(), specification)
             .ToListAsync(cancellationToken);
 
-        return (items, totalCount);
-    }
+    public async Task<int> CountAsync(
+        ISpecification<LessonType> specification,
+        CancellationToken cancellationToken = default
+    ) =>
+        await Specification
+            .GetQuery(context.LessonTypes.AsQueryable(), specification)
+            .CountAsync(cancellationToken);
+
+    public async Task<bool> AnyAsync(
+        ISpecification<LessonType> specification,
+        CancellationToken cancellationToken = default
+    ) =>
+        await Specification
+            .GetQuery(context.LessonTypes.AsQueryable(), specification)
+            .AnyAsync(cancellationToken);
 
     public async Task<(int ActiveCount, int ArchivedCount, DateTime? LastModifiedAt)> GetStatsAsync(
         Guid organizationId,

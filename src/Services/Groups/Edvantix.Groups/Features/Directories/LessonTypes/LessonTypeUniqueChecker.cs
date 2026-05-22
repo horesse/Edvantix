@@ -1,4 +1,5 @@
 using Edvantix.Groups.Domain.LessonTypeAggregate;
+using Edvantix.Groups.Domain.LessonTypeAggregate.Specifications;
 
 namespace Edvantix.Groups.Features.Directories.LessonTypes;
 
@@ -14,12 +15,12 @@ internal sealed class LessonTypeUniqueChecker(ILessonTypeRepository repository)
         string name,
         Guid? excludeId,
         CancellationToken ct
-    ) => repository.NameExistsAsync(organizationId, name, excludeId, ct);
+    ) => repository.AnyAsync(new LessonTypeUniqueNameSpec(organizationId, name, excludeId), ct);
 
     public Task<bool> CodeExistsAsync(
         Guid organizationId,
         string code,
         Guid? excludeId,
         CancellationToken ct
-    ) => repository.CodeExistsAsync(organizationId, code, excludeId, ct);
+    ) => repository.AnyAsync(new LessonTypeUniqueCodeSpec(organizationId, code, excludeId), ct);
 }

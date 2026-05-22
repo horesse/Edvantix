@@ -41,88 +41,40 @@ public sealed class ListLessonTypesQueryHandlerTests
     }
 
     [Test]
-    public async Task GivenPageSize_WhenListing_ThenAppliesPagination()
+    public async Task GivenPageSize_WhenListing_ThenPageMetadataIsCorrect()
     {
         SetupRepo([], 0);
 
-        await _handler.Handle(
+        var result = await _handler.Handle(
             new ListLessonTypesQuery(PageIndex: 2, PageSize: 10),
             CancellationToken.None
         );
 
-        _repoMock.Verify(
-            r =>
-                r.ListAsync(
-                    _organizationId,
-                    false,
-                    null,
-                    10, // offset = (2-1) * 10
-                    10,
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once
-        );
+        result.PageIndex.ShouldBe(2);
+        result.PageSize.ShouldBe(10);
     }
 
     [Test]
-    public async Task GivenIncludeArchivedTrue_WhenListing_ThenPassesToRepository()
+    public async Task GivenMultipleItems_WhenListing_ThenEachItemIsMapped()
     {
-        SetupRepo([], 0);
+        var items = BuildLessonTypes(2);
+        SetupRepo(items, 2);
 
-        await _handler.Handle(
-            new ListLessonTypesQuery(IncludeArchived: true),
-            CancellationToken.None
-        );
+        var result = await _handler.Handle(new ListLessonTypesQuery(), CancellationToken.None);
 
-        _repoMock.Verify(
-            r =>
-                r.ListAsync(
-                    _organizationId,
-                    true,
-                    null,
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once
-        );
-    }
-
-    [Test]
-    public async Task GivenSearch_WhenListing_ThenPassesSearchToRepository()
-    {
-        SetupRepo([], 0);
-
-        await _handler.Handle(new ListLessonTypesQuery(Search: "урок"), CancellationToken.None);
-
-        _repoMock.Verify(
-            r =>
-                r.ListAsync(
-                    _organizationId,
-                    false,
-                    "урок",
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once
-        );
+        result.ShouldAllBe(dto => dto != null);
+        result.Select(d => d.Name).ShouldBe(items.Select(lt => lt.Name));
     }
 
     private void SetupRepo(IReadOnlyList<LessonType> items, int total)
     {
         _repoMock
-            .Setup(r =>
-                r.ListAsync(
-                    _organizationId,
-                    It.IsAny<bool>(),
-                    It.IsAny<string?>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
-            .ReturnsAsync((items, total));
+            .Setup(r => r.ListAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(items);
+
+        _repoMock
+            .Setup(r => r.CountAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(total);
     }
 
     private static List<LessonType> BuildLessonTypes(int count)

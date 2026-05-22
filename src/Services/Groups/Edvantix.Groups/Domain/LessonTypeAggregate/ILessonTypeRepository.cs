@@ -9,38 +9,21 @@ public interface ILessonTypeRepository : IRepository<LessonType>
     /// <summary>Добавляет новый тип занятия.</summary>
     Task AddAsync(LessonType lessonType, CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Проверяет уникальность имени в рамках организации среди не архивных записей.
-    /// </summary>
-    /// <param name="organizationId">Идентификатор организации.</param>
-    /// <param name="name">Имя для проверки (уже Trim-нутое).</param>
-    /// <param name="excludeId">Идентификатор исключаемой записи (для сценария update).</param>
-    Task<bool> NameExistsAsync(
-        Guid organizationId,
-        string name,
-        Guid? excludeId,
+    /// <summary>Возвращает список типов занятий, соответствующих спецификации.</summary>
+    Task<IReadOnlyList<LessonType>> ListAsync(
+        ISpecification<LessonType> specification,
         CancellationToken cancellationToken = default
     );
 
-    /// <summary>
-    /// Проверяет уникальность кода в рамках организации среди не архивных записей.
-    /// </summary>
-    Task<bool> CodeExistsAsync(
-        Guid organizationId,
-        string code,
-        Guid? excludeId,
+    /// <summary>Возвращает количество записей, соответствующих спецификации.</summary>
+    Task<int> CountAsync(
+        ISpecification<LessonType> specification,
         CancellationToken cancellationToken = default
     );
 
-    /// <summary>
-    /// Возвращает страницу типов занятий организации с опциональным поиском.
-    /// </summary>
-    Task<(IReadOnlyList<LessonType> Items, int TotalCount)> ListAsync(
-        Guid organizationId,
-        bool includeArchived,
-        string? search,
-        int offset,
-        int limit,
+    /// <summary>Возвращает <c>true</c>, если существует хотя бы одна запись по спецификации.</summary>
+    Task<bool> AnyAsync(
+        ISpecification<LessonType> specification,
         CancellationToken cancellationToken = default
     );
 

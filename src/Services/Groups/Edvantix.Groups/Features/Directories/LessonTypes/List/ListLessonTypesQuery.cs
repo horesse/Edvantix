@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.LessonTypeAggregate;
+using Edvantix.Groups.Domain.LessonTypeAggregate.Specifications;
 using Edvantix.Groups.Features.Directories.LessonTypes;
 using Edvantix.Permissions;
 
@@ -37,15 +38,13 @@ internal sealed class ListLessonTypesQueryHandler(
         var pageIndex = Math.Max(request.PageIndex, 1);
         var pageSize = Math.Clamp(request.PageSize, 1, 100);
         var offset = (pageIndex - 1) * pageSize;
+        var orgId = tenantContext.OrganizationId;
 
-        var (items, totalCount) = await repository.ListAsync(
-            tenantContext.OrganizationId,
-            request.IncludeArchived,
-            request.Search,
-            offset,
-            pageSize,
-            cancellationToken
-        );
+        var listSpec = new LessonTypeListSpec(orgId, request.IncludeArchived, request.Search, offset, pageSize);
+        var countSpec = new LessonTypeListSpec(orgId, request.IncludeArchived, request.Search);
+
+        var items = await repository.ListAsync(listSpec, cancellationToken);
+        var totalCount = await repository.CountAsync(countSpec, cancellationToken);
 
         var dtos = items.Select(lt => lt.ToListItemDto()).ToList();
 

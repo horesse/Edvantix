@@ -14,6 +14,7 @@ global using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggrega
 global using Edvantix.Organizational.Domain.EventHandlers;
 global using Edvantix.Organizational.Domain.Events;
 global using Edvantix.Organizational.Features.Directories.StudentStatuses;
+global using Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
 global using Edvantix.Organizational.Features.Invitations;
 global using Edvantix.Organizational.Features.OrganizationMembers;
 global using Edvantix.Organizational.Features.OrganizationMembers.Create;

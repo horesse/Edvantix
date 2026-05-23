@@ -1,6 +1,8 @@
+using Edvantix.Chassis.Specification;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Features.Directories.StudentStatuses;
 using Edvantix.Organizational.Features.Directories.StudentStatuses.Create;
+using Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
 using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.StudentStatuses.Create;
@@ -18,22 +20,26 @@ public sealed class CreateStudentStatusValidatorTests
         tenantMock.Setup(t => t.OrganizationId).Returns(OrgId);
 
         var repoMock = new Mock<IStudentStatusRepository>();
+
+        // Уникальность имени проверяется через StudentStatusUniqueNameSpecification
         repoMock
             .Setup(r =>
-                r.ExistsNameAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<string>(),
-                    It.IsAny<Guid?>(),
+                r.AnyAsync(
+                    It.Is<ISpecification<StudentStatus>>(s =>
+                        s is StudentStatusUniqueNameSpecification
+                    ),
                     It.IsAny<CancellationToken>()
                 )
             )
             .ReturnsAsync(nameExists);
+
+        // Уникальность кода проверяется через StudentStatusUniqueCodeSpecification
         repoMock
             .Setup(r =>
-                r.ExistsCodeAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<string>(),
-                    It.IsAny<Guid?>(),
+                r.AnyAsync(
+                    It.Is<ISpecification<StudentStatus>>(s =>
+                        s is StudentStatusUniqueCodeSpecification
+                    ),
                     It.IsAny<CancellationToken>()
                 )
             )

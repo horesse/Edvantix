@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
 
 namespace Edvantix.Organizational.Features.Directories.StudentStatuses.List;
 
@@ -28,22 +29,31 @@ internal sealed class ListStudentStatusesQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var paged = await repository.ListAsync(
-            tenantContext.OrganizationId,
+        var orgId = tenantContext.OrganizationId;
+
+        // isArchived=null означает «все» (includeArchived=true), false — только активные
+        var isArchivedFilter = query.IncludeArchived ? (bool?)null : false;
+
+        var listSpec = new StudentStatusListSpecification(
+            orgId,
             query.IncludeArchived,
             query.Search,
             query.Page,
-            query.PageSize,
-            cancellationToken
+            query.PageSize
         );
 
-        var dtos = mapper.Map(paged);
+        var countSpec = new StudentStatusCountSpecification(orgId, isArchivedFilter, query.Search);
+
+        var items = await repository.ListAsync(listSpec, cancellationToken);
+        var total = await repository.CountAsync(countSpec, cancellationToken);
+
+        var dtos = mapper.Map(items);
 
         return new PagedResult<StudentStatusListItemDto>(
             dtos.ToList(),
-            paged.PageIndex,
-            paged.PageSize,
-            paged.TotalItems
+            query.Page,
+            query.PageSize,
+            total
         );
     }
 }

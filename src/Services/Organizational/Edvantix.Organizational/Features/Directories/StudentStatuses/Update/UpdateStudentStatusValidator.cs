@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+using Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
 using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Update;
@@ -11,7 +12,12 @@ internal sealed class UpdateStudentStatusValidator
         IStudentStatusRepository repository,
         ITenantContext tenantContext
     )
-        : base(nameChecker, _ => tenantContext.OrganizationId, c => c.Name, c => c.Id)
+        : base(
+            nameChecker,
+            _ => tenantContext.OrganizationId,
+            c => c.Name,
+            c => c.Id
+        )
     {
         RuleFor(c => c.Code)
             .Cascade(CascadeMode.Stop)
@@ -21,10 +27,12 @@ internal sealed class UpdateStudentStatusValidator
             .WithMessage($"Код статуса не может превышать {StudentStatus.MaxCodeLength} символов.")
             .MustAsync(
                 async (cmd, code, ct) =>
-                    !await repository.ExistsCodeAsync(
-                        tenantContext.OrganizationId,
-                        code.Trim(),
-                        excludeId: cmd.Id,
+                    !await repository.AnyAsync(
+                        new StudentStatusUniqueCodeSpecification(
+                            tenantContext.OrganizationId,
+                            code.Trim(),
+                            excludeId: cmd.Id
+                        ),
                         ct
                     )
             )

@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+using Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
 using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.Features.Directories.StudentStatuses;
@@ -17,8 +18,16 @@ internal sealed class StudentStatusStatsProvider(IStudentStatusRepository reposi
     /// <inheritdoc/>
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
     {
-        var activeCount = await repository.CountActiveAsync(orgId, ct);
-        var archivedCount = await repository.CountArchivedAsync(orgId, ct);
+        var activeCount = await repository.CountAsync(
+            new StudentStatusCountSpecification(orgId, isArchived: false),
+            ct
+        );
+
+        var archivedCount = await repository.CountAsync(
+            new StudentStatusCountSpecification(orgId, isArchived: true),
+            ct
+        );
+
         var lastModifiedAt = await repository.GetLastModifiedAtAsync(orgId, ct);
 
         return new DirectoryStats(

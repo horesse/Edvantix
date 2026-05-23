@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+using Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
 using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Create;
@@ -21,10 +22,11 @@ internal sealed class CreateStudentStatusValidator
             .WithMessage($"Код статуса не может превышать {StudentStatus.MaxCodeLength} символов.")
             .MustAsync(
                 async (code, ct) =>
-                    !await repository.ExistsCodeAsync(
-                        tenantContext.OrganizationId,
-                        code.Trim(),
-                        excludeId: null,
+                    !await repository.AnyAsync(
+                        new StudentStatusUniqueCodeSpecification(
+                            tenantContext.OrganizationId,
+                            code.Trim()
+                        ),
                         ct
                     )
             )

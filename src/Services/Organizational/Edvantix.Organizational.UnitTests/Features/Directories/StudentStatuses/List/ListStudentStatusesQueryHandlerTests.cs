@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Specification;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Features.Directories.StudentStatuses;
 using Edvantix.Organizational.Features.Directories.StudentStatuses.List;
@@ -26,11 +27,11 @@ public sealed class ListStudentStatusesQueryHandlerTests
             new(_orgId, "Активный", "ACTIVE", StudentStatusTone.Active),
             new(_orgId, "В академе", "ON_LEAVE", StudentStatusTone.Warning),
         };
-        var paged = new PagedResult<StudentStatus>(statuses, 1, 50, 2);
-        SetupList(paged);
+        SetupList(statuses);
+        SetupCount(2);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<StudentStatus>>()))
-            .Returns(statuses.Select(s => MapToDto(s)).ToList());
+            .Returns(statuses.Select(MapToDto).ToList());
 
         var result = await _handler.Handle(new ListStudentStatusesQuery(), CancellationToken.None);
 
@@ -41,8 +42,8 @@ public sealed class ListStudentStatusesQueryHandlerTests
     [Test]
     public async Task GivenEmptyOrganization_WhenListing_ThenShouldReturnEmptyResult()
     {
-        var paged = new PagedResult<StudentStatus>([], 1, 50, 0);
-        SetupList(paged);
+        SetupList([]);
+        SetupCount(0);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<StudentStatus>>()))
             .Returns(Array.Empty<StudentStatusListItemDto>());
@@ -54,10 +55,10 @@ public sealed class ListStudentStatusesQueryHandlerTests
     }
 
     [Test]
-    public async Task GivenIncludeArchivedFalse_WhenListing_ThenShouldPassCorrectFlag()
+    public async Task GivenIncludeArchivedFalse_WhenListing_ThenShouldCallListAndCount()
     {
-        var paged = new PagedResult<StudentStatus>([], 1, 50, 0);
-        SetupList(paged);
+        SetupList([]);
+        SetupCount(0);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<StudentStatus>>()))
             .Returns(Array.Empty<StudentStatusListItemDto>());
@@ -68,16 +69,20 @@ public sealed class ListStudentStatusesQueryHandlerTests
         );
 
         _repoMock.Verify(
-            r => r.ListAsync(_orgId, false, null, 1, 50, It.IsAny<CancellationToken>()),
+            r => r.ListAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
+            Times.Once
+        );
+        _repoMock.Verify(
+            r => r.CountAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
 
     [Test]
-    public async Task GivenSearchTerm_WhenListing_ThenShouldPassSearchToRepository()
+    public async Task GivenSearchTerm_WhenListing_ThenShouldCallBothSpecifications()
     {
-        var paged = new PagedResult<StudentStatus>([], 1, 50, 0);
-        SetupList(paged);
+        SetupList([]);
+        SetupCount(0);
         _mapperMock
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<StudentStatus>>()))
             .Returns(Array.Empty<StudentStatusListItemDto>());
@@ -88,24 +93,28 @@ public sealed class ListStudentStatusesQueryHandlerTests
         );
 
         _repoMock.Verify(
-            r => r.ListAsync(_orgId, false, "Актив", 1, 50, It.IsAny<CancellationToken>()),
+            r => r.ListAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
+            Times.Once
+        );
+        _repoMock.Verify(
+            r => r.CountAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
 
-    private void SetupList(PagedResult<StudentStatus> result) =>
+    private void SetupList(IReadOnlyList<StudentStatus> items) =>
         _repoMock
             .Setup(r =>
-                r.ListAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<bool>(),
-                    It.IsAny<string?>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.ListAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>())
             )
-            .ReturnsAsync(result);
+            .ReturnsAsync(items);
+
+    private void SetupCount(int count) =>
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(count);
 
     private static StudentStatusListItemDto MapToDto(StudentStatus s) =>
         new(s.Id, s.Name, s.Code, s.Tone, s.IsSystem, s.IsArchived, s.Order);

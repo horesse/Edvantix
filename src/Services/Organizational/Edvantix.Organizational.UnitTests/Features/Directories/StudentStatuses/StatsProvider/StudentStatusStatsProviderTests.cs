@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Specification;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Features.Directories.StudentStatuses;
 using Edvantix.Organizational.Features.Settings.Directories;
@@ -28,12 +29,17 @@ public sealed class StudentStatusStatsProviderTests
     [Test]
     public async Task GivenOrganizationWithStatuses_WhenGettingStats_ThenShouldReturnCorrectCounts()
     {
+        // CountAsync вызывается дважды: сначала для активных (isArchived=false), затем для архивных
         _repoMock
-            .Setup(r => r.CountActiveAsync(_orgId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(4);
-        _repoMock
-            .Setup(r => r.CountArchivedAsync(_orgId, It.IsAny<CancellationToken>()))
+            .SetupSequence(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
+            .ReturnsAsync(4)
             .ReturnsAsync(1);
+
         _repoMock
             .Setup(r => r.GetLastModifiedAtAsync(_orgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new DateTime(2026, 5, 22, 12, 0, 0, DateTimeKind.Utc));
@@ -50,11 +56,14 @@ public sealed class StudentStatusStatsProviderTests
     public async Task GivenOrganizationWithNoStatuses_WhenGettingStats_ThenShouldReturnZeroCounts()
     {
         _repoMock
-            .Setup(r => r.CountActiveAsync(_orgId, It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(0);
-        _repoMock
-            .Setup(r => r.CountArchivedAsync(_orgId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(0);
+
         _repoMock
             .Setup(r => r.GetLastModifiedAtAsync(_orgId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((DateTime?)null);

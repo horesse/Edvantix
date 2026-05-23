@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate.Specifications;
 using Edvantix.Organizational.Features.Settings.Directories;
 

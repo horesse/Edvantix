@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 /// <summary>Репозиторий агрегата <see cref="Feature"/>.</summary>
 public interface IFeatureRepository : IRepository<Feature>

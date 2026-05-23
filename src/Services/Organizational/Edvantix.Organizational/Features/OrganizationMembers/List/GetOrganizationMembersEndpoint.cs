@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.OrganizationMembers.List;
+﻿namespace Edvantix.Organizational.Features.OrganizationMembers.List;
 
 public sealed class GetOrganizationMembersEndpoint
     : IEndpoint<Ok<PagedResult<OrganizationMemberDto>>, GetOrganizationMembersQuery, ISender>

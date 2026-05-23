@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Organizations.List;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Organizations.List;
 
 public sealed class GetOrganizationsQueryHandlerTests
 {

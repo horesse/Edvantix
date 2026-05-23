@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using Grpc.Core;
 
 namespace Edvantix.Organizational.UnitTests.Grpc.Context;

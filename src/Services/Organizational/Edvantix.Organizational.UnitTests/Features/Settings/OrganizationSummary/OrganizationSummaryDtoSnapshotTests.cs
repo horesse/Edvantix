@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Features.Organizations;
+﻿using Edvantix.Organizational.Features.Organizations;
 using Edvantix.Organizational.Features.Settings.OrganizationSummary;
 
 namespace Edvantix.Organizational.UnitTests.Features.Settings.OrganizationSummary;

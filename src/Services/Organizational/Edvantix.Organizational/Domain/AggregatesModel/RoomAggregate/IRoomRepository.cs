@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Repository;
+﻿using Edvantix.Chassis.Repository;
 using Edvantix.Chassis.Specification;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;

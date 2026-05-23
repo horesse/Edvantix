@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Organizations.Create;
+﻿namespace Edvantix.Organizational.Features.Organizations.Create;
 
 public sealed class CreateOrganizationEndpoint
     : IEndpoint<Created<Guid>, CreateOrganizationCommand, ISender, LinkGenerator>

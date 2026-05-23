@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.Restore;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.Restore;
 
 public sealed class RestoreRoomEndpointTests
 {

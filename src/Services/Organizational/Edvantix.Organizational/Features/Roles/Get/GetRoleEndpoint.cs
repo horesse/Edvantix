@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.Get;
+﻿namespace Edvantix.Organizational.Features.Roles.Get;
 
 public sealed class GetRoleEndpoint : IEndpoint<Ok<RoleDetailDto>, Guid, ISender>
 {

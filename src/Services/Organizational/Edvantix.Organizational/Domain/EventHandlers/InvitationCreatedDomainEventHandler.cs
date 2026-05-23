@@ -1,4 +1,4 @@
-using Edvantix.Chassis.EventBus.Dispatcher;
+﻿using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Contracts;
 using Edvantix.Organizational.Domain.Events;
 

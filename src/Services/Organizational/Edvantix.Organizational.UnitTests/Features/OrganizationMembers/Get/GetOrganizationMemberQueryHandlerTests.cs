@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Grpc.Services.Profiles;
+﻿using Edvantix.Organizational.Grpc.Services.Profiles;
 using Edvantix.Persona.Grpc.Services;
 
 namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Get;

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Roles.Create;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Roles.Create;
 
 public sealed class CreateRoleValidatorTests
 {

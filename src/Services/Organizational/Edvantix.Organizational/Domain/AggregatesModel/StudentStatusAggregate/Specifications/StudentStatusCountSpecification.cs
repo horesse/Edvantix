@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для подсчёта статусов студентов.

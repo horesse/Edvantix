@@ -1,4 +1,4 @@
-using Edvantix.Groups.Grpc.Services;
+﻿using Edvantix.Groups.Grpc.Services;
 
 namespace Edvantix.Organizational.Grpc.Services.Groups;
 

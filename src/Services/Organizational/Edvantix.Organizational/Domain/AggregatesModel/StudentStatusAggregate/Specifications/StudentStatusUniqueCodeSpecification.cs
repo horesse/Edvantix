@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для проверки уникальности кода статуса среди активных записей организации.

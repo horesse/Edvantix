@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
+﻿namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
 public sealed class OrganizationDeletedDomainEventHandlerTests
 {

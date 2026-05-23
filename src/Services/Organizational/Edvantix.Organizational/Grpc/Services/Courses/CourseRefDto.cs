@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Grpc.Services.Courses;
+﻿namespace Edvantix.Organizational.Grpc.Services.Courses;
 
 /// <summary>Краткая информация о курсе, возвращаемая batch-эндпойнтом GetCoursesByIds.</summary>
 /// <param name="Id">Идентификатор курса.</param>

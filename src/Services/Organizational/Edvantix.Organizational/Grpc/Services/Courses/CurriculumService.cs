@@ -1,4 +1,4 @@
-using Edvantix.Curriculum.Grpc.Services;
+﻿using Edvantix.Curriculum.Grpc.Services;
 
 namespace Edvantix.Organizational.Grpc.Services.Courses;
 

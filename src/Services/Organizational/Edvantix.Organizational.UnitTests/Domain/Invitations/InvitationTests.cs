@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Domain.Invitations;
 

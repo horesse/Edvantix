@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Update;
+﻿namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Update;
 
 public sealed class UpdateOrganizationMemberCommandHandlerTests
 {

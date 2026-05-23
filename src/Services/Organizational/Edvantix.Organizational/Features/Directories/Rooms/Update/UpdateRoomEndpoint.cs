@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.Rooms.Update;
+﻿namespace Edvantix.Organizational.Features.Directories.Rooms.Update;
 
 /// <summary>Эндпоинт обновления кабинета.</summary>
 public sealed class UpdateRoomEndpoint : IEndpoint<Ok<RoomDto>, UpdateRoomCommand, ISender>

@@ -1,4 +1,4 @@
-using Edvantix.SharedKernel.SeedWork;
+﻿using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.UnitTests.Domain;
 

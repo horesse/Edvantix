@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Domain;
+﻿namespace Edvantix.Organizational.UnitTests.Domain;
 
 public sealed class PermissionAggregateTests
 {

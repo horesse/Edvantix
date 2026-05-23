@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Kpi;
+﻿namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Kpi;
 
 public sealed class GetOrganizationMembersKpiEndpointTests
 {

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Roles.List;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Roles.List;
 
 public sealed class GetRolesEndpointTests
 {

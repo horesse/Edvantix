@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Create;
+﻿namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Create;
 
 public sealed class CreateOrganizationMemberValidatorTests
 {

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.OrganizationMembers.Kpi;
+﻿namespace Edvantix.Organizational.Features.OrganizationMembers.Kpi;
 
 public sealed class GetOrganizationMembersKpiEndpoint
     : IEndpoint<Ok<OrganizationMembersKpiDto>, GetOrganizationMembersKpiQuery, ISender>

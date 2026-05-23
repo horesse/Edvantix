@@ -1,4 +1,4 @@
-using Edvantix.Chassis.CQRS;
+﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Edvantix.Organizational.Domain.Permissions;
 

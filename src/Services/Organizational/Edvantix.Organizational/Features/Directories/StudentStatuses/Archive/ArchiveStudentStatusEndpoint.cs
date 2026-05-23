@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Archive;
+﻿namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Archive;
 
 /// <summary>Эндпоинт архивации статуса студента.</summary>
 public sealed class ArchiveStudentStatusEndpoint : IEndpoint<NoContent, Guid, ISender>

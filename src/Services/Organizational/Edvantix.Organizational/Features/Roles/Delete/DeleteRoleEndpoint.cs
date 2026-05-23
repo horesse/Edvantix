@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.Delete;
+﻿namespace Edvantix.Organizational.Features.Roles.Delete;
 
 public sealed class DeleteRoleEndpoint : IEndpoint<NoContent, Guid, ISender>
 {

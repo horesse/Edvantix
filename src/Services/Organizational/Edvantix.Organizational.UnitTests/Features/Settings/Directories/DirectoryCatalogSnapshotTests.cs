@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Features.Settings.Directories;
+﻿using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.UnitTests.Features.Settings.Directories;
 

@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Pipelines;
+﻿using Edvantix.Organizational.Pipelines;
 
 namespace Edvantix.Organizational.Extensions;
 

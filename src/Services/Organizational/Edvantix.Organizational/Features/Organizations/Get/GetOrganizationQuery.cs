@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Edvantix.Organizational.Features.Organizations.Get;

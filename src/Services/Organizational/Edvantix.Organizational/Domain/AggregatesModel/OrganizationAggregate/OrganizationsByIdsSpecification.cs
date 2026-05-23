@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
 /// <summary>
 /// Спецификация для получения организаций по набору идентификаторов.

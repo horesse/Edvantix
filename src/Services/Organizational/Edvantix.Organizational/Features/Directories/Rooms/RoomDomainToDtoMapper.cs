@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Mapper;
+﻿using Edvantix.Chassis.Mapper;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.Features.Directories.Rooms;

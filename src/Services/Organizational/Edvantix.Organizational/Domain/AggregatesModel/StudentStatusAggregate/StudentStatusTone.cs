@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 
 /// <summary>
 /// Визуальный тон статуса студента — определяет цветовую индикацию в UI.

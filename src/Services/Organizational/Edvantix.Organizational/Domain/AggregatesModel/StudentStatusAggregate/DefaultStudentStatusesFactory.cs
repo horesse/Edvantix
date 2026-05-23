@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 
 /// <summary>
 /// Фабрика дефолтных (системных) статусов студентов, создаваемых при регистрации организации.

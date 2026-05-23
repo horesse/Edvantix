@@ -1,4 +1,4 @@
-global using System.Security.Claims;
+﻿global using System.Security.Claims;
 global using Edvantix.Chassis.Exceptions;
 global using Edvantix.Chassis.Mapper;
 global using Edvantix.Chassis.Repository;
@@ -6,6 +6,8 @@ global using Edvantix.Chassis.Security.Tenant;
 global using Edvantix.Chassis.Specification;
 global using Edvantix.Constants.Core;
 global using Edvantix.Curriculum.Grpc.Services;
+global using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate;
+global using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate.Specifications;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
@@ -14,6 +16,13 @@ global using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate.Specif
 global using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 global using Edvantix.Organizational.Domain.EventHandlers;
 global using Edvantix.Organizational.Domain.Events;
+global using Edvantix.Organizational.Features.Directories.LeadSources;
+global using Edvantix.Organizational.Features.Directories.LeadSources.Archive;
+global using Edvantix.Organizational.Features.Directories.LeadSources.Create;
+global using Edvantix.Organizational.Features.Directories.LeadSources.GetById;
+global using Edvantix.Organizational.Features.Directories.LeadSources.List;
+global using Edvantix.Organizational.Features.Directories.LeadSources.Restore;
+global using Edvantix.Organizational.Features.Directories.LeadSources.Update;
 global using Edvantix.Organizational.Features.Directories.Rooms;
 global using Edvantix.Organizational.Features.Directories.Rooms.Archive;
 global using Edvantix.Organizational.Features.Directories.Rooms.Create;

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.Create;
+﻿namespace Edvantix.Organizational.Features.Roles.Create;
 
 internal sealed class CreateRoleValidator : AbstractValidator<CreateRoleCommand>
 {

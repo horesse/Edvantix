@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Settings.Directories;
+﻿namespace Edvantix.Organizational.Features.Settings.Directories;
 
 /// <summary>
 /// Поставщик статистики по конкретному справочнику.

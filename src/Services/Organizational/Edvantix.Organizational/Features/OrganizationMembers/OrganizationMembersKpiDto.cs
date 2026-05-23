@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.OrganizationMembers;
+﻿namespace Edvantix.Organizational.Features.OrganizationMembers;
 
 /// <summary>
 /// KPI-статистика участников организации: количество по каждому статусу.

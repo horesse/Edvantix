@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Invitations.Decline;
+﻿namespace Edvantix.Organizational.Features.Invitations.Decline;
 
 /// <summary>Отклоняет приглашение по токену.</summary>
 public sealed class DeclineInvitationEndpoint : IEndpoint<NoContent, string, ISender>

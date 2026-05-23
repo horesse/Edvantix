@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.OrganizationMembers.Teachers;
+﻿namespace Edvantix.Organizational.Features.OrganizationMembers.Teachers;
 
 public sealed class GetTeachersEndpoint
     : IEndpoint<Ok<IReadOnlyCollection<TeacherDto>>, GetTeachersQuery, ISender>

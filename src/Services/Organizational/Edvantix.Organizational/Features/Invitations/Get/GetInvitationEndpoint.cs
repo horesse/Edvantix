@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Invitations.Get;
+﻿namespace Edvantix.Organizational.Features.Invitations.Get;
 
 /// <summary>Возвращает приглашение по Id.</summary>
 public sealed class GetInvitationEndpoint : IEndpoint<Ok<InvitationDto>, Guid, ISender>

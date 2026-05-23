@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Restore;
+﻿namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Restore;
 
 /// <summary>Эндпоинт восстановления статуса студента из архива.</summary>
 public sealed class RestoreStudentStatusEndpoint : IEndpoint<NoContent, Guid, ISender>

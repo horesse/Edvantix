@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Update;
+﻿namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Update;
 
 /// <summary>Эндпоинт обновления статуса студента.</summary>
 public sealed class UpdateStudentStatusEndpoint

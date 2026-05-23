@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.StatsProvider;
 

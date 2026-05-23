@@ -1,4 +1,4 @@
-using Edvantix.Chassis.EF.Configurations;
+﻿using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

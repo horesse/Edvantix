@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.Update;
+﻿namespace Edvantix.Organizational.Features.Roles.Update;
 
 internal sealed class UpdateRoleValidator : AbstractValidator<UpdateRoleCommand>
 {

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Organizations.List;
+﻿namespace Edvantix.Organizational.Features.Organizations.List;
 
 public sealed class GetOrganizationsEndpoint
     : IEndpoint<Ok<PagedResult<OrganizationDto>>, GetOrganizationsQuery, ISender>

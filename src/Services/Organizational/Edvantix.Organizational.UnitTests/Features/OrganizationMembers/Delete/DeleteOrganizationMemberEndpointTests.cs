@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Delete;
+﻿namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Delete;
 
 public sealed class DeleteOrganizationMemberEndpointTests
 {

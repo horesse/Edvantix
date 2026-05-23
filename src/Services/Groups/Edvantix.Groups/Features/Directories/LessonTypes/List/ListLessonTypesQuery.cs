@@ -40,7 +40,13 @@ internal sealed class ListLessonTypesQueryHandler(
         var offset = (pageIndex - 1) * pageSize;
         var orgId = tenantContext.OrganizationId;
 
-        var listSpec = new LessonTypeListSpec(orgId, request.IncludeArchived, request.Search, offset, pageSize);
+        var listSpec = new LessonTypeListSpec(
+            orgId,
+            request.IncludeArchived,
+            request.Search,
+            offset,
+            pageSize
+        );
         var countSpec = new LessonTypeListSpec(orgId, request.IncludeArchived, request.Search);
 
         var items = await repository.ListAsync(listSpec, cancellationToken);

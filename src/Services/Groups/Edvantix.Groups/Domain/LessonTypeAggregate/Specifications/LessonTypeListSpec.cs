@@ -14,7 +14,12 @@ public sealed class LessonTypeListSpec : Specification<LessonType>
         int limit
     )
     {
-        Query.Where(lt => lt.OrganizationId == organizationId).OrderBy(lt => lt.Order).ThenBy(lt => lt.Name).Skip(offset).Take(limit);
+        Query
+            .Where(lt => lt.OrganizationId == organizationId)
+            .OrderBy(lt => lt.Order)
+            .ThenBy(lt => lt.Name)
+            .Skip(offset)
+            .Take(limit);
 
         ApplyFilters(Query, includeArchived, search);
     }

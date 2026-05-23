@@ -11,9 +11,7 @@ public sealed class LessonTypeUniqueCodeSpec : Specification<LessonType>
     /// <param name="excludeId">Исключаемый идентификатор (для сценария update).</param>
     public LessonTypeUniqueCodeSpec(Guid organizationId, string code, Guid? excludeId = null)
     {
-        Query.Where(lt =>
-            lt.OrganizationId == organizationId && !lt.IsArchived && lt.Code == code
-        );
+        Query.Where(lt => lt.OrganizationId == organizationId && !lt.IsArchived && lt.Code == code);
 
         if (excludeId.HasValue)
             Query.Where(lt => lt.Id != excludeId.Value);

@@ -69,11 +69,15 @@ public sealed class ListLessonTypesQueryHandlerTests
     private void SetupRepo(IReadOnlyList<LessonType> items, int total)
     {
         _repoMock
-            .Setup(r => r.ListAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(items);
 
         _repoMock
-            .Setup(r => r.CountAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(total);
     }
 

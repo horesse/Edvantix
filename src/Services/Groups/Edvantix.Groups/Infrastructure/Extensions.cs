@@ -17,6 +17,7 @@ public static class Extensions
 
         // Регистрация модулей разрешений: сидер подхватывает их через DI и синкает в Organizational.
         services.AddSingleton<PermissionModule, LevelPermissionModule>();
+        services.AddSingleton<PermissionModule, SubjectPermissionModule>();
         services.AddSingleton<PermissionModule, GroupPermissionModule>();
         services.AddSingleton<PermissionModule, LessonTypePermissionModule>();
 

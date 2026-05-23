@@ -3,93 +3,100 @@ using Edvantix.SharedKernel.SeedWork;
 namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 /// <summary>
-/// Физический кабинет организации, используемый для проведения очных занятий.
+/// Кабинет (помещение) организации — запись справочника «Кабинеты».
 /// <para>Бизнес-правила:</para>
 /// <list type="bullet">
-///   <item>Вместимость (<see cref="Seats"/>) должна быть от 1 до 200.</item>
-///   <item>Удалённые кабинеты не могут быть назначены группам (фильтрация на уровне запроса).</item>
+///   <item><see cref="Capacity"/> — от 1 до 1000 мест.</item>
+///   <item><see cref="Floor"/> — не более 10 символов после <c>Trim</c>; <c>null</c> допустим.</item>
+///   <item>Уникальность <see cref="OrganizationScopedLookup.Name"/> в рамках организации среди не архивных записей.</item>
 /// </list>
 /// </summary>
-public sealed class Room() : Entity, IAggregateRoot, ISoftDelete, ITenanted
+public sealed class Room : OrganizationScopedLookup
 {
-    private const int MinSeats = 1;
-    private const int MaxSeats = 200;
+    /// <summary>Минимальная вместимость кабинета.</summary>
+    public const int MinCapacity = 1;
+
+    /// <summary>Максимальная вместимость кабинета.</summary>
+    public const int MaxCapacity = 1000;
+
+    /// <summary>Максимальная длина строки номера/названия этажа.</summary>
+    public const int MaxFloorLength = 10;
+
+    /// <summary>Конструктор для EF Core / десериализации.</summary>
+    private Room() { }
 
     /// <param name="organizationId">Идентификатор организации-владельца.</param>
-    /// <param name="label">Метка кабинета (напр. «Каб. 204», «Зал A»).</param>
-    /// <param name="floor">Номер этажа.</param>
-    /// <param name="seats">Количество мест (1–200).</param>
-    public Room(Guid organizationId, string label, short floor, short seats)
-        : this()
+    /// <param name="name">Отображаемое название кабинета.</param>
+    /// <param name="capacity">Вместимость (1–1000).</param>
+    /// <param name="floor">Номер/название этажа (до 10 символов); <c>null</c> — не указан.</param>
+    /// <param name="roomType">Тип помещения.</param>
+    /// <param name="order">Порядок сортировки.</param>
+    /// <param name="createdBy">Идентификатор пользователя, создавшего запись.</param>
+    public Room(
+        Guid organizationId,
+        string name,
+        int capacity,
+        string? floor,
+        RoomType roomType,
+        int order = 0,
+        Guid? createdBy = null
+    )
+        : base(organizationId, name, order, createdBy)
     {
-        if (organizationId == Guid.Empty)
-            throw new ArgumentException(
-                "Идентификатор организации не может быть пустым.",
-                nameof(organizationId)
-            );
+        ValidateCapacity(capacity);
+        ValidateFloor(floor);
 
-        Guard.Against.NullOrWhiteSpace(label, nameof(label));
-        ValidateSeats(seats);
-
-        OrganizationId = organizationId;
-        Label = label.Trim();
-        Floor = floor;
-        Seats = seats;
-        IsDeleted = false;
+        Capacity = capacity;
+        Floor = floor?.Trim();
+        RoomType = roomType;
     }
 
-    /// <inheritdoc />
-    public Guid OrganizationId { get; private set; }
+    /// <summary>Количество посадочных мест (1–1000).</summary>
+    public int Capacity { get; private set; }
 
-    /// <summary>Метка кабинета, отображаемая в интерфейсе.</summary>
-    public string Label { get; private set; } = string.Empty;
+    /// <summary>Номер или название этажа (до 10 символов). Может быть <c>null</c>.</summary>
+    public string? Floor { get; private set; }
 
-    /// <summary>Номер этажа.</summary>
-    public short Floor { get; private set; }
-
-    /// <summary>Количество посадочных мест (1–200).</summary>
-    public short Seats { get; private set; }
-
-    /// <inheritdoc />
-    public bool IsDeleted { get; set; }
+    /// <summary>Тип помещения.</summary>
+    public RoomType RoomType { get; private set; }
 
     /// <summary>
     /// Обновляет данные кабинета.
     /// </summary>
-    /// <param name="label">Новая метка.</param>
-    /// <param name="floor">Номер этажа.</param>
-    /// <param name="seats">Новое количество мест.</param>
-    /// <exception cref="ArgumentException">Если метка пуста или вместимость вне диапазона.</exception>
-    public void Update(string label, short floor, short seats)
+    /// <param name="name">Новое название.</param>
+    /// <param name="capacity">Новая вместимость (1–1000).</param>
+    /// <param name="floor">Новый номер/название этажа (до 10 символов).</param>
+    /// <param name="roomType">Новый тип помещения.</param>
+    /// <param name="order">Новый порядок сортировки.</param>
+    /// <param name="by">Идентификатор пользователя, выполняющего операцию.</param>
+    public void Update(string name, int capacity, string? floor, RoomType roomType, int order, Guid by)
     {
-        Guard.Against.NullOrWhiteSpace(label, nameof(label));
-        ValidateSeats(seats);
+        Rename(name, by);
+        ValidateCapacity(capacity);
+        ValidateFloor(floor);
 
-        Label = label.Trim();
-        Floor = floor;
-        Seats = seats;
+        Capacity = capacity;
+        Floor = floor?.Trim();
+        RoomType = roomType;
+
+        SetOrder(order, by);
     }
 
-    /// <summary>
-    /// Изменяет вместимость кабинета.
-    /// </summary>
-    /// <param name="seats">Новое количество мест (1–200).</param>
-    /// <exception cref="ArgumentOutOfRangeException">Если значение вне диапазона.</exception>
-    public void Resize(short seats)
+    private static void ValidateCapacity(int capacity)
     {
-        ValidateSeats(seats);
-        Seats = seats;
-    }
-
-    /// <inheritdoc />
-    public void Delete() => IsDeleted = true;
-
-    private static void ValidateSeats(short seats)
-    {
-        if (seats < MinSeats || seats > MaxSeats)
+        if (capacity < MinCapacity || capacity > MaxCapacity)
             throw new ArgumentOutOfRangeException(
-                nameof(seats),
-                $"Вместимость кабинета должна быть от {MinSeats} до {MaxSeats} мест."
+                nameof(capacity),
+                $"Вместимость кабинета должна быть от {MinCapacity} до {MaxCapacity} мест."
+            );
+    }
+
+    private static void ValidateFloor(string? floor)
+    {
+        if (floor is not null && floor.Trim().Length > MaxFloorLength)
+            throw new ArgumentException(
+                $"Номер/название этажа не может превышать {MaxFloorLength} символов.",
+                nameof(floor)
             );
     }
 }

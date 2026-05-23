@@ -6,24 +6,57 @@ public sealed class RoomAggregateTests
 {
     private static readonly Guid ValidOrgId = Guid.CreateVersion7();
 
-    private static Room CreateValidRoom() => new(ValidOrgId, "Каб. 204", floor: 2, seats: 20);
+    private static Room CreateValidRoom() =>
+        new(ValidOrgId, "Каб. 204", capacity: 30, floor: "2", RoomType.Classroom);
 
     [Test]
     public void GivenValidData_WhenCreatingRoom_ThenShouldInitializePropertiesCorrectly()
     {
-        var room = new Room(ValidOrgId, "Каб. 204", floor: 2, seats: 20);
+        var room = new Room(ValidOrgId, "Каб. 204", capacity: 30, floor: "2", RoomType.Classroom);
 
         room.OrganizationId.ShouldBe(ValidOrgId);
-        room.Label.ShouldBe("Каб. 204");
-        room.Floor.ShouldBe((short)2);
-        room.Seats.ShouldBe((short)20);
-        room.IsDeleted.ShouldBeFalse();
+        room.Name.ShouldBe("Каб. 204");
+        room.Capacity.ShouldBe(30);
+        room.Floor.ShouldBe("2");
+        room.RoomType.ShouldBe(RoomType.Classroom);
+        room.IsArchived.ShouldBeFalse();
+    }
+
+    [Test]
+    public void GivenNullFloor_WhenCreatingRoom_ThenFloorShouldBeNull()
+    {
+        var room = new Room(ValidOrgId, "Зал А", capacity: 50, floor: null, RoomType.Meeting);
+
+        room.Floor.ShouldBeNull();
+    }
+
+    [Test]
+    public void GivenFloorWithSpaces_WhenCreatingRoom_ThenFloorShouldBeTrimmed()
+    {
+        var room = new Room(ValidOrgId, "Зал А", capacity: 50, floor: "  3  ", RoomType.Meeting);
+
+        room.Floor.ShouldBe("3");
+    }
+
+    [Test]
+    public void GivenNameWithSpaces_WhenCreatingRoom_ThenNameShouldBeTrimmed()
+    {
+        var room = new Room(
+            ValidOrgId,
+            "  Каб. 204  ",
+            capacity: 30,
+            floor: null,
+            RoomType.Classroom
+        );
+
+        room.Name.ShouldBe("Каб. 204");
     }
 
     [Test]
     public void GivenEmptyOrganizationId_WhenCreatingRoom_ThenShouldThrowArgumentException()
     {
-        var act = () => new Room(Guid.Empty, "Каб. 204", floor: 2, seats: 20);
+        var act = () =>
+            new Room(Guid.Empty, "Каб. 204", capacity: 30, floor: null, RoomType.Classroom);
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -32,11 +65,11 @@ public sealed class RoomAggregateTests
     [Arguments(null)]
     [Arguments("")]
     [Arguments("   ")]
-    public void GivenNullOrWhiteSpaceLabel_WhenCreatingRoom_ThenShouldThrowArgumentException(
-        string? label
+    public void GivenNullOrWhiteSpaceName_WhenCreatingRoom_ThenShouldThrowArgumentException(
+        string? name
     )
     {
-        var act = () => new Room(ValidOrgId, label!, floor: 1, seats: 10);
+        var act = () => new Room(ValidOrgId, name!, capacity: 30, floor: null, RoomType.Classroom);
 
         act.ShouldThrow<ArgumentException>();
     }
@@ -44,78 +77,122 @@ public sealed class RoomAggregateTests
     [Test]
     [Arguments(0)]
     [Arguments(-1)]
-    [Arguments(201)]
-    public void GivenInvalidSeats_WhenCreatingRoom_ThenShouldThrowArgumentOutOfRangeException(
-        short seats
+    [Arguments(1001)]
+    public void GivenInvalidCapacity_WhenCreatingRoom_ThenShouldThrowArgumentOutOfRangeException(
+        int capacity
     )
     {
-        var act = () => new Room(ValidOrgId, "Каб. 204", floor: 2, seats: seats);
+        var act = () =>
+            new Room(ValidOrgId, "Зал А", capacity: capacity, floor: null, RoomType.Classroom);
 
         act.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Test]
-    public void GivenBoundarySeatsValue_WhenCreatingRoom_ThenShouldBeValid()
+    [Arguments(1)]
+    [Arguments(1000)]
+    public void GivenBoundaryCapacity_WhenCreatingRoom_ThenShouldBeValid(int capacity)
     {
-        var roomMin = new Room(ValidOrgId, "Кабинет 1", floor: 1, seats: 1);
-        var roomMax = new Room(ValidOrgId, "Зал А", floor: 3, seats: 200);
+        var room = new Room(ValidOrgId, "Зал А", capacity: capacity, floor: null, RoomType.Classroom);
 
-        roomMin.Seats.ShouldBe((short)1);
-        roomMax.Seats.ShouldBe((short)200);
+        room.Capacity.ShouldBe(capacity);
     }
 
     [Test]
-    public void GivenValidRoom_WhenResizing_ThenSeatsShouldUpdate()
+    public void GivenFloorExceedingMaxLength_WhenCreatingRoom_ThenShouldThrowArgumentException()
     {
-        var room = CreateValidRoom();
+        var floor = new string('1', Room.MaxFloorLength + 1);
+        var act = () =>
+            new Room(ValidOrgId, "Зал А", capacity: 30, floor: floor, RoomType.Classroom);
 
-        room.Resize(seats: 30);
-
-        room.Seats.ShouldBe((short)30);
+        act.ShouldThrow<ArgumentException>();
     }
 
     [Test]
-    [Arguments(0)]
-    [Arguments(-5)]
-    [Arguments(201)]
-    public void GivenInvalidSeats_WhenResizing_ThenShouldThrowArgumentOutOfRangeException(
-        short seats
-    )
+    public void GivenValidRoom_WhenArchiving_ThenIsArchivedShouldBeTrue()
     {
         var room = CreateValidRoom();
+        var by = Guid.CreateVersion7();
 
-        var act = () => room.Resize(seats);
+        room.Archive(by);
 
-        act.ShouldThrow<ArgumentOutOfRangeException>();
+        room.IsArchived.ShouldBeTrue();
+    }
+
+    [Test]
+    public void GivenArchivedRoom_WhenArchivingAgain_ThenShouldBeIdempotent()
+    {
+        var room = CreateValidRoom();
+        var by = Guid.CreateVersion7();
+        room.Archive(by);
+        var modifiedAt = room.LastModifiedAt;
+
+        room.Archive(by);
+
+        room.IsArchived.ShouldBeTrue();
+        room.LastModifiedAt.ShouldBe(modifiedAt);
+    }
+
+    [Test]
+    public void GivenArchivedRoom_WhenRestoring_ThenIsArchivedShouldBeFalse()
+    {
+        var room = CreateValidRoom();
+        var by = Guid.CreateVersion7();
+        room.Archive(by);
+
+        room.Restore(by);
+
+        room.IsArchived.ShouldBeFalse();
+    }
+
+    [Test]
+    public void GivenActiveRoom_WhenRestoringAgain_ThenShouldBeIdempotent()
+    {
+        var room = CreateValidRoom();
+        var by = Guid.CreateVersion7();
+        var modifiedAt = room.LastModifiedAt;
+
+        room.Restore(by);
+
+        room.IsArchived.ShouldBeFalse();
+        room.LastModifiedAt.ShouldBe(modifiedAt);
     }
 
     [Test]
     public void GivenValidRoom_WhenUpdating_ThenShouldUpdateAllProperties()
     {
         var room = CreateValidRoom();
+        var by = Guid.CreateVersion7();
 
-        room.Update("Зал Б", floor: 3, seats: 50);
+        room.Update("Лекционный зал", 200, "3", RoomType.Lab, 5, by);
 
-        room.Label.ShouldBe("Зал Б");
-        room.Floor.ShouldBe((short)3);
-        room.Seats.ShouldBe((short)50);
+        room.Name.ShouldBe("Лекционный зал");
+        room.Capacity.ShouldBe(200);
+        room.Floor.ShouldBe("3");
+        room.RoomType.ShouldBe(RoomType.Lab);
+        room.Order.ShouldBe(5);
     }
 
     [Test]
-    public void GivenLabelWithSpaces_WhenCreatingRoom_ThenLabelShouldBeTrimmed()
-    {
-        var room = new Room(ValidOrgId, "  Каб. 204  ", floor: 2, seats: 20);
-
-        room.Label.ShouldBe("Каб. 204");
-    }
-
-    [Test]
-    public void GivenActiveRoom_WhenDeleting_ThenIsDeletedShouldBeTrue()
+    public void GivenInvalidCapacityOnUpdate_WhenUpdating_ThenShouldThrow()
     {
         var room = CreateValidRoom();
+        var by = Guid.CreateVersion7();
 
-        room.Delete();
+        var act = () => room.Update("Зал", 0, null, RoomType.Classroom, 0, by);
 
-        room.IsDeleted.ShouldBeTrue();
+        act.ShouldThrow<ArgumentOutOfRangeException>();
+    }
+
+    [Test]
+    public void GivenFloorExceedingMaxLengthOnUpdate_WhenUpdating_ThenShouldThrow()
+    {
+        var room = CreateValidRoom();
+        var by = Guid.CreateVersion7();
+        var tooLong = new string('X', Room.MaxFloorLength + 1);
+
+        var act = () => room.Update("Зал", 30, tooLong, RoomType.Classroom, 0, by);
+
+        act.ShouldThrow<ArgumentException>();
     }
 }

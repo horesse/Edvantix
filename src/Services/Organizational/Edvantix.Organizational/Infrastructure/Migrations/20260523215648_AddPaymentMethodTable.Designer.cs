@@ -3,6 +3,7 @@ using System;
 using Edvantix.Organizational.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Organizational.Infrastructure.Migrations
 {
     [DbContext(typeof(OrganizationalDbContext))]
-    partial class OrganizationalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260523215648_AddPaymentMethodTable")]
+    partial class AddPaymentMethodTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -725,72 +728,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasFilter("is_archived = false");
 
                     b.ToTable("student_statuses", (string)null);
-                });
-
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.StudentTagAggregate.StudentTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasMaxLength(7)
-                        .HasColumnType("character varying(7)")
-                        .HasColumnName("color");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_by");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_archived");
-
-                    b.Property<DateTime?>("LastModifiedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_at");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("name");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer")
-                        .HasColumnName("order");
-
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("organization_id");
-
-                    b.Property<long>("RowVersion")
-                        .HasColumnType("bigint")
-                        .HasColumnName("row_version");
-
-                    b.HasKey("Id")
-                        .HasName("pk_student_tags");
-
-                    b.HasIndex("OrganizationId")
-                        .HasDatabaseName("ix_student_tags_org_id");
-
-                    b.HasIndex("OrganizationId", "Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_student_tags_org_name_active")
-                        .HasFilter("is_archived = false");
-
-                    b.ToTable("student_tags", (string)null);
                 });
 
             modelBuilder.Entity("Wolverine.EntityFrameworkCore.Internals.IncomingMessage", b =>

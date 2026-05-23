@@ -3,6 +3,7 @@ using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.PaymentMethodAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
@@ -40,6 +41,9 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
 
     // StudentTag directory
     public DbSet<StudentTag> StudentTags => Set<StudentTag>();
+
+    // PaymentMethod directory
+    public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -51,6 +51,8 @@ internal static class Extensions
 
         services.AddMapper(typeof(IOrganizationalApiMarker));
 
+        services.AddDirectoryServices(typeof(IOrganizationalApiMarker));
+
         builder.AddEventBus(opts =>
         {
             opts.Discovery.IncludeAssembly(typeof(IOrganizationalApiMarker).Assembly);

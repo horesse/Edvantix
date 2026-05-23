@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Features.Settings.Directories;
+using Edvantix.Organizational.Features.Settings.Directories.Catalog;
 
 namespace Edvantix.Organizational.Extensions;
 
@@ -13,12 +14,16 @@ internal static class DirectoriesExtensions
         Type markerType
     )
     {
-        // Провайдеры регистрируются как IDirectoryStatsProvider,
-        // чтобы их можно было инжектировать через IEnumerable<IDirectoryStatsProvider>
+        // StubDirectoryStatsProvider исключён: создаётся вручную через new в хендлере,
+        // т.к. требует DirectoryDescriptor в конструкторе — не является DI-сервисом.
+        // Остальные провайдеры регистрируются как IDirectoryStatsProvider для IEnumerable<> инжекции.
         services.Scan(scan =>
             scan.FromAssembliesOf(markerType)
                 .AddClasses(
-                    classes => classes.AssignableTo<IDirectoryStatsProvider>(),
+                    classes =>
+                        classes
+                            .AssignableTo<IDirectoryStatsProvider>()
+                            .Where(t => t != typeof(StubDirectoryStatsProvider)),
                     publicOnly: false
                 )
                 .AsImplementedInterfaces()

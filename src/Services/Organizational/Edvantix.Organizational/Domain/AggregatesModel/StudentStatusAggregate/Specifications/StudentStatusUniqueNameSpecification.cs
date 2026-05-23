@@ -1,7 +1,4 @@
-using Edvantix.Chassis.Specification;
-using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
-
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
+namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для проверки уникальности имени статуса среди активных записей организации.

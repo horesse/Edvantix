@@ -1,8 +1,6 @@
-using Edvantix.Chassis.Specification;
 using Edvantix.Chassis.Specification.Extensions;
-using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
+namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
 
 /// <summary>
 /// Спецификация постраничного списка статусов студентов организации.

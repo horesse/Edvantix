@@ -1,5 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
-using Edvantix.Organizational.Features.Directories.StudentStatuses.Specifications;
+using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
 using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.Features.Directories.StudentStatuses;

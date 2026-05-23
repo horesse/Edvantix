@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using Edvantix.Constants.Aspire;
+using JasperFx.CodeGeneration;
 using JasperFx.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,6 +79,8 @@ public static class WolverineHostExtensions
                     // Регистрируется до обратного вызова конфигурации сервиса, чтобы вспомогательные
                     // методы (ListenToIntegrationEventsIn / ListenToKafkaTopic) можно было вызывать из него.
                     opts.UseKafkaWithCloudEvents(kafkaConnectionString, applicationName);
+
+                    opts.CodeGeneration.TypeLoadMode = TypeLoadMode.Static;
 
                     // ── Настройка для конкретного сервиса ─────────────────────────────────
                     configure?.Invoke(opts);

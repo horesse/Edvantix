@@ -3,6 +3,7 @@ using System;
 using Edvantix.Organizational.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Edvantix.Organizational.Infrastructure.Migrations
 {
     [DbContext(typeof(OrganizationalDbContext))]
-    partial class OrganizationalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260523215806_AddStudentTagTable")]
+    partial class AddStudentTagTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -421,85 +424,6 @@ namespace Edvantix.Organizational.Infrastructure.Migrations
                         .HasDatabaseName("ix_organization_role_permission_permission_id");
 
                     b.ToTable("organization_role_permission", (string)null);
-                });
-
-            modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.PaymentMethodAggregate.PaymentMethod", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuidv7()");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("code");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_by");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_archived");
-
-                    b.Property<bool>("IsCashless")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_cashless");
-
-                    b.Property<DateTime?>("LastModifiedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_at");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)")
-                        .HasColumnName("name");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer")
-                        .HasColumnName("order");
-
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("organization_id");
-
-                    b.Property<bool>("RequiresContract")
-                        .HasColumnType("boolean")
-                        .HasColumnName("requires_contract");
-
-                    b.Property<long>("RowVersion")
-                        .HasColumnType("bigint")
-                        .HasColumnName("row_version");
-
-                    b.HasKey("Id")
-                        .HasName("pk_payment_methods");
-
-                    b.HasIndex("OrganizationId")
-                        .HasDatabaseName("ix_payment_methods_org_id");
-
-                    b.HasIndex("OrganizationId", "Code")
-                        .IsUnique()
-                        .HasDatabaseName("ix_payment_methods_org_code_active")
-                        .HasFilter("is_archived = false");
-
-                    b.HasIndex("OrganizationId", "Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_payment_methods_org_name_active")
-                        .HasFilter("is_archived = false");
-
-                    b.ToTable("payment_methods", (string)null);
                 });
 
             modelBuilder.Entity("Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate.Feature", b =>

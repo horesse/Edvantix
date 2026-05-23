@@ -7,6 +7,7 @@ using Edvantix.Organizational.Domain.AggregatesModel.PaymentMethodAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.StudentTagAggregate;
 using Wolverine.EntityFrameworkCore;
 
 namespace Edvantix.Organizational.Infrastructure;
@@ -37,6 +38,9 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
 
     // LeadSource directory
     public DbSet<LeadSource> LeadSources => Set<LeadSource>();
+
+    // StudentTag directory
+    public DbSet<StudentTag> StudentTags => Set<StudentTag>();
 
     // PaymentMethod directory
     public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();

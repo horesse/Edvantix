@@ -12,12 +12,7 @@ internal sealed class UpdateStudentStatusValidator
         IStudentStatusRepository repository,
         ITenantContext tenantContext
     )
-        : base(
-            nameChecker,
-            _ => tenantContext.OrganizationId,
-            c => c.Name,
-            c => c.Id
-        )
+        : base(nameChecker, _ => tenantContext.OrganizationId, c => c.Name, c => c.Id)
     {
         RuleFor(c => c.Code)
             .Cascade(CascadeMode.Stop)

@@ -69,11 +69,19 @@ public sealed class ListStudentStatusesQueryHandlerTests
         );
 
         _repoMock.Verify(
-            r => r.ListAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
+            r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
         _repoMock.Verify(
-            r => r.CountAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
+            r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -93,11 +101,19 @@ public sealed class ListStudentStatusesQueryHandlerTests
         );
 
         _repoMock.Verify(
-            r => r.ListAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
+            r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
         _repoMock.Verify(
-            r => r.CountAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()),
+            r =>
+                r.CountAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }
@@ -105,14 +121,20 @@ public sealed class ListStudentStatusesQueryHandlerTests
     private void SetupList(IReadOnlyList<StudentStatus> items) =>
         _repoMock
             .Setup(r =>
-                r.ListAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>())
+                r.ListAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(items);
 
     private void SetupCount(int count) =>
         _repoMock
             .Setup(r =>
-                r.CountAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>())
+                r.CountAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(count);
 

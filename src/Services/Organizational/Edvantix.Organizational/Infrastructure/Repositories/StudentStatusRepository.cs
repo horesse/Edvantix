@@ -43,9 +43,7 @@ internal sealed class StudentStatusRepository(OrganizationalDbContext context)
         ISpecification<StudentStatus> specification,
         CancellationToken ct = default
     ) =>
-        await Evaluator
-            .GetQuery(context.StudentStatuses.AsQueryable(), specification)
-            .AnyAsync(ct);
+        await Evaluator.GetQuery(context.StudentStatuses.AsQueryable(), specification).AnyAsync(ct);
 
     public async Task<DateTime?> GetLastModifiedAtAsync(
         Guid organizationId,

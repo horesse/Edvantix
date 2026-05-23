@@ -5,7 +5,11 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.StudentTagAggregate.Spe
 /// </summary>
 public sealed class StudentTagUniqueNameSpecification : Specification<StudentTag>
 {
-    public StudentTagUniqueNameSpecification(Guid organizationId, string name, Guid? excludeId = null)
+    public StudentTagUniqueNameSpecification(
+        Guid organizationId,
+        string name,
+        Guid? excludeId = null
+    )
     {
         Query
             .AsNoTracking()

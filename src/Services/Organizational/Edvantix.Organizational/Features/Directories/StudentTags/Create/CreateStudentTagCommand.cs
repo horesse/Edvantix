@@ -10,11 +10,8 @@ namespace Edvantix.Organizational.Features.Directories.StudentTags.Create;
 /// <param name="Order">Порядок сортировки.</param>
 [Transactional]
 [RequirePermission(OrganizationPermissions.Edit)]
-public sealed record CreateStudentTagCommand(
-    string Name,
-    string Color,
-    int Order = 0
-) : ICommand<StudentTagDto>;
+public sealed record CreateStudentTagCommand(string Name, string Color, int Order = 0)
+    : ICommand<StudentTagDto>;
 
 internal sealed class CreateStudentTagCommandHandler(
     ITenantContext tenantContext,

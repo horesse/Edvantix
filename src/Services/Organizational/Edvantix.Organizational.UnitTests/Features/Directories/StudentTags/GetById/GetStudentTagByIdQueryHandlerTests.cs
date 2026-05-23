@@ -23,10 +23,15 @@ public sealed class GetStudentTagByIdQueryHandlerTests
     {
         var tag = new StudentTag(_orgId, "VIP", "#FF5733");
         var expectedDto = CreateDto(tag.Id);
-        _repoMock.Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>())).ReturnsAsync(tag);
+        _repoMock
+            .Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(tag);
         _mapperMock.Setup(m => m.Map(tag)).Returns(expectedDto);
 
-        var result = await _handler.Handle(new GetStudentTagByIdQuery(tag.Id), CancellationToken.None);
+        var result = await _handler.Handle(
+            new GetStudentTagByIdQuery(tag.Id),
+            CancellationToken.None
+        );
 
         result.ShouldBe(expectedDto);
     }
@@ -35,7 +40,9 @@ public sealed class GetStudentTagByIdQueryHandlerTests
     public async Task GivenTagNotFound_WhenGettingById_ThenShouldThrowNotFoundException()
     {
         var id = Guid.CreateVersion7();
-        _repoMock.Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync((StudentTag?)null);
+        _repoMock
+            .Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((StudentTag?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler.Handle(new GetStudentTagByIdQuery(id), CancellationToken.None).AsTask()
@@ -46,7 +53,9 @@ public sealed class GetStudentTagByIdQueryHandlerTests
     public async Task GivenTagFromDifferentOrganization_WhenGettingById_ThenShouldThrowNotFoundException()
     {
         var tag = new StudentTag(Guid.CreateVersion7(), "VIP", "#FF5733");
-        _repoMock.Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>())).ReturnsAsync(tag);
+        _repoMock
+            .Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(tag);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler.Handle(new GetStudentTagByIdQuery(tag.Id), CancellationToken.None).AsTask()
@@ -54,5 +63,16 @@ public sealed class GetStudentTagByIdQueryHandlerTests
     }
 
     private static StudentTagDto CreateDto(Guid id) =>
-        new(id, "VIP", "#FF5733", false, 0, Guid.CreateVersion7(), DateTime.UtcNow, null, null, null);
+        new(
+            id,
+            "VIP",
+            "#FF5733",
+            false,
+            0,
+            Guid.CreateVersion7(),
+            DateTime.UtcNow,
+            null,
+            null,
+            null
+        );
 }

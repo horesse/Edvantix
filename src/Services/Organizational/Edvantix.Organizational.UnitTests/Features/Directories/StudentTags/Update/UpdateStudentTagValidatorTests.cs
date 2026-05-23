@@ -10,9 +10,10 @@ public sealed class UpdateStudentTagValidatorTests
 {
     private static readonly Guid OrgId = Guid.CreateVersion7();
 
-    private static (UpdateStudentTagValidator validator, Mock<IStudentTagRepository> repoMock) CreateValidator(
-        bool nameExists = false
-    )
+    private static (
+        UpdateStudentTagValidator validator,
+        Mock<IStudentTagRepository> repoMock
+    ) CreateValidator(bool nameExists = false)
     {
         var tenantMock = new Mock<ITenantContext>();
         tenantMock.Setup(t => t.OrganizationId).Returns(OrgId);
@@ -107,7 +108,12 @@ public sealed class UpdateStudentTagValidatorTests
     public async Task GivenNegativeOrder_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator();
-        var command = new UpdateStudentTagCommand(Guid.CreateVersion7(), "VIP", "#FF5733", Order: -1);
+        var command = new UpdateStudentTagCommand(
+            Guid.CreateVersion7(),
+            "VIP",
+            "#FF5733",
+            Order: -1
+        );
 
         var result = await validator.TestValidateAsync(command);
 

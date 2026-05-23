@@ -15,7 +15,12 @@ public sealed class GetStudentTagByIdEndpointTests
         var id = Guid.CreateVersion7();
         var dto = CreateDto(id);
         _senderMock
-            .Setup(s => s.Send(It.Is<GetStudentTagByIdQuery>(q => q.Id == id), It.IsAny<CancellationToken>()))
+            .Setup(s =>
+                s.Send(
+                    It.Is<GetStudentTagByIdQuery>(q => q.Id == id),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(dto);
 
         var result = await _endpoint.HandleAsync(id, _senderMock.Object);
@@ -38,5 +43,16 @@ public sealed class GetStudentTagByIdEndpointTests
     }
 
     private static StudentTagDto CreateDto(Guid id) =>
-        new(id, "VIP", "#FF5733", false, 0, Guid.CreateVersion7(), DateTime.UtcNow, null, null, null);
+        new(
+            id,
+            "VIP",
+            "#FF5733",
+            false,
+            0,
+            Guid.CreateVersion7(),
+            DateTime.UtcNow,
+            null,
+            null,
+            null
+        );
 }

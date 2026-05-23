@@ -11,12 +11,8 @@ namespace Edvantix.Organizational.Features.Directories.StudentTags.Update;
 /// <param name="Order">Новый порядок сортировки.</param>
 [Transactional]
 [RequirePermission(OrganizationPermissions.Edit)]
-public sealed record UpdateStudentTagCommand(
-    Guid Id,
-    string Name,
-    string Color,
-    int Order = 0
-) : ICommand<StudentTagDto>;
+public sealed record UpdateStudentTagCommand(Guid Id, string Name, string Color, int Order = 0)
+    : ICommand<StudentTagDto>;
 
 internal sealed class UpdateStudentTagCommandHandler(
     ITenantContext tenantContext,

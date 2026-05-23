@@ -18,10 +18,11 @@ public sealed class RestoreStudentTagEndpointTests
         await _endpoint.HandleAsync(id, _senderMock.Object);
 
         _senderMock.Verify(
-            s => s.Send(
-                It.Is<RestoreStudentTagCommand>(c => c.Id == id),
-                It.IsAny<CancellationToken>()
-            ),
+            s =>
+                s.Send(
+                    It.Is<RestoreStudentTagCommand>(c => c.Id == id),
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

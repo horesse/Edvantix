@@ -31,7 +31,9 @@ public sealed class ListStudentTagsEndpointTests
             new(Guid.CreateVersion7(), "VIP", "#FF5733", false, 0),
         };
         var pagedResult = new PagedResult<StudentTagListItemDto>(items, 1, 50, 1);
-        _senderMock.Setup(s => s.Send(query, It.IsAny<CancellationToken>())).ReturnsAsync(pagedResult);
+        _senderMock
+            .Setup(s => s.Send(query, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(pagedResult);
 
         var result = await _endpoint.HandleAsync(query, _senderMock.Object);
 

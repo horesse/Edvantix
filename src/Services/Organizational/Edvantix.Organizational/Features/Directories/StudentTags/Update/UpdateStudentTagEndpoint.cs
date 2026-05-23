@@ -1,7 +1,8 @@
 namespace Edvantix.Organizational.Features.Directories.StudentTags.Update;
 
 /// <summary>Эндпоинт обновления тега студента.</summary>
-public sealed class UpdateStudentTagEndpoint : IEndpoint<Ok<StudentTagDto>, UpdateStudentTagCommand, ISender>
+public sealed class UpdateStudentTagEndpoint
+    : IEndpoint<Ok<StudentTagDto>, UpdateStudentTagCommand, ISender>
 {
     /// <inheritdoc/>
     public void MapEndpoint(IEndpointRouteBuilder app)

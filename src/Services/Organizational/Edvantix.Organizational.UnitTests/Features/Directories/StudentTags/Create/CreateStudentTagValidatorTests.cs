@@ -10,9 +10,10 @@ public sealed class CreateStudentTagValidatorTests
 {
     private static readonly Guid OrgId = Guid.CreateVersion7();
 
-    private static (CreateStudentTagValidator validator, Mock<IStudentTagRepository> repoMock) CreateValidator(
-        bool nameExists = false
-    )
+    private static (
+        CreateStudentTagValidator validator,
+        Mock<IStudentTagRepository> repoMock
+    ) CreateValidator(bool nameExists = false)
     {
         var tenantMock = new Mock<ITenantContext>();
         tenantMock.Setup(t => t.OrganizationId).Returns(OrgId);
@@ -64,7 +65,10 @@ public sealed class CreateStudentTagValidatorTests
     public async Task GivenNameLongerThan40Chars_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator();
-        var command = new CreateStudentTagCommand(new string('А', StudentTag.MaxNameLength + 1), "#FF5733");
+        var command = new CreateStudentTagCommand(
+            new string('А', StudentTag.MaxNameLength + 1),
+            "#FF5733"
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -75,7 +79,10 @@ public sealed class CreateStudentTagValidatorTests
     public async Task GivenNameExactly40Chars_WhenValidating_ThenShouldBeValid()
     {
         var (validator, _) = CreateValidator();
-        var command = new CreateStudentTagCommand(new string('А', StudentTag.MaxNameLength), "#FF5733");
+        var command = new CreateStudentTagCommand(
+            new string('А', StudentTag.MaxNameLength),
+            "#FF5733"
+        );
 
         var result = await validator.TestValidateAsync(command);
 

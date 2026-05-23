@@ -38,7 +38,9 @@ public sealed class UpdateStudentTagCommandHandlerTests
         var tag = CreateTag(_orgId);
         var expectedDto = CreateDto(tag.Id);
         var command = new UpdateStudentTagCommand(tag.Id, "Premium", "#0000FF", 1);
-        _repoMock.Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>())).ReturnsAsync(tag);
+        _repoMock
+            .Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(tag);
         _mapperMock.Setup(m => m.Map(tag)).Returns(expectedDto);
 
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -56,10 +58,14 @@ public sealed class UpdateStudentTagCommandHandlerTests
     public async Task GivenTagNotFound_WhenUpdating_ThenShouldThrowNotFoundException()
     {
         var id = Guid.CreateVersion7();
-        _repoMock.Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync((StudentTag?)null);
+        _repoMock
+            .Setup(r => r.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((StudentTag?)null);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new UpdateStudentTagCommand(id, "VIP", "#FF5733"), CancellationToken.None).AsTask()
+            _handler
+                .Handle(new UpdateStudentTagCommand(id, "VIP", "#FF5733"), CancellationToken.None)
+                .AsTask()
         );
     }
 
@@ -67,16 +73,33 @@ public sealed class UpdateStudentTagCommandHandlerTests
     public async Task GivenTagFromDifferentOrganization_WhenUpdating_ThenShouldThrowNotFoundException()
     {
         var tag = CreateTag(Guid.CreateVersion7());
-        _repoMock.Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>())).ReturnsAsync(tag);
+        _repoMock
+            .Setup(r => r.GetByIdAsync(tag.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(tag);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(new UpdateStudentTagCommand(tag.Id, "VIP", "#FF5733"), CancellationToken.None).AsTask()
+            _handler
+                .Handle(
+                    new UpdateStudentTagCommand(tag.Id, "VIP", "#FF5733"),
+                    CancellationToken.None
+                )
+                .AsTask()
         );
     }
 
-    private static StudentTag CreateTag(Guid orgId) =>
-        new(orgId, "VIP", "#FF5733");
+    private static StudentTag CreateTag(Guid orgId) => new(orgId, "VIP", "#FF5733");
 
     private static StudentTagDto CreateDto(Guid id) =>
-        new(id, "Premium", "#0000FF", false, 1, Guid.CreateVersion7(), DateTime.UtcNow, null, null, null);
+        new(
+            id,
+            "Premium",
+            "#0000FF",
+            false,
+            1,
+            Guid.CreateVersion7(),
+            DateTime.UtcNow,
+            null,
+            null,
+            null
+        );
 }

@@ -49,6 +49,11 @@ internal sealed class ListStudentTagsQueryHandler(
 
         var dtos = mapper.Map(items);
 
-        return new PagedResult<StudentTagListItemDto>(dtos.ToList(), query.Page, query.PageSize, total);
+        return new PagedResult<StudentTagListItemDto>(
+            dtos.ToList(),
+            query.Page,
+            query.PageSize,
+            total
+        );
     }
 }

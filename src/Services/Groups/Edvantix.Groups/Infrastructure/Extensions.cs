@@ -1,4 +1,3 @@
-using Edvantix.Groups.Features.Directories.Subjects;
 using Edvantix.Groups.Infrastructure.PermissionModules;
 using Edvantix.Permissions;
 
@@ -21,8 +20,6 @@ public static class Extensions
         services.AddSingleton<PermissionModule, SubjectPermissionModule>();
         services.AddSingleton<PermissionModule, GroupPermissionModule>();
         services.AddSingleton<PermissionModule, LessonTypePermissionModule>();
-
-        services.AddScoped<SubjectStatsProvider>();
 
         builder.AddAzurePostgresDbContext<GroupsDbContext>(
             Components.Database.Groups,

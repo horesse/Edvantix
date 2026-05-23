@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.Rooms.Archive;
+﻿namespace Edvantix.Organizational.Features.Directories.Rooms.Archive;
 
 /// <summary>Эндпоинт архивации кабинета.</summary>
 public sealed class ArchiveRoomEndpoint : IEndpoint<NoContent, Guid, ISender>

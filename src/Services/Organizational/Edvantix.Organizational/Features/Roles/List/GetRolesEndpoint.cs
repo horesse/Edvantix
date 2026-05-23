@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.List;
+﻿namespace Edvantix.Organizational.Features.Roles.List;
 
 public sealed class GetRolesEndpoint : IEndpoint<Ok<PagedResult<RoleDto>>, GetRolesQuery, ISender>
 {

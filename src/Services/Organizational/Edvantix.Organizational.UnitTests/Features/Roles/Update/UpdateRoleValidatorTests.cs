@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Roles.Update;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Roles.Update;
 
 public sealed class UpdateRoleValidatorTests
 {

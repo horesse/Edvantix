@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.Update;
+﻿namespace Edvantix.Organizational.Features.Roles.Update;
 
 public sealed class UpdateRoleEndpoint : IEndpoint<NoContent, UpdateRoleCommand, ISender>
 {

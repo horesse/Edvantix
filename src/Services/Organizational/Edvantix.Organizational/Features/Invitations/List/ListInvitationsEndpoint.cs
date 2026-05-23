@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Invitations.List;
+﻿namespace Edvantix.Organizational.Features.Invitations.List;
 
 /// <summary>Возвращает постраничный список приглашений организации.</summary>
 public sealed class ListInvitationsEndpoint

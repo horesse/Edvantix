@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
 

@@ -1,4 +1,5 @@
 ﻿using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
@@ -32,6 +33,9 @@ public sealed class OrganizationalDbContext(DbContextOptions options)
 
     // StudentStatus directory
     public DbSet<StudentStatus> StudentStatuses => Set<StudentStatus>();
+
+    // LeadSource directory
+    public DbSet<LeadSource> LeadSources => Set<LeadSource>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

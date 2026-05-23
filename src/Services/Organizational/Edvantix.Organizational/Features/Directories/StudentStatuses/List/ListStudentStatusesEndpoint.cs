@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.List;
+﻿namespace Edvantix.Organizational.Features.Directories.StudentStatuses.List;
 
 /// <summary>Эндпоинт постраничного списка статусов студентов.</summary>
 public sealed class ListStudentStatusesEndpoint

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 
 /// <summary>Репозиторий агрегата <see cref="Invitation"/>.</summary>
 public interface IInvitationRepository : IRepository<Invitation>

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Organizations.ListByProfile;
+﻿namespace Edvantix.Organizational.Features.Organizations.ListByProfile;
 
 public sealed class GetMyOrganizationsEndpoint
     : IEndpoint<Ok<IReadOnlyList<OrganizationWithRoleDto>>, ISender>

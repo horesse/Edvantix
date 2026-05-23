@@ -1,4 +1,4 @@
-using Edvantix.Constants.Other;
+﻿using Edvantix.Constants.Other;
 using Wolverine.Attributes;
 
 namespace Edvantix.Contracts;

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 public interface IOrganizationRoleRepository : IRepository<OrganizationRole>
 {

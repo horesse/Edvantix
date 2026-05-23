@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Teachers;
+﻿namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Teachers;
 
 public sealed class GetTeachersEndpointTests
 {

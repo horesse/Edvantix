@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles;
+﻿namespace Edvantix.Organizational.Features.Roles;
 
 /// <summary>DTO элемента списка ролей.</summary>
 public sealed record RoleDto(

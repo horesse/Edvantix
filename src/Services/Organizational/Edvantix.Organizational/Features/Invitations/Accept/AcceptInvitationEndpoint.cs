@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Invitations.Accept;
+﻿namespace Edvantix.Organizational.Features.Invitations.Accept;
 
 /// <summary>Принимает приглашение по токену из письма или in-app уведомления.</summary>
 public sealed class AcceptInvitationEndpoint : IEndpoint<NoContent, string, ISender>

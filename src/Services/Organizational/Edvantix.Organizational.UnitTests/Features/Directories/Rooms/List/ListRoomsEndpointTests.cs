@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.List;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.List;
 
 public sealed class ListRoomsEndpointTests
 {

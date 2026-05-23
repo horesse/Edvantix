@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.Rooms.List;
+﻿namespace Edvantix.Organizational.Features.Directories.Rooms.List;
 
 /// <summary>Эндпоинт постраничного списка кабинетов.</summary>
 public sealed class ListRoomsEndpoint

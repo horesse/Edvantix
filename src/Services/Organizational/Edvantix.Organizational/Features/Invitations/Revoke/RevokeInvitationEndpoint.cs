@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Invitations.Revoke;
+﻿namespace Edvantix.Organizational.Features.Invitations.Revoke;
 
 /// <summary>Отзывает ожидающее приглашение по его Id.</summary>
 public sealed class RevokeInvitationEndpoint : IEndpoint<NoContent, Guid, ISender>

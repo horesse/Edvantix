@@ -1,4 +1,4 @@
-using Edvantix.Chassis.CQRS;
+﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 
 namespace Edvantix.Organizational.Features.Invitations.Accept;

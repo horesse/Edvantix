@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate.Specifications;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для подсчёта кабинетов организации.

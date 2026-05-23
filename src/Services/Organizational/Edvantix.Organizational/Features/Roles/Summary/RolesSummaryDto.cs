@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.Summary;
+﻿namespace Edvantix.Organizational.Features.Roles.Summary;
 
 /// <summary>
 /// Сводная информация о ролях организации для блока «Доступы».

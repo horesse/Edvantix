@@ -1,4 +1,4 @@
-using Edvantix.Constants.Core;
+﻿using Edvantix.Constants.Core;
 
 namespace Edvantix.Organizational.Features.Settings.Directories.Catalog;
 

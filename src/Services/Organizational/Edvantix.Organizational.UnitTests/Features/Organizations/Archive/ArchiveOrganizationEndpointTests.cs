@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Organizations.Archive;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Organizations.Archive;
 
 public sealed class ArchiveOrganizationEndpointTests
 {

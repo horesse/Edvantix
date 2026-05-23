@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Settings.Directories.Catalog;
+﻿namespace Edvantix.Organizational.Features.Settings.Directories.Catalog;
 
 /// <summary>
 /// Сводная карточка одного справочника для страницы настроек.

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 
 /// <summary>Способ доставки приглашения в организацию.</summary>
 public enum InvitationType

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 /// <summary>
 /// Спецификация для постраничного получения ролей организации с поддержкой текстового поиска.

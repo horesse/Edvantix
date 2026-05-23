@@ -1,4 +1,4 @@
-using Edvantix.Chassis.CQRS;
+﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Organizational.Pipelines;
 using Microsoft.Extensions.Logging.Abstractions;

@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Features.Organizations;
 
 namespace Edvantix.Organizational.Features.Settings.OrganizationSummary;

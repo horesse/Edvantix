@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.GetById;
+﻿namespace Edvantix.Organizational.Features.Directories.StudentStatuses.GetById;
 
 /// <summary>Эндпоинт получения статуса студента по идентификатору.</summary>
 public sealed class GetStudentStatusByIdEndpoint

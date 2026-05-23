@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Features.Organizations;
 using Edvantix.Organizational.Features.Settings.OrganizationSummary;
 using Edvantix.Persona.Grpc.Services;

@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Features.Roles.Summary;
+﻿using Edvantix.Organizational.Features.Roles.Summary;
 
 namespace Edvantix.Organizational.UnitTests.Features.Roles.Summary;
 

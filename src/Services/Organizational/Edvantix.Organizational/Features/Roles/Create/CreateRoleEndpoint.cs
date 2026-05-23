@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Roles.Create;
+﻿namespace Edvantix.Organizational.Features.Roles.Create;
 
 public sealed class CreateRoleEndpoint
     : IEndpoint<Created<Guid>, CreateRoleCommand, ISender, LinkGenerator>

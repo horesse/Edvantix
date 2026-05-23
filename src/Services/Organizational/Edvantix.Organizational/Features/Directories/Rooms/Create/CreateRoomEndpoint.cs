@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.Rooms.Create;
+﻿namespace Edvantix.Organizational.Features.Directories.Rooms.Create;
 
 /// <summary>Эндпоинт создания кабинета.</summary>
 public sealed class CreateRoomEndpoint : IEndpoint<Created<RoomDto>, CreateRoomCommand, ISender>

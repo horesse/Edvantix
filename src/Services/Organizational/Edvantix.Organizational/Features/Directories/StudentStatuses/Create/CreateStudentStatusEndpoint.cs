@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Create;
+﻿namespace Edvantix.Organizational.Features.Directories.StudentStatuses.Create;
 
 /// <summary>Эндпоинт создания статуса студента.</summary>
 public sealed class CreateStudentStatusEndpoint

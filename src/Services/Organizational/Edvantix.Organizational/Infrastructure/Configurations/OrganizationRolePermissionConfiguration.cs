@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Edvantix.Organizational.Infrastructure.Configurations;

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
 /// <summary>Репозиторий агрегата <see cref="Organization"/>.</summary>
 public interface IOrganizationRepository : IRepository<Organization>

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers;
+﻿namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers;
 
 public sealed class OrganizationMemberDtoMapperTests
 {

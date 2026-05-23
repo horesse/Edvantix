@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.Events;
+﻿using Edvantix.Organizational.Domain.Events;
 
 namespace Edvantix.Organizational.Domain.EventHandlers;
 

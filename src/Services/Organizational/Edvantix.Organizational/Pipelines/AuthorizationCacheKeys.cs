@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
 
 namespace Edvantix.Organizational.Pipelines;

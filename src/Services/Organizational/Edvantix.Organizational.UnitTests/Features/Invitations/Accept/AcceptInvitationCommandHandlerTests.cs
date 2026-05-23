@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Security.Keycloak;
+﻿using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
 using Edvantix.Organizational.Features.Invitations.Accept;
 

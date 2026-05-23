@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using Edvantix.Chassis.CQRS;
 using IMessage = Mediator.IMessage;
 

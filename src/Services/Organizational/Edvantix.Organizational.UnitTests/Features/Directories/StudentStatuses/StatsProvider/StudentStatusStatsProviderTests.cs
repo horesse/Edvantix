@@ -1,4 +1,4 @@
-using Edvantix.Chassis.Specification;
+﻿using Edvantix.Chassis.Specification;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Features.Directories.StudentStatuses;
 using Edvantix.Organizational.Features.Settings.Directories;

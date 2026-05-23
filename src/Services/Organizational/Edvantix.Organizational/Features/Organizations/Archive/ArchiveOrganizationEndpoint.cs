@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Organizations.Archive;
+﻿namespace Edvantix.Organizational.Features.Organizations.Archive;
 
 public sealed class ArchiveOrganizationEndpoint : IEndpoint<NoContent, Guid, ISender>
 {

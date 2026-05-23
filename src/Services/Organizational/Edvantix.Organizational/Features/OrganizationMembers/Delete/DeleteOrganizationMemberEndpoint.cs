@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.OrganizationMembers.Delete;
+﻿namespace Edvantix.Organizational.Features.OrganizationMembers.Delete;
 
 public sealed class DeleteOrganizationMemberEndpoint : IEndpoint<NoContent, Guid, ISender>
 {

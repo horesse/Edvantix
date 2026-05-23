@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+﻿using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Domain.StudentStatusAggregate;
 

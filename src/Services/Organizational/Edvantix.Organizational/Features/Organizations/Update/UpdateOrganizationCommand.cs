@@ -1,4 +1,4 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Utilities;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;

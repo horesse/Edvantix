@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Pipelines;
+﻿namespace Edvantix.Organizational.Pipelines;
 
 /// <summary>
 /// Проверяет, является ли профиль активным участником организации и обладает ли

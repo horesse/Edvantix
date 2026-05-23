@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Roles.Delete;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Roles.Delete;
 
 public sealed class DeleteRoleEndpointTests
 {

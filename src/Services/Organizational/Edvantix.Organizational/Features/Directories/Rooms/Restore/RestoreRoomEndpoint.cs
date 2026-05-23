@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Directories.Rooms.Restore;
+﻿namespace Edvantix.Organizational.Features.Directories.Rooms.Restore;
 
 /// <summary>Эндпоинт восстановления кабинета из архива.</summary>
 public sealed class RestoreRoomEndpoint : IEndpoint<NoContent, Guid, ISender>

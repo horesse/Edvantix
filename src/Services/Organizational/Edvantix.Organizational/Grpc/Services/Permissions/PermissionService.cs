@@ -1,4 +1,4 @@
-using Edvantix.Organizational.Pipelines;
+﻿using Edvantix.Organizational.Pipelines;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;

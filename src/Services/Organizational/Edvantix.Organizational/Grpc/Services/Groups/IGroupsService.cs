@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Grpc.Services.Groups;
+﻿namespace Edvantix.Organizational.Grpc.Services.Groups;
 
 /// <summary>Клиент Groups-сервиса для получения данных справочников.</summary>
 public interface IGroupsService

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.Archive;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.Archive;
 
 public sealed class ArchiveRoomEndpointTests
 {

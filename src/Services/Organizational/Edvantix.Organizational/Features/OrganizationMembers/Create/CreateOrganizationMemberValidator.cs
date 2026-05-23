@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.OrganizationMembers.Create;
+﻿namespace Edvantix.Organizational.Features.OrganizationMembers.Create;
 
 internal sealed class CreateOrganizationMemberValidator
     : AbstractValidator<CreateOrganizationMemberCommand>

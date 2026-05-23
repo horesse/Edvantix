@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Get;
+﻿namespace Edvantix.Organizational.UnitTests.Features.OrganizationMembers.Get;
 
 public sealed class GetOrganizationMemberEndpointTests
 {

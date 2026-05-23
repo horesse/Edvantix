@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Organizations.ListByProfile;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Organizations.ListByProfile;
 
 public sealed class GetMyOrganizationsEndpointTests
 {

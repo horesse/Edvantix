@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;

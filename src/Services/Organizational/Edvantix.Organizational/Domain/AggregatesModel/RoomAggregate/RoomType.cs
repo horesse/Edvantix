@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 /// <summary>Тип кабинета (помещения) организации.</summary>
 public enum RoomType

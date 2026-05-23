@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.UnitTests.Features.Organizations.Create;
+﻿namespace Edvantix.Organizational.UnitTests.Features.Organizations.Create;
 
 public sealed class CreateOrganizationEndpointTests
 {

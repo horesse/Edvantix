@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Organizations.Update;
+﻿namespace Edvantix.Organizational.Features.Organizations.Update;
 
 public sealed class UpdateOrganizationEndpoint
     : IEndpoint<NoContent, UpdateOrganizationCommand, ISender>

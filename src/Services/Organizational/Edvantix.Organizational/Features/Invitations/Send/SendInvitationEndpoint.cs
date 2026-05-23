@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.Invitations.Send;
+﻿namespace Edvantix.Organizational.Features.Invitations.Send;
 
 /// <summary>Отправляет приглашение в организацию (email или in-app).</summary>
 public sealed class SendInvitationEndpoint

@@ -1,4 +1,4 @@
-namespace Edvantix.Organizational.Features.OrganizationMembers.Update;
+﻿namespace Edvantix.Organizational.Features.OrganizationMembers.Update;
 
 internal sealed class UpdateOrganizationMemberValidator
     : AbstractValidator<UpdateOrganizationMemberCommand>

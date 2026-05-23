@@ -1,4 +1,4 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Edvantix.Chassis.Security.Keycloak;
 
 namespace Edvantix.Organizational.UnitTests.Features.Organizations.Update;

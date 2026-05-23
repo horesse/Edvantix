@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate;
+using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate.Specifications;
 using Edvantix.Permissions;
 
 namespace Edvantix.Groups.Features.Directories.Subjects.List;
@@ -35,21 +36,11 @@ internal sealed class ListSubjectsQueryHandler(
         var offset = (page - 1) * size;
         var orgId = tenantContext.OrganizationId;
 
-        var subjects = await repository.ListAsync(
-            orgId,
-            request.Search,
-            request.IncludeArchived,
-            offset,
-            size,
-            cancellationToken
-        );
+        var listSpec = new SubjectListSpec(orgId, offset, size, request.Search, request.IncludeArchived);
+        var countSpec = new SubjectListSpec(orgId, request.Search, request.IncludeArchived);
 
-        var total = await repository.CountAsync(
-            orgId,
-            request.Search,
-            request.IncludeArchived,
-            cancellationToken
-        );
+        var subjects = await repository.ListAsync(listSpec, cancellationToken);
+        var total = await repository.CountAsync(countSpec, cancellationToken);
 
         var items = subjects.Select(mapper.Map).ToList();
 

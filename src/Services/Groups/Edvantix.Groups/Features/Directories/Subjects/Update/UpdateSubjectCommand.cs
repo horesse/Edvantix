@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate;
+using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate.Specifications;
 using Edvantix.Permissions;
 
 namespace Edvantix.Groups.Features.Directories.Subjects.Update;
@@ -42,13 +43,8 @@ internal sealed class UpdateSubjectCommandHandler(
         var codeVo = SubjectCode.From(command.Code);
 
         if (
-            codeVo.Value != subject.Code.Value
-            && await repository.ExistsWithCodeAsync(
-                orgId,
-                codeVo.Value,
-                command.Id,
-                cancellationToken
-            )
+            codeVo != subject.Code
+            && await repository.ExistsWithCodeAsync(orgId, codeVo, command.Id, cancellationToken)
         )
             throw new InvalidOperationException(
                 $"Предмет с кодом '{codeVo.Value}' уже существует в организации."
@@ -56,10 +52,8 @@ internal sealed class UpdateSubjectCommandHandler(
 
         if (
             !string.Equals(command.Name.Trim(), subject.Name, StringComparison.Ordinal)
-            && await repository.ExistsWithNameAsync(
-                orgId,
-                command.Name,
-                command.Id,
+            && await repository.AnyAsync(
+                new SubjectByNameSpec(orgId, command.Name, command.Id),
                 cancellationToken
             )
         )

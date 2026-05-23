@@ -48,71 +48,53 @@ public sealed class ListSubjectsQueryHandlerTests
     }
 
     [Test]
-    public async Task GivenSearchParam_WhenListing_ThenPassesSearchToRepository()
+    public async Task GivenSearchParam_WhenListing_ThenCallsRepositoryWithSpec()
     {
         SetupRepo([], total: 0);
 
         await _handler.Handle(new ListSubjectsQuery(Search: "Мате"), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.ListAsync(
-                    _organizationId,
-                    "Мате",
-                    false,
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.ListAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
 
     [Test]
-    public async Task GivenPage2_WhenListing_ThenCalculatesCorrectOffset()
+    public async Task GivenPage2_WhenListing_ThenCallsRepositoryWithSpec()
     {
         SetupRepo([], total: 0);
 
         await _handler.Handle(new ListSubjectsQuery(Page: 2, Size: 10), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.ListAsync(
-                    _organizationId,
-                    null,
-                    false,
-                    10, // offset = (2-1)*10
-                    10,
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.ListAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
+    }
+
+    [Test]
+    public async Task GivenPageBeyondBounds_WhenListing_ThenClampsPagination()
+    {
+        SetupRepo([], total: 0);
+
+        var result = await _handler.Handle(
+            new ListSubjectsQuery(Page: 0, Size: 999),
+            CancellationToken.None
+        );
+
+        // Page clamps to 1, Size clamps to 100 — result is still a valid PagedResult
+        result.TotalItems.ShouldBe(0);
     }
 
     private void SetupRepo(IReadOnlyList<Subject> subjects, long total)
     {
         _repoMock
-            .Setup(r =>
-                r.ListAsync(
-                    _organizationId,
-                    It.IsAny<string?>(),
-                    It.IsAny<bool>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(r => r.ListAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(subjects);
 
         _repoMock
-            .Setup(r =>
-                r.CountAsync(
-                    _organizationId,
-                    It.IsAny<string?>(),
-                    It.IsAny<bool>(),
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(r => r.CountAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(total);
     }
 

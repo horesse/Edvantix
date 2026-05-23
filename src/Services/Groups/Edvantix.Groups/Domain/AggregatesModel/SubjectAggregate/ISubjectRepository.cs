@@ -9,56 +9,37 @@ public interface ISubjectRepository : IRepository<Subject>
     /// <summary>Добавляет новый предмет.</summary>
     Task AddAsync(Subject subject, CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Возвращает постраничный список предметов организации.
-    /// </summary>
-    /// <param name="organizationId">Идентификатор организации.</param>
-    /// <param name="search">Текстовый поиск по названию (опционально).</param>
-    /// <param name="includeArchived">Включить архивные записи.</param>
-    /// <param name="offset">Смещение (пропустить первые N записей).</param>
-    /// <param name="size">Размер страницы.</param>
-    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <summary>Возвращает список предметов, соответствующих спецификации.</summary>
     Task<IReadOnlyList<Subject>> ListAsync(
-        Guid organizationId,
-        string? search,
-        bool includeArchived,
-        int offset,
-        int size,
+        ISpecification<Subject> specification,
         CancellationToken cancellationToken = default
     );
 
-    /// <summary>Возвращает общее число предметов с учётом фильтров.</summary>
+    /// <summary>Возвращает количество предметов, соответствующих спецификации.</summary>
     Task<long> CountAsync(
-        Guid organizationId,
-        string? search,
-        bool includeArchived,
+        ISpecification<Subject> specification,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>
+    /// Возвращает <c>true</c>, если хотя бы один предмет соответствует спецификации.
+    /// Используется для проверок уникальности по названию (<see cref="SubjectByNameSpec"/>).
+    /// </summary>
+    Task<bool> AnyAsync(
+        ISpecification<Subject> specification,
         CancellationToken cancellationToken = default
     );
 
     /// <summary>
     /// Проверяет, существует ли не архивный предмет с указанным кодом в организации.
+    /// <para>
+    /// Сравнение выполняется в памяти: <see cref="SubjectCode"/> хранится через value-конвертер,
+    /// и его прямое сравнение в SQL-выражениях не поддерживается (аналогично <c>LevelRepository</c>).
+    /// </para>
     /// </summary>
-    /// <param name="organizationId">Идентификатор организации.</param>
-    /// <param name="code">Нормализованный код предмета.</param>
-    /// <param name="excludeId">Идентификатор предмета, исключаемого из проверки (для update-сценария).</param>
-    /// <param name="cancellationToken">Токен отмены.</param>
     Task<bool> ExistsWithCodeAsync(
         Guid organizationId,
-        string code,
-        Guid? excludeId = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
-    /// Проверяет, существует ли не архивный предмет с указанным именем в организации.
-    /// </summary>
-    /// <param name="organizationId">Идентификатор организации.</param>
-    /// <param name="name">Имя предмета (после Trim).</param>
-    /// <param name="excludeId">Идентификатор предмета, исключаемого из проверки (для update-сценария).</param>
-    /// <param name="cancellationToken">Токен отмены.</param>
-    Task<bool> ExistsWithNameAsync(
-        Guid organizationId,
-        string name,
+        SubjectCode code,
         Guid? excludeId = null,
         CancellationToken cancellationToken = default
     );

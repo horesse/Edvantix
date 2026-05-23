@@ -23,7 +23,7 @@ public sealed class UpdateSubjectCommandHandlerTests
         var command = BuildCommand(subject.Id);
 
         SetupSubject(subject);
-        SetupNoDuplicates(subject.Id);
+        SetupNoDuplicates();
         SetupSave();
 
         await _handler.Handle(command, CancellationToken.None);
@@ -66,7 +66,7 @@ public sealed class UpdateSubjectCommandHandlerTests
     public async Task GivenDuplicateCode_WhenUpdating_ThenThrowsInvalidOperationException()
     {
         var subject = CreateSubject(_organizationId);
-        var command = BuildCommand(subject.Id, code: "PHYS");
+        var command = BuildCommand(subject.Id, code: "PHYS"); // different from subject's MATH
 
         SetupSubject(subject);
 
@@ -74,7 +74,7 @@ public sealed class UpdateSubjectCommandHandlerTests
             .Setup(r =>
                 r.ExistsWithCodeAsync(
                     _organizationId,
-                    "PHYS",
+                    It.IsAny<SubjectCode>(),
                     subject.Id,
                     It.IsAny<CancellationToken>()
                 )
@@ -82,14 +82,7 @@ public sealed class UpdateSubjectCommandHandlerTests
             .ReturnsAsync(true);
 
         _repoMock
-            .Setup(r =>
-                r.ExistsWithNameAsync(
-                    _organizationId,
-                    It.IsAny<string>(),
-                    subject.Id,
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(r => r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
         await Should.ThrowAsync<InvalidOperationException>(() =>
@@ -102,28 +95,21 @@ public sealed class UpdateSubjectCommandHandlerTests
             .Setup(r => r.GetByIdAsync(subject.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(subject);
 
-    private void SetupNoDuplicates(Guid excludeId)
+    private void SetupNoDuplicates()
     {
         _repoMock
             .Setup(r =>
                 r.ExistsWithCodeAsync(
                     _organizationId,
-                    It.IsAny<string>(),
-                    excludeId,
+                    It.IsAny<SubjectCode>(),
+                    It.IsAny<Guid?>(),
                     It.IsAny<CancellationToken>()
                 )
             )
             .ReturnsAsync(false);
 
         _repoMock
-            .Setup(r =>
-                r.ExistsWithNameAsync(
-                    _organizationId,
-                    It.IsAny<string>(),
-                    excludeId,
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(r => r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
     }
 

@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate;
+using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate.Specifications;
 using Edvantix.Permissions;
 
 namespace Edvantix.Groups.Features.Directories.Subjects.Create;
@@ -33,24 +34,12 @@ internal sealed class CreateSubjectCommandHandler(
         var orgId = tenantContext.OrganizationId;
         var codeVo = SubjectCode.From(command.Code);
 
-        if (
-            await repository.ExistsWithCodeAsync(
-                orgId,
-                codeVo.Value,
-                cancellationToken: cancellationToken
-            )
-        )
+        if (await repository.ExistsWithCodeAsync(orgId, codeVo, cancellationToken: cancellationToken))
             throw new InvalidOperationException(
                 $"Предмет с кодом '{codeVo.Value}' уже существует в организации."
             );
 
-        if (
-            await repository.ExistsWithNameAsync(
-                orgId,
-                command.Name,
-                cancellationToken: cancellationToken
-            )
-        )
+        if (await repository.AnyAsync(new SubjectByNameSpec(orgId, command.Name), cancellationToken))
             throw new InvalidOperationException(
                 $"Предмет с названием '{command.Name.Trim()}' уже существует в организации."
             );

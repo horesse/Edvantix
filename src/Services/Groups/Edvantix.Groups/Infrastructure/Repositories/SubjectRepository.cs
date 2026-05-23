@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.Groups.Domain.AggregatesModel.SubjectAggregate;
 
 namespace Edvantix.Groups.Infrastructure.Repositories;
@@ -5,6 +6,8 @@ namespace Edvantix.Groups.Infrastructure.Repositories;
 internal sealed class SubjectRepository(GroupsDbContext context) : ISubjectRepository
 {
     public IUnitOfWork UnitOfWork => context;
+
+    private static SpecificationEvaluator Spec => SpecificationEvaluator.Instance;
 
     public async Task<Subject?> GetByIdAsync(
         Guid id,
@@ -16,85 +19,44 @@ internal sealed class SubjectRepository(GroupsDbContext context) : ISubjectRepos
         await context.Subjects.AddAsync(subject, cancellationToken);
 
     public async Task<IReadOnlyList<Subject>> ListAsync(
-        Guid organizationId,
-        string? search,
-        bool includeArchived,
-        int offset,
-        int size,
+        ISpecification<Subject> specification,
         CancellationToken cancellationToken = default
-    )
-    {
-        var query = context.Subjects.Where(s => s.OrganizationId == organizationId);
-
-        if (!includeArchived)
-            query = query.Where(s => !s.IsArchived);
-
-        if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(s => s.Name.Contains(search));
-
-        return await query
-            .OrderBy(s => s.Order)
-            .ThenBy(s => s.Name)
-            .Skip(offset)
-            .Take(size)
+    ) =>
+        await Spec
+            .GetQuery(context.Subjects.AsNoTracking(), specification)
             .ToListAsync(cancellationToken);
-    }
 
     public async Task<long> CountAsync(
-        Guid organizationId,
-        string? search,
-        bool includeArchived,
+        ISpecification<Subject> specification,
         CancellationToken cancellationToken = default
-    )
-    {
-        var query = context.Subjects.Where(s => s.OrganizationId == organizationId);
+    ) =>
+        await Spec
+            .GetQuery(context.Subjects.AsNoTracking(), specification)
+            .LongCountAsync(cancellationToken);
 
-        if (!includeArchived)
-            query = query.Where(s => !s.IsArchived);
-
-        if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(s => s.Name.Contains(search));
-
-        return await query.LongCountAsync(cancellationToken);
-    }
+    public async Task<bool> AnyAsync(
+        ISpecification<Subject> specification,
+        CancellationToken cancellationToken = default
+    ) =>
+        await Spec
+            .GetQuery(context.Subjects.AsNoTracking(), specification)
+            .AnyAsync(cancellationToken);
 
     public async Task<bool> ExistsWithCodeAsync(
         Guid organizationId,
-        string code,
+        SubjectCode code,
         Guid? excludeId = null,
         CancellationToken cancellationToken = default
     )
     {
-        var normalizedCode = SubjectCode.From(code).Value;
-
-        // Загружаем коды активных предметов в память для сравнения (предметов мало, запрос лёгкий)
+        // Сравнение выполняется в памяти: SubjectCode хранится через value-конвертер
+        // и не транслируется напрямую в SQL-предикат (аналогичный подход в LevelRepository).
         var entries = await context
             .Subjects.Where(s => s.OrganizationId == organizationId && !s.IsArchived)
             .Select(s => new { s.Id, s.Code })
             .ToListAsync(cancellationToken);
 
-        return entries.Any(e =>
-            e.Code.Value == normalizedCode && (!excludeId.HasValue || e.Id != excludeId.Value)
-        );
-    }
-
-    public async Task<bool> ExistsWithNameAsync(
-        Guid organizationId,
-        string name,
-        Guid? excludeId = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var trimmed = name.Trim();
-
-        var query = context.Subjects.Where(s =>
-            s.OrganizationId == organizationId && !s.IsArchived && s.Name == trimmed
-        );
-
-        if (excludeId.HasValue)
-            query = query.Where(s => s.Id != excludeId.Value);
-
-        return await query.AnyAsync(cancellationToken);
+        return entries.Any(e => e.Code == code && (!excludeId.HasValue || e.Id != excludeId.Value));
     }
 
     public async Task<(int ActiveCount, int ArchivedCount, DateTime? LastModifiedAt)> GetStatsAsync(
@@ -102,14 +64,14 @@ internal sealed class SubjectRepository(GroupsDbContext context) : ISubjectRepos
         CancellationToken cancellationToken = default
     )
     {
-        var subjects = await context
+        var stats = await context
             .Subjects.Where(s => s.OrganizationId == organizationId)
             .Select(s => new { s.IsArchived, s.LastModifiedAt })
             .ToListAsync(cancellationToken);
 
-        var activeCount = subjects.Count(s => !s.IsArchived);
-        var archivedCount = subjects.Count(s => s.IsArchived);
-        var lastModifiedAt = subjects
+        var activeCount = stats.Count(s => !s.IsArchived);
+        var archivedCount = stats.Count(s => s.IsArchived);
+        var lastModifiedAt = stats
             .Where(s => s.LastModifiedAt.HasValue)
             .Max(s => s.LastModifiedAt);
 

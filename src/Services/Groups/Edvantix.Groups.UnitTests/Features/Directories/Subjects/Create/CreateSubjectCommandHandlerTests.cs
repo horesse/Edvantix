@@ -76,19 +76,17 @@ public sealed class CreateSubjectCommandHandlerTests
 
         _repoMock
             .Setup(r =>
-                r.ExistsWithCodeAsync(_organizationId, "MATH", null, It.IsAny<CancellationToken>())
-            )
-            .ReturnsAsync(true);
-
-        _repoMock
-            .Setup(r =>
-                r.ExistsWithNameAsync(
+                r.ExistsWithCodeAsync(
                     _organizationId,
-                    It.IsAny<string>(),
+                    It.IsAny<SubjectCode>(),
                     null,
                     It.IsAny<CancellationToken>()
                 )
             )
+            .ReturnsAsync(true);
+
+        _repoMock
+            .Setup(r => r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
         await Should.ThrowAsync<InvalidOperationException>(() =>
@@ -105,7 +103,7 @@ public sealed class CreateSubjectCommandHandlerTests
             .Setup(r =>
                 r.ExistsWithCodeAsync(
                     _organizationId,
-                    It.IsAny<string>(),
+                    It.IsAny<SubjectCode>(),
                     null,
                     It.IsAny<CancellationToken>()
                 )
@@ -113,14 +111,7 @@ public sealed class CreateSubjectCommandHandlerTests
             .ReturnsAsync(false);
 
         _repoMock
-            .Setup(r =>
-                r.ExistsWithNameAsync(
-                    _organizationId,
-                    It.IsAny<string>(),
-                    null,
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(r => r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         await Should.ThrowAsync<InvalidOperationException>(() =>
@@ -134,7 +125,7 @@ public sealed class CreateSubjectCommandHandlerTests
             .Setup(r =>
                 r.ExistsWithCodeAsync(
                     _organizationId,
-                    It.IsAny<string>(),
+                    It.IsAny<SubjectCode>(),
                     null,
                     It.IsAny<CancellationToken>()
                 )
@@ -142,14 +133,7 @@ public sealed class CreateSubjectCommandHandlerTests
             .ReturnsAsync(false);
 
         _repoMock
-            .Setup(r =>
-                r.ExistsWithNameAsync(
-                    _organizationId,
-                    It.IsAny<string>(),
-                    null,
-                    It.IsAny<CancellationToken>()
-                )
-            )
+            .Setup(r => r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
     }
 

@@ -60,8 +60,5 @@ internal static class Extensions
         });
 
         builder.AddGrpcServices();
-
-        // Провайдеры статистики справочников (по одному на каждый справочник).
-        services.AddSingleton<IDirectoryStatsProvider, LevelDirectoryStatsProvider>();
     }
 }

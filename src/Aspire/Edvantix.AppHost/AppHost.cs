@@ -137,6 +137,9 @@ var groupsApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+// TODO: Такого быть не должно, циклическая зависимость сервисов. Перенести справочники в Organizational / еще куда-то
+organizationalApi.WithReference(groupsApi);
+
 builder
     .AddProject<Edvantix_Identity>(Services.Identity)
     .WithReference(identityDb)

@@ -82,7 +82,9 @@ public sealed class UpdateSubjectCommandHandlerTests
             .ReturnsAsync(true);
 
         _repoMock
-            .Setup(r => r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(false);
 
         await Should.ThrowAsync<InvalidOperationException>(() =>
@@ -109,7 +111,9 @@ public sealed class UpdateSubjectCommandHandlerTests
             .ReturnsAsync(false);
 
         _repoMock
-            .Setup(r => r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.AnyAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(false);
     }
 

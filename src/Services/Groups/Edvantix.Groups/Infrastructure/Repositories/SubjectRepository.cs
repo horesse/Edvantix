@@ -22,24 +22,21 @@ internal sealed class SubjectRepository(GroupsDbContext context) : ISubjectRepos
         ISpecification<Subject> specification,
         CancellationToken cancellationToken = default
     ) =>
-        await Spec
-            .GetQuery(context.Subjects.AsNoTracking(), specification)
+        await Spec.GetQuery(context.Subjects.AsNoTracking(), specification)
             .ToListAsync(cancellationToken);
 
     public async Task<long> CountAsync(
         ISpecification<Subject> specification,
         CancellationToken cancellationToken = default
     ) =>
-        await Spec
-            .GetQuery(context.Subjects.AsNoTracking(), specification)
+        await Spec.GetQuery(context.Subjects.AsNoTracking(), specification)
             .LongCountAsync(cancellationToken);
 
     public async Task<bool> AnyAsync(
         ISpecification<Subject> specification,
         CancellationToken cancellationToken = default
     ) =>
-        await Spec
-            .GetQuery(context.Subjects.AsNoTracking(), specification)
+        await Spec.GetQuery(context.Subjects.AsNoTracking(), specification)
             .AnyAsync(cancellationToken);
 
     public async Task<bool> ExistsWithCodeAsync(
@@ -71,9 +68,7 @@ internal sealed class SubjectRepository(GroupsDbContext context) : ISubjectRepos
 
         var activeCount = stats.Count(s => !s.IsArchived);
         var archivedCount = stats.Count(s => s.IsArchived);
-        var lastModifiedAt = stats
-            .Where(s => s.LastModifiedAt.HasValue)
-            .Max(s => s.LastModifiedAt);
+        var lastModifiedAt = stats.Where(s => s.LastModifiedAt.HasValue).Max(s => s.LastModifiedAt);
 
         return (activeCount, archivedCount, lastModifiedAt);
     }

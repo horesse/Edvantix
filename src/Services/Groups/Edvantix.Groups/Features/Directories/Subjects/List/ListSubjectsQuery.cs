@@ -36,7 +36,13 @@ internal sealed class ListSubjectsQueryHandler(
         var offset = (page - 1) * size;
         var orgId = tenantContext.OrganizationId;
 
-        var listSpec = new SubjectListSpec(orgId, offset, size, request.Search, request.IncludeArchived);
+        var listSpec = new SubjectListSpec(
+            orgId,
+            offset,
+            size,
+            request.Search,
+            request.IncludeArchived
+        );
         var countSpec = new SubjectListSpec(orgId, request.Search, request.IncludeArchived);
 
         var subjects = await repository.ListAsync(listSpec, cancellationToken);

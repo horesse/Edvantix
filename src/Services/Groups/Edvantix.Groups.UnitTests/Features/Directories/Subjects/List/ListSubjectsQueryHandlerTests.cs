@@ -90,11 +90,15 @@ public sealed class ListSubjectsQueryHandlerTests
     private void SetupRepo(IReadOnlyList<Subject> subjects, long total)
     {
         _repoMock
-            .Setup(r => r.ListAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(subjects);
 
         _repoMock
-            .Setup(r => r.CountAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Subject>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(total);
     }
 

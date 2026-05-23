@@ -93,7 +93,13 @@ public sealed class RoomAggregateTests
     [Arguments(1000)]
     public void GivenBoundaryCapacity_WhenCreatingRoom_ThenShouldBeValid(int capacity)
     {
-        var room = new Room(ValidOrgId, "Зал А", capacity: capacity, floor: null, RoomType.Classroom);
+        var room = new Room(
+            ValidOrgId,
+            "Зал А",
+            capacity: capacity,
+            floor: null,
+            RoomType.Classroom
+        );
 
         room.Capacity.ShouldBe(capacity);
     }

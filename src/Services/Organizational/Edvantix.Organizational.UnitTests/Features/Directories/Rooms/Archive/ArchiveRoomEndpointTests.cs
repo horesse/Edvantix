@@ -16,11 +16,7 @@ public sealed class ArchiveRoomEndpointTests
         await _endpoint.HandleAsync(id, _senderMock.Object);
 
         _senderMock.Verify(
-            s =>
-                s.Send(
-                    It.Is<ArchiveRoomCommand>(c => c.Id == id),
-                    It.IsAny<CancellationToken>()
-                ),
+            s => s.Send(It.Is<ArchiveRoomCommand>(c => c.Id == id), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

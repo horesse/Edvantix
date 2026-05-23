@@ -19,9 +19,5 @@ internal sealed class RoomUniqueNameChecker(IRoomRepository repository) : IUniqu
         string name,
         Guid? excludeId,
         CancellationToken ct
-    ) =>
-        repository.AnyAsync(
-            new RoomUniqueNameSpecification(organizationId, name, excludeId),
-            ct
-        );
+    ) => repository.AnyAsync(new RoomUniqueNameSpecification(organizationId, name, excludeId), ct);
 }

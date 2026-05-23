@@ -25,9 +25,7 @@ public sealed class CreateRoomEndpointTests
     {
         var command = new CreateRoomCommand("Зал А", 50, null, RoomType.Meeting);
         var dto = CreateDto();
-        _senderMock
-            .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(dto);
+        _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
         var result = await _endpoint.HandleAsync(command, _senderMock.Object);
 
@@ -40,9 +38,7 @@ public sealed class CreateRoomEndpointTests
     {
         var command = new CreateRoomCommand("Каб. 101", 20, "1", RoomType.Classroom);
         var dto = CreateDto();
-        _senderMock
-            .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(dto);
+        _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
         var result = await _endpoint.HandleAsync(command, _senderMock.Object);
 

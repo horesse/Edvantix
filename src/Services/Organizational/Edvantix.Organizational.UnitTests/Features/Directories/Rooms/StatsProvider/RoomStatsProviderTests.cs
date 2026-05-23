@@ -29,10 +29,7 @@ public sealed class RoomStatsProviderTests
         // CountAsync вызывается дважды: для активных (isArchived=false), затем для архивных
         _repoMock
             .SetupSequence(r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Room>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.CountAsync(It.IsAny<ISpecification<Room>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(5)
             .ReturnsAsync(2);
@@ -54,10 +51,7 @@ public sealed class RoomStatsProviderTests
     {
         _repoMock
             .Setup(r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Room>>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.CountAsync(It.IsAny<ISpecification<Room>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(0);
 

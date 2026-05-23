@@ -20,24 +20,17 @@ internal sealed class RoomRepository(OrganizationalDbContext context) : IRoomRep
     public async Task<IReadOnlyList<Room>> ListAsync(
         ISpecification<Room> specification,
         CancellationToken ct = default
-    ) =>
-        await Evaluator
-            .GetQuery(context.Rooms.AsQueryable(), specification)
-            .ToListAsync(ct);
+    ) => await Evaluator.GetQuery(context.Rooms.AsQueryable(), specification).ToListAsync(ct);
 
     public async Task<int> CountAsync(
         ISpecification<Room> specification,
         CancellationToken ct = default
-    ) =>
-        await Evaluator
-            .GetQuery(context.Rooms.AsQueryable(), specification)
-            .CountAsync(ct);
+    ) => await Evaluator.GetQuery(context.Rooms.AsQueryable(), specification).CountAsync(ct);
 
     public async Task<bool> AnyAsync(
         ISpecification<Room> specification,
         CancellationToken ct = default
-    ) =>
-        await Evaluator.GetQuery(context.Rooms.AsQueryable(), specification).AnyAsync(ct);
+    ) => await Evaluator.GetQuery(context.Rooms.AsQueryable(), specification).AnyAsync(ct);
 
     public async Task<DateTime?> GetLastModifiedAtAsync(
         Guid organizationId,

@@ -21,7 +21,12 @@ public sealed class UpdateRoomCommandHandlerTests
         _repoMock
             .Setup(r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-        _handler = new(_tenantMock.Object, _claimsMock.Object, _repoMock.Object, _mapperMock.Object);
+        _handler = new(
+            _tenantMock.Object,
+            _claimsMock.Object,
+            _repoMock.Object,
+            _mapperMock.Object
+        );
     }
 
     [Test]

@@ -10,7 +10,13 @@ public sealed class UpdateRoomEndpointTests
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldCallSenderOnce()
     {
-        var command = new UpdateRoomCommand(Guid.CreateVersion7(), "Каб. 204", 30, "2", RoomType.Classroom);
+        var command = new UpdateRoomCommand(
+            Guid.CreateVersion7(),
+            "Каб. 204",
+            30,
+            "2",
+            RoomType.Classroom
+        );
         _senderMock
             .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
             .ReturnsAsync(CreateDto());
@@ -24,10 +30,14 @@ public sealed class UpdateRoomEndpointTests
     public async Task GivenValidCommand_WhenHandling_ThenShouldReturnOkWithDto()
     {
         var dto = CreateDto();
-        var command = new UpdateRoomCommand(Guid.CreateVersion7(), "Зал А", 50, null, RoomType.Meeting);
-        _senderMock
-            .Setup(s => s.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(dto);
+        var command = new UpdateRoomCommand(
+            Guid.CreateVersion7(),
+            "Зал А",
+            50,
+            null,
+            RoomType.Meeting
+        );
+        _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 
         var result = await _endpoint.HandleAsync(command, _senderMock.Object);
 

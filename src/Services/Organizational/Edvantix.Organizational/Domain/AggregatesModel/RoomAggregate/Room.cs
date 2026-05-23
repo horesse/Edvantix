@@ -69,7 +69,14 @@ public sealed class Room : OrganizationScopedLookup
     /// <param name="roomType">Новый тип помещения.</param>
     /// <param name="order">Новый порядок сортировки.</param>
     /// <param name="by">Идентификатор пользователя, выполняющего операцию.</param>
-    public void Update(string name, int capacity, string? floor, RoomType roomType, int order, Guid by)
+    public void Update(
+        string name,
+        int capacity,
+        string? floor,
+        RoomType roomType,
+        int order,
+        Guid by
+    )
     {
         Rename(name, by);
         ValidateCapacity(capacity);

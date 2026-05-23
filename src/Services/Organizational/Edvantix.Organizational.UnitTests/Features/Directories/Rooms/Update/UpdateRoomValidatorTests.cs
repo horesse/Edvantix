@@ -30,7 +30,13 @@ public sealed class UpdateRoomValidatorTests
     public async Task GivenValidCommand_WhenValidating_ThenShouldBeValid()
     {
         var validator = CreateValidator();
-        var command = new UpdateRoomCommand(Guid.CreateVersion7(), "Каб. 204", 30, "2", RoomType.Classroom);
+        var command = new UpdateRoomCommand(
+            Guid.CreateVersion7(),
+            "Каб. 204",
+            30,
+            "2",
+            RoomType.Classroom
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -79,7 +85,13 @@ public sealed class UpdateRoomValidatorTests
     public async Task GivenDuplicateName_WhenValidating_ThenShouldFail()
     {
         var validator = CreateValidator(nameExists: true);
-        var command = new UpdateRoomCommand(Guid.CreateVersion7(), "Каб. 204", 30, null, RoomType.Classroom);
+        var command = new UpdateRoomCommand(
+            Guid.CreateVersion7(),
+            "Каб. 204",
+            30,
+            null,
+            RoomType.Classroom
+        );
 
         var result = await validator.TestValidateAsync(command);
 

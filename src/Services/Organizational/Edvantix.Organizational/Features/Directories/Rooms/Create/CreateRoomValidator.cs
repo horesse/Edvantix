@@ -3,8 +3,7 @@ using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.Features.Directories.Rooms.Create;
 
-internal sealed class CreateRoomValidator
-    : OrganizationScopedLookupValidator<CreateRoomCommand>
+internal sealed class CreateRoomValidator : OrganizationScopedLookupValidator<CreateRoomCommand>
 {
     public CreateRoomValidator(RoomUniqueNameChecker nameChecker, ITenantContext tenantContext)
         : base(nameChecker, _ => tenantContext.OrganizationId, c => c.Name)
@@ -17,9 +16,7 @@ internal sealed class CreateRoomValidator
 
         RuleFor(c => c.Floor)
             .MaximumLength(Room.MaxFloorLength)
-            .WithMessage(
-                $"Номер/название этажа не может превышать {Room.MaxFloorLength} символов."
-            )
+            .WithMessage($"Номер/название этажа не может превышать {Room.MaxFloorLength} символов.")
             .When(c => c.Floor is not null);
 
         RuleFor(c => c.Order)

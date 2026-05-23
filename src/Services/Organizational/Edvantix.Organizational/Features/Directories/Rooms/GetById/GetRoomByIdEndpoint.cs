@@ -1,8 +1,7 @@
 namespace Edvantix.Organizational.Features.Directories.Rooms.GetById;
 
 /// <summary>Эндпоинт получения кабинета по идентификатору.</summary>
-public sealed class GetRoomByIdEndpoint
-    : IEndpoint<Results<Ok<RoomDto>, NotFound>, Guid, ISender>
+public sealed class GetRoomByIdEndpoint : IEndpoint<Results<Ok<RoomDto>, NotFound>, Guid, ISender>
 {
     /// <inheritdoc/>
     public void MapEndpoint(IEndpointRouteBuilder app)

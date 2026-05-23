@@ -63,19 +63,11 @@ public sealed class ListRoomsQueryHandlerTests
         await _handler.Handle(new ListRoomsQuery(IncludeArchived: false), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.ListAsync(
-                    It.IsAny<ISpecification<Room>>(),
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.ListAsync(It.IsAny<ISpecification<Room>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
         _repoMock.Verify(
-            r =>
-                r.CountAsync(
-                    It.IsAny<ISpecification<Room>>(),
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.CountAsync(It.IsAny<ISpecification<Room>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
@@ -89,17 +81,10 @@ public sealed class ListRoomsQueryHandlerTests
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<Room>>()))
             .Returns(Array.Empty<RoomListItemDto>());
 
-        await _handler.Handle(
-            new ListRoomsQuery(Search: "Каб"),
-            CancellationToken.None
-        );
+        await _handler.Handle(new ListRoomsQuery(Search: "Каб"), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.ListAsync(
-                    It.IsAny<ISpecification<Room>>(),
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.ListAsync(It.IsAny<ISpecification<Room>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }

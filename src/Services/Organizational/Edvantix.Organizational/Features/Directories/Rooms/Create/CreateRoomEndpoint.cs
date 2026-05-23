@@ -1,8 +1,7 @@
 namespace Edvantix.Organizational.Features.Directories.Rooms.Create;
 
 /// <summary>Эндпоинт создания кабинета.</summary>
-public sealed class CreateRoomEndpoint
-    : IEndpoint<Created<RoomDto>, CreateRoomCommand, ISender>
+public sealed class CreateRoomEndpoint : IEndpoint<Created<RoomDto>, CreateRoomCommand, ISender>
 {
     /// <inheritdoc/>
     public void MapEndpoint(IEndpointRouteBuilder app)

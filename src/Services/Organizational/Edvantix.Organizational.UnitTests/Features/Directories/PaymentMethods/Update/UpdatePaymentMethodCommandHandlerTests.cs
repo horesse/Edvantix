@@ -36,9 +36,7 @@ public sealed class UpdatePaymentMethodCommandHandlerTests
     {
         var pm = CreatePaymentMethod(_orgId);
         var command = new UpdatePaymentMethodCommand(pm.Id, "Перевод", "transfer", true, false, 2);
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
         _mapperMock.Setup(m => m.Map(pm)).Returns(CreateDto());
 
         await _handler.Handle(command, CancellationToken.None);
@@ -75,9 +73,7 @@ public sealed class UpdatePaymentMethodCommandHandlerTests
     public async Task GivenPaymentMethodFromDifferentOrganization_WhenUpdating_ThenShouldThrowNotFoundException()
     {
         var pm = CreatePaymentMethod(Guid.CreateVersion7());
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler

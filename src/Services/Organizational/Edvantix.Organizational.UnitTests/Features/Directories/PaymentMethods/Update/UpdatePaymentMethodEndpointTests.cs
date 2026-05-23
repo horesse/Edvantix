@@ -11,7 +11,13 @@ public sealed class UpdatePaymentMethodEndpointTests
     [Test]
     public async Task GivenValidCommand_WhenHandling_ThenShouldReturnOk()
     {
-        var command = new UpdatePaymentMethodCommand(Guid.CreateVersion7(), "Перевод", "transfer", true, false);
+        var command = new UpdatePaymentMethodCommand(
+            Guid.CreateVersion7(),
+            "Перевод",
+            "transfer",
+            true,
+            false
+        );
         var dto = CreateDto();
         _senderMock.Setup(s => s.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(dto);
 

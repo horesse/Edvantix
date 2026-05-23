@@ -23,9 +23,7 @@ public sealed class GetPaymentMethodByIdQueryHandlerTests
     {
         var pm = CreatePaymentMethod(_orgId);
         var expectedDto = CreateDto(pm.Id);
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
         _mapperMock.Setup(m => m.Map(pm)).Returns(expectedDto);
 
         var result = await _handler.Handle(
@@ -53,9 +51,7 @@ public sealed class GetPaymentMethodByIdQueryHandlerTests
     public async Task GivenPaymentMethodFromDifferentOrganization_WhenGettingById_ThenShouldThrowNotFoundException()
     {
         var pm = CreatePaymentMethod(Guid.CreateVersion7());
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await Should.ThrowAsync<NotFoundException>(() =>
             _handler.Handle(new GetPaymentMethodByIdQuery(pm.Id), CancellationToken.None).AsTask()

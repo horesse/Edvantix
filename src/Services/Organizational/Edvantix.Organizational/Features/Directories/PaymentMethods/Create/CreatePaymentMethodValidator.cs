@@ -19,7 +19,9 @@ internal sealed class CreatePaymentMethodValidator
             .NotEmpty()
             .WithMessage("Код способа оплаты не может быть пустым.")
             .MaximumLength(PaymentMethod.MaxCodeLength)
-            .WithMessage($"Код способа оплаты не может превышать {PaymentMethod.MaxCodeLength} символов.")
+            .WithMessage(
+                $"Код способа оплаты не может превышать {PaymentMethod.MaxCodeLength} символов."
+            )
             .MustAsync(
                 async (code, ct) =>
                     !await repository.AnyAsync(

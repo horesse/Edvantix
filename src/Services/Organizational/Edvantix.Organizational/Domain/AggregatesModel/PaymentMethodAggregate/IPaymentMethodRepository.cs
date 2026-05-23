@@ -19,13 +19,19 @@ public interface IPaymentMethodRepository : IRepository<PaymentMethod>
     );
 
     /// <summary>Возвращает количество способов оплаты, удовлетворяющих спецификации.</summary>
-    Task<int> CountAsync(ISpecification<PaymentMethod> specification, CancellationToken ct = default);
+    Task<int> CountAsync(
+        ISpecification<PaymentMethod> specification,
+        CancellationToken ct = default
+    );
 
     /// <summary>
     /// Возвращает <see langword="true"/>, если существует хотя бы один способ оплаты,
     /// удовлетворяющий спецификации.
     /// </summary>
-    Task<bool> AnyAsync(ISpecification<PaymentMethod> specification, CancellationToken ct = default);
+    Task<bool> AnyAsync(
+        ISpecification<PaymentMethod> specification,
+        CancellationToken ct = default
+    );
 
     /// <summary>Дата последнего изменения любой записи организации.</summary>
     Task<DateTime?> GetLastModifiedAtAsync(Guid organizationId, CancellationToken ct = default);

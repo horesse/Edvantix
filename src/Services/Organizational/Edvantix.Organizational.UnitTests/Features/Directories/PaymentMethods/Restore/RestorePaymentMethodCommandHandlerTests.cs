@@ -29,9 +29,7 @@ public sealed class RestorePaymentMethodCommandHandlerTests
     {
         var pm = CreatePaymentMethod(_orgId);
         pm.Archive(_profileId);
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await _handler.Handle(new RestorePaymentMethodCommand(pm.Id), CancellationToken.None);
 
@@ -46,9 +44,7 @@ public sealed class RestorePaymentMethodCommandHandlerTests
     public async Task GivenAlreadyActivePaymentMethod_WhenRestoring_ThenShouldBeIdempotent()
     {
         var pm = CreatePaymentMethod(_orgId);
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await _handler.Handle(new RestorePaymentMethodCommand(pm.Id), CancellationToken.None);
 
@@ -72,14 +68,10 @@ public sealed class RestorePaymentMethodCommandHandlerTests
     public async Task GivenPaymentMethodFromDifferentOrganization_WhenRestoring_ThenShouldThrowNotFoundException()
     {
         var pm = CreatePaymentMethod(Guid.CreateVersion7());
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new RestorePaymentMethodCommand(pm.Id), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new RestorePaymentMethodCommand(pm.Id), CancellationToken.None).AsTask()
         );
     }
 

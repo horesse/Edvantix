@@ -28,9 +28,7 @@ public sealed class ArchivePaymentMethodCommandHandlerTests
     public async Task GivenActivePaymentMethod_WhenArchiving_ThenShouldSetIsArchivedAndSave()
     {
         var pm = CreatePaymentMethod(_orgId);
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await _handler.Handle(new ArchivePaymentMethodCommand(pm.Id), CancellationToken.None);
 
@@ -46,9 +44,7 @@ public sealed class ArchivePaymentMethodCommandHandlerTests
     {
         var pm = CreatePaymentMethod(_orgId);
         pm.Archive(_profileId);
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await _handler.Handle(new ArchivePaymentMethodCommand(pm.Id), CancellationToken.None);
 
@@ -72,14 +68,10 @@ public sealed class ArchivePaymentMethodCommandHandlerTests
     public async Task GivenPaymentMethodFromDifferentOrganization_WhenArchiving_ThenShouldThrowNotFoundException()
     {
         var pm = CreatePaymentMethod(Guid.CreateVersion7());
-        _repoMock
-            .Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(pm);
+        _repoMock.Setup(r => r.GetByIdAsync(pm.Id, It.IsAny<CancellationToken>())).ReturnsAsync(pm);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler
-                .Handle(new ArchivePaymentMethodCommand(pm.Id), CancellationToken.None)
-                .AsTask()
+            _handler.Handle(new ArchivePaymentMethodCommand(pm.Id), CancellationToken.None).AsTask()
         );
     }
 

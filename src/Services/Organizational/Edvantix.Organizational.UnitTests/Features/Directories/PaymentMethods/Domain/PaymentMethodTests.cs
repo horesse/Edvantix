@@ -42,7 +42,9 @@ public sealed class PaymentMethodTests
     {
         var longCode = new string('x', PaymentMethod.MaxCodeLength + 1);
 
-        Should.Throw<ArgumentException>(() => new PaymentMethod(OrgId, "Карта", longCode, true, false));
+        Should.Throw<ArgumentException>(() =>
+            new PaymentMethod(OrgId, "Карта", longCode, true, false)
+        );
     }
 
     [Test]

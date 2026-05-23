@@ -54,7 +54,13 @@ public sealed class UpdatePaymentMethodValidatorTests
     public async Task GivenValidCommand_WhenValidating_ThenShouldBeValid()
     {
         var (validator, _) = CreateValidator();
-        var command = new UpdatePaymentMethodCommand(Guid.CreateVersion7(), "Карта", "card", true, false);
+        var command = new UpdatePaymentMethodCommand(
+            Guid.CreateVersion7(),
+            "Карта",
+            "card",
+            true,
+            false
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -68,7 +74,13 @@ public sealed class UpdatePaymentMethodValidatorTests
     public async Task GivenEmptyName_WhenValidating_ThenShouldFailOnName(string? name)
     {
         var (validator, _) = CreateValidator();
-        var command = new UpdatePaymentMethodCommand(Guid.CreateVersion7(), name!, "card", true, false);
+        var command = new UpdatePaymentMethodCommand(
+            Guid.CreateVersion7(),
+            name!,
+            "card",
+            true,
+            false
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -81,7 +93,13 @@ public sealed class UpdatePaymentMethodValidatorTests
     public async Task GivenDuplicateName_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator(nameExists: true);
-        var command = new UpdatePaymentMethodCommand(Guid.CreateVersion7(), "Карта", "card", true, false);
+        var command = new UpdatePaymentMethodCommand(
+            Guid.CreateVersion7(),
+            "Карта",
+            "card",
+            true,
+            false
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -94,7 +112,13 @@ public sealed class UpdatePaymentMethodValidatorTests
     public async Task GivenDuplicateCode_WhenValidating_ThenShouldFail()
     {
         var (validator, _) = CreateValidator(codeExists: true);
-        var command = new UpdatePaymentMethodCommand(Guid.CreateVersion7(), "Карта", "card", true, false);
+        var command = new UpdatePaymentMethodCommand(
+            Guid.CreateVersion7(),
+            "Карта",
+            "card",
+            true,
+            false
+        );
 
         var result = await validator.TestValidateAsync(command);
 
@@ -106,7 +130,13 @@ public sealed class UpdatePaymentMethodValidatorTests
     {
         var (validator, _) = CreateValidator();
         var longCode = new string('x', PaymentMethod.MaxCodeLength + 1);
-        var command = new UpdatePaymentMethodCommand(Guid.CreateVersion7(), "Карта", longCode, true, false);
+        var command = new UpdatePaymentMethodCommand(
+            Guid.CreateVersion7(),
+            "Карта",
+            longCode,
+            true,
+            false
+        );
 
         var result = await validator.TestValidateAsync(command);
 

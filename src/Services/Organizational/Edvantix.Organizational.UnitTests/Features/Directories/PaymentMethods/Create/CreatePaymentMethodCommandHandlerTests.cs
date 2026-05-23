@@ -55,7 +55,13 @@ public sealed class CreatePaymentMethodCommandHandlerTests
     public async Task GivenValidCommand_WhenHandling_ThenPaymentMethodShouldBelongToCurrentOrganization()
     {
         PaymentMethod? capturedMethod = null;
-        var command = new CreatePaymentMethodCommand("Рассрочка", "installment", false, true, Order: 1);
+        var command = new CreatePaymentMethodCommand(
+            "Рассрочка",
+            "installment",
+            false,
+            true,
+            Order: 1
+        );
         _repoMock
             .Setup(r => r.AddAsync(It.IsAny<PaymentMethod>(), It.IsAny<CancellationToken>()))
             .Callback<PaymentMethod, CancellationToken>((pm, _) => capturedMethod = pm)

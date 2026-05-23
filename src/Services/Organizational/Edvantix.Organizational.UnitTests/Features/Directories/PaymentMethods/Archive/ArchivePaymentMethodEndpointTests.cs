@@ -12,9 +12,7 @@ public sealed class ArchivePaymentMethodEndpointTests
     {
         var id = Guid.CreateVersion7();
         _senderMock
-            .Setup(s =>
-                s.Send(new ArchivePaymentMethodCommand(id), It.IsAny<CancellationToken>())
-            )
+            .Setup(s => s.Send(new ArchivePaymentMethodCommand(id), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Mediator.Unit.Value);
 
         var result = await _endpoint.HandleAsync(id, _senderMock.Object);

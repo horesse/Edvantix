@@ -37,10 +37,7 @@ internal sealed class PaymentMethodRepository(OrganizationalDbContext context)
     public async Task<bool> AnyAsync(
         ISpecification<PaymentMethod> specification,
         CancellationToken ct = default
-    ) =>
-        await Evaluator
-            .GetQuery(context.PaymentMethods.AsQueryable(), specification)
-            .AnyAsync(ct);
+    ) => await Evaluator.GetQuery(context.PaymentMethods.AsQueryable(), specification).AnyAsync(ct);
 
     public async Task<DateTime?> GetLastModifiedAtAsync(
         Guid organizationId,

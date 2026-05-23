@@ -36,8 +36,6 @@ internal sealed class PaymentMethodConfiguration : IEntityTypeConfiguration<Paym
             .IsUnique()
             .HasDatabaseName("ix_payment_methods_org_code_active");
 
-        builder
-            .HasIndex(pm => pm.OrganizationId)
-            .HasDatabaseName("ix_payment_methods_org_id");
+        builder.HasIndex(pm => pm.OrganizationId).HasDatabaseName("ix_payment_methods_org_id");
     }
 }

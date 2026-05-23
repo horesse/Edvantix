@@ -49,33 +49,7 @@ internal static class Extensions
 
         services.AddMapper(typeof(IOrganizationalApiMarker));
 
-        // Регистрируем провайдеры статистики справочников (IDirectoryStatsProvider) и
-        // чекеры уникальности имён (IUniqueNameChecker) через Scrutor-сканирование.
-        services.Scan(scan =>
-            scan.FromAssembliesOf(typeof(IOrganizationalApiMarker))
-                .AddClasses(
-                    classes =>
-                        classes.AssignableTo(
-                            typeof(Edvantix.Organizational.Features.Settings.Directories.IDirectoryStatsProvider)
-                        ),
-                    false
-                )
-                .AsImplementedInterfaces()
-                .WithScopedLifetime()
-        );
-
-        services.Scan(scan =>
-            scan.FromAssembliesOf(typeof(IOrganizationalApiMarker))
-                .AddClasses(
-                    classes =>
-                        classes.AssignableTo(
-                            typeof(Edvantix.Organizational.Features.Settings.Directories.IUniqueNameChecker)
-                        ),
-                    false
-                )
-                .AsSelf()
-                .WithScopedLifetime()
-        );
+        services.AddDirectoryServices(typeof(IOrganizationalApiMarker));
 
         builder.AddEventBus(opts =>
         {

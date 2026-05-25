@@ -74,7 +74,8 @@ var notificationApi = builder
     .WithReference(notificationDb)
     .WaitFor(notificationDb)
     .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
+    .WithFriendlyUrls()
+    .WithExplicitStart();
 
 var auditApi = builder
     .AddProject<Edvantix_Audit>(Services.Audit)
@@ -86,7 +87,8 @@ var auditApi = builder
     .WithReference(redis)
     .WaitFor(redis)
     .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
+    .WithFriendlyUrls()
+    .WithExplicitStart();
 
 var curriculumApi = builder
     .AddProject<Edvantix_Curriculum>(Services.Curriculum)

@@ -44,36 +44,32 @@ internal sealed class GetDirectoriesQueryHandler(
             StringComparer.Ordinal
         );
 
-        var tasks = DirectoryCatalog
-            .All.Select(descriptor =>
-            {
-                var provider = providersByCode.TryGetValue(descriptor.Code, out var real)
-                    ? real
-                    : new StubDirectoryStatsProvider(descriptor);
+        var summaries = new List<DirectorySummaryDto>(DirectoryCatalog.All.Count);
 
-                return FetchWithFallbackAsync(provider, orgId, ct);
-            })
-            .ToArray();
+        foreach (var descriptor in DirectoryCatalog.All)
+        {
+            var provider =
+                providersByCode.GetValueOrDefault(descriptor.Code)
+                ?? new StubDirectoryStatsProvider(descriptor);
 
-        var statsArray = await Task.WhenAll(tasks);
+            var stats = await FetchWithFallbackAsync(provider, orgId, ct);
 
-        return DirectoryCatalog
-            .All.Zip(
-                statsArray,
-                (descriptor, stats) =>
-                    new DirectorySummaryDto(
-                        descriptor.Code,
-                        descriptor.Name,
-                        descriptor.Description,
-                        descriptor.Icon,
-                        descriptor.Badge,
-                        stats.ActiveCount,
-                        stats.ArchivedCount,
-                        stats.LastModifiedAt,
-                        stats.IsAvailable
-                    )
-            )
-            .ToList();
+            summaries.Add(
+                new DirectorySummaryDto(
+                    descriptor.Code,
+                    descriptor.Name,
+                    descriptor.Description,
+                    descriptor.Icon,
+                    descriptor.Badge,
+                    stats.ActiveCount,
+                    stats.ArchivedCount,
+                    stats.LastModifiedAt,
+                    stats.IsAvailable
+                )
+            );
+        }
+
+        return summaries;
     }
 
     private async Task<DirectoryStats> FetchWithFallbackAsync(

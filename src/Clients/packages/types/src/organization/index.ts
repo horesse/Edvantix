@@ -290,3 +290,43 @@ export type UpdateRoleRequest = {
   readonly description?: string | null;
   readonly permissionIds: readonly string[];
 };
+
+// --- Settings ---
+
+/** Сводка организации для страницы настроек. */
+export type OrganizationSummaryDto = {
+  readonly id: string;
+  readonly fullLegalName: string;
+  readonly shortName: string | null;
+  readonly organizationType: OrganizationType;
+  readonly status: OrganizationStatus;
+  readonly isLegalEntity: boolean;
+  readonly membersCount: number;
+  readonly primaryContact: ContactDto | null;
+  readonly lastModified: {
+    readonly at: string | null;
+    readonly byDisplayName: string | null;
+  };
+};
+
+/** Сводка одного справочника в каталоге (settings/directories). */
+export type DirectorySummaryDto = {
+  /** Идентификатор справочника: levels|subjects|lesson-types|student-statuses|rooms|sources|payment-methods|tags */
+  readonly code: string;
+  readonly name: string;
+  readonly description: string;
+  /** Имя Lucide-иконки для отображения. */
+  readonly icon: string;
+  readonly badge: string | null;
+  readonly activeCount: number;
+  readonly archivedCount: number;
+  readonly lastModifiedAt: string | null;
+  readonly isAvailable: boolean;
+};
+
+/** Сводка ролей организации для страницы настроек. */
+export type RolesSummaryDto = {
+  readonly totalRoles: number;
+  readonly assignedMembersCount: number;
+  readonly roleNamesPreview: readonly string[];
+};

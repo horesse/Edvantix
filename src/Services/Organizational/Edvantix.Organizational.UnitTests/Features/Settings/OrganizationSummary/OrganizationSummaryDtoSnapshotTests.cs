@@ -19,6 +19,7 @@ public sealed class OrganizationSummaryDtoSnapshotTests
             OrganizationType: OrganizationType.PrivateEducationalCenter,
             Status: OrganizationStatus.Active,
             IsLegalEntity: true,
+            RegistrationDate: new DateOnly(2019, 3, 14),
             MembersCount: 25,
             PrimaryContact: new ContactDto(
                 Id: new Guid("00000000-0000-7000-8000-000000000002"),
@@ -46,6 +47,7 @@ public sealed class OrganizationSummaryDtoSnapshotTests
             OrganizationType: OrganizationType.IndividualEntrepreneur,
             Status: OrganizationStatus.Active,
             IsLegalEntity: false,
+            RegistrationDate: new DateOnly(2015, 6, 1),
             MembersCount: 0,
             PrimaryContact: null,
             LastModified: new OrganizationSummaryDto.LastModifiedInfo(At: null, ByDisplayName: null)

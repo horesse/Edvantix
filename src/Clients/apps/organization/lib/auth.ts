@@ -45,10 +45,7 @@ export const auth = betterAuth({
                   "persona_write",
                   "organisational_read",
                   "organisational_write",
-              ],
-              mapProfileToUser: (profile) => ({
-                  name: profile.name || profile.preferred_username || profile.email,
-              }),
+              ]
           }),
       ],
     }),

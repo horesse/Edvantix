@@ -301,6 +301,7 @@ export type OrganizationSummaryDto = {
   readonly organizationType: OrganizationType;
   readonly status: OrganizationStatus;
   readonly isLegalEntity: boolean;
+  readonly registrationDate: string;
   readonly membersCount: number;
   readonly primaryContact: ContactDto | null;
   readonly lastModified: {

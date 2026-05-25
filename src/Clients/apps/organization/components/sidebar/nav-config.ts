@@ -1,15 +1,9 @@
 import {
-  BarChart2,
   BookOpen,
-  CalendarDays,
-  ClipboardCheck,
   GraduationCap,
   LayoutDashboard,
   Settings,
-  ShieldCheck,
   UserCheck,
-  Users,
-  UsersRound,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -37,17 +31,10 @@ const allNavSections: NavSection[] = [
     items: [
       {
         id: "dashboard",
-        title: "Главная",
+        title: "Дашборд",
         url: "/",
         icon: LayoutDashboard,
         exact: true,
-      },
-      {
-        id: "analytics",
-        title: "Аналитика",
-        url: "/school/analytics",
-        icon: BarChart2,
-        requiresOrg: true,
       },
     ],
   },
@@ -56,31 +43,17 @@ const allNavSections: NavSection[] = [
     label: "Люди",
     items: [
       {
-        id: "members",
-        title: "Участники",
-        url: "/organization/members",
-        icon: Users,
-        requiresOrg: true,
-      },
-      {
         id: "students",
-        title: "Ученики",
+        title: "Студенты",
         url: "/organization/members/students",
         icon: GraduationCap,
         requiresOrg: true,
       },
       {
         id: "teachers",
-        title: "Учителя",
+        title: "Работники",
         url: "/organization/members/teachers",
         icon: UserCheck,
-        requiresOrg: true,
-      },
-      {
-        id: "roles",
-        title: "Роли и права",
-        url: "/organization/roles",
-        icon: ShieldCheck,
         requiresOrg: true,
       },
     ],
@@ -94,25 +67,6 @@ const allNavSections: NavSection[] = [
         title: "Курсы",
         url: "/school/courses",
         icon: BookOpen,
-      },
-      {
-        id: "groups",
-        title: "Группы",
-        url: "/organization/groups",
-        icon: UsersRound,
-        requiresOrg: true,
-      },
-      {
-        id: "attendance",
-        title: "Посещаемость",
-        url: "/school/attendance",
-        icon: ClipboardCheck,
-      },
-      {
-        id: "schedule",
-        title: "Расписание",
-        url: "/school/schedule",
-        icon: CalendarDays,
       },
     ],
   },

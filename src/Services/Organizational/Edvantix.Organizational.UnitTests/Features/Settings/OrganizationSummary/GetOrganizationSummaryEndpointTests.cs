@@ -47,6 +47,7 @@ public sealed class GetOrganizationSummaryEndpointTests
             OrganizationType.PrivateEducationalCenter,
             OrganizationStatus.Active,
             true,
+            new DateOnly(2020, 1, 1),
             10,
             null,
             new OrganizationSummaryDto.LastModifiedInfo(null, null)

@@ -1,7 +1,8 @@
-﻿{
+{
   Id: Guid_1,
   FullLegalName: ИП Петров,
   OrganizationType: IndividualEntrepreneur,
   IsLegalEntity: false,
+  RegistrationDate: Date_1,
   LastModified: {}
 }

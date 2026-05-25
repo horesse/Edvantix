@@ -1,21 +1,18 @@
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
-using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
 
 namespace Edvantix.Groups.Features.Groups.Update;
 
 internal sealed class UpdateGroupValidator : AbstractValidator<UpdateGroupCommand>
 {
-    public UpdateGroupValidator(ILevelRepository levels, ITenantContext tenantContext)
+    public UpdateGroupValidator()
     {
         RuleFor(x => x.Id).NotEmpty().WithMessage("Идентификатор группы обязателен");
 
         RuleFor(x => x.Name).GroupNameRules();
         RuleFor(x => x.Description).GroupDescriptionRules();
 
+        // LevelId — мягкая ссылка на Level из Organizational-сервиса (cross-service); только проверяем непустоту.
         RuleFor(x => x.LevelId).NotEmpty().WithMessage("Идентификатор уровня обязателен");
-        RuleFor(x => x.LevelId)
-            .MustBeActiveLevelInCurrentOrganization(levels, tenantContext)
-            .When(x => x.LevelId != Guid.Empty);
 
         // CourseId cross-context validation is intentionally left to the handler,
         // which skips the gRPC call when the value has not changed.

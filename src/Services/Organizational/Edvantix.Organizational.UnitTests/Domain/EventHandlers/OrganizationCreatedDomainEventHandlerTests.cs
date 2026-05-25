@@ -8,6 +8,7 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
     private readonly Mock<IOrganizationMemberRepository> _memberRepoMock = new();
     private readonly Mock<IPermissionRepository> _permissionRepoMock = new();
     private readonly Mock<IStudentStatusRepository> _studentStatusRepoMock = new();
+    private readonly Mock<ILevelRepository> _levelRepoMock = new();
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly OrganizationCreatedDomainEventHandler _handler;
 
@@ -28,7 +29,8 @@ public sealed class OrganizationCreatedDomainEventHandlerTests
             _memberRoleRepoMock.Object,
             _memberRepoMock.Object,
             _permissionRepoMock.Object,
-            _studentStatusRepoMock.Object
+            _studentStatusRepoMock.Object,
+            _levelRepoMock.Object
         );
     }
 

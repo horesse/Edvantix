@@ -14,8 +14,10 @@ public sealed class GroupListItemDtoMapper : Mapper<Group, GroupListItemDto>
             source.Format,
             source.Capacity,
             source.LevelId,
-            source.Level.Code.Value,
-            source.Level.Name,
+            // LevelCode и LevelName недоступны из домена — Level хранится в Organizational-сервисе
+            // как мягкая ссылка. Обогащение производится в обработчике через cross-service вызов.
+            LevelCode: string.Empty,
+            LevelName: string.Empty,
             source.StartDate,
             source.EndDate,
             CourseCode: null,
@@ -39,8 +41,10 @@ public sealed class GroupDetailDtoMapper : Mapper<Group, GroupDetailDto>
             source.Format,
             source.Capacity,
             source.LevelId,
-            source.Level.Code.Value,
-            source.Level.Name,
+            // LevelCode и LevelName недоступны из домена — Level хранится в Organizational-сервисе
+            // как мягкая ссылка. Обогащение производится в обработчике через cross-service вызов.
+            LevelCode: string.Empty,
+            LevelName: string.Empty,
             source.CourseId,
             CourseCode: null,
             CourseName: null,

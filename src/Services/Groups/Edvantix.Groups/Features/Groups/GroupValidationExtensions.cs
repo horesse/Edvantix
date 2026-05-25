@@ -1,5 +1,4 @@
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
-using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
 
 namespace Edvantix.Groups.Features.Groups;
 
@@ -29,22 +28,4 @@ internal static class GroupValidationExtensions
     ) =>
         rule.InclusiveBetween(1, 50)
             .WithMessage("Вместимость группы должна быть от 1 до 50 участников");
-
-    /// <summary>Проверяет, что уровень существует, активен и принадлежит текущей организации.</summary>
-    public static IRuleBuilderOptions<T, Guid> MustBeActiveLevelInCurrentOrganization<T>(
-        this IRuleBuilder<T, Guid> rule,
-        ILevelRepository levels,
-        ITenantContext tenantContext
-    ) =>
-        rule.MustAsync(
-                async (id, ct) =>
-                {
-                    var level = await levels.GetByIdAsync(id, ct);
-                    return level is not null
-                        && level.OrganizationId == tenantContext.OrganizationId
-                        && level.IsActive
-                        && !level.IsDeleted;
-                }
-            )
-            .WithMessage("Уровень не найден или не принадлежит текущей организации.");
 }

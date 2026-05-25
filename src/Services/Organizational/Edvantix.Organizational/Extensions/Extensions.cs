@@ -4,7 +4,6 @@ using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Chassis.Utilities.Converters;
 using Edvantix.Organizational.Configurations;
 using Edvantix.Organizational.Features.Settings.Directories;
-using Edvantix.Organizational.Features.Settings.Directories.Levels;
 using Edvantix.Organizational.Grpc;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;

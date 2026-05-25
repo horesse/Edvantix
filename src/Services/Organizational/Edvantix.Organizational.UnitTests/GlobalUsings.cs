@@ -8,6 +8,7 @@ global using Edvantix.Constants.Core;
 global using Edvantix.Curriculum.Grpc.Services;
 global using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate.Specifications;
+global using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 global using Edvantix.Organizational.Domain.AggregatesModel.PaymentMethodAggregate;

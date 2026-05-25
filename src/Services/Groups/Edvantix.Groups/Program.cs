@@ -1,6 +1,5 @@
 using Edvantix.Chassis.Security.Keycloak;
 using Edvantix.Groups.Extensions;
-using Edvantix.Groups.Grpc.Services;
 using Edvantix.ServiceDefaults.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +24,6 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
-app.MapGrpcService<LevelStatsGrpcService>();
 app.MapGrpcHealthChecksService();
 app.MapDefaultEndpoints();
 app.UseDefaultOpenApi();

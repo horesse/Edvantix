@@ -16,10 +16,8 @@ public static class Extensions
         var services = builder.Services;
 
         // Регистрация модулей разрешений: сидер подхватывает их через DI и синкает в Organizational.
-        services.AddSingleton<PermissionModule, LevelPermissionModule>();
-        services.AddSingleton<PermissionModule, SubjectPermissionModule>();
+        // Level, Subject, LessonType перенесены в Organizational и регистрируются там.
         services.AddSingleton<PermissionModule, GroupPermissionModule>();
-        services.AddSingleton<PermissionModule, LessonTypePermissionModule>();
 
         builder.AddAzurePostgresDbContext<GroupsDbContext>(
             Components.Database.Groups,

@@ -2,35 +2,22 @@ namespace Edvantix.Groups.UnitTests.Features.Groups.Create;
 
 public sealed class CreateGroupValidatorTests
 {
-    private readonly Mock<ILevelRepository> _levelRepoMock = new();
     private readonly Mock<ICurriculumService> _curriculumMock = new();
     private readonly Mock<ITenantContext> _tenantMock = new();
     private readonly Guid _organizationId = Guid.CreateVersion7();
-    private readonly Guid _validLevelId = Guid.CreateVersion7();
     private readonly CreateGroupValidator _validator;
 
     public CreateGroupValidatorTests()
     {
         _tenantMock.Setup(t => t.OrganizationId).Returns(_organizationId);
 
-        _levelRepoMock
-            .Setup(r => r.GetByIdAsync(_validLevelId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(
-                new Level(
-                    _organizationId,
-                    LevelCode.From("B1"),
-                    "B1 Level",
-                    null,
-                    LevelTone.Blue,
-                    1
-                )
-            );
-
         _curriculumMock
             .Setup(s => s.GetCourseByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new CourseInfo { OrganizationId = _organizationId.ToString() });
 
-        _validator = new(_levelRepoMock.Object, _curriculumMock.Object, _tenantMock.Object);
+        // LevelId больше не проверяется через репозиторий: Level хранится в Organizational-сервисе
+        // как кросс-сервисная мягкая ссылка — валидатор проверяет только непустоту.
+        _validator = new(_curriculumMock.Object, _tenantMock.Object);
     }
 
     [Test]
@@ -87,77 +74,6 @@ public sealed class CreateGroupValidatorTests
             BuildValidCommand() with
             {
                 LevelId = Guid.Empty,
-            }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.LevelId);
-    }
-
-    [Test]
-    public async Task GivenNonExistentLevelId_WhenValidating_ThenShouldHaveError()
-    {
-        var unknownLevelId = Guid.CreateVersion7();
-        _levelRepoMock
-            .Setup(r => r.GetByIdAsync(unknownLevelId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Level?)null);
-
-        var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with
-            {
-                LevelId = unknownLevelId,
-            }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.LevelId);
-    }
-
-    [Test]
-    public async Task GivenInactiveLevelId_WhenValidating_ThenShouldHaveError()
-    {
-        var inactiveLevelId = Guid.CreateVersion7();
-        var inactiveLevel = new Level(
-            _organizationId,
-            LevelCode.From("B1"),
-            "B1 Level",
-            null,
-            LevelTone.Blue,
-            1
-        );
-        inactiveLevel.Deactivate();
-        _levelRepoMock
-            .Setup(r => r.GetByIdAsync(inactiveLevelId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(inactiveLevel);
-
-        var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with
-            {
-                LevelId = inactiveLevelId,
-            }
-        );
-
-        result.ShouldHaveValidationErrorFor(x => x.LevelId);
-    }
-
-    [Test]
-    public async Task GivenLevelFromAnotherOrganization_WhenValidating_ThenShouldHaveError()
-    {
-        var foreignLevelId = Guid.CreateVersion7();
-        var foreignLevel = new Level(
-            Guid.CreateVersion7(),
-            LevelCode.From("B1"),
-            "B1 Level",
-            null,
-            LevelTone.Blue,
-            1
-        );
-        _levelRepoMock
-            .Setup(r => r.GetByIdAsync(foreignLevelId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(foreignLevel);
-
-        var result = await _validator.TestValidateAsync(
-            BuildValidCommand() with
-            {
-                LevelId = foreignLevelId,
             }
         );
 
@@ -380,7 +296,7 @@ public sealed class CreateGroupValidatorTests
             Code: "B1-01",
             Name: "Английский B1",
             Description: "Описание группы",
-            LevelId: _validLevelId,
+            LevelId: Guid.CreateVersion7(),
             CourseId: Guid.CreateVersion7(),
             TeacherMemberId: Guid.CreateVersion7(),
             Format: GroupFormat.Online,

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="40" viewBox="0 0 180 40" fill="none">
+  <rect x="0" y="4" width="32" height="32" rx="7" fill="#4F46E5"></rect>
+  <g transform="translate(6 12)" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M20 8v5"></path>
+    <path d="M2 8l9-4 9 4-9 4-9-4Z"></path>
+    <path d="M5 10v4c2.5 2.3 8 2.3 10.5 0v-4"></path>
+  </g>
+  <text x="42" y="26" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0F172A" letter-spacing="-0.02em">Edv<tspan fill="#4F46E5">antix</tspan></text>
+</svg>

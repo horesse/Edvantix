@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Edvantix — Авторизация</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="colors_and_type.css">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: var(--edv-font-sans);
+    background: #0f1117;
+    color: var(--edv-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Form-side theme tokens ──────────────────────────────── */
+  .af-shell[data-af-theme="light"] {
+    --af-bg: #ffffff;
+    --af-fg: #0f172a;
+    --af-secondary: #475569;
+    --af-muted: #94a3b8;
+    --af-label: #334155;
+    --af-input-bg: #ffffff;
+    --af-input-border: #e2e8f0;
+    --af-hover-bg: #f8fafc;
+    --af-ring: #6366f1;
+    --af-ring-glow: rgba(99,102,241,0.18);
+    --af-tip-bg: #f8fafc;
+    --af-tip-border: #e2e8f0;
+    --af-divider: #f1f5f9;
+  }
+  .af-shell[data-af-theme="dark"] {
+    --af-bg: #0f1117;
+    --af-fg: #f1f5f9;
+    --af-secondary: #94a3b8;
+    --af-muted: #64748b;
+    --af-label: #cbd5e1;
+    --af-input-bg: #161b27;
+    --af-input-border: #2a3347;
+    --af-hover-bg: #1e2536;
+    --af-ring: #818cf8;
+    --af-ring-glow: rgba(129,140,248,0.22);
+    --af-tip-bg: rgba(99,102,241,0.06);
+    --af-tip-border: rgba(99,102,241,0.18);
+    --af-divider: #1e2536;
+  }
+
+  .af-shell {
+    display: grid;
+    grid-template-columns: minmax(440px, 1fr) 1.05fr;
+    min-height: 100vh;
+    background: var(--af-bg);
+  }
+  .af-left {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--af-bg);
+    color: var(--af-fg);
+  }
+  .af-right {
+    position: relative;
+    min-height: 100vh;
+  }
+  .af-form-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 48px 32px;
+  }
+
+  /* Subtle radial backdrop on form side */
+  .af-shell[data-af-theme="light"] .af-left {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.04), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 0% 100%, rgba(99,102,241,0.03), transparent 60%),
+      #ffffff;
+  }
+  .af-shell[data-af-theme="dark"] .af-left {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.08), transparent 60%),
+      #0f1117;
+  }
+
+  /* Fade-in form transition */
+  .af-fade { animation: af-fade 0.35s ease-out; }
+  @keyframes af-fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes af-spin { to { transform: rotate(360deg); } }
+
+  /* Marketing decorative animations */
+  @keyframes amk-float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(20px, -20px); }
+  }
+  @keyframes amk-rise {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Responsive — collapse to single column on narrow screens */
+  @media (max-width: 1024px) {
+    .af-shell { grid-template-columns: 1fr; }
+    .af-right { display: none; }
+    .af-mobile-brand { display: inline-flex !important; }
+  }
+  @media (max-width: 640px) {
+    .af-form-wrap { padding: 16px 20px 24px; }
+    .af-left > div:first-child,
+    .af-left > div:last-child { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+
+  /* Selection */
+  ::selection { background: rgba(99,102,241,0.25); }
+
+  /* Placeholder color */
+  input::placeholder { color: var(--af-muted); opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .af-fade, .af-shell *[style*="animation"] { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react" src="tweaks-panel.jsx"></script>
+<script type="text/babel" data-presets="react" src="auth-icons.jsx"></script>
+<script type="text/babel" data-presets="react" src="auth-form.jsx"></script>
+<script type="text/babel" data-presets="react" src="auth-marketing.jsx"></script>
+<script type="text/babel" data-presets="react" src="auth-app.jsx"></script>
+<script type="text/babel" data-presets="react">
+  ReactDOM.createRoot(document.getElementById('root')).render(<AuthApp/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+/* ═══════════════════════════════════════════════════════════════════
+   EDVANTIX — Colors & Type tokens
+   Extracted from src/Clients/packages/ui/src/styles/globals.css
+   Two modes:
+     • Dashboard/App (indigo brand — default shadcn system)
+     • Landing marketing (warm orange override — used only on /landing)
+═══════════════════════════════════════════════════════════════════ */
+
+@import url('./fonts/inter.css');
+@import url('./fonts/geist-mono.css');
+
+:root {
+  /* ── Brand scale — Indigo (dashboard default) ─────────────── */
+  --edv-brand-50:  #f0f4ff;
+  --edv-brand-100: #e0eaff;
+  --edv-brand-200: #c7d6fe;
+  --edv-brand-300: #a5b4fc;
+  --edv-brand-400: #818cf8;
+  --edv-brand-500: #6366f1;
+  --edv-brand-600: #4f46e5;  /* ★ primary — buttons, CTAs */
+  --edv-brand-700: #4338ca;
+
+  /* ── Landing accent — warm orange/amber ───────────────────── */
+  --edv-landing-primary:   oklch(0.67 0.13 39);   /* ≈ #c96b2c  */
+  --edv-landing-secondary: oklch(0.83 0.14 70);   /* ≈ amber    */
+
+  /* ── Surface scale — dark UI ──────────────────────────────── */
+  --edv-surface-900: #0f1117;
+  --edv-surface-850: #161b27;
+  --edv-surface-810: #1a2030;
+  --edv-surface-800: #1e2536;
+  --edv-surface-750: #232c3d;
+  --edv-surface-700: #2a3347;
+  --edv-surface-600: #374159;
+  --edv-surface-500: #4a5568;
+
+  /* ── Slate neutrals (light) ───────────────────────────────── */
+  --edv-slate-50:  #f8fafc;
+  --edv-slate-100: #f1f5f9;
+  --edv-slate-200: #e2e8f0;
+  --edv-slate-300: #cbd5e1;
+  --edv-slate-400: #94a3b8;
+  --edv-slate-500: #64748b;
+  --edv-slate-600: #475569;
+  --edv-slate-700: #334155;
+  --edv-slate-800: #1e293b;
+  --edv-slate-900: #0f172a;
+
+  /* ── Semantic status ─────────────────────────────────────── */
+  --edv-success: #10b981;    /* emerald-500 */
+  --edv-warning: #f59e0b;    /* amber-500 */
+  --edv-danger:  #ef4444;    /* red-500 */
+  --edv-info:    #6366f1;    /* brand-500 */
+
+  /* ── Chart palette (multi-series) ────────────────────────── */
+  --edv-chart-1: #6366f1;    /* brand-500 indigo */
+  --edv-chart-2: #10b981;    /* emerald */
+  --edv-chart-3: #f59e0b;    /* amber */
+  --edv-chart-4: #8b5cf6;    /* violet */
+  --edv-chart-5: #f43f5e;    /* rose */
+
+  /* ── Semantic aliases — light ─────────────────────────────── */
+  --edv-bg-base:       var(--edv-slate-50);
+  --edv-bg-panel:      #ffffff;
+  --edv-bg-sidebar:    #ffffff;
+  --edv-bg-input:      #ffffff;
+  --edv-bg-nested:     var(--edv-slate-50);
+  --edv-bg-hover:      var(--edv-slate-100);
+
+  --edv-border-default: var(--edv-slate-200);
+  --edv-border-subtle:  var(--edv-slate-100);
+
+  --edv-text-primary:     var(--edv-slate-900);
+  --edv-text-secondary:   var(--edv-slate-600);
+  --edv-text-muted:       var(--edv-slate-400);
+  --edv-text-placeholder: var(--edv-slate-400);
+
+  --edv-primary: var(--edv-brand-600);
+  --edv-primary-foreground: #ffffff;
+  --edv-ring: var(--edv-brand-500);
+
+  /* ── Typography ───────────────────────────────────────────── */
+  --edv-font-sans:  'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --edv-font-mono:  'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Type ramp (px) */
+  --edv-text-xs:   12px;   /* meta, counters, small labels */
+  --edv-text-sm:   14px;   /* body small, inputs, nav */
+  --edv-text-base: 16px;   /* body */
+  --edv-text-lg:   18px;   /* card titles */
+  --edv-text-xl:   20px;   /* section titles */
+  --edv-text-2xl:  24px;   /* H2 */
+  --edv-text-3xl:  30px;   /* H1 small */
+  --edv-text-4xl:  36px;   /* H1 */
+  --edv-text-5xl:  48px;   /* hero small */
+  --edv-text-6xl:  60px;   /* hero */
+  --edv-text-7xl:  72px;   /* hero xl */
+  --edv-text-8xl:  96px;   /* landing hero peak */
+
+  --edv-leading-tight:   1.1;
+  --edv-leading-snug:    1.25;
+  --edv-leading-normal:  1.5;
+  --edv-leading-relaxed: 1.625;
+
+  --edv-weight-regular:  400;
+  --edv-weight-medium:   500;
+  --edv-weight-semibold: 600;
+  --edv-weight-bold:     700;
+  --edv-weight-extra:    800;
+
+  --edv-tracking-tight:  -0.02em;
+  --edv-tracking-normal: 0em;
+  --edv-tracking-wide:   0.05em;
+  --edv-tracking-wider:  0.1em;    /* uppercase section labels */
+
+  /* ── Radii — conservative, consistent ───────────────────── */
+  --edv-radius-sm: 4px;    /* checkbox */
+  --edv-radius-md: 6px;    /* small tags, icon containers */
+  --edv-radius-lg: 8px;    /* buttons, nav links */
+  --edv-radius-xl: 12px;   /* inputs, pills */
+  --edv-radius-2xl: 16px;  /* cards, modals, avatars */
+  --edv-radius-full: 9999px;
+
+  /* ── Shadows (light) — soft, short ──────────────────────── */
+  --edv-shadow-xs: 0 1px 3px 0 rgba(0,0,0,0.05);
+  --edv-shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.10), 0 1px 2px -1px rgba(0,0,0,0.10);
+  --edv-shadow-md: 0 1px 3px 0 rgba(0,0,0,0.10), 0 2px 4px -1px rgba(0,0,0,0.10);
+  --edv-shadow-lg: 0 1px 3px 0 rgba(0,0,0,0.10), 0 4px 6px -1px rgba(0,0,0,0.10);
+  --edv-shadow-xl: 0 1px 3px 0 rgba(0,0,0,0.10), 0 8px 10px -1px rgba(0,0,0,0.10);
+  --edv-shadow-2xl: 0 25px 50px -12px rgba(0,0,0,0.25);
+
+  /* ── Spacing (px) — 4px baseline ────────────────────────── */
+  --edv-space-0:  0px;
+  --edv-space-1:  4px;
+  --edv-space-2:  8px;
+  --edv-space-3:  12px;
+  --edv-space-4:  16px;
+  --edv-space-5:  20px;
+  --edv-space-6:  24px;
+  --edv-space-8:  32px;
+  --edv-space-10: 40px;
+  --edv-space-12: 48px;
+  --edv-space-16: 64px;
+  --edv-space-20: 80px;
+  --edv-space-24: 96px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DARK MODE — dashboard & app
+═══════════════════════════════════════════════════════════════════ */
+.dark, [data-theme="dark"] {
+  --edv-bg-base:       var(--edv-surface-900);
+  --edv-bg-panel:      var(--edv-surface-800);
+  --edv-bg-sidebar:    var(--edv-surface-850);
+  --edv-bg-input:      var(--edv-surface-850);
+  --edv-bg-nested:     var(--edv-surface-810);
+  --edv-bg-hover:      var(--edv-surface-750);
+
+  --edv-border-default: var(--edv-surface-700);
+  --edv-border-subtle:  var(--edv-surface-800);
+
+  --edv-text-primary:     var(--edv-slate-100);
+  --edv-text-secondary:   var(--edv-slate-400);
+  --edv-text-muted:       var(--edv-slate-500);
+  --edv-text-placeholder: var(--edv-surface-500);
+
+  --edv-primary: var(--edv-brand-400);   /* lighter indigo for dark mode */
+  --edv-ring:    var(--edv-brand-500);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LANDING MODE — warm orange, used only on marketing pages
+═══════════════════════════════════════════════════════════════════ */
+[data-surface="landing"] {
+  --edv-primary: var(--edv-landing-primary);
+  --edv-ring:    var(--edv-landing-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SEMANTIC TYPE STYLES
+═══════════════════════════════════════════════════════════════════ */
+html { font-family: var(--edv-font-sans); color: var(--edv-text-primary); }
+body { background: var(--edv-bg-base); font-size: var(--edv-text-base); line-height: var(--edv-leading-normal); }
+
+.edv-h1 { font-size: var(--edv-text-4xl); font-weight: var(--edv-weight-bold); letter-spacing: var(--edv-tracking-tight); line-height: var(--edv-leading-tight); }
+.edv-h2 { font-size: var(--edv-text-2xl); font-weight: var(--edv-weight-bold); letter-spacing: var(--edv-tracking-tight); line-height: var(--edv-leading-snug); }
+.edv-h3 { font-size: var(--edv-text-xl); font-weight: var(--edv-weight-semibold); line-height: var(--edv-leading-snug); }
+.edv-h4 { font-size: var(--edv-text-lg); font-weight: var(--edv-weight-semibold); line-height: var(--edv-leading-snug); }
+
+.edv-hero        { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; }
+.edv-display     { font-size: var(--edv-text-5xl); font-weight: 800; letter-spacing: var(--edv-tracking-tight); line-height: var(--edv-leading-tight); }
+.edv-body        { font-size: var(--edv-text-base); line-height: var(--edv-leading-relaxed); }
+.edv-body-sm     { font-size: var(--edv-text-sm); line-height: var(--edv-leading-normal); }
+.edv-meta        { font-size: var(--edv-text-xs); color: var(--edv-text-muted); }
+.edv-label-caps  { font-size: 10px; font-weight: 600; letter-spacing: var(--edv-tracking-wider); text-transform: uppercase; color: var(--edv-text-muted); }
+.edv-code        { font-family: var(--edv-font-mono); font-size: 0.9em; }
+
+.edv-tabular { font-variant-numeric: tabular-nums; }

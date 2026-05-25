@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Edvantix — Участники организации</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="colors_and_type.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; background: #f8fafc; font-family: var(--edv-font-sans); color: #0f172a; height: 100%; }
+  #root { height: 100%; }
+  * { box-sizing: border-box; }
+  button { font-family: inherit; cursor: pointer; }
+  button:disabled { cursor: not-allowed; opacity: 0.55; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: rgba(79,70,229,0.15); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; border: 2px solid #f8fafc; }
+  ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react" src="kit/Icons.jsx"></script>
+<script type="text/babel" data-presets="react" src="kit/Primitives.jsx"></script>
+<script type="text/babel" data-presets="react" src="kit/Sidebar.jsx"></script>
+<script type="text/babel" data-presets="react" src="members/Data.jsx"></script>
+<script type="text/babel" data-presets="react" src="members/Components.jsx"></script>
+<script type="text/babel" data-presets="react" src="members/MembersApp.jsx"></script>
+<script type="text/babel" data-presets="react">
+  ReactDOM.createRoot(document.getElementById('root')).render(<MembersApp/>);
+</script>
+</body>
+</html>

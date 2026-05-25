@@ -1,10 +1,10 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { OrganizationMembersKpiDto } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { OrganizationMembersKpiDto } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 /**
  * Возвращает KPI-статистику участников текущей организации:
@@ -20,8 +20,8 @@ export default function useOrganizationMembersKpi(
   >,
 ) {
   return useQuery({
-    queryKey: companyKeys.membersKpi(orgId),
-    queryFn: () => companyApiClient.getMembersKpi(),
+    queryKey: organizationKeys.membersKpi(orgId),
+    queryFn: () => organizationApiClient.getMembersKpi(),
     enabled: Boolean(orgId),
     ...options,
   });

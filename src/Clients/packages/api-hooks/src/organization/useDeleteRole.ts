@@ -4,9 +4,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 type DeleteRoleParams = {
   /** ID организации — используется для инвалидации кэша. */
@@ -22,10 +22,12 @@ export default function useDeleteRole(
 
   return useMutation({
     ...options,
-    mutationFn: ({ roleId }) => companyApiClient.deleteRole(roleId),
+    mutationFn: ({ roleId }) => organizationApiClient.deleteRole(roleId),
     onSuccess: (...args) => {
       const { orgId } = args[1];
-      queryClient.invalidateQueries({ queryKey: companyKeys.roles(orgId) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.roles(orgId),
+      });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

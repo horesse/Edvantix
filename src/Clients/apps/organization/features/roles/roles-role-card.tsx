@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { ChevronRight, Lock } from "lucide-react";
 
-import type { RoleDto } from "@workspace/types/company";
+import type { RoleDto } from "@workspace/types/organization";
 
 import { declMembers, getRoleAvatarColors } from "./roles-constants";
 

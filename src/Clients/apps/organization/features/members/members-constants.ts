@@ -1,6 +1,6 @@
 import { Archive, CircleCheck, Trash2, Users } from "lucide-react";
 
-import { OrganizationStatus } from "@workspace/types/company";
+import { OrganizationStatus } from "@workspace/types/organization";
 
 export const MEMBER_STATUS_CONFIG: Record<
   OrganizationStatus,

@@ -7,7 +7,7 @@ import { useWatch } from "react-hook-form";
 import {
   ORGANIZATION_TYPE_LABELS,
   OrganizationType,
-} from "@workspace/types/company";
+} from "@workspace/types/organization";
 import {
   FormControl,
   FormField,
@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
-import type { CreateOrganizationInput } from "@workspace/validations/company";
+import type { CreateOrganizationInput } from "@workspace/validations/organization";
 
 import { FieldHint, FieldLabel } from "../components/field-hint";
 import { StepHeader } from "../components/step-header";

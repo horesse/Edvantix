@@ -1,10 +1,10 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { RoleDetailDto } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { RoleDetailDto } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 /**
  * Возвращает детальную информацию о роли организации по ID.
@@ -17,8 +17,8 @@ export default function useRole(
   options?: Omit<UseQueryOptions<RoleDetailDto>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
-    queryKey: companyKeys.role(orgId, roleId),
-    queryFn: () => companyApiClient.getRole(roleId),
+    queryKey: organizationKeys.role(orgId, roleId),
+    queryFn: () => organizationApiClient.getRole(roleId),
     enabled: Boolean(orgId) && Boolean(roleId),
     ...options,
   });

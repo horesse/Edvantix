@@ -4,9 +4,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 export default function useArchiveOrganization(
   options?: UseMutationOptions<void, Error, string>,
@@ -15,12 +15,14 @@ export default function useArchiveOrganization(
 
   return useMutation({
     ...options,
-    mutationFn: (id: string) => companyApiClient.archiveOrganization(id),
+    mutationFn: (id: string) => organizationApiClient.archiveOrganization(id),
     onSuccess: (...args) => {
       const id = args[1];
-      queryClient.invalidateQueries({ queryKey: companyKeys.organization(id) });
       queryClient.invalidateQueries({
-        queryKey: companyKeys.myOrganizations(),
+        queryKey: organizationKeys.organization(id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.myOrganizations(),
       });
       options?.onSuccess?.(...args);
     },

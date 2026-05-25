@@ -1,6 +1,6 @@
 import type { z } from "zod";
 
-import { updateOrganizationSchema } from "@workspace/validations/company";
+import { updateOrganizationSchema } from "@workspace/validations/organization";
 
 export { updateOrganizationSchema as editFormSchema };
 export type EditFormValues = z.infer<typeof updateOrganizationSchema>;

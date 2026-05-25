@@ -4,7 +4,7 @@ import {
   ContactType,
   LegalForm,
   OrganizationType,
-} from "@workspace/types/company";
+} from "@workspace/types/organization";
 
 const MAX_NAME_LENGTH = 200;
 const MAX_SHORT_NAME_LENGTH = 50;

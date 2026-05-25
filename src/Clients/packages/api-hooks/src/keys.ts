@@ -15,22 +15,23 @@ export const profileKeys = {
   details: () => [...profileKeys.all, "details"] as const,
 };
 
-export const companyKeys = {
+export const organizationKeys = {
   all: ["organizational"] as const,
-  myOrganizations: () => [...companyKeys.all, "organizations", "mine"] as const,
+  myOrganizations: () =>
+    [...organizationKeys.all, "organizations", "mine"] as const,
   organizations: (query?: unknown) =>
-    [...companyKeys.all, "organizations", query] as const,
+    [...organizationKeys.all, "organizations", query] as const,
   organization: (id: string) =>
-    [...companyKeys.all, "organizations", id] as const,
+    [...organizationKeys.all, "organizations", id] as const,
   members: (orgId: string, query?: unknown) =>
-    [...companyKeys.all, "members", orgId, query] as const,
+    [...organizationKeys.all, "members", orgId, query] as const,
   membersKpi: (orgId: string) =>
-    [...companyKeys.all, "members", orgId, "kpi"] as const,
-  member: (id: string) => [...companyKeys.all, "member", id] as const,
+    [...organizationKeys.all, "members", orgId, "kpi"] as const,
+  member: (id: string) => [...organizationKeys.all, "member", id] as const,
   roles: (orgId: string, query?: unknown) =>
-    [...companyKeys.all, "roles", orgId, query] as const,
+    [...organizationKeys.all, "roles", orgId, query] as const,
   role: (orgId: string, roleId: string) =>
-    [...companyKeys.all, "roles", orgId, roleId] as const,
+    [...organizationKeys.all, "roles", orgId, roleId] as const,
 };
 
 export const notificationKeys = {

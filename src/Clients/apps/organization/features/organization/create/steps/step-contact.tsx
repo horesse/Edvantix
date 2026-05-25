@@ -3,7 +3,7 @@
 import type { Control } from "react-hook-form";
 import { useWatch } from "react-hook-form";
 
-import { ContactType } from "@workspace/types/company";
+import { ContactType } from "@workspace/types/organization";
 import {
   FormControl,
   FormField,
@@ -13,7 +13,7 @@ import {
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
 import { cn } from "@workspace/ui/lib/utils";
-import type { CreateOrganizationInput } from "@workspace/validations/company";
+import type { CreateOrganizationInput } from "@workspace/validations/organization";
 
 import { FieldHint, FieldLabel } from "../components/field-hint";
 import { StepHeader } from "../components/step-header";

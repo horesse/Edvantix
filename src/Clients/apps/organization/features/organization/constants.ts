@@ -2,7 +2,7 @@ import type { ElementType } from "react";
 
 import { Mail, MessageCircle, Phone, Send } from "lucide-react";
 
-import { ContactType, LegalForm } from "@workspace/types/company";
+import { ContactType, LegalForm } from "@workspace/types/organization";
 
 // ── Legal form data ───────────────────────────────────────────────────────────
 

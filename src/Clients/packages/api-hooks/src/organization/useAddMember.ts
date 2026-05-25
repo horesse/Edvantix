@@ -4,10 +4,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { CreateOrganizationMemberRequest } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { CreateOrganizationMemberRequest } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 type AddMemberParams = {
   /** ID организации — используется для инвалидации кэша. */
@@ -23,10 +23,12 @@ export default function useAddMember(
 
   return useMutation({
     ...options,
-    mutationFn: ({ request }) => companyApiClient.addMember(request),
+    mutationFn: ({ request }) => organizationApiClient.addMember(request),
     onSuccess: (...args) => {
       const { orgId } = args[1];
-      queryClient.invalidateQueries({ queryKey: companyKeys.members(orgId) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.members(orgId),
+      });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

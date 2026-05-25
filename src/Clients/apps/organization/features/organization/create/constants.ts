@@ -1,4 +1,4 @@
-import type { CreateOrganizationInput } from "@workspace/validations/company";
+import type { CreateOrganizationInput } from "@workspace/validations/organization";
 
 export type { ContactTypeEntry, LegalFormEntry } from "../constants";
 export { CONTACT_TYPE_DATA, LEGAL_FORM_DATA } from "../constants";

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 
-import type { OrganizationMemberDto } from "@workspace/types/company";
+import type { OrganizationMemberDto } from "@workspace/types/organization";
 import { Checkbox } from "@workspace/ui/components/checkbox";
 import {
   DropdownMenu,

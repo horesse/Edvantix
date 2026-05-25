@@ -5,8 +5,8 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import useCreateRole from "@workspace/api-hooks/company/useCreateRole";
-import useDeleteRole from "@workspace/api-hooks/company/useDeleteRole";
+import useCreateRole from "@workspace/api-hooks/organization/useCreateRole";
+import useDeleteRole from "@workspace/api-hooks/organization/useDeleteRole";
 import {
   AlertDialog,
   AlertDialogAction,

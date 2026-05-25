@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
-import useRole from "@workspace/api-hooks/company/useRole";
-import useUpdateRole from "@workspace/api-hooks/company/useUpdateRole";
-import type { FeatureDto } from "@workspace/types/company";
+import useRole from "@workspace/api-hooks/organization/useRole";
+import useUpdateRole from "@workspace/api-hooks/organization/useUpdateRole";
+import type { FeatureDto } from "@workspace/types/organization";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import { Skeleton } from "@workspace/ui/components/skeleton";

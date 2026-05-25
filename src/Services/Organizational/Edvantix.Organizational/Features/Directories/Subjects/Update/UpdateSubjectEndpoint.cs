@@ -15,7 +15,10 @@ public sealed class UpdateSubjectEndpoint : IEndpoint<Ok<SubjectDto>, UpdateSubj
                 ) =>
                 {
                     // id из маршрута имеет приоритет над id из тела
-                    var merged = command with { Id = id };
+                    var merged = command with
+                    {
+                        Id = id,
+                    };
 
                     return await HandleAsync(merged, sender, cancellationToken);
                 }

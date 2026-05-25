@@ -7,14 +7,14 @@ import { ChevronRight, CircleCheck, History } from "lucide-react";
 import { useController, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import useArchiveOrganization from "@workspace/api-hooks/company/useArchiveOrganization";
-import useUpdateOrganization from "@workspace/api-hooks/company/useUpdateOrganization";
+import useArchiveOrganization from "@workspace/api-hooks/organization/useArchiveOrganization";
+import useUpdateOrganization from "@workspace/api-hooks/organization/useUpdateOrganization";
 import {
   ContactType,
   LEGAL_FORM_LABELS,
   OrganizationType,
-} from "@workspace/types/company";
-import type { OrganizationDetailDto } from "@workspace/types/company";
+} from "@workspace/types/organization";
+import type { OrganizationDetailDto } from "@workspace/types/organization";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 

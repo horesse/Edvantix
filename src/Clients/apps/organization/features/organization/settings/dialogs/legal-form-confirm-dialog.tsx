@@ -1,4 +1,4 @@
-import { LEGAL_FORM_LABELS, LegalForm } from "@workspace/types/company";
+import { LEGAL_FORM_LABELS, LegalForm } from "@workspace/types/organization";
 import {
   AlertDialog,
   AlertDialogAction,

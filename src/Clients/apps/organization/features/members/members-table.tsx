@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
-import useOrganizationMembers from "@workspace/api-hooks/company/useOrganizationMembers";
-import type { OrganizationMemberDto } from "@workspace/types/company";
-import { OrganizationStatus } from "@workspace/types/company";
+import useOrganizationMembers from "@workspace/api-hooks/organization/useOrganizationMembers";
+import type { OrganizationMemberDto } from "@workspace/types/organization";
+import { OrganizationStatus } from "@workspace/types/organization";
 import { Button } from "@workspace/ui/components/button";
 import { Checkbox } from "@workspace/ui/components/checkbox";
 import {

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { UserPlus } from "lucide-react";
 
-import type { OrganizationMemberDto } from "@workspace/types/company";
+import type { OrganizationMemberDto } from "@workspace/types/organization";
 import { Button } from "@workspace/ui/components/button";
 
 import { PageLayout } from "@/components/layout/page-layout";

@@ -1,10 +1,10 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { OrganizationWithRoleDto } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { OrganizationWithRoleDto } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 /** Возвращает список организаций текущего пользователя с его ролью в каждой. */
 export default function useMyOrganizations(
@@ -14,8 +14,8 @@ export default function useMyOrganizations(
   >,
 ) {
   return useQuery({
-    queryKey: companyKeys.myOrganizations(),
-    queryFn: () => companyApiClient.getMyOrganizations(),
+    queryKey: organizationKeys.myOrganizations(),
+    queryFn: () => organizationApiClient.getMyOrganizations(),
     ...options,
   });
 }

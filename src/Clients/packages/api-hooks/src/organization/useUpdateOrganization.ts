@@ -4,10 +4,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { UpdateOrganizationRequest } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { UpdateOrganizationRequest } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 type UpdateOrganizationParams = {
   id: string;
@@ -22,12 +22,14 @@ export default function useUpdateOrganization(
   return useMutation({
     ...options,
     mutationFn: ({ id, request }) =>
-      companyApiClient.updateOrganization(id, request),
+      organizationApiClient.updateOrganization(id, request),
     onSuccess: (...args) => {
       const { id } = args[1];
-      queryClient.invalidateQueries({ queryKey: companyKeys.organization(id) });
       queryClient.invalidateQueries({
-        queryKey: companyKeys.organizations(),
+        queryKey: organizationKeys.organization(id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.organizations(),
       });
       options?.onSuccess?.(...args);
     },

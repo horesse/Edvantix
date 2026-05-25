@@ -60,11 +60,7 @@ public sealed class GroupDtoMapperTests
     [Test]
     public void GivenGroupWithOfflineFormat_WhenMappingToListItem_ThenPlatformShouldBeNull()
     {
-        var group = CreateGroup(
-            GroupFormat.Offline,
-            roomId: Guid.CreateVersion7(),
-            platform: null
-        );
+        var group = CreateGroup(GroupFormat.Offline, roomId: Guid.CreateVersion7(), platform: null);
 
         var dto = _listMapper.Map(group);
 

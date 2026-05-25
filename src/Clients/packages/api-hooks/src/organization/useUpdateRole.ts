@@ -4,10 +4,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { UpdateRoleRequest } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { UpdateRoleRequest } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 type UpdateRoleParams = {
   /** ID организации — используется для инвалидации кэша. */
@@ -25,12 +25,14 @@ export default function useUpdateRole(
   return useMutation({
     ...options,
     mutationFn: ({ roleId, request }) =>
-      companyApiClient.updateRole(roleId, request),
+      organizationApiClient.updateRole(roleId, request),
     onSuccess: (...args) => {
       const { orgId, roleId } = args[1];
-      queryClient.invalidateQueries({ queryKey: companyKeys.roles(orgId) });
       queryClient.invalidateQueries({
-        queryKey: companyKeys.role(orgId, roleId),
+        queryKey: organizationKeys.roles(orgId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.role(orgId, roleId),
       });
       options?.onSuccess?.(...args);
     },

@@ -6,7 +6,7 @@ import {
   UserPlus,
 } from "lucide-react";
 
-import { LegalForm } from "@workspace/types/company";
+import { LegalForm } from "@workspace/types/organization";
 
 import { LEGAL_FORM_DATA } from "../../constants";
 import { ChangedBadge } from "../components/changed-badge";

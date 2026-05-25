@@ -28,7 +28,7 @@
     "./config": "./src/config.ts",
     "./token-utils": "./src/token-utils.ts",
     "./profile/*": "./src/profile/*.ts",
-    "./company/*": "./src/company/*.ts",
+    "./organization/*": "./src/organization/*.ts",
     "./blog/*": "./src/blog/*.ts",
     "./notifications/*": "./src/notifications/*.ts",
     "./admin/*": "./src/admin/*.ts"

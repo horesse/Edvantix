@@ -2,7 +2,7 @@ import { Skeleton } from "@workspace/ui/components/skeleton";
 
 export function SettingsSkeleton() {
   return (
-    <div className="flex max-w-[1180px] flex-col gap-8">
+    <div className="mx-auto flex max-w-[1180px] flex-col gap-8">
       {/* Org section skeleton */}
       <div>
         <Skeleton className="mb-3.5 h-5 w-48 rounded-md" />

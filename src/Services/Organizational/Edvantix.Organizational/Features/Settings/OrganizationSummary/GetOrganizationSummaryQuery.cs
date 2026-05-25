@@ -53,6 +53,7 @@ internal sealed class GetOrganizationSummaryQueryHandler(
                     organization.OrganizationType,
                     organization.Status,
                     organization.IsLegalEntity,
+                    organization.RegistrationDate,
                     membersCount,
                     primaryContact is null
                         ? null

@@ -2,14 +2,13 @@
 
 import { useMemo, useState } from "react";
 
-import { Search, Settings, X } from "lucide-react";
+import Link from "next/link";
+
+import { ChevronRight, Search, Settings, X } from "lucide-react";
 
 import useDirectoriesCatalog from "@workspace/api-hooks/organization/useDirectoriesCatalog";
 import useOrganizationSummary from "@workspace/api-hooks/organization/useOrganizationSummary";
-import useRolesSummary from "@workspace/api-hooks/organization/useRolesSummary";
 
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
-import { PageLayout } from "@/components/layout/page-layout";
 import { useOrganization } from "@/components/organization/provider";
 
 import { EmptySearchPage } from "./components/empty-search";
@@ -33,11 +32,10 @@ export function SettingsPage() {
     orgId,
     { enabled: Boolean(orgId) },
   );
-  const { isLoading: rolesLoading } = useRolesSummary(orgId, {
-    enabled: Boolean(orgId),
-  });
 
-  const isLoading = orgLoading || dirsLoading || rolesLoading;
+  // Показываем скелетон пока загружаются критические данные.
+  // AccessSection загружает данные о ролях самостоятельно и не блокирует страницу.
+  const isLoading = orgLoading || dirsLoading;
 
   const q = query.trim().toLowerCase();
 
@@ -67,9 +65,11 @@ export function SettingsPage() {
 
   if (!currentOrg) {
     return (
-      <p className="text-muted-foreground py-16 text-center text-sm">
-        Выберите организацию
-      </p>
+      <div className="-mx-4 -mt-4 lg:-mx-6 lg:-mt-6">
+        <p className="py-16 text-center text-sm text-slate-500">
+          Выберите организацию
+        </p>
+      </div>
     );
   }
 
@@ -95,25 +95,25 @@ export function SettingsPage() {
     sectionVisible.access ||
     sectionVisible.platform;
 
+  const orgDisplayName = currentOrg.shortName ?? currentOrg.fullLegalName;
+
   return (
-    <PageLayout
-      header={
-        <div className="space-y-[18px]">
-          <PageBreadcrumb
-            items={
-              currentOrg
-                ? [
-                    {
-                      label: currentOrg.shortName ?? currentOrg.fullLegalName,
-                      href: "/",
-                    },
-                  ]
-                : []
-            }
-            currentPage="Настройки"
-          />
-          {/* Page title row */}
-          <div className="flex items-center gap-[18px]">
+    // Выходим за пределы padding'а родительского контейнера — паттерн для sticky-шапок
+    <div className="-mx-4 -mt-4 flex min-h-0 flex-col lg:-mx-6 lg:-mt-6">
+      {/* ── Sticky-шапка ───────────────────────────────────────────── */}
+      <div className="sticky top-0 z-10 shrink-0 border-b border-slate-200 bg-white">
+        {/* Breadcrumb strip */}
+        <div className="flex items-center gap-2.5 border-b border-slate-100 px-4 py-3.5 text-[13px] text-slate-500 lg:px-8">
+          <Link href="/" className="transition-colors hover:text-slate-700">
+            {orgDisplayName}
+          </Link>
+          <ChevronRight className="size-3.5 text-slate-300" />
+          <span className="font-medium text-slate-900">Настройки</span>
+        </div>
+
+        {/* Title + search */}
+        <div className="px-4 pt-6 pb-[22px] lg:px-8">
+          <div className="mb-[18px] flex items-center gap-[18px]">
             <div className="flex size-12 shrink-0 items-center justify-center rounded-[12px] bg-indigo-50 text-indigo-700">
               <Settings className="size-6" />
             </div>
@@ -147,27 +147,30 @@ export function SettingsPage() {
             )}
           </div>
         </div>
-      }
-    >
-      {isLoading ? (
-        <SettingsSkeleton />
-      ) : (
-        <div className="mx-auto flex max-w-[1180px] flex-col gap-8">
-          {sectionVisible.org && <OrgSection />}
+      </div>
 
-          {sectionVisible.directories && (
-            <DirectoriesSection items={dirsFiltered} query={query} />
-          )}
+      {/* ── Body ──────────────────────────────────────────────────── */}
+      <div className="px-4 py-6 lg:px-8 lg:py-8">
+        {isLoading ? (
+          <SettingsSkeleton />
+        ) : (
+          <div className="mx-auto flex max-w-[1180px] flex-col gap-8">
+            {sectionVisible.org && <OrgSection />}
 
-          {sectionVisible.access && <AccessSection />}
+            {sectionVisible.directories && (
+              <DirectoriesSection items={dirsFiltered} query={query} />
+            )}
 
-          {sectionVisible.platform && (
-            <PlatformSection items={platformFiltered} />
-          )}
+            {sectionVisible.access && <AccessSection />}
 
-          {!anyVisible && <EmptySearchPage query={query} />}
-        </div>
-      )}
-    </PageLayout>
+            {sectionVisible.platform && (
+              <PlatformSection items={platformFiltered} />
+            )}
+
+            {!anyVisible && <EmptySearchPage query={query} />}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

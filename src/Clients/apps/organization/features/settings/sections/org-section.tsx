@@ -1,8 +1,11 @@
 import Link from "next/link";
 
+import { format, parseISO } from "date-fns";
+import { ru } from "date-fns/locale";
 import { ArrowRight, Building2, Info } from "lucide-react";
 
 import useOrganizationSummary from "@workspace/api-hooks/organization/useOrganizationSummary";
+import { ORGANIZATION_TYPE_LABELS } from "@workspace/types/organization";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 
@@ -12,6 +15,16 @@ import { OrgStat } from "../components/org-stat";
 import { SectionHeader } from "../components/section-header";
 import { ORG_EDIT_ROUTE } from "../constants";
 import { relativeDate } from "../lib/declension";
+
+/** Форматирует ISO DateOnly строку ("2019-03-14") в русскую дату "14 марта 2019". */
+function formatRegistrationDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  try {
+    return format(parseISO(iso), "d MMMM yyyy", { locale: ru });
+  } catch {
+    return null;
+  }
+}
 
 export function OrgSection() {
   const { currentOrg } = useOrganization();
@@ -26,6 +39,14 @@ export function OrgSection() {
     currentOrg?.shortName ??
     currentOrg?.fullLegalName;
   const initial = displayName?.replace(/[«»"]/g, "").trim().charAt(0) ?? "?";
+
+  const orgTypeLabel = summary
+    ? (ORGANIZATION_TYPE_LABELS[summary.organizationType] ?? null)
+    : null;
+
+  const registrationDateLabel = formatRegistrationDate(
+    summary?.registrationDate,
+  );
 
   const lastModifiedLabel = summary?.lastModified?.at
     ? relativeDate(summary.lastModified.at)
@@ -70,14 +91,8 @@ export function OrgSection() {
 
         {/* Stats grid */}
         <div className="grid grid-cols-4">
-          <OrgStat
-            label="Тип организации"
-            value={summary ? String(summary.organizationType) : null}
-          />
-          <OrgStat
-            label="Сотрудников"
-            value={summary ? String(summary.membersCount) : null}
-          />
+          <OrgStat label="Тип организации" value={orgTypeLabel} />
+          <OrgStat label="Дата регистрации" value={registrationDateLabel} />
           <OrgStat
             label="Основной контакт"
             value={summary?.primaryContact?.value ?? null}

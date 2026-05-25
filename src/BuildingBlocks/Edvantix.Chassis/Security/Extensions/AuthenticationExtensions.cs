@@ -34,15 +34,10 @@ public static class AuthenticationExtensions
             // Получает realm Keycloak из привязанных identity-опций.
             var realm = services.BuildServiceProvider().GetRequiredService<IdentityOptions>().Realm;
 
-            // Использует HTTP в среде разработки и HTTP/HTTPS вне её.
-            var scheme = builder.Environment.IsDevelopment()
-                ? Uri.UriSchemeHttp
-                : Http.Schemes.HttpOrHttps;
-
             // Формирует базовый URL Keycloak на основе внутренних соглашений об именовании компонентов.
             var keycloakUrl = HttpUtilities
                 .AsUrlBuilder()
-                .WithScheme(scheme)
+                .WithScheme(Http.Schemes.HttpOrHttps)
                 .WithHost(Components.KeyCloak)
                 .Build();
 

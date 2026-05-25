@@ -1,9 +1,10 @@
-﻿{
+{
   Id: Guid_1,
   FullLegalName: ООО Образовательный центр «Знание»,
   ShortName: ОЦ Знание,
   OrganizationType: PrivateEducationalCenter,
   IsLegalEntity: true,
+  RegistrationDate: Date_1,
   MembersCount: 25,
   PrimaryContact: {
     Id: Guid_2,

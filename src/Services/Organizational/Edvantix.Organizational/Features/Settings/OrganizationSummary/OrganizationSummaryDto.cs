@@ -13,6 +13,7 @@ public sealed record OrganizationSummaryDto(
     OrganizationType OrganizationType,
     OrganizationStatus Status,
     bool IsLegalEntity,
+    DateOnly RegistrationDate,
     int MembersCount,
     ContactDto? PrimaryContact,
     OrganizationSummaryDto.LastModifiedInfo LastModified

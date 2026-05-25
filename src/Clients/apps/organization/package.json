@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
@@ -42,6 +42,7 @@
     "@workspace/utils": "workspace:*",
     "@workspace/validations": "workspace:*",
     "better-auth": "^1.6.11",
+    "cross-env": "^10.1.0",
     "date-fns": "^4.2.1",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",

@@ -74,7 +74,8 @@ var notificationApi = builder
     .WithReference(notificationDb)
     .WaitFor(notificationDb)
     .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
+    .WithFriendlyUrls()
+    .WithExplicitStart();
 
 var auditApi = builder
     .AddProject<Edvantix_Audit>(Services.Audit)
@@ -86,7 +87,8 @@ var auditApi = builder
     .WithReference(redis)
     .WaitFor(redis)
     .WithContainerRegistry(registry)
-    .WithFriendlyUrls();
+    .WithFriendlyUrls()
+    .WithExplicitStart();
 
 var curriculumApi = builder
     .AddProject<Edvantix_Curriculum>(Services.Curriculum)
@@ -118,6 +120,7 @@ var organizationalApi = builder
     .WithReference(redis)
     .WaitFor(redis)
     .WithReference(personaApi)
+    .WithReference(curriculumApi)
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
@@ -136,9 +139,6 @@ var groupsApi = builder
     .WithReference(scheduleApi)
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
-
-// TODO: Такого быть не должно, циклическая зависимость сервисов. Перенести справочники в Organizational / еще куда-то
-organizationalApi.WithReference(groupsApi);
 
 builder
     .AddProject<Edvantix_Identity>(Services.Identity)

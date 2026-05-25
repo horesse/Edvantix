@@ -50,6 +50,5 @@ internal static class Extensions
             opts.Discovery.IncludeAssembly(typeof(IGroupsApiMarker).Assembly);
             opts.ListenToIntegrationEventsIn(typeof(IGroupsApiMarker).Assembly);
         });
-
     }
 }

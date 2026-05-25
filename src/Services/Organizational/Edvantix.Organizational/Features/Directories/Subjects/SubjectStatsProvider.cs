@@ -10,7 +10,8 @@ namespace Edvantix.Organizational.Features.Directories.Subjects;
 internal sealed class SubjectStatsProvider(ISubjectRepository repository) : IDirectoryStatsProvider
 {
     /// <inheritdoc/>
-    public DirectoryDescriptor Descriptor => DirectoryCatalog.FindByCode(DirectoryCatalog.Subjects)!;
+    public DirectoryDescriptor Descriptor =>
+        DirectoryCatalog.FindByCode(DirectoryCatalog.Subjects)!;
 
     /// <inheritdoc/>
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
@@ -23,7 +24,9 @@ internal sealed class SubjectStatsProvider(ISubjectRepository repository) : IDir
         return new DirectoryStats(
             activeCount,
             archivedCount,
-            lastModifiedAt.HasValue ? new DateTimeOffset(lastModifiedAt.Value, TimeSpan.Zero) : null,
+            lastModifiedAt.HasValue
+                ? new DateTimeOffset(lastModifiedAt.Value, TimeSpan.Zero)
+                : null,
             IsAvailable: true
         );
     }

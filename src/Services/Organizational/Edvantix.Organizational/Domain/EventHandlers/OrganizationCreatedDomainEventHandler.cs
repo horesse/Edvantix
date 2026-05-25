@@ -24,7 +24,12 @@ internal sealed class OrganizationCreatedDomainEventHandler(
     /// Набор уровней, создаваемых по умолчанию для каждой новой организации.
     /// Включает стандартные уровни CEFR (A1–C1) и возрастные/специальные группы.
     /// </summary>
-    private static readonly (string Code, string Name, LevelTone Tone, short Order)[] DefaultLevels =
+    private static readonly (
+        string Code,
+        string Name,
+        LevelTone Tone,
+        short Order
+    )[] DefaultLevels =
     [
         ("A1", "A1 — Начальный", LevelTone.Teal, 10),
         ("A2", "A2 — Базовый", LevelTone.Teal, 20),

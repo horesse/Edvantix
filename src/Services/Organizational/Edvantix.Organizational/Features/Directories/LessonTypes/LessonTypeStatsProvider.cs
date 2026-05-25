@@ -25,7 +25,9 @@ internal sealed class LessonTypeStatsProvider(ILessonTypeRepository repository)
         return new DirectoryStats(
             activeCount,
             archivedCount,
-            lastModifiedAt.HasValue ? new DateTimeOffset(lastModifiedAt.Value, TimeSpan.Zero) : null,
+            lastModifiedAt.HasValue
+                ? new DateTimeOffset(lastModifiedAt.Value, TimeSpan.Zero)
+                : null,
             IsAvailable: true
         );
     }

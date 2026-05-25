@@ -1,17 +1,22 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
-using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
 using Edvantix.Permissions;
 
 namespace Edvantix.Groups.Features.Groups.SuggestCode;
 
+/// <summary>
+/// Предлагает уникальный код группы на основе переданного кода уровня.
+/// <para>
+/// Клиент передаёт <see cref="LevelCode"/> напрямую: уровни теперь хранятся
+/// в Organizational-сервисе (cross-service), и Groups-сервис не имеет локального доступа к ним.
+/// </para>
+/// </summary>
 [RequirePermission(GroupPermissions.View)]
-public sealed record GetSuggestedGroupCodeQuery(Guid LevelId) : IQuery<string>;
+public sealed record GetSuggestedGroupCodeQuery(string LevelCode) : IQuery<string>;
 
 internal sealed class GetSuggestedGroupCodeQueryHandler(
     ITenantContext tenantContext,
-    IGroupRepository repository,
-    ILevelRepository levelRepository
+    IGroupRepository repository
 ) : IQueryHandler<GetSuggestedGroupCodeQuery, string>
 {
     public async ValueTask<string> Handle(
@@ -19,18 +24,14 @@ internal sealed class GetSuggestedGroupCodeQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var level =
-            await levelRepository.GetByIdAsync(query.LevelId, cancellationToken)
-            ?? throw new NotFoundException($"Уровень {query.LevelId} не найден.");
+        var levelCode = query.LevelCode.Trim().ToUpperInvariant();
 
         var codes = await repository.GetCodesByOrganizationAsync(
             tenantContext.OrganizationId,
             cancellationToken
         );
 
-        var levelCode = level.Code.Value;
-
-        // Ищем коды с паттерном {LEVEL}-{N} или {LEVEL}-{N} в любом месте
+        // Ищем коды с паттерном {LEVEL}-{N} и находим максимальный порядковый номер
         var maxNumber = codes
             .Where(c => c.StartsWith($"{levelCode}-", StringComparison.OrdinalIgnoreCase))
             .Select(c =>

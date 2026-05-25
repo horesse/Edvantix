@@ -1,4 +1,5 @@
-﻿using Edvantix.Organizational.Features.Settings.Directories;
+﻿using Edvantix.Organizational.Features.Directories.LessonTypes;
+using Edvantix.Organizational.Features.Settings.Directories;
 using Edvantix.Organizational.Features.Settings.Directories.Catalog;
 
 namespace Edvantix.Organizational.Extensions;
@@ -41,6 +42,10 @@ internal static class DirectoriesExtensions
                 .AsSelf()
                 .WithScopedLifetime()
         );
+
+        // ILessonTypeUniqueChecker проверяет уникальность и по имени, и по коду —
+        // не вписывается в IUniqueNameChecker, поэтому регистрируется явно.
+        services.AddScoped<ILessonTypeUniqueChecker, LessonTypeUniqueChecker>();
 
         return services;
     }

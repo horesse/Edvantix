@@ -1,8 +1,6 @@
 using Edvantix.Chassis.EventBus.Wolverine;
 using Edvantix.Chassis.Utilities.Configurations;
 using Edvantix.Groups.Configurations;
-using Edvantix.Groups.Features.Directories.LessonTypes;
-using Edvantix.Groups.Features.Directories.Subjects;
 using Edvantix.Groups.Grpc;
 using Edvantix.ServiceDefaults.ApiSpecification.OpenApi.Transformers;
 using Edvantix.ServiceDefaults.Cors;
@@ -53,9 +51,5 @@ internal static class Extensions
             opts.ListenToIntegrationEventsIn(typeof(IGroupsApiMarker).Assembly);
         });
 
-        // Сервисы прикладного уровня справочников (вне Infrastructure, чтобы не нарушать слоевую изоляцию).
-        services.AddScoped<ILessonTypeUniqueChecker, LessonTypeUniqueChecker>();
-        services.AddScoped<LessonTypeStatsProvider>();
-        services.AddScoped<SubjectStatsProvider>();
     }
 }

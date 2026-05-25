@@ -1,16 +1,11 @@
 using Edvantix.Groups.Domain.AggregatesModel.GroupAggregate;
-using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
 using Edvantix.Groups.Grpc.Services.Courses;
 
 namespace Edvantix.Groups.Features.Groups.Create;
 
 internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupCommand>
 {
-    public CreateGroupValidator(
-        ILevelRepository levels,
-        ICurriculumService curriculum,
-        ITenantContext tenantContext
-    )
+    public CreateGroupValidator(ICurriculumService curriculum, ITenantContext tenantContext)
     {
         RuleFor(x => x.Code)
             .NotEmpty()
@@ -25,10 +20,8 @@ internal sealed class CreateGroupValidator : AbstractValidator<CreateGroupComman
         RuleFor(x => x.Name).GroupNameRules();
         RuleFor(x => x.Description).GroupDescriptionRules();
 
+        // LevelId — мягкая ссылка на Level из Organizational-сервиса (cross-service); только проверяем непустоту.
         RuleFor(x => x.LevelId).NotEmpty().WithMessage("Идентификатор уровня обязателен");
-        RuleFor(x => x.LevelId)
-            .MustBeActiveLevelInCurrentOrganization(levels, tenantContext)
-            .When(x => x.LevelId != Guid.Empty);
 
         RuleFor(x => x.CourseId).NotEmpty().WithMessage("Идентификатор курса обязателен");
         RuleFor(x => x.CourseId)

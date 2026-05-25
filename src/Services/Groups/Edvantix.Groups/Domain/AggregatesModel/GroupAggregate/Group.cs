@@ -1,4 +1,3 @@
-using Edvantix.Groups.Domain.AggregatesModel.LevelAggregate;
 using Edvantix.Groups.Domain.Events;
 using Edvantix.SharedKernel.SeedWork;
 
@@ -121,11 +120,11 @@ public sealed class Group() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     /// <summary>Описание группы.</summary>
     public string Description { get; private set; } = string.Empty;
 
-    /// <summary>Идентификатор уровня сложности (FK → levels.id).</summary>
+    /// <summary>
+    /// Идентификатор уровня сложности.
+    /// Мягкая ссылка (soft Guid reference) на Level из Organizational-сервиса — без FK-constraint.
+    /// </summary>
     public Guid LevelId { get; private set; }
-
-    /// <summary>Уровень сложности (navigation property, загружается через AutoInclude).</summary>
-    public Level Level { get; private set; } = null!;
 
     /// <summary>
     /// Идентификатор курса в Curriculum-сервисе.

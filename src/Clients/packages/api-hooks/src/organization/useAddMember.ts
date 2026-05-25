@@ -26,7 +26,9 @@ export default function useAddMember(
     mutationFn: ({ request }) => organizationApiClient.addMember(request),
     onSuccess: (...args) => {
       const { orgId } = args[1];
-      queryClient.invalidateQueries({ queryKey: organizationKeys.members(orgId) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.members(orgId),
+      });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

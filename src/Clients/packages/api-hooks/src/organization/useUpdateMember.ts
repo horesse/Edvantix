@@ -28,8 +28,12 @@ export default function useUpdateMember(
       organizationApiClient.updateMember(memberId, request),
     onSuccess: (...args) => {
       const { orgId, memberId } = args[1];
-      queryClient.invalidateQueries({ queryKey: organizationKeys.members(orgId) });
-      queryClient.invalidateQueries({ queryKey: organizationKeys.member(memberId) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.members(orgId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.member(memberId),
+      });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

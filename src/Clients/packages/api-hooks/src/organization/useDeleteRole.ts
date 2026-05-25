@@ -25,7 +25,9 @@ export default function useDeleteRole(
     mutationFn: ({ roleId }) => organizationApiClient.deleteRole(roleId),
     onSuccess: (...args) => {
       const { orgId } = args[1];
-      queryClient.invalidateQueries({ queryKey: organizationKeys.roles(orgId) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.roles(orgId),
+      });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

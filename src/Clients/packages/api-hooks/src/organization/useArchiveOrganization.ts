@@ -18,7 +18,9 @@ export default function useArchiveOrganization(
     mutationFn: (id: string) => organizationApiClient.archiveOrganization(id),
     onSuccess: (...args) => {
       const id = args[1];
-      queryClient.invalidateQueries({ queryKey: organizationKeys.organization(id) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.organization(id),
+      });
       queryClient.invalidateQueries({
         queryKey: organizationKeys.myOrganizations(),
       });

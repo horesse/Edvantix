@@ -28,7 +28,9 @@ export default function useUpdateRole(
       organizationApiClient.updateRole(roleId, request),
     onSuccess: (...args) => {
       const { orgId, roleId } = args[1];
-      queryClient.invalidateQueries({ queryKey: organizationKeys.roles(orgId) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.roles(orgId),
+      });
       queryClient.invalidateQueries({
         queryKey: organizationKeys.role(orgId, roleId),
       });

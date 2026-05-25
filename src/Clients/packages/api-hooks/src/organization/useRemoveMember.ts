@@ -25,7 +25,9 @@ export default function useRemoveMember(
     mutationFn: ({ memberId }) => organizationApiClient.removeMember(memberId),
     onSuccess: (...args) => {
       const { orgId } = args[1];
-      queryClient.invalidateQueries({ queryKey: organizationKeys.members(orgId) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.members(orgId),
+      });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

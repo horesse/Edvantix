@@ -25,7 +25,9 @@ export default function useUpdateOrganization(
       organizationApiClient.updateOrganization(id, request),
     onSuccess: (...args) => {
       const { id } = args[1];
-      queryClient.invalidateQueries({ queryKey: organizationKeys.organization(id) });
+      queryClient.invalidateQueries({
+        queryKey: organizationKeys.organization(id),
+      });
       queryClient.invalidateQueries({
         queryKey: organizationKeys.organizations(),
       });

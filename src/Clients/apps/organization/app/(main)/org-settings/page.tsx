@@ -1,11 +1,6 @@
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { OrgSettingsPage } from "@/features/organization/org-settings-page";
-
-export const metadata: Metadata = {
-  title: "Edvantix - Настройки организации",
-};
-
+/** Старый маршрут — перенаправляет на хаб настроек. */
 export default function Page() {
-  return <OrgSettingsPage />;
+  redirect("/organization/settings/organization");
 }

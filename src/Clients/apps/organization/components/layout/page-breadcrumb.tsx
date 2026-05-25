@@ -55,10 +55,7 @@ function generateBreadcrumbItems(
 
     currentPath += `/${segment}`;
 
-    const label =
-      segment === "settings" && segments[i - 1] === "organization"
-        ? "Настройки организации"
-        : (ROUTE_LABELS[segment] ?? segment);
+    const label = ROUTE_LABELS[segment] ?? segment;
 
     items.push({ label, href: currentPath });
   }

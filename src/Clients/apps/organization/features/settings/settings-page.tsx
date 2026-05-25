@@ -11,6 +11,8 @@ import useRolesSummary from "@workspace/api-hooks/organization/useRolesSummary";
 import { PageLayout } from "@/components/layout/page-layout";
 import { useOrganization } from "@/components/organization/provider";
 
+import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
+
 import { EmptySearchPage } from "./components/empty-search";
 import { SettingsSkeleton } from "./components/settings-skeleton";
 import { PLATFORM_ITEMS } from "./constants";
@@ -101,6 +103,14 @@ export function SettingsPage() {
     <PageLayout
       header={
         <div className="space-y-[18px]">
+          <PageBreadcrumb
+            items={
+              currentOrg
+                ? [{ label: currentOrg.shortName ?? currentOrg.fullLegalName, href: "/" }]
+                : []
+            }
+            currentPage="Настройки"
+          />
           {/* Page title row */}
           <div className="flex items-center gap-[18px]">
             <div className="flex size-12 shrink-0 items-center justify-center rounded-[12px] bg-indigo-50 text-indigo-700">

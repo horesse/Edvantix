@@ -28,14 +28,10 @@ export const DIRECTORY_ICONS: Record<string, LucideIcon> = {
   Bell,
 };
 
-/** Маппинг кода справочника → маршрут приложения.
- *  Только справочники с готовыми страницами получают href. */
-export const DIRECTORY_ROUTES: Record<string, string> = {
-  levels: "/organization/levels",
-  subjects: "/organization/subjects",
-  "lesson-types": "/organization/lesson-types",
-  "payment-methods": "/organization/payment-methods",
-};
+/** Маппинг кода справочника → маршрут приложения. */
+export function directoryRoute(code: string): string {
+  return `/organization/settings/directories/${code}`;
+}
 
 export type PlatformItem = {
   readonly id: string;
@@ -121,4 +117,41 @@ export const PLATFORM_ITEMS: readonly PlatformItem[] = [
 ] as const;
 
 /** Маршрут страницы редактирования организации. */
-export const ORG_EDIT_ROUTE = "/org-settings";
+export const ORG_EDIT_ROUTE = "/organization/settings/organization";
+
+/** Статичный каталог справочников: code → {name, description}.
+ *  Используется в навигационных заглушках (server-side, без API). */
+export const DIRECTORY_CATALOG: Record<string, { name: string; description: string }> = {
+  levels: {
+    name: "Уровни",
+    description: "Уровни обучения для групп и курсов.",
+  },
+  subjects: {
+    name: "Предметы",
+    description: "Учебные предметы и направления.",
+  },
+  "lesson-types": {
+    name: "Типы занятий",
+    description: "Урок, консультация, тест, мастер-класс.",
+  },
+  "student-statuses": {
+    name: "Статусы студентов",
+    description: "Активный, в академе, выпускник, отчислен.",
+  },
+  rooms: {
+    name: "Кабинеты",
+    description: "Помещения и аудитории школы.",
+  },
+  sources: {
+    name: "Источники привлечения",
+    description: "Откуда студенты узнают о школе.",
+  },
+  "payment-methods": {
+    name: "Способы оплаты",
+    description: "Карта, перевод, рассрочка, материнский капитал.",
+  },
+  tags: {
+    name: "Теги студентов",
+    description: "Свободные метки для сегментации.",
+  },
+};

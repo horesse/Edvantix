@@ -5,7 +5,7 @@ import type { DirectorySummaryDto } from "@workspace/types/organization";
 import { DirectoryCard } from "../components/directory-card";
 import { EmptySearch } from "../components/empty-search";
 import { SectionHeader } from "../components/section-header";
-import { DIRECTORY_ICONS, DIRECTORY_ROUTES } from "../constants";
+import { DIRECTORY_CATALOG, DIRECTORY_ICONS, directoryRoute } from "../constants";
 
 interface DirectoriesSectionProps {
   readonly items: readonly DirectorySummaryDto[];
@@ -35,7 +35,8 @@ export function DirectoriesSection({ items, query }: DirectoriesSectionProps) {
         <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
           {items.map((dir) => {
             const Icon = DIRECTORY_ICONS[dir.icon] ?? DIRECTORY_ICONS["FileText"]!;
-            const href = DIRECTORY_ROUTES[dir.code];
+            const staticEntry = DIRECTORY_CATALOG[dir.code];
+            const href = staticEntry ? directoryRoute(dir.code) : undefined;
 
             return (
               <DirectoryCard

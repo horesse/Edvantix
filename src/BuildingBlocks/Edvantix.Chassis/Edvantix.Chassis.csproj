@@ -8,6 +8,7 @@
     <PackageReference Include="Scrutor" />
     <PackageReference Include="WolverineFx.Postgresql" />
     <PackageReference Include="WolverineFx.Kafka" />
+    <PackageReference Include="WolverineFx.RuntimeCompilation" />
   </ItemGroup>
   <ItemGroup Label="Data">
     <PackageReference Include="EFCore.NamingConventions" />

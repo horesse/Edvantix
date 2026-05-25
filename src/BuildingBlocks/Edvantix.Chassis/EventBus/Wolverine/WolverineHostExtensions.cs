@@ -80,7 +80,7 @@ public static class WolverineHostExtensions
                     // методы (ListenToIntegrationEventsIn / ListenToKafkaTopic) можно было вызывать из него.
                     opts.UseKafkaWithCloudEvents(kafkaConnectionString, applicationName);
 
-                    opts.CodeGeneration.TypeLoadMode = TypeLoadMode.Static;
+                    opts.UseRuntimeCompilation();
 
                     // ── Настройка для конкретного сервиса ─────────────────────────────────
                     configure?.Invoke(opts);

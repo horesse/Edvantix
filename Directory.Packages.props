@@ -67,6 +67,7 @@
     <PackageVersion Include="WolverineFx.Kafka" Version="$(WolverineVersion)" />
     <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="$(WolverineVersion)" />
     <PackageVersion Include="WolverineFx.Postgresql" Version="$(WolverineVersion)" />
+    <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="$(WolverineVersion)" />
     <!-- Quartz -->
     <PackageVersion Include="Quartz.Plugins" Version="$(QuartzVersion)" />
     <PackageVersion Include="Quartz.Dashboard" Version="$(QuartzVersion)" />

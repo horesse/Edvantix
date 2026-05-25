@@ -25,29 +25,31 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: false,
   },
+    advanced: {
+        // Для разработки
+        disableCSRFCheck: isDev,
+    },
   plugins: [
     genericOAuth({
       config: [
-        {
-          ...keycloak({
-            clientId: env.KEYCLOAK_CLIENT_ID!,
-            clientSecret: "",
-            issuer: `${keycloakUrl}/realms/${env.KEYCLOAK_REALM}`,
-            pkce: true,
-            scopes: [
-              "openid",
-              "profile",
-              "email",
-              "persona_read",
-              "persona_write",
-              "organisational_read",
-              "organisational_write",
-            ],
+          keycloak({
+              clientId: env.KEYCLOAK_CLIENT_ID!,
+              clientSecret: "",
+              issuer: `${keycloakUrl}/realms/${env.KEYCLOAK_REALM}`,
+              pkce: true,
+              scopes: [
+                  "openid",
+                  "profile",
+                  "email",
+                  "persona_read",
+                  "persona_write",
+                  "organisational_read",
+                  "organisational_write",
+              ],
+              mapProfileToUser: (profile) => ({
+                  name: profile.name || profile.preferred_username || profile.email,
+              }),
           }),
-          mapProfileToUser: (profile) => ({
-            name: profile.name || profile.preferred_username || profile.email,
-          }),
-        },
       ],
     }),
   ],

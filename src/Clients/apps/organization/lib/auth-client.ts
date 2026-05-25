@@ -1,9 +1,10 @@
 "use client";
 
 import { genericOAuthClient } from "better-auth/client/plugins";
+import type { createAuthClient as CreateAuthClient } from "better-auth/react";
 import { createAuthClient } from "better-auth/react";
 
-export const authClient = createAuthClient({
+export const authClient: ReturnType<typeof CreateAuthClient> = createAuthClient({
   baseURL:
     globalThis.window === undefined
       ? "http://localhost:3000"
@@ -13,14 +14,6 @@ export const authClient = createAuthClient({
 
 export const { signIn, signOut, useSession, getAccessToken } = authClient;
 
-/**
- * Forces an unconditional token refresh via Keycloak, bypassing better-auth's
- * cache check. Unlike `getAccessToken`, which returns a cached token if it has
- * not yet expired, this always exchanges the stored refresh token for a brand-new
- * access token. Use this immediately after server-side user attribute changes
- * (e.g. `profileId` written after profile registration) so the new claims are
- * available in the next access token without waiting for natural expiry.
- */
 export async function forceTokenRefresh(
   providerId: string,
 ): Promise<string | null> {

@@ -10,8 +10,7 @@ export function EmptySearch({ query, label }: EmptySearchProps) {
 
   return (
     <div className="rounded-[14px] border border-dashed border-slate-200 bg-white px-6 py-7 text-center text-[13px] text-slate-500">
-      По запросу{" "}
-      <strong className="text-slate-900">«{query}»</strong>
+      По запросу <strong className="text-slate-900">«{query}»</strong>
       {suffix} ничего не найдено.
     </div>
   );

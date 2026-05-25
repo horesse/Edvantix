@@ -20,7 +20,11 @@ export function OrgSection() {
     enabled: Boolean(orgId),
   });
 
-  const displayName = summary?.shortName ?? summary?.fullLegalName ?? currentOrg?.shortName ?? currentOrg?.fullLegalName;
+  const displayName =
+    summary?.shortName ??
+    summary?.fullLegalName ??
+    currentOrg?.shortName ??
+    currentOrg?.fullLegalName;
   const initial = displayName?.replace(/[«»"]/g, "").trim().charAt(0) ?? "?";
 
   const lastModifiedLabel = summary?.lastModified?.at

@@ -10,7 +10,7 @@ export function PlatformCard({ item }: PlatformCardProps) {
   const colors = PLATFORM_TONE_COLORS[item.tone];
 
   return (
-    <div className="group cursor-pointer rounded-[14px] border border-slate-200 bg-white p-[18px] shadow-[0_1px_2px_rgba(15,23,42,0.03)] opacity-[0.95] transition-all duration-150 hover:shadow-[0_4px_12px_rgba(15,23,42,0.05)]">
+    <div className="group cursor-pointer rounded-[14px] border border-slate-200 bg-white p-[18px] opacity-[0.95] shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-all duration-150 hover:shadow-[0_4px_12px_rgba(15,23,42,0.05)]">
       {/* Header */}
       <div className="mb-3 flex items-center gap-3">
         <div

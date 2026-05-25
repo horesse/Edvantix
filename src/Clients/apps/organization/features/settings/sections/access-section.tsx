@@ -49,7 +49,7 @@ export function AccessSection() {
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-1.5 text-[12px] text-slate-500 whitespace-nowrap tabular-nums">
+          <div className="flex shrink-0 items-center gap-1.5 text-[12px] whitespace-nowrap text-slate-500 tabular-nums">
             {membersCount > 0 && (
               <span>
                 <strong className="font-semibold text-slate-900">

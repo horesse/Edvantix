@@ -12,9 +12,12 @@ export function SettingsSkeleton() {
       {/* Directories section skeleton */}
       <div>
         <Skeleton className="mb-3.5 h-5 w-56 rounded-md" />
-        <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
+        <div className="grid [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))] gap-3.5">
           {Array.from({ length: 8 }, (_, i) => (
-            <Skeleton key={`dir-skeleton-${i}`} className="h-[148px] rounded-[14px]" />
+            <Skeleton
+              key={`dir-skeleton-${i}`}
+              className="h-[148px] rounded-[14px]"
+            />
           ))}
         </div>
       </div>
@@ -28,9 +31,12 @@ export function SettingsSkeleton() {
       {/* Platform section skeleton */}
       <div>
         <Skeleton className="mb-3.5 h-5 w-40 rounded-md" />
-        <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
+        <div className="grid [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))] gap-3.5">
           {Array.from({ length: 6 }, (_, i) => (
-            <Skeleton key={`plat-skeleton-${i}`} className="h-[118px] rounded-[14px]" />
+            <Skeleton
+              key={`plat-skeleton-${i}`}
+              className="h-[118px] rounded-[14px]"
+            />
           ))}
         </div>
       </div>

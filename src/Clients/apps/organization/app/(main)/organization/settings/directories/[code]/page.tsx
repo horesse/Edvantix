@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { Wrench } from "lucide-react";
 
@@ -14,7 +14,6 @@ import {
 
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { PageLayout } from "@/components/layout/page-layout";
-
 import { DIRECTORY_CATALOG } from "@/features/settings/constants";
 
 type Props = {
@@ -47,7 +46,7 @@ export default async function DirectoryStubPage({ params }: Props) {
       description={entry.description}
       back={{ href: "/organization/settings", label: "Назад к настройкам" }}
     >
-      <Empty className="border-dashed min-h-[320px]">
+      <Empty className="min-h-[320px] border-dashed">
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <Wrench />

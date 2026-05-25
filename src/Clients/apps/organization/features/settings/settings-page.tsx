@@ -8,10 +8,9 @@ import useDirectoriesCatalog from "@workspace/api-hooks/organization/useDirector
 import useOrganizationSummary from "@workspace/api-hooks/organization/useOrganizationSummary";
 import useRolesSummary from "@workspace/api-hooks/organization/useRolesSummary";
 
+import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { PageLayout } from "@/components/layout/page-layout";
 import { useOrganization } from "@/components/organization/provider";
-
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 
 import { EmptySearchPage } from "./components/empty-search";
 import { SettingsSkeleton } from "./components/settings-skeleton";
@@ -81,10 +80,7 @@ export function SettingsPage() {
     currentOrg.fullLegalName.toLowerCase().includes(q);
 
   const rolesMatch =
-    !q ||
-    "роли".includes(q) ||
-    "доступы".includes(q) ||
-    "права".includes(q);
+    !q || "роли".includes(q) || "доступы".includes(q) || "права".includes(q);
 
   const sectionVisible = {
     org: orgMatches,
@@ -106,7 +102,12 @@ export function SettingsPage() {
           <PageBreadcrumb
             items={
               currentOrg
-                ? [{ label: currentOrg.shortName ?? currentOrg.fullLegalName, href: "/" }]
+                ? [
+                    {
+                      label: currentOrg.shortName ?? currentOrg.fullLegalName,
+                      href: "/",
+                    },
+                  ]
                 : []
             }
             currentPage="Настройки"
@@ -139,7 +140,7 @@ export function SettingsPage() {
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-100"
+                className="absolute top-1/2 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-100"
               >
                 <X className="size-3.5" />
               </button>

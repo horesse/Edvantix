@@ -1,6 +1,9 @@
 /** Возвращает форму слова по числу.
  *  forms = [форма_1, форма_2_4, форма_5+] — русское склонение. */
-export function declension(n: number, forms: readonly [string, string, string]): string {
+export function declension(
+  n: number,
+  forms: readonly [string, string, string],
+): string {
   const abs = Math.abs(n);
   const m10 = abs % 10;
   const m100 = abs % 100;
@@ -32,7 +35,8 @@ export function relativeDate(iso: string | null | undefined): string | null {
   if (diffDays < 0) return null;
   if (diffDays === 0) return "сегодня";
   if (diffDays === 1) return "вчера";
-  if (diffDays < 7) return `${diffDays} ${declension(diffDays, ["день", "дня", "дней"])} назад`;
+  if (diffDays < 7)
+    return `${diffDays} ${declension(diffDays, ["день", "дня", "дней"])} назад`;
   if (diffDays < 14) return "неделю назад";
 
   const diffWeeks = Math.floor(diffDays / 7);

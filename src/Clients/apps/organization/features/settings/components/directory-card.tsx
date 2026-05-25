@@ -60,7 +60,7 @@ export function DirectoryCard({
               {name}
             </h3>
             {badge && (
-              <span className="rounded px-1.5 py-[2px] text-[10px] font-semibold tracking-[0.06em] text-slate-500 uppercase bg-slate-100">
+              <span className="rounded bg-slate-100 px-1.5 py-[2px] text-[10px] font-semibold tracking-[0.06em] text-slate-500 uppercase">
                 {badge}
               </span>
             )}
@@ -87,7 +87,9 @@ export function DirectoryCard({
           </strong>
           {declRecords(activeCount)}
           {archivedCount > 0 && (
-            <span className="ml-1 text-slate-300">+{archivedCount} в архиве</span>
+            <span className="ml-1 text-slate-300">
+              +{archivedCount} в архиве
+            </span>
           )}
         </span>
         {relative && (

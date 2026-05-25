@@ -121,7 +121,10 @@ export const ORG_EDIT_ROUTE = "/organization/settings/organization";
 
 /** Статичный каталог справочников: code → {name, description}.
  *  Используется в навигационных заглушках (server-side, без API). */
-export const DIRECTORY_CATALOG: Record<string, { name: string; description: string }> = {
+export const DIRECTORY_CATALOG: Record<
+  string,
+  { name: string; description: string }
+> = {
   levels: {
     name: "Уровни",
     description: "Уровни обучения для групп и курсов.",

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
-import { OrgSettingsPage } from "@/features/organization/org-settings-page";
+import { SettingsPage } from "@/features/settings";
 
 export const metadata: Metadata = {
-  title: "Edvantix - Настройки организации",
+  title: "Edvantix - Настройки",
 };
 
 export default function Page() {
-  return <OrgSettingsPage />;
+  return <SettingsPage />;
 }

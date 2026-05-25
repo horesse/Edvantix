@@ -1,14 +1,14 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
 import type {
   OrganizationMemberDto,
   OrganizationMembersQuery,
-} from "@workspace/types/company";
+} from "@workspace/types/organization";
 import type { PagedResult } from "@workspace/types/shared";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 /**
  * Возвращает участников текущей организации (берётся из localStorage selectedOrgId).
@@ -23,8 +23,8 @@ export default function useOrganizationMembers(
   >,
 ) {
   return useQuery({
-    queryKey: companyKeys.members(orgId, query),
-    queryFn: () => companyApiClient.getMembers(query),
+    queryKey: organizationKeys.members(orgId, query),
+    queryFn: () => organizationApiClient.getMembers(query),
     enabled: Boolean(orgId),
     ...options,
   });

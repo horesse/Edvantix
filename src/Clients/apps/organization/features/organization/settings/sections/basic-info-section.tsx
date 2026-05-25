@@ -4,7 +4,7 @@ import type { UseFormRegister } from "react-hook-form";
 import {
   ORGANIZATION_TYPE_LABELS,
   OrganizationType,
-} from "@workspace/types/company";
+} from "@workspace/types/organization";
 import { Input } from "@workspace/ui/components/input";
 import {
   Select,

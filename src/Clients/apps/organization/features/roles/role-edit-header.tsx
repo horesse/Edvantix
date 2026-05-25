@@ -2,7 +2,7 @@
 
 import { Lock, Trash2 } from "lucide-react";
 
-import type { RoleDetailDto } from "@workspace/types/company";
+import type { RoleDetailDto } from "@workspace/types/organization";
 import { Button } from "@workspace/ui/components/button";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 

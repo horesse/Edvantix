@@ -11,9 +11,9 @@
       "import": "./src/profile/index.ts",
       "types": "./src/profile/index.ts"
     },
-    "./company": {
-      "import": "./src/company/index.ts",
-      "types": "./src/company/index.ts"
+    "./organization": {
+      "import": "./src/organization/index.ts",
+      "types": "./src/organization/index.ts"
     }
   },
   "scripts": {

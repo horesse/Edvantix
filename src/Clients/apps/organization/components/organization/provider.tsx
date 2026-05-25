@@ -9,8 +9,8 @@ import {
   useState,
 } from "react";
 
-import useMyOrganizations from "@workspace/api-hooks/company/useMyOrganizations";
-import type { OrganizationWithRoleDto } from "@workspace/types/company";
+import useMyOrganizations from "@workspace/api-hooks/organization/useMyOrganizations";
+import type { OrganizationWithRoleDto } from "@workspace/types/organization";
 
 const STORAGE_KEY = "selectedOrgId";
 

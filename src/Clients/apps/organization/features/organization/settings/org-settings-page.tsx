@@ -1,6 +1,6 @@
 "use client";
 
-import useOrganization from "@workspace/api-hooks/company/useOrganization";
+import useOrganization from "@workspace/api-hooks/organization/useOrganization";
 
 import { useOrganization as useOrgContext } from "@/components/organization/provider";
 

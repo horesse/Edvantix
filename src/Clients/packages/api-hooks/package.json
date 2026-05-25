@@ -29,7 +29,7 @@
   "exports": {
     "./keys": "./src/keys.ts",
     "./profiles/*": "./src/profiles/*.ts",
-    "./company/*": "./src/company/*.ts",
+    "./organization/*": "./src/organization/*.ts",
     "./blog/*": "./src/blog/*.ts",
     "./notifications/*": "./src/notifications/*.ts",
     "./admin/*": "./src/admin/*.ts"

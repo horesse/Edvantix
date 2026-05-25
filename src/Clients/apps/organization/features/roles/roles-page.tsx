@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Plus, Search } from "lucide-react";
 
-import useRoles from "@workspace/api-hooks/company/useRoles";
+import useRoles from "@workspace/api-hooks/organization/useRoles";
 import { Button } from "@workspace/ui/components/button";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 

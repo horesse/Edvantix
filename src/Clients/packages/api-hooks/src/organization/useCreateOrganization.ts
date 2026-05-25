@@ -4,10 +4,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { CreateOrganizationRequest } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { CreateOrganizationRequest } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 export default function useCreateOrganization(
   options?: UseMutationOptions<string, Error, CreateOrganizationRequest>,
@@ -16,10 +16,10 @@ export default function useCreateOrganization(
 
   return useMutation({
     ...options,
-    mutationFn: (request) => companyApiClient.createOrganization(request),
+    mutationFn: (request) => organizationApiClient.createOrganization(request),
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: companyKeys.organizations(),
+        queryKey: organizationKeys.organizations(),
       });
       options?.onSuccess?.(...args);
     },

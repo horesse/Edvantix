@@ -4,10 +4,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { CreateRoleRequest } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { CreateRoleRequest } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 type CreateRoleParams = {
   /** ID организации — используется для инвалидации кэша. */
@@ -23,10 +23,10 @@ export default function useCreateRole(
 
   return useMutation({
     ...options,
-    mutationFn: ({ request }) => companyApiClient.createRole(request),
+    mutationFn: ({ request }) => organizationApiClient.createRole(request),
     onSuccess: (...args) => {
       const { orgId } = args[1];
-      queryClient.invalidateQueries({ queryKey: companyKeys.roles(orgId) });
+      queryClient.invalidateQueries({ queryKey: organizationKeys.roles(orgId) });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

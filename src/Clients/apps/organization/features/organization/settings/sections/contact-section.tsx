@@ -1,7 +1,7 @@
 import { Mail } from "lucide-react";
 import type { UseFormRegister } from "react-hook-form";
 
-import { ContactType } from "@workspace/types/company";
+import { ContactType } from "@workspace/types/organization";
 import { Input } from "@workspace/ui/components/input";
 import { Textarea } from "@workspace/ui/components/textarea";
 

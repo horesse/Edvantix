@@ -1,7 +1,7 @@
 "use client";
 
-import useOrganizationMembersKpi from "@workspace/api-hooks/company/useOrganizationMembersKpi";
-import { OrganizationStatus } from "@workspace/types/company";
+import useOrganizationMembersKpi from "@workspace/api-hooks/organization/useOrganizationMembersKpi";
+import { OrganizationStatus } from "@workspace/types/organization";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 
 import { KPI_ITEMS } from "./members-constants";

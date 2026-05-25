@@ -1,7 +1,7 @@
 import { Shield } from "lucide-react";
 
-import { ORGANIZATION_TYPE_LABELS } from "@workspace/types/company";
-import type { CreateOrganizationInput } from "@workspace/validations/company";
+import { ORGANIZATION_TYPE_LABELS } from "@workspace/types/organization";
+import type { CreateOrganizationInput } from "@workspace/validations/organization";
 
 import { InfoCallout } from "../components/info-callout";
 import { ReviewRow, ReviewSection } from "../components/review-section";

@@ -4,9 +4,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 type RemoveMemberParams = {
   /** ID организации — используется для инвалидации кэша. */
@@ -22,10 +22,10 @@ export default function useRemoveMember(
 
   return useMutation({
     ...options,
-    mutationFn: ({ memberId }) => companyApiClient.removeMember(memberId),
+    mutationFn: ({ memberId }) => organizationApiClient.removeMember(memberId),
     onSuccess: (...args) => {
       const { orgId } = args[1];
-      queryClient.invalidateQueries({ queryKey: companyKeys.members(orgId) });
+      queryClient.invalidateQueries({ queryKey: organizationKeys.members(orgId) });
       options?.onSuccess?.(...args);
     },
     onError: (...args) => {

@@ -15,7 +15,7 @@ import type {
   UpdateOrganizationMemberRequest,
   UpdateOrganizationRequest,
   UpdateRoleRequest,
-} from "@workspace/types/company";
+} from "@workspace/types/organization";
 import type { PagedResult } from "@workspace/types/shared";
 
 import { apiClient } from "../client";
@@ -38,7 +38,7 @@ function orgConfig(
   return { headers: { "X-Organization-Id": orgId }, ...extra };
 }
 
-class CompanyApiClient {
+class OrganizationApiClient {
   private readonly client: ApiClient;
 
   constructor() {
@@ -263,4 +263,4 @@ class CompanyApiClient {
   }
 }
 
-export default new CompanyApiClient();
+export default new OrganizationApiClient();

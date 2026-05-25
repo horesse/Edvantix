@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { ChevronsUpDown, GraduationCap, Plus } from "lucide-react";
 
-import type { OrganizationWithRoleDto } from "@workspace/types/company";
+import type { OrganizationWithRoleDto } from "@workspace/types/organization";
 import {
   Popover,
   PopoverContent,

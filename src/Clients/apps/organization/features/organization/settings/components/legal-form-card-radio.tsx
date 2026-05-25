@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 
-import { LegalForm } from "@workspace/types/company";
+import { LegalForm } from "@workspace/types/organization";
 import { cn } from "@workspace/ui/lib/utils";
 
 import { LEGAL_FORM_DATA } from "../../constants";

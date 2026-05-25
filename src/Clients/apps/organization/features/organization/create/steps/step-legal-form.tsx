@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@workspace/ui/components/form";
 import { cn } from "@workspace/ui/lib/utils";
-import type { CreateOrganizationInput } from "@workspace/validations/company";
+import type { CreateOrganizationInput } from "@workspace/validations/organization";
 
 import { FieldHint, FieldLabel } from "../components/field-hint";
 import { InfoCallout } from "../components/info-callout";

@@ -8,16 +8,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
-import useCreateOrganization from "@workspace/api-hooks/company/useCreateOrganization";
+import useCreateOrganization from "@workspace/api-hooks/organization/useCreateOrganization";
 import {
   ContactType,
   LegalForm,
   OrganizationType,
-} from "@workspace/types/company";
+} from "@workspace/types/organization";
 import {
   type CreateOrganizationInput,
   createOrganizationSchema,
-} from "@workspace/validations/company";
+} from "@workspace/validations/organization";
 
 import { LEGAL_FORM_DATA, STEP_FIELDS, WIZARD_STEPS } from "./constants";
 

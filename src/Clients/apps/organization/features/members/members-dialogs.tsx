@@ -5,10 +5,10 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import useAddMember from "@workspace/api-hooks/company/useAddMember";
-import useRemoveMember from "@workspace/api-hooks/company/useRemoveMember";
-import useUpdateMember from "@workspace/api-hooks/company/useUpdateMember";
-import type { OrganizationMemberDto } from "@workspace/types/company";
+import useAddMember from "@workspace/api-hooks/organization/useAddMember";
+import useRemoveMember from "@workspace/api-hooks/organization/useRemoveMember";
+import useUpdateMember from "@workspace/api-hooks/organization/useUpdateMember";
+import type { OrganizationMemberDto } from "@workspace/types/organization";
 import {
   AlertDialog,
   AlertDialogAction,

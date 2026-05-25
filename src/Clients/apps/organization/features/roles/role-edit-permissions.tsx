@@ -2,7 +2,7 @@
 
 import { Check, ChevronDown, Search } from "lucide-react";
 
-import type { FeatureDto } from "@workspace/types/company";
+import type { FeatureDto } from "@workspace/types/organization";
 
 import { FEATURE_META } from "./roles-constants";
 

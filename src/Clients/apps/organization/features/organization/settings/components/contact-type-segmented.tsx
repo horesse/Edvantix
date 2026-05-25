@@ -1,4 +1,4 @@
-import { ContactType } from "@workspace/types/company";
+import { ContactType } from "@workspace/types/organization";
 import { cn } from "@workspace/ui/lib/utils";
 
 import { CONTACT_TYPE_DATA } from "../../constants";

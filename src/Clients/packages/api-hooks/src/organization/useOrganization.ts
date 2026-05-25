@@ -1,10 +1,10 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
-import type { OrganizationDetailDto } from "@workspace/types/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
+import type { OrganizationDetailDto } from "@workspace/types/organization";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 /** Возвращает полные данные организации по её ID. */
 export default function useOrganization(
@@ -15,8 +15,8 @@ export default function useOrganization(
   >,
 ) {
   return useQuery({
-    queryKey: companyKeys.organization(id),
-    queryFn: () => companyApiClient.getOrganization(id),
+    queryKey: organizationKeys.organization(id),
+    queryFn: () => organizationApiClient.getOrganization(id),
     enabled: Boolean(id),
     ...options,
   });

@@ -1,14 +1,14 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-import companyApiClient from "@workspace/api-client/company/company";
+import organizationApiClient from "@workspace/api-client/organization/organization";
 import type {
   OrganizationDto,
   OrganizationsQuery,
-} from "@workspace/types/company";
+} from "@workspace/types/organization";
 import type { PagedResult } from "@workspace/types/shared";
 
-import { companyKeys } from "../keys";
+import { organizationKeys } from "../keys";
 
 /** Возвращает постраничный список организаций с опциональной фильтрацией. */
 export default function useOrganizations(
@@ -19,8 +19,8 @@ export default function useOrganizations(
   >,
 ) {
   return useQuery({
-    queryKey: companyKeys.organizations(query),
-    queryFn: () => companyApiClient.getOrganizations(query),
+    queryKey: organizationKeys.organizations(query),
+    queryFn: () => organizationApiClient.getOrganizations(query),
     ...options,
   });
 }

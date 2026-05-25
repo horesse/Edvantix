@@ -16,7 +16,7 @@ import {
   Users,
 } from "lucide-react";
 
-import useOrganization from "@workspace/api-hooks/company/useOrganization";
+import useOrganization from "@workspace/api-hooks/organization/useOrganization";
 import { Button } from "@workspace/ui/components/button";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { cn } from "@workspace/ui/lib/utils";

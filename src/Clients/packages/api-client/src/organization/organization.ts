@@ -2,16 +2,19 @@ import type {
   CreateOrganizationMemberRequest,
   CreateOrganizationRequest,
   CreateRoleRequest,
+  DirectorySummaryDto,
   OrganizationDetailDto,
   OrganizationDto,
   OrganizationMemberDto,
   OrganizationMembersKpiDto,
   OrganizationMembersQuery,
+  OrganizationSummaryDto,
   OrganizationWithRoleDto,
   OrganizationsQuery,
   RoleDetailDto,
   RoleDto,
   RolesQuery,
+  RolesSummaryDto,
   UpdateOrganizationMemberRequest,
   UpdateOrganizationRequest,
   UpdateRoleRequest,
@@ -260,6 +263,37 @@ class OrganizationApiClient {
    */
   public async deleteRole(id: string): Promise<void> {
     await this.client.delete<void>(`${BASE}/roles/${id}`, orgConfig());
+  }
+
+  // --- Settings ---
+
+  /** Получить сводку организации для страницы настроек. */
+  public async getOrganizationSummary(): Promise<OrganizationSummaryDto> {
+    const response = await this.client.get<OrganizationSummaryDto>(
+      `${BASE}/organization/summary`,
+      orgConfig(),
+    );
+    return response.data;
+  }
+
+  /** Получить каталог справочников с их метаданными. */
+  public async getDirectoriesCatalog(): Promise<
+    readonly DirectorySummaryDto[]
+  > {
+    const response = await this.client.get<readonly DirectorySummaryDto[]>(
+      `${BASE}/settings/directories`,
+      orgConfig(),
+    );
+    return response.data;
+  }
+
+  /** Получить сводку ролей организации для страницы настроек. */
+  public async getRolesSummary(): Promise<RolesSummaryDto> {
+    const response = await this.client.get<RolesSummaryDto>(
+      `${BASE}/roles/summary`,
+      orgConfig(),
+    );
+    return response.data;
   }
 }
 

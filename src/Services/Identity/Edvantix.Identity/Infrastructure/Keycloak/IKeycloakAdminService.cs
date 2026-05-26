@@ -18,4 +18,12 @@ public interface IKeycloakAdminService
 
     /// <summary>Включает учётную запись Keycloak (снятие блокировки пользователя).</summary>
     Task EnableUserAsync(Guid accountId, CancellationToken cancellationToken = default);
+
+    /// <summary>Обновляет имя и фамилию пользователя в Keycloak.</summary>
+    Task UpdateFullNameAsync(
+        Guid accountId,
+        string firstName,
+        string lastName,
+        CancellationToken cancellationToken = default
+    );
 }

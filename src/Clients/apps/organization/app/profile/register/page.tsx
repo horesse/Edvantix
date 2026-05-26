@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 import useRegisterProfile from "@workspace/api-hooks/profiles/useRegisterProfile";
 import { useTokenRefresh } from "@workspace/auth/use-token-refresh";
+import { useUserContext } from "@workspace/auth/use-user-context";
 
 import { ProfileSetupPage } from "@/features/profile/setup/profile-setup-page";
 import type { ProfileSetupValues } from "@/features/profile/setup/schema";
@@ -35,6 +36,7 @@ function mapGender(gender: ProfileSetupValues["gender"]): number {
 export default function ProfileRegisterPage() {
   const router = useRouter();
 
+  const { user } = useUserContext();
   const { mutateAsync } = useRegisterProfile();
   const refreshToken = useTokenRefresh();
 
@@ -58,5 +60,11 @@ export default function ProfileRegisterPage() {
     router.push("/");
   }
 
-  return <ProfileSetupPage onSubmit={handleSubmit} />;
+  return (
+    <ProfileSetupPage
+      onSubmit={handleSubmit}
+      initialFirstName={user?.given_name ?? undefined}
+      initialLastName={user?.family_name ?? undefined}
+    />
+  );
 }

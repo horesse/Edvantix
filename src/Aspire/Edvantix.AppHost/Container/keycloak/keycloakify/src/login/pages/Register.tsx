@@ -88,6 +88,8 @@ function FieldError({ message }: { message: string }) {
 
 type FieldState = { value: string; touched: boolean; error: string | null };
 type FormState = {
+  firstName: FieldState;
+  lastName: FieldState;
   email: FieldState;
   username: FieldState;
   password: FieldState;
@@ -134,13 +136,30 @@ export default function Register(
 
   const register = (
     kcContext as {
-      register?: { formData: { email?: string; username?: string } };
+      register?: {
+        formData: {
+          email?: string;
+          username?: string;
+          firstName?: string;
+          lastName?: string;
+        };
+      };
     }
   ).register ?? { formData: {} };
 
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const [formState, setFormState] = useState<FormState>({
+    firstName: {
+      value: register.formData.firstName ?? "",
+      touched: false,
+      error: null,
+    },
+    lastName: {
+      value: register.formData.lastName ?? "",
+      touched: false,
+      error: null,
+    },
     email: {
       value: register.formData.email ?? "",
       touched: false,
@@ -156,6 +175,12 @@ export default function Register(
   });
 
   // Валидаторы полей
+  const validateName = useCallback((value: string): string | null => {
+    if (!value.trim()) return "Обязательное поле";
+    if (value.trim().length < 2) return "Минимум 2 символа";
+    return null;
+  }, []);
+
   const validateEmail = useCallback((value: string): string | null => {
     if (!value.trim()) return "Обязательное поле";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
@@ -216,6 +241,16 @@ export default function Register(
       },
     }),
     [],
+  );
+
+  const firstNameHandlers = useMemo(
+    () => createFieldHandler("firstName", validateName),
+    [createFieldHandler, validateName],
+  );
+
+  const lastNameHandlers = useMemo(
+    () => createFieldHandler("lastName", validateName),
+    [createFieldHandler, validateName],
   );
 
   const emailHandlers = useMemo(
@@ -362,6 +397,45 @@ export default function Register(
           return true;
         }}
       >
+        {/* Поля имени и фамилии */}
+        <div className="grid grid-cols-2 gap-4">
+          <FormInput
+            label="Имя"
+            name="firstName"
+            type="text"
+            required
+            autoComplete="given-name"
+            autoFocus
+            placeholder="Иван"
+            value={formState.firstName.value}
+            onChange={firstNameHandlers.onChange}
+            onBlur={firstNameHandlers.onBlur}
+            touched={formState.firstName.touched}
+            error={
+              messagesPerField.existsError("firstName")
+                ? kcSanitize(messagesPerField.getFirstError("firstName"))
+                : formState.firstName.error
+            }
+          />
+          <FormInput
+            label="Фамилия"
+            name="lastName"
+            type="text"
+            required
+            autoComplete="family-name"
+            placeholder="Иванов"
+            value={formState.lastName.value}
+            onChange={lastNameHandlers.onChange}
+            onBlur={lastNameHandlers.onBlur}
+            touched={formState.lastName.touched}
+            error={
+              messagesPerField.existsError("lastName")
+                ? kcSanitize(messagesPerField.getFirstError("lastName"))
+                : formState.lastName.error
+            }
+          />
+        </div>
+
         {/* Поле Email */}
         <FormInput
           label={msgStr("email")}
@@ -369,7 +443,6 @@ export default function Register(
           type="email"
           required
           autoComplete="email"
-          autoFocus
           placeholder="example@mail.ru"
           value={formState.email.value}
           onChange={emailHandlers.onChange}

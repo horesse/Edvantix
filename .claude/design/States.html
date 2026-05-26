@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Edvantix — Empty / Loading / Error 500</title>
+<link rel="icon" href="shared/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap&subset=cyrillic,latin">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; background: #f1f5f9; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; color: #0f172a; -webkit-font-smoothing: antialiased; height: 100%; }
+  #root { height: 100%; }
+  * { box-sizing: border-box; }
+  button { font-family: inherit; }
+  a { color: inherit; text-decoration: none; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react" src="shared/Icons.jsx"></script>
+<script type="text/babel" data-presets="react" src="shared/Primitives.jsx"></script>
+<script type="text/babel" data-presets="react" src="shared/Sidebar.jsx"></script>
+<script type="text/babel" data-presets="react" src="design-canvas.jsx"></script>
+<script type="text/babel" data-presets="react" src="states/AppFrame.jsx"></script>
+<script type="text/babel" data-presets="react" src="states/EmptyStates.jsx"></script>
+<script type="text/babel" data-presets="react" src="states/LoadingStates.jsx"></script>
+<script type="text/babel" data-presets="react" src="states/ErrorStates.jsx"></script>
+<script type="text/babel" data-presets="react">
+function StatesCanvas() {
+  return (
+    <DesignCanvas>
+      <DCSection id="empty" title="Пустые состояния" subtitle="От «первый запуск» до «нет результатов фильтра» — каждое состояние ведёт к следующему действию.">
+        <DCArtboard id="empty-first" label="1. Первый запуск — нет студентов" width={1280} height={800}>
+          <EmptyFirstRun/>
+        </DCArtboard>
+        <DCArtboard id="empty-filtered" label="2. Фильтр без результатов" width={1280} height={800}>
+          <EmptyFiltered/>
+        </DCArtboard>
+        <DCArtboard id="empty-payments" label="3. Финансы — нет операций (с онбордингом)" width={1280} height={800}>
+          <EmptyPayments/>
+        </DCArtboard>
+        <DCArtboard id="empty-widgets" label="4. Виджеты дашборда без данных" width={1280} height={800}>
+          <EmptyWidgetGrid/>
+        </DCArtboard>
+        <DCArtboard id="empty-search" label="5. Глобальный поиск ⌘K — нет совпадений" width={520} height={340}>
+          <EmptyCompactSearch/>
+        </DCArtboard>
+        <DCArtboard id="empty-tab" label="6. Вкладка «Студенты» в группе пуста" width={920} height={560}>
+          <EmptyDetailTab/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="loading" title="Состояния загрузки" subtitle="Скелетоны имитируют форму контента, чтобы переход был незаметным. Спиннеры — только когда контент непредсказуемой формы.">
+        <DCArtboard id="loading-table" label="1. Скелетон — таблица студентов" width={1280} height={800}>
+          <LoadingStudentsSkeleton/>
+        </DCArtboard>
+        <DCArtboard id="loading-dashboard" label="2. Скелетон — дашборд с фоновым обновлением" width={1280} height={800}>
+          <LoadingDashboardSkeleton/>
+        </DCArtboard>
+        <DCArtboard id="loading-boot" label="3. Запуск приложения — splash" width={1280} height={800}>
+          <LoadingAppBoot/>
+        </DCArtboard>
+        <DCArtboard id="loading-micro" label="4. Микро-состояния — кнопки, виджеты, ленивая подгрузка" width={920} height={520}>
+          <LoadingMicroStates/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="error" title="Ошибка 500" subtitle="Сервер упал — а интерфейс остаётся понятным, дружелюбным и даёт пользователю ясные следующие шаги.">
+        <DCArtboard id="error-fullscreen" label="1. Фатальная ошибка — отдельная страница" width={1280} height={800}>
+          <ErrorFullScreen/>
+        </DCArtboard>
+        <DCArtboard id="error-fullpage" label="2. Внутри приложения — страница с шапкой" width={1280} height={800}>
+          <ErrorFullPage/>
+        </DCArtboard>
+        <DCArtboard id="error-inline" label="3. Частичный сбой — баннер + битый виджет" width={1280} height={800}>
+          <ErrorInlineWidget/>
+        </DCArtboard>
+        <DCArtboard id="error-toast" label="4. Не удалось сохранить — toast + форма" width={920} height={560}>
+          <ErrorToastForm/>
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<StatesCanvas/>);
+</script>
+</body>
+</html>

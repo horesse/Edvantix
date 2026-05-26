@@ -245,7 +245,7 @@ function WelcomeScreen({ onStart, onSkip }) {
                 <Icon.Check size={14} stroke="#10b981" sw={2.5}/> 14 дней бесплатно
               </span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                <Icon.Lock size={14} stroke="#10b981" sw={2.5}/> 152-ФЗ
+                <Icon.Lock size={14} stroke="#10b981" sw={2.5}/> Защищённое соединение
               </span>
             </div>
           </div>

@@ -174,7 +174,7 @@ function AuthMarketing() {
             background:'#10b981',
             boxShadow:'0 0 0 4px rgba(16,185,129,0.18)',
           }}/>
-          Платформа №1 для онлайн-школ в России
+          Платформа №1 для онлайн-школ в СНГ
         </span>
 
         {/* Headline */}

@@ -312,7 +312,7 @@ function TerminalPanel({amount}) {
             <TerminalStep n={1} active title="Сумма передана" sub="₽\u00A018\u00A0900 на POS-1209"/>
             <TerminalStep n={2} active title="Ожидание карты" sub="14 сек…" loading/>
             <TerminalStep n={3} title="Подтверждение банка"/>
-            <TerminalStep n={4} title="Печать чека (54-ФЗ)"/>
+            <TerminalStep n={4} title="Печать чека"/>
           </div>
         </div>
         {/* — terminal mock — */}
@@ -634,7 +634,7 @@ function CashPanel({amount}) {
         }}><Icon.Banknote size={20}/></div>
         <div>
           <div style={{fontSize:14,fontWeight:600,color:'#0f172a'}}>Внесение наличных</div>
-          <div style={{fontSize:12.5,color:'#64748b'}}>Чек 54-ФЗ будет сформирован автоматически</div>
+          <div style={{fontSize:12.5,color:'#64748b'}}>Кассовый чек будет сформирован автоматически</div>
         </div>
       </div>
 
@@ -737,7 +737,7 @@ function TransferPanel({amount, student}) {
 // ── Step 5. Documents ─────────────────────────────────────────────────
 function DocumentsBlock({docs, setDocs, mode, student}) {
   const items = [
-    {id:'receipt',  label:'Кассовый чек (54-ФЗ)', sub:'Отправим на email и в ОФД', icon:'Receipt', required:true},
+    {id:'receipt',  label:'Кассовый чек',          sub:'Отправим на email и в ОФД', icon:'Receipt', required:true},
     {id:'invoice',  label:'Счёт на оплату',        sub:'PDF со штампом и подписью', icon:'FileText'},
     {id:'contract', label:'Договор-оферта',         sub:'Если ещё не подписан',     icon:'FileText'},
     {id:'notify',   label:'Уведомить студента',     sub: mode==='request' ? 'Сразу после отправки' : 'После зачисления платежа', icon:'Mail'},
@@ -898,7 +898,7 @@ function ReceiptSidebar({student, course, subtotal, discount, total, method, mod
         display:'flex',alignItems:'center',gap:8,fontSize:11.5,color:'#94a3b8',padding:'4px 6px',
       }}>
         <Icon.ShieldCheck size={13} stroke="#10b981"/>
-        152-ФЗ · 54-ФЗ · PCI&nbsp;DSS L1
+        PCI&nbsp;DSS L1
       </div>
     </div>
   );

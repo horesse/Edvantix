@@ -318,7 +318,7 @@ function RegisterView({ setView }) {
         <div style={{ marginTop: 2 }}>
           <Checkbox checked={agree} onChange={setAgree}>
             Я согласен с <SwitchLink onClick={()=>{}}>условиями использования</SwitchLink> и{' '}
-            <SwitchLink onClick={()=>{}}>политикой обработки данных</SwitchLink> (152-ФЗ).
+            <SwitchLink onClick={()=>{}}>политикой обработки данных</SwitchLink>.
           </Checkbox>
         </div>
       </div>

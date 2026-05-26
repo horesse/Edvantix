@@ -50,6 +50,15 @@ const DIRECTORIES = [
     count: 18, archivedCount: 0, lastEdited: '4 дня назад', href: null },
 ];
 
+// ── Учебный календарь ─────────────────────────────────────
+const HOLIDAYS_PREVIEW = [
+  { date: '01.05', name: 'Праздник Весны и Труда' },
+  { date: '09.05', name: 'День Победы' },
+  { date: '04.11', name: 'День народного единства' },
+];
+const CALENDAR_YEAR = 2026;
+const CALENDAR_HOLIDAY_COUNT = 5;
+
 // ── Прочие разделы платформы ──────────────────────────────────────────
 const PLATFORM = [
   { id: 'notifications', name: 'Уведомления', icon: 'Bell',
@@ -109,14 +118,16 @@ function SettingsApp() {
 
   const orgMatches = matches('организация') || matches(ORG_PREVIEW.shortName) || matches(ORG_PREVIEW.fullName);
   const rolesMatch = matches('роли') || matches('доступы') || matches('права');
+  const calendarMatch = matches('календарь') || matches('выходные') || matches('праздники') || matches('праздники и выходные');
 
   const sectionVisible = {
     org: !q || orgMatches,
+    calendar: !q || calendarMatch,
     directories: !q || dirsFiltered.length > 0,
     access: !q || rolesMatch,
     platform: t.showPlatform && (!q || platformFiltered.length > 0),
   };
-  const anyVisible = sectionVisible.org || sectionVisible.directories || sectionVisible.access || sectionVisible.platform;
+  const anyVisible = sectionVisible.org || sectionVisible.calendar || sectionVisible.directories || sectionVisible.access || sectionVisible.platform;
 
   return (
     <div style={{ display: 'flex', height: '100vh', minHeight: 700, background: '#f8fafc', overflow: 'hidden' }}>
@@ -192,6 +203,8 @@ function SettingsApp() {
           <div style={{ maxWidth: 1180, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32 }}>
 
             {sectionVisible.org && <OrgSection/>}
+
+            {sectionVisible.calendar && <CalendarSection/>}
 
             {sectionVisible.directories && (
               <DirectoriesSection
@@ -596,6 +609,107 @@ function DirectoryRow({ dir, isLast, density, showCounts, showLastEdited }) {
       </div>
       <Icon.ChevronRight size={16} stroke={hover ? '#6366f1' : '#cbd5e1'}/>
     </a>
+  );
+}
+
+// ── УЧЕБНЫЙ КАЛЕНДАРЬ ────────────────────────────────────────────────
+function CalendarSection() {
+  const [hover, setHover] = useS(false);
+  return (
+    <section>
+      <SectionHeader
+        icon="Calendar"
+        title="Учебный календарь"
+        subtitle="Нерабочие дни, на которые система не назначает занятия"
+        action={
+          <a href="#" style={{ fontSize: 13, color: '#4f46e5', fontWeight: 500 }}
+            onClick={e => e.preventDefault()}>
+            Импорт государственных праздников →
+          </a>
+        }
+      />
+      <a href="#" onClick={e => e.preventDefault()}
+        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+        style={{
+          display: 'block', textDecoration: 'none',
+          background: '#fff',
+          border: '1px solid ' + (hover ? '#fcd34d' : '#e2e8f0'),
+          borderRadius: 16, overflow: 'hidden',
+          boxShadow: hover
+            ? '0 4px 16px rgba(245,158,11,0.12)'
+            : '0 1px 3px rgba(15,23,42,0.04)',
+          transition: 'all .15s',
+          cursor: 'pointer',
+        }}>
+        <div style={{
+          padding: '20px 24px',
+          display: 'flex', alignItems: 'center', gap: 18,
+          background: 'linear-gradient(135deg, rgba(245,158,11,0.06), rgba(244,114,182,0.04))',
+          borderBottom: '1px solid #f1f5f9',
+        }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 12, flexShrink: 0,
+            background: '#fff', color: '#b45309',
+            border: '1px solid #fde68a',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 2px 8px rgba(245,158,11,0.18)',
+          }}>
+            <Icon.Calendar size={22}/>
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 3 }}>
+              <h3 style={{ margin: 0, fontSize: 15.5, fontWeight: 600, color: '#0f172a', letterSpacing: '-0.01em' }}>
+                Выходные и праздники
+              </h3>
+              <Badge variant="default">{CALENDAR_YEAR}</Badge>
+            </div>
+            <div style={{ fontSize: 13, color: '#64748b' }}>
+              Общие нерабочие дни школы — учитываются при автозаполнении расписания и в табелях посещаемости
+            </div>
+          </div>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            fontSize: 12.5, color: '#475569', whiteSpace: 'nowrap',
+            fontVariantNumeric: 'tabular-nums',
+          }}>
+            <strong style={{ color: '#0f172a', fontWeight: 600, fontSize: 14 }}>
+              {CALENDAR_HOLIDAY_COUNT}
+            </strong>
+            <span>{declension(CALENDAR_HOLIDAY_COUNT, ['день','дня','дней'])}</span>
+          </div>
+          <Icon.ChevronRight size={16} stroke={hover ? '#b45309' : '#cbd5e1'}/>
+        </div>
+        <div style={{
+          padding: '12px 20px',
+          display: 'flex', alignItems: 'center', gap: 14,
+          fontSize: 12.5, color: '#64748b',
+          background: '#fafbfc',
+          overflowX: 'auto',
+        }}>
+          <span style={{
+            fontSize: 11, fontWeight: 600, color: '#94a3b8',
+            textTransform: 'uppercase', letterSpacing: '0.06em',
+            whiteSpace: 'nowrap',
+          }}>Ближайшие</span>
+          {HOLIDAYS_PREVIEW.map((h, i) => (
+            <span key={i} style={{
+              display: 'inline-flex', alignItems: 'baseline', gap: 6,
+              whiteSpace: 'nowrap',
+            }}>
+              <strong style={{
+                fontVariantNumeric: 'tabular-nums',
+                fontSize: 12.5, fontWeight: 600, color: '#0f172a',
+              }}>{h.date}</strong>
+              <span>{h.name}</span>
+            </span>
+          )).reduce((acc, el, i) => {
+            if (i > 0) acc.push(<span key={'sep-'+i} style={{ color: '#e2e8f0' }}>·</span>);
+            acc.push(el);
+            return acc;
+          }, [])}
+        </div>
+      </a>
+    </section>
   );
 }
 

@@ -77,7 +77,7 @@ function FormPanelFooter() {
     }}>
       <div style={{ display:'flex', gap: 18, flexWrap:'wrap' }}>
         <span style={{ display:'inline-flex', alignItems:'center', gap: 6 }}>
-          <IconShield size={12} stroke={2}/> 152-ФЗ
+          <IconShield size={12} stroke={2}/> Защищённое соединение
         </span>
         <span>Без кредитной карты</span>
         <span>Отмена в любой момент</span>

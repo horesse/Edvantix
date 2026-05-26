@@ -40,7 +40,7 @@ const PAYMENT_DETAIL = {
     secure3d: true,
     ip: '5.61.236.18',
     device: 'iPhone 14, Safari',
-    geo: 'Москва, Россия',
+    geo: 'Москва, СНГ',
   },
   manager: {
     name: 'Анна Мельникова',
@@ -49,7 +49,7 @@ const PAYMENT_DETAIL = {
   },
   documents: [
     { kind:'invoice',  title:'Счёт № INV-2026-0247',         meta:'PDF · 86 KB',  badge:null },
-    { kind:'receipt',  title:'Кассовый чек (54-ФЗ)',          meta:'ФД 4423 · ФП 2873912348', badge:'ОФД' },
+    { kind:'receipt',  title:'Кассовый чек',                  meta:'ФД 4423 · ФП 2873912348', badge:'ОФД' },
     { kind:'contract', title:'Договор-оферта A-1209/2026',    meta:'PDF · 142 KB', badge:null },
     { kind:'act',      title:'Акт выполненных работ',         meta:'будет сформирован после окончания курса', badge:'ожидается', disabled:true },
   ],
@@ -609,7 +609,7 @@ function ComplianceCard() {
         }}><Icon.ShieldCheck size={16}/></div>
         <div style={{flex:1,fontSize:12.5,color:'#475569',lineHeight:1.55}}>
           <div style={{fontWeight:600,color:'#0f172a',fontSize:13,marginBottom:4}}>Соответствие требованиям</div>
-          Платёж зарегистрирован в&nbsp;ОФД согласно <strong>54-ФЗ</strong>. Персональные данные обработаны по&nbsp;<strong>152-ФЗ</strong>. Эквайер сертифицирован <strong>PCI&nbsp;DSS Level&nbsp;1</strong>.
+          Платёж зарегистрирован в&nbsp;ОФД. Эквайер сертифицирован <strong>PCI&nbsp;DSS Level&nbsp;1</strong>.
         </div>
       </div>
     </Card>

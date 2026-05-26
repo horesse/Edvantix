@@ -18,6 +18,7 @@ const sidebarSections = [
     { id: 'org', title: 'Организация', icon: 'Building2' },
   ]},
   { id: 'system', label: 'Система', items: [
+    { id: 'subscription', title: 'Подписка', icon: 'CircleDollarSign' },
     { id: 'settings', title: 'Настройки', icon: 'Settings' },
   ]},
 ];

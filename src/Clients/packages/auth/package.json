@@ -1,0 +1,38 @@
+{
+  "name": "@workspace/auth",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=25.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "oidc-client-ts": "^3.5.0",
+    "react-oidc-context": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.15",
+    "@workspace/api-client": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^10.4.0",
+    "react": "^19.2.6"
+  },
+  "peerDependencies": {
+    "@workspace/api-client": "workspace:*",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "exports": {
+    "./provider": "./src/provider.tsx",
+    "./auth-guard": "./src/auth-guard.tsx",
+    "./admin-guard": "./src/admin-guard.tsx",
+    "./use-logout": "./src/use-logout.ts",
+    "./use-user-context": "./src/use-user-context.ts",
+    "./token-sync": "./src/token-sync.ts"
+  }
+}

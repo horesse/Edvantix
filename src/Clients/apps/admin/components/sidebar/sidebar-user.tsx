@@ -2,6 +2,7 @@
 
 import { LogOut, Shield } from "lucide-react";
 
+import { useLogout } from "@workspace/auth/use-logout";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +13,10 @@ import {
 } from "@workspace/ui/components/dropdown-menu";
 
 import { useUserContext } from "@/hooks/use-user-context";
-import { signOut } from "@/lib/auth-client";
 
 export function SidebarUser() {
   const { user } = useUserContext();
+  const { logout } = useLogout();
 
   const name = user?.name ?? "Администратор";
   const initials = name
@@ -28,7 +29,10 @@ export function SidebarUser() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="hover:bg-sidebar-accent flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors">
+        <button
+          type="button"
+          className="hover:bg-sidebar-accent flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors"
+        >
           <div className="from-primary/60 to-primary flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-xs font-bold text-white">
             {initials}
           </div>
@@ -48,7 +52,7 @@ export function SidebarUser() {
           <p className="text-sm font-medium">{name}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={() => signOut()}>
+        <DropdownMenuItem variant="destructive" onClick={logout}>
           <LogOut className="size-4" />
           Выйти
         </DropdownMenuItem>

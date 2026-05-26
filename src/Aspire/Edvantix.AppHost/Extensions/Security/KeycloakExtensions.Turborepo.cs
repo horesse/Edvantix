@@ -1,4 +1,4 @@
-﻿namespace Edvantix.AppHost.Extensions.Security;
+namespace Edvantix.AppHost.Extensions.Security;
 
 internal static partial class KeycloakExtensions
 {
@@ -15,10 +15,6 @@ internal static partial class KeycloakExtensions
         {
             var clientId = builder.Resource.Name;
 
-            var betterAuthSecret = builder
-                .ApplicationBuilder.AddParameter($"{clientId}-better-auth-secret", true)
-                .WithGeneratedDefault(new() { MinLength = 32, Special = false });
-
             switch (keycloak)
             {
                 case IResourceBuilder<KeycloakResource> keycloakContainer:
@@ -31,20 +27,22 @@ internal static partial class KeycloakExtensions
                         false
                     );
 
+                    // NEXT_PUBLIC_* so the browser-side react-oidc-context can reach Keycloak.
+                    // The endpoint URL is the Aspire-proxied host port — visible to the browser,
+                    // unlike the internal Docker network address (http://keycloak:8080).
                     builder
                         .WithReference(keycloakContainer)
                         .WaitForStart(keycloakContainer)
-                        .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
-                        .WithEnvironment("KEYCLOAK_REALM", _defaultLocalKeycloakName)
-                        .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
+                        .WithEnvironment(
+                            "NEXT_PUBLIC_KEYCLOAK_URL",
+                            keycloakContainer.GetEndpoint(Uri.UriSchemeHttp)
+                        )
+                        .WithEnvironment("NEXT_PUBLIC_KEYCLOAK_REALM", _defaultLocalKeycloakName)
+                        .WithEnvironment("NEXT_PUBLIC_KEYCLOAK_CLIENT_ID", clientId);
                     break;
+
                 case IResourceBuilder<ExternalServiceResource> keycloakHosted:
-                    ConfigureClientForHostedKeycloak(
-                        builder,
-                        keycloakHosted,
-                        betterAuthSecret,
-                        clientId
-                    );
+                    ConfigureClientForHostedKeycloak(builder, keycloakHosted, clientId);
                     break;
             }
 

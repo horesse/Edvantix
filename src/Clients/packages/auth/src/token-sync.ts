@@ -1,5 +1,6 @@
-import { registerTokenRefresher } from "@workspace/api-client/client";
 import type { AuthContextProps } from "react-oidc-context";
+
+import { registerTokenRefresher } from "@workspace/api-client/client";
 
 /** localStorage key read by the api-client request interceptor. */
 const ACCESS_TOKEN_KEY = "access_token";

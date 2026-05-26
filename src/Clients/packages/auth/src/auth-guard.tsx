@@ -3,8 +3,9 @@
 import type React from "react";
 import { useEffect } from "react";
 
-import { unregisterTokenRefresher } from "@workspace/api-client/client";
 import { useAuth } from "react-oidc-context";
+
+import { unregisterTokenRefresher } from "@workspace/api-client/client";
 
 import {
   registerOidcTokenRefresher,

@@ -33,6 +33,7 @@
     "./admin-guard": "./src/admin-guard.tsx",
     "./use-logout": "./src/use-logout.ts",
     "./use-user-context": "./src/use-user-context.ts",
+    "./use-token-refresh": "./src/use-token-refresh.ts",
     "./token-sync": "./src/token-sync.ts"
   }
 }

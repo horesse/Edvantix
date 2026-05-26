@@ -3,11 +3,10 @@
 import { useRouter } from "next/navigation";
 
 import useRegisterProfile from "@workspace/api-hooks/profiles/useRegisterProfile";
+import { useTokenRefresh } from "@workspace/auth/use-token-refresh";
 
 import { ProfileSetupPage } from "@/features/profile/setup/profile-setup-page";
 import type { ProfileSetupValues } from "@/features/profile/setup/schema";
-import { forceTokenRefresh } from "@/lib/auth-client";
-import { AUTH } from "@/lib/constants";
 import { genderOptions } from "@/lib/profile-options";
 
 /**
@@ -37,6 +36,7 @@ export default function ProfileRegisterPage() {
   const router = useRouter();
 
   const { mutateAsync } = useRegisterProfile();
+  const refreshToken = useTokenRefresh();
 
   async function handleSubmit(
     values: ProfileSetupValues,
@@ -52,11 +52,8 @@ export default function ProfileRegisterPage() {
     });
 
     // After profile creation Keycloak updates the user's claims.
-    // Force a token refresh so the new profile_id claim is included.
-    const token = await forceTokenRefresh(AUTH.PROVIDER);
-    if (token) {
-      window.localStorage.setItem("access_token", token);
-    }
+    // Force a silent token refresh so the new profile_id claim is included.
+    await refreshToken();
 
     router.push("/");
   }

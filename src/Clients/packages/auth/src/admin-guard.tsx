@@ -26,7 +26,9 @@ interface RealmAccess {
  */
 export function AdminGuard({ children, fallback }: Readonly<AdminGuardProps>) {
   const auth = useAuth();
-  const realmAccess = auth.user?.profile.realm_access as RealmAccess | undefined;
+  const realmAccess = auth.user?.profile.realm_access as
+    | RealmAccess
+    | undefined;
   const isAdmin = realmAccess?.roles?.includes("admin") ?? false;
 
   if (!isAdmin) {

@@ -68,7 +68,6 @@ internal static partial class KeycloakExtensions
     private static void ConfigureClientForHostedKeycloak<TResource>(
         IResourceBuilder<TResource> clientBuilder,
         IResourceBuilder<ExternalServiceResource> keycloakHosted,
-        IResourceBuilder<ParameterResource> betterAuthSecret,
         string clientId
     )
         where TResource : IResourceWithEnvironment, IResourceWithWaitSupport
@@ -77,12 +76,13 @@ internal static partial class KeycloakExtensions
             .ApplicationBuilder.Resources.OfType<ParameterResource>()
             .First(r => string.Equals(r.Name, "kc-realm", StringComparison.OrdinalIgnoreCase));
 
+        // NEXT_PUBLIC_* so the browser-side react-oidc-context can reach Keycloak.
+        // keycloakHosted resolves to the public-facing URL (e.g. https://identity.bookworm.com).
         clientBuilder
             .WithReference(keycloakHosted)
             .WaitFor(keycloakHosted)
-            .WithEnvironment("BETTER_AUTH_SECRET", betterAuthSecret)
-            .WithEnvironment("KEYCLOAK_HTTPS", keycloakHosted)
-            .WithEnvironment("KEYCLOAK_REALM", realmParameter)
-            .WithEnvironment("KEYCLOAK_CLIENT_ID", clientId);
+            .WithEnvironment("NEXT_PUBLIC_KEYCLOAK_URL", keycloakHosted)
+            .WithEnvironment("NEXT_PUBLIC_KEYCLOAK_REALM", realmParameter)
+            .WithEnvironment("NEXT_PUBLIC_KEYCLOAK_CLIENT_ID", clientId);
     }
 }

@@ -1,4 +1,6 @@
-﻿using Edvantix.Constants.Other;
+﻿using Edvantix.Chassis.Security.Extensions;
+using Edvantix.Chassis.Security.Keycloak;
+using Edvantix.Constants.Other;
 using Edvantix.Contracts;
 using Edvantix.Persona.Infrastructure.Blob;
 
@@ -68,6 +70,33 @@ public sealed class RegistrationCommandHandler(
         await publishEndpoint.PublishAsync(
             new LinkKeycloakProfileIntegrationEvent(accountId, profile.Id)
         );
+
+        // Если пользователь ввёл имя/фамилию, отличные от тех, что хранятся
+        // в Keycloak (given_name / family_name), синхронизируем их обратно.
+        var tokenFirstName = claims.GetClaimValue(KeycloakClaimTypes.GivenName);
+        var tokenLastName = claims.GetClaimValue(KeycloakClaimTypes.FamilyName);
+
+        var firstNameChanged = !string.Equals(
+            request.FirstName,
+            tokenFirstName,
+            StringComparison.OrdinalIgnoreCase
+        );
+        var lastNameChanged = !string.Equals(
+            request.LastName,
+            tokenLastName,
+            StringComparison.OrdinalIgnoreCase
+        );
+
+        if (firstNameChanged || lastNameChanged)
+        {
+            await publishEndpoint.PublishAsync(
+                new UpdateKeycloakFullNameIntegrationEvent(
+                    accountId,
+                    request.FirstName,
+                    request.LastName
+                )
+            );
+        }
 
         return profile.Id;
     }

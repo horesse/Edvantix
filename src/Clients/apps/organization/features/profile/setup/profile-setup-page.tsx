@@ -80,16 +80,6 @@ const defaultAvatarValues: AvatarStepValues = {
   presetValue: AVATAR_OPTIONS[0].value,
 };
 
-const defaultPersonalValues: PersonalStepValues = {
-  lastName: "",
-  firstName: "",
-  patronymic: "",
-  birthDate: "",
-  gender: "male",
-  countryCode: "+375",
-  phone: "",
-};
-
 const STEPS = [{ label: "Аватар" }, { label: "Данные" }];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -105,6 +95,10 @@ interface ProfileSetupPageProps {
     values: ProfileSetupValues,
     avatarFile: File | null,
   ) => Promise<void>;
+  /** Имя, предзаполненное из токена (given_name). */
+  initialFirstName?: string;
+  /** Фамилия, предзаполненная из токена (family_name). */
+  initialLastName?: string;
 }
 
 /**
@@ -116,16 +110,26 @@ interface ProfileSetupPageProps {
  * Sits outside the (main) layout — no sidebar, minimal header.
  * Pass an `onSubmit` handler to wire in the real API call from the page layer.
  */
-export function ProfileSetupPage({ onSubmit }: ProfileSetupPageProps) {
+export function ProfileSetupPage({
+  onSubmit,
+  initialFirstName,
+  initialLastName,
+}: ProfileSetupPageProps) {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
   const [avatarValues, setAvatarValues] =
     useState<AvatarStepValues>(defaultAvatarValues);
   const [uploadedDataUrl, setUploadedDataUrl] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [personalValues, setPersonalValues] = useState<PersonalStepValues>(
-    defaultPersonalValues,
-  );
+  const [personalValues, setPersonalValues] = useState<PersonalStepValues>({
+    lastName: initialLastName ?? "",
+    firstName: initialFirstName ?? "",
+    patronymic: "",
+    birthDate: "",
+    gender: "male",
+    countryCode: "+375",
+    phone: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

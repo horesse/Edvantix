@@ -261,7 +261,8 @@ export function DirectoryTable<
 
     const reordered = [...ids];
     const [moved] = reordered.splice(fromIdx, 1);
-    reordered.splice(toIdx, 0, moved);
+    // fromIdx проверен выше, поэтому moved гарантированно определён
+    reordered.splice(toIdx, 0, moved!);
     onReorder(reordered);
   }
 

@@ -19,6 +19,7 @@ public sealed class ListLevelsDirectoryEndpoint
             .WithName("ListLevelsDirectory")
             .WithTags("Справочник: Уровни")
             .WithSummary("Список записей справочника «Уровни»")
+            .WithPaginationHeaders()
             .Produces<PagedResult<LevelDirectoryListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

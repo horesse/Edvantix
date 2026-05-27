@@ -18,6 +18,7 @@ public sealed class ListStudentStatusesEndpoint
             .WithName("ListStudentStatuses")
             .WithTags("Статусы студентов")
             .WithSummary("Получить список статусов студентов организации")
+            .WithPaginationHeaders()
             .ProducesGet<PagedResult<StudentStatusListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

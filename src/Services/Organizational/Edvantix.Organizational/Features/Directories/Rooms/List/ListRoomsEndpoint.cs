@@ -18,6 +18,7 @@ public sealed class ListRoomsEndpoint
             .WithName("ListRooms")
             .WithTags("Кабинеты")
             .WithSummary("Получить список кабинетов организации")
+            .WithPaginationHeaders()
             .ProducesGet<PagedResult<RoomListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

@@ -17,6 +17,7 @@ public sealed class ListSubjectsEndpoint
             .WithName("ListSubjects")
             .WithTags("Справочник: Предметы")
             .WithSummary("Список записей справочника «Предметы»")
+            .WithPaginationHeaders()
             .Produces<PagedResult<SubjectListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

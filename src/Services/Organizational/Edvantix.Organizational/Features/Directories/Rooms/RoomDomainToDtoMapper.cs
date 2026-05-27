@@ -4,6 +4,10 @@ using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 namespace Edvantix.Organizational.Features.Directories.Rooms;
 
 /// <summary>Маппер <see cref="Room"/> → <see cref="RoomDto"/>.</summary>
+/// <remarks>
+/// Поле <see cref="RoomDto.Usage"/> маппер не заполняет — обогащение выполняется в хендлере
+/// через выражение <c>with { Usage = ... }</c> после batch-запроса к сервису Groups.
+/// </remarks>
 public sealed class RoomDtoMapper : Mapper<Room, RoomDto>
 {
     /// <inheritdoc/>
@@ -20,11 +24,16 @@ public sealed class RoomDtoMapper : Mapper<Room, RoomDto>
             source.CreatedAt,
             source.LastModifiedAt,
             source.CreatedBy,
-            source.LastModifiedBy
+            source.LastModifiedBy,
+            Usage: []
         );
 }
 
 /// <summary>Маппер <see cref="Room"/> → <see cref="RoomListItemDto"/>.</summary>
+/// <remarks>
+/// Поле <see cref="RoomListItemDto.Usage"/> маппер не заполняет — обогащение выполняется в хендлере
+/// через выражение <c>with { Usage = ... }</c> после batch-запроса к сервису Groups.
+/// </remarks>
 public sealed class RoomListItemDtoMapper : Mapper<Room, RoomListItemDto>
 {
     /// <inheritdoc/>
@@ -36,6 +45,7 @@ public sealed class RoomListItemDtoMapper : Mapper<Room, RoomListItemDto>
             source.Floor,
             source.RoomType,
             source.IsArchived,
-            source.Order
+            source.Order,
+            Usage: []
         );
 }

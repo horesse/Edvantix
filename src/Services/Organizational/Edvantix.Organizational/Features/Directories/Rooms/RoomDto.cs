@@ -15,6 +15,7 @@ namespace Edvantix.Organizational.Features.Directories.Rooms;
 /// <param name="LastModifiedAt">Дата последнего изменения.</param>
 /// <param name="CreatedBy">Кто создал.</param>
 /// <param name="LastModifiedBy">Кто изменил последним.</param>
+/// <param name="Usage">Использование кабинета в других объектах (напр. группы).</param>
 public sealed record RoomDto(
     Guid Id,
     string Name,
@@ -27,7 +28,8 @@ public sealed record RoomDto(
     DateTime CreatedAt,
     DateTime? LastModifiedAt,
     Guid? CreatedBy,
-    Guid? LastModifiedBy
+    Guid? LastModifiedBy,
+    IReadOnlyList<DirectoryUsageDto> Usage
 );
 
 /// <summary>Краткое DTO кабинета для постраничного списка.</summary>
@@ -38,6 +40,7 @@ public sealed record RoomDto(
 /// <param name="RoomType">Тип помещения.</param>
 /// <param name="IsArchived">Признак архивации.</param>
 /// <param name="Order">Порядок сортировки.</param>
+/// <param name="Usage">Использование кабинета в других объектах (напр. группы).</param>
 public sealed record RoomListItemDto(
     Guid Id,
     string Name,
@@ -45,5 +48,6 @@ public sealed record RoomListItemDto(
     string? Floor,
     RoomType RoomType,
     bool IsArchived,
-    int Order
+    int Order,
+    IReadOnlyList<DirectoryUsageDto> Usage
 );

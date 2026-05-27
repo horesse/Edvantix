@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 using Edvantix.Organizational.Features.Directories.Levels;
+using Edvantix.Organizational.Grpc.Services.Groups;
 using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Directories.Levels.List;
@@ -24,7 +25,8 @@ public sealed record ListLevelsDirectoryQuery(
 
 internal sealed class ListLevelsDirectoryQueryHandler(
     ITenantContext tenantContext,
-    ILevelRepository repository
+    ILevelRepository repository,
+    IGroupsUsageService groupsUsageService
 ) : IQueryHandler<ListLevelsDirectoryQuery, PagedResult<LevelDirectoryListItemDto>>
 {
     public async ValueTask<PagedResult<LevelDirectoryListItemDto>> Handle(
@@ -44,11 +46,21 @@ internal sealed class ListLevelsDirectoryQueryHandler(
             cancellationToken
         );
 
+        var counts = await groupsUsageService.CountByLevelIdsAsync(
+            items.Select(l => l.Id),
+            cancellationToken
+        );
+
         return new PagedResult<LevelDirectoryListItemDto>(
-            [.. items.Select(LevelDirectoryMapper.ToListItemDto)],
+            [.. items.Select(l => LevelDirectoryMapper.ToListItemDto(l, BuildUsage(counts, l.Id)))],
             pageIndex,
             pageSize,
             total
         );
     }
+
+    private static IReadOnlyList<DirectoryUsageDto> BuildUsage(
+        IReadOnlyDictionary<Guid, int> counts,
+        Guid id
+    ) => [new DirectoryUsageDto("Группы", counts.GetValueOrDefault(id, 0))];
 }

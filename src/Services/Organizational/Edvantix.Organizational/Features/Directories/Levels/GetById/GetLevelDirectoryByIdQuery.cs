@@ -1,6 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 using Edvantix.Organizational.Features.Directories.Levels;
+using Edvantix.Organizational.Grpc.Services.Groups;
 using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Directories.Levels.GetById;
@@ -11,7 +12,8 @@ public sealed record GetLevelDirectoryByIdQuery(Guid Id) : IQuery<LevelDirectory
 
 internal sealed class GetLevelDirectoryByIdQueryHandler(
     ITenantContext tenantContext,
-    ILevelRepository repository
+    ILevelRepository repository,
+    IGroupsUsageService groupsUsageService
 ) : IQueryHandler<GetLevelDirectoryByIdQuery, LevelDirectoryDto>
 {
     public async ValueTask<LevelDirectoryDto> Handle(
@@ -24,6 +26,11 @@ internal sealed class GetLevelDirectoryByIdQueryHandler(
         if (level is null || level.OrganizationId != tenantContext.OrganizationId)
             throw NotFoundException.For<Level>(query.Id);
 
-        return LevelDirectoryMapper.ToDto(level);
+        var counts = await groupsUsageService.CountByLevelIdsAsync([level.Id], cancellationToken);
+
+        return LevelDirectoryMapper.ToDto(
+            level,
+            [new DirectoryUsageDto("Группы", counts.GetValueOrDefault(level.Id, 0))]
+        );
     }
 }

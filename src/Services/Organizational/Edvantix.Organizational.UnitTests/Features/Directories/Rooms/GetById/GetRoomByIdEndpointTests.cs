@@ -48,6 +48,7 @@ public sealed class GetRoomByIdEndpointTests
             DateTime.UtcNow,
             null,
             null,
-            null
+            null,
+            Usage: []
         );
 }

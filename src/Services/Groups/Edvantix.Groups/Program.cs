@@ -24,6 +24,7 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
+app.MapGrpcService<Edvantix.Groups.Grpc.Services.GroupsService>();
 app.MapGrpcHealthChecksService();
 app.MapDefaultEndpoints();
 app.UseDefaultOpenApi();

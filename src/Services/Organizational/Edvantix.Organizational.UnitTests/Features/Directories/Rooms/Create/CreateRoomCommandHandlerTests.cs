@@ -84,6 +84,7 @@ public sealed class CreateRoomCommandHandlerTests
             DateTime.UtcNow,
             null,
             null,
-            null
+            null,
+            Usage: []
         );
 }

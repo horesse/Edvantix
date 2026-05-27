@@ -16,8 +16,6 @@ public sealed class GroupsByRoomIdsSpecification : Specification<Group>
     /// <param name="roomIds">Набор идентификаторов кабинетов для фильтрации.</param>
     public GroupsByRoomIdsSpecification(IReadOnlyCollection<Guid> roomIds)
     {
-        Query.Where(g =>
-            !g.IsDeleted && g.RoomId != null && roomIds.Contains(g.RoomId!.Value)
-        );
+        Query.Where(g => !g.IsDeleted && g.RoomId != null && roomIds.Contains(g.RoomId!.Value));
     }
 }

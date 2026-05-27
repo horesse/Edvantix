@@ -26,10 +26,7 @@ internal sealed class GetLevelDirectoryByIdQueryHandler(
         if (level is null || level.OrganizationId != tenantContext.OrganizationId)
             throw NotFoundException.For<Level>(query.Id);
 
-        var counts = await groupsUsageService.CountByLevelIdsAsync(
-            [level.Id],
-            cancellationToken
-        );
+        var counts = await groupsUsageService.CountByLevelIdsAsync([level.Id], cancellationToken);
 
         return LevelDirectoryMapper.ToDto(
             level,

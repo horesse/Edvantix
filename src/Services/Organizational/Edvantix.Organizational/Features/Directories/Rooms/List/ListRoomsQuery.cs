@@ -56,10 +56,12 @@ internal sealed class ListRoomsQueryHandler(
 
         var dtos = mapper
             .Map(items)
-            .Select(dto => dto with
-            {
-                Usage = [new DirectoryUsageDto("Группы", counts.GetValueOrDefault(dto.Id, 0))],
-            })
+            .Select(dto =>
+                dto with
+                {
+                    Usage = [new DirectoryUsageDto("Группы", counts.GetValueOrDefault(dto.Id, 0))],
+                }
+            )
             .ToList();
 
         return new PagedResult<RoomListItemDto>(dtos, query.Page, query.PageSize, total);

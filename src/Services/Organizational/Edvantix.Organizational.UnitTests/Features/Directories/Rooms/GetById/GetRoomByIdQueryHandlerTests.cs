@@ -20,12 +20,7 @@ public sealed class GetRoomByIdQueryHandlerTests
                 s.CountByRoomIdsAsync(It.IsAny<IEnumerable<Guid>>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(new Dictionary<Guid, int>());
-        _handler = new(
-            _tenantMock.Object,
-            _repoMock.Object,
-            _mapperMock.Object,
-            _usageMock.Object
-        );
+        _handler = new(_tenantMock.Object, _repoMock.Object, _mapperMock.Object, _usageMock.Object);
     }
 
     [Test]

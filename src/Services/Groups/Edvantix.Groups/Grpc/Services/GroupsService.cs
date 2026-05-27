@@ -32,7 +32,9 @@ internal sealed class GroupsService(IGroupRepository repository)
                 context.CancellationToken
             );
 
-            foreach (var (id, count) in groups.GroupBy(g => g.LevelId).Select(g => (g.Key, g.Count())))
+            foreach (
+                var (id, count) in groups.GroupBy(g => g.LevelId).Select(g => (g.Key, g.Count()))
+            )
                 response.Counts[id.ToString()] = count;
         }
         else if (request.Kind == "Room")
@@ -42,16 +44,21 @@ internal sealed class GroupsService(IGroupRepository repository)
                 context.CancellationToken
             );
 
-            foreach (var (id, count) in groups
-                .Where(g => g.RoomId.HasValue)
-                .GroupBy(g => g.RoomId!.Value)
-                .Select(g => (g.Key, g.Count())))
+            foreach (
+                var (id, count) in groups
+                    .Where(g => g.RoomId.HasValue)
+                    .GroupBy(g => g.RoomId!.Value)
+                    .Select(g => (g.Key, g.Count()))
+            )
                 response.Counts[id.ToString()] = count;
         }
         else
         {
             throw new RpcException(
-                new Status(StatusCode.InvalidArgument, $"Неизвестный тип справочника: {request.Kind}.")
+                new Status(
+                    StatusCode.InvalidArgument,
+                    $"Неизвестный тип справочника: {request.Kind}."
+                )
             );
         }
 

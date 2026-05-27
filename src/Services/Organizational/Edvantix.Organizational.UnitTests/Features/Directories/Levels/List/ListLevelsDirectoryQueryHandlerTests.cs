@@ -90,14 +90,15 @@ public sealed class ListLevelsDirectoryQueryHandlerTests
         await _handler.Handle(new ListLevelsDirectoryQuery(PageSize: 9999), CancellationToken.None);
 
         _repoMock.Verify(
-            r => r.ListForDirectoryAsync(
-                _orgId,
-                It.IsAny<bool>(),
-                It.IsAny<string?>(),
-                It.IsAny<int>(),
-                100,
-                It.IsAny<CancellationToken>()
-            ),
+            r =>
+                r.ListForDirectoryAsync(
+                    _orgId,
+                    It.IsAny<bool>(),
+                    It.IsAny<string?>(),
+                    It.IsAny<int>(),
+                    100,
+                    It.IsAny<CancellationToken>()
+                ),
             Times.Once
         );
     }

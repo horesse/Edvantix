@@ -52,11 +52,7 @@ internal sealed class ListLevelsDirectoryQueryHandler(
         );
 
         return new PagedResult<LevelDirectoryListItemDto>(
-            [
-                .. items.Select(l =>
-                    LevelDirectoryMapper.ToListItemDto(l, BuildUsage(counts, l.Id))
-                ),
-            ],
+            [.. items.Select(l => LevelDirectoryMapper.ToListItemDto(l, BuildUsage(counts, l.Id)))],
             pageIndex,
             pageSize,
             total

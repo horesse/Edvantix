@@ -27,10 +27,7 @@ internal sealed class GetRoomByIdQueryHandler(
         if (room is null || room.OrganizationId != tenantContext.OrganizationId)
             throw NotFoundException.For<Room>(query.Id);
 
-        var counts = await groupsUsageService.CountByRoomIdsAsync(
-            [room.Id],
-            cancellationToken
-        );
+        var counts = await groupsUsageService.CountByRoomIdsAsync([room.Id], cancellationToken);
 
         return mapper.Map(room) with
         {

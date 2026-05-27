@@ -94,10 +94,9 @@ public sealed class GetLevelDirectoryByIdQueryHandlerTests
             .ReturnsAsync(level);
 
         await Should.ThrowAsync<NotFoundException>(() =>
-            _handler.Handle(
-                new GetLevelDirectoryByIdQuery(level.Id),
-                CancellationToken.None
-            ).AsTask()
+            _handler
+                .Handle(new GetLevelDirectoryByIdQuery(level.Id), CancellationToken.None)
+                .AsTask()
         );
     }
 

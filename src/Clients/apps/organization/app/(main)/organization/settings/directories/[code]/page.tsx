@@ -14,11 +14,8 @@ import {
 
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { PageLayout } from "@/components/layout/page-layout";
-import { DirectoryPage } from "@/features/directories/directory-page";
-import {
-  directoryRegistry,
-  isDirectoryImplemented,
-} from "@/features/directories/registry";
+import { DirectoryClientPage } from "@/features/directories/directory-client-page";
+import { isDirectoryImplemented } from "@/features/directories/registry";
 import { DIRECTORY_CATALOG } from "@/features/settings/constants";
 
 type Props = {
@@ -40,8 +37,7 @@ export default async function DirectoryCodePage({ params }: Props) {
   if (!entry) notFound();
 
   if (isDirectoryImplemented(code)) {
-    const config = directoryRegistry[code];
-    return <DirectoryPage config={config} />;
+    return <DirectoryClientPage code={code} />;
   }
 
   return (

@@ -9,8 +9,11 @@ public sealed class ReorderLeadSourcesEndpoint : IEndpoint<NoContent, ReorderReq
     {
         app.MapPatch(
                 "/directories/sources/reorder",
-                async (ReorderRequest request, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(request, sender, cancellationToken)
+                async (
+                    ReorderRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
             .WithName("ReorderLeadSources")
             .WithTags("Источники привлечения")

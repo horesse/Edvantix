@@ -72,13 +72,24 @@ public sealed class ReorderPaymentMethodsCommandHandlerTests
 
     private PaymentMethod CreatePaymentMethod()
     {
-        var pm = new PaymentMethod(_orgId, "Карта", "CARD", isCashless: true, requiresContract: false);
+        var pm = new PaymentMethod(
+            _orgId,
+            "Карта",
+            "CARD",
+            isCashless: true,
+            requiresContract: false
+        );
         pm.Id = Guid.CreateVersion7();
         return pm;
     }
 
     private void SetupList(IReadOnlyList<PaymentMethod> items) =>
         _repoMock
-            .Setup(r => r.ListAsync(It.IsAny<ISpecification<PaymentMethod>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<PaymentMethod>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(items);
 }

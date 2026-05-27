@@ -9,8 +9,11 @@ public sealed class ReorderPaymentMethodsEndpoint : IEndpoint<NoContent, Reorder
     {
         app.MapPatch(
                 "/directories/payment-methods/reorder",
-                async (ReorderRequest request, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(request, sender, cancellationToken)
+                async (
+                    ReorderRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
             .WithName("ReorderPaymentMethods")
             .WithTags("Способы оплаты")

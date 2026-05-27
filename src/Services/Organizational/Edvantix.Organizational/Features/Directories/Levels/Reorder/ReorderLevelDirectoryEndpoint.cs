@@ -9,8 +9,11 @@ public sealed class ReorderLevelDirectoryEndpoint : IEndpoint<NoContent, Reorder
     {
         app.MapPatch(
                 "/directories/levels/reorder",
-                async (ReorderRequest request, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(request, sender, cancellationToken)
+                async (
+                    ReorderRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
             .WithName("ReorderLevelDirectory")
             .WithTags("Справочник: Уровни")

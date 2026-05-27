@@ -67,7 +67,10 @@ public sealed class ReorderLevelDirectoryCommandHandlerTests
 
         await Should.NotThrowAsync(() =>
             _handler
-                .Handle(new ReorderLevelDirectoryCommand([l1.Id, l2.Id, l3.Id]), CancellationToken.None)
+                .Handle(
+                    new ReorderLevelDirectoryCommand([l1.Id, l2.Id, l3.Id]),
+                    CancellationToken.None
+                )
                 .AsTask()
         );
     }
@@ -104,11 +107,7 @@ public sealed class ReorderLevelDirectoryCommandHandlerTests
     private void SetupList(IReadOnlyCollection<Level> items) =>
         _repoMock
             .Setup(r =>
-                r.ListByOrganizationAsync(
-                    _orgId,
-                    It.IsAny<bool>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.ListByOrganizationAsync(_orgId, It.IsAny<bool>(), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(items);
 }

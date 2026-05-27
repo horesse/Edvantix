@@ -9,8 +9,11 @@ public sealed class ReorderStudentTagsEndpoint : IEndpoint<NoContent, ReorderReq
     {
         app.MapPatch(
                 "/directories/tags/reorder",
-                async (ReorderRequest request, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(request, sender, cancellationToken)
+                async (
+                    ReorderRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
             .WithName("ReorderStudentTags")
             .WithTags("Теги студентов")

@@ -9,8 +9,11 @@ public sealed class ReorderLessonTypesEndpoint : IEndpoint<NoContent, ReorderReq
     {
         app.MapPatch(
                 "/directories/lesson-types/reorder",
-                async (ReorderRequest request, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(request, sender, cancellationToken)
+                async (
+                    ReorderRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
             .WithName("ReorderLessonTypes")
             .WithTags("Справочник: Типы занятий")

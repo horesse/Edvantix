@@ -79,6 +79,11 @@ public sealed class ReorderStudentStatusesCommandHandlerTests
 
     private void SetupList(IReadOnlyList<StudentStatus> items) =>
         _repoMock
-            .Setup(r => r.ListAsync(It.IsAny<ISpecification<StudentStatus>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.ListAsync(
+                    It.IsAny<ISpecification<StudentStatus>>(),
+                    It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(items);
 }

@@ -92,6 +92,8 @@ public sealed class ReorderLeadSourcesCommandHandlerTests
 
     private void SetupList(IReadOnlyList<LeadSource> items) =>
         _repoMock
-            .Setup(r => r.ListAsync(It.IsAny<ISpecification<LeadSource>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<LeadSource>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(items);
 }

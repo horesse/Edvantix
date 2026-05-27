@@ -9,8 +9,11 @@ public sealed class ReorderStudentStatusesEndpoint : IEndpoint<NoContent, Reorde
     {
         app.MapPatch(
                 "/directories/student-statuses/reorder",
-                async (ReorderRequest request, ISender sender, CancellationToken cancellationToken) =>
-                    await HandleAsync(request, sender, cancellationToken)
+                async (
+                    ReorderRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken
+                ) => await HandleAsync(request, sender, cancellationToken)
             )
             .WithName("ReorderStudentStatuses")
             .WithTags("Статусы студентов")
@@ -27,10 +30,7 @@ public sealed class ReorderStudentStatusesEndpoint : IEndpoint<NoContent, Reorde
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(
-            new ReorderStudentStatusesCommand(request.OrderedIds),
-            cancellationToken
-        );
+        await sender.Send(new ReorderStudentStatusesCommand(request.OrderedIds), cancellationToken);
 
         return TypedResults.NoContent();
     }

@@ -82,6 +82,8 @@ public sealed class ReorderLessonTypesCommandHandlerTests
 
     private void SetupList(IReadOnlyList<LessonType> items) =>
         _repoMock
-            .Setup(r => r.ListAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>()))
+            .Setup(r =>
+                r.ListAsync(It.IsAny<ISpecification<LessonType>>(), It.IsAny<CancellationToken>())
+            )
             .ReturnsAsync(items);
 }

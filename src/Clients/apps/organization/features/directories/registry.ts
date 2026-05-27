@@ -4,9 +4,9 @@ import { levelsConfig } from "./configs/levels";
 import type { DirectoryConfig } from "./directory-config";
 
 /** Реестр реализованных конфигов справочников: code → config. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const directoryRegistry: Record<
   string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DirectoryConfig<DirectoryItemBase, any>
 > = {
   levels: levelsConfig,

@@ -1,19 +1,18 @@
-using Edvantix.Organizational.Features.Directories;
-
 namespace Edvantix.Organizational.Features.Directories.LessonTypes.Reorder;
 
 /// <summary>PATCH /api/v1/directories/lesson-types/reorder — переупорядочить типы занятий.</summary>
-public sealed class ReorderLessonTypesEndpoint : IEndpoint<NoContent, ReorderRequest, ISender>
+public sealed class ReorderLessonTypesEndpoint
+    : IEndpoint<NoContent, ReorderLessonTypesCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPatch(
                 "/directories/lesson-types/reorder",
                 async (
-                    ReorderRequest request,
+                    ReorderLessonTypesCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) => await HandleAsync(request, sender, cancellationToken)
+                ) => await HandleAsync(command, sender, cancellationToken)
             )
             .WithName("ReorderLessonTypes")
             .WithTags("Справочник: Типы занятий")
@@ -25,12 +24,12 @@ public sealed class ReorderLessonTypesEndpoint : IEndpoint<NoContent, ReorderReq
     }
 
     public async Task<NoContent> HandleAsync(
-        ReorderRequest request,
+        ReorderLessonTypesCommand command,
         ISender sender,
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(new ReorderLessonTypesCommand(request.OrderedIds), cancellationToken);
+        await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();
     }

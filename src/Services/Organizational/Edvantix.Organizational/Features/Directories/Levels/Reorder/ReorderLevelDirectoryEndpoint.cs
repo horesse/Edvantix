@@ -1,19 +1,18 @@
-using Edvantix.Organizational.Features.Directories;
-
 namespace Edvantix.Organizational.Features.Directories.Levels.Reorder;
 
 /// <summary>PATCH /api/v1/directories/levels/reorder — переупорядочить уровни.</summary>
-public sealed class ReorderLevelDirectoryEndpoint : IEndpoint<NoContent, ReorderRequest, ISender>
+public sealed class ReorderLevelDirectoryEndpoint
+    : IEndpoint<NoContent, ReorderLevelDirectoryCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPatch(
                 "/directories/levels/reorder",
                 async (
-                    ReorderRequest request,
+                    ReorderLevelDirectoryCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) => await HandleAsync(request, sender, cancellationToken)
+                ) => await HandleAsync(command, sender, cancellationToken)
             )
             .WithName("ReorderLevelDirectory")
             .WithTags("Справочник: Уровни")
@@ -25,12 +24,12 @@ public sealed class ReorderLevelDirectoryEndpoint : IEndpoint<NoContent, Reorder
     }
 
     public async Task<NoContent> HandleAsync(
-        ReorderRequest request,
+        ReorderLevelDirectoryCommand command,
         ISender sender,
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(new ReorderLevelDirectoryCommand(request.OrderedIds), cancellationToken);
+        await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();
     }

@@ -1,22 +1,21 @@
-using Edvantix.Organizational.Features.Directories;
-
 namespace Edvantix.Organizational.Features.Directories.StudentTags.Reorder;
 
 /// <summary>PATCH /api/v1/directories/tags/reorder — переупорядочить теги студентов.</summary>
-public sealed class ReorderStudentTagsEndpoint : IEndpoint<NoContent, ReorderRequest, ISender>
+public sealed class ReorderStudentTagsEndpoint
+    : IEndpoint<NoContent, ReorderStudentTagsCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPatch(
                 "/directories/tags/reorder",
                 async (
-                    ReorderRequest request,
+                    ReorderStudentTagsCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) => await HandleAsync(request, sender, cancellationToken)
+                ) => await HandleAsync(command, sender, cancellationToken)
             )
             .WithName("ReorderStudentTags")
-            .WithTags("Теги студентов")
+            .WithTags("Справочник: Теги студентов")
             .WithSummary("Изменить порядок тегов студентов")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status401Unauthorized)
@@ -25,12 +24,12 @@ public sealed class ReorderStudentTagsEndpoint : IEndpoint<NoContent, ReorderReq
     }
 
     public async Task<NoContent> HandleAsync(
-        ReorderRequest request,
+        ReorderStudentTagsCommand command,
         ISender sender,
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(new ReorderStudentTagsCommand(request.OrderedIds), cancellationToken);
+        await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();
     }

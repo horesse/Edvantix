@@ -1,19 +1,18 @@
-using Edvantix.Organizational.Features.Directories;
-
 namespace Edvantix.Organizational.Features.Directories.LeadSources.Reorder;
 
 /// <summary>PATCH /api/v1/directories/sources/reorder — переупорядочить источники привлечения.</summary>
-public sealed class ReorderLeadSourcesEndpoint : IEndpoint<NoContent, ReorderRequest, ISender>
+public sealed class ReorderLeadSourcesEndpoint
+    : IEndpoint<NoContent, ReorderLeadSourcesCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPatch(
                 "/directories/sources/reorder",
                 async (
-                    ReorderRequest request,
+                    ReorderLeadSourcesCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) => await HandleAsync(request, sender, cancellationToken)
+                ) => await HandleAsync(command, sender, cancellationToken)
             )
             .WithName("ReorderLeadSources")
             .WithTags("Источники привлечения")
@@ -25,12 +24,12 @@ public sealed class ReorderLeadSourcesEndpoint : IEndpoint<NoContent, ReorderReq
     }
 
     public async Task<NoContent> HandleAsync(
-        ReorderRequest request,
+        ReorderLeadSourcesCommand command,
         ISender sender,
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(new ReorderLeadSourcesCommand(request.OrderedIds), cancellationToken);
+        await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();
     }

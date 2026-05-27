@@ -1,22 +1,20 @@
-using Edvantix.Organizational.Features.Directories;
-
 namespace Edvantix.Organizational.Features.Directories.Rooms.Reorder;
 
 /// <summary>PATCH /api/v1/directories/rooms/reorder — переупорядочить кабинеты.</summary>
-public sealed class ReorderRoomsEndpoint : IEndpoint<NoContent, ReorderRequest, ISender>
+public sealed class ReorderRoomsEndpoint : IEndpoint<NoContent, ReorderRoomsCommand, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPatch(
                 "/directories/rooms/reorder",
                 async (
-                    ReorderRequest request,
+                    ReorderRoomsCommand command,
                     ISender sender,
                     CancellationToken cancellationToken
-                ) => await HandleAsync(request, sender, cancellationToken)
+                ) => await HandleAsync(command, sender, cancellationToken)
             )
             .WithName("ReorderRooms")
-            .WithTags("Кабинеты")
+            .WithTags("Справочник: Кабинеты")
             .WithSummary("Изменить порядок кабинетов")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status401Unauthorized)
@@ -25,12 +23,12 @@ public sealed class ReorderRoomsEndpoint : IEndpoint<NoContent, ReorderRequest, 
     }
 
     public async Task<NoContent> HandleAsync(
-        ReorderRequest request,
+        ReorderRoomsCommand command,
         ISender sender,
         CancellationToken cancellationToken = default
     )
     {
-        await sender.Send(new ReorderRoomsCommand(request.OrderedIds), cancellationToken);
+        await sender.Send(command, cancellationToken);
 
         return TypedResults.NoContent();
     }

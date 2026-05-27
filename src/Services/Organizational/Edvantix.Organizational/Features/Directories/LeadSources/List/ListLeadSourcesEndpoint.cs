@@ -18,6 +18,7 @@ public sealed class ListLeadSourcesEndpoint
             .WithName("ListLeadSources")
             .WithTags("Источники привлечения")
             .WithSummary("Получить список источников привлечения организации")
+            .WithPaginationHeaders()
             .ProducesGet<PagedResult<LeadSourceListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

@@ -18,6 +18,7 @@ public sealed class ListPaymentMethodsEndpoint
             .WithName("ListPaymentMethods")
             .WithTags("Способы оплаты")
             .WithSummary("Получить список способов оплаты организации")
+            .WithPaginationHeaders()
             .ProducesGet<PagedResult<PaymentMethodListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

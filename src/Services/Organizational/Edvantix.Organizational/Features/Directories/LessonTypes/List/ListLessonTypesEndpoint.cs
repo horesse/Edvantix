@@ -10,6 +10,7 @@ public sealed class ListLessonTypesEndpoint
             .WithName("ListLessonTypes")
             .WithTags("Справочник: Типы занятий")
             .WithSummary("Получить справочник типов занятий организации")
+            .WithPaginationHeaders()
             .Produces<PagedResult<LessonTypeListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

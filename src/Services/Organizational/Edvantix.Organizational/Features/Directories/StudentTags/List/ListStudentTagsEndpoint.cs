@@ -18,6 +18,7 @@ public sealed class ListStudentTagsEndpoint
             .WithName("ListStudentTags")
             .WithTags("Теги студентов")
             .WithSummary("Получить список тегов студентов организации")
+            .WithPaginationHeaders()
             .ProducesGet<PagedResult<StudentTagListItemDto>>()
             .Produces(StatusCodes.Status401Unauthorized)
             .MapToApiVersion(ApiVersions.V1)

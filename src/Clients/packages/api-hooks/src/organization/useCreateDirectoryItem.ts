@@ -23,7 +23,8 @@ export default function useCreateDirectoryItem<TReq>(
 
   return useMutation({
     ...options,
-    mutationFn: ({ request }) => directoriesApiClient.create<TReq>(code, request),
+    mutationFn: ({ request }) =>
+      directoriesApiClient.create<TReq>(code, request),
     onSuccess: (...args) => {
       const { orgId } = args[1];
       queryClient.invalidateQueries({

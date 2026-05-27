@@ -52,10 +52,7 @@ class DirectoriesApiClient {
   }
 
   /** Создать элемент справочника. Возвращает ID созданной записи. */
-  public async create<TReq>(
-    code: string,
-    body: TReq,
-  ): Promise<string> {
+  public async create<TReq>(code: string, body: TReq): Promise<string> {
     const response = await this.client.post<string>(
       `${BASE}/directories/${code}`,
       body,

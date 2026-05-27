@@ -53,7 +53,9 @@ export function DirectoryDrawer<
 }: Readonly<DirectoryDrawerProps<TItem, TForm>>) {
   const form = useForm<TForm>({
     resolver: zodResolver(config.schema),
-    defaultValues: config.defaults as Parameters<typeof useForm<TForm>>[0]["defaultValues"],
+    defaultValues: config.defaults as Parameters<
+      typeof useForm<TForm>
+    >[0]["defaultValues"],
   });
 
   const { reset } = form;
@@ -88,7 +90,10 @@ export function DirectoryDrawer<
       : [];
 
   const Icon = config.icon;
-  const title = mode === "edit" ? `Изменить ${config.singular}` : `Новый ${config.singular}`;
+  const title =
+    mode === "edit"
+      ? `Изменить ${config.singular}`
+      : `Новый ${config.singular}`;
 
   return (
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
@@ -99,7 +104,9 @@ export function DirectoryDrawer<
           </div>
           <div className="min-w-0 flex-1">
             <SheetTitle className="text-base">{title}</SheetTitle>
-            <p className="mt-0.5 text-xs text-slate-400">Справочник «{config.plural}»</p>
+            <p className="mt-0.5 text-xs text-slate-400">
+              Справочник «{config.plural}»
+            </p>
           </div>
           <button
             type="button"
@@ -123,16 +130,18 @@ export function DirectoryDrawer<
 
               {usageCards.length > 0 && (
                 <div className="rounded-xl border bg-slate-50 p-4">
-                  <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                  <p className="mb-3 text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
                     Где используется
                   </p>
                   <div
                     className="grid gap-2"
-                    style={{ gridTemplateColumns: `repeat(${Math.min(usageCards.length, 3)}, 1fr)` }}
+                    style={{
+                      gridTemplateColumns: `repeat(${Math.min(usageCards.length, 3)}, 1fr)`,
+                    }}
                   >
                     {usageCards.map((card) => (
                       <div key={card.label}>
-                        <p className="text-lg font-semibold tabular-nums text-slate-900">
+                        <p className="text-lg font-semibold text-slate-900 tabular-nums">
                           {card.count}
                         </p>
                         <p className="text-xs text-slate-500">{card.label}</p>

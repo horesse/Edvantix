@@ -18,10 +18,20 @@ export function UsageCell({ usage, dim }: Readonly<UsageCellProps>) {
   }
 
   return (
-    <div className={cn("flex items-center gap-3 tabular-nums", dim ? "text-slate-400" : "text-slate-500")}>
+    <div
+      className={cn(
+        "flex items-center gap-3 tabular-nums",
+        dim ? "text-slate-400" : "text-slate-500",
+      )}
+    >
       {usage.map((u) => (
         <span key={u.label} className="inline-flex items-baseline gap-1">
-          <strong className={cn("font-semibold", dim ? "text-slate-400" : "text-slate-900")}>
+          <strong
+            className={cn(
+              "font-semibold",
+              dim ? "text-slate-400" : "text-slate-900",
+            )}
+          >
             {u.count}
           </strong>
           <span className="text-xs text-slate-400">{u.label}</span>

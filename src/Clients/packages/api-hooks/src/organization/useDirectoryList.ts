@@ -19,10 +19,7 @@ export default function useDirectoryList<T extends DirectoryItemBase>(
   orgId: string,
   code: string,
   query?: DirectoryListQuery,
-  options?: Omit<
-    UseQueryOptions<PagedResult<T>>,
-    "queryKey" | "queryFn"
-  >,
+  options?: Omit<UseQueryOptions<PagedResult<T>>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: organizationKeys.directory(orgId, code, query),

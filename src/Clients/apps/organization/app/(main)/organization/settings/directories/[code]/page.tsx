@@ -14,12 +14,12 @@ import {
 
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { PageLayout } from "@/components/layout/page-layout";
-import { DIRECTORY_CATALOG } from "@/features/settings/constants";
+import { DirectoryPage } from "@/features/directories/directory-page";
 import {
   directoryRegistry,
   isDirectoryImplemented,
 } from "@/features/directories/registry";
-import { DirectoryPage } from "@/features/directories/directory-page";
+import { DIRECTORY_CATALOG } from "@/features/settings/constants";
 
 type Props = {
   params: Promise<{ code: string }>;

@@ -10,7 +10,10 @@ import type { LevelDirectoryFormValues } from "@workspace/validations/organizati
 
 import type { DirectoryConfig } from "../directory-config";
 
-export const levelsConfig: DirectoryConfig<LevelDirectoryListItem, LevelDirectoryFormValues> = {
+export const levelsConfig: DirectoryConfig<
+  LevelDirectoryListItem,
+  LevelDirectoryFormValues
+> = {
   code: "levels",
   singular: "уровень",
   plural: "Уровни",
@@ -28,9 +31,13 @@ export const levelsConfig: DirectoryConfig<LevelDirectoryListItem, LevelDirector
       render(item) {
         return (
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-slate-900">{item.name}</p>
+            <p className="truncate text-sm font-semibold text-slate-900">
+              {item.name}
+            </p>
             {item.description && (
-              <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">{item.description}</p>
+              <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">
+                {item.description}
+              </p>
             )}
           </div>
         );

@@ -12,4 +12,6 @@ export const COLOR_DOTS: Record<string, string> = {
   blue: "#3b82f6",
 };
 
-export const COLOR_DOT_NAMES = Object.keys(COLOR_DOTS) as (keyof typeof COLOR_DOTS)[];
+export const COLOR_DOT_NAMES = Object.keys(
+  COLOR_DOTS,
+) as (keyof typeof COLOR_DOTS)[];

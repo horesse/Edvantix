@@ -18,16 +18,52 @@ export type DirectoryColumn<T> = {
 
 /** Дескриптор поля формы в drawer'е справочника. */
 export type DirectoryField =
-  | { kind: "text"; name: string; label: string; required?: boolean; maxLength?: number; placeholder?: string; hint?: string }
-  | { kind: "code"; name: string; label: string; maxLength?: number; hint?: string }
-  | { kind: "textarea"; name: string; label: string; maxLength?: number; rows?: number; hint?: string }
+  | {
+      kind: "text";
+      name: string;
+      label: string;
+      required?: boolean;
+      maxLength?: number;
+      placeholder?: string;
+      hint?: string;
+    }
+  | {
+      kind: "code";
+      name: string;
+      label: string;
+      maxLength?: number;
+      hint?: string;
+    }
+  | {
+      kind: "textarea";
+      name: string;
+      label: string;
+      maxLength?: number;
+      rows?: number;
+      hint?: string;
+    }
   | { kind: "color"; name: string; label: string }
-  | { kind: "enumSelect"; name: string; label: string; options: { value: string | number; label: string }[] }
-  | { kind: "number"; name: string; label: string; min?: number; max?: number; suffix?: string }
+  | {
+      kind: "enumSelect";
+      name: string;
+      label: string;
+      options: { value: string | number; label: string }[];
+    }
+  | {
+      kind: "number";
+      name: string;
+      label: string;
+      min?: number;
+      max?: number;
+      suffix?: string;
+    }
   | { kind: "switch"; name: string; label: string; hint?: string };
 
 /** Полный конфиг справочника: колонки, поля формы, маппинги запросов. */
-export type DirectoryConfig<TItem extends DirectoryItemBase, TForm extends Record<string, unknown>> = {
+export type DirectoryConfig<
+  TItem extends DirectoryItemBase,
+  TForm extends Record<string, unknown>,
+> = {
   /** Код справочника (последний сегмент URL и ключ API). */
   code: string;
   /** Единственное число: «уровень», «предмет». */

@@ -30,7 +30,10 @@ interface FieldRendererProps {
 }
 
 /** Рендерит одно поле формы справочника по его дескриптору. */
-export function FieldRenderer({ field: f, form }: Readonly<FieldRendererProps>) {
+export function FieldRenderer({
+  field: f,
+  form,
+}: Readonly<FieldRendererProps>) {
   switch (f.kind) {
     case "text":
       return (
@@ -42,7 +45,11 @@ export function FieldRenderer({ field: f, form }: Readonly<FieldRendererProps>) 
               <FormLabel>
                 {f.label}
                 {f.required && <span className="ml-1 text-red-500">*</span>}
-                {f.hint && <span className="ml-auto text-xs text-slate-400">{f.hint}</span>}
+                {f.hint && (
+                  <span className="ml-auto text-xs text-slate-400">
+                    {f.hint}
+                  </span>
+                )}
               </FormLabel>
               <FormControl>
                 <Input
@@ -67,14 +74,22 @@ export function FieldRenderer({ field: f, form }: Readonly<FieldRendererProps>) 
             <FormItem>
               <FormLabel>
                 {f.label}
-                {f.hint && <span className="ml-auto text-xs text-slate-400">{f.hint}</span>}
+                {f.hint && (
+                  <span className="ml-auto text-xs text-slate-400">
+                    {f.hint}
+                  </span>
+                )}
               </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  className="font-mono uppercase tracking-widest"
+                  className="font-mono tracking-widest uppercase"
                   maxLength={f.maxLength ?? 8}
-                  onChange={(e) => field.onChange(e.target.value.toUpperCase().slice(0, f.maxLength ?? 8))}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value.toUpperCase().slice(0, f.maxLength ?? 8),
+                    )
+                  }
                   autoComplete="off"
                 />
               </FormControl>
@@ -93,7 +108,11 @@ export function FieldRenderer({ field: f, form }: Readonly<FieldRendererProps>) 
             <FormItem>
               <FormLabel>
                 {f.label}
-                {f.hint && <span className="ml-auto text-xs text-slate-400">{f.hint}</span>}
+                {f.hint && (
+                  <span className="ml-auto text-xs text-slate-400">
+                    {f.hint}
+                  </span>
+                )}
               </FormLabel>
               <FormControl>
                 <Textarea
@@ -167,7 +186,10 @@ export function FieldRenderer({ field: f, form }: Readonly<FieldRendererProps>) 
                 </FormControl>
                 <SelectContent>
                   {f.options.map((opt) => (
-                    <SelectItem key={String(opt.value)} value={String(opt.value)}>
+                    <SelectItem
+                      key={String(opt.value)}
+                      value={String(opt.value)}
+                    >
                       {opt.label}
                     </SelectItem>
                   ))}

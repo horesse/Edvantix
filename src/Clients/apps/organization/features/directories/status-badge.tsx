@@ -6,7 +6,10 @@ interface StatusBadgeProps {
 }
 
 /** Бейдж статуса элемента справочника: «Активный» / «В архиве». */
-export function StatusBadge({ isArchived, className }: Readonly<StatusBadgeProps>) {
+export function StatusBadge({
+  isArchived,
+  className,
+}: Readonly<StatusBadgeProps>) {
   if (isArchived) {
     return (
       <span
@@ -16,8 +19,7 @@ export function StatusBadge({ isArchived, className }: Readonly<StatusBadgeProps
           className,
         )}
       >
-        <span className="size-1.5 rounded-full bg-slate-400" />
-        В архиве
+        <span className="size-1.5 rounded-full bg-slate-400" />В архиве
       </span>
     );
   }

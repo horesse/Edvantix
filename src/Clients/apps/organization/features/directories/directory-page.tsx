@@ -71,7 +71,11 @@ export function DirectoryPage<
     [debouncedSearch, tab, pageIndex],
   );
 
-  const { data: listData, isLoading } = useDirectoryList<TItem>(orgId, config.code, query);
+  const { data: listData, isLoading } = useDirectoryList<TItem>(
+    orgId,
+    config.code,
+    query,
+  );
 
   const activeQuery = useMemo(
     () => ({ includeArchived: false, pageSize: 1000 }),
@@ -81,8 +85,16 @@ export function DirectoryPage<
     () => ({ includeArchived: true, pageSize: 1000 }),
     [],
   );
-  const { data: allActive } = useDirectoryList<TItem>(orgId, config.code, activeQuery);
-  const { data: allArchived } = useDirectoryList<TItem>(orgId, config.code, archivedQuery);
+  const { data: allActive } = useDirectoryList<TItem>(
+    orgId,
+    config.code,
+    activeQuery,
+  );
+  const { data: allArchived } = useDirectoryList<TItem>(
+    orgId,
+    config.code,
+    archivedQuery,
+  );
 
   const activeCount = allActive?.totalCount ?? 0;
   const archivedCount = (allArchived?.totalCount ?? 0) - activeCount;
@@ -159,7 +171,7 @@ export function DirectoryPage<
           <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
             <Icon className="size-[22px]" />
           </div>
-          <h1 className="flex-1 min-w-0 text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="min-w-0 flex-1 text-2xl font-bold tracking-tight text-slate-900">
             {config.plural}
           </h1>
           <div className="flex shrink-0 items-center gap-2">
@@ -193,7 +205,10 @@ export function DirectoryPage<
             </Button>
           </div>
         </div>
-        <p className="mt-3 max-w-2xl text-sm text-slate-500" style={{ paddingLeft: "60px" }}>
+        <p
+          className="mt-3 max-w-2xl text-sm text-slate-500"
+          style={{ paddingLeft: "60px" }}
+        >
           {config.description}
         </p>
       </div>
@@ -201,7 +216,6 @@ export function DirectoryPage<
       {/* Body */}
       <div className="flex-1 overflow-y-auto px-8 py-5">
         <div className="mx-auto max-w-[1180px] space-y-4">
-
           {/* Tabs + search + counters */}
           <div className="flex items-center gap-4">
             {/* Tabs */}
@@ -217,7 +231,10 @@ export function DirectoryPage<
                   <button
                     key={value}
                     type="button"
-                    onClick={() => { setTab(value); setPageIndex(0); }}
+                    onClick={() => {
+                      setTab(value);
+                      setPageIndex(0);
+                    }}
                     className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                       active
                         ? "bg-indigo-600 text-white"
@@ -242,7 +259,7 @@ export function DirectoryPage<
             {/* Search */}
             <div className="relative max-w-xs flex-1">
               <svg
-                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -257,7 +274,7 @@ export function DirectoryPage<
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder={`Поиск по ${config.plural.toLowerCase()}`}
-                className="h-9 w-full rounded-xl border bg-white pl-9 pr-3 text-sm outline-none transition-shadow focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                className="h-9 w-full rounded-xl border bg-white pr-3 pl-9 text-sm transition-shadow outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
               />
             </div>
 
@@ -313,7 +330,8 @@ export function DirectoryPage<
             <div className="flex items-center justify-between text-sm text-slate-500">
               <span>
                 {pageIndex * DEFAULT_PAGE_SIZE + 1}–
-                {Math.min((pageIndex + 1) * DEFAULT_PAGE_SIZE, totalCount)} из {totalCount}
+                {Math.min((pageIndex + 1) * DEFAULT_PAGE_SIZE, totalCount)} из{" "}
+                {totalCount}
               </span>
               <div className="flex items-center gap-1">
                 <Button
@@ -342,8 +360,9 @@ export function DirectoryPage<
           {/* Footer hint */}
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <Info className="size-3.5 shrink-0" />
-            Порядок записей определяет, как они отображаются в выпадающих списках и фильтрах.
-            Удалить можно только записи, которые ни в чём не используются — иначе переведите в «Архив».
+            Порядок записей определяет, как они отображаются в выпадающих
+            списках и фильтрах. Удалить можно только записи, которые ни в чём не
+            используются — иначе переведите в «Архив».
           </div>
         </div>
       </div>

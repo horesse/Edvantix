@@ -18,7 +18,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Archive, GripVertical, MoreHorizontal, Pencil, RotateCcw } from "lucide-react";
+import {
+  Archive,
+  GripVertical,
+  MoreHorizontal,
+  Pencil,
+  RotateCcw,
+} from "lucide-react";
 
 import type { DirectoryItemBase } from "@workspace/types/organization";
 import {
@@ -83,7 +89,7 @@ function SortableRow<TItem extends DirectoryItemBase>({
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={cn(
         "transition-colors",
-        isDragging && "opacity-50 bg-indigo-50/40",
+        isDragging && "bg-indigo-50/40 opacity-50",
         item.isArchived && "opacity-60",
       )}
       data-drag-handle-listeners={JSON.stringify(listeners)}
@@ -130,7 +136,8 @@ function DirectoryTableRow<
     isDragging,
   } = useSortable({ id: item.id, disabled: !draggable });
 
-  const usageCards = config.usageCards?.(item) ?? (item.usage ? [...item.usage] : []);
+  const usageCards =
+    config.usageCards?.(item) ?? (item.usage ? [...item.usage] : []);
 
   return (
     <TableRow
@@ -138,7 +145,7 @@ function DirectoryTableRow<
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={cn(
         "group transition-colors",
-        isDragging && "opacity-50 bg-indigo-50/40",
+        isDragging && "bg-indigo-50/40 opacity-50",
         item.isArchived && "opacity-70",
       )}
     >
@@ -149,7 +156,11 @@ function DirectoryTableRow<
             {...attributes}
             {...listeners}
             aria-label="Перетащить"
-            title={item.isArchived ? "Архивные записи нельзя сортировать" : "Перетащите для изменения порядка"}
+            title={
+              item.isArchived
+                ? "Архивные записи нельзя сортировать"
+                : "Перетащите для изменения порядка"
+            }
             className={cn(
               "flex size-7 items-center justify-center rounded text-slate-300 transition-colors",
               draggable
@@ -182,7 +193,7 @@ function DirectoryTableRow<
             <button
               type="button"
               aria-label="Действия"
-              className="flex size-8 items-center justify-center rounded-lg text-slate-400 opacity-0 transition-all hover:bg-slate-100 hover:text-slate-600 group-hover:opacity-100"
+              className="flex size-8 items-center justify-center rounded-lg text-slate-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-slate-100 hover:text-slate-600"
             >
               <MoreHorizontal className="size-4" />
             </button>
@@ -205,8 +216,7 @@ function DirectoryTableRow<
                     onClick={() => onArchive(item)}
                     className="text-amber-600 focus:text-amber-700"
                   >
-                    <Archive className="mr-2 size-4" />
-                    В архив
+                    <Archive className="mr-2 size-4" />В архив
                   </DropdownMenuItem>
                 )}
               </>
@@ -278,17 +288,17 @@ export function DirectoryTable<
                   <TableHead
                     key={col.key}
                     className={cn(
-                      "text-[11px] font-semibold uppercase tracking-wider text-slate-500",
+                      "text-[11px] font-semibold tracking-wider text-slate-500 uppercase",
                       col.className,
                     )}
                   >
                     {col.header}
                   </TableHead>
                 ))}
-                <TableHead className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <TableHead className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
                   Использование
                 </TableHead>
-                <TableHead className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <TableHead className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">
                   Статус
                 </TableHead>
                 <TableHead className="w-12" />

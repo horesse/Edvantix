@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
+import type { Resolver } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -52,7 +53,7 @@ export function DirectoryDrawer<
   onUpdate,
 }: Readonly<DirectoryDrawerProps<TItem, TForm>>) {
   const form = useForm<TForm>({
-    resolver: zodResolver(config.schema),
+    resolver: zodResolver(config.schema) as Resolver<TForm>,
     defaultValues: config.defaults as Parameters<
       typeof useForm<TForm>
     >[0]["defaultValues"],

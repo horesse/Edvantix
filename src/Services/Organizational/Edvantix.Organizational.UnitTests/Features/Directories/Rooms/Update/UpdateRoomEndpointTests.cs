@@ -58,6 +58,7 @@ public sealed class UpdateRoomEndpointTests
             DateTime.UtcNow,
             null,
             null,
-            null
+            null,
+            Usage: []
         );
 }

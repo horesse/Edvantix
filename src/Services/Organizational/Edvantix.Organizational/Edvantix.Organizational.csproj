@@ -10,6 +10,11 @@
   <ItemGroup>
     <Protobuf Include="Grpc\Protos\permission\v1\permission.proto" GrpcService="Server" />
     <Protobuf
+      Include="..\..\Groups\Edvantix.Groups\Grpc\Protos\groups\v1\groups.proto"
+      Link="Grpc\Protos\groups\v1\groups.proto"
+      GrpcServices="Client"
+    />
+    <Protobuf
       Include="..\..\Persona\Edvantix.Persona\Grpc\Protos\profile\v1\profile.proto"
       Link="Grpc\Protos\persona\v1\profile.proto"
       GrpcServices="Client"

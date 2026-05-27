@@ -103,6 +103,7 @@ public sealed class UpdateRoomCommandHandlerTests
             DateTime.UtcNow,
             null,
             null,
-            null
+            null,
+            Usage: []
         );
 }

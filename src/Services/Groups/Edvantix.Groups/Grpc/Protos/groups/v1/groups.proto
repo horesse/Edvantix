@@ -1,0 +1,24 @@
+edition = "2023";
+
+option csharp_namespace = "Edvantix.Groups.Grpc.Services";
+
+package groups.v1;
+
+service GroupsGrpcService {
+  // Batch-подсчёт групп, ссылающихся на записи справочника заданного типа.
+  rpc CountGroupsByDirectoryRefs(CountGroupsByDirectoryRefsRequest) returns (CountGroupsByDirectoryRefsResponse);
+}
+
+/// Запрос подсчёта групп по ссылкам справочника.
+message CountGroupsByDirectoryRefsRequest {
+  // Тип справочника: "Level" или "Room".
+  string kind = 1;
+  // Список идентификаторов записей справочника (UUID-строки).
+  repeated string ids = 2;
+}
+
+/// Ответ с числом групп для каждого запрошенного идентификатора.
+message CountGroupsByDirectoryRefsResponse {
+  // Ключ — строковый UUID записи справочника; значение — число групп.
+  map<string, int32> counts = 1;
+}

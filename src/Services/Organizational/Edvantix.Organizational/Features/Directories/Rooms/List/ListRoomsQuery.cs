@@ -2,6 +2,7 @@
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate.Specifications;
 using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Organizational.Grpc.Services.Groups;
 
 namespace Edvantix.Organizational.Features.Directories.Rooms.List;
 
@@ -21,7 +22,8 @@ public sealed record ListRoomsQuery(
 internal sealed class ListRoomsQueryHandler(
     ITenantContext tenantContext,
     IRoomRepository repository,
-    IMapper<Room, RoomListItemDto> mapper
+    IMapper<Room, RoomListItemDto> mapper,
+    IGroupsUsageService groupsUsageService
 ) : IQueryHandler<ListRoomsQuery, PagedResult<RoomListItemDto>>
 {
     public async ValueTask<PagedResult<RoomListItemDto>> Handle(
@@ -47,8 +49,19 @@ internal sealed class ListRoomsQueryHandler(
         var items = await repository.ListAsync(listSpec, cancellationToken);
         var total = await repository.CountAsync(countSpec, cancellationToken);
 
-        var dtos = mapper.Map(items);
+        var counts = await groupsUsageService.CountByRoomIdsAsync(
+            items.Select(r => r.Id),
+            cancellationToken
+        );
 
-        return new PagedResult<RoomListItemDto>(dtos.ToList(), query.Page, query.PageSize, total);
+        var dtos = mapper
+            .Map(items)
+            .Select(dto => dto with
+            {
+                Usage = [new DirectoryUsageDto("Группы", counts.GetValueOrDefault(dto.Id, 0))],
+            })
+            .ToList();
+
+        return new PagedResult<RoomListItemDto>(dtos, query.Page, query.PageSize, total);
     }
 }

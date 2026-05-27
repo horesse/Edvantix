@@ -6,10 +6,12 @@ namespace Edvantix.Organizational.Features.Directories.Levels;
 /// <param name="Order">Порядковый номер в списках.</param>
 /// <param name="Description">Описание уровня.</param>
 /// <param name="IsArchived">Деактивирован ли уровень.</param>
+/// <param name="Usage">Использование уровня в других объектах (напр. группы).</param>
 public sealed record LevelDirectoryListItemDto(
     Guid Id,
     string Name,
     short Order,
     string? Description,
-    bool IsArchived
+    bool IsArchived,
+    IReadOnlyList<DirectoryUsageDto> Usage
 );

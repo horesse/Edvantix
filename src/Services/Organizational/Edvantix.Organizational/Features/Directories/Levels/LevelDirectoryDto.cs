@@ -10,6 +10,7 @@ namespace Edvantix.Organizational.Features.Directories.Levels;
 /// <param name="IsArchived">Деактивирован ли уровень (недоступен для новых групп).</param>
 /// <param name="Code">Внутренний уникальный код уровня.</param>
 /// <param name="Tone">Цветовой тон бейджа в UI.</param>
+/// <param name="Usage">Использование уровня в других объектах (напр. группы).</param>
 public sealed record LevelDirectoryDto(
     Guid Id,
     string Name,
@@ -17,5 +18,6 @@ public sealed record LevelDirectoryDto(
     string? Description,
     bool IsArchived,
     string Code,
-    LevelTone Tone
+    LevelTone Tone,
+    IReadOnlyList<DirectoryUsageDto> Usage
 );

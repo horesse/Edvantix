@@ -140,6 +140,10 @@ var groupsApi = builder
     .WithContainerRegistry(registry)
     .WithFriendlyUrls();
 
+// Organizational вызывает Groups по gRPC для подсчёта использования справочников.
+// WaitFor не добавляем — Groups зависит от Organizational, что создало бы цикл запуска.
+organizationalApi.WithReference(groupsApi);
+
 builder
     .AddProject<Edvantix_Identity>(Services.Identity)
     .WithReference(identityDb)

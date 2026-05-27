@@ -15,6 +15,11 @@ import {
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { PageLayout } from "@/components/layout/page-layout";
 import { DIRECTORY_CATALOG } from "@/features/settings/constants";
+import {
+  directoryRegistry,
+  isDirectoryImplemented,
+} from "@/features/directories/registry";
+import { DirectoryPage } from "@/features/directories/directory-page";
 
 type Props = {
   params: Promise<{ code: string }>;
@@ -28,11 +33,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function DirectoryStubPage({ params }: Props) {
+export default async function DirectoryCodePage({ params }: Props) {
   const { code } = await params;
   const entry = DIRECTORY_CATALOG[code];
 
   if (!entry) notFound();
+
+  if (isDirectoryImplemented(code)) {
+    const config = directoryRegistry[code];
+    return <DirectoryPage config={config} />;
+  }
 
   return (
     <PageLayout

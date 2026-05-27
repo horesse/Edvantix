@@ -331,3 +331,5 @@ export type RolesSummaryDto = {
   readonly assignedMembersCount: number;
   readonly roleNamesPreview: readonly string[];
 };
+
+export * from "./directories";

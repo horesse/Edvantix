@@ -14,6 +14,10 @@
     "./organization": {
       "import": "./src/organization/index.ts",
       "types": "./src/organization/index.ts"
+    },
+    "./organization/directories/levels": {
+      "import": "./src/organization/directories/levels.ts",
+      "types": "./src/organization/directories/levels.ts"
     }
   },
   "scripts": {

@@ -1,8 +1,6 @@
-using Edvantix.Permissions;
+namespace Edvantix.Permissions;
 
-namespace Edvantix.Organizational.Infrastructure.PermissionModules;
-
-internal sealed class LevelPermissionModule : PermissionModule
+public sealed class LevelPermissionModule : PermissionModule
 {
     public override string ServiceCode => "organizational";
     public override string FeatureCode => "Level";

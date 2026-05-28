@@ -1,5 +1,4 @@
-﻿using Edvantix.Organizational.Infrastructure.PermissionModules;
-using Edvantix.Permissions;
+﻿using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Infrastructure;
 
@@ -9,8 +8,8 @@ public static class Extensions
     {
         var services = builder.Services;
 
-        // Регистрация модулей разрешений: сидер обнаруживает их через DI.
         services.AddSingleton<PermissionModule, OrganizationPermissionModule>();
+        services.AddSingleton<PermissionModule, GroupPermissionModule>();
         services.AddSingleton<PermissionModule, LevelPermissionModule>();
         services.AddSingleton<PermissionModule, SubjectPermissionModule>();
         services.AddSingleton<PermissionModule, LessonTypePermissionModule>();

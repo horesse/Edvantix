@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Specifications;
 
 /// <summary>Постраничный список приглашений организации с опциональной фильтрацией по статусу.</summary>
 public sealed class InvitationListSpecification : Specification<Invitation>

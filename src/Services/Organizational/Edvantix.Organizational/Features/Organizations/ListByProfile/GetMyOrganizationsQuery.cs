@@ -1,4 +1,5 @@
 ﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.Specifications;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 

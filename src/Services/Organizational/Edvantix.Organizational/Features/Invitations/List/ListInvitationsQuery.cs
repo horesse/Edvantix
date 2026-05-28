@@ -1,5 +1,6 @@
 ﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Specifications;
 using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Invitations.List;

@@ -203,9 +203,9 @@ public sealed class StudentStatusTests
     }
 
     [Test]
-    public void GivenDefaultFactory_WhenCreating_ThenShouldReturnFourSystemStatuses()
+    public void GivenOrganizationId_WhenCreatingStudentStatusData_ThenShouldReturnFourSystemStatuses()
     {
-        var statuses = DefaultStudentStatusesFactory.CreateFor(OrgId);
+        var statuses = new StudentStatusData(OrgId);
 
         statuses.Count.ShouldBe(4);
         statuses.ShouldAllBe(s => s.IsSystem);
@@ -214,9 +214,9 @@ public sealed class StudentStatusTests
     }
 
     [Test]
-    public void GivenDefaultFactory_WhenCreating_ThenShouldContainExpectedStatuses()
+    public void GivenOrganizationId_WhenCreatingStudentStatusData_ThenShouldContainExpectedCodes()
     {
-        var statuses = DefaultStudentStatusesFactory.CreateFor(OrgId);
+        var statuses = new StudentStatusData(OrgId);
         var codes = statuses.Select(s => s.Code).ToHashSet();
 
         codes.ShouldContain("ACTIVE");

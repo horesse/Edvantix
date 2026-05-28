@@ -82,9 +82,7 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
         if (excludeId.HasValue)
             query = query.Where(l => l.Id != excludeId.Value);
 
-        var codes = await query
-            .Select(l => l.Code)
-            .ToListAsync(cancellationToken);
+        var codes = await query.Select(l => l.Code).ToListAsync(cancellationToken);
 
         return codes.Any(c => c.Value == normalizedCode);
     }

@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 
 namespace Edvantix.Organizational.Features.Directories.Levels.Create;

@@ -151,10 +151,7 @@ function DirectoryTableRow<
       onClick={() => onEdit(item)}
     >
       {config.capabilities.reorder && (
-        <TableCell
-          className="w-9 px-2"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <TableCell className="w-9 px-2" onClick={(e) => e.stopPropagation()}>
           <button
             type="button"
             {...attributes}

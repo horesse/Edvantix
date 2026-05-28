@@ -27,7 +27,7 @@ export default function useArchiveDirectoryItem(
     onSuccess: (...args) => {
       const { orgId } = args[1];
       queryClient.invalidateQueries({
-        queryKey: organizationKeys.directory(orgId, code),
+        queryKey: organizationKeys.directoryList(orgId, code),
       });
       options?.onSuccess?.(...args);
     },

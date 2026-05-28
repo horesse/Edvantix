@@ -296,7 +296,11 @@ export function FieldRenderer({
 
     case "row": {
       const visibleChildren = f.children.filter((child) => {
-        if ("showOnlyInEdit" in child && child.showOnlyInEdit && mode !== "edit")
+        if (
+          "showOnlyInEdit" in child &&
+          child.showOnlyInEdit &&
+          mode !== "edit"
+        )
           return false;
         return true;
       });
@@ -308,7 +312,12 @@ export function FieldRenderer({
           )}
         >
           {visibleChildren.map((child) => (
-            <FieldRenderer key={child.name} field={child} form={form} mode={mode} />
+            <FieldRenderer
+              key={child.name}
+              field={child}
+              form={form}
+              mode={mode}
+            />
           ))}
         </div>
       );

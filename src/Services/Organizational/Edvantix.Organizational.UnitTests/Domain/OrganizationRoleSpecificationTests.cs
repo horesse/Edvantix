@@ -1,4 +1,5 @@
 ﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate.Specifications;
 
 namespace Edvantix.Organizational.UnitTests.Domain;
 

@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate;
-using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Directories.LeadSources.Restore;
 

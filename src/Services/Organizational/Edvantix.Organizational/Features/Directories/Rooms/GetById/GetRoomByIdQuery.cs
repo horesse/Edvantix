@@ -1,7 +1,7 @@
 ﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
-using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Grpc.Services.Groups;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Directories.Rooms.GetById;
 

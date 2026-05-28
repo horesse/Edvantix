@@ -50,6 +50,9 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
     public async Task AddAsync(Level level, CancellationToken cancellationToken = default) =>
         await context.Levels.AddAsync(level, cancellationToken);
 
+    public Task AddRange(List<Level> levels, CancellationToken cancellationToken = default) =>
+        context.Levels.AddRangeAsync(levels, cancellationToken);
+
     public async Task<IReadOnlyCollection<Level>> ListByOrganizationAsync(
         Guid organizationId,
         bool includeInactive = false,

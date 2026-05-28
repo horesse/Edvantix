@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для получения первых <paramref name="limit"/> ролей организации

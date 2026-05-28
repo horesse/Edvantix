@@ -2,12 +2,12 @@
 using Edvantix.Organizational.Domain.Events;
 using ZiggyCreatures.Caching.Fusion;
 
-namespace Edvantix.Organizational.Domain.EventHandlers;
+namespace Edvantix.Organizational.Domain.EventHandlers.OrganizationEventHandlers;
 
 /// <summary>
 /// Инвалидирует запись организации в кэше после удаления.
 /// </summary>
-internal sealed class OrganizationDeletedDomainEventHandler(IFusionCache cache)
+internal sealed class RemoveCacheOnDelete(IFusionCache cache)
     : INotificationHandler<OrganizationDeletedDomainEvent>
 {
     public async ValueTask Handle(

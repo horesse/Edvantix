@@ -1,5 +1,4 @@
 ﻿using Edvantix.Organizational.Domain.AggregatesModel.PermissionAggregate;
-using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;

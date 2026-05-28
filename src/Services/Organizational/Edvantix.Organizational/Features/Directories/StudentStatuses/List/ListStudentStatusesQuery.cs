@@ -1,7 +1,7 @@
 ﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
-using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Directories.StudentStatuses.List;
 

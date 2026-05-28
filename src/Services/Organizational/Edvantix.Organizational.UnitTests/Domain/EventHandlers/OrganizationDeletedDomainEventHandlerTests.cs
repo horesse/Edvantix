@@ -1,9 +1,11 @@
-﻿namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
+﻿using Edvantix.Organizational.Domain.EventHandlers.OrganizationEventHandlers;
+
+namespace Edvantix.Organizational.UnitTests.Domain.EventHandlers;
 
 public sealed class OrganizationDeletedDomainEventHandlerTests
 {
     private readonly Mock<IFusionCache> _cacheMock = new();
-    private readonly OrganizationDeletedDomainEventHandler _handler;
+    private readonly RemoveCacheOnDelete _handler;
 
     public OrganizationDeletedDomainEventHandlerTests()
     {

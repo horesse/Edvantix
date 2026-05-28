@@ -1,7 +1,7 @@
 ﻿using Edvantix.Chassis.EventBus.Dispatcher;
 using Edvantix.Organizational.Domain.Events;
 
-namespace Edvantix.Organizational.Domain.EventHandlers;
+namespace Edvantix.Organizational.Domain.EventHandlers.OrganizationEventHandlers;
 
 /// <summary>
 /// Публикует интеграционное событие о создании организации, чтобы Groups-сервис

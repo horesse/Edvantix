@@ -1,6 +1,6 @@
 ﻿using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 
-namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для получения активных членств пользователя во всех организациях,

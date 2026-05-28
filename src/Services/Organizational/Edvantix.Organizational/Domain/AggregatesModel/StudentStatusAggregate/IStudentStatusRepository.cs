@@ -1,7 +1,4 @@
-﻿using Edvantix.Chassis.Repository;
-using Edvantix.Chassis.Specification;
-
-namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 
 /// <summary>Репозиторий агрегата <see cref="StudentStatus"/>.</summary>
 public interface IStudentStatusRepository : IRepository<StudentStatus>
@@ -10,7 +7,7 @@ public interface IStudentStatusRepository : IRepository<StudentStatus>
     Task AddAsync(StudentStatus status, CancellationToken ct = default);
 
     /// <summary>Добавляет несколько статусов (используется при сидинге).</summary>
-    Task AddRangeAsync(IEnumerable<StudentStatus> statuses, CancellationToken ct = default);
+    Task AddRangeAsync(List<StudentStatus> statuses, CancellationToken ct = default);
 
     /// <summary>Возвращает статус по идентификатору (включая архивные).</summary>
     Task<StudentStatus?> GetByIdAsync(Guid id, CancellationToken ct = default);

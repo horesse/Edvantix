@@ -1,10 +1,8 @@
-using Edvantix.Permissions;
+namespace Edvantix.Permissions;
 
-namespace Edvantix.Groups.Infrastructure.PermissionModules;
-
-internal sealed class GroupPermissionModule : PermissionModule
+public sealed class GroupPermissionModule : PermissionModule
 {
-    public override string ServiceCode => "groups";
+    public override string ServiceCode => "organizational";
     public override string FeatureCode => "Group";
     public override string FeatureName => "Группы";
 

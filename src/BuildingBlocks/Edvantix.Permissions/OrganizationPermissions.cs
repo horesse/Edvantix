@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.Permissions;
+﻿namespace Edvantix.Permissions;
 
 /// <summary>
 /// Полные коды разрешений функциональной области "Организация".

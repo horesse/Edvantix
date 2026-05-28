@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для подсчёта участников организации с назначенной ролью.

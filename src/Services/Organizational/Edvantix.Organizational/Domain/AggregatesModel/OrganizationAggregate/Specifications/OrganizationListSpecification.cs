@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для постраничного получения организаций.

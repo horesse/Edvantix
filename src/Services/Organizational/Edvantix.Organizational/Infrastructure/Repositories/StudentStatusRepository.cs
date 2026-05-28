@@ -15,10 +15,8 @@ internal sealed class StudentStatusRepository(OrganizationalDbContext context)
     public async Task AddAsync(StudentStatus status, CancellationToken ct = default) =>
         await context.StudentStatuses.AddAsync(status, ct);
 
-    public async Task AddRangeAsync(
-        IEnumerable<StudentStatus> statuses,
-        CancellationToken ct = default
-    ) => await context.StudentStatuses.AddRangeAsync(statuses, ct);
+    public async Task AddRangeAsync(List<StudentStatus> statuses, CancellationToken ct = default) =>
+        await context.StudentStatuses.AddRangeAsync(statuses, ct);
 
     public async Task<StudentStatus?> GetByIdAsync(Guid id, CancellationToken ct = default) =>
         await context.StudentStatuses.AsTracking().FirstOrDefaultAsync(s => s.Id == id, ct);

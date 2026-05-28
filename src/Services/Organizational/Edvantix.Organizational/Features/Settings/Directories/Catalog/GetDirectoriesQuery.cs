@@ -1,5 +1,5 @@
 ﻿using Edvantix.Chassis.CQRS;
-using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Permissions;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Edvantix.Organizational.Features.Settings.Directories.Catalog;

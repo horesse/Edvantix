@@ -1,7 +1,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.PaymentMethodAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.PaymentMethodAggregate.Specifications;
-using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Directories.PaymentMethods.Reorder;
 

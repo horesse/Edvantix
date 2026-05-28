@@ -1,6 +1,6 @@
 ﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationRoleAggregate;
-using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Roles.Delete;
 

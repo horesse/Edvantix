@@ -1,9 +1,10 @@
 ﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate;
-using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Organizational.Domain.AggregatesModel.OrganizationMemberAggregate.Specifications;
 using Edvantix.Organizational.Features.Organizations;
 using Edvantix.Organizational.Grpc.Services.Profiles;
+using Edvantix.Permissions;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace Edvantix.Organizational.Features.Settings.OrganizationSummary;

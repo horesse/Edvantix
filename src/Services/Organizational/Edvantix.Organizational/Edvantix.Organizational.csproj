@@ -30,9 +30,6 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Edvantix.Permissions\Edvantix.Permissions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Infrastructure\Migrations\" />
-  </ItemGroup>
-  <ItemGroup>
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
     <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />

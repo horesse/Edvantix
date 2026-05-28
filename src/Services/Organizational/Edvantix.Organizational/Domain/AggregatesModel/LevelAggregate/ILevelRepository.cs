@@ -29,6 +29,11 @@ public interface ILevelRepository : IRepository<Level>
     /// <summary>Добавляет новый уровень.</summary>
     Task AddAsync(Level level, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Добавляет массив уровней
+    /// </summary>
+    Task AddRange(List<Level> levels, CancellationToken cancellationToken = default);
+
     /// <summary>Возвращает все уровни организации, отсортированные по <see cref="Level.SortOrder"/>.</summary>
     Task<IReadOnlyCollection<Level>> ListByOrganizationAsync(
         Guid organizationId,

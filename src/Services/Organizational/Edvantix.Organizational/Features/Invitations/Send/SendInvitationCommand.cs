@@ -1,7 +1,7 @@
 ﻿using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
-using Edvantix.Organizational.Domain.Permissions;
 using Edvantix.Organizational.Grpc.Services.Profiles;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Invitations.Send;
 

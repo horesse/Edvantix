@@ -2,7 +2,7 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Chassis.Utilities;
 using Edvantix.Organizational.Domain.AggregatesModel.OrganizationAggregate;
-using Edvantix.Organizational.Domain.Permissions;
+using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Organizations.Update;
 

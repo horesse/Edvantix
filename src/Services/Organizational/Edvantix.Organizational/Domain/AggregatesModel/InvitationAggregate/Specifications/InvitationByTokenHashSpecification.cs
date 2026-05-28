@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate;
+﻿namespace Edvantix.Organizational.Domain.AggregatesModel.InvitationAggregate.Specifications;
 
 /// <summary>Находит единственное активное (Pending) приглашение по SHA-256 хэшу токена.</summary>
 public sealed class InvitationByTokenHashSpecification : Specification<Invitation>

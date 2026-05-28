@@ -8,7 +8,8 @@ namespace Edvantix.Organizational.Domain.EventHandlers.OrganizationEventHandlers
 /// Инвалидирует запись организации в кэше после удаления.
 /// </summary>
 internal sealed class RemoveCache(IFusionCache cache)
-    : INotificationHandler<OrganizationDeletedDomainEvent>, INotificationHandler<OrganizationUpdatedDomainEvent>
+    : INotificationHandler<OrganizationDeletedDomainEvent>,
+        INotificationHandler<OrganizationUpdatedDomainEvent>
 {
     public async ValueTask Handle(
         OrganizationDeletedDomainEvent notification,

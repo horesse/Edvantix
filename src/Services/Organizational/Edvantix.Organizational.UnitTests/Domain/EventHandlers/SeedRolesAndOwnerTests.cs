@@ -24,11 +24,7 @@ public sealed class SeedRolesAndOwnerTests
             .Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync([]);
 
-        _handler = new(
-            _roleRepoMock.Object,
-            _memberRepoMock.Object,
-            _permissionRepoMock.Object
-        );
+        _handler = new(_roleRepoMock.Object, _memberRepoMock.Object, _permissionRepoMock.Object);
     }
 
     [Test]

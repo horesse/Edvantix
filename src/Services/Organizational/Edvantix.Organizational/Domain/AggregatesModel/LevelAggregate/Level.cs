@@ -78,9 +78,15 @@ public sealed class Level() : Entity, IAggregateRoot, ISoftDelete, ITenanted
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
-    /// <summary>
-    /// Обновляет данные уровня. Код (<see cref="Code"/>) не меняется.
-    /// </summary>
+    /// <summary>Изменяет код уровня.</summary>
+    /// <param name="newCode">Новый код уровня.</param>
+    public void ChangeCode(LevelCode newCode)
+    {
+        ArgumentNullException.ThrowIfNull(newCode);
+        Code = newCode;
+    }
+
+    /// <summary>Обновляет данные уровня.</summary>
     /// <param name="name">Новое название.</param>
     /// <param name="description">Новое описание.</param>
     /// <param name="tone">Новый цветовой тон.</param>

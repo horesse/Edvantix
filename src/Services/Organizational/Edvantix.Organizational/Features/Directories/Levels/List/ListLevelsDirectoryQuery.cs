@@ -1,6 +1,5 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
-using Edvantix.Organizational.Features.Directories.Levels;
 using Edvantix.Organizational.Grpc.Services.Groups;
 using Edvantix.Permissions;
 

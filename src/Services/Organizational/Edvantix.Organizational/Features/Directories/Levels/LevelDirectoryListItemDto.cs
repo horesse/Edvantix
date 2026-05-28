@@ -1,3 +1,5 @@
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
+
 namespace Edvantix.Organizational.Features.Directories.Levels;
 
 /// <summary>Строка списка справочника «Уровни».</summary>
@@ -6,6 +8,8 @@ namespace Edvantix.Organizational.Features.Directories.Levels;
 /// <param name="Order">Порядковый номер в списках.</param>
 /// <param name="Description">Описание уровня.</param>
 /// <param name="IsArchived">Деактивирован ли уровень.</param>
+/// <param name="Code">Уникальный код уровня (например A1, B2).</param>
+/// <param name="Tone">Цветовой тон бейджа в UI.</param>
 /// <param name="Usage">Использование уровня в других объектах (напр. группы).</param>
 public sealed record LevelDirectoryListItemDto(
     Guid Id,
@@ -13,5 +17,7 @@ public sealed record LevelDirectoryListItemDto(
     short Order,
     string? Description,
     bool IsArchived,
+    string Code,
+    LevelTone Tone,
     IReadOnlyList<DirectoryUsageDto> Usage
 );

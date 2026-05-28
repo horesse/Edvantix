@@ -70,14 +70,19 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
     public async Task<bool> ExistsWithCodeAsync(
         Guid organizationId,
         string code,
+        Guid? excludeId = null,
         CancellationToken cancellationToken = default
     )
     {
         var normalizedCode = LevelCode.From(code).Value;
 
-        // Загружаем только коды и проверяем в памяти — уровней в org мало, запрос лёгкий.
-        var codes = await context
-            .Levels.Where(l => l.OrganizationId == organizationId && !l.IsDeleted)
+        // Загружаем коды в память — уровней в org мало, запрос лёгкий.
+        var query = context.Levels.Where(l => l.OrganizationId == organizationId && !l.IsDeleted);
+
+        if (excludeId.HasValue)
+            query = query.Where(l => l.Id != excludeId.Value);
+
+        var codes = await query
             .Select(l => l.Code)
             .ToListAsync(cancellationToken);
 

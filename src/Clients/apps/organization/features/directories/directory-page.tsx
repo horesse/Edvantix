@@ -129,18 +129,22 @@ export function DirectoryPage<
     await updateMutation.mutateAsync({ orgId: orgIdArg, id, request });
   }
 
-  function handleArchive(item: TItem) {
-    archiveMutation.mutate(
-      { orgId, id: item.id },
-      { onError: () => toast.error("Не удалось архивировать") },
-    );
+  async function handleArchive(item: TItem) {
+    try {
+      await archiveMutation.mutateAsync({ orgId, id: item.id });
+    } catch (error) {
+      toast.error("Не удалось архивировать");
+      throw error;
+    }
   }
 
-  function handleRestore(item: TItem) {
-    restoreMutation.mutate(
-      { orgId, id: item.id },
-      { onError: () => toast.error("Не удалось восстановить") },
-    );
+  async function handleRestore(item: TItem) {
+    try {
+      await restoreMutation.mutateAsync({ orgId, id: item.id });
+    } catch (error) {
+      toast.error("Не удалось восстановить");
+      throw error;
+    }
   }
 
   function handleReorder(orderedIds: string[]) {
@@ -153,9 +157,11 @@ export function DirectoryPage<
   const Icon = config.icon;
 
   return (
-    <div className="flex flex-col gap-0">
+    // Вырываемся из внешнего px-4/lg:px-6 основного лейаута чтобы breadcrumb
+    // и header шли от края до края, как в дизайне.
+    <div className="-mx-4 -mt-4 flex flex-col gap-0 lg:-mx-6 lg:-mt-6">
       {/* Breadcrumb */}
-      <div className="border-b bg-white px-8 py-3.5">
+      <div className="border-b bg-white px-6 py-3.5 lg:px-8">
         <PageBreadcrumb
           items={[
             { label: "Настройки", href: "/organization/settings" },
@@ -166,7 +172,7 @@ export function DirectoryPage<
       </div>
 
       {/* Page header */}
-      <div className="border-b bg-white px-8 py-6">
+      <div className="border-b bg-white px-6 py-6 lg:px-8">
         <div className="flex items-center gap-4">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
             <Icon className="size-[22px]" />
@@ -205,16 +211,13 @@ export function DirectoryPage<
             </Button>
           </div>
         </div>
-        <p
-          className="mt-3 max-w-2xl text-sm text-slate-500"
-          style={{ paddingLeft: "60px" }}
-        >
+        <p className="mt-3 max-w-2xl text-sm text-slate-500 lg:pl-[60px]">
           {config.description}
         </p>
       </div>
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto px-8 py-5">
+      <div className="flex-1 overflow-y-auto px-6 py-5 pb-12 lg:px-8">
         <div className="mx-auto max-w-[1180px] space-y-4">
           {/* Tabs + search + counters */}
           <div className="flex items-center gap-4">
@@ -376,6 +379,8 @@ export function DirectoryPage<
         onClose={() => setDrawerOpen(false)}
         onCreate={handleCreate}
         onUpdate={handleUpdate}
+        onArchive={handleArchive}
+        onRestore={handleRestore}
       />
     </div>
   );

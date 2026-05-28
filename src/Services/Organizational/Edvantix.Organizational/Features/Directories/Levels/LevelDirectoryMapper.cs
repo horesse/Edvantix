@@ -29,6 +29,8 @@ internal static class LevelDirectoryMapper
             level.SortOrder,
             level.Description,
             IsArchived: !level.IsActive,
+            level.Code.Value,
+            level.Tone,
             usage ?? []
         );
 }

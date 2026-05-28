@@ -41,10 +41,14 @@ public interface ILevelRepository : IRepository<Level>
         CancellationToken cancellationToken = default
     );
 
-    /// <summary>Проверяет, существует ли не удалённый уровень с указанным кодом в организации.</summary>
+    /// <summary>
+    /// Проверяет, существует ли не удалённый уровень с указанным кодом в организации,
+    /// исключая запись <paramref name="excludeId"/>.
+    /// </summary>
     Task<bool> ExistsWithCodeAsync(
         Guid organizationId,
         string code,
+        Guid? excludeId = null,
         CancellationToken cancellationToken = default
     );
 

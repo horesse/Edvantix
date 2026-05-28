@@ -73,24 +73,27 @@ export const LEVEL_TONE_LABELS: Record<LevelTone, string> = {
 /** Элемент справочника «Уровни» в списке. */
 export type LevelDirectoryListItem = DirectoryItemBase & {
   readonly description?: string;
-};
-
-/** Детальный элемент справочника «Уровни». */
-export type LevelDirectoryDetailItem = LevelDirectoryListItem & {
   readonly code: string;
   readonly tone: LevelTone;
 };
 
+/** Детальный элемент справочника «Уровни». */
+export type LevelDirectoryDetailItem = LevelDirectoryListItem;
+
 /** Запрос на создание уровня. */
 export type CreateLevelDirectoryRequest = {
   readonly name: string;
+  readonly code: string;
   readonly order: number;
   readonly description?: string;
+  readonly tone?: LevelTone;
 };
 
 /** Запрос на обновление уровня. */
 export type UpdateLevelDirectoryRequest = {
   readonly name: string;
+  readonly code: string;
   readonly order: number;
   readonly description?: string;
+  readonly tone: LevelTone;
 };

@@ -144,13 +144,17 @@ function DirectoryTableRow<
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={cn(
-        "group transition-colors",
+        "group cursor-pointer transition-colors",
         isDragging && "bg-indigo-50/40 opacity-50",
         item.isArchived && "opacity-70",
       )}
+      onClick={() => onEdit(item)}
     >
       {config.capabilities.reorder && (
-        <TableCell className="w-9 px-2">
+        <TableCell
+          className="w-9 px-2"
+          onClick={(e) => e.stopPropagation()}
+        >
           <button
             type="button"
             {...attributes}
@@ -187,7 +191,10 @@ function DirectoryTableRow<
         <StatusBadge isArchived={item.isArchived} />
       </TableCell>
 
-      <TableCell className="w-12 py-3 text-right">
+      <TableCell
+        className="w-12 py-3 text-right"
+        onClick={(e) => e.stopPropagation()}
+      >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button

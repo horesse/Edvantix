@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { EdvantixAuthProvider } from "@workspace/auth/provider";
 import { Toaster } from "@workspace/ui/components/sonner";
@@ -33,17 +32,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       appUrl={env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001"}
     >
       <QueryClientProvider client={queryClient}>
-        <NextThemesProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-          enableColorScheme
-        >
-          <div className="pb-16 md:pb-0">{children}</div>
-          <Toaster richColors closeButton position="top-right" />
-          {/*<Analytics />*/}
-        </NextThemesProvider>
+        <div className="pb-16 md:pb-0">{children}</div>
+        <Toaster richColors closeButton position="top-right" />
       </QueryClientProvider>
     </EdvantixAuthProvider>
   );

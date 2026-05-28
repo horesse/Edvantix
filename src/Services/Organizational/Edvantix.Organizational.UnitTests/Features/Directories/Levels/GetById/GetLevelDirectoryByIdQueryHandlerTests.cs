@@ -101,5 +101,5 @@ public sealed class GetLevelDirectoryByIdQueryHandlerTests
     }
 
     private Level CreateLevel() =>
-        new(_orgId, LevelCode.From("B2"), "Средний", null, LevelTone.Green, 2);
+        new(_orgId, LevelCode.From("B2"), "Средний", null, LevelTone.Emerald, 2);
 }

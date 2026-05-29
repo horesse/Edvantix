@@ -180,7 +180,7 @@ importers:
         version: 3.2.2(react@19.2.6)
       '@hookform/resolvers':
         specifier: ^5.4.0
-        version: 5.4.0(react-hook-form@7.76.0(react@19.2.6))
+        version: 5.4.0(react-hook-form@7.76.1(react@19.2.6))
       '@opentelemetry/exporter-trace-otlp-proto':
         specifier: ^0.218.0
         version: 0.218.0(@opentelemetry/api@1.9.1)
@@ -242,8 +242,8 @@ importers:
         specifier: ^19.2.6
         version: 19.2.6(react@19.2.6)
       react-hook-form:
-        specifier: ^7.76.0
-        version: 7.76.0(react@19.2.6)
+        specifier: ^7.76.1
+        version: 7.76.1(react@19.2.6)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -474,7 +474,7 @@ importers:
     dependencies:
       '@hookform/resolvers':
         specifier: ^5.4.0
-        version: 5.4.0(react-hook-form@7.76.0(react@19.2.6))
+        version: 5.4.0(react-hook-form@7.76.1(react@19.2.6))
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -554,8 +554,8 @@ importers:
         specifier: ^19.2.6
         version: 19.2.6(react@19.2.6)
       react-hook-form:
-        specifier: ^7.76.0
-        version: 7.76.0(react@19.2.6)
+        specifier: ^7.76.1
+        version: 7.76.1(react@19.2.6)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -745,6 +745,10 @@ packages:
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/code-frame@7.29.7':
+    resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/compat-data@7.29.3':
     resolution: {integrity: sha512-LIVqM46zQWZhj17qA8wb4nW/ixr2y1Nw+r1etiAWgRM6U1IqP+LNhL1yg440jYZR72jCWcWbLWzIosH+uP1fqg==}
     engines: {node: '>=6.9.0'}
@@ -783,6 +787,10 @@ packages:
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/helper-validator-identifier@7.29.7':
+    resolution: {integrity: sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/helper-validator-option@7.27.1':
     resolution: {integrity: sha512-YvjJow9FxbhFFKDSuFnVCe2WxXk1zWc22fFePVNEaWJEu8IrZVlda6N0uHwzZrUM1il7NC9Mlp4MaJYbYd9JSg==}
     engines: {node: '>=6.9.0'}
@@ -798,6 +806,10 @@ packages:
 
   '@babel/runtime@7.29.2':
     resolution: {integrity: sha512-JiDShH45zKHWyGe4ZNVRrCjBz8Nh9TMmZG1kh4QTK8hCBTWBi8Da+i7s1fJw7/lYpM4ccepSNfqzZ/QvABBi5g==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.29.7':
+    resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
@@ -5036,8 +5048,8 @@ packages:
     peerDependencies:
       react: ^19.2.6
 
-  react-hook-form@7.76.0:
-    resolution: {integrity: sha512-eKtLGgFeSgkHqQD8J59AMZ9a4uD1D83iSIzt4YlTGD7liDen5rrjcUO1rVIGd9yC1gofryjtHbv+4ny4hkLWlw==}
+  react-hook-form@7.76.1:
+    resolution: {integrity: sha512-rYM7tPiWlu3nZchkR/ex7piyzui2vFPyaLnXnI/RnblB/L4qfMmyses8llJVtF1NpE9WBBsJlGtcSZzPCXW1qQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -5386,11 +5398,11 @@ packages:
     resolution: {integrity: sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@7.0.30:
-    resolution: {integrity: sha512-uiHN8PIB1VmWyS98eZYja4xzlYqeFZVjb4OuYlJQnZAuJhMw4PbKQOKgHKhBdJR3FE/t5mUQ1Kd80++B+qhD1Q==}
+  tldts-core@7.4.1:
+    resolution: {integrity: sha512-sc2nGvGbixlJRHwTh/qQdPXTxJU1UDJboGPQm4d/01YUJ9r/u6aeIulQvEaxUlvKDN7hb1qCLjax+jhVAPLa/g==}
 
-  tldts@7.0.30:
-    resolution: {integrity: sha512-ELrFxuqsDdHUwoh0XxDbxuLD3Wnz49Z57IFvTtvWy1hJdcMZjXLIuonjilCiWHlT2GbE4Wlv1wKVTzDFnXH1aw==}
+  tldts@7.4.0:
+    resolution: {integrity: sha512-yHBe+zVfzNZ3QfTPW/Z6KK1G2t340gFjMHqI/4KKSt/abzYydzuCnpqdaF5gCCABby+9Yfbj59oR5F2Fd5CBzg==}
     hasBin: true
 
   to-regex-range@5.0.1:
@@ -6111,6 +6123,12 @@ snapshots:
       js-tokens: 4.0.0
       picocolors: 1.1.1
 
+  '@babel/code-frame@7.29.7':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.29.7
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
   '@babel/compat-data@7.29.3': {}
 
   '@babel/core@7.29.0':
@@ -6171,6 +6189,8 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
+  '@babel/helper-validator-identifier@7.29.7': {}
+
   '@babel/helper-validator-option@7.27.1': {}
 
   '@babel/helpers@7.29.2':
@@ -6183,6 +6203,8 @@ snapshots:
       '@babel/types': 7.29.0
 
   '@babel/runtime@7.29.2': {}
+
+  '@babel/runtime@7.29.7': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -6484,10 +6506,10 @@ snapshots:
       protobufjs: 7.6.1
       yargs: 17.7.2
 
-  '@hookform/resolvers@5.4.0(react-hook-form@7.76.0(react@19.2.6))':
+  '@hookform/resolvers@5.4.0(react-hook-form@7.76.1(react@19.2.6))':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.76.0(react@19.2.6)
+      react-hook-form: 7.76.1(react@19.2.6)
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -8367,8 +8389,8 @@ snapshots:
 
   '@testing-library/dom@10.4.1':
     dependencies:
-      '@babel/code-frame': 7.29.0
-      '@babel/runtime': 7.29.2
+      '@babel/code-frame': 7.29.7
+      '@babel/runtime': 7.29.7
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
@@ -10565,7 +10587,7 @@ snapshots:
       react: 19.2.6
       scheduler: 0.27.0
 
-  react-hook-form@7.76.0(react@19.2.6):
+  react-hook-form@7.76.1(react@19.2.6):
     dependencies:
       react: 19.2.6
 
@@ -10986,12 +11008,12 @@ snapshots:
 
   tinyrainbow@3.1.0: {}
 
-  tldts-core@7.0.30:
+  tldts-core@7.4.1:
     optional: true
 
-  tldts@7.0.30:
+  tldts@7.4.0:
     dependencies:
-      tldts-core: 7.0.30
+      tldts-core: 7.4.1
     optional: true
 
   to-regex-range@5.0.1:
@@ -11002,7 +11024,7 @@ snapshots:
 
   tough-cookie@6.0.1:
     dependencies:
-      tldts: 7.0.30
+      tldts: 7.4.0
     optional: true
 
   ts-api-utils@2.5.0(typescript@6.0.3):

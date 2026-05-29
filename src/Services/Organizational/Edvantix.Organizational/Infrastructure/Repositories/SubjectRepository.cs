@@ -48,8 +48,9 @@ internal sealed class SubjectRepository(OrganizationalDbContext context) : ISubj
     {
         // Сравнение выполняется в памяти: SubjectCode хранится через value-конвертер
         // и не транслируется напрямую в SQL-предикат.
+        // Query filter исключает удалённые записи автоматически.
         var entries = await context
-            .Subjects.Where(s => s.OrganizationId == organizationId && !s.IsArchived)
+            .Subjects.Where(s => s.OrganizationId == organizationId)
             .Select(s => new { s.Id, s.Code })
             .ToListAsync(cancellationToken);
 
@@ -61,13 +62,15 @@ internal sealed class SubjectRepository(OrganizationalDbContext context) : ISubj
         CancellationToken cancellationToken = default
     )
     {
+        // IgnoreQueryFilters нужен, чтобы включить удалённые записи в подсчёт архива.
         var stats = await context
-            .Subjects.Where(s => s.OrganizationId == organizationId)
-            .Select(s => new { s.IsArchived, s.LastModifiedAt })
+            .Subjects.IgnoreQueryFilters()
+            .Where(s => s.OrganizationId == organizationId)
+            .Select(s => new { s.IsDeleted, s.LastModifiedAt })
             .ToListAsync(cancellationToken);
 
-        var activeCount = stats.Count(s => !s.IsArchived);
-        var archivedCount = stats.Count(s => s.IsArchived);
+        var activeCount = stats.Count(s => !s.IsDeleted);
+        var archivedCount = stats.Count(s => s.IsDeleted);
         var lastModifiedAt = stats.Where(s => s.LastModifiedAt.HasValue).Max(s => s.LastModifiedAt);
 
         return (activeCount, archivedCount, lastModifiedAt);

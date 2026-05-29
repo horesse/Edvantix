@@ -114,5 +114,5 @@ public sealed class ListPaymentMethodsQueryHandlerTests
             .ReturnsAsync(count);
 
     private static PaymentMethodListItemDto MapToDto(PaymentMethod pm) =>
-        new(pm.Id, pm.Name, pm.Code, pm.IsCashless, pm.RequiresContract, pm.IsArchived, pm.Order);
+        new(pm.Id, pm.Name, pm.Code, pm.IsCashless, pm.RequiresContract, pm.IsDeleted, pm.Order);
 }

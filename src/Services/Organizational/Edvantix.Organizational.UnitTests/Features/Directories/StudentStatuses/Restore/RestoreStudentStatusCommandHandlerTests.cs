@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Features.Directories.StudentStatuses.Restore;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.StudentStatuses.Restore;
@@ -33,7 +33,7 @@ public sealed class RestoreStudentStatusCommandHandlerTests
 
         await _handler.Handle(new RestoreStudentStatusCommand(status.Id), CancellationToken.None);
 
-        status.IsArchived.ShouldBeFalse();
+        status.IsDeleted.ShouldBeFalse();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -89,7 +89,7 @@ public sealed class RestoreStudentStatusCommandHandlerTests
 
         await _handler.Handle(new RestoreStudentStatusCommand(status.Id), CancellationToken.None);
 
-        status.IsArchived.ShouldBeFalse();
+        status.IsDeleted.ShouldBeFalse();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once

@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Domain.StudentStatusAggregate;
 
@@ -26,7 +26,7 @@ public sealed class StudentStatusTests
         status.Tone.ShouldBe(StudentStatusTone.Active);
         status.IsSystem.ShouldBeFalse();
         status.Order.ShouldBe(5);
-        status.IsArchived.ShouldBeFalse();
+        status.IsDeleted.ShouldBeFalse();
         status.CreatedBy.ShouldBe(UserId);
         status.Id.ShouldNotBe(Guid.Empty);
     }
@@ -104,7 +104,7 @@ public sealed class StudentStatusTests
 
         status.Archive(UserId);
 
-        status.IsArchived.ShouldBeTrue();
+        status.IsDeleted.ShouldBeTrue();
         status.LastModifiedBy.ShouldBe(UserId);
     }
 
@@ -122,7 +122,7 @@ public sealed class StudentStatusTests
         var act = () => status.Archive(UserId);
 
         act.ShouldThrow<InvalidOperationException>();
-        status.IsArchived.ShouldBeFalse();
+        status.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -139,7 +139,7 @@ public sealed class StudentStatusTests
 
         status.Archive(Guid.CreateVersion7());
 
-        status.IsArchived.ShouldBeTrue();
+        status.IsDeleted.ShouldBeTrue();
         status.LastModifiedAt.ShouldBe(firstModifiedAt);
     }
 
@@ -157,7 +157,7 @@ public sealed class StudentStatusTests
         var restoredBy = Guid.CreateVersion7();
         status.Restore(restoredBy);
 
-        status.IsArchived.ShouldBeFalse();
+        status.IsDeleted.ShouldBeFalse();
         status.LastModifiedBy.ShouldBe(restoredBy);
     }
 

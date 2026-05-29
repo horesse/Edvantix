@@ -14,7 +14,7 @@ public sealed class PaymentMethodDtoMapper : Mapper<PaymentMethod, PaymentMethod
             source.Code,
             source.IsCashless,
             source.RequiresContract,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order,
             source.OrganizationId,
             source.CreatedAt,
@@ -35,7 +35,7 @@ public sealed class PaymentMethodListItemDtoMapper : Mapper<PaymentMethod, Payme
             source.Code,
             source.IsCashless,
             source.RequiresContract,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order
         );
 }

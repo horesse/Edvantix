@@ -34,7 +34,7 @@ public sealed class ArchiveStudentTagCommandHandlerTests
 
         await _handler.Handle(new ArchiveStudentTagCommand(tag.Id), CancellationToken.None);
 
-        tag.IsArchived.ShouldBeTrue();
+        tag.IsDeleted.ShouldBeTrue();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -52,7 +52,7 @@ public sealed class ArchiveStudentTagCommandHandlerTests
 
         await _handler.Handle(new ArchiveStudentTagCommand(tag.Id), CancellationToken.None);
 
-        tag.IsArchived.ShouldBeTrue();
+        tag.IsDeleted.ShouldBeTrue();
     }
 
     [Test]

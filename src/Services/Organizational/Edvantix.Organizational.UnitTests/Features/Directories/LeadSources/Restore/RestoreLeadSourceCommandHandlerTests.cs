@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Restore;
+namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Restore;
 
 public sealed class RestoreLeadSourceCommandHandlerTests
 {
@@ -32,7 +32,7 @@ public sealed class RestoreLeadSourceCommandHandlerTests
 
         await _handler.Handle(new RestoreLeadSourceCommand(source.Id), CancellationToken.None);
 
-        source.IsArchived.ShouldBeFalse();
+        source.IsDeleted.ShouldBeFalse();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -49,7 +49,7 @@ public sealed class RestoreLeadSourceCommandHandlerTests
 
         await _handler.Handle(new RestoreLeadSourceCommand(source.Id), CancellationToken.None);
 
-        source.IsArchived.ShouldBeFalse();
+        source.IsDeleted.ShouldBeFalse();
     }
 
     [Test]

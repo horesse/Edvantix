@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.Create;
 
@@ -68,7 +68,7 @@ public sealed class CreateRoomCommandHandlerTests
         capturedRoom.Capacity.ShouldBe(100);
         capturedRoom.Floor.ShouldBe("3");
         capturedRoom.RoomType.ShouldBe(RoomType.Lab);
-        capturedRoom.IsArchived.ShouldBeFalse();
+        capturedRoom.IsDeleted.ShouldBeFalse();
     }
 
     private static RoomDto CreateDto() =>

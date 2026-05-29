@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate.Specifications;
 using Edvantix.Permissions;
 
 namespace Edvantix.Organizational.Features.Directories.Levels.Reorder;
@@ -28,9 +29,8 @@ internal sealed class ReorderLevelDirectoryCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var allLevels = await repository.ListByOrganizationAsync(
-            tenantContext.OrganizationId,
-            includeInactive: true,
+        var allLevels = await repository.ListAsync(
+            new LevelReorderSpec(tenantContext.OrganizationId),
             cancellationToken
         );
 

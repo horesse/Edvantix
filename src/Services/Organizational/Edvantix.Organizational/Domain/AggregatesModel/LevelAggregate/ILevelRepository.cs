@@ -29,15 +29,18 @@ public interface ILevelRepository : IRepository<Level>
     /// <summary>Добавляет новый уровень.</summary>
     Task AddAsync(Level level, CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Добавляет массив уровней
-    /// </summary>
+    /// <summary>Добавляет массив уровней.</summary>
     Task AddRange(List<Level> levels, CancellationToken cancellationToken = default);
 
-    /// <summary>Возвращает все уровни организации, отсортированные по <see cref="Level.SortOrder"/>.</summary>
-    Task<IReadOnlyCollection<Level>> ListByOrganizationAsync(
-        Guid organizationId,
-        bool includeInactive = false,
+    /// <summary>Возвращает список уровней по спецификации.</summary>
+    Task<IReadOnlyList<Level>> ListAsync(
+        ISpecification<Level> specification,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>Возвращает количество уровней по спецификации.</summary>
+    Task<int> CountAsync(
+        ISpecification<Level> specification,
         CancellationToken cancellationToken = default
     );
 
@@ -60,22 +63,6 @@ public interface ILevelRepository : IRepository<Level>
         Guid organizationId,
         string name,
         Guid? excludeId = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>Постраничный список уровней для страницы справочника.</summary>
-    Task<(IReadOnlyList<Level> Items, int Total)> ListForDirectoryAsync(
-        Guid organizationId,
-        bool includeInactive,
-        string? search,
-        int pageIndex,
-        int pageSize,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>Количество активных и архивных (деактивированных) уровней в организации.</summary>
-    Task<(int Active, int Archived)> GetStatsAsync(
-        Guid organizationId,
         CancellationToken cancellationToken = default
     );
 }

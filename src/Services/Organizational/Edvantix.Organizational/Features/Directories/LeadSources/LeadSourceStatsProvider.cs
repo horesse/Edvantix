@@ -18,12 +18,12 @@ internal sealed class LeadSourceStatsProvider(ILeadSourceRepository repository)
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
     {
         var activeCount = await repository.CountAsync(
-            new LeadSourceCountSpecification(orgId, isArchived: false),
+            new LeadSourceCountSpecification(orgId, isArchive: false),
             ct
         );
 
         var archivedCount = await repository.CountAsync(
-            new LeadSourceCountSpecification(orgId, isArchived: true),
+            new LeadSourceCountSpecification(orgId, isArchive: true),
             ct
         );
 

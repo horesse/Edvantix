@@ -1,4 +1,5 @@
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate.Specifications;
 using Edvantix.Organizational.Features.Settings.Directories;
 
 namespace Edvantix.Organizational.Features.Directories.Levels;
@@ -16,8 +17,20 @@ internal sealed class LevelDirectoryStatsProvider(ILevelRepository repository)
     /// <inheritdoc/>
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
     {
-        var (active, archived) = await repository.GetStatsAsync(orgId, ct);
+        var activeCount = await repository.CountAsync(
+            new LevelCountDirectorySpec(orgId, isArchive: false),
+            ct
+        );
+        var archivedCount = await repository.CountAsync(
+            new LevelCountDirectorySpec(orgId, isArchive: true),
+            ct
+        );
 
-        return new DirectoryStats(active, archived, LastModifiedAt: null, IsAvailable: true);
+        return new DirectoryStats(
+            activeCount,
+            archivedCount,
+            LastModifiedAt: null,
+            IsAvailable: true
+        );
     }
 }

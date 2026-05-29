@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Domain;
+namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Domain;
 
 public sealed class LeadSourceTests
 {
@@ -15,7 +15,7 @@ public sealed class LeadSourceTests
         source.Channel.ShouldBe(LeadChannel.Online);
         source.UtmTag.ShouldBe("utm_insta");
         source.Order.ShouldBe(1);
-        source.IsArchived.ShouldBeFalse();
+        source.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -91,7 +91,7 @@ public sealed class LeadSourceTests
 
         source.Archive(UserId);
 
-        source.IsArchived.ShouldBeTrue();
+        source.IsDeleted.ShouldBeTrue();
     }
 
     [Test]
@@ -102,7 +102,7 @@ public sealed class LeadSourceTests
 
         source.Archive(UserId);
 
-        source.IsArchived.ShouldBeTrue();
+        source.IsDeleted.ShouldBeTrue();
     }
 
     [Test]
@@ -113,7 +113,7 @@ public sealed class LeadSourceTests
 
         source.Restore(UserId);
 
-        source.IsArchived.ShouldBeFalse();
+        source.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -123,7 +123,7 @@ public sealed class LeadSourceTests
 
         source.Restore(UserId);
 
-        source.IsArchived.ShouldBeFalse();
+        source.IsDeleted.ShouldBeFalse();
     }
 
     [Test]

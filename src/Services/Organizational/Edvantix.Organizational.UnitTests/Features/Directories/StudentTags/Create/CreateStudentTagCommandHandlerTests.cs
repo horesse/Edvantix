@@ -69,7 +69,7 @@ public sealed class CreateStudentTagCommandHandlerTests
         capturedTag.Name.ShouldBe("Premium");
         capturedTag.Color.ShouldBe("#0000FF");
         capturedTag.Order.ShouldBe(1);
-        capturedTag.IsArchived.ShouldBeFalse();
+        capturedTag.IsDeleted.ShouldBeFalse();
     }
 
     private static StudentTagDto CreateDto() =>

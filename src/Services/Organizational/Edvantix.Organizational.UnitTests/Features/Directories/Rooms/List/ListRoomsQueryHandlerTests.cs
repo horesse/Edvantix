@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Edvantix.Organizational.Grpc.Services.Groups;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.List;
@@ -67,7 +67,7 @@ public sealed class ListRoomsQueryHandlerTests
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<Room>>()))
             .Returns(Array.Empty<RoomListItemDto>());
 
-        await _handler.Handle(new ListRoomsQuery(IncludeArchived: false), CancellationToken.None);
+        await _handler.Handle(new ListRoomsQuery(IsArchive: false), CancellationToken.None);
 
         _repoMock.Verify(
             r => r.ListAsync(It.IsAny<ISpecification<Room>>(), It.IsAny<CancellationToken>()),
@@ -134,5 +134,5 @@ public sealed class ListRoomsQueryHandlerTests
             .ReturnsAsync(count);
 
     private static RoomListItemDto MapToDto(Room r) =>
-        new(r.Id, r.Name, r.Capacity, r.Floor, r.RoomType, r.IsArchived, r.Order, Usage: []);
+        new(r.Id, r.Name, r.Capacity, r.Floor, r.RoomType, r.IsDeleted, r.Order, Usage: []);
 }

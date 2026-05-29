@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.Mapper;
+using Edvantix.Chassis.Mapper;
 using Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate;
 
 namespace Edvantix.Organizational.Features.Directories.LeadSources;
@@ -13,7 +13,7 @@ public sealed class LeadSourceDtoMapper : Mapper<LeadSource, LeadSourceDto>
             source.Name,
             source.Channel,
             source.UtmTag,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order,
             source.OrganizationId,
             source.CreatedAt,
@@ -28,5 +28,5 @@ public sealed class LeadSourceListItemDtoMapper : Mapper<LeadSource, LeadSourceL
 {
     /// <inheritdoc/>
     public override LeadSourceListItemDto Map(LeadSource source) =>
-        new(source.Id, source.Name, source.Channel, source.UtmTag, source.IsArchived, source.Order);
+        new(source.Id, source.Name, source.Channel, source.UtmTag, source.IsDeleted, source.Order);
 }

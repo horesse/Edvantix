@@ -1,30 +1,26 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate.Specifications;
+namespace Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для подсчёта кабинетов организации.
 /// <para>
-/// <paramref name="isArchived"/> = <see langword="false"/> — только активные,
-/// <paramref name="isArchived"/> = <see langword="true"/> — только архивные,
-/// <paramref name="isArchived"/> = <see langword="null"/> — все записи.
+/// <paramref name="isArchive"/> = <see langword="false"/> (по умолчанию) — только активные,
+/// <paramref name="isArchive"/> = <see langword="true"/> — только архивные.
 /// </para>
 /// </summary>
 public sealed class RoomCountSpecification : Specification<Room>
 {
     public RoomCountSpecification(
         Guid organizationId,
-        bool? isArchived = false,
+        bool isArchive = false,
         string? search = null
     )
     {
         Query.AsNoTracking().Where(r => r.OrganizationId == organizationId);
 
-        if (isArchived.HasValue)
-            Query.Where(r => r.IsArchived == isArchived.Value);
+        if (isArchive)
+            Query.IgnoreQueryFilters().Where(r => r.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(search))
-        {
-            var term = search.Trim().ToLower();
-            Query.Where(r => r.Name.ToLower().Contains(term));
-        }
+            Query.Where(r => r.Name.ToLower().Contains(search.Trim().ToLower()));
     }
 }

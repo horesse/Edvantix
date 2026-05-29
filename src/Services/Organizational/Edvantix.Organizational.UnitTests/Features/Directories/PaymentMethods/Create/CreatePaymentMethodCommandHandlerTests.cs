@@ -76,7 +76,7 @@ public sealed class CreatePaymentMethodCommandHandlerTests
         capturedMethod.Code.ShouldBe("installment");
         capturedMethod.IsCashless.ShouldBeFalse();
         capturedMethod.RequiresContract.ShouldBeTrue();
-        capturedMethod.IsArchived.ShouldBeFalse();
+        capturedMethod.IsDeleted.ShouldBeFalse();
     }
 
     private static PaymentMethodDto CreateDto() =>

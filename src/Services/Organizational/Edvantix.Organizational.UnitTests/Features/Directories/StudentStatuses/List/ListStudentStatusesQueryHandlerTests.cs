@@ -1,4 +1,4 @@
-﻿using Edvantix.Chassis.Specification;
+using Edvantix.Chassis.Specification;
 using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Features.Directories.StudentStatuses;
 using Edvantix.Organizational.Features.Directories.StudentStatuses.List;
@@ -64,7 +64,7 @@ public sealed class ListStudentStatusesQueryHandlerTests
             .Returns(Array.Empty<StudentStatusListItemDto>());
 
         await _handler.Handle(
-            new ListStudentStatusesQuery(IncludeArchived: false),
+            new ListStudentStatusesQuery(IsArchive: false),
             CancellationToken.None
         );
 
@@ -139,5 +139,5 @@ public sealed class ListStudentStatusesQueryHandlerTests
             .ReturnsAsync(count);
 
     private static StudentStatusListItemDto MapToDto(StudentStatus s) =>
-        new(s.Id, s.Name, s.Code, s.Tone, s.IsSystem, s.IsArchived, s.Order);
+        new(s.Id, s.Name, s.Code, s.Tone, s.IsSystem, s.IsDeleted, s.Order);
 }

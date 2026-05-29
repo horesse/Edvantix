@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
+namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для проверки уникальности кода статуса среди активных записей организации.
@@ -11,9 +11,7 @@ public sealed class StudentStatusUniqueCodeSpecification : Specification<Student
         Guid? excludeId = null
     )
     {
-        Query
-            .AsNoTracking()
-            .Where(s => s.OrganizationId == organizationId && !s.IsArchived && s.Code == code);
+        Query.AsNoTracking().Where(s => s.OrganizationId == organizationId && s.Code == code);
 
         if (excludeId.HasValue)
             Query.Where(s => s.Id != excludeId.Value);

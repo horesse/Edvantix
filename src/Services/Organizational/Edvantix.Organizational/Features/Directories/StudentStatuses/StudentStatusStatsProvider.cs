@@ -19,12 +19,12 @@ internal sealed class StudentStatusStatsProvider(IStudentStatusRepository reposi
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
     {
         var activeCount = await repository.CountAsync(
-            new StudentStatusCountSpecification(orgId, isArchived: false),
+            new StudentStatusCountSpecification(orgId, isArchive: false),
             ct
         );
 
         var archivedCount = await repository.CountAsync(
-            new StudentStatusCountSpecification(orgId, isArchived: true),
+            new StudentStatusCountSpecification(orgId, isArchive: true),
             ct
         );
 

@@ -17,12 +17,12 @@ internal sealed class RoomStatsProvider(IRoomRepository repository) : IDirectory
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
     {
         var activeCount = await repository.CountAsync(
-            new RoomCountSpecification(orgId, isArchived: false),
+            new RoomCountSpecification(orgId, isArchive: false),
             ct
         );
 
         var archivedCount = await repository.CountAsync(
-            new RoomCountSpecification(orgId, isArchived: true),
+            new RoomCountSpecification(orgId, isArchive: true),
             ct
         );
 

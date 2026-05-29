@@ -2,6 +2,7 @@ import type React from "react";
 
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+
 import { ThemeProvider } from "next-themes";
 
 import "@workspace/ui/globals.css";
@@ -106,17 +107,17 @@ export default async function RootLayout({
       <body className="font-sans antialiased">
         {/* ThemeProvider в серверном компоненте, чтобы избежать
             React 19 warning о script-тегах в клиентских компонентах. */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-          enableColorScheme
-        >
-          <div id="main-content">
-            <Providers>{children}</Providers>
-          </div>
-        </ThemeProvider>
+        {/*<ThemeProvider*/}
+        {/*  attribute="class"*/}
+        {/*  defaultTheme="light"*/}
+        {/*  enableSystem={false}*/}
+        {/*  disableTransitionOnChange*/}
+        {/*  enableColorScheme*/}
+        {/*>*/}
+        <div id="main-content">
+          <Providers>{children}</Providers>
+        </div>
+        {/*</ThemeProvider>*/}
       </body>
     </html>
   );

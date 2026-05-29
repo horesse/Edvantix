@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.Restore;
 
@@ -33,7 +33,7 @@ public sealed class RestoreRoomCommandHandlerTests
 
         await _handler.Handle(new RestoreRoomCommand(room.Id), CancellationToken.None);
 
-        room.IsArchived.ShouldBeFalse();
+        room.IsDeleted.ShouldBeFalse();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -50,7 +50,7 @@ public sealed class RestoreRoomCommandHandlerTests
 
         await _handler.Handle(new RestoreRoomCommand(room.Id), CancellationToken.None);
 
-        room.IsArchived.ShouldBeFalse();
+        room.IsDeleted.ShouldBeFalse();
     }
 
     [Test]

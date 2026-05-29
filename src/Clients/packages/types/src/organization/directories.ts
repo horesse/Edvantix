@@ -21,7 +21,8 @@ export type ReorderDirectoryRequest = {
 /** Параметры фильтрации/пагинации для списка справочника. */
 export type DirectoryListQuery = {
   search?: string;
-  includeArchived?: boolean;
+  /** Показать только архивные записи (true) или только активные (false / не задан). */
+  isArchive?: boolean;
   pageIndex?: number;
   pageSize?: number;
 };

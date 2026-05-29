@@ -19,12 +19,12 @@ internal sealed class PaymentMethodStatsProvider(IPaymentMethodRepository reposi
     public async Task<DirectoryStats> GetStatsAsync(Guid orgId, CancellationToken ct)
     {
         var activeCount = await repository.CountAsync(
-            new PaymentMethodCountSpecification(orgId, isArchived: false),
+            new PaymentMethodCountSpecification(orgId, isArchive: false),
             ct
         );
 
         var archivedCount = await repository.CountAsync(
-            new PaymentMethodCountSpecification(orgId, isArchived: true),
+            new PaymentMethodCountSpecification(orgId, isArchive: true),
             ct
         );
 

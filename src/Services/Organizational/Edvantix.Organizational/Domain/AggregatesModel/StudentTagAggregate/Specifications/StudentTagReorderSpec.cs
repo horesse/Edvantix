@@ -5,9 +5,6 @@ public sealed class StudentTagReorderSpec : Specification<StudentTag>
 {
     public StudentTagReorderSpec(Guid organizationId)
     {
-        Query
-            .Where(t => t.OrganizationId == organizationId && !t.IsArchived)
-            .OrderBy(t => t.Order)
-            .AsTracking();
+        Query.Where(t => t.OrganizationId == organizationId).OrderBy(t => t.Order).AsTracking();
     }
 }

@@ -1,5 +1,6 @@
 using Edvantix.Chassis.CQRS;
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate.Specifications;
 using Edvantix.Organizational.Grpc.Services.Groups;
 using Edvantix.Permissions;
 
@@ -7,13 +8,13 @@ namespace Edvantix.Organizational.Features.Directories.Levels.List;
 
 /// <summary>Постраничный список уровней для страницы справочника.</summary>
 /// <param name="Search">Фильтр по названию (частичное совпадение).</param>
-/// <param name="IncludeArchived">Включать деактивированные уровни.</param>
+/// <param name="IsArchive">Показать только деактивированные уровни.</param>
 /// <param name="PageIndex">Номер страницы (начиная с 1).</param>
 /// <param name="PageSize">Размер страницы.</param>
 [RequirePermission(LevelPermissions.View)]
 public sealed record ListLevelsDirectoryQuery(
     [property: Description("Фильтр по названию")] string? Search = null,
-    [property: Description("Включить деактивированные уровни")] bool IncludeArchived = false,
+    [property: Description("Показать только деактивированные уровни")] bool IsArchive = false,
     [property: Description("Номер страницы")]
     [property: DefaultValue(Pagination.DefaultPageIndex)]
         int PageIndex = Pagination.DefaultPageIndex,
@@ -35,15 +36,19 @@ internal sealed class ListLevelsDirectoryQueryHandler(
     {
         var pageIndex = Math.Max(query.PageIndex, 1);
         var pageSize = Math.Clamp(query.PageSize, 1, 100);
+        var orgId = tenantContext.OrganizationId;
 
-        var (items, total) = await repository.ListForDirectoryAsync(
-            tenantContext.OrganizationId,
-            includeInactive: query.IncludeArchived,
+        var listSpec = new LevelListDirectorySpec(
+            orgId,
+            query.IsArchive,
             query.Search,
             pageIndex,
-            pageSize,
-            cancellationToken
+            pageSize
         );
+        var countSpec = new LevelCountDirectorySpec(orgId, query.IsArchive, query.Search);
+
+        var items = await repository.ListAsync(listSpec, cancellationToken);
+        var total = await repository.CountAsync(countSpec, cancellationToken);
 
         var counts = await groupsUsageService.CountByLevelIdsAsync(
             items.Select(l => l.Id),

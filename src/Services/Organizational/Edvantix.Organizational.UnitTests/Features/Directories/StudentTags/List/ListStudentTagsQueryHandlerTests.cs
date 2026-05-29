@@ -62,10 +62,7 @@ public sealed class ListStudentTagsQueryHandlerTests
             .Setup(m => m.Map(It.IsAny<IReadOnlyCollection<StudentTag>>()))
             .Returns(Array.Empty<StudentTagListItemDto>());
 
-        await _handler.Handle(
-            new ListStudentTagsQuery(IncludeArchived: false),
-            CancellationToken.None
-        );
+        await _handler.Handle(new ListStudentTagsQuery(IsArchive: false), CancellationToken.None);
 
         _repoMock.Verify(
             r => r.ListAsync(It.IsAny<ISpecification<StudentTag>>(), It.IsAny<CancellationToken>()),
@@ -110,5 +107,5 @@ public sealed class ListStudentTagsQueryHandlerTests
             .ReturnsAsync(count);
 
     private static StudentTagListItemDto MapToDto(StudentTag t) =>
-        new(t.Id, t.Name, t.Color, t.IsArchived, t.Order);
+        new(t.Id, t.Name, t.Color, t.IsDeleted, t.Order);
 }

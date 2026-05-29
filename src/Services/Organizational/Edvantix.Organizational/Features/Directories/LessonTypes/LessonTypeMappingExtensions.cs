@@ -15,7 +15,7 @@ internal static class LessonTypeMappingExtensions
             lt.Color,
             lt.Icon,
             lt.Order,
-            lt.IsArchived,
+            lt.IsDeleted,
             lt.CreatedAt,
             lt.LastModifiedAt
         );
@@ -30,6 +30,6 @@ internal static class LessonTypeMappingExtensions
             lt.Color,
             lt.Icon,
             lt.Order,
-            lt.IsArchived
+            lt.IsDeleted
         );
 }

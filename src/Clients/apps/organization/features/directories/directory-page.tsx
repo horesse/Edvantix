@@ -64,7 +64,7 @@ export function DirectoryPage<
   const query = useMemo(
     () => ({
       search: debouncedSearch || undefined,
-      includeArchived: tab === "archived",
+      isArchive: tab === "archived",
       pageIndex,
       pageSize: DEFAULT_PAGE_SIZE,
     }),
@@ -77,14 +77,8 @@ export function DirectoryPage<
     query,
   );
 
-  const activeQuery = useMemo(
-    () => ({ includeArchived: false, pageSize: 1000 }),
-    [],
-  );
-  const archivedQuery = useMemo(
-    () => ({ includeArchived: true, pageSize: 1000 }),
-    [],
-  );
+  const activeQuery = useMemo(() => ({ isArchive: false, pageSize: 1 }), []);
+  const archivedQuery = useMemo(() => ({ isArchive: true, pageSize: 1 }), []);
   const { data: allActive } = useDirectoryList<TItem>(
     orgId,
     config.code,
@@ -97,7 +91,7 @@ export function DirectoryPage<
   );
 
   const activeCount = allActive?.totalCount ?? 0;
-  const archivedCount = (allArchived?.totalCount ?? 0) - activeCount;
+  const archivedCount = allArchived?.totalCount ?? 0;
 
   const items = listData?.items ?? [];
   const totalCount = listData?.totalCount ?? 0;

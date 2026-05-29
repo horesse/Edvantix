@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 using Edvantix.Organizational.Grpc.Services.Groups;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.Rooms.GetById;
@@ -96,7 +96,7 @@ public sealed class GetRoomByIdQueryHandlerTests
             room.Capacity,
             room.Floor,
             room.RoomType,
-            room.IsArchived,
+            room.IsDeleted,
             room.Order,
             room.OrganizationId,
             room.CreatedAt,

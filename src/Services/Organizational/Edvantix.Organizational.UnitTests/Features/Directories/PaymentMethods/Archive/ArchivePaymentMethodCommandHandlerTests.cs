@@ -32,7 +32,7 @@ public sealed class ArchivePaymentMethodCommandHandlerTests
 
         await _handler.Handle(new ArchivePaymentMethodCommand(pm.Id), CancellationToken.None);
 
-        pm.IsArchived.ShouldBeTrue();
+        pm.IsDeleted.ShouldBeTrue();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -48,7 +48,7 @@ public sealed class ArchivePaymentMethodCommandHandlerTests
 
         await _handler.Handle(new ArchivePaymentMethodCommand(pm.Id), CancellationToken.None);
 
-        pm.IsArchived.ShouldBeTrue();
+        pm.IsDeleted.ShouldBeTrue();
     }
 
     [Test]

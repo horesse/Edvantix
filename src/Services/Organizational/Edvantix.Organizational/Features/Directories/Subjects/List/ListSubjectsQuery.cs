@@ -7,13 +7,13 @@ namespace Edvantix.Organizational.Features.Directories.Subjects.List;
 
 /// <summary>Возвращает постраничный список предметов организации.</summary>
 /// <param name="Search">Текстовый поиск по названию.</param>
-/// <param name="IncludeArchived">Включить архивные записи.</param>
+/// <param name="IsArchive">Показать только архивные записи.</param>
 /// <param name="Page">Номер страницы (начиная с 1).</param>
 /// <param name="Size">Размер страницы.</param>
 [RequirePermission(SubjectPermissions.View)]
 public sealed record ListSubjectsQuery(
     [property: Description("Текстовый поиск по названию")] string? Search = null,
-    [property: Description("Включить архивные записи")] bool IncludeArchived = false,
+    [property: Description("Показать только архивные записи")] bool IsArchive = false,
     [property: DefaultValue(Pagination.DefaultPageIndex)] int Page = Pagination.DefaultPageIndex,
     [property: DefaultValue(Pagination.DefaultPageSize)] int Size = Pagination.DefaultPageSize
 ) : IQuery<PagedResult<SubjectListItemDto>>;
@@ -34,14 +34,8 @@ internal sealed class ListSubjectsQueryHandler(
         var offset = (page - 1) * size;
         var orgId = tenantContext.OrganizationId;
 
-        var listSpec = new SubjectListSpec(
-            orgId,
-            offset,
-            size,
-            request.Search,
-            request.IncludeArchived
-        );
-        var countSpec = new SubjectListSpec(orgId, request.Search, request.IncludeArchived);
+        var listSpec = new SubjectListSpec(orgId, offset, size, request.Search, request.IsArchive);
+        var countSpec = new SubjectListSpec(orgId, request.Search, request.IsArchive);
 
         var subjects = await repository.ListAsync(listSpec, cancellationToken);
         var total = await repository.CountAsync(countSpec, cancellationToken);

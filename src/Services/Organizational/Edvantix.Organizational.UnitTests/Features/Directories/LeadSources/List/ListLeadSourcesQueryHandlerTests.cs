@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.List;
+namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.List;
 
 public sealed class ListLeadSourcesQueryHandlerTests
 {
@@ -100,5 +100,5 @@ public sealed class ListLeadSourcesQueryHandlerTests
             .ReturnsAsync(count);
 
     private static LeadSourceListItemDto MapToDto(LeadSource ls) =>
-        new(ls.Id, ls.Name, ls.Channel, ls.UtmTag, ls.IsArchived, ls.Order);
+        new(ls.Id, ls.Name, ls.Channel, ls.UtmTag, ls.IsDeleted, ls.Order);
 }

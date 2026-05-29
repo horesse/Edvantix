@@ -1,3 +1,4 @@
+using Edvantix.Chassis.Specification.Evaluators;
 using Edvantix.Organizational.Domain.AggregatesModel.LevelAggregate;
 
 namespace Edvantix.Organizational.Infrastructure.Repositories;
@@ -6,16 +7,15 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
 {
     public IUnitOfWork UnitOfWork => context;
 
+    private static SpecificationEvaluator Evaluator => SpecificationEvaluator.Instance;
+
     public async Task<Level?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default
-    ) =>
-        await context
-            .Levels.AsTracking()
-            .FirstOrDefaultAsync(l => l.Id == id && !l.IsDeleted, cancellationToken);
+    ) => await context.Levels.AsTracking().FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
 
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default) =>
-        await context.Levels.AnyAsync(l => l.Id == id && !l.IsDeleted, cancellationToken);
+        await context.Levels.AnyAsync(l => l.Id == id, cancellationToken);
 
     public async Task<bool> ExistsAsync(
         Guid id,
@@ -24,9 +24,7 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
         CancellationToken cancellationToken = default
     )
     {
-        var query = context.Levels.Where(l =>
-            l.Id == id && l.OrganizationId == organizationId && !l.IsDeleted
-        );
+        var query = context.Levels.Where(l => l.Id == id && l.OrganizationId == organizationId);
 
         if (requireActive)
             query = query.Where(l => l.IsActive);
@@ -43,7 +41,7 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
 
         return await context
             .Levels.AsTracking()
-            .Where(l => idList.Contains(l.Id) && !l.IsDeleted)
+            .Where(l => idList.Contains(l.Id))
             .ToListAsync(cancellationToken);
     }
 
@@ -53,19 +51,21 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
     public Task AddRange(List<Level> levels, CancellationToken cancellationToken = default) =>
         context.Levels.AddRangeAsync(levels, cancellationToken);
 
-    public async Task<IReadOnlyCollection<Level>> ListByOrganizationAsync(
-        Guid organizationId,
-        bool includeInactive = false,
+    public async Task<IReadOnlyList<Level>> ListAsync(
+        ISpecification<Level> specification,
         CancellationToken cancellationToken = default
-    )
-    {
-        var query = context.Levels.Where(l => l.OrganizationId == organizationId && !l.IsDeleted);
+    ) =>
+        await Evaluator
+            .GetQuery(context.Levels.AsQueryable(), specification)
+            .ToListAsync(cancellationToken);
 
-        if (!includeInactive)
-            query = query.Where(l => l.IsActive);
-
-        return await query.OrderBy(l => l.SortOrder).ToListAsync(cancellationToken);
-    }
+    public async Task<int> CountAsync(
+        ISpecification<Level> specification,
+        CancellationToken cancellationToken = default
+    ) =>
+        await Evaluator
+            .GetQuery(context.Levels.AsQueryable(), specification)
+            .CountAsync(cancellationToken);
 
     public async Task<bool> ExistsWithCodeAsync(
         Guid organizationId,
@@ -77,7 +77,7 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
         var normalizedCode = LevelCode.From(code).Value;
 
         // Загружаем коды в память — уровней в org мало, запрос лёгкий.
-        var query = context.Levels.Where(l => l.OrganizationId == organizationId && !l.IsDeleted);
+        var query = context.Levels.Where(l => l.OrganizationId == organizationId);
 
         if (excludeId.HasValue)
             query = query.Where(l => l.Id != excludeId.Value);
@@ -96,58 +96,12 @@ internal sealed class LevelRepository(OrganizationalDbContext context) : ILevelR
     {
         var trimmed = name.Trim();
         var query = context.Levels.Where(l =>
-            l.OrganizationId == organizationId && !l.IsDeleted && l.IsActive && l.Name == trimmed
+            l.OrganizationId == organizationId && l.IsActive && l.Name == trimmed
         );
 
         if (excludeId.HasValue)
             query = query.Where(l => l.Id != excludeId.Value);
 
         return await query.AnyAsync(cancellationToken);
-    }
-
-    public async Task<(IReadOnlyList<Level> Items, int Total)> ListForDirectoryAsync(
-        Guid organizationId,
-        bool includeInactive,
-        string? search,
-        int pageIndex,
-        int pageSize,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var query = context.Levels.Where(l => l.OrganizationId == organizationId && !l.IsDeleted);
-
-        if (!includeInactive)
-            query = query.Where(l => l.IsActive);
-
-        if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(l => l.Name.Contains(search.Trim()));
-
-        var total = await query.CountAsync(cancellationToken);
-        var offset = (pageIndex - 1) * pageSize;
-        var items = await query
-            .OrderBy(l => l.SortOrder)
-            .Skip(offset)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return ([.. items], total);
-    }
-
-    public async Task<(int Active, int Archived)> GetStatsAsync(
-        Guid organizationId,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var activeCount = await context.Levels.CountAsync(
-            l => l.OrganizationId == organizationId && !l.IsDeleted && l.IsActive,
-            cancellationToken
-        );
-
-        var archivedCount = await context.Levels.CountAsync(
-            l => l.OrganizationId == organizationId && !l.IsDeleted && !l.IsActive,
-            cancellationToken
-        );
-
-        return (activeCount, archivedCount);
     }
 }

@@ -11,9 +11,7 @@ public sealed class StudentTagUniqueNameSpecification : Specification<StudentTag
         Guid? excludeId = null
     )
     {
-        Query
-            .AsNoTracking()
-            .Where(t => t.OrganizationId == organizationId && !t.IsArchived && t.Name == name);
+        Query.AsNoTracking().Where(t => t.OrganizationId == organizationId && t.Name == name);
 
         if (excludeId.HasValue)
             Query.Where(t => t.Id != excludeId.Value);

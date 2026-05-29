@@ -1,3 +1,4 @@
+using Edvantix.Chassis.EF.Configurations;
 using Edvantix.Organizational.Domain.AggregatesModel.SubjectAggregate;
 using Edvantix.SharedKernel.Helpers;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,9 +9,7 @@ internal sealed class SubjectConfiguration : IEntityTypeConfiguration<Subject>
 {
     public void Configure(EntityTypeBuilder<Subject> builder)
     {
-        builder.HasKey(s => s.Id);
-
-        builder.Property(s => s.Id).HasDefaultValueSql(UniqueIdentifierHelper.NewUuidV7);
+        builder.ConfigureSoftDeletable();
 
         builder.Property(s => s.CreatedAt).HasDefaultValueSql(DateTimeHelper.SqlUtcNow);
 
@@ -34,20 +33,16 @@ internal sealed class SubjectConfiguration : IEntityTypeConfiguration<Subject>
 
         builder.Property(s => s.Order).IsRequired();
 
-        builder.Property(s => s.IsArchived).IsRequired();
-
-        // Уникальный код в рамках организации (только среди не архивных)
+        // Уникальный код в рамках организации (только среди не удалённых)
         builder
             .HasIndex(s => new { s.OrganizationId, s.Code })
             .IsUnique()
-            .HasFilter("is_archived = false");
+            .HasFilter("is_deleted = false");
 
-        // Уникальное имя в рамках организации (только среди не архивных)
+        // Уникальное имя в рамках организации (только среди не удалённых)
         builder
             .HasIndex(s => new { s.OrganizationId, s.Name })
             .IsUnique()
-            .HasFilter("is_archived = false");
-
-        builder.HasIndex(s => new { s.OrganizationId, s.IsArchived });
+            .HasFilter("is_deleted = false");
     }
 }

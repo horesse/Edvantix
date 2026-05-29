@@ -18,7 +18,7 @@ public sealed class RoomDtoMapper : Mapper<Room, RoomDto>
             source.Capacity,
             source.Floor,
             source.RoomType,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order,
             source.OrganizationId,
             source.CreatedAt,
@@ -44,7 +44,7 @@ public sealed class RoomListItemDtoMapper : Mapper<Room, RoomListItemDto>
             source.Capacity,
             source.Floor,
             source.RoomType,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order,
             Usage: []
         );

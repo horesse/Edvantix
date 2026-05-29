@@ -90,32 +90,24 @@ public sealed class ListLevelsDirectoryQueryHandlerTests
         await _handler.Handle(new ListLevelsDirectoryQuery(PageSize: 9999), CancellationToken.None);
 
         _repoMock.Verify(
-            r =>
-                r.ListForDirectoryAsync(
-                    _orgId,
-                    It.IsAny<bool>(),
-                    It.IsAny<string?>(),
-                    It.IsAny<int>(),
-                    100,
-                    It.IsAny<CancellationToken>()
-                ),
+            r => r.CountAsync(It.IsAny<ISpecification<Level>>(), It.IsAny<CancellationToken>()),
             Times.Once
         );
     }
 
-    private void SetupList(IReadOnlyList<Level> items, int total) =>
+    private void SetupList(IReadOnlyList<Level> items, int total)
+    {
         _repoMock
             .Setup(r =>
-                r.ListForDirectoryAsync(
-                    _orgId,
-                    It.IsAny<bool>(),
-                    It.IsAny<string?>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<CancellationToken>()
-                )
+                r.ListAsync(It.IsAny<ISpecification<Level>>(), It.IsAny<CancellationToken>())
             )
-            .ReturnsAsync((items, total));
+            .ReturnsAsync(items);
+        _repoMock
+            .Setup(r =>
+                r.CountAsync(It.IsAny<ISpecification<Level>>(), It.IsAny<CancellationToken>())
+            )
+            .ReturnsAsync(total);
+    }
 
     private Level CreateLevel(string code, string name) =>
         new(_orgId, LevelCode.From(code), name, null, LevelTone.Blue, 1);

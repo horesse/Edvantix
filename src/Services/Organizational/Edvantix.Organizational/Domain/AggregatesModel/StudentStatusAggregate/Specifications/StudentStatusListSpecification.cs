@@ -1,16 +1,19 @@
-﻿using Edvantix.Chassis.Specification.Extensions;
+using Edvantix.Chassis.Specification.Extensions;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate.Specifications;
 
 /// <summary>
 /// Спецификация постраничного списка статусов студентов организации.
-/// Поддерживает фильтрацию по архивности и поиск по имени/коду.
+/// <para>
+/// <paramref name="isArchive"/> = <see langword="false"/> (по умолчанию) — активные записи.
+/// <paramref name="isArchive"/> = <see langword="true"/> — только архивные (удалённые).
+/// </para>
 /// </summary>
 public sealed class StudentStatusListSpecification : Specification<StudentStatus>
 {
     public StudentStatusListSpecification(
         Guid organizationId,
-        bool includeArchived,
+        bool isArchive,
         string? search,
         int page,
         int pageSize
@@ -18,8 +21,8 @@ public sealed class StudentStatusListSpecification : Specification<StudentStatus
     {
         Query.AsNoTracking().Where(s => s.OrganizationId == organizationId);
 
-        if (!includeArchived)
-            Query.Where(s => !s.IsArchived);
+        if (isArchive)
+            Query.IgnoreQueryFilters().Where(s => s.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(search))
         {

@@ -13,7 +13,7 @@ public sealed class SubjectDomainToDtoMapper : Mapper<Subject, SubjectDto>
             source.Color,
             source.Description,
             source.Order,
-            source.IsArchived,
+            source.IsDeleted,
             source.CreatedAt,
             source.LastModifiedAt
         );
@@ -29,6 +29,6 @@ public sealed class SubjectDomainToListItemDtoMapper : Mapper<Subject, SubjectLi
             source.Code.Value,
             source.Color,
             source.Order,
-            source.IsArchived
+            source.IsDeleted
         );
 }

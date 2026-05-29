@@ -2,13 +2,17 @@ namespace Edvantix.Organizational.Domain.LessonTypeAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для постраничного списка типов занятий с фильтрацией и поиском.
+/// <para>
+/// <paramref name="isArchive"/> = <see langword="false"/> (по умолчанию) — активные записи.
+/// <paramref name="isArchive"/> = <see langword="true"/> — только архивные (удалённые).
+/// </para>
 /// </summary>
 public sealed class LessonTypeListSpec : Specification<LessonType>
 {
     /// <summary>Конструктор для постраничной выборки.</summary>
     public LessonTypeListSpec(
         Guid organizationId,
-        bool includeArchived,
+        bool isArchive,
         string? search,
         int offset,
         int limit
@@ -21,25 +25,25 @@ public sealed class LessonTypeListSpec : Specification<LessonType>
             .Skip(offset)
             .Take(limit);
 
-        ApplyFilters(Query, includeArchived, search);
+        ApplyFilters(Query, isArchive, search);
     }
 
     /// <summary>Конструктор для подсчёта (без пагинации).</summary>
-    public LessonTypeListSpec(Guid organizationId, bool includeArchived, string? search)
+    public LessonTypeListSpec(Guid organizationId, bool isArchive, string? search)
     {
         Query.Where(lt => lt.OrganizationId == organizationId);
 
-        ApplyFilters(Query, includeArchived, search);
+        ApplyFilters(Query, isArchive, search);
     }
 
     private static void ApplyFilters(
         ISpecificationBuilder<LessonType> query,
-        bool includeArchived,
+        bool isArchive,
         string? search
     )
     {
-        if (!includeArchived)
-            query.Where(lt => !lt.IsArchived);
+        if (isArchive)
+            query.IgnoreQueryFilters().Where(lt => lt.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(search))
             query.Where(lt => lt.Name.Contains(search));

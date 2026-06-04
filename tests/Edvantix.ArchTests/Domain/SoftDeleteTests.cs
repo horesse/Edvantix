@@ -27,6 +27,8 @@ public sealed class SoftDeleteTests : ArchUnitBaseTest
         Classes()
             .That()
             .ImplementInterface(typeof(ISoftDelete))
+            .And()
+            .AreNotAbstract()
             .Should()
             .BeSealed()
             .Because(

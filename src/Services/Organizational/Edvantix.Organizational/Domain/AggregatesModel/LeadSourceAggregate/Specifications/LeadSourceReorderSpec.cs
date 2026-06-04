@@ -5,9 +5,6 @@ public sealed class LeadSourceReorderSpec : Specification<LeadSource>
 {
     public LeadSourceReorderSpec(Guid organizationId)
     {
-        Query
-            .Where(ls => ls.OrganizationId == organizationId && !ls.IsArchived)
-            .OrderBy(ls => ls.Order)
-            .AsTracking();
+        Query.Where(ls => ls.OrganizationId == organizationId).OrderBy(ls => ls.Order).AsTracking();
     }
 }

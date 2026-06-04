@@ -107,7 +107,7 @@ public sealed class ReorderLevelDirectoryCommandHandlerTests
     private void SetupList(IReadOnlyCollection<Level> items) =>
         _repoMock
             .Setup(r =>
-                r.ListByOrganizationAsync(_orgId, It.IsAny<bool>(), It.IsAny<CancellationToken>())
+                r.ListAsync(It.IsAny<ISpecification<Level>>(), It.IsAny<CancellationToken>())
             )
-            .ReturnsAsync(items);
+            .ReturnsAsync(items.ToList());
 }

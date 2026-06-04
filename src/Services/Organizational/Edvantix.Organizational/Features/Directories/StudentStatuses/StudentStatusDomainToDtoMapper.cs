@@ -14,7 +14,7 @@ public sealed class StudentStatusDtoMapper : Mapper<StudentStatus, StudentStatus
             source.Code,
             source.Tone,
             source.IsSystem,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order,
             source.OrganizationId,
             source.CreatedAt,
@@ -35,7 +35,7 @@ public sealed class StudentStatusListItemDtoMapper : Mapper<StudentStatus, Stude
             source.Code,
             source.Tone,
             source.IsSystem,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order
         );
 }

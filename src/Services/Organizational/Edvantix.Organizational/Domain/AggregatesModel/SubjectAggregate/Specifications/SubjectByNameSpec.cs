@@ -12,7 +12,7 @@ public sealed class SubjectByNameSpec : Specification<Subject>
     {
         var trimmed = name.Trim();
 
-        Query.Where(s => s.OrganizationId == organizationId && !s.IsArchived && s.Name == trimmed);
+        Query.Where(s => s.OrganizationId == organizationId && s.Name == trimmed);
 
         if (excludeId.HasValue)
             Query.Where(s => s.Id != excludeId.Value);

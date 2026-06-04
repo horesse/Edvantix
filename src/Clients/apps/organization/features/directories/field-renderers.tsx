@@ -27,12 +27,14 @@ interface FieldRendererProps {
   field: DirectoryField;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: UseFormReturn<any>;
+  mode?: "create" | "edit";
 }
 
 /** Рендерит одно поле формы справочника по его дескриптору. */
 export function FieldRenderer({
   field: f,
   form,
+  mode,
 }: Readonly<FieldRendererProps>) {
   switch (f.kind) {
     case "text":
@@ -65,7 +67,9 @@ export function FieldRenderer({
         />
       );
 
-    case "code":
+    case "code": {
+      if (f.showOnlyInEdit && mode !== "edit") return null;
+      const isReadonly = f.readonlyInEdit && mode === "edit";
       return (
         <FormField
           control={form.control}
@@ -74,21 +78,35 @@ export function FieldRenderer({
             <FormItem>
               <FormLabel>
                 {f.label}
-                {f.hint && (
+                {f.hint && !isReadonly && (
                   <span className="ml-auto text-xs text-slate-400">
                     {f.hint}
+                  </span>
+                )}
+                {isReadonly && (
+                  <span className="ml-auto text-xs text-slate-400">
+                    не изменяется
                   </span>
                 )}
               </FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  className="font-mono tracking-widest uppercase"
+                  readOnly={isReadonly}
+                  className={cn(
+                    "font-mono tracking-widest uppercase",
+                    isReadonly && "cursor-default bg-slate-50 text-slate-500",
+                  )}
                   maxLength={f.maxLength ?? 8}
-                  onChange={(e) =>
-                    field.onChange(
-                      e.target.value.toUpperCase().slice(0, f.maxLength ?? 8),
-                    )
+                  onChange={
+                    isReadonly
+                      ? undefined
+                      : (e) =>
+                          field.onChange(
+                            e.target.value
+                              .toUpperCase()
+                              .slice(0, f.maxLength ?? 8),
+                          )
                   }
                   autoComplete="off"
                 />
@@ -98,6 +116,7 @@ export function FieldRenderer({
           )}
         />
       );
+    }
 
     case "textarea":
       return (
@@ -231,6 +250,78 @@ export function FieldRenderer({
           )}
         />
       );
+
+    case "statusToggle": {
+      if (f.showOnlyInEdit && mode !== "edit") return null;
+      return (
+        <FormField
+          control={form.control}
+          name={f.name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{f.label}</FormLabel>
+              <FormControl>
+                <div className="grid h-[38px] grid-cols-2 gap-1 rounded-lg bg-slate-100 p-1">
+                  {(
+                    [
+                      { value: false, label: "Активный" },
+                      { value: true, label: "Архив" },
+                    ] as const
+                  ).map((opt) => {
+                    const active = field.value === opt.value;
+                    return (
+                      <button
+                        key={String(opt.value)}
+                        type="button"
+                        onClick={() => field.onChange(opt.value)}
+                        className={cn(
+                          "rounded-md text-sm font-medium transition-all",
+                          active
+                            ? "bg-white text-slate-900 shadow-sm"
+                            : "text-slate-500 hover:text-slate-700",
+                        )}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
+    }
+
+    case "row": {
+      const visibleChildren = f.children.filter((child) => {
+        if (
+          "showOnlyInEdit" in child &&
+          child.showOnlyInEdit &&
+          mode !== "edit"
+        )
+          return false;
+        return true;
+      });
+      return (
+        <div
+          className={cn(
+            "grid gap-3",
+            visibleChildren.length > 1 ? "grid-cols-2" : "",
+          )}
+        >
+          {visibleChildren.map((child) => (
+            <FieldRenderer
+              key={child.name}
+              field={child}
+              form={form}
+              mode={mode}
+            />
+          ))}
+        </div>
+      );
+    }
 
     case "switch":
       return null;

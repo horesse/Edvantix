@@ -5,9 +5,6 @@ public sealed class LessonTypeReorderSpec : Specification<LessonType>
 {
     public LessonTypeReorderSpec(Guid organizationId)
     {
-        Query
-            .Where(lt => lt.OrganizationId == organizationId && !lt.IsArchived)
-            .OrderBy(lt => lt.Order)
-            .AsTracking();
+        Query.Where(lt => lt.OrganizationId == organizationId).OrderBy(lt => lt.Order).AsTracking();
     }
 }

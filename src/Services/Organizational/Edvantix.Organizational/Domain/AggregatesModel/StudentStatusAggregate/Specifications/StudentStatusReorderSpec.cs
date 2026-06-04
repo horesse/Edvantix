@@ -5,9 +5,6 @@ public sealed class StudentStatusReorderSpec : Specification<StudentStatus>
 {
     public StudentStatusReorderSpec(Guid organizationId)
     {
-        Query
-            .Where(s => s.OrganizationId == organizationId && !s.IsArchived)
-            .OrderBy(s => s.Order)
-            .AsTracking();
+        Query.Where(s => s.OrganizationId == organizationId).OrderBy(s => s.Order).AsTracking();
     }
 }

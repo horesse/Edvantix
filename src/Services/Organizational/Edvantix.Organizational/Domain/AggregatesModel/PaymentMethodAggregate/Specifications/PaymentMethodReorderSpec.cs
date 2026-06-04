@@ -5,9 +5,6 @@ public sealed class PaymentMethodReorderSpec : Specification<PaymentMethod>
 {
     public PaymentMethodReorderSpec(Guid organizationId)
     {
-        Query
-            .Where(pm => pm.OrganizationId == organizationId && !pm.IsArchived)
-            .OrderBy(pm => pm.Order)
-            .AsTracking();
+        Query.Where(pm => pm.OrganizationId == organizationId).OrderBy(pm => pm.Order).AsTracking();
     }
 }

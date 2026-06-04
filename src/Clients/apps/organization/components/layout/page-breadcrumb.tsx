@@ -105,8 +105,8 @@ export function PageBreadcrumb({
               </BreadcrumbItem>
             </>
           )}
-          {displayedItems.map((item) => (
-            <span key={item.href} className="contents">
+          {displayedItems.map((item, idx) => (
+            <span key={`${item.href}-${idx}`} className="contents">
               <BreadcrumbSeparator>
                 <ChevronRight />
               </BreadcrumbSeparator>

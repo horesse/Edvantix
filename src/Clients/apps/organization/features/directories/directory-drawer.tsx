@@ -36,6 +36,8 @@ interface DirectoryDrawerProps<
   onClose: () => void;
   onCreate: (orgId: string, request: unknown) => Promise<unknown>;
   onUpdate: (orgId: string, id: string, request: unknown) => Promise<unknown>;
+  onArchive?: (item: TItem) => void;
+  onRestore?: (item: TItem) => void;
 }
 
 /** Slide-over drawer для создания/редактирования элемента справочника. */
@@ -51,6 +53,8 @@ export function DirectoryDrawer<
   onClose,
   onCreate,
   onUpdate,
+  onArchive,
+  onRestore,
 }: Readonly<DirectoryDrawerProps<TItem, TForm>>) {
   const form = useForm<TForm>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -75,6 +79,9 @@ export function DirectoryDrawer<
         await onCreate(orgId, config.toCreate(values));
         toast.success(`${config.singular} создан`);
       } else if (item) {
+        const statusChange = config.toStatusChange?.(values, item);
+        if (statusChange === "archive") await onArchive?.(item);
+        else if (statusChange === "restore") await onRestore?.(item);
         await onUpdate(orgId, item.id, config.toUpdate(values, item));
         toast.success(`${config.singular} обновлён`);
       }
@@ -89,6 +96,9 @@ export function DirectoryDrawer<
       ? (config.usageCards?.(item) ?? (item.usage ? [...item.usage] : []))
       : [];
 
+  const formValues = form.watch();
+  const headerColor = config.getHeaderColor?.(formValues as TForm);
+
   const Icon = config.icon;
   const title =
     mode === "edit"
@@ -99,8 +109,22 @@ export function DirectoryDrawer<
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent className="flex w-[460px] flex-col gap-0 p-0 sm:max-w-[460px]">
         <SheetHeader className="flex-row items-center gap-3 border-b px-6 py-4">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-            <Icon className="size-5" />
+          <div
+            className="flex size-9 shrink-0 items-center justify-center rounded-xl"
+            style={
+              headerColor
+                ? { background: `${headerColor}1f` }
+                : { background: "rgb(238 242 255)" }
+            }
+          >
+            {headerColor ? (
+              <span
+                className="size-3 rounded-full"
+                style={{ background: headerColor }}
+              />
+            ) : (
+              <Icon className="size-5 text-indigo-600" />
+            )}
           </div>
           <div className="min-w-0 flex-1">
             <SheetTitle className="text-base">{title}</SheetTitle>
@@ -125,7 +149,7 @@ export function DirectoryDrawer<
           >
             <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
               {config.fields.map((f) => (
-                <FieldRenderer key={f.name} field={f} form={form} />
+                <FieldRenderer key={f.name} field={f} form={form} mode={mode} />
               ))}
 
               {usageCards.length > 0 && (
@@ -152,13 +176,15 @@ export function DirectoryDrawer<
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t px-6 py-4">
-              <Button type="button" variant="outline" onClick={onClose}>
-                Отмена
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {mode === "edit" ? "Сохранить" : "Создать"}
-              </Button>
+            <div className="flex items-center gap-2 border-t px-6 py-4">
+              <div className="ml-auto flex items-center gap-2">
+                <Button type="button" variant="outline" onClick={onClose}>
+                  Отмена
+                </Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {mode === "edit" ? "Сохранить" : "Создать"}
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

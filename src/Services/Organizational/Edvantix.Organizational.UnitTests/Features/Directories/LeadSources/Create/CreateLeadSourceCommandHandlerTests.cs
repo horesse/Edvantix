@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Create;
+namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Create;
 
 public sealed class CreateLeadSourceCommandHandlerTests
 {
@@ -65,7 +65,7 @@ public sealed class CreateLeadSourceCommandHandlerTests
         capturedSource.Name.ShouldBe("Флаер");
         capturedSource.Channel.ShouldBe(LeadChannel.Offline);
         capturedSource.UtmTag.ShouldBeNull();
-        capturedSource.IsArchived.ShouldBeFalse();
+        capturedSource.IsDeleted.ShouldBeFalse();
     }
 
     private static LeadSourceDto CreateDto() =>

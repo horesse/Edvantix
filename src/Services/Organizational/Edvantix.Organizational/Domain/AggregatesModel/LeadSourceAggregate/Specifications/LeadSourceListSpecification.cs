@@ -1,16 +1,21 @@
-﻿using Edvantix.Chassis.Specification.Extensions;
+using Edvantix.Chassis.Specification.Extensions;
 
 namespace Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate.Specifications;
 
 /// <summary>
 /// Спецификация постраничного списка источников привлечения организации.
-/// Поддерживает фильтрацию по архивности и поиск по названию.
+/// <para>
+/// <paramref name="isArchive"/> = <see langword="false"/> (по умолчанию) — активные записи
+/// (глобальный query-фильтр по <c>IsDeleted</c> применяется автоматически).
+/// <paramref name="isArchive"/> = <see langword="true"/> — только архивные (удалённые) записи
+/// (query-фильтр игнорируется, дополнительно фильтруется по <c>IsDeleted = true</c>).
+/// </para>
 /// </summary>
 public sealed class LeadSourceListSpecification : Specification<LeadSource>
 {
     public LeadSourceListSpecification(
         Guid organizationId,
-        bool includeArchived,
+        bool isArchive,
         string? search,
         int page,
         int pageSize
@@ -18,14 +23,11 @@ public sealed class LeadSourceListSpecification : Specification<LeadSource>
     {
         Query.AsNoTracking().Where(ls => ls.OrganizationId == organizationId);
 
-        if (!includeArchived)
-            Query.Where(ls => !ls.IsArchived);
+        if (isArchive)
+            Query.IgnoreQueryFilters().Where(ls => ls.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(search))
-        {
-            var term = search.Trim().ToLower();
-            Query.Where(ls => ls.Name.ToLower().Contains(term));
-        }
+            Query.Where(ls => ls.Name.ToLower().Contains(search.Trim().ToLower()));
 
         Query.OrderBy(ls => ls.Order).ThenBy(ls => ls.Name);
 

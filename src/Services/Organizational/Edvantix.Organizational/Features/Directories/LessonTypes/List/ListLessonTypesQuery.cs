@@ -11,7 +11,7 @@ namespace Edvantix.Organizational.Features.Directories.LessonTypes.List;
 /// <param name="PageIndex">Номер страницы (начинается с 1).</param>
 /// <param name="PageSize">Размер страницы.</param>
 /// <param name="Search">Текстовый поиск по имени.</param>
-/// <param name="IncludeArchived">Включить архивные записи.</param>
+/// <param name="IsArchive">Показать только архивные записи.</param>
 [RequirePermission(LessonTypePermissions.View)]
 public sealed record ListLessonTypesQuery(
     [property: Description("Номер страницы")]
@@ -21,7 +21,7 @@ public sealed record ListLessonTypesQuery(
     [property: DefaultValue(Pagination.DefaultPageSize)]
         int PageSize = Pagination.DefaultPageSize,
     [property: Description("Текстовый поиск по имени")] string? Search = null,
-    [property: Description("Включить архивные записи")] bool IncludeArchived = false
+    [property: Description("Показать только архивные записи")] bool IsArchive = false
 ) : IQuery<PagedResult<LessonTypeListItemDto>>;
 
 internal sealed class ListLessonTypesQueryHandler(
@@ -41,12 +41,12 @@ internal sealed class ListLessonTypesQueryHandler(
 
         var listSpec = new LessonTypeListSpec(
             orgId,
-            request.IncludeArchived,
+            request.IsArchive,
             request.Search,
             offset,
             pageSize
         );
-        var countSpec = new LessonTypeListSpec(orgId, request.IncludeArchived, request.Search);
+        var countSpec = new LessonTypeListSpec(orgId, request.IsArchive, request.Search);
 
         var items = await repository.ListAsync(listSpec, cancellationToken);
         var totalCount = await repository.CountAsync(countSpec, cancellationToken);

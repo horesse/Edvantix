@@ -8,7 +8,7 @@ internal sealed class PaymentMethodConfiguration : IEntityTypeConfiguration<Paym
 {
     public void Configure(EntityTypeBuilder<PaymentMethod> builder)
     {
-        builder.UseDefaultConfiguration();
+        builder.ConfigureSoftDeletable();
 
         builder.ToTable("payment_methods");
 
@@ -17,22 +17,21 @@ internal sealed class PaymentMethodConfiguration : IEntityTypeConfiguration<Paym
         builder.Property(pm => pm.Code).IsRequired().HasMaxLength(20);
         builder.Property(pm => pm.IsCashless).IsRequired();
         builder.Property(pm => pm.RequiresContract).IsRequired();
-        builder.Property(pm => pm.IsArchived).IsRequired();
         builder.Property(pm => pm.Order).IsRequired();
         builder.Property(pm => pm.CreatedBy);
         builder.Property(pm => pm.LastModifiedBy);
 
-        // Уникальность имени среди не архивных записей в рамках организации
+        // Уникальность имени среди не удалённых записей в рамках организации
         builder
             .HasIndex(pm => new { pm.OrganizationId, pm.Name })
-            .HasFilter("is_archived = false")
+            .HasFilter("is_deleted = false")
             .IsUnique()
             .HasDatabaseName("ix_payment_methods_org_name_active");
 
-        // Уникальность кода среди не архивных записей в рамках организации
+        // Уникальность кода среди не удалённых записей в рамках организации
         builder
             .HasIndex(pm => new { pm.OrganizationId, pm.Code })
-            .HasFilter("is_archived = false")
+            .HasFilter("is_deleted = false")
             .IsUnique()
             .HasDatabaseName("ix_payment_methods_org_code_active");
 

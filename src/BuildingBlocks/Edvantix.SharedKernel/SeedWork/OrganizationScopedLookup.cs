@@ -12,7 +12,11 @@ namespace Edvantix.SharedKernel.SeedWork;
 ///   <item>Архивирование/восстановление — идемпотентны (повторный вызов — no-op).</item>
 /// </list>
 /// </summary>
-public abstract class OrganizationScopedLookup : AuditableEntity<Guid>, IAggregateRoot, ITenanted
+public abstract class OrganizationScopedLookup
+    : AuditableEntity<Guid>,
+        IAggregateRoot,
+        ITenanted,
+        ISoftDelete
 {
     /// <summary>Минимальная длина имени после <c>Trim</c>.</summary>
     public const int MinNameLength = 1;
@@ -46,7 +50,7 @@ public abstract class OrganizationScopedLookup : AuditableEntity<Guid>, IAggrega
         OrganizationId = organizationId;
         Name = name.Trim();
         Order = order;
-        IsArchived = false;
+        IsDeleted = false;
         CreatedBy = createdBy;
     }
 
@@ -56,8 +60,8 @@ public abstract class OrganizationScopedLookup : AuditableEntity<Guid>, IAggrega
     /// <summary>Отображаемое имя записи. Длина 1..120 после <c>Trim</c>.</summary>
     public string Name { get; protected set; } = string.Empty;
 
-    /// <summary>Признак того, что запись архивирована (логически удалена для UI).</summary>
-    public bool IsArchived { get; protected set; }
+    /// <summary>Признак мягкого удаления (архивирования). Скрыт глобальным EF-фильтром.</summary>
+    public bool IsDeleted { get; set; }
 
     /// <summary>Порядок сортировки в UI. Меньше значение — выше в списке.</summary>
     public int Order { get; protected set; }
@@ -68,29 +72,34 @@ public abstract class OrganizationScopedLookup : AuditableEntity<Guid>, IAggrega
     /// <summary>Идентификатор пользователя, последним изменившего запись.</summary>
     public Guid? LastModifiedBy { get; protected set; }
 
+    /// <summary>Выполняет мягкое удаление — реализация <see cref="ISoftDelete"/>.</summary>
+    public void Delete() => IsDeleted = true;
+
     /// <summary>
-    /// Архивирует запись справочника. Повторный вызов — no-op.
+    /// Архивирует запись справочника (устанавливает <see cref="IsDeleted"/> = <see langword="true"/>).
+    /// Повторный вызов — no-op.
     /// </summary>
     /// <param name="by">Идентификатор пользователя, выполняющего операцию.</param>
     public void Archive(Guid by)
     {
-        if (IsArchived)
+        if (IsDeleted)
             return;
 
-        IsArchived = true;
+        IsDeleted = true;
         Touch(by);
     }
 
     /// <summary>
-    /// Восстанавливает архивную запись. Повторный вызов на активной записи — no-op.
+    /// Восстанавливает архивную запись (<see cref="IsDeleted"/> = <see langword="false"/>).
+    /// Повторный вызов на активной записи — no-op.
     /// </summary>
     /// <param name="by">Идентификатор пользователя, выполняющего операцию.</param>
     public void Restore(Guid by)
     {
-        if (!IsArchived)
+        if (!IsDeleted)
             return;
 
-        IsArchived = false;
+        IsDeleted = false;
         Touch(by);
     }
 

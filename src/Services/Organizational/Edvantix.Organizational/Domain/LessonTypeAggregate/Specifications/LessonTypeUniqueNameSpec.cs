@@ -2,7 +2,7 @@ namespace Edvantix.Organizational.Domain.LessonTypeAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для проверки уникальности имени типа занятия в рамках организации
-/// среди не архивных записей.
+/// среди активных (не удалённых) записей.
 /// </summary>
 public sealed class LessonTypeUniqueNameSpec : Specification<LessonType>
 {
@@ -11,7 +11,7 @@ public sealed class LessonTypeUniqueNameSpec : Specification<LessonType>
     /// <param name="excludeId">Исключаемый идентификатор (для сценария update).</param>
     public LessonTypeUniqueNameSpec(Guid organizationId, string name, Guid? excludeId = null)
     {
-        Query.Where(lt => lt.OrganizationId == organizationId && !lt.IsArchived && lt.Name == name);
+        Query.Where(lt => lt.OrganizationId == organizationId && lt.Name == name);
 
         if (excludeId.HasValue)
             Query.Where(lt => lt.Id != excludeId.Value);

@@ -33,6 +33,8 @@ export type DirectoryField =
       label: string;
       maxLength?: number;
       hint?: string;
+      readonlyInEdit?: boolean;
+      showOnlyInEdit?: boolean;
     }
   | {
       kind: "textarea";
@@ -57,7 +59,20 @@ export type DirectoryField =
       max?: number;
       suffix?: string;
     }
-  | { kind: "switch"; name: string; label: string; hint?: string };
+  | { kind: "switch"; name: string; label: string; hint?: string }
+  | {
+      kind: "statusToggle";
+      name: string;
+      label: string;
+      /** Если true — поле показывается только в режиме редактирования. */
+      showOnlyInEdit?: boolean;
+    }
+  | {
+      /** Обёртка — рендерит children в 2-колоночной сетке. */
+      kind: "row";
+      name: string;
+      children: DirectoryField[];
+    };
 
 /** Полный конфиг справочника: колонки, поля формы, маппинги запросов. */
 export type DirectoryConfig<
@@ -95,4 +110,14 @@ export type DirectoryConfig<
   fromItem(item: TItem): TForm;
   /** Формирует usage-карточки; по умолчанию берёт item.usage. */
   usageCards?: (item: TItem) => DirectoryUsageDto[];
+  /**
+   * Возвращает HEX-цвет для динамической точки в заголовке drawer'а.
+   * Вызывается реактивно при каждом изменении формы.
+   */
+  getHeaderColor?: (form: TForm) => string | undefined;
+  /**
+   * Определяет, нужно ли изменить статус элемента при сохранении формы.
+   * Возвращает 'archive', 'restore' или null.
+   */
+  toStatusChange?: (form: TForm, item: TItem) => "archive" | "restore" | null;
 };

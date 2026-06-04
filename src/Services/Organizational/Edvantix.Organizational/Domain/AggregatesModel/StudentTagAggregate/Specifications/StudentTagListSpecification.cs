@@ -4,13 +4,16 @@ namespace Edvantix.Organizational.Domain.AggregatesModel.StudentTagAggregate.Spe
 
 /// <summary>
 /// Спецификация постраничного списка тегов студентов организации.
-/// Поддерживает фильтрацию по архивности и поиск по названию.
+/// <para>
+/// <paramref name="isArchive"/> = <see langword="false"/> (по умолчанию) — активные записи.
+/// <paramref name="isArchive"/> = <see langword="true"/> — только архивные (удалённые).
+/// </para>
 /// </summary>
 public sealed class StudentTagListSpecification : Specification<StudentTag>
 {
     public StudentTagListSpecification(
         Guid organizationId,
-        bool includeArchived,
+        bool isArchive,
         string? search,
         int page,
         int pageSize
@@ -18,14 +21,11 @@ public sealed class StudentTagListSpecification : Specification<StudentTag>
     {
         Query.AsNoTracking().Where(t => t.OrganizationId == organizationId);
 
-        if (!includeArchived)
-            Query.Where(t => !t.IsArchived);
+        if (isArchive)
+            Query.IgnoreQueryFilters().Where(t => t.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(search))
-        {
-            var term = search.Trim().ToLower();
-            Query.Where(t => t.Name.ToLower().Contains(term));
-        }
+            Query.Where(t => t.Name.ToLower().Contains(search.Trim().ToLower()));
 
         Query.OrderBy(t => t.Order).ThenBy(t => t.Name);
 

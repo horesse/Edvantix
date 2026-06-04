@@ -1,4 +1,4 @@
-﻿using Edvantix.SharedKernel.SeedWork;
+using Edvantix.SharedKernel.SeedWork;
 
 namespace Edvantix.Organizational.UnitTests.Domain;
 
@@ -27,7 +27,7 @@ public sealed class OrganizationScopedLookupTests
         lookup.OrganizationId.ShouldBe(OrgId);
         lookup.Name.ShouldBe("Уровень A1");
         lookup.Order.ShouldBe(5);
-        lookup.IsArchived.ShouldBeFalse();
+        lookup.IsDeleted.ShouldBeFalse();
         lookup.CreatedBy.ShouldBe(UserId);
         lookup.LastModifiedAt.ShouldBeNull();
         lookup.LastModifiedBy.ShouldBeNull();
@@ -82,7 +82,7 @@ public sealed class OrganizationScopedLookupTests
 
         lookup.Archive(UserId);
 
-        lookup.IsArchived.ShouldBeTrue();
+        lookup.IsDeleted.ShouldBeTrue();
         lookup.LastModifiedAt.ShouldNotBeNull();
         lookup.LastModifiedBy.ShouldBe(UserId);
     }
@@ -96,7 +96,7 @@ public sealed class OrganizationScopedLookupTests
 
         lookup.Archive(Guid.CreateVersion7());
 
-        lookup.IsArchived.ShouldBeTrue();
+        lookup.IsDeleted.ShouldBeTrue();
         lookup.LastModifiedAt.ShouldBe(firstTouchAt);
         lookup.LastModifiedBy.ShouldBe(UserId);
     }
@@ -110,7 +110,7 @@ public sealed class OrganizationScopedLookupTests
         var restoredBy = Guid.CreateVersion7();
         lookup.Restore(restoredBy);
 
-        lookup.IsArchived.ShouldBeFalse();
+        lookup.IsDeleted.ShouldBeFalse();
         lookup.LastModifiedBy.ShouldBe(restoredBy);
     }
 
@@ -121,7 +121,7 @@ public sealed class OrganizationScopedLookupTests
 
         lookup.Restore(UserId);
 
-        lookup.IsArchived.ShouldBeFalse();
+        lookup.IsDeleted.ShouldBeFalse();
         lookup.LastModifiedAt.ShouldBeNull();
         lookup.LastModifiedBy.ShouldBeNull();
     }
@@ -201,7 +201,7 @@ public sealed class OrganizationScopedLookupTests
 
         lookup.Archive(Guid.Empty);
 
-        lookup.IsArchived.ShouldBeTrue();
+        lookup.IsDeleted.ShouldBeTrue();
         lookup.LastModifiedBy.ShouldBeNull();
         lookup.LastModifiedAt.ShouldNotBeNull();
     }

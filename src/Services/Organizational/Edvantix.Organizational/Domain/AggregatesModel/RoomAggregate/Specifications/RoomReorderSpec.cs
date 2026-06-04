@@ -5,9 +5,6 @@ public sealed class RoomReorderSpec : Specification<Room>
 {
     public RoomReorderSpec(Guid organizationId)
     {
-        Query
-            .Where(r => r.OrganizationId == organizationId && !r.IsArchived)
-            .OrderBy(r => r.Order)
-            .AsTracking();
+        Query.Where(r => r.OrganizationId == organizationId).OrderBy(r => r.Order).AsTracking();
     }
 }

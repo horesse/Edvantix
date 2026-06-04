@@ -11,8 +11,10 @@ namespace Edvantix.Organizational.Features.Directories.Levels.Update;
 public sealed record UpdateLevelDirectoryCommand(
     Guid Id,
     string Name,
+    string Code,
     short Order,
-    string? Description
+    string? Description,
+    LevelTone Tone = LevelTone.Indigo
 ) : ICommand<LevelDirectoryDto>;
 
 internal sealed class UpdateLevelDirectoryCommandHandler(
@@ -30,8 +32,11 @@ internal sealed class UpdateLevelDirectoryCommandHandler(
         if (level is null || level.OrganizationId != tenantContext.OrganizationId)
             throw NotFoundException.For<Level>(command.Id);
 
-        // Tone preserves its existing value; Code is immutable.
-        level.Update(command.Name, command.Description, level.Tone, command.Order);
+        level.Update(command.Name, command.Description, command.Tone, command.Order);
+
+        var newCode = LevelCode.From(command.Code);
+        if (newCode.Value != level.Code.Value)
+            level.ChangeCode(newCode);
 
         await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

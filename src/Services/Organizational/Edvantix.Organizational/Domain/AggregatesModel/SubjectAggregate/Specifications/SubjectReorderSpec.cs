@@ -5,9 +5,6 @@ public sealed class SubjectReorderSpec : Specification<Subject>
 {
     public SubjectReorderSpec(Guid organizationId)
     {
-        Query
-            .Where(s => s.OrganizationId == organizationId && !s.IsArchived)
-            .OrderBy(s => s.Order)
-            .AsTracking();
+        Query.Where(s => s.OrganizationId == organizationId).OrderBy(s => s.Order).AsTracking();
     }
 }

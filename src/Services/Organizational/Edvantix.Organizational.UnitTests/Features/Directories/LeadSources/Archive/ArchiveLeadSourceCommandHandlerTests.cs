@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Archive;
+namespace Edvantix.Organizational.UnitTests.Features.Directories.LeadSources.Archive;
 
 public sealed class ArchiveLeadSourceCommandHandlerTests
 {
@@ -31,7 +31,7 @@ public sealed class ArchiveLeadSourceCommandHandlerTests
 
         await _handler.Handle(new ArchiveLeadSourceCommand(source.Id), CancellationToken.None);
 
-        source.IsArchived.ShouldBeTrue();
+        source.IsDeleted.ShouldBeTrue();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -49,7 +49,7 @@ public sealed class ArchiveLeadSourceCommandHandlerTests
 
         await _handler.Handle(new ArchiveLeadSourceCommand(source.Id), CancellationToken.None);
 
-        source.IsArchived.ShouldBeTrue();
+        source.IsDeleted.ShouldBeTrue();
     }
 
     [Test]

@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.RoomAggregate;
 
 namespace Edvantix.Organizational.UnitTests.Domain;
 
@@ -19,7 +19,7 @@ public sealed class RoomAggregateTests
         room.Capacity.ShouldBe(30);
         room.Floor.ShouldBe("2");
         room.RoomType.ShouldBe(RoomType.Classroom);
-        room.IsArchived.ShouldBeFalse();
+        room.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -122,7 +122,7 @@ public sealed class RoomAggregateTests
 
         room.Archive(by);
 
-        room.IsArchived.ShouldBeTrue();
+        room.IsDeleted.ShouldBeTrue();
     }
 
     [Test]
@@ -135,7 +135,7 @@ public sealed class RoomAggregateTests
 
         room.Archive(by);
 
-        room.IsArchived.ShouldBeTrue();
+        room.IsDeleted.ShouldBeTrue();
         room.LastModifiedAt.ShouldBe(modifiedAt);
     }
 
@@ -148,7 +148,7 @@ public sealed class RoomAggregateTests
 
         room.Restore(by);
 
-        room.IsArchived.ShouldBeFalse();
+        room.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -160,7 +160,7 @@ public sealed class RoomAggregateTests
 
         room.Restore(by);
 
-        room.IsArchived.ShouldBeFalse();
+        room.IsDeleted.ShouldBeFalse();
         room.LastModifiedAt.ShouldBe(modifiedAt);
     }
 

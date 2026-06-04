@@ -1,4 +1,4 @@
-﻿namespace Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate.Specifications;
+namespace Edvantix.Organizational.Domain.AggregatesModel.LeadSourceAggregate.Specifications;
 
 /// <summary>
 /// Спецификация для проверки уникальности названия источника привлечения
@@ -12,9 +12,7 @@ public sealed class LeadSourceUniqueNameSpecification : Specification<LeadSource
         Guid? excludeId = null
     )
     {
-        Query
-            .AsNoTracking()
-            .Where(ls => ls.OrganizationId == organizationId && !ls.IsArchived && ls.Name == name);
+        Query.AsNoTracking().Where(ls => ls.OrganizationId == organizationId && ls.Name == name);
 
         if (excludeId.HasValue)
             Query.Where(ls => ls.Id != excludeId.Value);

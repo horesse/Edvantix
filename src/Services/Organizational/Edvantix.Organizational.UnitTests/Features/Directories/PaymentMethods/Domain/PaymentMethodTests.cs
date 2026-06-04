@@ -18,7 +18,7 @@ public sealed class PaymentMethodTests
         pm.IsCashless.ShouldBeTrue();
         pm.RequiresContract.ShouldBeFalse();
         pm.Order.ShouldBe(1);
-        pm.IsArchived.ShouldBeFalse();
+        pm.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -120,7 +120,7 @@ public sealed class PaymentMethodTests
 
         pm.Archive(UserId);
 
-        pm.IsArchived.ShouldBeTrue();
+        pm.IsDeleted.ShouldBeTrue();
     }
 
     [Test]
@@ -131,7 +131,7 @@ public sealed class PaymentMethodTests
 
         pm.Archive(UserId);
 
-        pm.IsArchived.ShouldBeTrue();
+        pm.IsDeleted.ShouldBeTrue();
     }
 
     [Test]
@@ -142,7 +142,7 @@ public sealed class PaymentMethodTests
 
         pm.Restore(UserId);
 
-        pm.IsArchived.ShouldBeFalse();
+        pm.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -152,6 +152,6 @@ public sealed class PaymentMethodTests
 
         pm.Restore(UserId);
 
-        pm.IsArchived.ShouldBeFalse();
+        pm.IsDeleted.ShouldBeFalse();
     }
 }

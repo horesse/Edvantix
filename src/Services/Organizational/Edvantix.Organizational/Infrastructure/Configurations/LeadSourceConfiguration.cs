@@ -8,7 +8,7 @@ internal sealed class LeadSourceConfiguration : IEntityTypeConfiguration<LeadSou
 {
     public void Configure(EntityTypeBuilder<LeadSource> builder)
     {
-        builder.UseDefaultConfiguration();
+        builder.ConfigureSoftDeletable();
 
         builder.ToTable("lead_sources");
 
@@ -16,15 +16,14 @@ internal sealed class LeadSourceConfiguration : IEntityTypeConfiguration<LeadSou
         builder.Property(ls => ls.Name).IsRequired().HasMaxLength(120);
         builder.Property(ls => ls.Channel).IsRequired().HasConversion<string>();
         builder.Property(ls => ls.UtmTag).HasMaxLength(60);
-        builder.Property(ls => ls.IsArchived).IsRequired();
         builder.Property(ls => ls.Order).IsRequired();
         builder.Property(ls => ls.CreatedBy);
         builder.Property(ls => ls.LastModifiedBy);
 
-        // Уникальность имени среди не архивных записей в рамках организации
+        // Уникальность имени среди не удалённых (архивных) записей в рамках организации
         builder
             .HasIndex(ls => new { ls.OrganizationId, ls.Name })
-            .HasFilter("is_archived = false")
+            .HasFilter("is_deleted = false")
             .IsUnique()
             .HasDatabaseName("ix_lead_sources_org_name_active");
 

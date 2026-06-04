@@ -12,7 +12,7 @@ public sealed class StudentTagDtoMapper : Mapper<StudentTag, StudentTagDto>
             source.Id,
             source.Name,
             source.Color,
-            source.IsArchived,
+            source.IsDeleted,
             source.Order,
             source.OrganizationId,
             source.CreatedAt,
@@ -27,5 +27,5 @@ public sealed class StudentTagListItemDtoMapper : Mapper<StudentTag, StudentTagL
 {
     /// <inheritdoc/>
     public override StudentTagListItemDto Map(StudentTag source) =>
-        new(source.Id, source.Name, source.Color, source.IsArchived, source.Order);
+        new(source.Id, source.Name, source.Color, source.IsDeleted, source.Order);
 }

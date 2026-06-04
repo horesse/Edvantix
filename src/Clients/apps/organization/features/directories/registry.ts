@@ -9,7 +9,8 @@ export const directoryRegistry: Record<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DirectoryConfig<DirectoryItemBase, any>
 > = {
-  levels: levelsConfig,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  levels: levelsConfig as DirectoryConfig<DirectoryItemBase, any>,
 };
 
 /** Проверяет, реализован ли справочник с данным кодом. */

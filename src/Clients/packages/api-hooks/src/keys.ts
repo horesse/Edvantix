@@ -38,6 +38,8 @@ export const organizationKeys = {
     [...organizationKeys.all, "settings", "directories", orgId] as const,
   rolesSummary: (orgId: string) =>
     [...organizationKeys.all, "roles", orgId, "summary"] as const,
+  directoryList: (orgId: string, code: string) =>
+    [...organizationKeys.all, "directories", orgId, code] as const,
   directory: (orgId: string, code: string, query?: unknown) =>
     [...organizationKeys.all, "directories", orgId, code, query] as const,
   directoryItem: (orgId: string, code: string, id: string) =>

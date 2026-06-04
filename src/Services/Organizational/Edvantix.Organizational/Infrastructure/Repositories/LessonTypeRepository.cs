@@ -50,13 +50,15 @@ internal sealed class LessonTypeRepository(OrganizationalDbContext context) : IL
         CancellationToken cancellationToken = default
     )
     {
+        // IgnoreQueryFilters нужен, чтобы включить удалённые записи в подсчёт архива.
         var data = await context
-            .LessonTypes.Where(lt => lt.OrganizationId == organizationId)
+            .LessonTypes.IgnoreQueryFilters()
+            .Where(lt => lt.OrganizationId == organizationId)
             .GroupBy(_ => 1)
             .Select(g => new
             {
-                ActiveCount = g.Count(lt => !lt.IsArchived),
-                ArchivedCount = g.Count(lt => lt.IsArchived),
+                ActiveCount = g.Count(lt => !lt.IsDeleted),
+                ArchivedCount = g.Count(lt => lt.IsDeleted),
                 LastModifiedAt = g.Max(lt => lt.LastModifiedAt),
             })
             .FirstOrDefaultAsync(cancellationToken);

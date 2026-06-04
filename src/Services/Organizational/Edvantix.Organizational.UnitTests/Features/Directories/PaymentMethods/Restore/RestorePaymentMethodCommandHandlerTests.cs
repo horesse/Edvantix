@@ -33,7 +33,7 @@ public sealed class RestorePaymentMethodCommandHandlerTests
 
         await _handler.Handle(new RestorePaymentMethodCommand(pm.Id), CancellationToken.None);
 
-        pm.IsArchived.ShouldBeFalse();
+        pm.IsDeleted.ShouldBeFalse();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -48,7 +48,7 @@ public sealed class RestorePaymentMethodCommandHandlerTests
 
         await _handler.Handle(new RestorePaymentMethodCommand(pm.Id), CancellationToken.None);
 
-        pm.IsArchived.ShouldBeFalse();
+        pm.IsDeleted.ShouldBeFalse();
     }
 
     [Test]

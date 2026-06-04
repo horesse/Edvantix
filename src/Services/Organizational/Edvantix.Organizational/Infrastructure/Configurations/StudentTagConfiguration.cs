@@ -8,22 +8,21 @@ internal sealed class StudentTagConfiguration : IEntityTypeConfiguration<Student
 {
     public void Configure(EntityTypeBuilder<StudentTag> builder)
     {
-        builder.UseDefaultConfiguration();
+        builder.ConfigureSoftDeletable();
 
         builder.ToTable("student_tags");
 
         builder.Property(t => t.OrganizationId).IsRequired();
         builder.Property(t => t.Name).IsRequired().HasMaxLength(40);
         builder.Property(t => t.Color).IsRequired().HasMaxLength(7);
-        builder.Property(t => t.IsArchived).IsRequired();
         builder.Property(t => t.Order).IsRequired();
         builder.Property(t => t.CreatedBy);
         builder.Property(t => t.LastModifiedBy);
 
-        // Уникальность имени среди не архивных записей в рамках организации
+        // Уникальность имени среди не удалённых записей в рамках организации
         builder
             .HasIndex(t => new { t.OrganizationId, t.Name })
-            .HasFilter("is_archived = false")
+            .HasFilter("is_deleted = false")
             .IsUnique()
             .HasDatabaseName("ix_student_tags_org_name_active");
 

@@ -17,7 +17,7 @@ public sealed class StudentTagTests
         tag.Color.ShouldBe("#FF5733");
         tag.Order.ShouldBe(1);
         tag.CreatedBy.ShouldBe(UserId);
-        tag.IsArchived.ShouldBeFalse();
+        tag.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -130,7 +130,7 @@ public sealed class StudentTagTests
 
         tag.Archive(UserId);
 
-        tag.IsArchived.ShouldBeTrue();
+        tag.IsDeleted.ShouldBeTrue();
     }
 
     [Test]
@@ -142,7 +142,7 @@ public sealed class StudentTagTests
 
         tag.Archive(UserId);
 
-        tag.IsArchived.ShouldBeTrue();
+        tag.IsDeleted.ShouldBeTrue();
         tag.LastModifiedAt.ShouldBe(modifiedAt);
     }
 
@@ -154,7 +154,7 @@ public sealed class StudentTagTests
 
         tag.Restore(UserId);
 
-        tag.IsArchived.ShouldBeFalse();
+        tag.IsDeleted.ShouldBeFalse();
     }
 
     [Test]
@@ -165,7 +165,7 @@ public sealed class StudentTagTests
 
         tag.Restore(UserId);
 
-        tag.IsArchived.ShouldBeFalse();
+        tag.IsDeleted.ShouldBeFalse();
         tag.LastModifiedAt.ShouldBe(modifiedAt);
     }
 }

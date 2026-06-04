@@ -9,7 +9,7 @@ public sealed class LevelByOrganizationSpec : Specification<Level>
     /// <param name="includeInactive">Включать ли деактивированные уровни.</param>
     public LevelByOrganizationSpec(Guid organizationId, bool includeInactive = false)
     {
-        Query.Where(l => l.OrganizationId == organizationId && !l.IsDeleted);
+        Query.Where(l => l.OrganizationId == organizationId);
 
         if (!includeInactive)
             Query.Where(l => l.IsActive);

@@ -1,4 +1,4 @@
-﻿using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
+using Edvantix.Organizational.Domain.AggregatesModel.StudentStatusAggregate;
 using Edvantix.Organizational.Features.Directories.StudentStatuses.Archive;
 
 namespace Edvantix.Organizational.UnitTests.Features.Directories.StudentStatuses.Archive;
@@ -33,7 +33,7 @@ public sealed class ArchiveStudentStatusCommandHandlerTests
 
         await _handler.Handle(new ArchiveStudentStatusCommand(status.Id), CancellationToken.None);
 
-        status.IsArchived.ShouldBeTrue();
+        status.IsDeleted.ShouldBeTrue();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once
@@ -105,7 +105,7 @@ public sealed class ArchiveStudentStatusCommandHandlerTests
         await _handler.Handle(new ArchiveStudentStatusCommand(status.Id), CancellationToken.None);
 
         // Архивирование идемпотентно — статус остаётся архивным
-        status.IsArchived.ShouldBeTrue();
+        status.IsDeleted.ShouldBeTrue();
         _repoMock.Verify(
             r => r.UnitOfWork.SaveEntitiesAsync(It.IsAny<CancellationToken>()),
             Times.Once

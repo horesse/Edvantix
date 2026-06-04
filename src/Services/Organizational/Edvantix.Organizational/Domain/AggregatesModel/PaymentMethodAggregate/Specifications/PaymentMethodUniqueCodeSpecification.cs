@@ -12,9 +12,7 @@ public sealed class PaymentMethodUniqueCodeSpecification : Specification<Payment
         Guid? excludeId = null
     )
     {
-        Query
-            .AsNoTracking()
-            .Where(pm => pm.OrganizationId == organizationId && !pm.IsArchived && pm.Code == code);
+        Query.AsNoTracking().Where(pm => pm.OrganizationId == organizationId && pm.Code == code);
 
         if (excludeId.HasValue)
             Query.Where(pm => pm.Id != excludeId.Value);

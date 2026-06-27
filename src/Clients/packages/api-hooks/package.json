@@ -11,15 +11,15 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.101.0"
+    "@tanstack/react-query": "^5.101.1"
   },
   "devDependencies": {
-    "@types/react": "^19.2.16",
+    "@types/react": "^19.2.17",
     "@workspace/api-client": "workspace:*",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/types": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "eslint": "^10.4.1",
+    "eslint": "^10.6.0",
     "react": "^19.2.7"
   },
   "peerDependencies": {

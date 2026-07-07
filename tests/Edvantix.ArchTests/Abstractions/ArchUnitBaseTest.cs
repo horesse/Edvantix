@@ -26,6 +26,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(AuditAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As(nameof(Audit));
 
     protected static readonly IObjectProvider<IType> PersonaServiceTypes = ArchRuleDefinition
@@ -34,6 +36,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(PersonaAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As(nameof(Persona));
 
     protected static readonly IObjectProvider<IType> NotificationServiceTypes = ArchRuleDefinition
@@ -42,6 +46,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(NotificationAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As(nameof(Notification));
 
     protected static readonly IObjectProvider<IType> SchedulerServiceTypes = ArchRuleDefinition
@@ -50,6 +56,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(SchedulerAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As(nameof(Scheduler));
 
     protected static readonly IObjectProvider<IType> OrganizationalServiceTypes = ArchRuleDefinition
@@ -58,6 +66,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(OrganizationalAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As("Organizational");
 
     protected static readonly IObjectProvider<IType> GroupsServiceTypes = ArchRuleDefinition
@@ -66,6 +76,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(GroupsAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As("Groups");
 
     protected static readonly IObjectProvider<IType> ChassisServiceTypes = ArchRuleDefinition
@@ -74,6 +86,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(ChassisAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As(nameof(Chassis));
 
     protected static readonly IObjectProvider<IType> ConstantsServiceTypes = ArchRuleDefinition
@@ -82,6 +96,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(ConstantsAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As(nameof(Constants));
 
     protected static readonly IObjectProvider<IType> SharedKernelServiceTypes = ArchRuleDefinition
@@ -90,6 +106,8 @@ public abstract class ArchUnitBaseTest : BaseTest
         .ResideInAssembly(SharedKernelAssembly)
         .And()
         .DoNotResideInNamespaceMatching("Microsoft.CodeCoverage.*")
+        .And()
+        .DoNotResideInNamespaceMatching("CritterWatch.Generated.*")
         .As(nameof(SharedKernel));
 
     protected static IObjectProvider<IType> GetServiceTypes(string serviceName)

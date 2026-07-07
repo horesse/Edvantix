@@ -6,6 +6,7 @@
     <PackageReference Include="Aspire.Keycloak.Authentication" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="Scrutor" />
+    <PackageReference Include="Wolverine.CritterWatch" />
     <PackageReference Include="WolverineFx.Postgresql" />
     <PackageReference Include="WolverineFx.Kafka" />
     <PackageReference Include="WolverineFx.RuntimeCompilation" />

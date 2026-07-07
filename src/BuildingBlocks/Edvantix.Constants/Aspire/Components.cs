@@ -33,6 +33,9 @@ public static class Components
 
         public static readonly string Schedule = $"{nameof(Schedule).ToLowerInvariant()}{Suffix}";
         public static readonly string Groups = $"{nameof(Groups).ToLowerInvariant()}{Suffix}";
+
+        public static readonly string CritterWatch =
+            $"{nameof(CritterWatch).ToLowerInvariant()}{Suffix}";
     }
 
     public static class Azure

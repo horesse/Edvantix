@@ -43,10 +43,17 @@ var auditDb = postgres.AddDatabase(Components.Database.Audit);
 var curriculumDb = postgres.AddDatabase(Components.Database.Curriculum);
 var scheduleDb = postgres.AddDatabase(Components.Database.Schedule);
 var groupsDb = postgres.AddDatabase(Components.Database.Groups);
+var critterWatchDb = postgres.AddDatabase(Components.Database.CritterWatch);
 
 IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
+
+var console = builder.AddProject<Edvantix_CritterWatch>(Services.CritterWatch)
+    .WithReference(queue).WaitFor(queue)
+    .WithReference(critterWatchDb).WaitFor(critterWatchDb)
+    .WithExternalHttpEndpoints()
+    .WithExplicitStart();
 
 var personaApi = builder
     .AddProject<Edvantix_Persona>(Services.Persona)
@@ -249,5 +256,15 @@ else
     scheduleApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
     groupsApi.WithCorsOrigins(organizationFrontUrl, adminFrontUrl);
 }
+
+var licenseKey = builder.Configuration["JASPERFX__LICENSEKEY"];
+if (!string.IsNullOrWhiteSpace(licenseKey))
+{
+    foreach (var project in builder.Resources.OfType<ProjectResource>().ToList())
+    {
+        builder.CreateResourceBuilder(project).WithEnvironment("JASPERFX__LICENSEKEY", licenseKey);
+    }
+}
+
 
 await builder.Build().RunAsync();

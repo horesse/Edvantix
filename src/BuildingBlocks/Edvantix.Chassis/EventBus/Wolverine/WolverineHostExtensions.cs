@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Wolverine;
 using Wolverine.Attributes;
 using Wolverine.Configuration;
+using Wolverine.CritterWatch;
 using Wolverine.Kafka;
 
 namespace Edvantix.Chassis.EventBus.Wolverine;
@@ -82,6 +83,11 @@ public static class WolverineHostExtensions
 
                     opts.UseRuntimeCompilation();
 
+                    opts.AddCritterWatchMonitoring(
+                        critterWatchUri: KafkaEndpointUri.Topic("critterwatch"),
+                        systemControlUri: KafkaEndpointUri.Topic("critterwatch-sc")
+                    );
+                    
                     // ── Настройка для конкретного сервиса ─────────────────────────────────
                     configure?.Invoke(opts);
                 }
@@ -96,7 +102,7 @@ public static class WolverineHostExtensions
 
     extension(WolverineOptions opts)
     {
-        private void UseKafkaWithCloudEvents(string kafkaConnectionString, string applicationName)
+        public void UseKafkaWithCloudEvents(string kafkaConnectionString, string applicationName)
         {
             opts.ServiceName = KafkaTopicRouter.ToKebabCase(applicationName);
 

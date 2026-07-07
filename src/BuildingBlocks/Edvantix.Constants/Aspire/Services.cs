@@ -14,6 +14,7 @@ public static class Services
     public static readonly string Curriculum = nameof(Curriculum).ToLowerInvariant();
     public static readonly string Schedule = nameof(Schedule).ToLowerInvariant();
     public static readonly string Groups = nameof(Groups).ToLowerInvariant();
+    public static readonly string CritterWatch = nameof(CritterWatch).ToLowerInvariant();
 
     public static string ToClientName(string application, string? suffix = null)
     {

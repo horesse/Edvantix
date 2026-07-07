@@ -23,7 +23,7 @@ internal sealed class SecuritySchemeDefinitionsTransformer : IOpenApiDocumentTra
 
         var keycloakUrl = ServiceDiscoveryUtilities.GetServiceEndpoint(
             Components.KeyCloak,
-            Uri.UriSchemeHttp
+            Uri.UriSchemeHttps
         );
 
         if (string.IsNullOrWhiteSpace(keycloakUrl))
@@ -39,7 +39,7 @@ internal sealed class SecuritySchemeDefinitionsTransformer : IOpenApiDocumentTra
 
         var tokenUrl = HttpUtilities
             .AsUrlBuilder()
-            .WithScheme(Uri.UriSchemeHttp)
+            .WithScheme(Uri.UriSchemeHttps)
             .WithHost(Components.KeyCloak)
             .WithPath(KeycloakEndpoints.Token(identityOptions.Realm))
             .Build();

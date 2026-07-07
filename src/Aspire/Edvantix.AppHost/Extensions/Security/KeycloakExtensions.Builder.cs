@@ -16,6 +16,7 @@ internal static partial class KeycloakExtensions
         {
             var keycloak = builder
                 .AddKeycloak(name)
+                .WithImageTag("26.5")
                 .WithDataVolume()
                 .WithOtlpExporter()
                 .WithArgs("--health-enabled=true")

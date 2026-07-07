@@ -1,20 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CritterWatch" />
+    <PackageReference Include="WolverineFx.Kafka" />
+    <PackageReference Include="WolverineFx.RuntimeCompilation" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="CritterWatch" />
-      <PackageReference Include="WolverineFx.Kafka" />
-      <PackageReference Include="WolverineFx.RuntimeCompilation" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj" />
-      <ProjectReference Include="..\..\..\BuildingBlocks\Edvantix.Chassis\Edvantix.Chassis.csproj" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Edvantix.Constants\Edvantix.Constants.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Edvantix.Chassis\Edvantix.Chassis.csproj" />
+  </ItemGroup>
 </Project>

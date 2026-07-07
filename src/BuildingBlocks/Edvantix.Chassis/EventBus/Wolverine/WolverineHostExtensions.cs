@@ -87,7 +87,7 @@ public static class WolverineHostExtensions
                         critterWatchUri: KafkaEndpointUri.Topic("critterwatch"),
                         systemControlUri: KafkaEndpointUri.Topic("critterwatch-sc")
                     );
-                    
+
                     // ── Настройка для конкретного сервиса ─────────────────────────────────
                     configure?.Invoke(opts);
                 }

@@ -49,9 +49,12 @@ IResourceBuilder<IResource> keycloak = builder.ExecutionContext.IsRunMode
     ? builder.AddLocalKeycloak(Components.KeyCloak)
     : builder.AddHostedKeycloak(Components.KeyCloak);
 
-var console = builder.AddProject<Edvantix_CritterWatch>(Services.CritterWatch)
-    .WithReference(queue).WaitFor(queue)
-    .WithReference(critterWatchDb).WaitFor(critterWatchDb)
+var console = builder
+    .AddProject<Edvantix_CritterWatch>(Services.CritterWatch)
+    .WithReference(queue)
+    .WaitFor(queue)
+    .WithReference(critterWatchDb)
+    .WaitFor(critterWatchDb)
     .WithExternalHttpEndpoints()
     .WithExplicitStart();
 
@@ -265,6 +268,5 @@ if (!string.IsNullOrWhiteSpace(licenseKey))
         builder.CreateResourceBuilder(project).WithEnvironment("JASPERFX__LICENSEKEY", licenseKey);
     }
 }
-
 
 await builder.Build().RunAsync();

@@ -5,12 +5,11 @@ using Wolverine.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString(Components.Database.CritterWatch) ??
-                       throw new Exception("CritterWatch connection string is not set");
+var connectionString =
+    builder.Configuration.GetConnectionString(Components.Database.CritterWatch)
+    ?? throw new Exception("CritterWatch connection string is not set");
 
-var kafkaConnectionString = builder.Configuration.GetConnectionString(
-    Components.Broker
-);
+var kafkaConnectionString = builder.Configuration.GetConnectionString(Components.Broker);
 
 if (string.IsNullOrWhiteSpace(kafkaConnectionString))
     return;
@@ -21,15 +20,14 @@ builder.AddCritterWatch(
     connectionString,
     configureWolverine: opts =>
     {
-        opts.UseKafka(kafkaConnectionString)
-            .AutoProvision();
+        opts.UseKafka(kafkaConnectionString).AutoProvision();
 
         opts.UseKafkaWithCloudEvents(kafkaConnectionString, applicationName);
-        
-        opts.ListenToKafkaTopic("critterwatch")
-            .ListenOnlyAtLeader();
+
+        opts.ListenToKafkaTopic("critterwatch").ListenOnlyAtLeader();
     },
-    enableClusterPartitioning: false);
+    enableClusterPartitioning: false
+);
 
 builder.Services.AddHealthChecks();
 

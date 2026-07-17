@@ -78,7 +78,7 @@
     "allure": "^3.14.1",
     "allure-playwright": "^3.10.2",
     "allure-vitest": "^3.10.2",
-    "eslint": "^10.6.0",
+    "eslint": "^10.7.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "happy-dom": "^20.10.6",
     "typescript": "^6.0.3",

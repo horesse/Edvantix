@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "keycloakify": "^11.15.11",
-    "autoprefixer": "^10.5.2",
+    "autoprefixer": "^10.5.4",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^1.23.0",
     "clsx": "^2.1.1",

@@ -69,7 +69,7 @@
     <PackageVersion Include="WolverineFx.Postgresql" Version="$(WolverineVersion)" />
     <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="$(WolverineVersion)" />
     <PackageVersion Include="CritterWatch" Version="1.0.0-beta.1" />
-    <PackageVersion Include="Wolverine.CritterWatch" Version="1.0.0-beta.1" />
+    <PackageVersion Include="Wolverine.CritterWatch" Version="1.0.0-beta.2" />
     <!-- Quartz -->
     <PackageVersion Include="Quartz.Plugins" Version="$(QuartzVersion)" />
     <PackageVersion Include="Quartz.Dashboard" Version="$(QuartzVersion)" />

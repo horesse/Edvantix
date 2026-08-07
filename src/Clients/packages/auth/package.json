@@ -15,12 +15,12 @@
     "react-oidc-context": "^3.3.1"
   },
   "devDependencies": {
-    "@types/react": "^19.2.17",
+    "@types/react": "^19.2.18",
     "@workspace/api-client": "workspace:*",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "eslint": "^10.6.0",
-    "react": "^19.2.7"
+    "react": "^19.2.8"
   },
   "peerDependencies": {
     "@workspace/api-client": "workspace:*",

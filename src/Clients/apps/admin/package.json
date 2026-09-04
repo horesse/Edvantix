@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.2",
-    "@types/node": "^26.1.0",
+    "@types/node": "^26.4.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@workspace/api-client": "workspace:*",
@@ -34,7 +34,7 @@
     "@workspace/ui": "workspace:*",
     "@workspace/utils": "workspace:*",
     "eslint": "^10.6.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^8.1.3",
     "vitest": "^4.1.10"
   }
